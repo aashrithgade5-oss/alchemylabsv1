@@ -1,19 +1,21 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
 import alchemyLogo from '@/assets/alchemy-logo.png';
 
 const navItems = [
-  { label: 'Home', href: '#' },
-  { label: 'Solutions', href: '#solutions' },
-  { label: 'Work', href: '#work' },
-  { label: 'About', href: '#about' },
-  { label: 'Journal', href: '#journal' },
+  { label: 'Home', href: '/' },
+  { label: 'Solutions', href: '/solutions' },
+  { label: 'About', href: '/about' },
+  { label: 'Work', href: '/#work' },
+  { label: 'Journal', href: '/#journal' },
 ];
 
 export const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,6 +24,11 @@ export const Navigation = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const isActive = (href: string) => {
+    if (href === '/') return location.pathname === '/';
+    return location.pathname.startsWith(href.replace('/#', ''));
+  };
 
   return (
     <>
@@ -33,7 +40,7 @@ export const Navigation = () => {
       >
         <div className="glass-nav-pill px-6 md:px-10 py-3 flex items-center gap-8 md:gap-12">
           {/* Logo */}
-          <a href="#" className="flex items-center gap-3 group flex-shrink-0">
+          <Link to="/" className="flex items-center gap-3 group flex-shrink-0 no-glow">
             <img 
               src={alchemyLogo} 
               alt="Alchemy Labs" 
@@ -47,29 +54,33 @@ export const Navigation = () => {
                 LABS
               </span>
             </div>
-          </a>
+          </Link>
 
           {/* Desktop Navigation */}
           <ul className="hidden md:flex items-center gap-6 lg:gap-8">
             {navItems.map((item) => (
               <li key={item.label}>
-                <a
-                  href={item.href}
-                  className="font-body text-sm text-porcelain/70 hover:text-porcelain link-underline transition-colors duration-300"
+                <Link
+                  to={item.href}
+                  className={`font-body text-sm link-underline transition-colors duration-300 no-glow ${
+                    isActive(item.href) 
+                      ? 'text-alchemy-red' 
+                      : 'text-porcelain/70 hover:text-porcelain'
+                  }`}
                 >
                   {item.label}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
           
           {/* CTA Button */}
-          <a
-            href="#contact"
-            className="hidden md:flex glass-cta-nav text-sm px-5 py-2"
+          <Link
+            to="/#contact"
+            className="hidden md:flex glass-cta-nav text-sm px-5 py-2 no-glow"
           >
             Contact
-          </a>
+          </Link>
 
           {/* Mobile Menu Button */}
           <button
@@ -105,30 +116,36 @@ export const Navigation = () => {
               className="relative h-full flex flex-col items-center justify-center gap-8 p-8"
             >
               {navItems.map((item, i) => (
-                <motion.a
+                <motion.div
                   key={item.label}
-                  href={item.href}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 20 }}
                   transition={{ delay: i * 0.1, duration: 0.4 }}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="font-display text-3xl italic text-porcelain hover:text-alchemy-red transition-colors"
                 >
-                  {item.label}
-                </motion.a>
+                  <Link
+                    to={item.href}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="font-display text-3xl italic text-porcelain hover:text-alchemy-red transition-colors no-glow"
+                  >
+                    {item.label}
+                  </Link>
+                </motion.div>
               ))}
-              <motion.a
-                href="#contact"
+              <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 20 }}
                 transition={{ delay: 0.5, duration: 0.4 }}
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="glass-cta-primary mt-4"
               >
-                Contact Us
-              </motion.a>
+                <Link
+                  to="/#contact"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="glass-cta-primary mt-4 no-glow"
+                >
+                  Contact Us
+                </Link>
+              </motion.div>
             </motion.div>
           </motion.div>
         )}

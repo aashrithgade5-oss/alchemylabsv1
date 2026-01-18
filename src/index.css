@@ -123,6 +123,34 @@
 }
 
 @layer components {
+  /* Interactive Hover Effects */
+  .interactive-hover {
+    @apply transition-all duration-300 ease-out;
+  }
+  
+  .interactive-hover:hover {
+    transform: translateY(-2px) scale(1.01);
+    box-shadow: 0 8px 30px rgba(225, 6, 19, 0.15);
+  }
+  
+  /* Button Hover Effects */
+  button, a, [role="button"] {
+    @apply transition-all duration-200 ease-out;
+  }
+  
+  button:hover, [role="button"]:hover {
+    transform: translateY(-1px);
+  }
+  
+  button:active, [role="button"]:active {
+    transform: translateY(0) scale(0.98);
+  }
+  
+  /* Link Glow on Hover */
+  a:not(.no-glow):hover {
+    text-shadow: 0 0 20px rgba(225, 6, 19, 0.3);
+  }
+  
   /* Global Gradient Backdrop */
   .section-gradient {
     position: relative;
