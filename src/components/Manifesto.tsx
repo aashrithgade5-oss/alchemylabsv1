@@ -1,5 +1,5 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { useRef, useState, useEffect } from 'react';
+import { useRef } from 'react';
 
 const principles = [
   {
@@ -19,16 +19,8 @@ const principles = [
   },
 ];
 
-// Mini section indicators for the sticky scroll map
-const sectionPoints = [
-  { id: 'intro', label: 'Statement' },
-  { id: 'principles', label: 'Principles' },
-  { id: 'positioning', label: 'Position' },
-];
-
 export const Manifesto = () => {
   const sectionRef = useRef<HTMLElement>(null);
-  const [activePoint, setActivePoint] = useState(0);
   
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -39,81 +31,12 @@ export const Manifesto = () => {
   const numberY = useTransform(scrollYProgress, [0, 1], ['15%', '-15%']);
   const numberOpacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 0.04, 0.04, 0]);
 
-  // Track active section point based on scroll
-  useEffect(() => {
-    const unsubscribe = scrollYProgress.on('change', (progress) => {
-      // Map progress to section points
-      if (progress < 0.33) setActivePoint(0);
-      else if (progress < 0.66) setActivePoint(1);
-      else setActivePoint(2);
-    });
-    return () => unsubscribe();
-  }, [scrollYProgress]);
-
-  // Progress line for sticky indicator
-  const lineProgress = useTransform(scrollYProgress, [0.1, 0.9], ['0%', '100%']);
-
   return (
     <section
       id="manifesto"
       ref={sectionRef}
       className="relative py-40 overflow-hidden"
     >
-      {/* Sticky Mini Scroll Map - only visible in this section */}
-      <motion.div
-        className="fixed right-6 md:right-10 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col items-center"
-        initial={{ opacity: 0, x: 20 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        viewport={{ once: true, margin: '-200px' }}
-        transition={{ duration: 0.6 }}
-        style={{
-          // Only show when section is in view
-          pointerEvents: 'auto',
-        }}
-      >
-        <motion.div
-          className="flex flex-col items-center gap-0"
-          style={{ opacity: useTransform(scrollYProgress, [0, 0.1, 0.9, 1], [0, 1, 1, 0]) }}
-        >
-          {/* Progress track */}
-          <div className="relative flex flex-col items-center">
-            {/* Background line */}
-            <div className="absolute left-1/2 -translate-x-1/2 top-[10px] bottom-[10px] w-[2px] bg-porcelain/10 rounded-full" />
-            
-            {/* Progress line */}
-            <motion.div
-              style={{ height: lineProgress }}
-              className="absolute left-1/2 -translate-x-1/2 top-[10px] w-[2px] bg-alchemy-red rounded-full origin-top"
-            />
-
-            {sectionPoints.map((point, i) => (
-              <div key={point.id} className="relative flex flex-col items-center" style={{ marginBottom: i < sectionPoints.length - 1 ? '32px' : 0 }}>
-                {/* Dot */}
-                <motion.div
-                  className={`w-[10px] h-[10px] rounded-full border-2 transition-all duration-300 ${
-                    activePoint >= i
-                      ? 'bg-alchemy-red border-alchemy-red shadow-[0_0_12px_rgba(225,6,19,0.6)]'
-                      : 'bg-transparent border-porcelain/30'
-                  }`}
-                  animate={{
-                    scale: activePoint === i ? 1.3 : 1,
-                  }}
-                  transition={{ duration: 0.3 }}
-                />
-                
-                {/* Connecting line segment (except for last) */}
-                {i < sectionPoints.length - 1 && (
-                  <div 
-                    className={`w-[2px] h-[32px] transition-all duration-500 ${
-                      activePoint > i ? 'bg-alchemy-red' : 'bg-porcelain/10'
-                    }`}
-                  />
-                )}
-              </div>
-            ))}
-          </div>
-        </motion.div>
-      </motion.div>
 
       {/* Mesh gradient background */}
       <div className="absolute inset-0 pointer-events-none">

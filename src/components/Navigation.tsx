@@ -47,13 +47,18 @@ export const Navigation = () => {
           <div className="flex items-center justify-between">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-3 group flex-shrink-0 no-glow">
-              <motion.img 
-                src={alchemyLogo} 
-                alt="Alchemy Labs" 
-                className="w-12 h-12 md:w-14 md:h-14 object-contain"
+              {/* Zoomed and cropped logo container */}
+              <motion.div 
+                className="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden relative"
                 animate={{ scale: isScrolled ? 0.9 : 1 }}
                 transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-              />
+              >
+                <img 
+                  src={alchemyLogo} 
+                  alt="Alchemy Labs" 
+                  className="w-[140%] h-[140%] object-cover absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+                />
+              </motion.div>
               <motion.div 
                 className="hidden sm:flex items-baseline gap-1.5"
                 animate={{ opacity: isScrolled ? 0.95 : 1 }}
