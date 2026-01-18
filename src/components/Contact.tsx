@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Send, Calendar } from 'lucide-react';
+import { Send, Calendar, MessageCircle, Instagram, Mail } from 'lucide-react';
+import { aiServices, brandingServices, consultationServices } from '@/data/services';
 
 export const Contact = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     company: '',
-    budget: '',
+    service: '',
     message: '',
   });
 
@@ -21,7 +22,7 @@ export const Contact = () => {
       {/* Extra red glow */}
       <div className="absolute inset-0 bg-gradient-radial from-deep-crimson/10 via-transparent to-transparent" />
 
-      <div className="relative z-10 max-w-4xl mx-auto px-6 md:px-12">
+      <div className="relative z-10 max-w-5xl mx-auto px-6 md:px-12">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -47,7 +48,7 @@ export const Contact = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
           onSubmit={handleSubmit}
-          className="glass-deep rounded-3xl p-8 md:p-12"
+          className="glass-deep rounded-3xl p-8 md:p-12 mb-12"
         >
           <div className="grid md:grid-cols-2 gap-6 mb-6">
             {/* Name */}
@@ -101,25 +102,43 @@ export const Contact = () => {
             />
           </div>
 
-          {/* Budget */}
+          {/* Service Selection */}
           <div className="space-y-2 mb-6">
             <label className="font-mono text-xs text-porcelain/50 tracking-label uppercase">
-              Investment Range
+              Desired Service
             </label>
             <select
-              value={formData.budget}
+              value={formData.service}
               onChange={(e) =>
-                setFormData({ ...formData, budget: e.target.value })
+                setFormData({ ...formData, service: e.target.value })
               }
               className="glass-input cursor-pointer"
             >
               <option value="" disabled>
-                Select a range
+                Select a service...
               </option>
-              <option value="25-50k">$25K – $50K</option>
-              <option value="50-100k">$50K – $100K</option>
-              <option value="100-250k">$100K – $250K</option>
-              <option value="250k+">$250K+</option>
+              <optgroup label="AI Solutions">
+                {aiServices.map((service) => (
+                  <option key={service.id} value={service.id}>
+                    {service.title}
+                  </option>
+                ))}
+              </optgroup>
+              <optgroup label="Branding Solutions">
+                {brandingServices.map((service) => (
+                  <option key={service.id} value={service.id}>
+                    {service.title}
+                  </option>
+                ))}
+              </optgroup>
+              <optgroup label="Consultation">
+                {consultationServices.map((service) => (
+                  <option key={service.id} value={service.id}>
+                    {service.title}
+                  </option>
+                ))}
+              </optgroup>
+              <option value="not-sure">Not Sure / Multiple Services</option>
             </select>
           </div>
 
@@ -166,6 +185,61 @@ export const Contact = () => {
             Selective partnerships. Fast replies. No spam.
           </p>
         </motion.form>
+
+        {/* Contact Methods */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="grid md:grid-cols-3 gap-6"
+        >
+          {/* WhatsApp */}
+          <motion.a
+            href="https://wa.me/917794912315"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="glass-deep rounded-2xl p-8 text-center hover:border-alchemy-red/30 transition-all duration-300 group"
+            whileHover={{ scale: 1.02 }}
+          >
+            <div className="w-14 h-14 rounded-xl bg-green-500/10 flex items-center justify-center mx-auto mb-4 group-hover:shadow-[0_0_20px_rgba(34,197,94,0.3)] transition-shadow">
+              <MessageCircle className="w-7 h-7 text-green-500" />
+            </div>
+            <h3 className="font-display text-lg italic text-porcelain mb-1">Text Us</h3>
+            <p className="font-body text-sm text-porcelain/50 mb-3">WhatsApp</p>
+            <p className="font-mono text-sm text-alchemy-red">+91 7794912315</p>
+          </motion.a>
+
+          {/* Instagram */}
+          <motion.a
+            href="https://instagram.com/alchemylabs"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="glass-deep rounded-2xl p-8 text-center hover:border-alchemy-red/30 transition-all duration-300 group"
+            whileHover={{ scale: 1.02 }}
+          >
+            <div className="w-14 h-14 rounded-xl bg-pink-500/10 flex items-center justify-center mx-auto mb-4 group-hover:shadow-[0_0_20px_rgba(236,72,153,0.3)] transition-shadow">
+              <Instagram className="w-7 h-7 text-pink-500" />
+            </div>
+            <h3 className="font-display text-lg italic text-porcelain mb-1">DM Us</h3>
+            <p className="font-body text-sm text-porcelain/50 mb-3">Instagram</p>
+            <p className="font-mono text-sm text-alchemy-red">@alchemylabs</p>
+          </motion.a>
+
+          {/* Email */}
+          <motion.a
+            href="mailto:brandalchemie@gmail.com"
+            className="glass-deep rounded-2xl p-8 text-center hover:border-alchemy-red/30 transition-all duration-300 group"
+            whileHover={{ scale: 1.02 }}
+          >
+            <div className="w-14 h-14 rounded-xl bg-alchemy-red/10 flex items-center justify-center mx-auto mb-4 group-hover:shadow-[0_0_20px_rgba(225,6,19,0.3)] transition-shadow">
+              <Mail className="w-7 h-7 text-alchemy-red" />
+            </div>
+            <h3 className="font-display text-lg italic text-porcelain mb-1">Email Us</h3>
+            <p className="font-body text-sm text-porcelain/50 mb-3">Direct Mail</p>
+            <p className="font-mono text-sm text-alchemy-red">brandalchemie@gmail.com</p>
+          </motion.a>
+        </motion.div>
       </div>
     </section>
   );
