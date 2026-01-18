@@ -3,6 +3,7 @@ import { ArrowRight } from 'lucide-react';
 import { aiServices, brandingServices, consultationServices } from '@/data/services';
 import { ServiceCard } from './ServiceCard';
 import { ConsultationCard } from './ConsultationCard';
+import { MagneticButton } from './MagneticButton';
 
 export const Solutions = () => {
   return (
@@ -53,10 +54,10 @@ export const Solutions = () => {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="text-center"
           >
-            <a href="#contact" className="glass-cta-primary inline-flex items-center gap-2">
+            <MagneticButton href="#contact" className="glass-cta-primary inline-flex items-center gap-2 relative overflow-hidden">
               <span className="font-body">Book an AI Sprint</span>
               <ArrowRight className="w-4 h-4" />
-            </a>
+            </MagneticButton>
             <p className="font-body text-sm text-porcelain/40 mt-3">
               3-Day Intensive → Delivered Systems
             </p>
@@ -107,10 +108,10 @@ export const Solutions = () => {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="text-center"
           >
-            <a href="#contact" className="glass-cta-primary inline-flex items-center gap-2">
+            <MagneticButton href="#contact" className="glass-cta-primary inline-flex items-center gap-2 relative overflow-hidden">
               <span className="font-body">Book a Brand Sprint</span>
               <ArrowRight className="w-4 h-4" />
-            </a>
+            </MagneticButton>
             <p className="font-body text-sm text-porcelain/40 mt-3">
               2-Week Intensive → Complete Identity
             </p>

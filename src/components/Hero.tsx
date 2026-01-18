@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
 import heroVideo from '@/assets/hero-video.mp4';
+import { MagneticButton } from './MagneticButton';
 
 export const Hero = () => {
   return (
@@ -77,15 +78,13 @@ export const Hero = () => {
             transition={{ duration: 0.8, delay: 1.1, ease: [0.22, 1, 0.36, 1] }}
             className="flex flex-col sm:flex-row items-center justify-center gap-5"
           >
-            <motion.a
+            <MagneticButton
               href="#contact"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="glass-cta-primary group text-glow"
+              className="glass-cta-primary group relative overflow-hidden"
             >
               <span className="font-body">Book a Strategy Sprint</span>
               <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-            </motion.a>
+            </MagneticButton>
 
             <a
               href="#work"
