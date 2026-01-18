@@ -44,22 +44,21 @@ export const Navigation = () => {
       >
         <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3 group flex-shrink-0 no-glow">
+          <Link to="/" className="flex items-center gap-4 group flex-shrink-0 no-glow">
             <motion.img 
               src={alchemyLogo} 
               alt="Alchemy Labs" 
-              className="w-9 h-9 md:w-10 md:h-10 object-contain"
-              animate={{ scale: isScrolled ? 0.9 : 1 }}
-              transition={{ duration: 0.3 }}
+              className="w-11 h-11 md:w-14 md:h-14 object-contain"
+              animate={{ scale: isScrolled ? 0.85 : 1 }}
+              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
             />
-            <div className="hidden sm:flex flex-col leading-none">
-              <span className="font-display text-base md:text-lg font-normal text-porcelain tracking-wide italic">
-                Alchemy
-              </span>
-              <span className="font-mono text-[9px] text-porcelain/50 tracking-[0.25em] uppercase">
-                LABS
-              </span>
-            </div>
+            <motion.span 
+              className="hidden sm:block font-display text-xl md:text-2xl font-normal text-porcelain tracking-wide italic whitespace-nowrap"
+              animate={{ opacity: isScrolled ? 0.9 : 1 }}
+              transition={{ duration: 0.3 }}
+            >
+              Alchemy Labs
+            </motion.span>
           </Link>
 
           {/* Desktop Navigation - Center */}
