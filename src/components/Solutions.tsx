@@ -80,9 +80,9 @@ export const Solutions = () => {
             What We Build
           </p>
           <h2 className="font-display text-4xl md:text-5xl lg:text-6xl leading-display tracking-display">
-            Solutions for the
+            <span className="italic">Solutions</span> for the
             <br />
-            <span className="text-alchemy-red">Intelligence Era</span>
+            <span className="text-alchemy-red italic">Intelligence Era</span>
           </h2>
         </motion.div>
 

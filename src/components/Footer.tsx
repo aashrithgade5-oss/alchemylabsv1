@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { useState } from 'react';
+import alchemyLogo from '@/assets/alchemy-logo.png';
 
 const footerLinks = {
   company: [
@@ -45,13 +46,20 @@ export const Footer = () => {
           viewport={{ once: true }}
           className="mb-16"
         >
-          <a href="#" className="inline-flex items-baseline gap-1">
-            <span className="font-display text-3xl md:text-4xl font-light text-porcelain">
-              Alchemy
-            </span>
-            <span className="font-display text-2xl md:text-3xl font-medium tracking-widest text-porcelain uppercase">
-              LABS
-            </span>
+          <a href="#" className="inline-flex items-center gap-3">
+            <img 
+              src={alchemyLogo} 
+              alt="Alchemy Labs" 
+              className="w-12 h-12 object-contain"
+            />
+            <div className="flex flex-col leading-none">
+              <span className="font-display text-2xl md:text-3xl italic text-porcelain">
+                Alchemy
+              </span>
+              <span className="font-mono text-[10px] text-porcelain/60 tracking-[0.3em] uppercase">
+                LABS
+              </span>
+            </div>
           </a>
         </motion.div>
 
@@ -120,7 +128,7 @@ export const Footer = () => {
               Newsletter
             </h3>
             <p className="text-sm text-porcelain/60 mb-4">
-              Quarterly insights on brand systems and AI.
+              Quarterly insights on <span className="font-display italic">brand systems</span> and <span className="font-display italic">AI</span>.
             </p>
             <form onSubmit={handleNewsletterSubmit} className="space-y-3">
               <input
@@ -145,7 +153,7 @@ export const Footer = () => {
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-porcelain/10 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="font-mono text-xs text-porcelain/50">
-            © 2026 Alchemy Labs. All rights reserved.
+            © 2026 <span className="font-display italic">Alchemy Labs</span>. All rights reserved.
           </p>
           <div className="flex gap-8">
             <a

@@ -35,7 +35,7 @@ export const Contact = () => {
           <h2 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-display tracking-display">
             Let's build something
             <br />
-            <span className="text-alchemy-red">inevitable.</span>
+            <span className="text-alchemy-red italic">inevitable.</span>
           </h2>
           <p className="text-xl text-porcelain/70 mt-6">
             Brief us in under 3 minutes.

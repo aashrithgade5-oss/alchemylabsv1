@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
+import alchemyLogo from '@/assets/alchemy-logo.png';
 
 const navItems = [
   { label: 'Home', href: '#' },
@@ -28,28 +29,33 @@ export const Navigation = () => {
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-        className={`fixed top-0 w-full z-50 transition-all duration-500 ${
-          isScrolled ? 'glass-nav' : 'bg-transparent'
-        }`}
+        className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-6xl"
       >
-        <div className="max-w-7xl mx-auto px-6 md:px-12 py-4 flex items-center justify-between">
+        <div className="glass-nav-pill px-4 md:px-8 py-3 flex items-center justify-between">
           {/* Logo */}
-          <a href="#" className="flex items-baseline gap-1 group">
-            <span className="font-display text-2xl font-light text-porcelain transition-colors">
-              Alchemy
-            </span>
-            <span className="font-display text-lg font-medium tracking-widest text-porcelain uppercase">
-              LABS
-            </span>
+          <a href="#" className="flex items-center gap-3 group">
+            <img 
+              src={alchemyLogo} 
+              alt="Alchemy Labs" 
+              className="w-10 h-10 md:w-12 md:h-12 object-contain"
+            />
+            <div className="hidden sm:flex flex-col leading-none">
+              <span className="font-display text-lg font-light text-porcelain tracking-wide">
+                Alchemy
+              </span>
+              <span className="font-mono text-[10px] text-porcelain/60 tracking-[0.3em] uppercase">
+                LABS
+              </span>
+            </div>
           </a>
 
           {/* Desktop Navigation */}
-          <ul className="hidden md:flex items-center gap-8">
+          <ul className="hidden md:flex items-center gap-6 lg:gap-8">
             {navItems.map((item) => (
               <li key={item.label}>
                 <a
                   href={item.href}
-                  className="text-sm text-porcelain/80 hover:text-porcelain link-underline transition-colors duration-300"
+                  className="text-sm text-porcelain/70 hover:text-porcelain link-underline transition-colors duration-300"
                 >
                   {item.label}
                 </a>
@@ -58,7 +64,7 @@ export const Navigation = () => {
             <li>
               <a
                 href="#contact"
-                className="glass-cta-primary text-sm px-6 py-2.5"
+                className="glass-cta-nav text-sm px-5 py-2"
               >
                 Contact
               </a>

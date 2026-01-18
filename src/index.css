@@ -119,6 +119,31 @@
       0 8px 32px rgba(0, 0, 0, 0.12);
   }
   
+  /* Pill-shaped Nav with Glass Effect */
+  .glass-nav-pill {
+    background: rgba(10, 10, 11, 0.4);
+    backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 9999px;
+    box-shadow: 
+      0 0 30px rgba(225, 6, 19, 0.08),
+      0 0 60px rgba(225, 6, 19, 0.04),
+      0 8px 32px rgba(0, 0, 0, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  }
+  
+  .glass-cta-nav {
+    @apply inline-flex items-center gap-2 rounded-full font-medium transition-all duration-300;
+    background: rgba(225, 6, 19, 0.15);
+    border: 1px solid rgba(225, 6, 19, 0.3);
+    box-shadow: 0 0 16px rgba(225, 6, 19, 0.15);
+  }
+  
+  .glass-cta-nav:hover {
+    background: rgba(225, 6, 19, 0.25);
+    box-shadow: 0 0 24px rgba(225, 6, 19, 0.3);
+  }
+  
   .glass-red {
     background: linear-gradient(135deg, 
       rgba(225, 6, 19, 0.06), 
