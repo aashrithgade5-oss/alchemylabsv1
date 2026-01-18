@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import Lenis from 'lenis';
 
 interface SmoothScrollProps {
@@ -7,27 +7,29 @@ interface SmoothScrollProps {
 
 export const SmoothScroll = ({ children }: SmoothScrollProps) => {
   const lenisRef = useRef<Lenis | null>(null);
+  const rafRef = useRef<number | null>(null);
+
+  const raf = useCallback((time: number) => {
+    lenisRef.current?.raf(time);
+    rafRef.current = requestAnimationFrame(raf);
+  }, []);
 
   useEffect(() => {
-    // Initialize Lenis
+    // Initialize Lenis with luxurious settings
     const lenis = new Lenis({
-      duration: 1.2,
+      duration: 1.8, // Slower, more premium feel
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
       touchMultiplier: 2,
+      infinite: false,
     });
 
     lenisRef.current = lenis;
 
-    // Animation frame loop
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-
-    requestAnimationFrame(raf);
+    // Start animation loop
+    rafRef.current = requestAnimationFrame(raf);
 
     // Handle anchor links for smooth scrolling
     const handleAnchorClick = (e: MouseEvent) => {
@@ -42,7 +44,7 @@ export const SmoothScroll = ({ children }: SmoothScrollProps) => {
           if (targetElement) {
             lenis.scrollTo(targetElement as HTMLElement, {
               offset: -100,
-              duration: 1.5,
+              duration: 2, // Longer, smoother scroll
             });
           }
         }
@@ -52,10 +54,13 @@ export const SmoothScroll = ({ children }: SmoothScrollProps) => {
     document.addEventListener('click', handleAnchorClick);
 
     return () => {
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+      }
       lenis.destroy();
       document.removeEventListener('click', handleAnchorClick);
     };
-  }, []);
+  }, [raf]);
 
   return <>{children}</>;
 };

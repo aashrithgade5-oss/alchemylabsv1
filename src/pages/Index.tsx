@@ -4,7 +4,6 @@ import { Solutions } from '@/components/Solutions';
 import { CaseStudies } from '@/components/CaseStudies';
 import { Manifesto } from '@/components/Manifesto';
 import { EditorialSection } from '@/components/EditorialSection';
-import { LogoTicker } from '@/components/LogoTicker';
 import { Journal } from '@/components/Journal';
 import { Contact } from '@/components/Contact';
 import { Footer } from '@/components/Footer';
@@ -23,7 +22,6 @@ const Index = () => {
       <VisualBreadcrumbs />
       <main className="relative z-10">
         <Hero />
-        <LogoTicker />
         <Solutions />
         <CaseStudies />
         <Manifesto />

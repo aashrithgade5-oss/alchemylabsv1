@@ -1,3 +1,4 @@
+import { forwardRef } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { useState } from 'react';
@@ -19,12 +20,12 @@ const footerLinks = {
   connect: [
     { label: 'Twitter', href: '#' },
     { label: 'LinkedIn', href: '#' },
-    { label: 'Instagram', href: '#' },
+    { label: 'Instagram', href: 'https://instagram.com/alchemylabs' },
     { label: 'Dribbble', href: '#' },
   ],
 };
 
-export const Footer = () => {
+export const Footer = forwardRef<HTMLElement>((_, ref) => {
   const [email, setEmail] = useState('');
 
   const handleNewsletterSubmit = (e: React.FormEvent) => {
@@ -34,7 +35,7 @@ export const Footer = () => {
   };
 
   return (
-    <footer className="relative overflow-hidden section-gradient">
+    <footer ref={ref} className="relative overflow-hidden section-gradient">
       <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 py-20">
         {/* Logo */}
         <motion.div
@@ -63,7 +64,12 @@ export const Footer = () => {
         {/* Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-12 mb-16">
           {/* Company */}
-          <div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+          >
             <h3 className="font-mono text-xs text-porcelain/40 tracking-label uppercase mb-6">
               Company
             </h3>
@@ -79,10 +85,15 @@ export const Footer = () => {
                 </li>
               ))}
             </ul>
-          </div>
+          </motion.div>
 
           {/* Services */}
-          <div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+          >
             <h3 className="font-mono text-xs text-porcelain/40 tracking-label uppercase mb-6">
               Services
             </h3>
@@ -98,10 +109,15 @@ export const Footer = () => {
                 </li>
               ))}
             </ul>
-          </div>
+          </motion.div>
 
           {/* Connect */}
-          <div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3 }}
+          >
             <h3 className="font-mono text-xs text-porcelain/40 tracking-label uppercase mb-6">
               Connect
             </h3>
@@ -110,6 +126,8 @@ export const Footer = () => {
                 <li key={link.label}>
                   <a
                     href={link.href}
+                    target={link.href.startsWith('http') ? '_blank' : undefined}
+                    rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
                     className="font-body text-porcelain/60 hover:text-porcelain transition-colors duration-300"
                   >
                     {link.label}
@@ -117,10 +135,15 @@ export const Footer = () => {
                 </li>
               ))}
             </ul>
-          </div>
+          </motion.div>
 
           {/* Newsletter */}
-          <div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.4 }}
+          >
             <h3 className="font-mono text-xs text-porcelain/40 tracking-label uppercase mb-6">
               Newsletter
             </h3>
@@ -146,11 +169,17 @@ export const Footer = () => {
                 <ArrowRight className="w-3 h-3" />
               </button>
             </form>
-          </div>
+          </motion.div>
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 border-t border-porcelain/10 flex flex-col md:flex-row justify-between items-center gap-4">
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.5 }}
+          className="pt-8 border-t border-porcelain/10 flex flex-col md:flex-row justify-between items-center gap-4"
+        >
           <p className="font-mono text-xs text-porcelain/40">
             © 2026 <span className="font-display italic">Alchemy Labs</span>. All rights reserved.
           </p>
@@ -167,9 +196,17 @@ export const Footer = () => {
             >
               Terms
             </a>
+            <a
+              href="/admin/auth"
+              className="font-body text-sm text-porcelain/40 hover:text-porcelain transition-colors"
+            >
+              Admin
+            </a>
           </div>
-        </div>
+        </motion.div>
       </div>
     </footer>
   );
-};
+});
+
+Footer.displayName = 'Footer';

@@ -86,6 +86,8 @@
   
   html {
     scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   
   body {
@@ -93,11 +95,16 @@
     font-family: var(--font-body);
     font-weight: 400;
     overflow-x: hidden;
+    /* Enable hardware acceleration for smooth animations */
+    transform: translateZ(0);
+    backface-visibility: hidden;
   }
   
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
     font-weight: 400;
+    /* Smooth text rendering */
+    text-rendering: optimizeLegibility;
   }
   
   p, span, a, li, label, input, textarea, select, button {
@@ -107,6 +114,11 @@
   ::selection {
     background: hsl(var(--alchemy-red) / 0.3);
     color: hsl(var(--porcelain));
+  }
+  
+  /* Smooth all transitions globally */
+  *, *::before, *::after {
+    transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
   }
 }
 
