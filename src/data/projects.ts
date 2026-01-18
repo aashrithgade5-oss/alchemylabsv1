@@ -20,89 +20,112 @@ export interface Project {
     description: string;
   }[];
   visuals: string[];
+  isConceptual?: boolean;
 }
 
 export const projects: Project[] = [
   {
-    id: 'ai-media-gen',
-    title: 'AI MEDIA GEN',
-    brand: 'IKEA',
-    category: 'AI Video Generation',
-    description: 'Transforming furniture showcasing with AI-generated cinematic video content.',
-    overview: 'A groundbreaking collaboration with IKEA to create AI-generated product showcase videos that bring furniture to life. Using cutting-edge generative AI, we produced cinematic content that demonstrates how products transform living spaces—achieving in hours what traditional production takes weeks.',
+    id: 'branding-solutions',
+    title: 'Branding Solutions',
+    brand: 'Alchemy Labs',
+    category: 'Brand Architecture',
+    description: 'Complete identity systems engineered for recognition and resonance.',
+    overview: 'Our branding methodology fuses strategic clarity with visual poetry. We craft identity systems that don\'t just represent—they resonate. From verbal identity to visual language, every touchpoint is orchestrated to create inevitable recognition.',
     image: caseStudy1,
     video: aiMediaGen1,
-    video2: aiMediaGen2,
     size: 'large',
     services: [
-      { title: 'AI Video Generation', description: 'Cinematic product videos created entirely with generative AI' },
-      { title: 'Visual Storytelling', description: 'Narrative-driven content showcasing product in context' },
-      { title: 'Rapid Production', description: 'From concept to delivery in 48 hours' }
+      { title: 'Brand Strategy', description: 'Positioning, messaging, and narrative architecture' },
+      { title: 'Visual Identity', description: 'Logo systems, typography, and color science' },
+      { title: 'Brand Guidelines', description: 'Comprehensive identity documentation' }
     ],
-    visuals: [caseStudy1, caseStudy2, caseStudy3]
+    visuals: [caseStudy1, caseStudy2, caseStudy3],
+    isConceptual: false
   },
   {
-    id: 'nike',
-    title: 'NIKE',
-    brand: 'Nike',
-    category: 'Campaign Concept',
-    description: 'AI-augmented athlete portraits pushing visual boundaries.',
-    overview: 'Conceptual campaign exploring how Nike could use generative AI to create surreal, larger-than-life athlete portraits that capture human potential. A meditation on the intersection of sport, technology, and art.',
+    id: 'consultation-sessions',
+    title: 'Consultation Sessions',
+    brand: 'Alchemy Labs',
+    category: 'Strategic Advisory',
+    description: 'Intensive strategy sessions that transform vision into executable roadmaps.',
+    overview: 'Our consultation sessions are not meetings—they\'re interventions. Through structured discovery and strategic synthesis, we help founders and creative directors crystallize their vision into actionable, measurable systems.',
     image: caseStudy2,
     size: 'medium',
     services: [
-      { title: 'Concept Development', description: 'Art direction and visual strategy' },
-      { title: 'AI Portrait Generation', description: 'Hyper-stylized athlete imagery' },
-      { title: 'Motion Design', description: 'Animated campaign assets' }
+      { title: 'Discovery Sessions', description: 'Deep-dive analysis of current state and aspirations' },
+      { title: 'Strategy Sprints', description: '3-5 day intensive roadmap development' },
+      { title: 'Implementation Support', description: 'Ongoing advisory for execution' }
     ],
-    visuals: [caseStudy2, caseStudy1, caseStudy3]
+    visuals: [caseStudy2, caseStudy1, caseStudy3],
+    isConceptual: false
   },
   {
-    id: 'balenciaga',
-    title: 'BALENCIAGA',
-    brand: 'Balenciaga',
-    category: 'Brand Evolution',
-    description: 'Pushing luxury fashion into the AI aesthetic frontier.',
-    overview: 'A speculative project imagining Balenciaga\'s next evolution—where haute couture meets machine learning. We created conceptual campaign visuals that embody the house\'s avant-garde spirit through AI.',
+    id: 'aether-rituals',
+    title: 'Aether Rituals',
+    brand: 'Alchemy Labs',
+    category: 'AI Ceremony',
+    description: 'Where machine learning meets creative intuition—our signature AI process.',
+    overview: 'Aether Rituals is our proprietary methodology for AI-augmented creative production. A carefully choreographed dance between human taste and machine capability, producing outputs that neither could achieve alone.',
     image: caseStudy3,
+    video: aiMediaGen2,
     size: 'medium',
     services: [
-      { title: 'Visual Exploration', description: 'AI-generated lookbook concepts' },
-      { title: 'Aesthetic Development', description: 'Defining AI-native luxury visual language' },
-      { title: 'Campaign Direction', description: 'Strategic visual narrative' }
+      { title: 'AI Media Generation', description: 'Studio-grade video and imagery' },
+      { title: 'Content Systems', description: 'Scalable production pipelines' },
+      { title: 'Style Training', description: 'Brand-specific AI model fine-tuning' }
     ],
-    visuals: [caseStudy3, caseStudy1, caseStudy2]
+    visuals: [caseStudy3, caseStudy1, caseStudy2],
+    isConceptual: false
   },
   {
-    id: 'aesop',
-    title: 'AESOP',
-    brand: 'Aesop',
-    category: 'Content Systems',
-    description: 'Scalable beauty content with artisanal quality.',
-    overview: 'Exploring how Aesop\'s meticulous approach to beauty could translate into AI-generated content that maintains the brand\'s signature restraint and sophistication. Every asset feels handcrafted, yet infinitely scalable.',
+    id: 'oakley-showcase',
+    title: 'Oakley Showcase',
+    brand: 'Oakley',
+    category: 'Conceptual Campaign',
+    description: 'Reimagining performance eyewear through AI-generated visual narratives.',
+    overview: 'A conceptual exploration of how Oakley could leverage generative AI to create otherworldly campaign visuals. We imagined a future where sport meets science fiction—athletes transcending human limits in environments that blur reality and imagination.',
     image: caseStudy1,
     size: 'small',
     services: [
-      { title: 'Content Pipeline', description: 'Automated visual generation system' },
-      { title: 'Style Consistency', description: 'Brand-trained AI models' },
-      { title: 'Quality Control', description: 'Human-in-the-loop refinement' }
+      { title: 'Concept Development', description: 'Visual strategy and creative direction' },
+      { title: 'AI Visualization', description: 'Generative imagery and motion' },
+      { title: 'Campaign Architecture', description: 'Multi-touchpoint narrative design' }
     ],
-    visuals: [caseStudy1, caseStudy2]
+    visuals: [caseStudy1, caseStudy2],
+    isConceptual: true
   },
   {
-    id: 'arc-teryx',
-    title: 'ARC\'TERYX',
+    id: 'arcteryx-branding',
+    title: 'Arc\'teryx Concept',
     brand: 'Arc\'teryx',
-    category: 'Visual Identity',
-    description: 'Technical precision meets natural beauty.',
-    overview: 'A conceptual project exploring how Arc\'teryx could use AI to generate campaign imagery that captures the sublime beauty of extreme environments while maintaining technical accuracy.',
+    category: 'Conceptual Branding',
+    description: 'Technical precision meets sublime nature—a brand evolution study.',
+    overview: 'A speculative branding exercise exploring how Arc\'teryx could evolve their visual identity to capture the raw sublimity of extreme environments. We used AI to generate campaign imagery that honors their technical heritage while pushing into new aesthetic territory.',
     image: caseStudy2,
     size: 'small',
     services: [
-      { title: 'Environment Generation', description: 'AI-created landscape visuals' },
-      { title: 'Product Integration', description: 'Seamless product placement' },
-      { title: 'Asset Library', description: 'Infinite terrain variations' }
+      { title: 'Visual Exploration', description: 'AI-generated landscape and product imagery' },
+      { title: 'Brand Extension', description: 'Conceptual identity evolution' },
+      { title: 'Motion Concepts', description: 'Atmospheric brand films' }
     ],
-    visuals: [caseStudy2, caseStudy3]
+    visuals: [caseStudy2, caseStudy3],
+    isConceptual: true
+  },
+  {
+    id: 'identity-systems',
+    title: 'Identity Systems',
+    brand: 'Alchemy Labs',
+    category: 'Design Infrastructure',
+    description: 'Modular design systems built for scale and consistency.',
+    overview: 'We build identity infrastructure—not just logos. Our design systems approach ensures every brand asset, from business cards to billboards, speaks with one unmistakable voice. Components, not campaigns.',
+    image: caseStudy3,
+    size: 'small',
+    services: [
+      { title: 'Component Libraries', description: 'Modular design building blocks' },
+      { title: 'Style Guides', description: 'Living documentation systems' },
+      { title: 'Asset Pipelines', description: 'Automated production workflows' }
+    ],
+    visuals: [caseStudy3, caseStudy1],
+    isConceptual: false
   }
 ];
