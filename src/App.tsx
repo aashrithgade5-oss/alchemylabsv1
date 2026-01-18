@@ -7,23 +7,26 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import { ServicePage } from "./pages/ServicePage";
 import { Preloader } from "./components/Preloader";
+import { SmoothScroll } from "./components/SmoothScroll";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <Preloader />
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/services/:slug" element={<ServicePage />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+      <SmoothScroll>
+        <Preloader />
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/services/:slug" element={<ServicePage />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </SmoothScroll>
     </TooltipProvider>
   </QueryClientProvider>
 );
