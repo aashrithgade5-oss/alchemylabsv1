@@ -1,6 +1,8 @@
 import caseStudy1 from '@/assets/case-study-1.jpg';
 import caseStudy2 from '@/assets/case-study-2.jpg';
 import caseStudy3 from '@/assets/case-study-3.jpg';
+import aiMediaGen1 from '@/assets/ai-media-gen-1.mov';
+import aiMediaGen2 from '@/assets/ai-media-gen-2.mov';
 
 export interface Project {
   id: string;
@@ -10,6 +12,8 @@ export interface Project {
   description: string;
   overview: string;
   image: string;
+  video?: string;
+  video2?: string;
   size: 'large' | 'medium' | 'small';
   services: {
     title: string;
@@ -20,18 +24,20 @@ export interface Project {
 
 export const projects: Project[] = [
   {
-    id: 'oakley',
-    title: 'OAKLEY',
-    brand: 'Oakley',
-    category: 'Visual Identity',
-    description: 'Redefining performance eyewear through AI-generated campaign assets.',
-    overview: 'A conceptual exploration of how Oakley could leverage AI-native visual systems to create campaign assets that blur the line between sport and art. We developed a generative pipeline that creates infinite variations of product photography with consistent brand DNA.',
+    id: 'ai-media-gen',
+    title: 'AI MEDIA GEN',
+    brand: 'IKEA',
+    category: 'AI Video Generation',
+    description: 'Transforming furniture showcasing with AI-generated cinematic video content.',
+    overview: 'A groundbreaking collaboration with IKEA to create AI-generated product showcase videos that bring furniture to life. Using cutting-edge generative AI, we produced cinematic content that demonstrates how products transform living spaces—achieving in hours what traditional production takes weeks.',
     image: caseStudy1,
+    video: aiMediaGen1,
+    video2: aiMediaGen2,
     size: 'large',
     services: [
-      { title: 'AI Visual Generation', description: 'Custom Midjourney workflows for product visualization' },
-      { title: 'Brand System Extension', description: 'Expanding existing identity into AI-native formats' },
-      { title: 'Campaign Asset Library', description: '200+ unique visuals generated in 72 hours' }
+      { title: 'AI Video Generation', description: 'Cinematic product videos created entirely with generative AI' },
+      { title: 'Visual Storytelling', description: 'Narrative-driven content showcasing product in context' },
+      { title: 'Rapid Production', description: 'From concept to delivery in 48 hours' }
     ],
     visuals: [caseStudy1, caseStudy2, caseStudy3]
   },
