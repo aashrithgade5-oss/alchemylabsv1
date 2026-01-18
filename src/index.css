@@ -662,6 +662,24 @@
   .duration-400 {
     transition-duration: 400ms;
   }
+
+  /* Luxury Margin - Breathing room between decision points */
+  .luxury-margin {
+    margin-top: 120px;
+    margin-bottom: 120px;
+  }
+
+  @media (min-width: 768px) {
+    .luxury-margin {
+      margin-top: 160px;
+      margin-bottom: 160px;
+    }
+  }
+
+  /* Smart text breaking for headlines */
+  .text-balance {
+    text-wrap: balance;
+  }
   
   /* Leading (Line Height) */
   .leading-display {

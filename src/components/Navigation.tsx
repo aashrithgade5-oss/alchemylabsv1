@@ -36,76 +36,84 @@ export const Navigation = () => {
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          isScrolled 
-            ? 'py-3 bg-alchemy-black/80 backdrop-blur-xl border-b border-porcelain/5' 
-            : 'py-6'
-        }`}
+        className="fixed top-0 left-0 right-0 z-50 px-4 md:px-8 py-4"
       >
-        <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
-          {/* Logo */}
-          <Link to="/" className="flex items-center gap-4 group flex-shrink-0 no-glow">
-            <motion.img 
-              src={alchemyLogo} 
-              alt="Alchemy Labs" 
-              className="w-11 h-11 md:w-14 md:h-14 object-contain"
-              animate={{ scale: isScrolled ? 0.85 : 1 }}
-              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            />
-            <motion.span 
-              className="hidden sm:block font-display text-xl md:text-2xl font-normal text-porcelain tracking-wide italic whitespace-nowrap"
-              animate={{ opacity: isScrolled ? 0.9 : 1 }}
-              transition={{ duration: 0.3 }}
+        {/* Liquid Glass Nav Container */}
+        <div 
+          className={`max-w-6xl mx-auto transition-all duration-500 ${
+            isScrolled ? 'glass-nav-pill py-3 px-6' : 'py-4 px-6'
+          }`}
+        >
+          <div className="flex items-center justify-between">
+            {/* Logo */}
+            <Link to="/" className="flex items-center gap-3 group flex-shrink-0 no-glow">
+              <motion.img 
+                src={alchemyLogo} 
+                alt="Alchemy Labs" 
+                className="w-12 h-12 md:w-14 md:h-14 object-contain"
+                animate={{ scale: isScrolled ? 0.9 : 1 }}
+                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              />
+              <motion.div 
+                className="hidden sm:flex items-baseline gap-1.5"
+                animate={{ opacity: isScrolled ? 0.95 : 1 }}
+                transition={{ duration: 0.3 }}
+              >
+                <span className="font-display text-xl md:text-2xl font-normal text-porcelain tracking-wide italic">
+                  Alchemy
+                </span>
+                <span className="font-body text-[10px] md:text-xs font-bold text-porcelain/70 tracking-[0.35em] uppercase">
+                  LABS
+                </span>
+              </motion.div>
+            </Link>
+
+            {/* Desktop Navigation - Center */}
+            <ul className="hidden md:flex items-center gap-1 lg:gap-2">
+              {navItems.map((item) => (
+                <li key={item.label}>
+                  <Link
+                    to={item.href}
+                    className={`relative px-4 py-2 font-body text-sm transition-colors duration-300 no-glow rounded-full ${
+                      isActive(item.href) 
+                        ? 'text-alchemy-red' 
+                        : 'text-porcelain/60 hover:text-porcelain'
+                    }`}
+                  >
+                    {item.label}
+                    {isActive(item.href) && (
+                      <motion.div
+                        layoutId="nav-indicator"
+                        className="absolute inset-0 bg-alchemy-red/10 rounded-full border border-alchemy-red/20"
+                        transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+                      />
+                    )}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            
+            {/* CTA Button */}
+            <Link
+              to="/contact"
+              className={`hidden md:flex items-center gap-2 text-sm font-medium px-5 py-2.5 rounded-full transition-all duration-300 no-glow ${
+                isScrolled
+                  ? 'bg-alchemy-red text-porcelain hover:bg-alchemy-red/90'
+                  : 'glass-cta-nav text-porcelain'
+              }`}
             >
-              Alchemy Labs
-            </motion.span>
-          </Link>
+              Contact
+            </Link>
 
-          {/* Desktop Navigation - Center */}
-          <ul className="hidden md:flex items-center gap-1 lg:gap-2 absolute left-1/2 -translate-x-1/2">
-            {navItems.map((item) => (
-              <li key={item.label}>
-                <Link
-                  to={item.href}
-                  className={`relative px-4 py-2 font-body text-sm transition-colors duration-300 no-glow rounded-full ${
-                    isActive(item.href) 
-                      ? 'text-alchemy-red' 
-                      : 'text-porcelain/60 hover:text-porcelain'
-                  }`}
-                >
-                  {item.label}
-                  {isActive(item.href) && (
-                    <motion.div
-                      layoutId="nav-indicator"
-                      className="absolute inset-0 bg-alchemy-red/10 rounded-full border border-alchemy-red/20"
-                      transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-                    />
-                  )}
-                </Link>
-              </li>
-            ))}
-          </ul>
-          
-          {/* CTA Button */}
-          <Link
-            to="/contact"
-            className={`hidden md:flex items-center gap-2 text-sm font-medium px-5 py-2.5 rounded-full transition-all duration-300 no-glow ${
-              isScrolled
-                ? 'bg-alchemy-red text-porcelain hover:bg-alchemy-red/90'
-                : 'glass-cta-nav'
-            }`}
-          >
-            Contact
-          </Link>
-
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2 text-porcelain"
-            aria-label="Toggle menu"
-          >
-            {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
-          </button>
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="md:hidden p-2 text-porcelain"
+              aria-label="Toggle menu"
+            >
+              {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+            </button>
+          </div>
         </div>
       </motion.nav>
 
