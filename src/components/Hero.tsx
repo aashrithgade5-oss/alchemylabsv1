@@ -30,13 +30,13 @@ export const Hero = () => {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-            className="mb-6"
+            className="mb-8"
           >
             <h1 className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-display tracking-display">
-              <span className="italic text-alchemy-red text-glow">Alchemy</span>
+              <span className="italic text-alchemy-red">Alchemy</span>
               <span className="text-porcelain/90"> in </span>
-              <span className="italic text-alchemy-red text-glow">Motion</span>
-              <span className="text-porcelain/50">.</span>
+              <span className="italic text-alchemy-red">Motion</span>
+              <span className="text-porcelain/40">.</span>
             </h1>
           </motion.div>
 
@@ -47,10 +47,10 @@ export const Hero = () => {
             transition={{ duration: 0.9, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
             className="mb-10"
           >
-            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl leading-display tracking-tight text-porcelain/80">
-              <span className="italic text-alchemy-red text-glow-subtle">AI</span>
-              <span>-Augmented </span>
-              <span className="italic text-alchemy-red text-glow-subtle">Branding</span>
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl leading-display tracking-tight text-porcelain/70">
+              <span className="italic text-alchemy-red">AI</span>
+              <span className="text-porcelain/70">-Augmented </span>
+              <span className="italic text-alchemy-red">Branding</span>
             </h2>
           </motion.div>
 
@@ -59,14 +59,14 @@ export const Hero = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="font-body text-base md:text-lg lg:text-xl text-porcelain/60 leading-relaxed max-w-2xl mx-auto mb-12 font-light"
+            className="font-body text-base md:text-lg text-porcelain/50 leading-relaxed max-w-2xl mx-auto mb-14 font-light"
           >
             We architect{' '}
-            <span className="font-display italic text-porcelain/90">brand systems</span>{' '}
+            <span className="font-display italic text-porcelain/80">brand systems</span>{' '}
             for the intelligence era—where{' '}
-            <span className="font-display italic text-porcelain/90">strategy</span>,{' '}
-            <span className="font-display italic text-porcelain/90">identity</span>, and{' '}
-            <span className="font-display italic text-porcelain/90">culture</span>{' '}
+            <span className="font-display italic text-porcelain/80">strategy</span>,{' '}
+            <span className="font-display italic text-porcelain/80">identity</span>, and{' '}
+            <span className="font-display italic text-porcelain/80">culture</span>{' '}
             scale through precision.
           </motion.p>
 
@@ -75,25 +75,23 @@ export const Hero = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1.1, ease: [0.22, 1, 0.36, 1] }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6"
+            className="flex flex-col sm:flex-row items-center justify-center gap-5"
           >
             <motion.a
               href="#contact"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="glass-cta-primary group"
+              className="glass-cta-primary group text-glow"
             >
-              <span className="font-display italic">Book</span>
-              <span className="font-body">a Strategy Sprint</span>
+              <span className="font-body">Book a Strategy Sprint</span>
               <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
             </motion.a>
 
             <a
               href="#work"
-              className="group inline-flex items-center gap-2 px-6 py-4 font-body text-porcelain/60 hover:text-porcelain transition-colors duration-300"
+              className="group inline-flex items-center gap-2 px-6 py-4 font-body text-porcelain/50 hover:text-porcelain transition-colors duration-300"
             >
-              <span>Explore Our</span>
-              <span className="font-display italic text-porcelain/90">Work</span>
+              <span>Explore Our Work</span>
               <ArrowUpRight className="w-4 h-4 text-alchemy-red transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </a>
           </motion.div>
@@ -112,7 +110,7 @@ export const Hero = () => {
           transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
           className="w-6 h-10 rounded-full border border-porcelain/20 flex justify-center pt-2"
         >
-          <div className="w-1.5 h-1.5 rounded-full bg-alchemy-red shadow-[0_0_10px_rgba(225,6,19,0.6)]" />
+          <div className="w-1.5 h-1.5 rounded-full bg-alchemy-red" />
         </motion.div>
       </motion.div>
     </section>

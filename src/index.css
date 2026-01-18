@@ -297,24 +297,11 @@
     font-family: var(--font-mono);
   }
   
-  /* Glowing Text Effect */
+  /* Glowing Text Effect - Use sparingly on key CTAs only */
   .text-glow {
     text-shadow: 
-      0 0 20px rgba(225, 6, 19, 0.6),
-      0 0 40px rgba(225, 6, 19, 0.4),
-      0 0 60px rgba(225, 6, 19, 0.2);
-  }
-  
-  .text-glow-subtle {
-    text-shadow: 
-      0 0 15px rgba(225, 6, 19, 0.4),
-      0 0 30px rgba(225, 6, 19, 0.2);
-  }
-  
-  .text-glow-white {
-    text-shadow: 
-      0 0 20px rgba(255, 255, 255, 0.3),
-      0 0 40px rgba(255, 255, 255, 0.1);
+      0 0 12px rgba(225, 6, 19, 0.35),
+      0 0 24px rgba(225, 6, 19, 0.15);
   }
   
   /* Underline Animation */
