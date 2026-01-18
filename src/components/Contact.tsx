@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Send, Calendar, MessageCircle, Instagram, Mail } from 'lucide-react';
 import { aiServices, brandingServices, consultationServices } from '@/data/services';
+import { MagneticButton } from './MagneticButton';
 
 export const Contact = () => {
   const [formData, setFormData] = useState({
@@ -161,15 +162,13 @@ export const Contact = () => {
 
           {/* Actions */}
           <div className="flex flex-col sm:flex-row items-center gap-4">
-            <motion.button
+            <MagneticButton
               type="submit"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="glass-cta-primary w-full sm:w-auto justify-center"
+              className="glass-cta-primary w-full sm:w-auto justify-center relative overflow-hidden"
             >
               <span>Send Brief</span>
               <Send className="w-4 h-4" />
-            </motion.button>
+            </MagneticButton>
 
             <a
               href="#"
