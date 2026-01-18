@@ -1,181 +1,98 @@
-import { useEffect, useState, useCallback, useRef } from 'react';
-import { motion, useSpring, useMotionValue } from 'framer-motion';
-import { useLocation } from 'react-router-dom';
-
-type CursorVariant = 'default' | 'hover' | 'text' | 'hidden';
-
-// Check desktop synchronously to avoid initial null render
-const checkIsDesktop = () => {
-  if (typeof window === 'undefined') return false;
-  // Also check for touch devices
-  if ('ontouchstart' in window) return false;
-  return window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-};
+import { useEffect, useState, useRef } from 'react';
 
 export const CustomCursor = () => {
-  const [cursorVariant, setCursorVariant] = useState<CursorVariant>('default');
-  const [isVisible, setIsVisible] = useState(true); // Start visible
-  const [isDesktop, setIsDesktop] = useState(checkIsDesktop);
-  const cursorLabel = useRef<string>('');
-  const location = useLocation();
+  const cursorRef = useRef<HTMLDivElement>(null);
+  const [isHovering, setIsHovering] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const positionRef = useRef({ x: 0, y: 0 });
+  const rafRef = useRef<number>();
 
-  const mouseX = useMotionValue(-100);
-  const mouseY = useMotionValue(-100);
+  // Check if desktop (no touch, has fine pointer)
+  const isDesktop = typeof window !== 'undefined' && 
+    !('ontouchstart' in window) && 
+    window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
-  const springConfig = { damping: 25, stiffness: 300, mass: 0.5 };
-  const cursorX = useSpring(mouseX, springConfig);
-  const cursorY = useSpring(mouseY, springConfig);
-
-  const trailConfig = { damping: 35, stiffness: 150, mass: 0.8 };
-  const trailX = useSpring(mouseX, trailConfig);
-  const trailY = useSpring(mouseY, trailConfig);
-
-  // Re-check desktop on mount and media query changes
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(hover: hover) and (pointer: fine)');
-    setIsDesktop(mediaQuery.matches && !('ontouchstart' in window));
-
-    const handleChange = (e: MediaQueryListEvent) => {
-      setIsDesktop(e.matches && !('ontouchstart' in window));
-    };
-
-    mediaQuery.addEventListener('change', handleChange);
-    return () => mediaQuery.removeEventListener('change', handleChange);
-  }, []);
-
-  // Reset visibility on route change to ensure cursor is active
-  useEffect(() => {
-    if (isDesktop) {
-      setIsVisible(true);
-    }
-  }, [location.pathname, isDesktop]);
-
-  const updateCursorVariant = useCallback((target: Element | null) => {
-    if (!target) {
-      setCursorVariant('default');
-      cursorLabel.current = '';
-      return;
-    }
-    
-    if (target.closest('button, a, [role="button"], [data-cursor="button"]')) {
-      setCursorVariant('hover');
-      cursorLabel.current = '';
-    } else if (target.closest('input, textarea, select')) {
-      setCursorVariant('text');
-    } else if (target.closest('[data-cursor="view"]')) {
-      setCursorVariant('hover');
-      cursorLabel.current = 'View';
-    } else {
-      setCursorVariant('default');
-      cursorLabel.current = '';
-    }
-  }, []);
-
-  // Single global mouse tracking - attached to window
   useEffect(() => {
     if (!isDesktop) return;
 
-    const handleMouseMove = (e: MouseEvent) => {
-      mouseX.set(e.clientX);
-      mouseY.set(e.clientY);
-      setIsVisible(true);
-      updateCursorVariant(e.target as Element);
+    const updateCursor = () => {
+      if (cursorRef.current) {
+        cursorRef.current.style.transform = `translate(${positionRef.current.x}px, ${positionRef.current.y}px)`;
+      }
+      rafRef.current = requestAnimationFrame(updateCursor);
     };
 
-    const handleMouseLeave = () => setIsVisible(false);
-    const handleMouseEnter = () => setIsVisible(true);
+    const handleMouseMove = (e: MouseEvent) => {
+      positionRef.current = { x: e.clientX, y: e.clientY };
+      if (!isVisible) setIsVisible(true);
+    };
 
-    // Use window for global tracking
+    const handleMouseEnter = () => setIsVisible(true);
+    const handleMouseLeave = () => setIsVisible(false);
+
+    // Hover detection via event delegation
+    const handleMouseOver = (e: MouseEvent) => {
+      const target = e.target as Element;
+      const isInteractive = target.closest('button, a, [role="button"], input, textarea, select, [data-cursor="pointer"]');
+      setIsHovering(!!isInteractive);
+    };
+
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
-    document.documentElement.addEventListener('mouseleave', handleMouseLeave);
+    document.addEventListener('mouseover', handleMouseOver, { passive: true });
     document.documentElement.addEventListener('mouseenter', handleMouseEnter);
+    document.documentElement.addEventListener('mouseleave', handleMouseLeave);
+    
+    rafRef.current = requestAnimationFrame(updateCursor);
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
-      document.documentElement.removeEventListener('mouseleave', handleMouseLeave);
+      document.removeEventListener('mouseover', handleMouseOver);
       document.documentElement.removeEventListener('mouseenter', handleMouseEnter);
+      document.documentElement.removeEventListener('mouseleave', handleMouseLeave);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, [isDesktop, mouseX, mouseY, updateCursorVariant]);
+  }, [isDesktop, isVisible]);
 
-  // Don't render on mobile/touch devices
   if (!isDesktop) return null;
 
   return (
     <>
-      {/* Main cursor dot - fastest response */}
-      <motion.div
-        className="fixed top-0 left-0 pointer-events-none rounded-full flex items-center justify-center"
+      <div
+        ref={cursorRef}
+        className="fixed top-0 left-0 pointer-events-none will-change-transform"
         style={{
-          x: cursorX,
-          y: cursorY,
-          translateX: '-50%',
-          translateY: '-50%',
-          zIndex: 999999, // Highest z-index
-        }}
-        animate={{
-          width: cursorVariant === 'hover' ? 56 : cursorVariant === 'text' ? 4 : 10,
-          height: cursorVariant === 'hover' ? 56 : cursorVariant === 'text' ? 24 : 10,
-          backgroundColor: cursorVariant === 'hover' 
-            ? 'rgba(225, 6, 19, 0.12)' 
-            : 'rgba(225, 6, 19, 0.9)',
-          borderRadius: cursorVariant === 'text' ? 2 : 999,
-          borderWidth: cursorVariant === 'hover' ? 1 : 0,
-          borderColor: 'rgba(225, 6, 19, 0.5)',
+          zIndex: 999999,
           opacity: isVisible ? 1 : 0,
+          transition: 'opacity 0.15s ease',
         }}
-        transition={{ type: 'spring', damping: 25, stiffness: 400 }}
       >
-        {cursorVariant === 'hover' && cursorLabel.current && (
-          <span className="text-[10px] font-mono uppercase tracking-wider text-alchemy-red">
-            {cursorLabel.current}
-          </span>
-        )}
-      </motion.div>
+        {/* Main dot */}
+        <div
+          className="absolute rounded-full bg-alchemy-red transition-all duration-200 ease-out"
+          style={{
+            width: isHovering ? 40 : 8,
+            height: isHovering ? 40 : 8,
+            opacity: isHovering ? 0.15 : 0.9,
+            transform: 'translate(-50%, -50%)',
+            border: isHovering ? '1px solid rgba(225, 6, 19, 0.5)' : 'none',
+          }}
+        />
+        {/* Outer ring */}
+        <div
+          className="absolute rounded-full border border-alchemy-red/20 transition-all duration-300 ease-out"
+          style={{
+            width: isHovering ? 56 : 28,
+            height: isHovering ? 56 : 28,
+            transform: 'translate(-50%, -50%)',
+            opacity: isHovering ? 0.8 : 0.4,
+          }}
+        />
+      </div>
 
-      {/* Trailing ring - slower, creates depth */}
-      <motion.div
-        className="fixed top-0 left-0 pointer-events-none rounded-full"
-        style={{
-          x: trailX,
-          y: trailY,
-          translateX: '-50%',
-          translateY: '-50%',
-          border: '1px solid rgba(225, 6, 19, 0.15)',
-          zIndex: 999998,
-        }}
-        animate={{
-          width: cursorVariant === 'hover' ? 72 : 36,
-          height: cursorVariant === 'hover' ? 72 : 36,
-          opacity: isVisible && cursorVariant !== 'text' ? 0.6 : 0,
-        }}
-        transition={{ type: 'spring', damping: 35, stiffness: 180 }}
-      />
-
-      {/* Outer glow ring - slowest, for depth */}
-      <motion.div
-        className="fixed top-0 left-0 pointer-events-none rounded-full"
-        style={{
-          x: trailX,
-          y: trailY,
-          translateX: '-50%',
-          translateY: '-50%',
-          border: '1px solid rgba(225, 6, 19, 0.08)',
-          zIndex: 999997,
-        }}
-        animate={{
-          width: cursorVariant === 'hover' ? 88 : 48,
-          height: cursorVariant === 'hover' ? 88 : 48,
-          opacity: isVisible && cursorVariant === 'default' ? 0.3 : 0,
-        }}
-        transition={{ type: 'spring', damping: 45, stiffness: 120 }}
-      />
-
-      {/* Hide default cursor globally on desktop */}
+      {/* Hide default cursor */}
       <style>{`
         @media (hover: hover) and (pointer: fine) {
-          *, *::before, *::after {
-            cursor: none !important;
-          }
+          * { cursor: none !important; }
         }
       `}</style>
     </>
