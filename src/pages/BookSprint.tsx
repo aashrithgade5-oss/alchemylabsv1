@@ -4,7 +4,6 @@ import { ArrowRight, Check, Loader, MessageCircle, Mail, ArrowLeft } from 'lucid
 import { Link, useNavigate } from 'react-router-dom';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
-import { CustomCursor } from '@/components/CustomCursor';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
@@ -65,7 +64,6 @@ export const BookSprint = () => {
   if (submitted) {
     return (
       <div className="min-h-screen bg-background grain-overlay">
-        <CustomCursor />
         <Navigation />
         
         <section className="min-h-screen flex items-center justify-center section-gradient">
@@ -103,7 +101,6 @@ export const BookSprint = () => {
 
   return (
     <div className="min-h-screen bg-background grain-overlay">
-      <CustomCursor />
       <Navigation />
       
       {/* Hero */}
@@ -223,7 +220,7 @@ export const BookSprint = () => {
                   value={formData.service}
                   onChange={(e) => setFormData({...formData, service: e.target.value})}
                   required
-                  className="glass-input"
+                  className="glass-input select-dropdown"
                 >
                   <option value="">Select a service...</option>
                   {serviceOptions.map((group) => (

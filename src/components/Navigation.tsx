@@ -76,7 +76,7 @@ export const Navigation = () => {
           
           {/* CTA Button */}
           <Link
-            to="/book-sprint"
+            to="/contact"
             className="hidden md:flex glass-cta-nav text-sm px-5 py-2 no-glow"
           >
             Contact

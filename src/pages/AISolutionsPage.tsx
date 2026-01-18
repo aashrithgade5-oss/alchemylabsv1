@@ -5,7 +5,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { MagneticButton } from '@/components/MagneticButton';
-import { CustomCursor } from '@/components/CustomCursor';
 
 const services = [
   {
@@ -182,7 +181,6 @@ export const AISolutionsPage = () => {
 
   return (
     <div className="min-h-screen bg-background grain-overlay">
-      <CustomCursor />
       <Navigation />
       
       {/* Hero */}

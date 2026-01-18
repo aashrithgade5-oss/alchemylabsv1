@@ -300,6 +300,143 @@
     font-weight: 300;
   }
   
+  /* Select Dropdown Styling */
+  .select-dropdown {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23e10613' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1rem;
+    padding-right: 3rem;
+  }
+  
+  .select-dropdown option {
+    background-color: hsl(240 5% 6%);
+    color: hsl(356 94% 45%);
+    padding: 12px 16px;
+    font-family: var(--font-body);
+  }
+  
+  .select-dropdown option:hover,
+  .select-dropdown option:focus,
+  .select-dropdown option:checked {
+    background-color: hsl(356 94% 45% / 0.2);
+    color: hsl(356 94% 45%);
+  }
+  
+  .select-dropdown optgroup {
+    background-color: hsl(240 5% 8%);
+    color: hsl(var(--porcelain));
+    font-family: var(--font-body);
+    font-weight: 600;
+    padding: 8px 0;
+  }
+  
+  /* Text blend effect for important headings */
+  .text-blend-overlay {
+    mix-blend-mode: overlay;
+  }
+  
+  .text-blend-difference {
+    mix-blend-mode: difference;
+  }
+  
+  .text-blend-screen {
+    mix-blend-mode: screen;
+  }
+  
+  /* Parallax Layer Utility */
+  .parallax-slow {
+    will-change: transform;
+    transform: translateZ(-2px) scale(3);
+  }
+  
+  .parallax-medium {
+    will-change: transform;
+    transform: translateZ(-1px) scale(2);
+  }
+  
+  .parallax-fast {
+    will-change: transform;
+    transform: translateZ(0);
+  }
+  
+  /* Fade in up animation */
+  .animate-fade-in-up {
+    animation: fadeInUp 0.8s ease forwards;
+  }
+  
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Staggered fade animation */
+  .stagger-fade > * {
+    opacity: 0;
+    animation: fadeInUp 0.6s ease forwards;
+  }
+  
+  .stagger-fade > *:nth-child(1) { animation-delay: 0.1s; }
+  .stagger-fade > *:nth-child(2) { animation-delay: 0.2s; }
+  .stagger-fade > *:nth-child(3) { animation-delay: 0.3s; }
+  .stagger-fade > *:nth-child(4) { animation-delay: 0.4s; }
+  .stagger-fade > *:nth-child(5) { animation-delay: 0.5s; }
+  .stagger-fade > *:nth-child(6) { animation-delay: 0.6s; }
+  
+  /* Smooth scroll reveal */
+  .scroll-reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  
+  .scroll-reveal.revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  /* Glow hover effect for interactive elements */
+  .hover-glow:hover {
+    box-shadow: 0 0 40px rgba(225, 6, 19, 0.25);
+  }
+  
+  /* Subtle pulse animation */
+  .pulse-subtle {
+    animation: pulseSoft 3s ease-in-out infinite;
+  }
+  
+  @keyframes pulseSoft {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.85; transform: scale(1.02); }
+  }
+  
+  /* Float animation for decorative elements */
+  .float {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+  }
+  
+  /* Rotate slow animation */
+  .rotate-slow {
+    animation: rotateSlow 30s linear infinite;
+  }
+  
+  @keyframes rotateSlow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  
   /* Glass Tabs */
   .glass-tab {
     @apply px-6 py-3 rounded-full transition-all duration-350;
