@@ -18,6 +18,8 @@ import BrandingSolutionsPage from "./pages/BrandingSolutionsPage";
 import ConsultationSolutionsPage from "./pages/ConsultationSolutionsPage";
 import BookSprint from "./pages/BookSprint";
 import About from "./pages/About";
+import Work from "./pages/Work";
+import JournalPage from "./pages/JournalPage";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +38,8 @@ const AnimatedRoutes = () => {
         <Routes location={location}>
           <Route path="/" element={<Index />} />
           <Route path="/about" element={<About />} />
+          <Route path="/work" element={<Work />} />
+          <Route path="/journal" element={<JournalPage />} />
           <Route path="/solutions" element={<SolutionsHub />} />
           <Route path="/solutions/ai" element={<AISolutionsPage />} />
           <Route path="/solutions/branding" element={<BrandingSolutionsPage />} />

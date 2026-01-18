@@ -55,12 +55,13 @@ export const Hero = () => {
           >
             <h1 className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl leading-display tracking-display">
               <motion.span
-                className="italic text-alchemy-red inline-block"
+                className="inline-block font-bold uppercase tracking-tight"
+                style={{ fontFamily: 'Helvetica Neue, Helvetica, Arial, sans-serif' }}
                 initial={{ opacity: 0, y: 40, filter: 'blur(10px)' }}
                 animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                 transition={{ duration: 1, delay: 0.4 }}
               >
-                Alchemy
+                <span className="text-alchemy-red">ALCHEMY</span>
               </motion.span>
               <motion.span
                 className="text-porcelain/90 inline-block"
@@ -71,12 +72,13 @@ export const Hero = () => {
                 {' '}in{' '}
               </motion.span>
               <motion.span
-                className="italic text-alchemy-red inline-block"
+                className="inline-block font-bold uppercase tracking-tight"
+                style={{ fontFamily: 'Helvetica Neue, Helvetica, Arial, sans-serif' }}
                 initial={{ opacity: 0, y: 40, filter: 'blur(10px)' }}
                 animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                 transition={{ duration: 1, delay: 0.7 }}
               >
-                Motion
+                <span className="text-alchemy-red">MOTION</span>
               </motion.span>
               <motion.span
                 className="text-porcelain/30 inline-block"
@@ -97,9 +99,9 @@ export const Hero = () => {
             className="mb-12"
           >
             <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl leading-display tracking-tight text-porcelain/70">
-              <span className="italic text-alchemy-red">AI</span>
+              <span className="font-bold uppercase tracking-tight text-alchemy-red" style={{ fontFamily: 'Helvetica Neue, Helvetica, Arial, sans-serif' }}>AI</span>
               <span className="text-porcelain/60">-Augmented </span>
-              <span className="italic text-alchemy-red">Branding</span>
+              <span className="font-bold uppercase tracking-tight text-alchemy-red" style={{ fontFamily: 'Helvetica Neue, Helvetica, Arial, sans-serif' }}>BRANDING</span>
             </h2>
           </motion.div>
 
