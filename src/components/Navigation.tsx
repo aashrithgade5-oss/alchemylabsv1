@@ -76,7 +76,7 @@ export const Navigation = () => {
           
           {/* CTA Button */}
           <Link
-            to="/#contact"
+            to="/book-sprint"
             className="hidden md:flex glass-cta-nav text-sm px-5 py-2 no-glow"
           >
             Contact
@@ -139,7 +139,7 @@ export const Navigation = () => {
                 transition={{ delay: 0.5, duration: 0.4 }}
               >
                 <Link
-                  to="/#contact"
+                  to="/book-sprint"
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="glass-cta-primary mt-4 no-glow"
                 >

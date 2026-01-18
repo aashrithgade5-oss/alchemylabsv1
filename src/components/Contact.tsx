@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Send, Calendar, MessageCircle, Instagram, Mail, Loader2, Check } from 'lucide-react';
-import { aiServices, brandingServices, consultationServices } from '@/data/services';
+import { Link } from 'react-router-dom';
 import { MagneticButton } from './MagneticButton';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -159,7 +159,7 @@ export const Contact = () => {
           {/* Service Selection */}
           <div className="space-y-2 mb-6">
             <label className="font-mono text-xs text-porcelain/50 tracking-label uppercase">
-              Desired Service
+              Interested In
             </label>
             <select
               value={formData.service}
@@ -170,30 +170,12 @@ export const Contact = () => {
               disabled={isSubmitting}
             >
               <option value="" disabled>
-                Select a service...
+                Select a pillar...
               </option>
-              <optgroup label="AI Solutions">
-                {aiServices.map((service) => (
-                  <option key={service.id} value={service.id}>
-                    {service.title}
-                  </option>
-                ))}
-              </optgroup>
-              <optgroup label="Branding Solutions">
-                {brandingServices.map((service) => (
-                  <option key={service.id} value={service.id}>
-                    {service.title}
-                  </option>
-                ))}
-              </optgroup>
-              <optgroup label="Consultation">
-                {consultationServices.map((service) => (
-                  <option key={service.id} value={service.id}>
-                    {service.title}
-                  </option>
-                ))}
-              </optgroup>
-              <option value="not-sure">Not Sure / Multiple Services</option>
+              <option value="ai-solutions">AI Solutions</option>
+              <option value="branding-solutions">Branding Solutions</option>
+              <option value="consultation">Consultation</option>
+              <option value="not-sure">Not Sure / Multiple</option>
             </select>
           </div>
 
@@ -240,13 +222,13 @@ export const Contact = () => {
               )}
             </MagneticButton>
 
-            <a
-              href="#"
-              className="inline-flex items-center gap-2 px-6 py-4 font-body text-porcelain/50 hover:text-alchemy-red transition-colors group"
+            <Link
+              to="/book-sprint"
+              className="inline-flex items-center gap-2 px-6 py-4 font-body text-porcelain/50 hover:text-alchemy-red transition-colors group no-glow"
             >
               <Calendar className="w-4 h-4" />
               <span>Book a Call Instead</span>
-            </a>
+            </Link>
           </div>
 
           {/* Reassurance */}
