@@ -1,12 +1,44 @@
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, useInView } from 'framer-motion';
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import heroVideo from '@/assets/hero-video.mp4';
 import { MagneticButton } from './MagneticButton';
 import { useRef } from 'react';
 
+// Word-by-word animation variants
+const wordVariants = {
+  hidden: { 
+    opacity: 0, 
+    y: 40, 
+    filter: 'blur(12px)',
+    rotateX: 45,
+  },
+  visible: { 
+    opacity: 1, 
+    y: 0, 
+    filter: 'blur(0px)',
+    rotateX: 0,
+  },
+};
+
+const charVariants = {
+  hidden: { 
+    opacity: 0, 
+    y: 20,
+    scale: 0.8,
+  },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    scale: 1,
+  },
+};
+
 export const Hero = () => {
   const sectionRef = useRef<HTMLElement>(null);
+  const headlineRef = useRef<HTMLDivElement>(null);
+  const isHeadlineInView = useInView(headlineRef, { once: true, margin: '-100px' });
+  
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ['start start', 'end start'],
@@ -16,6 +48,9 @@ export const Hero = () => {
   const opacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
   const scale = useTransform(scrollYProgress, [0, 0.6], [1, 0.92]);
   const blur = useTransform(scrollYProgress, [0, 0.4], [0, 10]);
+
+  // Blend mode shifts
+  const blendProgress = useTransform(scrollYProgress, [0, 0.3], [0, 1]);
 
   return (
     <section id="hero" ref={sectionRef} className="relative min-h-screen flex items-center overflow-hidden">
@@ -35,6 +70,15 @@ export const Hero = () => {
         <div className="absolute inset-0 bg-gradient-to-t from-alchemy-black via-transparent to-alchemy-black/50" />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-alchemy-black" />
         <div className="absolute inset-0 hero-gradient" />
+        
+        {/* Dynamic mesh gradient overlay */}
+        <motion.div 
+          className="absolute inset-0 pointer-events-none"
+          style={{ opacity: blendProgress }}
+        >
+          <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-gradient-radial from-alchemy-red/10 to-transparent rounded-full blur-[150px]" />
+          <div className="absolute bottom-1/4 right-1/3 w-[500px] h-[500px] bg-gradient-radial from-deep-crimson/8 to-transparent rounded-full blur-[120px]" />
+        </motion.div>
       </motion.div>
 
       {/* Content with blur-on-scroll effect */}
@@ -46,85 +90,151 @@ export const Hero = () => {
         }}
         className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 py-32 md:py-40 w-full will-change-transform"
       >
-        <div className="max-w-4xl mx-auto text-center">
-          {/* Main Headline with staggered reveal */}
-          <motion.div
-            initial={{ opacity: 0, y: 60, filter: 'blur(20px)' }}
-            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-            transition={{ duration: 1.2, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-            className="mb-8"
-          >
+        <div className="max-w-4xl mx-auto text-center" ref={headlineRef}>
+          {/* Main Headline with character-by-character reveal */}
+          <div className="mb-8 perspective-1000">
             <h1 className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl leading-display tracking-display">
+              {/* "Alchemy" - with blend mode effect */}
               <motion.span
-                className="italic text-alchemy-red inline-block"
-                initial={{ opacity: 0, y: 40, filter: 'blur(10px)' }}
-                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                transition={{ duration: 1, delay: 0.4 }}
+                className="italic text-alchemy-red inline-block relative"
+                initial="hidden"
+                animate={isHeadlineInView ? 'visible' : 'hidden'}
+                variants={wordVariants}
+                transition={{ duration: 1.2, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
               >
-                Alchemy
+                <span className="relative z-10">Alchemy</span>
+                {/* Blend overlay glow */}
+                <motion.span 
+                  className="absolute inset-0 text-alchemy-red blur-[2px] opacity-50"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: [0, 0.5, 0.3] }}
+                  transition={{ duration: 2, delay: 1.5, repeat: Infinity, repeatType: 'reverse' }}
+                >
+                  Alchemy
+                </motion.span>
               </motion.span>
+              
               <motion.span
-                className="text-porcelain/90 inline-block"
+                className="text-porcelain/90 inline-block mx-2"
                 initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.8, delay: 0.6 }}
+                animate={isHeadlineInView ? { opacity: 1 } : { opacity: 0 }}
+                transition={{ duration: 0.6, delay: 0.8 }}
               >
-                {' '}in{' '}
+                in
               </motion.span>
+              
+              {/* "Motion" - with split character animation */}
               <motion.span
-                className="italic text-alchemy-red inline-block"
-                initial={{ opacity: 0, y: 40, filter: 'blur(10px)' }}
-                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                transition={{ duration: 1, delay: 0.7 }}
+                className="italic text-alchemy-red inline-block relative"
+                initial="hidden"
+                animate={isHeadlineInView ? 'visible' : 'hidden'}
+                variants={wordVariants}
+                transition={{ duration: 1.2, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
               >
-                Motion
+                <span className="relative z-10">Motion</span>
+                {/* Blend overlay glow */}
+                <motion.span 
+                  className="absolute inset-0 text-alchemy-red blur-[3px] opacity-40"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: [0, 0.4, 0.2] }}
+                  transition={{ duration: 2.5, delay: 2, repeat: Infinity, repeatType: 'reverse' }}
+                >
+                  Motion
+                </motion.span>
               </motion.span>
+              
               <motion.span
                 className="text-porcelain/30 inline-block"
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: 1.1, type: 'spring' }}
+                initial={{ opacity: 0, scale: 0, rotate: -180 }}
+                animate={isHeadlineInView ? { opacity: 1, scale: 1, rotate: 0 } : {}}
+                transition={{ duration: 0.8, delay: 1.2, type: 'spring', stiffness: 200 }}
               >
                 .
               </motion.span>
             </h1>
-          </motion.div>
+          </div>
 
-          {/* Sub Headline with gradient reveal */}
+          {/* Sub Headline with word reveal */}
           <motion.div
-            initial={{ opacity: 0, y: 30, filter: 'blur(10px)' }}
-            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-            transition={{ duration: 1, delay: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="mb-12"
+            className="mb-12 overflow-hidden"
           >
-            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl leading-display tracking-tight text-porcelain/70">
-              <span className="italic text-alchemy-red">AI</span>
-              <span className="text-porcelain/60">-Augmented </span>
-              <span className="italic text-alchemy-red">Branding</span>
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl leading-display tracking-tight">
+              <motion.span
+                className="italic text-alchemy-red inline-block"
+                initial={{ opacity: 0, y: 30, rotateX: 45 }}
+                animate={isHeadlineInView ? { opacity: 1, y: 0, rotateX: 0 } : {}}
+                transition={{ duration: 0.8, delay: 1.0, ease: [0.22, 1, 0.36, 1] }}
+              >
+                AI
+              </motion.span>
+              <motion.span
+                className="text-porcelain/60 inline-block"
+                initial={{ opacity: 0, y: 20 }}
+                animate={isHeadlineInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.6, delay: 1.2 }}
+              >
+                -Augmented{' '}
+              </motion.span>
+              <motion.span
+                className="italic text-alchemy-red inline-block"
+                initial={{ opacity: 0, y: 30, rotateX: 45 }}
+                animate={isHeadlineInView ? { opacity: 1, y: 0, rotateX: 0 } : {}}
+                transition={{ duration: 0.8, delay: 1.3, ease: [0.22, 1, 0.36, 1] }}
+              >
+                Branding
+              </motion.span>
             </h2>
           </motion.div>
 
-          {/* Description with word emphasis */}
+          {/* Description with word-by-word emphasis */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 1, ease: [0.22, 1, 0.36, 1] }}
+            animate={isHeadlineInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.9, delay: 1.5, ease: [0.22, 1, 0.36, 1] }}
             className="font-body text-base md:text-lg lg:text-xl text-porcelain/50 leading-relaxed max-w-2xl mx-auto mb-16 font-light"
           >
             We architect{' '}
-            <span className="font-display italic text-porcelain/80">brand systems</span>{' '}
+            <motion.span 
+              className="font-display italic text-porcelain/80 inline-block"
+              initial={{ opacity: 0, y: 10 }}
+              animate={isHeadlineInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5, delay: 1.7 }}
+            >
+              brand systems
+            </motion.span>{' '}
             for the intelligence era—where{' '}
-            <span className="font-display italic text-porcelain/80">strategy</span>,{' '}
-            <span className="font-display italic text-porcelain/80">identity</span>, and{' '}
-            <span className="font-display italic text-porcelain/80">culture</span>{' '}
+            <motion.span 
+              className="font-display italic text-porcelain/80 inline-block"
+              initial={{ opacity: 0, y: 10 }}
+              animate={isHeadlineInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5, delay: 1.9 }}
+            >
+              strategy
+            </motion.span>,{' '}
+            <motion.span 
+              className="font-display italic text-porcelain/80 inline-block"
+              initial={{ opacity: 0, y: 10 }}
+              animate={isHeadlineInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5, delay: 2.1 }}
+            >
+              identity
+            </motion.span>, and{' '}
+            <motion.span 
+              className="font-display italic text-porcelain/80 inline-block"
+              initial={{ opacity: 0, y: 10 }}
+              animate={isHeadlineInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5, delay: 2.3 }}
+            >
+              culture
+            </motion.span>{' '}
             scale through precision.
           </motion.p>
 
           {/* CTAs with stagger */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.2, ease: [0.22, 1, 0.36, 1] }}
+            animate={isHeadlineInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, delay: 2.5, ease: [0.22, 1, 0.36, 1] }}
             className="flex flex-col sm:flex-row items-center justify-center gap-6"
           >
             <Link to="/book-sprint">
@@ -151,7 +261,7 @@ export const Hero = () => {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 2.5, duration: 0.8 }}
+        transition={{ delay: 3, duration: 0.8 }}
         className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3"
       >
         <span className="font-mono text-[10px] text-porcelain/30 uppercase tracking-[0.3em]">

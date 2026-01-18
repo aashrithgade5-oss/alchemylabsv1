@@ -3,10 +3,11 @@ import { useRef } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import { MagneticButton } from './MagneticButton';
 
+// Premium positioning metrics - not hypothetical, but aspirational and honest
 const stats = [
-  { number: '50+', label: 'Projects Delivered' },
-  { number: '98%', label: 'Client Retention' },
-  { number: '3x', label: 'Average ROI' },
+  { number: '∞', label: 'Creative Capacity', subtext: 'Limitless production potential' },
+  { number: '24h', label: 'Concept Speed', subtext: 'From brief to visual in a day' },
+  { number: '1:1', label: 'Founder Access', subtext: 'Direct collaboration, no layers' },
 ];
 
 export const EditorialSection = () => {
@@ -23,6 +24,7 @@ export const EditorialSection = () => {
 
   return (
     <section
+      id="editorial"
       ref={sectionRef}
       className="relative py-40 overflow-hidden section-cream"
     >
@@ -59,7 +61,7 @@ export const EditorialSection = () => {
               transition={{ duration: 0.8 }}
               className="inline-block font-mono text-xs uppercase tracking-[0.25em] text-alchemy-black/40"
             >
-              The Thesis
+              Our Promise
             </motion.span>
 
             <motion.h2
@@ -67,13 +69,13 @@ export const EditorialSection = () => {
               whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
               viewport={{ once: true }}
               transition={{ duration: 1, delay: 0.1 }}
-              className="font-display text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-[1.05] tracking-tight text-alchemy-black"
+              className="font-display text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-[1.05] tracking-tight text-alchemy-black text-balance"
             >
-              Most brands chase{' '}
-              <span className="italic text-alchemy-red">relevance</span>.
+              Most agencies sell{' '}
+              <span className="italic text-alchemy-red">hours</span>.
               <br />
-              Icons design{' '}
-              <span className="italic text-alchemy-red">permanence</span>.
+              We deliver{' '}
+              <span className="italic text-alchemy-red">outcomes</span>.
             </motion.h2>
 
             <motion.p
@@ -83,8 +85,8 @@ export const EditorialSection = () => {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="font-body text-lg md:text-xl text-alchemy-black/60 leading-relaxed max-w-lg"
             >
-              We build strategic systems that compound over time—not campaigns that expire. 
-              Every touchpoint is engineered to reinforce your position in culture.
+              We're not counting billable hours—we're engineering brand infrastructure 
+              that compounds. AI acceleration means premium output at startup speed.
             </motion.p>
 
             <motion.div
@@ -103,13 +105,13 @@ export const EditorialSection = () => {
             </motion.div>
           </motion.div>
 
-          {/* Right column - Stats with stagger */}
+          {/* Right column - Premium positioning metrics */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 1, delay: 0.3 }}
-            className="space-y-10"
+            className="space-y-8"
           >
             {stats.map((stat, i) => (
               <motion.div
@@ -118,19 +120,24 @@ export const EditorialSection = () => {
                 whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: 0.4 + i * 0.15 }}
-                className="border-b border-alchemy-black/10 pb-10 group"
+                className="border-b border-alchemy-black/10 pb-8 group"
               >
-                <div className="flex items-end justify-between">
-                  <motion.span 
-                    className="font-display text-6xl md:text-7xl lg:text-8xl italic text-alchemy-red"
-                    whileHover={{ scale: 1.02 }}
-                    transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-                  >
-                    {stat.number}
-                  </motion.span>
-                  <span className="font-body text-sm text-alchemy-black/40 uppercase tracking-wider pb-5">
-                    {stat.label}
-                  </span>
+                <div className="flex items-start justify-between gap-6">
+                  <div className="flex-1">
+                    <motion.span 
+                      className="font-display text-5xl md:text-6xl lg:text-7xl italic text-alchemy-red block mb-2"
+                      whileHover={{ scale: 1.02 }}
+                      transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+                    >
+                      {stat.number}
+                    </motion.span>
+                    <span className="font-display text-lg md:text-xl text-alchemy-black block mb-1">
+                      {stat.label}
+                    </span>
+                    <span className="font-body text-sm text-alchemy-black/40">
+                      {stat.subtext}
+                    </span>
+                  </div>
                 </div>
               </motion.div>
             ))}
@@ -147,10 +154,10 @@ export const EditorialSection = () => {
             whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
             viewport={{ once: true }}
             transition={{ duration: 1.2 }}
-            className="font-display text-2xl md:text-3xl lg:text-4xl xl:text-5xl italic text-alchemy-black/80 max-w-4xl mx-auto leading-[1.3]"
+            className="font-display text-2xl md:text-3xl lg:text-4xl xl:text-5xl italic text-alchemy-black/80 max-w-4xl mx-auto leading-[1.3] text-balance"
           >
-            "In a world drowning in content, the brands that win are the ones that 
-            <span className="text-alchemy-red"> mean something</span>."
+            "The best brands don't explain themselves. They 
+            <span className="text-alchemy-red"> feel inevitable</span>."
           </motion.blockquote>
           <motion.cite 
             initial={{ opacity: 0 }}
@@ -159,7 +166,7 @@ export const EditorialSection = () => {
             transition={{ duration: 0.8, delay: 0.5 }}
             className="block mt-8 font-mono text-sm text-alchemy-black/30 not-italic uppercase tracking-[0.2em]"
           >
-            — Alchemy Labs Founding Principle
+            — Alchemy Labs Philosophy
           </motion.cite>
         </motion.div>
       </div>
