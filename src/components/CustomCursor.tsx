@@ -1,146 +1,109 @@
 import { useEffect, useRef, useState } from 'react';
 
 export const CustomCursor = () => {
-  const cursorDotRef = useRef<HTMLDivElement>(null);
-  const cursorRingRef = useRef<HTMLDivElement>(null);
-  const [isHovering, setIsHovering] = useState(false);
-  const mousePos = useRef({ x: -100, y: -100 });
-  const cursorPos = useRef({ x: -100, y: -100 });
-  const magnetTarget = useRef<{ x: number; y: number; active: boolean }>({ x: 0, y: 0, active: false });
+  const dotRef = useRef<HTMLDivElement>(null);
+  const ringRef = useRef<HTMLDivElement>(null);
+  const [enabled, setEnabled] = useState(false);
+  const [hovering, setHovering] = useState(false);
+  const pos = useRef({ x: 0, y: 0 });
+  const target = useRef({ x: 0, y: 0 });
 
-  // Synchronous desktop check
-  const isDesktop = typeof window !== 'undefined' && 
-    !('ontouchstart' in window) && 
-    window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  // Enable only after mount on desktop
+  useEffect(() => {
+    const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    const hasFinePointer = window.matchMedia('(pointer: fine)').matches;
+    
+    if (!isTouch && hasFinePointer) {
+      setEnabled(true);
+      console.log('[Cursor] Enabled - desktop detected');
+    } else {
+      console.log('[Cursor] Disabled - touch device or no fine pointer');
+    }
+  }, []);
 
   useEffect(() => {
-    if (!isDesktop) return;
+    if (!enabled) return;
 
-    let animationId: number;
+    let raf: number;
 
-    const lerp = (start: number, end: number, factor: number) => start + (end - start) * factor;
+    const update = () => {
+      pos.current.x += (target.current.x - pos.current.x) * 0.15;
+      pos.current.y += (target.current.y - pos.current.y) * 0.15;
 
-    const animate = () => {
-      // Apply magnetic pull if near interactive element
-      const targetX = magnetTarget.current.active ? magnetTarget.current.x : mousePos.current.x;
-      const targetY = magnetTarget.current.active ? magnetTarget.current.y : mousePos.current.y;
-      
-      // Smooth interpolation
-      cursorPos.current.x = lerp(cursorPos.current.x, targetX, 0.15);
-      cursorPos.current.y = lerp(cursorPos.current.y, targetY, 0.15);
-
-      if (cursorDotRef.current) {
-        cursorDotRef.current.style.left = `${cursorPos.current.x}px`;
-        cursorDotRef.current.style.top = `${cursorPos.current.y}px`;
+      if (dotRef.current) {
+        dotRef.current.style.transform = `translate(${pos.current.x - 4}px, ${pos.current.y - 4}px)`;
       }
-      if (cursorRingRef.current) {
-        cursorRingRef.current.style.left = `${cursorPos.current.x}px`;
-        cursorRingRef.current.style.top = `${cursorPos.current.y}px`;
+      if (ringRef.current) {
+        ringRef.current.style.transform = `translate(${pos.current.x - 14}px, ${pos.current.y - 14}px)`;
       }
 
-      animationId = requestAnimationFrame(animate);
+      raf = requestAnimationFrame(update);
     };
 
-    const handleMouseMove = (e: MouseEvent) => {
-      mousePos.current = { x: e.clientX, y: e.clientY };
+    const onMove = (e: MouseEvent) => {
+      target.current.x = e.clientX;
+      target.current.y = e.clientY;
 
-      // Check for magnetic targets
-      const target = e.target as Element;
-      const interactiveEl = target.closest('button, a, [role="button"], [data-magnetic]') as HTMLElement;
-      
-      if (interactiveEl) {
-        const rect = interactiveEl.getBoundingClientRect();
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
-        
-        // Calculate distance from center
-        const distX = e.clientX - centerX;
-        const distY = e.clientY - centerY;
-        const distance = Math.sqrt(distX * distX + distY * distY);
-        
-        // Magnetic threshold (pixels from center)
-        const threshold = Math.max(rect.width, rect.height) * 0.8;
-        
-        if (distance < threshold) {
-          // Pull cursor toward center with strength based on distance
-          const pull = 0.3 * (1 - distance / threshold);
-          magnetTarget.current = {
-            x: e.clientX - distX * pull,
-            y: e.clientY - distY * pull,
-            active: true
-          };
-          setIsHovering(true);
-        } else {
-          magnetTarget.current.active = false;
-          setIsHovering(false);
-        }
+      // Check hover state
+      const el = document.elementFromPoint(e.clientX, e.clientY);
+      if (el?.closest('button, a, [role="button"], input, textarea, select')) {
+        setHovering(true);
       } else {
-        magnetTarget.current.active = false;
-        setIsHovering(false);
+        setHovering(false);
       }
     };
 
-    const handleMouseLeave = () => {
-      mousePos.current = { x: -100, y: -100 };
-      magnetTarget.current.active = false;
-    };
-
-    window.addEventListener('mousemove', handleMouseMove, { passive: true });
-    document.documentElement.addEventListener('mouseleave', handleMouseLeave);
-    
-    animationId = requestAnimationFrame(animate);
+    // Start animation
+    raf = requestAnimationFrame(update);
+    window.addEventListener('mousemove', onMove);
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      document.documentElement.removeEventListener('mouseleave', handleMouseLeave);
-      cancelAnimationFrame(animationId);
+      cancelAnimationFrame(raf);
+      window.removeEventListener('mousemove', onMove);
     };
-  }, [isDesktop]);
+  }, [enabled]);
 
-  if (!isDesktop) return null;
+  if (!enabled) return null;
 
   return (
     <>
-      {/* Cursor dot */}
+      {/* Dot */}
       <div
-        ref={cursorDotRef}
+        ref={dotRef}
         style={{
           position: 'fixed',
-          width: isHovering ? '40px' : '8px',
-          height: isHovering ? '40px' : '8px',
-          backgroundColor: isHovering ? 'rgba(225, 6, 19, 0.12)' : 'rgba(225, 6, 19, 0.9)',
-          border: isHovering ? '1px solid rgba(225, 6, 19, 0.5)' : 'none',
+          top: 0,
+          left: 0,
+          width: hovering ? 32 : 8,
+          height: hovering ? 32 : 8,
+          backgroundColor: hovering ? 'rgba(225, 6, 19, 0.15)' : 'rgba(225, 6, 19, 0.85)',
+          border: hovering ? '1px solid rgba(225, 6, 19, 0.4)' : 'none',
           borderRadius: '50%',
           pointerEvents: 'none',
-          zIndex: 999999,
-          transform: 'translate(-50%, -50%)',
-          transition: 'width 0.2s, height 0.2s, background-color 0.2s, border 0.2s',
-          willChange: 'left, top',
+          zIndex: 2147483647,
+          transition: 'width 0.15s, height 0.15s, background-color 0.15s',
         }}
       />
-      
-      {/* Cursor ring */}
+      {/* Ring */}
       <div
-        ref={cursorRingRef}
+        ref={ringRef}
         style={{
           position: 'fixed',
-          width: isHovering ? '56px' : '28px',
-          height: isHovering ? '56px' : '28px',
-          border: '1px solid rgba(225, 6, 19, 0.2)',
+          top: 0,
+          left: 0,
+          width: 28,
+          height: 28,
+          border: '1px solid rgba(225, 6, 19, 0.25)',
           borderRadius: '50%',
           pointerEvents: 'none',
-          zIndex: 999998,
-          transform: 'translate(-50%, -50%)',
-          opacity: isHovering ? 0.8 : 0.4,
-          transition: 'width 0.3s, height 0.3s, opacity 0.2s',
-          willChange: 'left, top',
+          zIndex: 2147483646,
+          opacity: hovering ? 0 : 0.5,
+          transition: 'opacity 0.15s',
         }}
       />
-
-      {/* Hide default cursor */}
       <style>{`
         @media (hover: hover) and (pointer: fine) {
-          * { cursor: none !important; }
+          html, body, * { cursor: none !important; }
         }
       `}</style>
     </>
