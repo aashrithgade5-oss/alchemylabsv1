@@ -8,8 +8,8 @@ const navItems = [
   { label: 'Home', href: '/' },
   { label: 'Solutions', href: '/solutions' },
   { label: 'About', href: '/about' },
-  { label: 'Work', href: '/#work' },
-  { label: 'Journal', href: '/#journal' },
+  { label: 'Work', href: '/work' },
+  { label: 'Journal', href: '/journal' },
 ];
 
 export const Navigation = () => {
