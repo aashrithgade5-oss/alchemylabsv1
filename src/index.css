@@ -676,6 +676,39 @@
     }
   }
 
+  /* Shimmer loading animation for images/media */
+  .shimmer-loading {
+    background: linear-gradient(
+      90deg,
+      hsl(240 5% 10%) 0%,
+      hsl(240 5% 14%) 20%,
+      hsl(240 5% 18%) 40%,
+      hsl(240 5% 14%) 60%,
+      hsl(240 5% 10%) 80%,
+      hsl(240 5% 10%) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmerPulse 1.5s infinite ease-in-out;
+  }
+
+  @keyframes shimmerPulse {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+
+  /* Custom cursor for lightbox */
+  .cursor-zoom-in {
+    cursor: zoom-in;
+  }
+  
+  .cursor-zoom-out {
+    cursor: zoom-out;
+  }
+
   /* Smart text breaking for headlines */
   .text-balance {
     text-wrap: balance;
