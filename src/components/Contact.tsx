@@ -166,7 +166,7 @@ export const Contact = () => {
               onChange={(e) =>
                 setFormData({ ...formData, service: e.target.value })
               }
-              className="glass-input cursor-pointer"
+              className="glass-input cursor-pointer select-dropdown"
               disabled={isSubmitting}
             >
               <option value="" disabled>
