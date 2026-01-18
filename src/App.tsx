@@ -4,7 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { CustomCursor } from "./components/CustomCursor";
+
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import { ServicePage } from "./pages/ServicePage";
@@ -50,15 +50,12 @@ const AnimatedRoutes = () => {
 };
 
 const AppContent = () => (
-  <>
-    <CustomCursor />
-    <SmoothScroll>
-      <Preloader />
-      <Toaster />
-      <Sonner />
-      <AnimatedRoutes />
-    </SmoothScroll>
-  </>
+  <SmoothScroll>
+    <Preloader />
+    <Toaster />
+    <Sonner />
+    <AnimatedRoutes />
+  </SmoothScroll>
 );
 
 const App = () => (
