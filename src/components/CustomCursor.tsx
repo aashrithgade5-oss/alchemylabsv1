@@ -6,7 +6,13 @@ type CursorVariant = 'default' | 'hover' | 'text' | 'hidden';
 export const CustomCursor = () => {
   const [cursorVariant, setCursorVariant] = useState<CursorVariant>('default');
   const [isVisible, setIsVisible] = useState(false);
-  const [isDesktop, setIsDesktop] = useState(false);
+  // Initialize synchronously to avoid flash of no cursor
+  const [isDesktop, setIsDesktop] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    }
+    return false;
+  });
   const cursorLabel = useRef<string>('');
 
   const mouseX = useMotionValue(-100);
@@ -81,7 +87,7 @@ export const CustomCursor = () => {
     <>
       {/* Main cursor dot - faster response */}
       <motion.div
-        className="fixed top-0 left-0 pointer-events-none z-[9999] rounded-full flex items-center justify-center"
+        className="fixed top-0 left-0 pointer-events-none z-[99999] rounded-full flex items-center justify-center"
         style={{
           x: cursorX,
           y: cursorY,
@@ -110,7 +116,7 @@ export const CustomCursor = () => {
 
       {/* Trailing ring - slower, creates depth */}
       <motion.div
-        className="fixed top-0 left-0 pointer-events-none z-[9998] rounded-full"
+        className="fixed top-0 left-0 pointer-events-none z-[99998] rounded-full"
         style={{
           x: trailX,
           y: trailY,
@@ -128,7 +134,7 @@ export const CustomCursor = () => {
 
       {/* Outer glow ring - slowest, for depth */}
       <motion.div
-        className="fixed top-0 left-0 pointer-events-none z-[9997] rounded-full"
+        className="fixed top-0 left-0 pointer-events-none z-[99997] rounded-full"
         style={{
           x: trailX,
           y: trailY,
