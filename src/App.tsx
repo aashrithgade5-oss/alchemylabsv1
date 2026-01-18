@@ -4,7 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
@@ -23,33 +23,66 @@ import Work from "./pages/Work";
 import JournalPage from "./pages/JournalPage";
 import ContactPage from "./pages/ContactPage";
 import BlogPostPage from "./pages/BlogPostPage";
+import { PageAtmosphereProvider, AtmosphericBackground } from "./contexts/PageAtmosphereContext";
 
 const queryClient = new QueryClient();
 
-// Scroll restoration component
-const ScrollToTopOnMount = () => {
+// Scroll restoration with position memory
+const ScrollRestoration = () => {
   const { pathname } = useLocation();
+  const scrollPositions = useRef<Record<string, number>>({});
   
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    // Save current scroll position before navigation
+    const currentPath = pathname;
+    
+    const handleBeforeUnload = () => {
+      scrollPositions.current[currentPath] = window.scrollY;
+    };
+    
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    
+    // Restore scroll position or scroll to top
+    const savedPosition = scrollPositions.current[pathname];
+    if (savedPosition !== undefined) {
+      window.scrollTo({ top: savedPosition, left: 0, behavior: 'instant' });
+    } else {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    }
+    
+    return () => {
+      scrollPositions.current[currentPath] = window.scrollY;
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
   }, [pathname]);
   
   return null;
 };
 
+// Get transition config based on destination
+const getTransitionConfig = (pathname: string) => {
+  if (pathname === '/contact') {
+    // Slower, more deliberate for contact
+    return { duration: 0.8, ease: [0.22, 1, 0.36, 1] as const };
+  }
+  // Snappier for content pages
+  return { duration: 0.5, ease: [0.22, 1, 0.36, 1] as const };
+};
+
 const AnimatedRoutes = () => {
   const location = useLocation();
+  const transitionConfig = getTransitionConfig(location.pathname);
   
   return (
     <>
-      <ScrollToTopOnMount />
+      <ScrollRestoration />
       <AnimatePresence mode="wait">
         <motion.div
           key={location.pathname}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.3 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={transitionConfig}
         >
           <Routes location={location}>
             <Route path="/" element={<Index />} />
@@ -75,12 +108,15 @@ const AnimatedRoutes = () => {
 };
 
 const AppContent = () => (
-  <SmoothScroll>
-    <Preloader />
-    <Toaster />
-    <Sonner />
-    <AnimatedRoutes />
-  </SmoothScroll>
+  <PageAtmosphereProvider>
+    <SmoothScroll>
+      <AtmosphericBackground />
+      <Preloader />
+      <Toaster />
+      <Sonner />
+      <AnimatedRoutes />
+    </SmoothScroll>
+  </PageAtmosphereProvider>
 );
 
 const App = () => (
