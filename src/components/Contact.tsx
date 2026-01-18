@@ -19,7 +19,7 @@ export const Contact = () => {
   return (
     <section id="contact" className="relative py-32 overflow-hidden section-gradient">
       {/* Extra red glow */}
-      <div className="absolute inset-0 bg-gradient-radial from-deep-crimson/15 via-transparent to-transparent" />
+      <div className="absolute inset-0 bg-gradient-radial from-deep-crimson/10 via-transparent to-transparent" />
 
       <div className="relative z-10 max-w-4xl mx-auto px-6 md:px-12">
         {/* Header */}
@@ -30,12 +30,12 @@ export const Contact = () => {
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           className="text-center mb-16"
         >
-          <h2 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-display tracking-display">
+          <h2 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-display tracking-display text-porcelain">
             Let's build something
             <br />
-            <span className="text-alchemy-red italic text-glow">inevitable.</span>
+            <span className="italic text-alchemy-red">inevitable.</span>
           </h2>
-          <p className="font-body text-lg text-porcelain/50 mt-6 font-light">
+          <p className="font-body text-base text-porcelain/50 mt-6 font-light">
             Brief us in under 3 minutes.
           </p>
         </motion.div>

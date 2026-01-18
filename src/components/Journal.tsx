@@ -41,9 +41,9 @@ export const Journal = () => {
             Perspectives
           </p>
           <h2 className="font-display text-4xl md:text-5xl lg:text-6xl leading-display tracking-display">
-            The <span className="italic text-alchemy-red text-glow-subtle">Journal</span>
+            The <span className="italic text-alchemy-red">Journal</span>
           </h2>
-          <p className="font-body text-lg text-porcelain/50 mt-4 font-light">
+          <p className="font-body text-base text-porcelain/50 mt-6 font-light">
             Perspectives on{' '}
             <span className="font-display italic text-porcelain/70">brand</span>,{' '}
             <span className="font-display italic text-porcelain/70">systems</span>, and{' '}
@@ -64,15 +64,15 @@ export const Journal = () => {
                 duration: 0.6,
                 ease: [0.22, 1, 0.36, 1],
               }}
-              className="glass-deep rounded-2xl p-8 group cursor-pointer hover:shadow-[0_0_40px_rgba(225,6,19,0.15)] transition-all duration-400"
+              className="glass-deep rounded-2xl p-8 group cursor-pointer hover:border-alchemy-red/30 transition-all duration-400"
             >
               <span className="font-mono text-xs text-porcelain/40 tracking-label uppercase">
                 {post.date}
               </span>
-              <h3 className="font-display text-xl md:text-2xl italic mt-4 mb-4 group-hover:text-alchemy-red transition-colors duration-300">
+              <h3 className="font-display text-xl md:text-2xl italic text-porcelain mt-4 mb-4 group-hover:text-alchemy-red transition-colors duration-300">
                 {post.title}
               </h3>
-              <p className="font-body text-porcelain/50 leading-relaxed mb-6 font-light">
+              <p className="font-body text-sm text-porcelain/50 leading-relaxed mb-6 font-light">
                 {post.excerpt}
               </p>
               <a

@@ -76,10 +76,9 @@ export const Solutions = () => {
             What We Build
           </p>
           <h2 className="font-display text-4xl md:text-5xl lg:text-6xl leading-display tracking-display">
-            <span className="italic text-glow-subtle">Solutions</span>
-            <span className="text-porcelain/80"> for the</span>
-            <br />
-            <span className="text-alchemy-red italic text-glow">Intelligence Era</span>
+            <span className="italic text-porcelain">Solutions</span>
+            <span className="text-porcelain/60"> for the </span>
+            <span className="italic text-alchemy-red">Intelligence Era</span>
           </h2>
         </motion.div>
 
@@ -120,11 +119,11 @@ export const Solutions = () => {
                 <div className="w-12 h-12 rounded-xl glass-red flex items-center justify-center">
                   <activeSolution.icon className="w-6 h-6 text-alchemy-red" />
                 </div>
-                <h3 className="font-display text-2xl md:text-3xl italic">
+                <h3 className="font-display text-2xl md:text-3xl italic text-porcelain">
                   {activeSolution.title}
                 </h3>
               </div>
-              <p className="font-body text-base md:text-lg text-porcelain/70 leading-relaxed mb-8 font-light">
+              <p className="font-body text-base text-porcelain/60 leading-relaxed mb-8 font-light">
                 {activeSolution.description}
               </p>
               <a
@@ -149,10 +148,10 @@ export const Solutions = () => {
                   transition={{ delay: i * 0.1, duration: 0.4 }}
                   className="glass p-5 rounded-xl flex items-center gap-4 group hover:glass-red transition-all duration-300"
                 >
-                  <span className="font-mono text-xs text-alchemy-red text-glow-subtle">
+                  <span className="font-mono text-xs text-alchemy-red">
                     0{i + 1}
                   </span>
-                  <span className="font-body text-porcelain/80">{outcome}</span>
+                  <span className="font-body text-base text-porcelain/70">{outcome}</span>
                 </motion.div>
               ))}
             </div>

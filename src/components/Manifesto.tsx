@@ -20,21 +20,19 @@ const principles = [
 
 export const Manifesto = () => {
   return (
-    <section id="about" className="relative py-32 overflow-hidden">
-      {/* Cream Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-alchemy-black via-cream-editorial to-alchemy-black" />
-
-      <div className="relative z-10 max-w-6xl mx-auto px-6 md:px-12 py-20">
+    <section id="about" className="relative py-32 overflow-hidden section-gradient">
+      <div className="relative z-10 max-w-6xl mx-auto px-6 md:px-12 py-16">
         {/* Editorial Statement */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 1.2 }}
-          className="text-center mb-24"
+          className="text-center mb-20"
         >
-          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-display tracking-display text-graphite-layer max-w-5xl mx-auto">
-            <span className="italic">Alchemy Labs</span> is built at the intersection of{' '}
+          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-display tracking-display text-porcelain max-w-5xl mx-auto">
+            <span className="italic text-alchemy-red">Alchemy Labs</span>
+            <span className="text-porcelain/80"> is built at the intersection of </span>
             <motion.span
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -44,7 +42,7 @@ export const Manifesto = () => {
             >
               taste
             </motion.span>
-            ,{' '}
+            <span className="text-porcelain/80">, </span>
             <motion.span
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -54,7 +52,7 @@ export const Manifesto = () => {
             >
               systems
             </motion.span>
-            , and{' '}
+            <span className="text-porcelain/80">, and </span>
             <motion.span
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -64,16 +62,16 @@ export const Manifesto = () => {
             >
               intelligence
             </motion.span>
-            .
+            <span className="text-porcelain/50">.</span>
           </h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.9, duration: 0.6 }}
-            className="font-body text-lg md:text-xl text-graphite-layer/60 mt-8 max-w-2xl mx-auto font-light"
+            className="font-body text-lg md:text-xl text-porcelain/50 mt-8 max-w-2xl mx-auto font-light"
           >
-            We don't chase trends. We design <span className="font-display italic">infrastructure</span>.
+            We don't chase trends. We design <span className="font-display italic text-porcelain/80">infrastructure</span>.
           </motion.p>
         </motion.div>
 
@@ -90,16 +88,16 @@ export const Manifesto = () => {
                 duration: 0.6,
                 ease: [0.22, 1, 0.36, 1],
               }}
-              className="glass-on-cream rounded-2xl p-8 text-center"
+              className="glass-deep rounded-2xl p-8 text-center"
             >
               <span className="font-mono text-xs text-alchemy-red tracking-label uppercase">
                 0{i + 1}
               </span>
-              <h3 className="font-display text-2xl md:text-3xl text-graphite-layer mt-4 mb-4">
+              <h3 className="font-display text-2xl md:text-3xl text-porcelain mt-4 mb-4">
                 <span className="italic text-alchemy-red">{principle.highlight}</span>{' '}
-                <span>{principle.rest}</span>
+                <span className="text-porcelain/80">{principle.rest}</span>
               </h3>
-              <p className="font-body text-graphite-layer/60 leading-relaxed font-light">
+              <p className="font-body text-base text-porcelain/50 leading-relaxed font-light">
                 {principle.description}
               </p>
             </motion.div>
