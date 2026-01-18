@@ -1,10 +1,11 @@
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowUpRight, X, Check, Play, Filter } from 'lucide-react';
+import { ArrowUpRight, X, Check, Filter, Sparkles, Layers, Target, Palette, Mountain, Grid3X3 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { projects, Project } from '@/data/projects';
-import { ScrollReveal, StaggerReveal } from '@/components/ScrollReveal';
+import { ScrollReveal } from '@/components/ScrollReveal';
 import { SpotlightContainer, SpotlightItem } from '@/components/SpotlightGrid';
 import { ShimmerImage, ShimmerVideo } from '@/components/ShimmerImage';
 import { Lightbox, LightboxTrigger } from '@/components/Lightbox';
@@ -12,21 +13,37 @@ import { Lightbox, LightboxTrigger } from '@/components/Lightbox';
 // Extract unique categories
 const allCategories = ['All', ...Array.from(new Set(projects.map(p => p.category)))];
 
+// Icon mapping for projects
+const projectIcons: Record<string, React.ElementType> = {
+  'branding-solutions': Palette,
+  'consultation-sessions': Target,
+  'aether-rituals': Sparkles,
+  'oakley-showcase': Mountain,
+  'arcteryx-branding': Layers,
+  'identity-systems': Grid3X3,
+};
+
+// Abstract 6-element grid positions
+const gridPositions = [
+  'col-span-12 md:col-span-8 row-span-2',
+  'col-span-6 md:col-span-4',
+  'col-span-6 md:col-span-4',
+  'col-span-6 md:col-span-4',
+  'col-span-6 md:col-span-4',
+  'col-span-12 md:col-span-4',
+];
+
 export const Work = () => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [activeCategory, setActiveCategory] = useState('All');
   const [lightboxMedia, setLightboxMedia] = useState<{ src: string; type: 'image' | 'video'; caption?: string } | null>(null);
+  const navigate = useNavigate();
 
   // Filter projects based on category
   const filteredProjects = useMemo(() => {
     if (activeCategory === 'All') return projects;
     return projects.filter(p => p.category === activeCategory);
   }, [activeCategory]);
-
-  // Separate featured from rest
-  const featuredProject = filteredProjects[0];
-  const otherProjects = filteredProjects.slice(1);
 
   const openLightbox = (src: string, type: 'image' | 'video', caption?: string) => {
     setLightboxMedia({ src, type, caption });
@@ -36,10 +53,12 @@ export const Work = () => {
     <div className="min-h-screen bg-background grain-overlay">
       <Navigation />
       
-      {/* Hero with Filters */}
-      <section className="relative pt-32 pb-8 overflow-hidden">
+      {/* Hero with Enhanced Mesh Gradients */}
+      <section className="relative pt-32 pb-16 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-alchemy-red/5 rounded-full blur-[200px] translate-x-1/2 -translate-y-1/2" />
+          <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-gradient-radial from-alchemy-red/10 via-alchemy-red/3 to-transparent rounded-full blur-[150px] translate-x-1/2 -translate-y-1/2" />
+          <div className="absolute top-1/2 left-0 w-[600px] h-[600px] bg-gradient-radial from-deep-crimson/6 to-transparent rounded-full blur-[120px] -translate-x-1/2" />
+          <div className="absolute bottom-0 left-1/2 w-[1000px] h-[400px] bg-gradient-conic from-alchemy-red/5 via-transparent to-alchemy-red/3 rounded-full blur-[100px] -translate-x-1/2" />
         </div>
         
         <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12">
@@ -51,24 +70,31 @@ export const Work = () => {
                   Portfolio
                 </p>
                 <h1 className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[0.9] tracking-display text-porcelain text-balance">
-                  Selected
+                  Curated
                   <br />
                   <span className="italic text-alchemy-red">Works</span>
                 </h1>
               </div>
               
               <p className="font-body text-base text-porcelain/40 max-w-sm font-light lg:text-right">
-                Conceptual explorations where intelligence meets craft.
+                Services we offer and conceptual explorations demonstrating our capabilities.
               </p>
             </div>
           </ScrollReveal>
 
-          {/* Category Filters */}
+          {/* Category Filters with Liquid Glass */}
           <ScrollReveal delay={0.2}>
-            <div className="flex flex-wrap items-center gap-3">
-              <div className="flex items-center gap-2 text-porcelain/40 mr-4">
+            <div 
+              className="inline-flex flex-wrap items-center gap-3 p-2 rounded-full"
+              style={{
+                background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%)',
+                backdropFilter: 'blur(24px)',
+                border: '1px solid rgba(255, 255, 255, 0.06)',
+              }}
+            >
+              <div className="flex items-center gap-2 text-porcelain/40 px-3">
                 <Filter className="w-4 h-4" />
-                <span className="font-mono text-xs tracking-label uppercase">Filter</span>
+                <span className="font-mono text-xs tracking-label uppercase hidden sm:inline">Filter</span>
               </div>
               
               {allCategories.map((category) => (
@@ -86,7 +112,12 @@ export const Work = () => {
                   {activeCategory === category && (
                     <motion.div
                       layoutId="filter-indicator"
-                      className="absolute inset-0 bg-alchemy-red/20 border border-alchemy-red/40 rounded-full"
+                      className="absolute inset-0 rounded-full"
+                      style={{
+                        background: 'linear-gradient(135deg, rgba(225, 6, 19, 0.2) 0%, rgba(225, 6, 19, 0.08) 100%)',
+                        border: '1px solid rgba(225, 6, 19, 0.4)',
+                        boxShadow: '0 0 20px rgba(225, 6, 19, 0.2)',
+                      }}
                       transition={{ type: 'spring', damping: 25, stiffness: 300 }}
                     />
                   )}
@@ -98,227 +129,138 @@ export const Work = () => {
         </div>
       </section>
 
-      {/* Featured Project */}
-      <AnimatePresence mode="wait">
-        {featuredProject && (
-          <motion.section 
-            key={featuredProject.id + '-featured'}
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.5 }}
-            className="relative py-8"
-          >
-            <div className="max-w-[1600px] mx-auto px-6 md:px-12">
-              <ScrollReveal>
-                <motion.div
-                  onClick={() => setSelectedProject(featuredProject)}
-                  onMouseEnter={() => setHoveredId(featuredProject.id)}
-                  onMouseLeave={() => setHoveredId(null)}
-                  className="group relative rounded-3xl overflow-hidden cursor-pointer"
-                >
-                  <div className="relative aspect-[21/9] md:aspect-[2.5/1] overflow-hidden">
-                    {featuredProject.video ? (
-                      <ShimmerVideo
-                        src={featuredProject.video}
-                        wrapperClassName="w-full h-full"
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                      />
-                    ) : (
-                      <ShimmerImage
-                        src={featuredProject.image}
-                        alt={featuredProject.title}
-                        wrapperClassName="w-full h-full"
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                      />
-                    )}
-                    
-                    <div className="absolute inset-0 bg-gradient-to-r from-alchemy-black/80 via-alchemy-black/40 to-transparent" />
-                    <div className="absolute inset-0 bg-alchemy-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                    
-                    <div className="absolute inset-0 p-8 md:p-16 flex flex-col justify-between">
-                      <div className="flex items-start justify-between">
-                        <motion.span 
-                          className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-xs font-mono text-porcelain/80 tracking-label uppercase"
-                          animate={{ scale: hoveredId === featuredProject.id ? 1.05 : 1 }}
-                        >
-                          <span className="w-2 h-2 rounded-full bg-alchemy-red animate-pulse" />
-                          {featuredProject.category}
-                        </motion.span>
-                        
-                        <motion.div
-                          initial={{ opacity: 0, scale: 0.8 }}
-                          animate={{ opacity: hoveredId === featuredProject.id ? 1 : 0, scale: hoveredId === featuredProject.id ? 1 : 0.8 }}
-                          className="w-16 h-16 rounded-full glass-red flex items-center justify-center"
-                        >
-                          <Play className="w-6 h-6 text-porcelain ml-1" />
-                        </motion.div>
-                      </div>
-                      
-                      <div>
-                        <motion.p
-                          className="font-mono text-xs text-alchemy-red tracking-label uppercase mb-3"
-                          animate={{ x: hoveredId === featuredProject.id ? 10 : 0 }}
-                          transition={{ duration: 0.3 }}
-                        >
-                          Featured Project
-                        </motion.p>
-                        <h2 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl italic text-porcelain mb-4 text-balance">
-                          {featuredProject.title}
-                        </h2>
-                        <p className="font-body text-base md:text-lg text-porcelain/60 max-w-lg font-light">
-                          {featuredProject.description}
-                        </p>
-                        
-                        <motion.div 
-                          className="inline-flex items-center gap-2 mt-6 text-alchemy-red font-body"
-                          animate={{ x: hoveredId === featuredProject.id ? 10 : 0 }}
-                          transition={{ duration: 0.3 }}
-                        >
-                          <span>Explore Project</span>
-                          <ArrowUpRight className="w-5 h-5 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
-                        </motion.div>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none border border-alchemy-red/30 shadow-[0_0_60px_rgba(225,6,19,0.15)]" />
-                </motion.div>
-              </ScrollReveal>
-            </div>
-          </motion.section>
-        )}
-      </AnimatePresence>
-
-      {/* Projects Grid with Spotlight Effect */}
-      <section className="relative py-16 md:py-24 luxury-margin">
-        <div className="max-w-7xl mx-auto px-6 md:px-12">
-          {otherProjects.length > 0 && (
-            <>
-              <ScrollReveal>
-                <div className="flex items-center gap-4 mb-12">
-                  <div className="w-12 h-px bg-alchemy-red/50" />
-                  <span className="font-mono text-xs text-porcelain/40 tracking-label uppercase">
-                    {activeCategory === 'All' ? 'More Projects' : `${activeCategory} Projects`}
-                  </span>
-                  <span className="font-mono text-xs text-porcelain/20">
-                    ({otherProjects.length})
-                  </span>
-                </div>
-              </ScrollReveal>
-
-              <SpotlightContainer className="grid grid-cols-12 gap-4 md:gap-6 lg:gap-8">
-                <AnimatePresence mode="popLayout">
-                  {otherProjects.map((project, i) => {
-                    const layouts = [
-                      'col-span-12 md:col-span-7',
-                      'col-span-12 md:col-span-5',
-                      'col-span-12 md:col-span-5',
-                      'col-span-12 md:col-span-7',
-                    ];
-                    const aspectRatios = [
-                      'aspect-[16/10]',
-                      'aspect-[4/5]',
-                      'aspect-[1/1]',
-                      'aspect-[16/9]',
-                    ];
-                    
-                    return (
-                      <SpotlightItem key={project.id} id={project.id} className={layouts[i % layouts.length]}>
-                        <motion.div
-                          layout
-                          initial={{ opacity: 0, y: 60, scale: 0.95 }}
-                          animate={{ opacity: 1, y: 0, scale: 1 }}
-                          exit={{ opacity: 0, scale: 0.9 }}
-                          transition={{ duration: 0.5, delay: i * 0.05 }}
-                          onClick={() => setSelectedProject(project)}
-                          onMouseEnter={() => setHoveredId(project.id)}
-                          onMouseLeave={() => setHoveredId(null)}
-                          className="group relative rounded-2xl overflow-hidden cursor-pointer h-full"
-                        >
-                          <div className={`relative overflow-hidden ${aspectRatios[i % aspectRatios.length]}`}>
-                            {project.video ? (
-                              <ShimmerVideo
-                                src={project.video}
-                                wrapperClassName="w-full h-full"
-                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                              />
-                            ) : (
-                              <ShimmerImage
-                                src={project.image}
-                                alt={project.title}
-                                wrapperClassName="w-full h-full"
-                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                              />
-                            )}
-                            
-                            <div className="absolute inset-0 bg-gradient-to-t from-alchemy-black via-alchemy-black/30 to-transparent" />
-                            <div className="absolute inset-0 bg-alchemy-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 backdrop-blur-[2px]" />
-                            
-                            <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-between">
-                              <div className="flex items-center justify-between">
-                                <span className="px-3 py-1.5 rounded-full glass text-[10px] font-mono text-porcelain/70 tracking-label uppercase">
-                                  {project.category}
-                                </span>
-                                
-                                <motion.span
-                                  className="font-mono text-[10px] text-porcelain/30 tracking-label"
-                                  animate={{ opacity: hoveredId === project.id ? 1 : 0.3 }}
-                                >
-                                  0{i + 2}
-                                </motion.span>
-                              </div>
-                              
-                              <div>
-                                <motion.h3 
-                                  className="font-display text-2xl md:text-3xl lg:text-4xl italic text-porcelain mb-2 text-balance"
-                                  animate={{ x: hoveredId === project.id ? 8 : 0 }}
-                                  transition={{ duration: 0.3 }}
-                                >
-                                  {project.title}
-                                </motion.h3>
-                                
-                                <motion.p
-                                  className="font-body text-sm text-porcelain/50 max-w-sm font-light line-clamp-2"
-                                  initial={{ opacity: 0, y: 10 }}
-                                  animate={{ 
-                                    opacity: hoveredId === project.id ? 1 : 0,
-                                    y: hoveredId === project.id ? 0 : 10
-                                  }}
-                                  transition={{ duration: 0.3 }}
-                                >
-                                  {project.description}
-                                </motion.p>
-                                
-                                <motion.div 
-                                  className="inline-flex items-center gap-2 mt-4 text-alchemy-red font-body text-sm"
-                                  initial={{ opacity: 0 }}
-                                  animate={{ opacity: hoveredId === project.id ? 1 : 0 }}
-                                  transition={{ duration: 0.3 }}
-                                >
-                                  <span>View</span>
-                                  <ArrowUpRight className="w-4 h-4" />
-                                </motion.div>
-                              </div>
-                            </div>
-                          </div>
-                          
-                          <motion.div
-                            className="absolute inset-0 rounded-2xl border border-alchemy-red/0 pointer-events-none"
-                            animate={{ 
-                              borderColor: hoveredId === project.id ? 'rgba(225,6,19,0.4)' : 'rgba(225,6,19,0)',
-                              boxShadow: hoveredId === project.id ? '0 0 40px rgba(225,6,19,0.15)' : '0 0 0px rgba(225,6,19,0)'
-                            }}
-                            transition={{ duration: 0.4 }}
+      {/* Abstract 6-Element Grid */}
+      <section className="relative py-12">
+        <div className="max-w-[1600px] mx-auto px-6 md:px-12">
+          <SpotlightContainer className="grid grid-cols-12 gap-4 md:gap-6 auto-rows-[180px] md:auto-rows-[220px]">
+            <AnimatePresence mode="popLayout">
+              {filteredProjects.map((project, i) => {
+                const Icon = projectIcons[project.id] || Sparkles;
+                const position = gridPositions[i % gridPositions.length];
+                
+                return (
+                  <SpotlightItem key={project.id} id={project.id} className={position}>
+                    <motion.div
+                      layout
+                      initial={{ opacity: 0, y: 40, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.9 }}
+                      transition={{ duration: 0.5, delay: i * 0.05 }}
+                      onClick={() => setSelectedProject(project)}
+                      className="group relative rounded-2xl overflow-hidden cursor-pointer h-full"
+                      style={{
+                        background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%)',
+                        backdropFilter: 'blur(20px)',
+                        border: '1px solid rgba(255, 255, 255, 0.06)',
+                      }}
+                    >
+                      {/* Media */}
+                      <div className="absolute inset-0 overflow-hidden">
+                        {project.video && i === 0 ? (
+                          <ShimmerVideo
+                            src={project.video}
+                            wrapperClassName="w-full h-full"
+                            className="w-full h-full object-cover opacity-50 group-hover:opacity-70 transition-all duration-700 group-hover:scale-105"
                           />
-                        </motion.div>
-                      </SpotlightItem>
-                    );
-                  })}
-                </AnimatePresence>
-              </SpotlightContainer>
-            </>
-          )}
+                        ) : (
+                          <ShimmerImage
+                            src={project.image}
+                            alt={project.title}
+                            wrapperClassName="w-full h-full"
+                            className="w-full h-full object-cover opacity-40 group-hover:opacity-60 transition-all duration-700 group-hover:scale-105"
+                          />
+                        )}
+                      </div>
+
+                      {/* Gradient overlays */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-alchemy-black via-alchemy-black/60 to-alchemy-black/20" />
+                      
+                      {/* Liquid glass hover effect */}
+                      <div 
+                        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
+                        style={{
+                          background: 'radial-gradient(ellipse at 30% 20%, rgba(225, 6, 19, 0.15) 0%, transparent 60%)',
+                        }}
+                      />
+
+                      {/* Content */}
+                      <div className="absolute inset-0 p-5 md:p-6 flex flex-col justify-between">
+                        {/* Top: Icon + Category */}
+                        <div className="flex items-start justify-between">
+                          <motion.div
+                            className="w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center"
+                            style={{
+                              background: 'linear-gradient(135deg, rgba(225, 6, 19, 0.2) 0%, rgba(225, 6, 19, 0.08) 100%)',
+                              backdropFilter: 'blur(12px)',
+                              border: '1px solid rgba(225, 6, 19, 0.3)',
+                            }}
+                            whileHover={{ scale: 1.1 }}
+                          >
+                            <Icon className="w-4 h-4 md:w-5 md:h-5 text-alchemy-red" />
+                          </motion.div>
+                          
+                          <div className="flex items-center gap-2">
+                            {project.isConceptual && (
+                              <span className="px-2 py-1 rounded-full text-[8px] md:text-[9px] font-mono text-porcelain/50 tracking-label uppercase bg-porcelain/5 border border-porcelain/10">
+                                Concept
+                              </span>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Bottom: Title + Description */}
+                        <div>
+                          <span 
+                            className="inline-block px-2 py-1 rounded-full text-[9px] md:text-[10px] font-mono text-porcelain/70 tracking-label uppercase mb-2"
+                            style={{
+                              background: 'rgba(255, 255, 255, 0.06)',
+                              backdropFilter: 'blur(12px)',
+                              border: '1px solid rgba(255, 255, 255, 0.1)',
+                            }}
+                          >
+                            {project.category}
+                          </span>
+                          
+                          <motion.h3 
+                            className={`font-display italic text-porcelain mb-2 text-balance ${
+                              i === 0 ? 'text-2xl md:text-3xl lg:text-4xl' : 'text-lg md:text-xl lg:text-2xl'
+                            }`}
+                            whileHover={{ x: 5 }}
+                            transition={{ duration: 0.3 }}
+                          >
+                            {project.title}
+                          </motion.h3>
+
+                          <p className={`font-body text-porcelain/50 font-light line-clamp-2 mb-3 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0 ${
+                            i === 0 ? 'text-sm max-w-md' : 'text-xs'
+                          }`}>
+                            {project.description}
+                          </p>
+
+                          <motion.div 
+                            className="inline-flex items-center gap-2 text-alchemy-red font-body text-xs md:text-sm opacity-0 group-hover:opacity-100 transition-all duration-300"
+                            whileHover={{ x: 5 }}
+                          >
+                            <span>Explore</span>
+                            <ArrowUpRight className="w-3 h-3 md:w-4 md:h-4" />
+                          </motion.div>
+                        </div>
+                      </div>
+
+                      {/* Border glow on hover */}
+                      <motion.div 
+                        className="absolute inset-0 rounded-2xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                        style={{
+                          border: '1px solid rgba(225, 6, 19, 0.4)',
+                          boxShadow: '0 0 40px rgba(225, 6, 19, 0.15), inset 0 0 60px rgba(225, 6, 19, 0.05)',
+                        }}
+                      />
+                    </motion.div>
+                  </SpotlightItem>
+                );
+              })}
+            </AnimatePresence>
+          </SpotlightContainer>
 
           {/* Empty State */}
           {filteredProjects.length === 0 && (
@@ -328,20 +270,20 @@ export const Work = () => {
               className="text-center py-20"
             >
               <p className="font-display text-2xl italic text-porcelain/50">
-                No projects in this category yet.
+                No works in this category yet.
               </p>
               <button
                 onClick={() => setActiveCategory('All')}
                 className="mt-4 font-body text-sm text-alchemy-red hover:text-alchemy-red/80 transition-colors"
               >
-                View all projects →
+                View all works →
               </button>
             </motion.div>
           )}
         </div>
       </section>
 
-      {/* Case Study Modal with Lightbox Support */}
+      {/* Case Study Mini Page Stack Modal */}
       <AnimatePresence>
         {selectedProject && (
           <motion.div
@@ -351,23 +293,62 @@ export const Work = () => {
             onClick={() => setSelectedProject(null)}
             className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8"
           >
+            {/* Backdrop */}
             <div className="absolute inset-0 bg-alchemy-black/95 backdrop-blur-xl" />
+
+            {/* Stacked page effect */}
+            <div className="absolute inset-8 md:inset-16 pointer-events-none">
+              <motion.div
+                initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                animate={{ opacity: 0.3, y: 0, scale: 0.95 }}
+                className="absolute inset-0 rounded-3xl"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%)',
+                  border: '1px solid rgba(255, 255, 255, 0.05)',
+                  transform: 'translateY(30px) scale(0.92)',
+                }}
+              />
+              <motion.div
+                initial={{ opacity: 0, y: 15, scale: 0.97 }}
+                animate={{ opacity: 0.5, y: 0, scale: 0.97 }}
+                className="absolute inset-0 rounded-3xl"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.02) 100%)',
+                  border: '1px solid rgba(255, 255, 255, 0.06)',
+                  transform: 'translateY(15px) scale(0.96)',
+                }}
+              />
+            </div>
+
+            {/* Modal */}
             <motion.div
-              initial={{ scale: 0.95, y: 30, opacity: 0 }}
+              initial={{ scale: 0.9, y: 50, opacity: 0 }}
               animate={{ scale: 1, y: 0, opacity: 1 }}
-              exit={{ scale: 0.95, y: 30, opacity: 0 }}
-              transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+              exit={{ scale: 0.9, y: 50, opacity: 0 }}
+              transition={{ type: 'spring', damping: 25 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative z-10 w-full max-w-6xl max-h-[90vh] overflow-y-auto rounded-3xl bg-charcoal-ui/80 backdrop-blur-xl border border-porcelain/5"
+              className="relative z-10 w-full max-w-5xl max-h-[90vh] overflow-y-auto rounded-3xl"
+              style={{
+                background: 'linear-gradient(135deg, rgba(20, 20, 22, 0.95) 0%, rgba(10, 10, 11, 0.98) 100%)',
+                backdropFilter: 'blur(40px)',
+                border: '1px solid rgba(255, 255, 255, 0.08)',
+                boxShadow: '0 0 100px rgba(225, 6, 19, 0.1), 0 32px 64px rgba(0, 0, 0, 0.5)',
+              }}
             >
+              {/* Close button */}
               <button
                 onClick={() => setSelectedProject(null)}
-                className="absolute top-6 right-6 z-20 w-12 h-12 rounded-full glass flex items-center justify-center hover:bg-porcelain/10 transition-colors"
+                className="absolute top-6 right-6 z-20 w-12 h-12 rounded-full flex items-center justify-center hover:bg-porcelain/10 transition-colors"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.06)',
+                  backdropFilter: 'blur(12px)',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                }}
               >
                 <X className="w-5 h-5 text-porcelain/60" />
               </button>
-              
-              {/* Media with Lightbox */}
+
+              {/* Hero Media with Lightbox */}
               <LightboxTrigger
                 onClick={() => openLightbox(
                   selectedProject.video || selectedProject.image,
@@ -376,7 +357,7 @@ export const Work = () => {
                 )}
                 className="rounded-t-3xl overflow-hidden"
               >
-                <div className="aspect-video overflow-hidden">
+                <div className="relative aspect-video overflow-hidden">
                   {selectedProject.video ? (
                     <ShimmerVideo
                       src={selectedProject.video}
@@ -391,64 +372,129 @@ export const Work = () => {
                       className="w-full h-full object-cover"
                     />
                   )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-alchemy-black via-alchemy-black/50 to-transparent" />
+
+                  {/* Title overlay */}
+                  <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12">
+                    <div className="flex items-center gap-3 mb-4">
+                      <span 
+                        className="inline-block px-3 py-1 rounded-full text-xs font-mono text-porcelain/80 tracking-label uppercase"
+                        style={{
+                          background: 'rgba(255, 255, 255, 0.08)',
+                          backdropFilter: 'blur(12px)',
+                          border: '1px solid rgba(255, 255, 255, 0.1)',
+                        }}
+                      >
+                        {selectedProject.category}
+                      </span>
+                      {selectedProject.isConceptual && (
+                        <span className="px-3 py-1 rounded-full text-xs font-mono text-alchemy-red tracking-label uppercase bg-alchemy-red/10 border border-alchemy-red/20">
+                          Conceptual
+                        </span>
+                      )}
+                    </div>
+                    <h3 className="font-display text-4xl md:text-5xl lg:text-6xl italic text-porcelain mb-2 text-balance">
+                      {selectedProject.title}
+                    </h3>
+                  </div>
                 </div>
               </LightboxTrigger>
-              
+
+              {/* Content */}
               <div className="p-8 md:p-12">
-                <div className="flex flex-wrap items-center gap-3 mb-6">
-                  <span className="px-4 py-2 rounded-full glass text-xs font-mono text-porcelain/70 tracking-label uppercase">
-                    {selectedProject.category}
-                  </span>
-                  <span className="px-4 py-2 rounded-full glass text-xs font-mono text-alchemy-red tracking-label uppercase">
-                    {selectedProject.brand}
-                  </span>
+                {/* Overview */}
+                <div className="mb-12">
+                  <h4 className="font-mono text-xs text-alchemy-red tracking-label uppercase mb-4">
+                    Overview
+                  </h4>
+                  <p className="font-body text-base md:text-lg text-porcelain/70 leading-relaxed font-light">
+                    {selectedProject.overview}
+                  </p>
                 </div>
-                
-                <h2 className="font-display text-4xl md:text-5xl lg:text-6xl italic text-porcelain mb-6 text-balance">
-                  {selectedProject.title}
-                </h2>
-                
-                <div className="grid md:grid-cols-3 gap-8 mb-10">
-                  <div className="md:col-span-2">
-                    <h4 className="font-mono text-xs text-alchemy-red tracking-label uppercase mb-4">Overview</h4>
-                    <p className="font-body text-base text-porcelain/60 font-light leading-relaxed">
-                      {selectedProject.overview}
-                    </p>
-                  </div>
-                  
-                  <div className="space-y-6">
-                    <div>
-                      <h4 className="font-mono text-xs text-alchemy-red tracking-label uppercase mb-3">Client</h4>
-                      <p className="font-body text-porcelain">{selectedProject.brand}</p>
-                    </div>
-                    <div>
-                      <h4 className="font-mono text-xs text-alchemy-red tracking-label uppercase mb-3">Services</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {selectedProject.services.map((service, idx) => (
-                          <span key={typeof service === 'string' ? service : idx} className="px-3 py-1 rounded-full glass text-xs font-body text-porcelain/60">
-                            {typeof service === 'string' ? service : (service as { title: string }).title}
-                          </span>
-                        ))}
+
+                {/* Services */}
+                <div className="mb-12">
+                  <h4 className="font-mono text-xs text-alchemy-red tracking-label uppercase mb-6">
+                    {selectedProject.isConceptual ? 'What We Explored' : 'What We Offer'}
+                  </h4>
+                  <div className="grid md:grid-cols-3 gap-4">
+                    {selectedProject.services.map((service, i) => (
+                      <div 
+                        key={i} 
+                        className="rounded-xl p-6"
+                        style={{
+                          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%)',
+                          border: '1px solid rgba(255, 255, 255, 0.06)',
+                        }}
+                      >
+                        <div 
+                          className="w-8 h-8 rounded-lg flex items-center justify-center mb-4"
+                          style={{
+                            background: 'linear-gradient(135deg, rgba(225, 6, 19, 0.2) 0%, rgba(225, 6, 19, 0.08) 100%)',
+                            border: '1px solid rgba(225, 6, 19, 0.3)',
+                          }}
+                        >
+                          <Check className="w-4 h-4 text-alchemy-red" />
+                        </div>
+                        <h5 className="font-display text-lg italic text-porcelain mb-2">
+                          {service.title}
+                        </h5>
+                        <p className="font-body text-sm text-porcelain/50 font-light">
+                          {service.description}
+                        </p>
                       </div>
-                    </div>
+                    ))}
                   </div>
                 </div>
-                
-                {/* Secondary Media with Lightbox */}
-                {selectedProject.video2 && (
-                  <LightboxTrigger
-                    onClick={() => openLightbox(selectedProject.video2!, 'video', `${selectedProject.title} - Detail`)}
-                    className="rounded-2xl overflow-hidden"
-                  >
-                    <div className="rounded-2xl overflow-hidden">
-                      <ShimmerVideo
-                        src={selectedProject.video2}
-                        wrapperClassName="w-full"
-                        className="w-full aspect-video object-cover"
-                      />
-                    </div>
-                    <p className="font-mono text-xs text-porcelain/30 mt-2 text-center">Click to expand</p>
-                  </LightboxTrigger>
+
+                {/* Visual Gallery with Lightbox */}
+                <div className="mb-12">
+                  <h4 className="font-mono text-xs text-alchemy-red tracking-label uppercase mb-6">
+                    Visual Exploration
+                  </h4>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    {selectedProject.visuals.map((visual, i) => (
+                      <LightboxTrigger
+                        key={i}
+                        onClick={() => openLightbox(visual, 'image', `${selectedProject.title} - Visual ${i + 1}`)}
+                        className="aspect-square rounded-xl overflow-hidden"
+                      >
+                        <ShimmerImage
+                          src={visual}
+                          alt={`${selectedProject.title} visual ${i + 1}`}
+                          wrapperClassName="w-full h-full"
+                          className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                        />
+                      </LightboxTrigger>
+                    ))}
+                  </div>
+                </div>
+
+                {/* CTA for services */}
+                {!selectedProject.isConceptual && (
+                  <div className="flex justify-center">
+                    <motion.button
+                      onClick={() => {
+                        setSelectedProject(null);
+                        navigate('/book-sprint');
+                      }}
+                      className="inline-flex items-center gap-3 px-8 py-4 rounded-full"
+                      style={{
+                        background: 'linear-gradient(135deg, rgba(225, 6, 19, 0.2) 0%, rgba(225, 6, 19, 0.08) 100%)',
+                        backdropFilter: 'blur(16px)',
+                        border: '1px solid rgba(225, 6, 19, 0.4)',
+                        boxShadow: '0 0 30px rgba(225, 6, 19, 0.2)',
+                      }}
+                      whileHover={{ 
+                        scale: 1.02,
+                        boxShadow: '0 0 50px rgba(225, 6, 19, 0.4)',
+                      }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      <span className="font-body text-porcelain">Book This Service</span>
+                      <ArrowUpRight className="w-4 h-4 text-alchemy-red" />
+                    </motion.button>
+                  </div>
                 )}
               </div>
             </motion.div>
