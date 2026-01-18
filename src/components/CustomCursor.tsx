@@ -1,25 +1,48 @@
-import { useEffect, useState, useCallback } from 'react';
-import { motion, useMotionValue, useSpring } from 'framer-motion';
+import { useEffect, useState, useCallback, useRef } from 'react';
+import { motion, useSpring, useMotionValue } from 'framer-motion';
 
 type CursorVariant = 'default' | 'hover' | 'text' | 'hidden';
 
 export const CustomCursor = () => {
   const [cursorVariant, setCursorVariant] = useState<CursorVariant>('default');
   const [isVisible, setIsVisible] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(true);
+  const cursorLabel = useRef<string>('');
 
-  const cursorX = useMotionValue(-100);
-  const cursorY = useMotionValue(-100);
+  const mouseX = useMotionValue(-100);
+  const mouseY = useMotionValue(-100);
 
-  const springConfig = { damping: 25, stiffness: 400, mass: 0.5 };
-  const cursorXSpring = useSpring(cursorX, springConfig);
-  const cursorYSpring = useSpring(cursorY, springConfig);
+  // Smoother spring for main cursor
+  const springConfig = { damping: 30, stiffness: 400, mass: 0.5 };
+  const cursorX = useSpring(mouseX, springConfig);
+  const cursorY = useSpring(mouseY, springConfig);
+
+  // Slower spring for trailing ring (creates depth)
+  const trailConfig = { damping: 40, stiffness: 200, mass: 1 };
+  const trailX = useSpring(mouseX, trailConfig);
+  const trailY = useSpring(mouseY, trailConfig);
+
+  const updateCursorVariant = useCallback((target: Element) => {
+    if (target.closest('button, a, [role="button"], [data-cursor="button"]')) {
+      setCursorVariant('hover');
+      cursorLabel.current = '';
+    } else if (target.closest('input, textarea, select')) {
+      setCursorVariant('text');
+    } else if (target.closest('[data-cursor="view"]')) {
+      setCursorVariant('hover');
+      cursorLabel.current = 'View';
+    } else {
+      setCursorVariant('default');
+      cursorLabel.current = '';
+    }
+  }, []);
 
   const onMouseMove = useCallback((e: MouseEvent) => {
-    cursorX.set(e.clientX);
-    cursorY.set(e.clientY);
+    mouseX.set(e.clientX);
+    mouseY.set(e.clientY);
     if (!isVisible) setIsVisible(true);
-  }, [cursorX, cursorY, isVisible]);
+    updateCursorVariant(e.target as Element);
+  }, [mouseX, mouseY, isVisible, updateCursorVariant]);
 
   const onMouseLeave = useCallback(() => {
     setIsVisible(false);
@@ -39,43 +62,10 @@ export const CustomCursor = () => {
       document.body.addEventListener('mouseleave', onMouseLeave);
       document.body.addEventListener('mouseenter', onMouseEnter);
 
-      // Set up hover detection for interactive elements
-      const interactiveElements = document.querySelectorAll(
-        'a, button, [role="button"], input, textarea, select, [data-cursor="hover"]'
-      );
-      const textElements = document.querySelectorAll(
-        'h1, h2, h3, h4, h5, h6, p, [data-cursor="text"]'
-      );
-
-      const handleMouseEnterInteractive = () => setCursorVariant('hover');
-      const handleMouseLeaveInteractive = () => setCursorVariant('default');
-      const handleMouseEnterText = () => setCursorVariant('text');
-      const handleMouseLeaveText = () => setCursorVariant('default');
-
-      interactiveElements.forEach((el) => {
-        el.addEventListener('mouseenter', handleMouseEnterInteractive);
-        el.addEventListener('mouseleave', handleMouseLeaveInteractive);
-      });
-
-      textElements.forEach((el) => {
-        el.addEventListener('mouseenter', handleMouseEnterText);
-        el.addEventListener('mouseleave', handleMouseLeaveText);
-      });
-
       return () => {
         window.removeEventListener('mousemove', onMouseMove);
         document.body.removeEventListener('mouseleave', onMouseLeave);
         document.body.removeEventListener('mouseenter', onMouseEnter);
-
-        interactiveElements.forEach((el) => {
-          el.removeEventListener('mouseenter', handleMouseEnterInteractive);
-          el.removeEventListener('mouseleave', handleMouseLeaveInteractive);
-        });
-
-        textElements.forEach((el) => {
-          el.removeEventListener('mouseenter', handleMouseEnterText);
-          el.removeEventListener('mouseleave', handleMouseLeaveText);
-        });
       };
     }
   }, [onMouseMove, onMouseLeave, onMouseEnter]);
@@ -83,72 +73,79 @@ export const CustomCursor = () => {
   // Don't render on mobile/touch devices
   if (isMobile) return null;
 
-  const variants = {
-    default: {
-      width: 12,
-      height: 12,
-      backgroundColor: 'rgba(225, 6, 19, 0.8)',
-      mixBlendMode: 'difference' as const,
-    },
-    hover: {
-      width: 48,
-      height: 48,
-      backgroundColor: 'rgba(225, 6, 19, 0.15)',
-      border: '1px solid rgba(225, 6, 19, 0.5)',
-      mixBlendMode: 'normal' as const,
-    },
-    text: {
-      width: 4,
-      height: 24,
-      backgroundColor: 'rgba(225, 6, 19, 0.6)',
-      borderRadius: 2,
-      mixBlendMode: 'difference' as const,
-    },
-    hidden: {
-      width: 0,
-      height: 0,
-      opacity: 0,
-    },
-  };
-
   return (
     <>
-      {/* Main cursor dot */}
+      {/* Main cursor dot - faster response */}
       <motion.div
-        className="fixed top-0 left-0 pointer-events-none z-[9999] rounded-full"
+        className="fixed top-0 left-0 pointer-events-none z-[9999] rounded-full flex items-center justify-center"
         style={{
-          x: cursorXSpring,
-          y: cursorYSpring,
-          translateX: '-50%',
-          translateY: '-50%',
-        }}
-        animate={cursorVariant}
-        variants={variants}
-        transition={{ type: 'spring', damping: 20, stiffness: 300 }}
-        initial={false}
-      />
-
-      {/* Trailing ring */}
-      <motion.div
-        className="fixed top-0 left-0 pointer-events-none z-[9998] rounded-full border border-alchemy-red/20"
-        style={{
-          x: cursorXSpring,
-          y: cursorYSpring,
+          x: cursorX,
+          y: cursorY,
           translateX: '-50%',
           translateY: '-50%',
         }}
         animate={{
-          width: cursorVariant === 'hover' ? 64 : 32,
-          height: cursorVariant === 'hover' ? 64 : 32,
-          opacity: isVisible ? (cursorVariant === 'text' ? 0 : 0.5) : 0,
+          width: cursorVariant === 'hover' ? 56 : cursorVariant === 'text' ? 4 : 10,
+          height: cursorVariant === 'hover' ? 56 : cursorVariant === 'text' ? 24 : 10,
+          backgroundColor: cursorVariant === 'hover' 
+            ? 'rgba(225, 6, 19, 0.12)' 
+            : 'rgba(225, 6, 19, 0.9)',
+          borderRadius: cursorVariant === 'text' ? 2 : 999,
+          borderWidth: cursorVariant === 'hover' ? 1 : 0,
+          borderColor: 'rgba(225, 6, 19, 0.5)',
+          opacity: isVisible ? 1 : 0,
         }}
-        transition={{ type: 'spring', damping: 30, stiffness: 200 }}
+        transition={{ type: 'spring', damping: 25, stiffness: 400 }}
+      >
+        {cursorVariant === 'hover' && cursorLabel.current && (
+          <span className="text-[10px] font-mono uppercase tracking-wider text-alchemy-red">
+            {cursorLabel.current}
+          </span>
+        )}
+      </motion.div>
+
+      {/* Trailing ring - slower, creates depth */}
+      <motion.div
+        className="fixed top-0 left-0 pointer-events-none z-[9998] rounded-full"
+        style={{
+          x: trailX,
+          y: trailY,
+          translateX: '-50%',
+          translateY: '-50%',
+          border: '1px solid rgba(225, 6, 19, 0.15)',
+        }}
+        animate={{
+          width: cursorVariant === 'hover' ? 72 : 36,
+          height: cursorVariant === 'hover' ? 72 : 36,
+          opacity: isVisible && cursorVariant !== 'text' ? 0.6 : 0,
+        }}
+        transition={{ type: 'spring', damping: 35, stiffness: 180 }}
+      />
+
+      {/* Outer glow ring - slowest, for depth */}
+      <motion.div
+        className="fixed top-0 left-0 pointer-events-none z-[9997] rounded-full"
+        style={{
+          x: trailX,
+          y: trailY,
+          translateX: '-50%',
+          translateY: '-50%',
+          border: '1px solid rgba(225, 6, 19, 0.08)',
+        }}
+        animate={{
+          width: cursorVariant === 'hover' ? 88 : 48,
+          height: cursorVariant === 'hover' ? 88 : 48,
+          opacity: isVisible && cursorVariant === 'default' ? 0.3 : 0,
+        }}
+        transition={{ type: 'spring', damping: 45, stiffness: 120 }}
       />
 
       {/* Hide default cursor globally */}
       <style>{`
-        * {
-          cursor: none !important;
+        @media (hover: hover) and (pointer: fine) {
+          * {
+            cursor: none !important;
+          }
         }
       `}</style>
     </>

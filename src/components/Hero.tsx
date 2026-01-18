@@ -11,13 +11,14 @@ export const Hero = () => {
     offset: ['start start', 'end start'],
   });
 
-  const y = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
+  const y = useTransform(scrollYProgress, [0, 1], ['0%', '40%']);
+  const opacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
+  const scale = useTransform(scrollYProgress, [0, 0.6], [1, 0.92]);
+  const blur = useTransform(scrollYProgress, [0, 0.4], [0, 10]);
 
   return (
     <section id="hero" ref={sectionRef} className="relative min-h-screen flex items-center overflow-hidden">
-      {/* Video Background with parallax */}
+      {/* Video Background with enhanced parallax */}
       <motion.div className="absolute inset-0" style={{ y }}>
         <video
           autoPlay
@@ -28,31 +29,36 @@ export const Hero = () => {
         >
           <source src={heroVideo} type="video/mp4" />
         </video>
-        {/* Gradient overlays */}
-        <div className="absolute inset-0 bg-gradient-to-r from-alchemy-black via-alchemy-black/70 to-alchemy-black/40" />
-        <div className="absolute inset-0 bg-gradient-to-t from-alchemy-black via-transparent to-alchemy-black/60" />
+        {/* Layered gradient overlays for depth */}
+        <div className="absolute inset-0 bg-gradient-to-r from-alchemy-black via-alchemy-black/80 to-alchemy-black/30" />
+        <div className="absolute inset-0 bg-gradient-to-t from-alchemy-black via-transparent to-alchemy-black/50" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-alchemy-black" />
         <div className="absolute inset-0 hero-gradient" />
       </motion.div>
 
-      {/* Content */}
+      {/* Content with blur-on-scroll effect */}
       <motion.div
-        style={{ opacity, scale }}
-        className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 py-32 md:py-40 w-full"
+        style={{ 
+          opacity, 
+          scale,
+          filter: blur.get() > 0 ? `blur(${blur.get()}px)` : 'none',
+        }}
+        className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 py-32 md:py-40 w-full will-change-transform"
       >
         <div className="max-w-4xl mx-auto text-center">
-          {/* Main Headline with staggered character animation */}
+          {/* Main Headline with staggered reveal */}
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            initial={{ opacity: 0, y: 60, filter: 'blur(20px)' }}
+            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+            transition={{ duration: 1.2, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
             className="mb-8"
           >
-            <h1 className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-display tracking-display">
+            <h1 className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl leading-display tracking-display">
               <motion.span
                 className="italic text-alchemy-red inline-block"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.3 }}
+                initial={{ opacity: 0, y: 40, filter: 'blur(10px)' }}
+                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                transition={{ duration: 1, delay: 0.4 }}
               >
                 Alchemy
               </motion.span>
@@ -60,49 +66,49 @@ export const Hero = () => {
                 className="text-porcelain/90 inline-block"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ duration: 0.6, delay: 0.5 }}
+                transition={{ duration: 0.8, delay: 0.6 }}
               >
                 {' '}in{' '}
               </motion.span>
               <motion.span
                 className="italic text-alchemy-red inline-block"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.6 }}
+                initial={{ opacity: 0, y: 40, filter: 'blur(10px)' }}
+                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                transition={{ duration: 1, delay: 0.7 }}
               >
                 Motion
               </motion.span>
               <motion.span
-                className="text-porcelain/40 inline-block"
+                className="text-porcelain/30 inline-block"
                 initial={{ opacity: 0, scale: 0 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.4, delay: 0.9 }}
+                transition={{ duration: 0.5, delay: 1.1, type: 'spring' }}
               >
                 .
               </motion.span>
             </h1>
           </motion.div>
 
-          {/* Sub Headline */}
+          {/* Sub Headline with gradient reveal */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="mb-10"
+            initial={{ opacity: 0, y: 30, filter: 'blur(10px)' }}
+            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+            transition={{ duration: 1, delay: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            className="mb-12"
           >
             <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl leading-display tracking-tight text-porcelain/70">
               <span className="italic text-alchemy-red">AI</span>
-              <span className="text-porcelain/70">-Augmented </span>
+              <span className="text-porcelain/60">-Augmented </span>
               <span className="italic text-alchemy-red">Branding</span>
             </h2>
           </motion.div>
 
-          {/* Description */}
+          {/* Description with word emphasis */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="font-body text-base md:text-lg text-porcelain/50 leading-relaxed max-w-2xl mx-auto mb-14 font-light"
+            transition={{ duration: 0.9, delay: 1, ease: [0.22, 1, 0.36, 1] }}
+            className="font-body text-base md:text-lg lg:text-xl text-porcelain/50 leading-relaxed max-w-2xl mx-auto mb-16 font-light"
           >
             We architect{' '}
             <span className="font-display italic text-porcelain/80">brand systems</span>{' '}
@@ -113,45 +119,53 @@ export const Hero = () => {
             scale through precision.
           </motion.p>
 
-          {/* CTAs with enhanced hover states */}
+          {/* CTAs with stagger */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.1, ease: [0.22, 1, 0.36, 1] }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-5"
+            transition={{ duration: 0.8, delay: 1.2, ease: [0.22, 1, 0.36, 1] }}
+            className="flex flex-col sm:flex-row items-center justify-center gap-6"
           >
             <MagneticButton
               href="#contact"
               className="glass-cta-primary group relative overflow-hidden"
             >
-              <span className="font-body">Book a Strategy Sprint</span>
-              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+              <span className="font-body font-medium">Book a Strategy Sprint</span>
+              <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
             </MagneticButton>
 
-            <a
+            <motion.a
               href="#work"
-              className="group inline-flex items-center gap-2 px-6 py-4 font-body text-porcelain/50 hover:text-porcelain transition-colors duration-300"
+              className="group inline-flex items-center gap-2 px-6 py-4 font-body text-porcelain/50 hover:text-porcelain transition-all duration-500"
+              whileHover={{ x: 4 }}
             >
               <span>Explore Our Work</span>
-              <ArrowUpRight className="w-4 h-4 text-alchemy-red transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-            </a>
+              <ArrowUpRight className="w-4 h-4 text-alchemy-red transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
+            </motion.a>
           </motion.div>
         </div>
       </motion.div>
 
-      {/* Scroll indicator */}
+      {/* Enhanced scroll indicator */}
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 2.5, duration: 0.8 }}
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3"
       >
+        <span className="font-mono text-[10px] text-porcelain/30 uppercase tracking-[0.3em]">
+          Scroll
+        </span>
         <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-          className="w-6 h-10 rounded-full border border-porcelain/20 flex justify-center pt-2"
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+          className="w-6 h-12 rounded-full border border-porcelain/20 flex justify-center pt-2"
         >
-          <div className="w-1.5 h-1.5 rounded-full bg-alchemy-red" />
+          <motion.div 
+            className="w-1 h-3 rounded-full bg-alchemy-red"
+            animate={{ opacity: [0.5, 1, 0.5] }}
+            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+          />
         </motion.div>
       </motion.div>
     </section>
