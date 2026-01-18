@@ -1,7 +1,4 @@
-import { Suspense, lazy } from 'react';
 import { motion } from 'framer-motion';
-
-const Spline = lazy(() => import('@splinetool/react-spline'));
 
 interface SplineSceneProps {
   url: string;
@@ -9,6 +6,9 @@ interface SplineSceneProps {
 }
 
 export const SplineScene = ({ url, className = '' }: SplineSceneProps) => {
+  // Convert Spline URL to embed format
+  const embedUrl = url.replace('prod.spline.design', 'my.spline.design/embed');
+  
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -16,15 +16,15 @@ export const SplineScene = ({ url, className = '' }: SplineSceneProps) => {
       transition={{ duration: 1.5, delay: 0.5 }}
       className={`w-full h-full ${className}`}
     >
-      <Suspense
-        fallback={
-          <div className="w-full h-full flex items-center justify-center">
-            <div className="w-12 h-12 rounded-full border-2 border-alchemy-red/30 border-t-alchemy-red animate-spin" />
-          </div>
-        }
-      >
-        <Spline scene={url} />
-      </Suspense>
+      <iframe
+        src={embedUrl}
+        frameBorder="0"
+        width="100%"
+        height="100%"
+        style={{ border: 'none' }}
+        title="Spline 3D Scene"
+        loading="lazy"
+      />
     </motion.div>
   );
 };
