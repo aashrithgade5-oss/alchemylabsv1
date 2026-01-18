@@ -2,95 +2,78 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Alchemy Labs Design System - Luxury AI Agency */
+
+/* Font Imports */
+@import '@fontsource/playfair-display/400.css';
+@import '@fontsource/playfair-display/500.css';
+@import '@fontsource/playfair-display/700.css';
+@import '@fontsource/playfair-display/400-italic.css';
+@import '@fontsource/jetbrains-mono/400.css';
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
+    /* Core Alchemy Palette */
+    --alchemy-black: 240 5% 3%;
+    --alchemy-red: 356 94% 45%;
+    --deep-crimson: 354 85% 26%;
+    --crimson-bright: 355 85% 38%;
+    
+    /* Structural Grays */
+    --charcoal-ui: 240 8% 7%;
+    --graphite-layer: 240 8% 11%;
+    --smoke: 240 5% 17%;
+    --warm-stone: 0 0% 73%;
+    
+    /* Light & Cream */
+    --cream-editorial: 43 55% 89%;
+    --porcelain: 40 33% 98%;
+    
+    /* Semantic Tokens */
+    --background: var(--alchemy-black);
+    --foreground: var(--porcelain);
+    
+    --card: var(--graphite-layer);
+    --card-foreground: var(--porcelain);
+    
+    --popover: var(--charcoal-ui);
+    --popover-foreground: var(--porcelain);
+    
+    --primary: var(--alchemy-red);
+    --primary-foreground: var(--porcelain);
+    
+    --secondary: var(--smoke);
+    --secondary-foreground: var(--porcelain);
+    
+    --muted: var(--graphite-layer);
+    --muted-foreground: 0 0% 60%;
+    
+    --accent: var(--deep-crimson);
+    --accent-foreground: var(--porcelain);
+    
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
+    
+    --border: 240 5% 15%;
+    --input: 240 5% 15%;
+    --ring: var(--alchemy-red);
+    
     --radius: 0.5rem;
-
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    
+    /* Typography */
+    --font-display: 'Playfair Display', Georgia, serif;
+    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+    
+    /* Sidebar - keeping defaults */
+    --sidebar-background: var(--charcoal-ui);
+    --sidebar-foreground: var(--porcelain);
+    --sidebar-primary: var(--alchemy-red);
+    --sidebar-primary-foreground: var(--porcelain);
+    --sidebar-accent: var(--smoke);
+    --sidebar-accent-foreground: var(--porcelain);
+    --sidebar-border: var(--border);
+    --sidebar-ring: var(--alchemy-red);
   }
 }
 
@@ -98,8 +81,260 @@ All colors MUST be HSL.
   * {
     @apply border-border;
   }
-
+  
+  html {
+    scroll-behavior: smooth;
+  }
+  
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-body);
+    overflow-x: hidden;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+  }
+  
+  ::selection {
+    background: hsl(var(--alchemy-red) / 0.3);
+    color: hsl(var(--porcelain));
+  }
+}
+
+@layer components {
+  /* Liquid Glass Effects */
+  .glass {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+  
+  .glass-nav {
+    background: rgba(10, 10, 11, 0.7);
+    backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 
+      0 1px 0 rgba(225, 6, 19, 0.1),
+      0 8px 32px rgba(0, 0, 0, 0.12);
+  }
+  
+  .glass-red {
+    background: linear-gradient(135deg, 
+      rgba(225, 6, 19, 0.06), 
+      rgba(255, 255, 255, 0.04)
+    );
+    backdrop-filter: blur(28px) saturate(200%);
+    border: 1px solid rgba(225, 6, 19, 0.2);
+  }
+  
+  .glass-deep {
+    background: rgba(10, 10, 11, 0.85);
+    backdrop-filter: blur(32px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+  
+  .glass-on-cream {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(20px) saturate(120%);
+    border: 1px solid rgba(10, 10, 11, 0.1);
+    box-shadow: 
+      0 8px 32px rgba(10, 10, 11, 0.08),
+      inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  }
+  
+  /* Glass CTAs */
+  .glass-cta-primary {
+    @apply inline-flex items-center gap-3 px-8 py-4 rounded-md font-medium transition-all duration-400;
+    background: linear-gradient(135deg, 
+      rgba(225, 6, 19, 0.12), 
+      rgba(255, 255, 255, 0.06)
+    );
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(225, 6, 19, 0.3);
+    box-shadow: 
+      0 0 24px rgba(225, 6, 19, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  }
+  
+  .glass-cta-primary:hover {
+    background: linear-gradient(135deg, 
+      rgba(225, 6, 19, 0.25), 
+      rgba(255, 255, 255, 0.1)
+    );
+    box-shadow: 
+      0 0 40px rgba(225, 6, 19, 0.4),
+      0 8px 32px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+  }
+  
+  /* Glass Inputs */
+  .glass-input {
+    @apply w-full px-4 py-3 rounded-md transition-all duration-300;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: hsl(var(--porcelain));
+  }
+  
+  .glass-input:focus {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(225, 6, 19, 0.5);
+    box-shadow: 
+      0 0 0 3px rgba(225, 6, 19, 0.1),
+      0 4px 16px rgba(0, 0, 0, 0.2);
+    outline: none;
+  }
+  
+  .glass-input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+  }
+  
+  /* Glass Tabs */
+  .glass-tab {
+    @apply px-6 py-3 rounded-md text-sm font-medium transition-all duration-350;
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  
+  .glass-tab:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.15);
+  }
+  
+  .glass-tab.active {
+    background: rgba(225, 6, 19, 0.15);
+    border-color: rgba(225, 6, 19, 0.4);
+    box-shadow: 
+      0 0 20px rgba(225, 6, 19, 0.25),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+  
+  /* Typography Utilities */
+  .font-display {
+    font-family: var(--font-display);
+  }
+  
+  .font-mono {
+    font-family: var(--font-mono);
+  }
+  
+  /* Text Effects */
+  .text-shimmer {
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.6) 0%,
+      rgba(255, 255, 255, 1) 50%,
+      rgba(255, 255, 255, 0.6) 100%
+    );
+    background-size: 200% auto;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 3s linear infinite;
+  }
+  
+  @keyframes shimmer {
+    to {
+      background-position: 200% center;
+    }
+  }
+  
+  /* Underline Animation */
+  .link-underline {
+    @apply relative inline-block;
+  }
+  
+  .link-underline::after {
+    content: '';
+    @apply absolute bottom-0 left-0 w-full h-0.5 origin-bottom-right transition-transform duration-300;
+    background: hsl(var(--alchemy-red));
+    transform: scaleX(0);
+  }
+  
+  .link-underline:hover::after {
+    transform: scaleX(1);
+    transform-origin: bottom-left;
+  }
+  
+  /* Grain Overlay */
+  .grain-overlay::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    opacity: 0.03;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+    z-index: 9999;
+  }
+  
+  /* Hero Background */
+  .hero-gradient {
+    background: radial-gradient(
+      ellipse at 20% 30%,
+      rgba(225, 6, 19, 0.12) 0%,
+      transparent 50%
+    );
+  }
+  
+  /* Scroll Progress */
+  .scroll-indicator {
+    @apply fixed top-0 left-0 right-0 h-0.5 z-50;
+    background: linear-gradient(90deg, hsl(var(--alchemy-red)), hsl(var(--deep-crimson)));
+    box-shadow: 0 0 8px rgba(225, 6, 19, 0.6);
+    transform-origin: 0%;
+  }
+}
+
+@layer utilities {
+  .duration-350 {
+    transition-duration: 350ms;
+  }
+  
+  .duration-400 {
+    transition-duration: 400ms;
+  }
+  
+  /* Leading (Line Height) */
+  .leading-display {
+    line-height: 1.1;
+  }
+  
+  .leading-body {
+    line-height: 1.7;
+  }
+  
+  /* Letter Spacing */
+  .tracking-display {
+    letter-spacing: -0.02em;
+  }
+  
+  .tracking-label {
+    letter-spacing: 0.1em;
+  }
+  
+  /* Max Width for Readability */
+  .max-w-prose-narrow {
+    max-width: 55ch;
+  }
+  
+  .max-w-headline {
+    max-width: 20ch;
+  }
+  
+  /* Reduced Motion */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }
