@@ -49,6 +49,9 @@ export const PageScrollTracker = () => {
   const basePath = '/' + (location.pathname.split('/')[1] || '');
   const sections = routeSections[basePath] || routeSections['/'];
 
+  // Don't render on homepage - Manifesto has its own sticky indicator
+  const isHomePage = location.pathname === '/';
+
   // Track which section is active
   useEffect(() => {
     const unsubscribe = scrollYProgress.on('change', (progress) => {
@@ -67,6 +70,9 @@ export const PageScrollTracker = () => {
 
   // Progress line height
   const lineHeight = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
+
+  // Hide on homepage
+  if (isHomePage) return null;
 
   return (
     <motion.div
