@@ -74,13 +74,26 @@ export const Work = () => {
                 <div className={`relative overflow-hidden ${
                   project.size === 'large' ? 'aspect-[16/10]' : 'aspect-[4/5]'
                 }`}>
-                  <motion.img
-                    src={project.image}
-                    alt={project.title}
-                    className="w-full h-full object-cover"
-                    whileHover={{ scale: 1.05 }}
-                    transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                  />
+                  {project.video ? (
+                    <motion.video
+                      src={project.video}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      className="w-full h-full object-cover"
+                      whileHover={{ scale: 1.05 }}
+                      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                    />
+                  ) : (
+                    <motion.img
+                      src={project.image}
+                      alt={project.title}
+                      className="w-full h-full object-cover"
+                      whileHover={{ scale: 1.05 }}
+                      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                    />
+                  )}
                   <div className="absolute inset-0 bg-gradient-to-t from-alchemy-black via-alchemy-black/40 to-transparent" />
                   <div className="absolute inset-0 bg-alchemy-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 backdrop-blur-sm" />
 
@@ -142,7 +155,18 @@ export const Work = () => {
               </button>
 
               <div className="relative aspect-[16/9] overflow-hidden rounded-t-3xl">
-                <img src={selectedProject.image} alt={selectedProject.title} className="w-full h-full object-cover" />
+                {selectedProject.video ? (
+                  <video 
+                    src={selectedProject.video} 
+                    autoPlay 
+                    loop 
+                    muted 
+                    playsInline 
+                    className="w-full h-full object-cover" 
+                  />
+                ) : (
+                  <img src={selectedProject.image} alt={selectedProject.title} className="w-full h-full object-cover" />
+                )}
                 <div className="absolute inset-0 bg-gradient-to-t from-alchemy-black via-alchemy-black/50 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12">
                   <span className="inline-block px-3 py-1 rounded-full glass text-xs font-mono text-porcelain/80 tracking-label uppercase mb-4">
