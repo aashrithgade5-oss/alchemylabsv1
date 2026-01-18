@@ -1,5 +1,6 @@
-import { useRef, useState, ReactNode } from 'react';
+import { useRef, useState, ReactNode, useCallback } from 'react';
 import { motion } from 'framer-motion';
+import { useSoundEffects } from '@/hooks/useSoundEffects';
 
 interface MagneticButtonProps {
   children: ReactNode;
@@ -20,6 +21,7 @@ export const MagneticButton = ({
 }: MagneticButtonProps) => {
   const buttonRef = useRef<HTMLButtonElement | HTMLAnchorElement>(null);
   const [position, setPosition] = useState({ x: 0, y: 0 });
+  const { playSound } = useSoundEffects();
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!buttonRef.current || disabled) return;
@@ -34,9 +36,18 @@ export const MagneticButton = ({
     });
   };
 
+  const handleMouseEnter = useCallback(() => {
+    playSound('hover');
+  }, [playSound]);
+
   const handleMouseLeave = () => {
     setPosition({ x: 0, y: 0 });
   };
+
+  const handleClick = useCallback(() => {
+    playSound('click');
+    onClick?.();
+  }, [playSound, onClick]);
 
   const springTransition = {
     type: 'spring' as const,
@@ -52,7 +63,9 @@ export const MagneticButton = ({
         href={href}
         className={className}
         onMouseMove={handleMouseMove}
+        onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
+        onClick={() => playSound('click')}
         animate={{ x: position.x, y: position.y }}
         transition={springTransition}
         whileHover={{ scale: 1.02 }}
@@ -73,10 +86,11 @@ export const MagneticButton = ({
     <motion.button
       ref={buttonRef as React.RefObject<HTMLButtonElement>}
       type={type}
-      onClick={onClick}
+      onClick={handleClick}
       disabled={disabled}
       className={className}
       onMouseMove={handleMouseMove}
+      onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       animate={{ x: position.x, y: position.y }}
       transition={springTransition}
