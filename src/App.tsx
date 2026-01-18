@@ -50,15 +50,12 @@ const AnimatedRoutes = () => {
 };
 
 const AppContent = () => (
-  <>
-    <CustomCursor />
-    <SmoothScroll>
-      <Preloader />
-      <Toaster />
-      <Sonner />
-      <AnimatedRoutes />
-    </SmoothScroll>
-  </>
+  <SmoothScroll>
+    <Preloader />
+    <Toaster />
+    <Sonner />
+    <AnimatedRoutes />
+  </SmoothScroll>
 );
 
 const App = () => (
