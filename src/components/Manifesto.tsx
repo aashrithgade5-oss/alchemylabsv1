@@ -2,19 +2,16 @@ import { motion } from 'framer-motion';
 
 const principles = [
   {
-    title: 'Restraint Over Noise',
     highlight: 'Restraint',
     rest: 'Over Noise',
     description: 'In a world of infinite content, precision is luxury.',
   },
   {
-    title: 'Systems Over Luck',
     highlight: 'Systems',
     rest: 'Over Luck',
     description: 'Repeatability is the foundation of scale.',
   },
   {
-    title: 'Taste Over Templates',
     highlight: 'Taste',
     rest: 'Over Templates',
     description: 'Cultural fluency cannot be automated—yet.',
@@ -36,8 +33,8 @@ export const Manifesto = () => {
           transition={{ duration: 1.2 }}
           className="text-center mb-24"
         >
-          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-display text-graphite-layer max-w-5xl mx-auto">
-            Alchemy Labs is built at the intersection of{' '}
+          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-display tracking-display text-graphite-layer max-w-5xl mx-auto">
+            <span className="italic">Alchemy Labs</span> is built at the intersection of{' '}
             <motion.span
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -74,9 +71,9 @@ export const Manifesto = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.9, duration: 0.6 }}
-            className="text-xl md:text-2xl text-graphite-layer/70 mt-8 max-w-2xl mx-auto"
+            className="font-body text-lg md:text-xl text-graphite-layer/60 mt-8 max-w-2xl mx-auto font-light"
           >
-            We don't chase trends. We design infrastructure.
+            We don't chase trends. We design <span className="font-display italic">infrastructure</span>.
           </motion.p>
         </motion.div>
 
@@ -84,16 +81,16 @@ export const Manifesto = () => {
         <div className="grid md:grid-cols-3 gap-6">
           {principles.map((principle, i) => (
             <motion.div
-              key={principle.title}
-              initial={{ opacity: 0, rotateX: -15, y: 30 }}
-              whileInView={{ opacity: 1, rotateX: 0, y: 0 }}
+              key={principle.highlight}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{
                 delay: i * 0.15,
                 duration: 0.6,
                 ease: [0.22, 1, 0.36, 1],
               }}
-              className="glass-on-cream rounded-xl p-8 text-center"
+              className="glass-on-cream rounded-2xl p-8 text-center"
             >
               <span className="font-mono text-xs text-alchemy-red tracking-label uppercase">
                 0{i + 1}
@@ -102,7 +99,7 @@ export const Manifesto = () => {
                 <span className="italic text-alchemy-red">{principle.highlight}</span>{' '}
                 <span>{principle.rest}</span>
               </h3>
-              <p className="text-graphite-layer/70 leading-relaxed">
+              <p className="font-body text-graphite-layer/60 leading-relaxed font-light">
                 {principle.description}
               </p>
             </motion.div>

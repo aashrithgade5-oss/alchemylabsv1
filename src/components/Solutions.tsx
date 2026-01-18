@@ -62,11 +62,7 @@ export const Solutions = () => {
   const activeSolution = solutions[activeTab];
 
   return (
-    <section id="solutions" className="relative py-32 overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 bg-charcoal-ui" />
-      <div className="absolute inset-0 bg-gradient-to-b from-alchemy-black via-transparent to-alchemy-black opacity-50" />
-
+    <section id="solutions" className="relative py-32 overflow-hidden section-gradient">
       <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12">
         {/* Header */}
         <motion.div
@@ -74,15 +70,16 @@ export const Solutions = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="mb-16"
+          className="mb-16 text-center"
         >
           <p className="font-mono text-xs text-alchemy-red tracking-label uppercase mb-4">
             What We Build
           </p>
           <h2 className="font-display text-4xl md:text-5xl lg:text-6xl leading-display tracking-display">
-            <span className="italic">Solutions</span> for the
+            <span className="italic text-glow-subtle">Solutions</span>
+            <span className="text-porcelain/80"> for the</span>
             <br />
-            <span className="text-alchemy-red italic">Intelligence Era</span>
+            <span className="text-alchemy-red italic text-glow">Intelligence Era</span>
           </h2>
         </motion.div>
 
@@ -92,7 +89,7 @@ export const Solutions = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="flex flex-wrap gap-3 mb-12"
+          className="flex flex-wrap justify-center gap-3 mb-12"
         >
           {solutions.map((solution, i) => (
             <button
@@ -111,28 +108,28 @@ export const Solutions = () => {
         <AnimatePresence mode="wait">
           <motion.div
             key={activeSolution.id}
-            initial={{ opacity: 0, x: -20, filter: 'blur(8px)' }}
-            animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
-            exit={{ opacity: 0, x: 20, filter: 'blur(8px)' }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="grid lg:grid-cols-2 gap-12"
+            className="grid lg:grid-cols-2 gap-8"
           >
             {/* Description */}
-            <div className="glass-deep rounded-xl p-8 md:p-12">
+            <div className="glass-deep rounded-2xl p-8 md:p-10">
               <div className="flex items-center gap-4 mb-6">
-                <div className="w-12 h-12 rounded-lg glass-red flex items-center justify-center">
+                <div className="w-12 h-12 rounded-xl glass-red flex items-center justify-center">
                   <activeSolution.icon className="w-6 h-6 text-alchemy-red" />
                 </div>
-                <h3 className="font-display text-2xl md:text-3xl">
+                <h3 className="font-display text-2xl md:text-3xl italic">
                   {activeSolution.title}
                 </h3>
               </div>
-              <p className="text-lg text-porcelain/80 leading-relaxed mb-8">
+              <p className="font-body text-base md:text-lg text-porcelain/70 leading-relaxed mb-8 font-light">
                 {activeSolution.description}
               </p>
               <a
                 href="#contact"
-                className="inline-flex items-center gap-2 text-alchemy-red hover:text-crimson-bright transition-colors group"
+                className="inline-flex items-center gap-2 font-body text-alchemy-red hover:text-crimson-bright transition-colors group"
               >
                 <span>Discuss Your Project</span>
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
@@ -140,22 +137,22 @@ export const Solutions = () => {
             </div>
 
             {/* Outcomes */}
-            <div className="space-y-4">
-              <p className="font-mono text-xs text-porcelain/50 tracking-label uppercase mb-6">
+            <div className="space-y-3">
+              <p className="font-mono text-xs text-porcelain/40 tracking-label uppercase mb-6">
                 Key Outcomes
               </p>
               {activeSolution.outcomes.map((outcome, i) => (
                 <motion.div
                   key={outcome}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.1, duration: 0.4 }}
-                  className="glass p-6 rounded-lg flex items-center gap-4 group hover:glass-red transition-all duration-300"
+                  className="glass p-5 rounded-xl flex items-center gap-4 group hover:glass-red transition-all duration-300"
                 >
-                  <span className="font-mono text-xs text-alchemy-red">
+                  <span className="font-mono text-xs text-alchemy-red text-glow-subtle">
                     0{i + 1}
                   </span>
-                  <span className="text-porcelain/90">{outcome}</span>
+                  <span className="font-body text-porcelain/80">{outcome}</span>
                 </motion.div>
               ))}
             </div>

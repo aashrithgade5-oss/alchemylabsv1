@@ -13,15 +13,13 @@ export const Contact = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
     console.log('Form submitted:', formData);
   };
 
   return (
-    <section id="contact" className="relative py-32 overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 bg-alchemy-black" />
-      <div className="absolute inset-0 bg-gradient-radial from-deep-crimson/20 via-transparent to-transparent" />
+    <section id="contact" className="relative py-32 overflow-hidden section-gradient">
+      {/* Extra red glow */}
+      <div className="absolute inset-0 bg-gradient-radial from-deep-crimson/15 via-transparent to-transparent" />
 
       <div className="relative z-10 max-w-4xl mx-auto px-6 md:px-12">
         {/* Header */}
@@ -35,9 +33,9 @@ export const Contact = () => {
           <h2 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-display tracking-display">
             Let's build something
             <br />
-            <span className="text-alchemy-red italic">inevitable.</span>
+            <span className="text-alchemy-red italic text-glow">inevitable.</span>
           </h2>
-          <p className="text-xl text-porcelain/70 mt-6">
+          <p className="font-body text-lg text-porcelain/50 mt-6 font-light">
             Brief us in under 3 minutes.
           </p>
         </motion.div>
@@ -49,12 +47,12 @@ export const Contact = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
           onSubmit={handleSubmit}
-          className="glass-deep rounded-2xl p-8 md:p-12"
+          className="glass-deep rounded-3xl p-8 md:p-12"
         >
           <div className="grid md:grid-cols-2 gap-6 mb-6">
             {/* Name */}
             <div className="space-y-2">
-              <label className="font-mono text-xs text-porcelain/60 tracking-label uppercase">
+              <label className="font-mono text-xs text-porcelain/50 tracking-label uppercase">
                 Your Name
               </label>
               <input
@@ -71,7 +69,7 @@ export const Contact = () => {
 
             {/* Email */}
             <div className="space-y-2">
-              <label className="font-mono text-xs text-porcelain/60 tracking-label uppercase">
+              <label className="font-mono text-xs text-porcelain/50 tracking-label uppercase">
                 Email
               </label>
               <input
@@ -89,7 +87,7 @@ export const Contact = () => {
 
           {/* Company */}
           <div className="space-y-2 mb-6">
-            <label className="font-mono text-xs text-porcelain/60 tracking-label uppercase">
+            <label className="font-mono text-xs text-porcelain/50 tracking-label uppercase">
               Company
             </label>
             <input
@@ -105,7 +103,7 @@ export const Contact = () => {
 
           {/* Budget */}
           <div className="space-y-2 mb-6">
-            <label className="font-mono text-xs text-porcelain/60 tracking-label uppercase">
+            <label className="font-mono text-xs text-porcelain/50 tracking-label uppercase">
               Investment Range
             </label>
             <select
@@ -127,7 +125,7 @@ export const Contact = () => {
 
           {/* Message */}
           <div className="space-y-2 mb-8">
-            <label className="font-mono text-xs text-porcelain/60 tracking-label uppercase">
+            <label className="font-mono text-xs text-porcelain/50 tracking-label uppercase">
               What are we building?
             </label>
             <textarea
@@ -156,7 +154,7 @@ export const Contact = () => {
 
             <a
               href="#"
-              className="inline-flex items-center gap-2 px-6 py-4 text-porcelain/70 hover:text-alchemy-red transition-colors group"
+              className="inline-flex items-center gap-2 px-6 py-4 font-body text-porcelain/50 hover:text-alchemy-red transition-colors group"
             >
               <Calendar className="w-4 h-4" />
               <span>Book a Call Instead</span>
@@ -164,7 +162,7 @@ export const Contact = () => {
           </div>
 
           {/* Reassurance */}
-          <p className="font-mono text-xs text-center text-porcelain/50 mt-8">
+          <p className="font-mono text-xs text-center text-porcelain/40 mt-8">
             Selective partnerships. Fast replies. No spam.
           </p>
         </motion.form>
