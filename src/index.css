@@ -406,7 +406,7 @@
     transform-origin: bottom-left;
   }
   
-  /* Grain Overlay */
+  /* Grain Overlay - z-index must be below custom cursor (99999) */
   .grain-overlay::before {
     content: '';
     position: fixed;
@@ -415,7 +415,12 @@
     opacity: 0.025;
     pointer-events: none;
     mix-blend-mode: overlay;
-    z-index: 9999;
+    z-index: 9990;
+  }
+  
+  /* Ensure pointer events work globally for cursor tracking */
+  html, body, #root {
+    pointer-events: auto;
   }
   
   /* Hero Background */
