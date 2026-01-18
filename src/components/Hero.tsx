@@ -1,158 +1,107 @@
 import { motion } from 'framer-motion';
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
-import heroVisual from '@/assets/hero-visual.jpg';
-
-const headlineWords = ['Alchemy', 'in', 'Motion.'];
-const subheadlineWords = ['AI-Augmented', 'Branding.'];
+import heroVideo from '@/assets/hero-video.mp4';
 
 export const Hero = () => {
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 bg-alchemy-black">
-        <div className="absolute inset-0 hero-gradient" />
-        <motion.div
-          initial={{ opacity: 0, scale: 1.1 }}
-          animate={{ opacity: 0.6, scale: 1 }}
-          transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
-          className="absolute inset-0"
+      {/* Video Background */}
+      <div className="absolute inset-0">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="w-full h-full object-cover"
         >
-          <img
-            src={heroVisual}
-            alt=""
-            className="w-full h-full object-cover opacity-40"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-alchemy-black/60 via-transparent to-alchemy-black" />
-        </motion.div>
+          <source src={heroVideo} type="video/mp4" />
+        </video>
+        {/* Overlay gradients */}
+        <div className="absolute inset-0 bg-gradient-to-r from-alchemy-black via-alchemy-black/80 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-alchemy-black via-transparent to-alchemy-black/50" />
+        <div className="absolute inset-0 hero-gradient opacity-60" />
       </div>
 
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 py-32 md:py-40 w-full">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-          {/* Editorial Column */}
-          <div className="space-y-8">
-            {/* Headline */}
-            <div className="overflow-hidden">
-              <h1 className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-display tracking-display">
-                {headlineWords.map((word, i) => (
-                  <motion.span
-                    key={word}
-                    initial={{ opacity: 0, y: 60, filter: 'blur(8px)' }}
-                    animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                    transition={{
-                      duration: 0.8,
-                      delay: 0.2 + i * 0.15,
-                      ease: [0.22, 1, 0.36, 1],
-                    }}
-                    className="inline-block mr-4"
-                  >
-                    {word}
-                  </motion.span>
-                ))}
-                <br />
-                {subheadlineWords.map((word, i) => (
-                  <motion.span
-                    key={word}
-                    initial={{ opacity: 0, y: 60, filter: 'blur(8px)' }}
-                    animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                    transition={{
-                      duration: 0.8,
-                      delay: 0.6 + i * 0.15,
-                      ease: [0.22, 1, 0.36, 1],
-                    }}
-                    className="inline-block mr-4 text-alchemy-red"
-                  >
-                    {word}
-                  </motion.span>
-                ))}
-              </h1>
-            </div>
-
-            {/* Subtext */}
-            <motion.p
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.9, ease: [0.22, 1, 0.36, 1] }}
-              className="text-lg md:text-xl lg:text-2xl text-porcelain/80 leading-relaxed max-w-xl"
+        <div className="max-w-4xl mx-auto text-center">
+          {/* Headline - Symmetric centered layout */}
+          <div className="overflow-hidden mb-8">
+            <motion.h1
+              initial={{ opacity: 0, y: 60, filter: 'blur(8px)' }}
+              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+              transition={{
+                duration: 1,
+                delay: 0.3,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl leading-display tracking-display"
             >
-              We architect brand systems for the intelligence era—where strategy, 
-              identity, and culture scale through precision.
-            </motion.p>
-
-            {/* Tertiary */}
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 1.1 }}
-              className="font-mono text-xs text-porcelain/50 tracking-label uppercase"
-            >
-              EST. 2024 / MUMBAI × SILICON VALLEY
-            </motion.p>
-
-            {/* CTAs */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 1.3, ease: [0.22, 1, 0.36, 1] }}
-              className="flex flex-wrap gap-4 pt-4"
-            >
-              <motion.a
-                href="#contact"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                animate={{
-                  boxShadow: [
-                    '0 0 24px rgba(225, 6, 19, 0.2)',
-                    '0 0 48px rgba(225, 6, 19, 0.4)',
-                    '0 0 24px rgba(225, 6, 19, 0.2)',
-                  ],
-                }}
-                transition={{
-                  boxShadow: { duration: 2, delay: 2, repeat: 0 },
-                }}
-                className="glass-cta-primary group"
-              >
-                <span>Book a Strategy Sprint</span>
-                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-              </motion.a>
-
-              <a
-                href="#work"
-                className="group inline-flex items-center gap-2 px-6 py-4 text-porcelain/80 hover:text-porcelain transition-colors duration-300"
-              >
-                <span>Explore Our Work</span>
-                <ArrowUpRight className="w-4 h-4 text-alchemy-red transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-              </a>
-            </motion.div>
+              <span className="font-display italic text-alchemy-red">Alchemy</span>
+              {' '}in{' '}
+              <span className="font-display italic text-alchemy-red">Motion</span>
+              <span className="text-porcelain/80">.</span>
+            </motion.h1>
           </div>
 
-          {/* Cinematic Frame */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95, x: 50 }}
-            animate={{ opacity: 1, scale: 1, x: 0 }}
-            transition={{ duration: 1.2, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="relative hidden lg:block"
+          <div className="overflow-hidden mb-10">
+            <motion.h2
+              initial={{ opacity: 0, y: 40, filter: 'blur(8px)' }}
+              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+              transition={{
+                duration: 0.9,
+                delay: 0.6,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-display tracking-display text-porcelain/90"
+            >
+              <span className="font-display italic text-alchemy-red">AI</span>-Augmented{' '}
+              <span className="font-display italic text-alchemy-red">Branding</span>
+            </motion.h2>
+          </div>
+
+          {/* Subtext */}
+          <motion.p
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.9, ease: [0.22, 1, 0.36, 1] }}
+            className="text-lg md:text-xl lg:text-2xl text-porcelain/70 leading-relaxed max-w-2xl mx-auto mb-12"
           >
-            <div className="aspect-[4/5] glass-deep rounded-lg overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-alchemy-red/10 via-transparent to-transparent" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-center space-y-4 p-8">
-                  <div className="w-20 h-20 mx-auto rounded-full glass-red flex items-center justify-center">
-                    <div className="w-3 h-3 rounded-full bg-alchemy-red animate-pulse" />
-                  </div>
-                  <p className="font-mono text-xs text-porcelain/60 tracking-label uppercase">
-                    Intelligence at Work
-                  </p>
-                </div>
-              </div>
-            </div>
-            
-            {/* Floating accent */}
-            <motion.div
-              animate={{ y: [0, -10, 0] }}
-              transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-              className="absolute -top-6 -right-6 w-24 h-24 rounded-full bg-alchemy-red/20 blur-2xl"
-            />
+            We architect{' '}
+            <span className="font-display italic text-porcelain">brand systems</span>{' '}
+            for the intelligence era—where{' '}
+            <span className="font-display italic text-porcelain">strategy</span>,{' '}
+            <span className="font-display italic text-porcelain">identity</span>, and{' '}
+            <span className="font-display italic text-porcelain">culture</span>{' '}
+            scale through precision.
+          </motion.p>
+
+          {/* CTAs - Symmetric centered */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1.2, ease: [0.22, 1, 0.36, 1] }}
+            className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6"
+          >
+            <motion.a
+              href="#contact"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="glass-cta-primary group"
+            >
+              <span className="font-display italic">Book</span>
+              <span>a Strategy Sprint</span>
+              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+            </motion.a>
+
+            <a
+              href="#work"
+              className="group inline-flex items-center gap-2 px-6 py-4 text-porcelain/70 hover:text-porcelain transition-colors duration-300"
+            >
+              <span>Explore Our</span>
+              <span className="font-display italic text-porcelain">Work</span>
+              <ArrowUpRight className="w-4 h-4 text-alchemy-red transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </a>
           </motion.div>
         </div>
       </div>

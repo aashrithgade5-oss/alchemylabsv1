@@ -43,10 +43,10 @@ export const Journal = () => {
             Perspectives
           </p>
           <h2 className="font-display text-4xl md:text-5xl lg:text-6xl leading-display tracking-display">
-            The Journal
+            The <span className="italic text-alchemy-red">Journal</span>
           </h2>
           <p className="text-xl text-porcelain/70 mt-4">
-            Perspectives on brand, systems, and intelligence.
+            Perspectives on <span className="font-display italic">brand</span>, <span className="font-display italic">systems</span>, and <span className="font-display italic">intelligence</span>.
           </p>
         </motion.div>
 

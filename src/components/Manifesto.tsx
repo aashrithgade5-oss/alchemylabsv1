@@ -3,14 +3,20 @@ import { motion } from 'framer-motion';
 const principles = [
   {
     title: 'Restraint Over Noise',
+    highlight: 'Restraint',
+    rest: 'Over Noise',
     description: 'In a world of infinite content, precision is luxury.',
   },
   {
     title: 'Systems Over Luck',
+    highlight: 'Systems',
+    rest: 'Over Luck',
     description: 'Repeatability is the foundation of scale.',
   },
   {
     title: 'Taste Over Templates',
+    highlight: 'Taste',
+    rest: 'Over Templates',
     description: 'Cultural fluency cannot be automated—yet.',
   },
 ];
@@ -93,7 +99,8 @@ export const Manifesto = () => {
                 0{i + 1}
               </span>
               <h3 className="font-display text-2xl md:text-3xl text-graphite-layer mt-4 mb-4">
-                {principle.title}
+                <span className="italic text-alchemy-red">{principle.highlight}</span>{' '}
+                <span>{principle.rest}</span>
               </h3>
               <p className="text-graphite-layer/70 leading-relaxed">
                 {principle.description}
