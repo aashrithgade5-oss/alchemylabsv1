@@ -10,6 +10,7 @@ import { Footer } from '@/components/Footer';
 import { ScrollProgress } from '@/components/ScrollProgress';
 import { ParallaxBackground } from '@/components/ParallaxBackground';
 import { VisualBreadcrumbs } from '@/components/VisualBreadcrumbs';
+import { HomepageScrollMap } from '@/components/HomepageScrollMap';
 
 const Index = () => {
   return (
@@ -18,6 +19,7 @@ const Index = () => {
       <ScrollProgress />
       <Navigation />
       <VisualBreadcrumbs />
+      <HomepageScrollMap />
       <main className="relative z-10">
         <Hero />
         <Solutions />
