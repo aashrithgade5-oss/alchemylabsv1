@@ -33,9 +33,7 @@ const projects = [
 
 export const CaseStudies = () => {
   return (
-    <section id="work" className="relative py-32 overflow-hidden">
-      <div className="absolute inset-0 bg-alchemy-black" />
-
+    <section id="work" className="relative py-32 overflow-hidden section-gradient">
       <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12">
         {/* Header */}
         <motion.div
@@ -50,12 +48,13 @@ export const CaseStudies = () => {
               Selected Work
             </p>
             <h2 className="font-display text-4xl md:text-5xl lg:text-6xl leading-display tracking-display">
-              Case Studies
+              <span className="italic text-glow-subtle">Case</span>{' '}
+              <span className="text-porcelain/80">Studies</span>
             </h2>
           </div>
           <a
             href="#"
-            className="mt-6 md:mt-0 inline-flex items-center gap-2 text-porcelain/70 hover:text-porcelain transition-colors group"
+            className="mt-6 md:mt-0 inline-flex items-center gap-2 font-body text-porcelain/60 hover:text-porcelain transition-colors group"
           >
             <span>View All Projects</span>
             <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -71,7 +70,7 @@ export const CaseStudies = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-50px' }}
               transition={{ duration: 0.6, delay: i * 0.15, ease: [0.22, 1, 0.36, 1] }}
-              className={`group relative rounded-xl overflow-hidden cursor-pointer ${
+              className={`group relative rounded-2xl overflow-hidden cursor-pointer ${
                 project.featured
                   ? 'md:col-span-2 lg:col-span-8 lg:row-span-2'
                   : 'lg:col-span-4'
@@ -92,29 +91,29 @@ export const CaseStudies = () => {
                 />
 
                 {/* Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-alchemy-black via-alchemy-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="absolute inset-0 bg-gradient-to-t from-alchemy-black via-alchemy-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
                 {/* Content */}
                 <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-end opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0">
                   <p className="font-mono text-xs text-alchemy-red tracking-label uppercase mb-2">
                     {project.category}
                   </p>
-                  <h3 className="font-display text-2xl md:text-3xl mb-2">
+                  <h3 className="font-display text-2xl md:text-3xl italic mb-2">
                     {project.title}
                   </h3>
-                  <p className="text-porcelain/70 text-sm mb-4 max-w-md">
+                  <p className="font-body text-porcelain/60 text-sm mb-4 max-w-md font-light">
                     {project.description}
                   </p>
-                  <div className="inline-flex items-center gap-2 text-alchemy-red">
-                    <span className="text-sm font-medium">View Case</span>
+                  <div className="inline-flex items-center gap-2 text-alchemy-red font-body text-sm">
+                    <span>View Case</span>
                     <ArrowUpRight className="w-4 h-4" />
                   </div>
                 </div>
               </div>
 
               {/* Border glow on hover */}
-              <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
-                <div className="absolute inset-0 rounded-xl border border-alchemy-red/30" />
+              <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+                <div className="absolute inset-0 rounded-2xl border border-alchemy-red/40 shadow-[0_0_30px_rgba(225,6,19,0.2)]" />
               </div>
             </motion.div>
           ))}

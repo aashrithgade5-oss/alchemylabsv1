@@ -34,10 +34,7 @@ export const Footer = () => {
   };
 
   return (
-    <footer className="relative overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-t from-alchemy-black via-charcoal-ui to-charcoal-ui" />
-
+    <footer className="relative overflow-hidden section-gradient">
       <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 py-20">
         {/* Logo */}
         <motion.div
@@ -46,7 +43,7 @@ export const Footer = () => {
           viewport={{ once: true }}
           className="mb-16"
         >
-          <a href="#" className="inline-flex items-center gap-3">
+          <a href="#" className="inline-flex items-center gap-4">
             <img 
               src={alchemyLogo} 
               alt="Alchemy Labs" 
@@ -56,7 +53,7 @@ export const Footer = () => {
               <span className="font-display text-2xl md:text-3xl italic text-porcelain">
                 Alchemy
               </span>
-              <span className="font-mono text-[10px] text-porcelain/60 tracking-[0.3em] uppercase">
+              <span className="font-mono text-[10px] text-porcelain/40 tracking-[0.25em] uppercase">
                 LABS
               </span>
             </div>
@@ -67,15 +64,15 @@ export const Footer = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-12 mb-16">
           {/* Company */}
           <div>
-            <h3 className="font-mono text-xs text-porcelain/50 tracking-label uppercase mb-4">
+            <h3 className="font-mono text-xs text-porcelain/40 tracking-label uppercase mb-6">
               Company
             </h3>
-            <ul className="space-y-3">
+            <ul className="space-y-4">
               {footerLinks.company.map((link) => (
                 <li key={link.label}>
                   <a
                     href={link.href}
-                    className="text-porcelain/70 hover:text-porcelain transition-colors duration-300"
+                    className="font-body text-porcelain/60 hover:text-porcelain transition-colors duration-300"
                   >
                     {link.label}
                   </a>
@@ -86,15 +83,15 @@ export const Footer = () => {
 
           {/* Services */}
           <div>
-            <h3 className="font-mono text-xs text-porcelain/50 tracking-label uppercase mb-4">
+            <h3 className="font-mono text-xs text-porcelain/40 tracking-label uppercase mb-6">
               Services
             </h3>
-            <ul className="space-y-3">
+            <ul className="space-y-4">
               {footerLinks.services.map((link) => (
                 <li key={link.label}>
                   <a
                     href={link.href}
-                    className="text-porcelain/70 hover:text-porcelain transition-colors duration-300"
+                    className="font-body text-porcelain/60 hover:text-porcelain transition-colors duration-300"
                   >
                     {link.label}
                   </a>
@@ -105,15 +102,15 @@ export const Footer = () => {
 
           {/* Connect */}
           <div>
-            <h3 className="font-mono text-xs text-porcelain/50 tracking-label uppercase mb-4">
+            <h3 className="font-mono text-xs text-porcelain/40 tracking-label uppercase mb-6">
               Connect
             </h3>
-            <ul className="space-y-3">
+            <ul className="space-y-4">
               {footerLinks.connect.map((link) => (
                 <li key={link.label}>
                   <a
                     href={link.href}
-                    className="text-porcelain/70 hover:text-porcelain transition-colors duration-300"
+                    className="font-body text-porcelain/60 hover:text-porcelain transition-colors duration-300"
                   >
                     {link.label}
                   </a>
@@ -124,11 +121,13 @@ export const Footer = () => {
 
           {/* Newsletter */}
           <div>
-            <h3 className="font-mono text-xs text-porcelain/50 tracking-label uppercase mb-4">
+            <h3 className="font-mono text-xs text-porcelain/40 tracking-label uppercase mb-6">
               Newsletter
             </h3>
-            <p className="text-sm text-porcelain/60 mb-4">
-              Quarterly insights on <span className="font-display italic">brand systems</span> and <span className="font-display italic">AI</span>.
+            <p className="font-body text-sm text-porcelain/50 mb-4 font-light">
+              Quarterly insights on{' '}
+              <span className="font-display italic">brand systems</span> and{' '}
+              <span className="font-display italic">AI</span>.
             </p>
             <form onSubmit={handleNewsletterSubmit} className="space-y-3">
               <input
@@ -141,7 +140,7 @@ export const Footer = () => {
               />
               <button
                 type="submit"
-                className="glass-cta-primary w-full justify-center text-sm px-4 py-2.5"
+                className="glass-cta-primary w-full justify-center text-sm px-4 py-3"
               >
                 <span>Subscribe</span>
                 <ArrowRight className="w-3 h-3" />
@@ -152,19 +151,19 @@ export const Footer = () => {
 
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-porcelain/10 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="font-mono text-xs text-porcelain/50">
+          <p className="font-mono text-xs text-porcelain/40">
             © 2026 <span className="font-display italic">Alchemy Labs</span>. All rights reserved.
           </p>
           <div className="flex gap-8">
             <a
               href="#"
-              className="text-sm text-porcelain/50 hover:text-porcelain transition-colors"
+              className="font-body text-sm text-porcelain/40 hover:text-porcelain transition-colors"
             >
               Privacy
             </a>
             <a
               href="#"
-              className="text-sm text-porcelain/50 hover:text-porcelain transition-colors"
+              className="font-body text-sm text-porcelain/40 hover:text-porcelain transition-colors"
             >
               Terms
             </a>

@@ -27,9 +27,7 @@ const posts = [
 
 export const Journal = () => {
   return (
-    <section id="journal" className="relative py-32 overflow-hidden">
-      <div className="absolute inset-0 bg-charcoal-ui" />
-
+    <section id="journal" className="relative py-32 overflow-hidden section-gradient">
       <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12">
         {/* Header */}
         <motion.div
@@ -37,16 +35,19 @@ export const Journal = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="mb-16"
+          className="mb-16 text-center"
         >
           <p className="font-mono text-xs text-alchemy-red tracking-label uppercase mb-4">
             Perspectives
           </p>
           <h2 className="font-display text-4xl md:text-5xl lg:text-6xl leading-display tracking-display">
-            The <span className="italic text-alchemy-red">Journal</span>
+            The <span className="italic text-alchemy-red text-glow-subtle">Journal</span>
           </h2>
-          <p className="text-xl text-porcelain/70 mt-4">
-            Perspectives on <span className="font-display italic">brand</span>, <span className="font-display italic">systems</span>, and <span className="font-display italic">intelligence</span>.
+          <p className="font-body text-lg text-porcelain/50 mt-4 font-light">
+            Perspectives on{' '}
+            <span className="font-display italic text-porcelain/70">brand</span>,{' '}
+            <span className="font-display italic text-porcelain/70">systems</span>, and{' '}
+            <span className="font-display italic text-porcelain/70">intelligence</span>.
           </p>
         </motion.div>
 
@@ -63,20 +64,20 @@ export const Journal = () => {
                 duration: 0.6,
                 ease: [0.22, 1, 0.36, 1],
               }}
-              className="glass-deep rounded-xl p-8 group cursor-pointer hover:border-alchemy-red/30 transition-all duration-400"
+              className="glass-deep rounded-2xl p-8 group cursor-pointer hover:shadow-[0_0_40px_rgba(225,6,19,0.15)] transition-all duration-400"
             >
-              <span className="font-mono text-xs text-porcelain/50 tracking-label uppercase">
+              <span className="font-mono text-xs text-porcelain/40 tracking-label uppercase">
                 {post.date}
               </span>
-              <h3 className="font-display text-xl md:text-2xl mt-4 mb-4 group-hover:text-alchemy-red transition-colors duration-300">
+              <h3 className="font-display text-xl md:text-2xl italic mt-4 mb-4 group-hover:text-alchemy-red transition-colors duration-300">
                 {post.title}
               </h3>
-              <p className="text-porcelain/70 leading-relaxed mb-6">
+              <p className="font-body text-porcelain/50 leading-relaxed mb-6 font-light">
                 {post.excerpt}
               </p>
               <a
                 href="#"
-                className="inline-flex items-center gap-2 text-sm text-porcelain/70 hover:text-alchemy-red transition-colors duration-300 group/link"
+                className="inline-flex items-center gap-2 font-body text-sm text-porcelain/50 hover:text-alchemy-red transition-colors duration-300 group/link"
               >
                 <span>Read Article</span>
                 <ArrowRight className="w-4 h-4 transition-transform group-hover/link:translate-x-1" />

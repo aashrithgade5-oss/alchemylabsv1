@@ -29,21 +29,21 @@ export const Navigation = () => {
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-        className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-6xl"
+        className="fixed top-6 left-0 right-0 z-50 flex justify-center px-4"
       >
-        <div className="glass-nav-pill px-4 md:px-8 py-3 flex items-center justify-between">
+        <div className="glass-nav-pill px-6 md:px-10 py-3 flex items-center gap-8 md:gap-12">
           {/* Logo */}
-          <a href="#" className="flex items-center gap-3 group">
+          <a href="#" className="flex items-center gap-3 group flex-shrink-0">
             <img 
               src={alchemyLogo} 
               alt="Alchemy Labs" 
-              className="w-10 h-10 md:w-12 md:h-12 object-contain"
+              className="w-9 h-9 md:w-10 md:h-10 object-contain"
             />
             <div className="hidden sm:flex flex-col leading-none">
-              <span className="font-display text-lg font-light text-porcelain tracking-wide">
+              <span className="font-display text-base md:text-lg font-normal text-porcelain tracking-wide italic">
                 Alchemy
               </span>
-              <span className="font-mono text-[10px] text-porcelain/60 tracking-[0.3em] uppercase">
+              <span className="font-mono text-[9px] text-porcelain/50 tracking-[0.25em] uppercase">
                 LABS
               </span>
             </div>
@@ -55,21 +55,21 @@ export const Navigation = () => {
               <li key={item.label}>
                 <a
                   href={item.href}
-                  className="text-sm text-porcelain/70 hover:text-porcelain link-underline transition-colors duration-300"
+                  className="font-body text-sm text-porcelain/70 hover:text-porcelain link-underline transition-colors duration-300"
                 >
                   {item.label}
                 </a>
               </li>
             ))}
-            <li>
-              <a
-                href="#contact"
-                className="glass-cta-nav text-sm px-5 py-2"
-              >
-                Contact
-              </a>
-            </li>
           </ul>
+          
+          {/* CTA Button */}
+          <a
+            href="#contact"
+            className="hidden md:flex glass-cta-nav text-sm px-5 py-2"
+          >
+            Contact
+          </a>
 
           {/* Mobile Menu Button */}
           <button
@@ -77,7 +77,7 @@ export const Navigation = () => {
             className="md:hidden p-2 text-porcelain"
             aria-label="Toggle menu"
           >
-            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
       </motion.nav>
@@ -96,7 +96,7 @@ export const Navigation = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-alchemy-black/95 backdrop-blur-xl"
+              className="absolute inset-0 bg-alchemy-black/98 backdrop-blur-2xl"
             />
             <motion.div
               initial={{ opacity: 0 }}
@@ -113,7 +113,7 @@ export const Navigation = () => {
                   exit={{ opacity: 0, y: 20 }}
                   transition={{ delay: i * 0.1, duration: 0.4 }}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="font-display text-4xl text-porcelain hover:text-alchemy-red transition-colors"
+                  className="font-display text-3xl italic text-porcelain hover:text-alchemy-red transition-colors"
                 >
                   {item.label}
                 </motion.a>
