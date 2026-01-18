@@ -6,7 +6,7 @@ type CursorVariant = 'default' | 'hover' | 'text' | 'hidden';
 export const CustomCursor = () => {
   const [cursorVariant, setCursorVariant] = useState<CursorVariant>('default');
   const [isVisible, setIsVisible] = useState(false);
-  const [isMobile, setIsMobile] = useState(true);
+  const [isDesktop, setIsDesktop] = useState(false);
   const cursorLabel = useRef<string>('');
 
   const mouseX = useMotionValue(-100);
@@ -19,6 +19,19 @@ export const CustomCursor = () => {
   const trailConfig = { damping: 35, stiffness: 150, mass: 0.8 };
   const trailX = useSpring(mouseX, trailConfig);
   const trailY = useSpring(mouseY, trailConfig);
+
+  // Check if desktop on mount
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(hover: hover) and (pointer: fine)');
+    setIsDesktop(mediaQuery.matches);
+
+    const handleChange = (e: MediaQueryListEvent) => {
+      setIsDesktop(e.matches);
+    };
+
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, []);
 
   const updateCursorVariant = useCallback((target: Element) => {
     if (target.closest('button, a, [role="button"], [data-cursor="button"]')) {
@@ -35,34 +48,34 @@ export const CustomCursor = () => {
     }
   }, []);
 
-  const onMouseMove = useCallback((e: MouseEvent) => {
-    mouseX.set(e.clientX);
-    mouseY.set(e.clientY);
-    if (!isVisible) setIsVisible(true);
-    updateCursorVariant(e.target as Element);
-  }, [mouseX, mouseY, isVisible, updateCursorVariant]);
-
-  const onMouseLeave = useCallback(() => setIsVisible(false), []);
-  const onMouseEnter = useCallback(() => setIsVisible(true), []);
-
+  // Mouse event handlers - separate useEffect to avoid stale closures
   useEffect(() => {
-    const mediaQuery = window.matchMedia('(hover: hover) and (pointer: fine)');
-    setIsMobile(!mediaQuery.matches);
+    if (!isDesktop) return;
 
-    if (mediaQuery.matches) {
-      window.addEventListener('mousemove', onMouseMove);
-      document.body.addEventListener('mouseleave', onMouseLeave);
-      document.body.addEventListener('mouseenter', onMouseEnter);
+    const handleMouseMove = (e: MouseEvent) => {
+      mouseX.set(e.clientX);
+      mouseY.set(e.clientY);
+      setIsVisible(true);
+      if (e.target) {
+        updateCursorVariant(e.target as Element);
+      }
+    };
 
-      return () => {
-        window.removeEventListener('mousemove', onMouseMove);
-        document.body.removeEventListener('mouseleave', onMouseLeave);
-        document.body.removeEventListener('mouseenter', onMouseEnter);
-      };
-    }
-  }, [onMouseMove, onMouseLeave, onMouseEnter]);
+    const handleMouseLeave = () => setIsVisible(false);
+    const handleMouseEnter = () => setIsVisible(true);
 
-  if (isMobile) return null;
+    window.addEventListener('mousemove', handleMouseMove);
+    document.body.addEventListener('mouseleave', handleMouseLeave);
+    document.body.addEventListener('mouseenter', handleMouseEnter);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      document.body.removeEventListener('mouseleave', handleMouseLeave);
+      document.body.removeEventListener('mouseenter', handleMouseEnter);
+    };
+  }, [isDesktop, mouseX, mouseY, updateCursorVariant]);
+
+  if (!isDesktop) return null;
 
   return (
     <>
