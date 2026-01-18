@@ -1,19 +1,30 @@
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
 import heroVideo from '@/assets/hero-video.mp4';
 import { MagneticButton } from './MagneticButton';
+import { useRef } from 'react';
 
 export const Hero = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start start', 'end start'],
+  });
+
+  const y = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
+
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden">
-      {/* Video Background */}
-      <div className="absolute inset-0">
+    <section id="hero" ref={sectionRef} className="relative min-h-screen flex items-center overflow-hidden">
+      {/* Video Background with parallax */}
+      <motion.div className="absolute inset-0" style={{ y }}>
         <video
           autoPlay
           loop
           muted
           playsInline
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover scale-110"
         >
           <source src={heroVideo} type="video/mp4" />
         </video>
@@ -21,12 +32,15 @@ export const Hero = () => {
         <div className="absolute inset-0 bg-gradient-to-r from-alchemy-black via-alchemy-black/70 to-alchemy-black/40" />
         <div className="absolute inset-0 bg-gradient-to-t from-alchemy-black via-transparent to-alchemy-black/60" />
         <div className="absolute inset-0 hero-gradient" />
-      </div>
+      </motion.div>
 
       {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 py-32 md:py-40 w-full">
+      <motion.div
+        style={{ opacity, scale }}
+        className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 py-32 md:py-40 w-full"
+      >
         <div className="max-w-4xl mx-auto text-center">
-          {/* Main Headline */}
+          {/* Main Headline with staggered character animation */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
@@ -34,10 +48,38 @@ export const Hero = () => {
             className="mb-8"
           >
             <h1 className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-display tracking-display">
-              <span className="italic text-alchemy-red">Alchemy</span>
-              <span className="text-porcelain/90"> in </span>
-              <span className="italic text-alchemy-red">Motion</span>
-              <span className="text-porcelain/40">.</span>
+              <motion.span
+                className="italic text-alchemy-red inline-block"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.3 }}
+              >
+                Alchemy
+              </motion.span>
+              <motion.span
+                className="text-porcelain/90 inline-block"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.6, delay: 0.5 }}
+              >
+                {' '}in{' '}
+              </motion.span>
+              <motion.span
+                className="italic text-alchemy-red inline-block"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.6 }}
+              >
+                Motion
+              </motion.span>
+              <motion.span
+                className="text-porcelain/40 inline-block"
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.4, delay: 0.9 }}
+              >
+                .
+              </motion.span>
             </h1>
           </motion.div>
 
@@ -71,7 +113,7 @@ export const Hero = () => {
             scale through precision.
           </motion.p>
 
-          {/* CTAs */}
+          {/* CTAs with enhanced hover states */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -95,7 +137,7 @@ export const Hero = () => {
             </a>
           </motion.div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Scroll indicator */}
       <motion.div

@@ -304,6 +304,79 @@
       0 0 24px rgba(225, 6, 19, 0.15);
   }
   
+  /* Red gradient text */
+  .text-gradient-red {
+    background: linear-gradient(
+      135deg,
+      hsl(var(--alchemy-red)) 0%,
+      hsl(var(--deep-crimson)) 50%,
+      hsl(354 85% 20%) 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  /* Text glow red for key emphasis */
+  .text-glow-red {
+    color: hsl(var(--alchemy-red));
+    text-shadow: 
+      0 0 20px hsla(var(--alchemy-red) / 0.3),
+      0 0 40px hsla(var(--alchemy-red) / 0.1);
+  }
+  
+  /* Shimmer animation for buttons */
+  .shimmer-effect {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .shimmer-effect::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.1) 50%,
+      transparent 100%
+    );
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+  }
+  
+  .shimmer-effect:hover::before {
+    transform: translateX(100%);
+  }
+  
+  /* Large opacity numbers for sections */
+  .section-number {
+    font-family: var(--font-display);
+    font-size: clamp(150px, 25vw, 400px);
+    font-weight: 400;
+    font-style: italic;
+    color: rgba(225, 6, 19, 0.04);
+    line-height: 0.8;
+    user-select: none;
+    pointer-events: none;
+  }
+  
+  /* Cream section styling */
+  .section-cream {
+    background: hsl(var(--cream-editorial));
+    color: hsl(var(--alchemy-black));
+  }
+  
+  .section-cream h1,
+  .section-cream h2,
+  .section-cream h3 {
+    color: hsl(var(--alchemy-black));
+  }
+  
+  .section-cream p {
+    color: hsl(var(--alchemy-black) / 0.7);
+  }
+  
   /* Underline Animation */
   .link-underline {
     @apply relative inline-block;

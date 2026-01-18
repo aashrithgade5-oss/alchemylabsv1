@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Send, Calendar, MessageCircle, Instagram, Mail } from 'lucide-react';
+import { Send, Calendar, MessageCircle, Instagram, Mail, Loader2, Check } from 'lucide-react';
 import { aiServices, brandingServices, consultationServices } from '@/data/services';
 import { MagneticButton } from './MagneticButton';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 
 export const Contact = () => {
   const [formData, setFormData] = useState({
@@ -12,10 +14,40 @@ export const Contact = () => {
     service: '',
     message: '',
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
+    setIsSubmitting(true);
+
+    try {
+      const { error } = await supabase
+        .from('contact_submissions')
+        .insert({
+          name: formData.name,
+          email: formData.email,
+          company: formData.company || null,
+          service: formData.service || null,
+          message: formData.message,
+        });
+
+      if (error) throw error;
+
+      setIsSubmitted(true);
+      toast.success('Brief sent successfully! We\'ll be in touch soon.');
+      
+      // Reset form after delay
+      setTimeout(() => {
+        setFormData({ name: '', email: '', company: '', service: '', message: '' });
+        setIsSubmitted(false);
+      }, 3000);
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      toast.error('Something went wrong. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -66,6 +98,7 @@ export const Contact = () => {
                 placeholder="Alex Rivera"
                 className="glass-input"
                 required
+                disabled={isSubmitting}
               />
             </div>
 
@@ -83,6 +116,7 @@ export const Contact = () => {
                 placeholder="alex@company.com"
                 className="glass-input"
                 required
+                disabled={isSubmitting}
               />
             </div>
           </div>
@@ -100,6 +134,7 @@ export const Contact = () => {
               }
               placeholder="Your Company Name"
               className="glass-input"
+              disabled={isSubmitting}
             />
           </div>
 
@@ -114,6 +149,7 @@ export const Contact = () => {
                 setFormData({ ...formData, service: e.target.value })
               }
               className="glass-input cursor-pointer"
+              disabled={isSubmitting}
             >
               <option value="" disabled>
                 Select a service...
@@ -157,6 +193,7 @@ export const Contact = () => {
               rows={4}
               className="glass-input resize-none"
               required
+              disabled={isSubmitting}
             />
           </div>
 
@@ -165,9 +202,24 @@ export const Contact = () => {
             <MagneticButton
               type="submit"
               className="glass-cta-primary w-full sm:w-auto justify-center relative overflow-hidden"
+              disabled={isSubmitting || isSubmitted}
             >
-              <span>Send Brief</span>
-              <Send className="w-4 h-4" />
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <span>Sending...</span>
+                </>
+              ) : isSubmitted ? (
+                <>
+                  <Check className="w-4 h-4" />
+                  <span>Sent!</span>
+                </>
+              ) : (
+                <>
+                  <span>Send Brief</span>
+                  <Send className="w-4 h-4" />
+                </>
+              )}
             </MagneticButton>
 
             <a
