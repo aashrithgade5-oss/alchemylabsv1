@@ -36,15 +36,21 @@ export const Navigation = () => {
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-        className="fixed top-6 left-0 right-0 z-50 flex justify-center px-4"
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+          isScrolled 
+            ? 'py-3 bg-alchemy-black/80 backdrop-blur-xl border-b border-porcelain/5' 
+            : 'py-6'
+        }`}
       >
-        <div className="glass-nav-pill px-6 md:px-10 py-3 flex items-center gap-8 md:gap-12">
+        <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 group flex-shrink-0 no-glow">
-            <img 
+            <motion.img 
               src={alchemyLogo} 
               alt="Alchemy Labs" 
               className="w-9 h-9 md:w-10 md:h-10 object-contain"
+              animate={{ scale: isScrolled ? 0.9 : 1 }}
+              transition={{ duration: 0.3 }}
             />
             <div className="hidden sm:flex flex-col leading-none">
               <span className="font-display text-base md:text-lg font-normal text-porcelain tracking-wide italic">
@@ -56,19 +62,26 @@ export const Navigation = () => {
             </div>
           </Link>
 
-          {/* Desktop Navigation */}
-          <ul className="hidden md:flex items-center gap-6 lg:gap-8">
+          {/* Desktop Navigation - Center */}
+          <ul className="hidden md:flex items-center gap-1 lg:gap-2 absolute left-1/2 -translate-x-1/2">
             {navItems.map((item) => (
               <li key={item.label}>
                 <Link
                   to={item.href}
-                  className={`font-body text-sm link-underline transition-colors duration-300 no-glow ${
+                  className={`relative px-4 py-2 font-body text-sm transition-colors duration-300 no-glow rounded-full ${
                     isActive(item.href) 
                       ? 'text-alchemy-red' 
-                      : 'text-porcelain/70 hover:text-porcelain'
+                      : 'text-porcelain/60 hover:text-porcelain'
                   }`}
                 >
                   {item.label}
+                  {isActive(item.href) && (
+                    <motion.div
+                      layoutId="nav-indicator"
+                      className="absolute inset-0 bg-alchemy-red/10 rounded-full border border-alchemy-red/20"
+                      transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+                    />
+                  )}
                 </Link>
               </li>
             ))}
@@ -77,7 +90,11 @@ export const Navigation = () => {
           {/* CTA Button */}
           <Link
             to="/contact"
-            className="hidden md:flex glass-cta-nav text-sm px-5 py-2 no-glow"
+            className={`hidden md:flex items-center gap-2 text-sm font-medium px-5 py-2.5 rounded-full transition-all duration-300 no-glow ${
+              isScrolled
+                ? 'bg-alchemy-red text-porcelain hover:bg-alchemy-red/90'
+                : 'glass-cta-nav'
+            }`}
           >
             Contact
           </Link>
@@ -126,7 +143,9 @@ export const Navigation = () => {
                   <Link
                     to={item.href}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="font-display text-3xl italic text-porcelain hover:text-alchemy-red transition-colors no-glow"
+                    className={`font-display text-3xl italic transition-colors no-glow ${
+                      isActive(item.href) ? 'text-alchemy-red' : 'text-porcelain hover:text-alchemy-red'
+                    }`}
                   >
                     {item.label}
                   </Link>
@@ -139,7 +158,7 @@ export const Navigation = () => {
                 transition={{ delay: 0.5, duration: 0.4 }}
               >
                 <Link
-                  to="/book-sprint"
+                  to="/contact"
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="glass-cta-primary mt-4 no-glow"
                 >
