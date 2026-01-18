@@ -604,6 +604,56 @@
   }
 }
 
+/* Enhanced Hover Effects */
+.magnetic-hover {
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.magnetic-hover:hover {
+  transform: scale(1.05) translateY(-3px);
+}
+
+/* Smooth reveal on scroll */
+.reveal-up {
+  opacity: 0;
+  transform: translateY(60px);
+  transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Gradient text shimmer */
+.text-shimmer {
+  background: linear-gradient(
+    90deg,
+    hsl(var(--porcelain)) 0%,
+    hsl(var(--alchemy-red)) 50%,
+    hsl(var(--porcelain)) 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { background-position: 200% 0; }
+  50% { background-position: 0% 0; }
+}
+
+/* Card lift effect */
+.card-lift {
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s ease;
+}
+
+.card-lift:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 60px rgba(225, 6, 19, 0.15);
+}
+
 @layer utilities {
   .duration-350 {
     transition-duration: 350ms;

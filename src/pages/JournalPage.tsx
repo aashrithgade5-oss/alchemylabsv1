@@ -1,11 +1,13 @@
 import { motion } from 'framer-motion';
 import { ArrowRight, Calendar } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 
 const posts = [
   {
     id: 1,
+    slug: 'architecture-of-ai-native-brands',
     date: 'Jan 2026',
     title: 'The Architecture of AI-Native Brands',
     excerpt: 'How the next generation of iconic brands will be built from the ground up with intelligence at their core.',
@@ -14,6 +16,7 @@ const posts = [
   },
   {
     id: 2,
+    slug: 'luxury-in-age-of-infinite-content',
     date: 'Dec 2025',
     title: 'Luxury in the Age of Infinite Content',
     excerpt: 'When everyone can create, scarcity becomes the new currency. A framework for maintaining exclusivity.',
@@ -22,6 +25,7 @@ const posts = [
   },
   {
     id: 3,
+    slug: 'systems-thinking-creative-teams',
     date: 'Nov 2025',
     title: 'Systems Thinking for Creative Teams',
     excerpt: 'Moving beyond project-based work to build repeatable creative infrastructure.',
@@ -30,6 +34,7 @@ const posts = [
   },
   {
     id: 4,
+    slug: 'death-of-brand-guidelines-pdf',
     date: 'Oct 2025',
     title: 'The Death of the Brand Guidelines PDF',
     excerpt: 'Why static brand books are obsolete and what replaces them in the age of AI.',
@@ -38,6 +43,7 @@ const posts = [
   },
   {
     id: 5,
+    slug: 'velocity-without-compromise',
     date: 'Sep 2025',
     title: 'Velocity Without Compromise',
     excerpt: 'How we ship in days what takes others months—without sacrificing craft.',
@@ -46,6 +52,7 @@ const posts = [
   },
   {
     id: 6,
+    slug: 'new-visual-language-of-ai',
     date: 'Aug 2025',
     title: 'The New Visual Language of AI',
     excerpt: 'Aesthetic patterns emerging from generative systems and what they mean for design.',
@@ -129,13 +136,13 @@ export const JournalPage = () => {
                 
                 <div className="flex items-center justify-between">
                   <span className="font-mono text-xs text-porcelain/30">{post.readTime}</span>
-                  <a
-                    href="#"
+                  <Link
+                    to={`/journal/${post.slug}`}
                     className="inline-flex items-center gap-2 font-body text-sm text-porcelain/50 hover:text-alchemy-red transition-colors duration-300 group/link no-glow"
                   >
                     <span>Read</span>
                     <ArrowRight className="w-4 h-4 transition-transform group-hover/link:translate-x-1" />
-                  </a>
+                  </Link>
                 </div>
               </motion.article>
             ))}
