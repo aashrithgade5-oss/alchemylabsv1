@@ -1,173 +1,160 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
 
 export const CustomCursor = () => {
   const [isDesktop, setIsDesktop] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
   const [cursorVariant, setCursorVariant] = useState<'default' | 'hover' | 'click' | 'text'>('default');
-  const [cursorText, setCursorText] = useState('');
   
-  const cursorX = useMotionValue(-100);
-  const cursorY = useMotionValue(-100);
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
   
-  const springConfig = { damping: 25, stiffness: 400 };
-  const cursorXSpring = useSpring(cursorX, springConfig);
-  const cursorYSpring = useSpring(cursorY, springConfig);
+  const springConfig = { damping: 20, stiffness: 300, mass: 0.5 };
+  const cursorX = useSpring(mouseX, springConfig);
+  const cursorY = useSpring(mouseY, springConfig);
 
   useEffect(() => {
     // Check if desktop with fine pointer
-    const mediaQuery = window.matchMedia('(pointer: fine)');
-    setIsDesktop(mediaQuery.matches && !('ontouchstart' in window));
-    
-    const handleChange = (e: MediaQueryListEvent) => {
-      setIsDesktop(e.matches && !('ontouchstart' in window));
+    const checkDesktop = () => {
+      const hasFineMouse = window.matchMedia('(pointer: fine)').matches;
+      const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+      setIsDesktop(hasFineMouse && !hasTouch);
     };
     
-    mediaQuery.addEventListener('change', handleChange);
-    return () => mediaQuery.removeEventListener('change', handleChange);
+    checkDesktop();
+    window.addEventListener('resize', checkDesktop);
+    return () => window.removeEventListener('resize', checkDesktop);
   }, []);
 
-  const handleMouseMove = useCallback((e: MouseEvent) => {
-    cursorX.set(e.clientX);
-    cursorY.set(e.clientY);
-  }, [cursorX, cursorY]);
+  const updateCursorPosition = useCallback((e: MouseEvent) => {
+    mouseX.set(e.clientX);
+    mouseY.set(e.clientY);
+    if (!isVisible) setIsVisible(true);
+  }, [mouseX, mouseY, isVisible]);
 
   const handleMouseOver = useCallback((e: MouseEvent) => {
     const target = e.target as HTMLElement;
     
     // Check for specific interactive elements
-    const link = target.closest('a');
-    const button = target.closest('button, [role="button"]');
-    const input = target.closest('input, textarea, select');
-    const hoverable = target.closest('[data-cursor]');
+    const isLink = target.closest('a');
+    const isButton = target.closest('button, [role="button"]');
+    const isInput = target.closest('input, textarea, select');
+    const hasDataCursor = target.closest('[data-cursor]');
     
-    if (hoverable) {
-      const cursorType = hoverable.getAttribute('data-cursor');
-      const text = hoverable.getAttribute('data-cursor-text') || '';
-      setCursorVariant(cursorType as typeof cursorVariant || 'hover');
-      setCursorText(text);
-    } else if (input) {
+    if (hasDataCursor) {
+      const cursorType = hasDataCursor.getAttribute('data-cursor') as typeof cursorVariant;
+      setCursorVariant(cursorType || 'hover');
+    } else if (isInput) {
       setCursorVariant('text');
-      setCursorText('');
-    } else if (link || button) {
+    } else if (isLink || isButton) {
       setCursorVariant('hover');
-      setCursorText('');
     } else {
       setCursorVariant('default');
-      setCursorText('');
     }
   }, []);
 
-  const handleMouseDown = useCallback(() => {
-    setCursorVariant('click');
-  }, []);
-
-  const handleMouseUp = useCallback(() => {
-    setCursorVariant('default');
-  }, []);
+  const handleMouseDown = useCallback(() => setCursorVariant('click'), []);
+  const handleMouseUp = useCallback(() => setCursorVariant('default'), []);
+  const handleMouseLeave = useCallback(() => setIsVisible(false), []);
+  const handleMouseEnter = useCallback(() => setIsVisible(true), []);
 
   useEffect(() => {
     if (!isDesktop) return;
 
-    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    // Use document-level listeners for better coverage
+    document.addEventListener('mousemove', updateCursorPosition, { passive: true });
     document.addEventListener('mouseover', handleMouseOver, { passive: true });
     document.addEventListener('mousedown', handleMouseDown);
     document.addEventListener('mouseup', handleMouseUp);
+    document.documentElement.addEventListener('mouseleave', handleMouseLeave);
+    document.documentElement.addEventListener('mouseenter', handleMouseEnter);
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mousemove', updateCursorPosition);
       document.removeEventListener('mouseover', handleMouseOver);
       document.removeEventListener('mousedown', handleMouseDown);
       document.removeEventListener('mouseup', handleMouseUp);
+      document.documentElement.removeEventListener('mouseleave', handleMouseLeave);
+      document.documentElement.removeEventListener('mouseenter', handleMouseEnter);
     };
-  }, [isDesktop, handleMouseMove, handleMouseOver, handleMouseDown, handleMouseUp]);
+  }, [isDesktop, updateCursorPosition, handleMouseOver, handleMouseDown, handleMouseUp, handleMouseLeave, handleMouseEnter]);
 
   if (!isDesktop) return null;
 
-  const variants = {
-    default: {
-      width: 12,
-      height: 12,
-      backgroundColor: 'hsl(356 94% 45%)',
-      border: 'none',
-      mixBlendMode: 'difference' as const,
-    },
-    hover: {
-      width: 48,
-      height: 48,
-      backgroundColor: 'transparent',
-      border: '2px solid hsl(356 94% 45%)',
-      mixBlendMode: 'normal' as const,
-    },
-    click: {
-      width: 8,
-      height: 8,
-      backgroundColor: 'hsl(356 94% 45%)',
-      border: 'none',
-      mixBlendMode: 'difference' as const,
-    },
-    text: {
-      width: 4,
-      height: 24,
-      backgroundColor: 'hsl(356 94% 45%)',
-      border: 'none',
-      mixBlendMode: 'difference' as const,
-      borderRadius: 2,
-    },
+  const getSize = () => {
+    switch (cursorVariant) {
+      case 'hover': return 48;
+      case 'click': return 8;
+      case 'text': return 4;
+      default: return 12;
+    }
   };
-
-  const currentVariant = variants[cursorVariant];
 
   return (
     <>
-      {/* Main cursor */}
+      {/* Main cursor ring */}
       <motion.div
-        className="fixed top-0 left-0 pointer-events-none z-[99999] rounded-full flex items-center justify-center"
+        className="pointer-events-none"
         style={{
-          x: cursorXSpring,
-          y: cursorYSpring,
-          translateX: '-50%',
-          translateY: '-50%',
-        }}
-        animate={{
-          width: currentVariant.width,
-          height: currentVariant.height,
-          backgroundColor: currentVariant.backgroundColor,
-          border: currentVariant.border,
-          borderRadius: cursorVariant === 'text' ? 2 : '50%',
-        }}
-        transition={{
-          type: 'spring',
-          damping: 20,
-          stiffness: 300,
-        }}
-      >
-        {cursorText && (
-          <motion.span
-            initial={{ opacity: 0, scale: 0.5 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.5 }}
-            className="text-[10px] font-mono text-porcelain uppercase tracking-wider whitespace-nowrap"
-          >
-            {cursorText}
-          </motion.span>
-        )}
-      </motion.div>
-
-      {/* Trailing dot */}
-      <motion.div
-        className="fixed top-0 left-0 w-1 h-1 rounded-full bg-alchemy-red/50 pointer-events-none z-[99998]"
-        style={{
+          position: 'fixed',
+          left: 0,
+          top: 0,
           x: cursorX,
           y: cursorY,
           translateX: '-50%',
           translateY: '-50%',
+          zIndex: 2147483647,
+        }}
+        animate={{
+          width: getSize(),
+          height: cursorVariant === 'text' ? 24 : getSize(),
+          opacity: isVisible ? 1 : 0,
+        }}
+        transition={{
+          width: { type: 'spring', damping: 20, stiffness: 300 },
+          height: { type: 'spring', damping: 20, stiffness: 300 },
+          opacity: { duration: 0.15 },
+        }}
+      >
+        <motion.div
+          className="w-full h-full"
+          animate={{
+            backgroundColor: cursorVariant === 'hover' ? 'transparent' : 'hsl(356 94% 45%)',
+            borderWidth: cursorVariant === 'hover' ? 2 : 0,
+            borderColor: 'hsl(356 94% 45%)',
+            borderRadius: cursorVariant === 'text' ? 2 : 999,
+          }}
+          style={{
+            borderStyle: 'solid',
+            mixBlendMode: cursorVariant === 'hover' ? 'normal' : 'difference',
+          }}
+          transition={{ duration: 0.15 }}
+        />
+      </motion.div>
+
+      {/* Small trailing dot */}
+      <motion.div
+        className="pointer-events-none rounded-full"
+        style={{
+          position: 'fixed',
+          left: 0,
+          top: 0,
+          x: mouseX,
+          y: mouseY,
+          translateX: '-50%',
+          translateY: '-50%',
+          width: 4,
+          height: 4,
+          backgroundColor: 'hsl(356 94% 45% / 0.5)',
+          zIndex: 2147483646,
+          opacity: isVisible ? 1 : 0,
         }}
       />
 
-      {/* Hide default cursor */}
+      {/* Global cursor hide styles */}
       <style>{`
         @media (pointer: fine) {
-          html, body, * {
+          *, *::before, *::after {
             cursor: none !important;
           }
         }
