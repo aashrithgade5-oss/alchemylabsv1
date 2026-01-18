@@ -1,5 +1,6 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import heroVideo from '@/assets/hero-video.mp4';
 import { MagneticButton } from './MagneticButton';
 import { useRef } from 'react';
@@ -55,13 +56,12 @@ export const Hero = () => {
           >
             <h1 className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl leading-display tracking-display">
               <motion.span
-                className="inline-block font-bold uppercase tracking-tight"
-                style={{ fontFamily: 'Helvetica Neue, Helvetica, Arial, sans-serif' }}
+                className="italic text-alchemy-red inline-block"
                 initial={{ opacity: 0, y: 40, filter: 'blur(10px)' }}
                 animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                 transition={{ duration: 1, delay: 0.4 }}
               >
-                <span className="text-alchemy-red">ALCHEMY</span>
+                Alchemy
               </motion.span>
               <motion.span
                 className="text-porcelain/90 inline-block"
@@ -72,13 +72,12 @@ export const Hero = () => {
                 {' '}in{' '}
               </motion.span>
               <motion.span
-                className="inline-block font-bold uppercase tracking-tight"
-                style={{ fontFamily: 'Helvetica Neue, Helvetica, Arial, sans-serif' }}
+                className="italic text-alchemy-red inline-block"
                 initial={{ opacity: 0, y: 40, filter: 'blur(10px)' }}
                 animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                 transition={{ duration: 1, delay: 0.7 }}
               >
-                <span className="text-alchemy-red">MOTION</span>
+                Motion
               </motion.span>
               <motion.span
                 className="text-porcelain/30 inline-block"
@@ -99,9 +98,9 @@ export const Hero = () => {
             className="mb-12"
           >
             <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl leading-display tracking-tight text-porcelain/70">
-              <span className="font-bold uppercase tracking-tight text-alchemy-red" style={{ fontFamily: 'Helvetica Neue, Helvetica, Arial, sans-serif' }}>AI</span>
+              <span className="italic text-alchemy-red">AI</span>
               <span className="text-porcelain/60">-Augmented </span>
-              <span className="font-bold uppercase tracking-tight text-alchemy-red" style={{ fontFamily: 'Helvetica Neue, Helvetica, Arial, sans-serif' }}>BRANDING</span>
+              <span className="italic text-alchemy-red">Branding</span>
             </h2>
           </motion.div>
 
@@ -128,22 +127,22 @@ export const Hero = () => {
             transition={{ duration: 0.8, delay: 1.2, ease: [0.22, 1, 0.36, 1] }}
             className="flex flex-col sm:flex-row items-center justify-center gap-6"
           >
-            <MagneticButton
-              href="#contact"
-              className="glass-cta-primary group relative overflow-hidden"
-            >
-              <span className="font-body font-medium">Book a Strategy Sprint</span>
-              <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-            </MagneticButton>
+            <Link to="/book-sprint">
+              <MagneticButton
+                className="glass-cta-primary group relative overflow-hidden"
+              >
+                <span className="font-body font-medium">Book a Strategy Sprint</span>
+                <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+              </MagneticButton>
+            </Link>
 
-            <motion.a
-              href="#work"
-              className="group inline-flex items-center gap-2 px-6 py-4 font-body text-porcelain/50 hover:text-porcelain transition-all duration-500"
-              whileHover={{ x: 4 }}
+            <Link
+              to="/work"
+              className="group inline-flex items-center gap-2 px-6 py-4 font-body text-porcelain/50 hover:text-porcelain transition-all duration-500 no-glow"
             >
               <span>Explore Our Work</span>
               <ArrowUpRight className="w-4 h-4 text-alchemy-red transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
-            </motion.a>
+            </Link>
           </motion.div>
         </div>
       </motion.div>
