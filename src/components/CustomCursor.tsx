@@ -12,13 +12,11 @@ export const CustomCursor = () => {
   const mouseX = useMotionValue(-100);
   const mouseY = useMotionValue(-100);
 
-  // Smoother spring for main cursor
-  const springConfig = { damping: 30, stiffness: 400, mass: 0.5 };
+  const springConfig = { damping: 25, stiffness: 300, mass: 0.5 };
   const cursorX = useSpring(mouseX, springConfig);
   const cursorY = useSpring(mouseY, springConfig);
 
-  // Slower spring for trailing ring (creates depth)
-  const trailConfig = { damping: 40, stiffness: 200, mass: 1 };
+  const trailConfig = { damping: 35, stiffness: 150, mass: 0.8 };
   const trailX = useSpring(mouseX, trailConfig);
   const trailY = useSpring(mouseY, trailConfig);
 
@@ -44,16 +42,10 @@ export const CustomCursor = () => {
     updateCursorVariant(e.target as Element);
   }, [mouseX, mouseY, isVisible, updateCursorVariant]);
 
-  const onMouseLeave = useCallback(() => {
-    setIsVisible(false);
-  }, []);
-
-  const onMouseEnter = useCallback(() => {
-    setIsVisible(true);
-  }, []);
+  const onMouseLeave = useCallback(() => setIsVisible(false), []);
+  const onMouseEnter = useCallback(() => setIsVisible(true), []);
 
   useEffect(() => {
-    // Check if device supports hover (not touch)
     const mediaQuery = window.matchMedia('(hover: hover) and (pointer: fine)');
     setIsMobile(!mediaQuery.matches);
 
@@ -70,7 +62,6 @@ export const CustomCursor = () => {
     }
   }, [onMouseMove, onMouseLeave, onMouseEnter]);
 
-  // Don't render on mobile/touch devices
   if (isMobile) return null;
 
   return (
