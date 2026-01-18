@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
+import { CustomCursor } from "./components/CustomCursor";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import { ServicePage } from "./pages/ServicePage";
@@ -51,6 +52,7 @@ const AnimatedRoutes = () => {
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
+      <CustomCursor />
       <SmoothScroll>
         <Preloader />
         <Toaster />

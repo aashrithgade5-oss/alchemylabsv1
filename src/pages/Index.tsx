@@ -8,14 +8,12 @@ import { Journal } from '@/components/Journal';
 import { Contact } from '@/components/Contact';
 import { Footer } from '@/components/Footer';
 import { ScrollProgress } from '@/components/ScrollProgress';
-import { CustomCursor } from '@/components/CustomCursor';
 import { ParallaxBackground } from '@/components/ParallaxBackground';
 import { VisualBreadcrumbs } from '@/components/VisualBreadcrumbs';
 
 const Index = () => {
   return (
     <div className="relative grain-overlay">
-      <CustomCursor />
       <ParallaxBackground />
       <ScrollProgress />
       <Navigation />
