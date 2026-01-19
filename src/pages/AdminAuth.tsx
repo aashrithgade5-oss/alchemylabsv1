@@ -11,20 +11,39 @@ const AdminAuth = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [isSignUp, setIsSignUp] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check if already logged in
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+    // Check if already logged in and is admin
+    const checkAdminStatus = async (userId: string) => {
+      const { data, error } = await supabase
+        .from('admin_users')
+        .select('id')
+        .eq('user_id', userId)
+        .maybeSingle();
+      
+      if (error) {
+        console.error('Error checking admin status:', error);
+        return false;
+      }
+      return !!data;
+    };
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (session) {
-        navigate('/admin');
+        const isAdmin = await checkAdminStatus(session.user.id);
+        if (isAdmin) {
+          navigate('/admin');
+        }
       }
     });
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (session) {
-        navigate('/admin');
+        const isAdmin = await checkAdminStatus(session.user.id);
+        if (isAdmin) {
+          navigate('/admin');
+        }
       }
     });
 
@@ -36,37 +55,42 @@ const AdminAuth = () => {
     setIsLoading(true);
 
     try {
-      if (isSignUp) {
-        const { error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            emailRedirectTo: `${window.location.origin}/admin`,
-          },
-        });
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-        if (error) throw error;
-        toast.success('Account created! You can now log in.');
-        setIsSignUp(false);
-      } else {
-        const { error } = await supabase.auth.signInWithPassword({
-          email,
-          password,
-        });
+      if (error) throw error;
 
-        if (error) throw error;
-        toast.success('Welcome back!');
-        navigate('/admin');
+      // Check if user is an admin
+      const { data: adminData, error: adminError } = await supabase
+        .from('admin_users')
+        .select('id')
+        .eq('user_id', data.user.id)
+        .maybeSingle();
+
+      if (adminError) {
+        console.error('Error checking admin status:', adminError);
+        await supabase.auth.signOut();
+        toast.error('Authorization check failed');
+        return;
       }
+
+      if (!adminData) {
+        // User is not an admin - sign them out
+        await supabase.auth.signOut();
+        toast.error('Access denied. You are not authorized to access this area.');
+        return;
+      }
+
+      toast.success('Welcome back!');
+      navigate('/admin');
     } catch (error: any) {
       console.error('Auth error:', error);
       if (error.message.includes('Invalid login credentials')) {
         toast.error('Invalid email or password');
-      } else if (error.message.includes('User already registered')) {
-        toast.error('This email is already registered. Try logging in.');
-        setIsSignUp(false);
       } else {
-        toast.error(error.message || 'Authentication failed');
+        toast.error('Authentication failed');
       }
     } finally {
       setIsLoading(false);
@@ -108,7 +132,7 @@ const AdminAuth = () => {
               Admin <span className="italic text-alchemy-red">Portal</span>
             </h1>
             <p className="font-body text-sm text-porcelain/50 mt-2">
-              {isSignUp ? 'Create your admin account' : 'Sign in to manage submissions'}
+              Sign in to manage submissions
             </p>
           </div>
 
@@ -159,24 +183,17 @@ const AdminAuth = () => {
               {isLoading ? (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin" />
-                  <span>{isSignUp ? 'Creating...' : 'Signing in...'}</span>
+                  <span>Signing in...</span>
                 </>
               ) : (
-                <span>{isSignUp ? 'Create Account' : 'Sign In'}</span>
+                <span>Sign In</span>
               )}
             </MagneticButton>
           </form>
 
-          {/* Toggle */}
-          <p className="text-center mt-6 font-body text-sm text-porcelain/50">
-            {isSignUp ? 'Already have an account?' : "Don't have an account?"}{' '}
-            <button
-              type="button"
-              onClick={() => setIsSignUp(!isSignUp)}
-              className="text-alchemy-red hover:underline"
-            >
-              {isSignUp ? 'Sign in' : 'Create one'}
-            </button>
+          {/* Info notice */}
+          <p className="text-center mt-6 font-body text-xs text-porcelain/40">
+            Admin access is invite-only. Contact your administrator if you need access.
           </p>
         </div>
       </motion.div>

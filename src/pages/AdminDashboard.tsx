@@ -38,19 +38,48 @@ const AdminDashboard = () => {
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // Check auth state
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (!session) {
-        navigate('/admin/auth');
-      }
-    });
+  // Check if user is admin
+  const checkAdminStatus = async (userId: string): Promise<boolean> => {
+    const { data, error } = await supabase
+      .from('admin_users')
+      .select('id')
+      .eq('user_id', userId)
+      .maybeSingle();
+    
+    if (error) {
+      console.error('Error checking admin status:', error);
+      return false;
+    }
+    return !!data;
+  };
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
+  useEffect(() => {
+    // Check auth state and admin role
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (!session) {
         navigate('/admin/auth');
       } else {
-        fetchSubmissions();
+        const isAdmin = await checkAdminStatus(session.user.id);
+        if (!isAdmin) {
+          toast.error('Access denied. You are not authorized to access this area.');
+          await supabase.auth.signOut();
+          navigate('/admin/auth');
+        }
+      }
+    });
+
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
+      if (!session) {
+        navigate('/admin/auth');
+      } else {
+        const isAdmin = await checkAdminStatus(session.user.id);
+        if (!isAdmin) {
+          toast.error('Access denied. You are not authorized to access this area.');
+          await supabase.auth.signOut();
+          navigate('/admin/auth');
+        } else {
+          fetchSubmissions();
+        }
       }
     });
 
