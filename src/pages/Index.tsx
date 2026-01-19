@@ -11,10 +11,13 @@ import { ScrollProgress } from '@/components/ScrollProgress';
 import { ParallaxBackground } from '@/components/ParallaxBackground';
 import { VisualBreadcrumbs } from '@/components/VisualBreadcrumbs';
 import { HomepageScrollMap } from '@/components/HomepageScrollMap';
+import { ClientMarquee } from '@/components/ClientMarquee';
+import { CustomCursor } from '@/components/CustomCursor';
 
 const Index = () => {
   return (
     <div className="relative grain-overlay">
+      <CustomCursor />
       <ParallaxBackground />
       <ScrollProgress />
       <Navigation />
@@ -22,6 +25,7 @@ const Index = () => {
       <HomepageScrollMap />
       <main className="relative z-10">
         <Hero />
+        <ClientMarquee />
         <Solutions />
         <CaseStudies />
         <Manifesto />
