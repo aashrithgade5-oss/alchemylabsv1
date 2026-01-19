@@ -10,6 +10,7 @@ const navItems = [
   { label: 'About', href: '/about' },
   { label: 'Work', href: '/work' },
   { label: 'Journal', href: '/journal' },
+  { label: 'Contact', href: '/contact' },
 ];
 
 export const Navigation = () => {
@@ -63,7 +64,7 @@ export const Navigation = () => {
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-        className="fixed top-0 left-0 right-0 z-[100] px-4 md:px-8 py-4"
+        className="fixed top-0 left-0 right-0 z-50 px-4 md:px-8 py-4"
       >
         <div 
           className={`max-w-6xl mx-auto transition-all duration-500 ${
@@ -125,20 +126,20 @@ export const Navigation = () => {
             
             {/* Desktop CTA */}
             <Link
-              to="/contact"
+              to="/book-sprint"
               className={`hidden md:flex items-center gap-2 text-sm font-medium px-5 py-2.5 rounded-full transition-all duration-300 no-glow ${
                 isScrolled
                   ? 'bg-alchemy-red text-porcelain hover:bg-alchemy-red/90'
                   : 'glass-cta-nav text-porcelain'
               }`}
             >
-              Contact
+              Book a Sprint
             </Link>
 
             {/* Mobile Menu Toggle Button */}
             <motion.button
               onClick={toggleMenu}
-              className="md:hidden relative z-[110] p-2 text-porcelain hover:text-alchemy-red transition-colors"
+              className="md:hidden relative z-[60] p-2 text-porcelain hover:text-alchemy-red transition-colors"
               aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={isMobileMenuOpen}
               whileTap={{ scale: 0.95 }}
@@ -152,7 +153,7 @@ export const Navigation = () => {
                     exit={{ rotate: 90, opacity: 0 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <X size={24} />
+                    <X size={28} />
                   </motion.div>
                 ) : (
                   <motion.div
@@ -162,7 +163,7 @@ export const Navigation = () => {
                     exit={{ rotate: -90, opacity: 0 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <Menu size={24} />
+                    <Menu size={28} />
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -179,62 +180,58 @@ export const Navigation = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-[90] md:hidden"
+            className="fixed inset-0 z-40 md:hidden"
             role="dialog"
             aria-modal="true"
             aria-label="Navigation menu"
           >
-            {/* Backdrop */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="absolute inset-0 bg-alchemy-black backdrop-blur-3xl"
+            {/* Dark Background */}
+            <div 
+              className="absolute inset-0 bg-[#0a0a0b]"
               onClick={closeMenu}
-            >
-              {/* Decorative gradients */}
-              <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[350px] h-[350px] bg-gradient-radial from-alchemy-red/15 to-transparent rounded-full blur-[100px] pointer-events-none" />
-              <div className="absolute bottom-1/4 left-1/2 -translate-x-1/2 w-[250px] h-[250px] bg-gradient-radial from-deep-crimson/10 to-transparent rounded-full blur-[80px] pointer-events-none" />
-            </motion.div>
+            />
+            
+            {/* Decorative Glow Elements */}
+            <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-80 h-80 rounded-full bg-alchemy-red/10 blur-[120px] pointer-events-none" />
+            <div className="absolute bottom-1/4 left-1/2 -translate-x-1/2 w-60 h-60 rounded-full bg-deep-crimson/10 blur-[100px] pointer-events-none" />
             
             {/* Menu Content */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-              className="relative h-full flex flex-col items-center justify-center px-6 pt-20 pb-16"
+              className="relative h-full flex flex-col items-center justify-center px-8"
             >
               {/* Navigation Links */}
-              <nav className="flex flex-col items-center space-y-5">
+              <nav className="flex flex-col items-center gap-6">
                 {navItems.map((item, index) => (
                   <motion.div
                     key={item.label}
-                    initial={{ opacity: 0, y: 30 }}
+                    initial={{ opacity: 0, y: 40 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
+                    exit={{ opacity: 0, y: -20 }}
                     transition={{ 
-                      delay: 0.1 + index * 0.07,
-                      duration: 0.4,
+                      delay: 0.05 + index * 0.06,
+                      duration: 0.5,
                       ease: [0.22, 1, 0.36, 1]
                     }}
                   >
                     <Link
                       to={item.href}
                       onClick={closeMenu}
-                      className={`relative block text-center font-display text-3xl xs:text-4xl sm:text-5xl italic 
-                        transition-all duration-300 py-2 px-4 no-glow
+                      className={`relative block text-center font-display text-4xl sm:text-5xl italic tracking-tight
+                        transition-all duration-300 py-2 px-6 no-glow
                         ${isActive(item.href) 
                           ? 'text-alchemy-red' 
-                          : 'text-porcelain hover:text-alchemy-red'
+                          : 'text-porcelain hover:text-alchemy-red/80'
                         }`}
                     >
                       {item.label}
                       {isActive(item.href) && (
                         <motion.span
-                          layoutId="mobile-active-indicator"
-                          className="absolute -left-4 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-alchemy-red"
+                          layoutId="mobile-active-dot"
+                          className="absolute -left-2 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-alchemy-red"
                           transition={{ type: 'spring', damping: 25, stiffness: 300 }}
                         />
                       )}
@@ -245,36 +242,35 @@ export const Navigation = () => {
 
               {/* CTA Button */}
               <motion.div
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 40 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 10 }}
-                transition={{ delay: 0.45, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                className="mt-10"
+                exit={{ opacity: 0, y: 20 }}
+                transition={{ delay: 0.4, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                className="mt-12"
               >
                 <Link
-                  to="/contact"
+                  to="/book-sprint"
                   onClick={closeMenu}
-                  className="inline-flex items-center justify-center gap-2 px-8 py-4 
+                  className="inline-flex items-center justify-center gap-2 px-10 py-4 
                     bg-alchemy-red text-porcelain font-body font-medium text-lg
                     rounded-full transition-all duration-300
-                    hover:bg-alchemy-red/90 active:scale-95 no-glow"
+                    hover:bg-alchemy-red/90 active:scale-95 no-glow
+                    shadow-lg shadow-alchemy-red/20"
                 >
-                  Get In Touch
+                  Book a Sprint
                 </Link>
               </motion.div>
 
               {/* Footer Branding */}
-              <motion.div
+              <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ delay: 0.5, duration: 0.3 }}
-                className="absolute bottom-8 left-0 right-0 text-center"
+                className="absolute bottom-10 left-0 right-0 text-center font-mono text-xs text-porcelain/30 tracking-[0.25em] uppercase"
               >
-                <p className="font-mono text-[10px] text-porcelain/30 tracking-[0.3em] uppercase">
-                  Alchemy Labs
-                </p>
-              </motion.div>
+                © 2025 Alchemy Labs
+              </motion.p>
             </motion.div>
           </motion.div>
         )}
