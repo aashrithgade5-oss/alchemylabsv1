@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { motion, AnimatePresence, useMotionValue, useSpring } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import alchemyLogo from '@/assets/alchemy-logo.png';
@@ -13,9 +13,81 @@ const navItems = [
   { label: 'Contact', href: '/contact' },
 ];
 
+// Magnetic nav link component
+const MagneticNavLink = ({ 
+  href, 
+  isActive, 
+  children, 
+  onClick 
+}: { 
+  href: string; 
+  isActive: boolean; 
+  children: React.ReactNode;
+  onClick?: () => void;
+}) => {
+  const ref = useRef<HTMLAnchorElement>(null);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  
+  const springConfig = { damping: 15, stiffness: 150 };
+  const springX = useSpring(x, springConfig);
+  const springY = useSpring(y, springConfig);
+  
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!ref.current) return;
+    const rect = ref.current.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    
+    x.set((e.clientX - centerX) * 0.2);
+    y.set((e.clientY - centerY) * 0.2);
+  };
+  
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
+  return (
+    <motion.div style={{ x: springX, y: springY }}>
+      <Link
+        ref={ref}
+        to={href}
+        onClick={onClick}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        className={`relative px-4 py-2 font-body text-sm transition-colors duration-300 no-glow rounded-full ${
+          isActive 
+            ? 'text-alchemy-red' 
+            : 'text-porcelain/60 hover:text-porcelain'
+        }`}
+      >
+        {children}
+        {isActive && (
+          <motion.div
+            layoutId="nav-indicator"
+            className="absolute inset-0 bg-alchemy-red/10 rounded-full border border-alchemy-red/20"
+            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+          />
+        )}
+        {/* Underline animation on hover */}
+        <motion.div
+          className="absolute bottom-1 left-4 right-4 h-px bg-gradient-to-r from-alchemy-red to-alchemy-red/50"
+          initial={{ scaleX: 0 }}
+          whileHover={{ scaleX: 1 }}
+          transition={{ duration: 0.3 }}
+          style={{ transformOrigin: 'left' }}
+        />
+      </Link>
+    </motion.div>
+  );
+};
+
 export const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isHidden, setIsHidden] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [lastScrollY, setLastScrollY] = useState(0);
   const location = useLocation();
 
   // Close menu on route change
@@ -23,14 +95,26 @@ export const Navigation = () => {
     setIsMobileMenuOpen(false);
   }, [location.pathname]);
 
-  // Handle scroll for nav styling
+  // Smart scroll behavior - hide on scroll down, show on scroll up
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      const currentScrollY = window.scrollY;
+      
+      setIsScrolled(currentScrollY > 50);
+      
+      // Hide when scrolling down past 200px, show when scrolling up
+      if (currentScrollY > lastScrollY && currentScrollY > 200) {
+        setIsHidden(true);
+      } else {
+        setIsHidden(false);
+      }
+      
+      setLastScrollY(currentScrollY);
     };
+    
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [lastScrollY]);
 
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
@@ -62,14 +146,20 @@ export const Navigation = () => {
       {/* Main Navigation Bar */}
       <motion.nav
         initial={{ y: -100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        animate={{ 
+          y: isHidden ? -100 : 0, 
+          opacity: isHidden ? 0 : 1 
+        }}
+        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
         className="fixed top-0 left-0 right-0 z-50 px-4 md:px-8 py-4"
       >
-        <div 
+        <motion.div 
           className={`max-w-6xl mx-auto transition-all duration-500 ${
             isScrolled ? 'glass-nav-pill py-3 px-6' : 'py-4 px-6'
           }`}
+          animate={{
+            height: isScrolled ? 'auto' : 'auto',
+          }}
         >
           <div className="flex items-center justify-between">
             {/* Logo */}
@@ -78,6 +168,7 @@ export const Navigation = () => {
                 className="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden relative"
                 animate={{ scale: isScrolled ? 0.9 : 1 }}
                 transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                whileHover={{ scale: 1.05 }}
               >
                 <img 
                   src={alchemyLogo} 
@@ -99,41 +190,34 @@ export const Navigation = () => {
               </motion.div>
             </Link>
 
-            {/* Desktop Navigation */}
+            {/* Desktop Navigation with magnetic effect */}
             <ul className="hidden md:flex items-center gap-1 lg:gap-2">
               {navItems.map((item) => (
                 <li key={item.label}>
-                  <Link
-                    to={item.href}
-                    className={`relative px-4 py-2 font-body text-sm transition-colors duration-300 no-glow rounded-full ${
-                      isActive(item.href) 
-                        ? 'text-alchemy-red' 
-                        : 'text-porcelain/60 hover:text-porcelain'
-                    }`}
-                  >
+                  <MagneticNavLink href={item.href} isActive={isActive(item.href)}>
                     {item.label}
-                    {isActive(item.href) && (
-                      <motion.div
-                        layoutId="nav-indicator"
-                        className="absolute inset-0 bg-alchemy-red/10 rounded-full border border-alchemy-red/20"
-                        transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-                      />
-                    )}
-                  </Link>
+                  </MagneticNavLink>
                 </li>
               ))}
             </ul>
             
-            {/* Desktop CTA */}
+            {/* Desktop CTA with shimmer */}
             <Link
               to="/book-sprint"
-              className={`hidden md:flex items-center gap-2 text-sm font-medium px-5 py-2.5 rounded-full transition-all duration-300 no-glow ${
+              className={`hidden md:flex items-center gap-2 text-sm font-medium px-5 py-2.5 rounded-full transition-all duration-300 no-glow relative overflow-hidden group ${
                 isScrolled
                   ? 'bg-alchemy-red text-porcelain hover:bg-alchemy-red/90'
                   : 'glass-cta-nav text-porcelain'
               }`}
             >
-              Book a Sprint
+              <span className="relative z-10">Book a Sprint</span>
+              {/* Shimmer effect */}
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                initial={{ x: '-100%' }}
+                whileHover={{ x: '100%' }}
+                transition={{ duration: 0.6 }}
+              />
             </Link>
 
             {/* Mobile Menu Toggle Button */}
@@ -169,7 +253,7 @@ export const Navigation = () => {
               </AnimatePresence>
             </motion.button>
           </div>
-        </div>
+        </motion.div>
       </motion.nav>
 
       {/* Mobile Menu Overlay */}
@@ -186,14 +270,34 @@ export const Navigation = () => {
             aria-label="Navigation menu"
           >
             {/* Dark Background */}
-            <div 
+            <motion.div 
               className="absolute inset-0 bg-[#0a0a0b]"
               onClick={closeMenu}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
             />
             
+            {/* Animated grid background */}
+            <div className="absolute inset-0 opacity-10" style={{
+              backgroundImage: `
+                linear-gradient(rgba(225, 6, 19, 0.3) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(225, 6, 19, 0.3) 1px, transparent 1px)
+              `,
+              backgroundSize: '50px 50px',
+            }} />
+            
             {/* Decorative Glow Elements */}
-            <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-80 h-80 rounded-full bg-alchemy-red/10 blur-[120px] pointer-events-none" />
-            <div className="absolute bottom-1/4 left-1/2 -translate-x-1/2 w-60 h-60 rounded-full bg-deep-crimson/10 blur-[100px] pointer-events-none" />
+            <motion.div 
+              className="absolute top-1/4 left-1/2 -translate-x-1/2 w-80 h-80 rounded-full bg-alchemy-red/10 blur-[120px] pointer-events-none"
+              animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.15, 0.1] }}
+              transition={{ duration: 4, repeat: Infinity }}
+            />
+            <motion.div 
+              className="absolute bottom-1/4 left-1/2 -translate-x-1/2 w-60 h-60 rounded-full bg-deep-crimson/10 blur-[100px] pointer-events-none"
+              animate={{ scale: [1.2, 1, 1.2], opacity: [0.1, 0.15, 0.1] }}
+              transition={{ duration: 4, repeat: Infinity, delay: 2 }}
+            />
             
             {/* Menu Content */}
             <motion.div
@@ -208,14 +312,15 @@ export const Navigation = () => {
                 {navItems.map((item, index) => (
                   <motion.div
                     key={item.label}
-                    initial={{ opacity: 0, y: 40 }}
-                    animate={{ opacity: 1, y: 0 }}
+                    initial={{ opacity: 0, y: 40, rotateX: -45 }}
+                    animate={{ opacity: 1, y: 0, rotateX: 0 }}
                     exit={{ opacity: 0, y: -20 }}
                     transition={{ 
                       delay: 0.05 + index * 0.06,
                       duration: 0.5,
                       ease: [0.22, 1, 0.36, 1]
                     }}
+                    style={{ perspective: '1000px' }}
                   >
                     <Link
                       to={item.href}
@@ -227,6 +332,10 @@ export const Navigation = () => {
                           : 'text-porcelain hover:text-alchemy-red/80'
                         }`}
                     >
+                      {/* Number prefix */}
+                      <span className="absolute -left-8 top-1/2 -translate-y-1/2 font-mono text-xs text-porcelain/30">
+                        0{index + 1}
+                      </span>
                       {item.label}
                       {isActive(item.href) && (
                         <motion.span
