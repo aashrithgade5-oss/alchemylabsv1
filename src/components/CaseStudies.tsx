@@ -394,35 +394,13 @@ export const CaseStudies = () => {
                         >
                           <Check className="w-4 h-4 text-alchemy-red" />
                         </div>
-                        <p className="font-body text-sm text-porcelain/70">{service}</p>
+                        <p className="font-body text-sm text-porcelain/70">{service.title}</p>
                       </div>
                     ))}
                   </div>
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-4">
-                  {selectedProject.cta && (
-                    <motion.button
-                      onClick={() => {
-                        if (selectedProject.cta?.link.startsWith('/')) {
-                          navigate(selectedProject.cta.link);
-                        } else {
-                          window.open(selectedProject.cta?.link, '_blank');
-                        }
-                      }}
-                      className="inline-flex items-center gap-3 px-8 py-4 rounded-full font-body text-sm"
-                      style={{
-                        background: 'linear-gradient(135deg, rgba(225, 6, 19, 0.2) 0%, rgba(225, 6, 19, 0.08) 100%)',
-                        border: '1px solid rgba(225, 6, 19, 0.4)',
-                        boxShadow: '0 0 30px rgba(225, 6, 19, 0.2)',
-                      }}
-                      whileHover={{ scale: 1.02, boxShadow: '0 0 50px rgba(225, 6, 19, 0.3)' }}
-                      whileTap={{ scale: 0.98 }}
-                    >
-                      <span className="text-porcelain">{selectedProject.cta.label}</span>
-                      <ArrowUpRight className="w-4 h-4 text-alchemy-red" />
-                    </motion.button>
-                  )}
                   <motion.button
                     onClick={() => setSelectedProject(null)}
                     className="inline-flex items-center gap-3 px-8 py-4 rounded-full font-body text-sm text-porcelain/60 hover:text-porcelain transition-colors"
