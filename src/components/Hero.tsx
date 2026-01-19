@@ -57,30 +57,41 @@ export const Hero = () => {
       >
         <div className="flex flex-col items-center text-center">
           
-          {/* Eyebrow */}
+          {/* Eyebrow - Floating Animation */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            animate={isInView ? { 
+              opacity: 1, 
+              y: [0, -8, 0],
+            } : {}}
+            transition={{ 
+              opacity: { duration: 0.6, delay: 0.2 },
+              y: { 
+                duration: 3, 
+                delay: 0.8,
+                repeat: Infinity, 
+                ease: "easeInOut" 
+              }
+            }}
             className="mb-8 sm:mb-10"
           >
-            <span className="inline-block px-4 py-2 rounded-full border border-porcelain/10 bg-porcelain/5 backdrop-blur-sm">
+            <span className="inline-block px-4 py-2 rounded-full border border-porcelain/10 bg-porcelain/5 backdrop-blur-sm shadow-[0_0_30px_rgba(255,255,255,0.05)]">
               <span className="font-mono text-[10px] sm:text-xs tracking-[0.2em] uppercase text-porcelain/60">
                 AI-Powered Creative Studio
               </span>
             </span>
           </motion.div>
 
-          {/* Main Headline */}
+          {/* Main Headline with Gradient */}
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
             className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[7rem] leading-[1.1] tracking-[-0.02em] mb-6 sm:mb-8"
           >
-            <span className="text-porcelain">Alchemy</span>
+            <span className="bg-gradient-to-r from-porcelain via-porcelain/90 to-porcelain/70 bg-clip-text text-transparent">Alchemy</span>
             <span className="text-porcelain/40 mx-2 sm:mx-3 font-light">in</span>
-            <span className="italic text-alchemy-red">Motion</span>
+            <span className="italic bg-gradient-to-r from-alchemy-red via-alchemy-red/90 to-alchemy-red/70 bg-clip-text text-transparent">Motion</span>
           </motion.h1>
 
           {/* Subheadline */}
