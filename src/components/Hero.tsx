@@ -61,23 +61,30 @@ export const Hero = () => {
           loop
           muted
           playsInline
+          webkit-playsinline="true"
+          preload="auto"
           className="w-full h-full object-cover scale-110"
+          style={{ 
+            // Ensure video plays on mobile
+            WebkitBackfaceVisibility: 'hidden',
+            backfaceVisibility: 'hidden',
+          }}
         >
           <source src={heroVideo} type="video/mp4" />
         </video>
-        {/* Layered gradient overlays for depth */}
-        <div className="absolute inset-0 bg-gradient-to-r from-alchemy-black via-alchemy-black/80 to-alchemy-black/30" />
-        <div className="absolute inset-0 bg-gradient-to-t from-alchemy-black via-transparent to-alchemy-black/50" />
+        {/* Layered gradient overlays for depth - adjusted for mobile visibility */}
+        <div className="absolute inset-0 bg-gradient-to-r from-alchemy-black via-alchemy-black/70 to-alchemy-black/20 md:from-alchemy-black md:via-alchemy-black/80 md:to-alchemy-black/30" />
+        <div className="absolute inset-0 bg-gradient-to-t from-alchemy-black via-transparent to-alchemy-black/40 md:to-alchemy-black/50" />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-alchemy-black" />
         <div className="absolute inset-0 hero-gradient" />
         
-        {/* Dynamic mesh gradient overlay */}
+        {/* Dynamic mesh gradient overlay - responsive sizes */}
         <motion.div 
           className="absolute inset-0 pointer-events-none"
           style={{ opacity: blendProgress }}
         >
-          <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-gradient-radial from-alchemy-red/10 to-transparent rounded-full blur-[150px]" />
-          <div className="absolute bottom-1/4 right-1/3 w-[500px] h-[500px] bg-gradient-radial from-deep-crimson/8 to-transparent rounded-full blur-[120px]" />
+          <div className="absolute top-1/4 left-1/4 w-[300px] h-[300px] md:w-[600px] md:h-[600px] bg-gradient-radial from-alchemy-red/10 to-transparent rounded-full blur-[80px] md:blur-[150px]" />
+          <div className="absolute bottom-1/4 right-1/3 w-[250px] h-[250px] md:w-[500px] md:h-[500px] bg-gradient-radial from-deep-crimson/8 to-transparent rounded-full blur-[60px] md:blur-[120px]" />
         </motion.div>
       </motion.div>
 
@@ -88,12 +95,12 @@ export const Hero = () => {
           scale,
           filter: blur.get() > 0 ? `blur(${blur.get()}px)` : 'none',
         }}
-        className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 py-32 md:py-40 w-full will-change-transform"
+        className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 md:px-12 py-24 sm:py-32 md:py-40 w-full will-change-transform"
       >
         <div className="max-w-4xl mx-auto text-center" ref={headlineRef}>
           {/* Main Headline with character-by-character reveal */}
-          <div className="mb-8 perspective-1000">
-            <h1 className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl leading-display tracking-display">
+          <div className="mb-6 sm:mb-8 perspective-1000">
+            <h1 className="font-display text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl leading-display tracking-display">
               {/* "Alchemy" - with blend mode effect */}
               <motion.span
                 className="italic text-alchemy-red inline-block relative"
@@ -156,9 +163,9 @@ export const Hero = () => {
 
           {/* Sub Headline with word reveal */}
           <motion.div
-            className="mb-12 overflow-hidden"
+            className="mb-8 sm:mb-12 overflow-hidden"
           >
-            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl leading-display tracking-tight">
+            <h2 className="font-display text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl leading-display tracking-tight">
               <motion.span
                 className="italic text-alchemy-red inline-block"
                 initial={{ opacity: 0, y: 30, rotateX: 45 }}
@@ -191,7 +198,7 @@ export const Hero = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={isHeadlineInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.9, delay: 1.5, ease: [0.22, 1, 0.36, 1] }}
-            className="font-body text-base md:text-lg lg:text-xl text-porcelain/50 leading-relaxed max-w-2xl mx-auto mb-16 font-light"
+            className="font-body text-sm sm:text-base md:text-lg lg:text-xl text-porcelain/50 leading-relaxed max-w-2xl mx-auto mb-10 sm:mb-16 font-light px-2"
           >
             We architect{' '}
             <motion.span 
@@ -235,7 +242,7 @@ export const Hero = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={isHeadlineInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8, delay: 2.5, ease: [0.22, 1, 0.36, 1] }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-6"
+            className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6"
           >
             <Link to="/book-sprint">
               <MagneticButton
@@ -257,23 +264,23 @@ export const Hero = () => {
         </div>
       </motion.div>
 
-      {/* Enhanced scroll indicator */}
+      {/* Enhanced scroll indicator - hidden on very small screens */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 3, duration: 0.8 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3"
+        className="absolute bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 sm:gap-3"
       >
-        <span className="font-mono text-[10px] text-porcelain/30 uppercase tracking-[0.3em]">
+        <span className="font-mono text-[9px] sm:text-[10px] text-porcelain/30 uppercase tracking-[0.3em]">
           Scroll
         </span>
         <motion.div
-          animate={{ y: [0, 10, 0] }}
+          animate={{ y: [0, 8, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-          className="w-6 h-12 rounded-full border border-porcelain/20 flex justify-center pt-2"
+          className="w-5 h-10 sm:w-6 sm:h-12 rounded-full border border-porcelain/20 flex justify-center pt-2"
         >
           <motion.div 
-            className="w-1 h-3 rounded-full bg-alchemy-red"
+            className="w-1 h-2.5 sm:h-3 rounded-full bg-alchemy-red"
             animate={{ opacity: [0.5, 1, 0.5] }}
             transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
           />
