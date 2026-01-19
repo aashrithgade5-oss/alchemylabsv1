@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Send, Calendar, MessageCircle, Instagram, Mail, Loader2, Check } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { MagneticButton } from './MagneticButton';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { TurnstileWidget } from './TurnstileWidget';
 
 export const Contact = () => {
   const [formData, setFormData] = useState({
@@ -16,9 +17,29 @@ export const Contact = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+
+  const handleTurnstileVerify = useCallback((token: string) => {
+    setTurnstileToken(token);
+  }, []);
+
+  const handleTurnstileError = useCallback(() => {
+    setTurnstileToken(null);
+    toast.error('Security verification failed. Please refresh and try again.');
+  }, []);
+
+  const handleTurnstileExpire = useCallback(() => {
+    setTurnstileToken(null);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!turnstileToken) {
+      toast.error('Please complete the security verification.');
+      return;
+    }
+    
     setIsSubmitting(true);
 
     try {
@@ -35,24 +56,25 @@ export const Contact = () => {
 
       if (dbError) throw dbError;
 
-      // Send email notifications (non-blocking)
-      supabase.functions.invoke('send-contact-email', {
+      // Send email notifications with CAPTCHA token for verification
+      const { error: emailError } = await supabase.functions.invoke('send-contact-email', {
         body: {
           name: formData.name,
           email: formData.email,
           company: formData.company,
           service: formData.service,
           message: formData.message,
+          turnstileToken: turnstileToken,
         },
-      }).then((res) => {
-        if (res.error) {
-          console.error('Email notification error:', res.error);
-        } else {
-          console.log('Email notifications sent:', res.data);
-        }
       });
 
+      if (emailError) {
+        console.error('Email notification error:', emailError);
+        // Still show success since DB save worked
+      }
+
       setIsSubmitted(true);
+      setTurnstileToken(null);
       toast.success('Brief sent successfully! We\'ll be in touch soon.');
       
       // Reset form after delay
@@ -197,12 +219,19 @@ export const Contact = () => {
             />
           </div>
 
+          {/* Turnstile CAPTCHA */}
+          <TurnstileWidget 
+            onVerify={handleTurnstileVerify}
+            onError={handleTurnstileError}
+            onExpire={handleTurnstileExpire}
+          />
+
           {/* Actions */}
           <div className="flex flex-col sm:flex-row items-center gap-4">
             <MagneticButton
               type="submit"
               className="glass-cta-primary w-full sm:w-auto justify-center relative overflow-hidden"
-              disabled={isSubmitting || isSubmitted}
+              disabled={isSubmitting || isSubmitted || !turnstileToken}
             >
               {isSubmitting ? (
                 <>

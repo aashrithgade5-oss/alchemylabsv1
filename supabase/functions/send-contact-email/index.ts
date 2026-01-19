@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+const TURNSTILE_SECRET_KEY = Deno.env.get("TURNSTILE_SECRET_KEY");
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -14,6 +15,46 @@ interface ContactEmailRequest {
   company?: string;
   service?: string;
   message: string;
+  turnstileToken: string;
+}
+
+// HTML escape function to prevent XSS in emails
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+// Verify Turnstile token with Cloudflare
+async function verifyTurnstileToken(token: string): Promise<boolean> {
+  if (!TURNSTILE_SECRET_KEY) {
+    console.error("TURNSTILE_SECRET_KEY not configured");
+    return false;
+  }
+
+  try {
+    const formData = new URLSearchParams();
+    formData.append('secret', TURNSTILE_SECRET_KEY);
+    formData.append('response', token);
+
+    const result = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    });
+
+    const outcome = await result.json();
+    console.log("Turnstile verification result:", outcome);
+    return outcome.success === true;
+  } catch (error) {
+    console.error("Turnstile verification error:", error);
+    return false;
+  }
 }
 
 async function sendEmail(to: string[], subject: string, html: string) {
@@ -46,14 +87,47 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const { name, email, company, service, message }: ContactEmailRequest = await req.json();
+    const { name, email, company, service, message, turnstileToken }: ContactEmailRequest = await req.json();
 
     console.log("Received contact form submission:", { name, email, company, service });
+
+    // Verify CAPTCHA token first
+    if (!turnstileToken) {
+      console.error("No Turnstile token provided");
+      return new Response(
+        JSON.stringify({ error: "Security verification required" }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
+    }
+
+    const isValidToken = await verifyTurnstileToken(turnstileToken);
+    if (!isValidToken) {
+      console.error("Invalid Turnstile token");
+      return new Response(
+        JSON.stringify({ error: "Security verification failed" }),
+        {
+          status: 403,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
+    }
+
+    console.log("CAPTCHA verification passed");
+
+    // Escape all user inputs for safe HTML insertion
+    const safeName = escapeHtml(name);
+    const safeEmail = escapeHtml(email);
+    const safeCompany = company ? escapeHtml(company) : '';
+    const safeService = service ? escapeHtml(service) : '';
+    const safeMessage = escapeHtml(message).replace(/\n/g, '<br>');
 
     // Send notification email to admin
     const adminEmailResponse = await sendEmail(
       ["brandalchemie@gmail.com"],
-      `New Contact Form Submission from ${name}`,
+      `New Contact Form Submission from ${safeName}`,
       `
         <!DOCTYPE html>
         <html>
@@ -81,31 +155,31 @@ const handler = async (req: Request): Promise<Response> => {
             
             <div class="field">
               <div class="label">Name</div>
-              <div class="value">${name}</div>
+              <div class="value">${safeName}</div>
             </div>
             
             <div class="field">
               <div class="label">Email</div>
-              <div class="value"><a href="mailto:${email}" style="color: #e10613;">${email}</a></div>
+              <div class="value"><a href="mailto:${safeEmail}" style="color: #e10613;">${safeEmail}</a></div>
             </div>
             
-            ${company ? `
+            ${safeCompany ? `
             <div class="field">
               <div class="label">Company</div>
-              <div class="value">${company}</div>
+              <div class="value">${safeCompany}</div>
             </div>
             ` : ''}
             
-            ${service ? `
+            ${safeService ? `
             <div class="field">
               <div class="label">Interested Service</div>
-              <div class="value accent">${service}</div>
+              <div class="value accent">${safeService}</div>
             </div>
             ` : ''}
             
             <div class="field">
               <div class="label">Message</div>
-              <div class="message-box">${message.replace(/\n/g, '<br>')}</div>
+              <div class="message-box">${safeMessage}</div>
             </div>
             
             <div class="footer">
@@ -146,7 +220,7 @@ const handler = async (req: Request): Promise<Response> => {
               <div class="logo"><span>Alchemy</span> Labs</div>
             </div>
             
-            <h1>Thank you, <span>${name}</span></h1>
+            <h1>Thank you, <span>${safeName}</span></h1>
             
             <p>We've received your brief and are already diving in. Our team reviews every submission personally—expect to hear from us within 24-48 hours.</p>
             
