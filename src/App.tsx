@@ -60,31 +60,34 @@ const ScrollRestoration = () => {
   return null;
 };
 
-// Enhanced page transition variants
+// Enhanced page transition variants with more dramatic effects
 const pageVariants = {
   initial: { 
     opacity: 0, 
-    y: 20,
-    filter: 'blur(4px)',
+    y: 30,
+    scale: 0.98,
+    filter: 'blur(8px)',
   },
   animate: { 
     opacity: 1, 
     y: 0,
+    scale: 1,
     filter: 'blur(0px)',
   },
   exit: { 
     opacity: 0, 
-    y: -15,
-    filter: 'blur(4px)',
+    y: -20,
+    scale: 1.02,
+    filter: 'blur(8px)',
   },
 };
 
 // Get transition config based on destination
 const getTransitionConfig = (pathname: string) => {
-  if (pathname === '/contact' || pathname === '/about') {
-    return { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const };
+  if (pathname === '/contact' || pathname === '/about' || pathname === '/book-sprint') {
+    return { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const };
   }
-  return { duration: 0.4, ease: [0.22, 1, 0.36, 1] as const };
+  return { duration: 0.5, ease: [0.22, 1, 0.36, 1] as const };
 };
 
 const AnimatedRoutes = () => {

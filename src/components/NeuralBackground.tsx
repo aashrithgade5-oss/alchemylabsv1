@@ -2,13 +2,14 @@ import { useRef, useMemo, useEffect } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 
-// Particle system that creates a neural network effect
+// Particle system that creates a neural network effect - ENHANCED with more particles
 const Particles = () => {
   const particlesRef = useRef<THREE.Points>(null);
   const mouseRef = useRef({ x: 0, y: 0 });
   const { viewport } = useThree();
   
-  const particleCount = 800;
+  // Increased particle count for more dramatic effect
+  const particleCount = 1200;
   
   const { positions, originalPositions, velocities } = useMemo(() => {
     const positions = new Float32Array(particleCount * 3);
@@ -97,10 +98,10 @@ const Particles = () => {
         />
       </bufferGeometry>
       <pointsMaterial
-        size={0.03}
+        size={0.04}
         color="#e10613"
         transparent
-        opacity={0.6}
+        opacity={0.8}
         sizeAttenuation
         blending={THREE.AdditiveBlending}
       />
@@ -193,15 +194,17 @@ const FloatingShapes = () => {
 
 export const NeuralBackground = () => {
   return (
-    <div className="absolute inset-0 z-0">
+    <div className="absolute inset-0">
       <Canvas
         camera={{ position: [0, 0, 5], fov: 60 }}
-        dpr={[1, 1.5]}
+        dpr={[1, 2]}
         gl={{ antialias: true, alpha: true }}
+        style={{ background: 'transparent' }}
       >
-        <color attach="background" args={['#080808']} />
-        <fog attach="fog" args={['#080808', 5, 15]} />
-        <ambientLight intensity={0.5} />
+        {/* Transparent background to show through */}
+        <color attach="background" args={['transparent']} />
+        <fog attach="fog" args={['#0a0a0b', 6, 18]} />
+        <ambientLight intensity={0.6} />
         <Particles />
         <Connections />
         <FloatingShapes />

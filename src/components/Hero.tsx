@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import heroVideo from '@/assets/hero-video.mp4';
 import { MagneticButton } from './MagneticButton';
 import { useRef, Suspense, lazy } from 'react';
-import { WordReveal } from './WordReveal';
+import { FluidBackground } from './FluidBackground';
 
 // Lazy load the neural background for performance
 const NeuralBackground = lazy(() => 
@@ -31,13 +31,18 @@ export const Hero = () => {
       ref={sectionRef} 
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
     >
-      {/* Three.js Neural Background */}
-      <Suspense fallback={null}>
-        <NeuralBackground />
-      </Suspense>
+      {/* Three.js Neural Background - Increased visibility */}
+      <div className="absolute inset-0 z-[2]">
+        <Suspense fallback={null}>
+          <NeuralBackground />
+        </Suspense>
+      </div>
 
-      {/* Video Background - layered behind particles */}
-      <motion.div className="absolute inset-0 z-[1]" style={{ y }}>
+      {/* Fluid mouse-reactive gradient */}
+      <FluidBackground variant="hero" className="z-[1]" />
+
+      {/* Video Background - with mild blur, layered behind particles */}
+      <motion.div className="absolute inset-0 z-[0]" style={{ y }}>
         <video
           autoPlay
           loop
@@ -45,7 +50,7 @@ export const Hero = () => {
           playsInline
           webkit-playsinline="true"
           preload="auto"
-          className="w-full h-full object-cover scale-105 opacity-30"
+          className="w-full h-full object-cover scale-105 opacity-40 blur-[2px]"
           style={{ 
             WebkitBackfaceVisibility: 'hidden',
             backfaceVisibility: 'hidden',
@@ -54,10 +59,10 @@ export const Hero = () => {
           <source src={heroVideo} type="video/mp4" />
         </video>
         
-        {/* Gradient overlays */}
-        <div className="absolute inset-0 bg-alchemy-black/70" />
-        <div className="absolute inset-0 bg-gradient-to-t from-alchemy-black via-transparent to-alchemy-black/30" />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-alchemy-black" />
+        {/* Reduced opacity overlays to reveal particles */}
+        <div className="absolute inset-0 bg-alchemy-black/40" />
+        <div className="absolute inset-0 bg-gradient-to-t from-alchemy-black/80 via-transparent to-alchemy-black/20" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-alchemy-black/90" />
       </motion.div>
 
       {/* Animated grid lines */}
@@ -79,26 +84,51 @@ export const Hero = () => {
       >
         <div className="flex flex-col items-center text-center">
           
-          {/* Eyebrow - Floating Animation */}
+          {/* Eyebrow - Enhanced Floating Animation with Glow */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30, scale: 0.9 }}
             animate={isInView ? { 
               opacity: 1, 
-              y: [0, -8, 0],
+              y: [0, -12, 0],
+              scale: 1,
             } : {}}
             transition={{ 
-              opacity: { duration: 0.6, delay: 0.2 },
+              opacity: { duration: 0.8, delay: 0.2 },
+              scale: { duration: 0.8, delay: 0.2 },
               y: { 
-                duration: 3, 
-                delay: 0.8,
+                duration: 4, 
+                delay: 1,
                 repeat: Infinity, 
                 ease: "easeInOut" 
               }
             }}
-            className="mb-8 sm:mb-10"
+            className="mb-8 sm:mb-10 relative"
           >
-            <span className="inline-block px-4 py-2 rounded-full border border-porcelain/10 bg-porcelain/5 backdrop-blur-sm shadow-[0_0_30px_rgba(225,6,19,0.1)]">
-              <span className="font-mono text-[10px] sm:text-xs tracking-[0.2em] uppercase text-porcelain/60">
+            {/* Glow effect behind badge */}
+            <motion.div
+              className="absolute inset-0 rounded-full blur-xl"
+              animate={{
+                opacity: [0.3, 0.6, 0.3],
+                scale: [1, 1.2, 1],
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+              style={{
+                background: 'radial-gradient(circle, rgba(225, 6, 19, 0.4) 0%, transparent 70%)',
+              }}
+            />
+            <span 
+              className="relative inline-block px-5 py-2.5 rounded-full backdrop-blur-md"
+              style={{
+                background: 'linear-gradient(135deg, rgba(225, 6, 19, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%)',
+                border: '1px solid rgba(225, 6, 19, 0.3)',
+                boxShadow: '0 0 40px rgba(225, 6, 19, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
+              }}
+            >
+              <span className="font-mono text-[10px] sm:text-xs tracking-[0.25em] uppercase text-porcelain/80">
                 AI-Powered Creative Studio
               </span>
             </span>
@@ -252,11 +282,63 @@ export const Hero = () => {
         </motion.div>
       </motion.div>
 
-      {/* Corner accents */}
-      <div className="absolute top-8 left-8 w-16 h-16 border-l border-t border-porcelain/10 pointer-events-none" />
-      <div className="absolute top-8 right-8 w-16 h-16 border-r border-t border-porcelain/10 pointer-events-none" />
-      <div className="absolute bottom-8 left-8 w-16 h-16 border-l border-b border-porcelain/10 pointer-events-none" />
-      <div className="absolute bottom-8 right-8 w-16 h-16 border-r border-b border-porcelain/10 pointer-events-none" />
+      {/* Enhanced Corner accent frames */}
+      <motion.div 
+        className="absolute top-6 left-6 w-24 h-24 pointer-events-none"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1, delay: 1.5 }}
+      >
+        <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-alchemy-red/50 to-transparent" />
+        <div className="absolute top-0 left-0 h-full w-[2px] bg-gradient-to-b from-alchemy-red/50 to-transparent" />
+        <motion.div 
+          className="absolute top-0 left-0 w-2 h-2 rounded-full bg-alchemy-red"
+          animate={{ opacity: [0.5, 1, 0.5] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        />
+      </motion.div>
+      <motion.div 
+        className="absolute top-6 right-6 w-24 h-24 pointer-events-none"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1, delay: 1.6 }}
+      >
+        <div className="absolute top-0 right-0 w-full h-[2px] bg-gradient-to-l from-alchemy-red/50 to-transparent" />
+        <div className="absolute top-0 right-0 h-full w-[2px] bg-gradient-to-b from-alchemy-red/50 to-transparent" />
+        <motion.div 
+          className="absolute top-0 right-0 w-2 h-2 rounded-full bg-alchemy-red"
+          animate={{ opacity: [0.5, 1, 0.5] }}
+          transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
+        />
+      </motion.div>
+      <motion.div 
+        className="absolute bottom-6 left-6 w-24 h-24 pointer-events-none"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1, delay: 1.7 }}
+      >
+        <div className="absolute bottom-0 left-0 w-full h-[2px] bg-gradient-to-r from-alchemy-red/50 to-transparent" />
+        <div className="absolute bottom-0 left-0 h-full w-[2px] bg-gradient-to-t from-alchemy-red/50 to-transparent" />
+        <motion.div 
+          className="absolute bottom-0 left-0 w-2 h-2 rounded-full bg-alchemy-red"
+          animate={{ opacity: [0.5, 1, 0.5] }}
+          transition={{ duration: 2, repeat: Infinity, delay: 1 }}
+        />
+      </motion.div>
+      <motion.div 
+        className="absolute bottom-6 right-6 w-24 h-24 pointer-events-none"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1, delay: 1.8 }}
+      >
+        <div className="absolute bottom-0 right-0 w-full h-[2px] bg-gradient-to-l from-alchemy-red/50 to-transparent" />
+        <div className="absolute bottom-0 right-0 h-full w-[2px] bg-gradient-to-t from-alchemy-red/50 to-transparent" />
+        <motion.div 
+          className="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-alchemy-red"
+          animate={{ opacity: [0.5, 1, 0.5] }}
+          transition={{ duration: 2, repeat: Infinity, delay: 1.5 }}
+        />
+      </motion.div>
     </section>
   );
 };
