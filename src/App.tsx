@@ -11,6 +11,7 @@ import NotFound from "./pages/NotFound";
 import { ServicePage } from "./pages/ServicePage";
 import { Preloader } from "./components/Preloader";
 import { SmoothScroll } from "./components/SmoothScroll";
+import { BackToTop } from "./components/BackToTop";
 import AdminAuth from "./pages/AdminAuth";
 import AdminDashboard from "./pages/AdminDashboard";
 import SolutionsHub from "./pages/SolutionsHub";
@@ -59,14 +60,31 @@ const ScrollRestoration = () => {
   return null;
 };
 
+// Enhanced page transition variants
+const pageVariants = {
+  initial: { 
+    opacity: 0, 
+    y: 20,
+    filter: 'blur(4px)',
+  },
+  animate: { 
+    opacity: 1, 
+    y: 0,
+    filter: 'blur(0px)',
+  },
+  exit: { 
+    opacity: 0, 
+    y: -15,
+    filter: 'blur(4px)',
+  },
+};
+
 // Get transition config based on destination
 const getTransitionConfig = (pathname: string) => {
-  if (pathname === '/contact') {
-    // Slower, more deliberate for contact
-    return { duration: 0.8, ease: [0.22, 1, 0.36, 1] as const };
+  if (pathname === '/contact' || pathname === '/about') {
+    return { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const };
   }
-  // Snappier for content pages
-  return { duration: 0.5, ease: [0.22, 1, 0.36, 1] as const };
+  return { duration: 0.4, ease: [0.22, 1, 0.36, 1] as const };
 };
 
 const AnimatedRoutes = () => {
@@ -76,13 +94,15 @@ const AnimatedRoutes = () => {
   return (
     <>
       <ScrollRestoration />
-      <AnimatePresence mode="wait">
+      <AnimatePresence mode="wait" initial={false}>
         <motion.div
           key={location.pathname}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
+          variants={pageVariants}
+          initial="initial"
+          animate="animate"
+          exit="exit"
           transition={transitionConfig}
+          className="min-h-screen"
         >
           <Routes location={location}>
             <Route path="/" element={<Index />} />
@@ -115,6 +135,7 @@ const AppContent = () => (
       <Toaster />
       <Sonner />
       <AnimatedRoutes />
+      <BackToTop />
     </SmoothScroll>
   </PageAtmosphereProvider>
 );
