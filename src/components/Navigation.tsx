@@ -122,62 +122,112 @@ export const Navigation = () => {
         </div>
       </motion.nav>
 
-      {/* Mobile Menu Overlay */}
+      {/* Mobile Menu Overlay - Full Screen with Centered Content */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.4 }}
             className="fixed inset-0 z-40 md:hidden"
           >
+            {/* Background with liquid glass effect */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-alchemy-black/98 backdrop-blur-2xl"
-            />
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="relative h-full flex flex-col items-center justify-center gap-8 p-8"
+              className="absolute inset-0 bg-alchemy-black/98 backdrop-blur-3xl"
             >
-              {navItems.map((item, i) => (
-                <motion.div
-                  key={item.label}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 20 }}
-                  transition={{ delay: i * 0.1, duration: 0.4 }}
-                >
-                  <Link
-                    to={item.href}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className={`font-display text-3xl italic transition-colors no-glow ${
-                      isActive(item.href) ? 'text-alchemy-red' : 'text-porcelain hover:text-alchemy-red'
-                    }`}
+              {/* Decorative gradients */}
+              <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[400px] h-[400px] bg-gradient-radial from-alchemy-red/10 to-transparent rounded-full blur-[100px]" />
+              <div className="absolute bottom-1/4 left-1/2 -translate-x-1/2 w-[300px] h-[300px] bg-gradient-radial from-deep-crimson/8 to-transparent rounded-full blur-[80px]" />
+            </motion.div>
+            
+            {/* Navigation Content - Perfectly Centered */}
+            <motion.nav
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="relative h-full flex flex-col items-center justify-center"
+            >
+              {/* Close button at top */}
+              <motion.button
+                initial={{ opacity: 0, rotate: -90 }}
+                animate={{ opacity: 1, rotate: 0 }}
+                exit={{ opacity: 0, rotate: 90 }}
+                transition={{ duration: 0.3 }}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="absolute top-6 right-6 p-3 text-porcelain/60 hover:text-porcelain transition-colors"
+                aria-label="Close menu"
+              >
+                <X size={28} />
+              </motion.button>
+
+              {/* Nav Items - Centered Stack */}
+              <ul className="flex flex-col items-center gap-6">
+                {navItems.map((item, i) => (
+                  <motion.li
+                    key={item.label}
+                    initial={{ opacity: 0, y: 30, scale: 0.9 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ 
+                      delay: i * 0.08, 
+                      duration: 0.5,
+                      ease: [0.22, 1, 0.36, 1]
+                    }}
                   >
-                    {item.label}
-                  </Link>
-                </motion.div>
-              ))}
+                    <Link
+                      to={item.href}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className={`block font-display text-4xl sm:text-5xl italic transition-all duration-300 no-glow ${
+                        isActive(item.href) 
+                          ? 'text-alchemy-red' 
+                          : 'text-porcelain/80 hover:text-alchemy-red'
+                      }`}
+                    >
+                      {item.label}
+                      {isActive(item.href) && (
+                        <motion.div 
+                          layoutId="mobile-nav-indicator"
+                          className="h-[2px] bg-alchemy-red mt-1 mx-auto"
+                          style={{ width: '60%' }}
+                        />
+                      )}
+                    </Link>
+                  </motion.li>
+                ))}
+              </ul>
+
+              {/* CTA Button */}
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 20 }}
-                transition={{ delay: 0.5, duration: 0.4 }}
+                transition={{ delay: 0.5, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                className="mt-12"
               >
                 <Link
                   to="/contact"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="glass-cta-primary mt-4 no-glow"
+                  className="glass-cta-primary px-8 py-4 text-lg no-glow"
                 >
                   Contact Us
                 </Link>
               </motion.div>
-            </motion.div>
+
+              {/* Footer info */}
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ delay: 0.6, duration: 0.4 }}
+                className="absolute bottom-8 text-porcelain/30 font-mono text-xs tracking-widest"
+              >
+                ALCHEMY LABS
+              </motion.p>
+            </motion.nav>
           </motion.div>
         )}
       </AnimatePresence>
