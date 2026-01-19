@@ -53,7 +53,7 @@ export const Hero = () => {
   const blendProgress = useTransform(scrollYProgress, [0, 0.3], [0, 1]);
 
   return (
-    <section id="hero" ref={sectionRef} className="relative min-h-screen flex items-center overflow-hidden">
+    <section id="hero" ref={sectionRef} className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Video Background with enhanced parallax */}
       <motion.div className="absolute inset-0" style={{ y }}>
         <video
@@ -65,20 +65,19 @@ export const Hero = () => {
           preload="auto"
           className="w-full h-full object-cover scale-110"
           style={{ 
-            // Ensure video plays on mobile
             WebkitBackfaceVisibility: 'hidden',
             backfaceVisibility: 'hidden',
           }}
         >
           <source src={heroVideo} type="video/mp4" />
         </video>
-        {/* Layered gradient overlays for depth - adjusted for mobile visibility */}
+        {/* Layered gradient overlays for depth */}
         <div className="absolute inset-0 bg-gradient-to-r from-alchemy-black via-alchemy-black/70 to-alchemy-black/20 md:from-alchemy-black md:via-alchemy-black/80 md:to-alchemy-black/30" />
         <div className="absolute inset-0 bg-gradient-to-t from-alchemy-black via-transparent to-alchemy-black/40 md:to-alchemy-black/50" />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-alchemy-black" />
         <div className="absolute inset-0 hero-gradient" />
         
-        {/* Dynamic mesh gradient overlay - responsive sizes */}
+        {/* Dynamic mesh gradient overlay */}
         <motion.div 
           className="absolute inset-0 pointer-events-none"
           style={{ opacity: blendProgress }}
@@ -95,11 +94,11 @@ export const Hero = () => {
           scale,
           filter: blur.get() > 0 ? `blur(${blur.get()}px)` : 'none',
         }}
-        className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 md:px-12 py-24 sm:py-32 md:py-40 w-full will-change-transform"
+        className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 md:px-12 pt-28 pb-20 sm:pt-32 sm:pb-24 md:pt-36 md:pb-28 w-full will-change-transform"
       >
-        <div className="max-w-4xl mx-auto text-center" ref={headlineRef}>
-          {/* Main Headline with character-by-character reveal */}
-          <div className="mb-6 sm:mb-8 perspective-1000">
+        <div className="max-w-5xl mx-auto text-center" ref={headlineRef}>
+          {/* Main Headline */}
+          <div className="mb-8 sm:mb-10 md:mb-12 perspective-1000">
             <h1 className="font-display text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl leading-display tracking-display">
               {/* "Alchemy" - with blend mode effect */}
               <motion.span
@@ -161,11 +160,9 @@ export const Hero = () => {
             </h1>
           </div>
 
-          {/* Sub Headline with word reveal */}
-          <motion.div
-            className="mb-8 sm:mb-12 overflow-hidden"
-          >
-            <h2 className="font-display text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl leading-display tracking-tight">
+          {/* Sub Headline */}
+          <div className="mb-10 sm:mb-12 md:mb-14">
+            <h2 className="font-display text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-relaxed tracking-tight pb-2">
               <motion.span
                 className="italic text-alchemy-red inline-block"
                 initial={{ opacity: 0, y: 30, rotateX: 45 }}
@@ -191,14 +188,14 @@ export const Hero = () => {
                 Branding
               </motion.span>
             </h2>
-          </motion.div>
+          </div>
 
-          {/* Description with word-by-word emphasis */}
+          {/* Description */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={isHeadlineInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.9, delay: 1.5, ease: [0.22, 1, 0.36, 1] }}
-            className="font-body text-sm sm:text-base md:text-lg lg:text-xl text-porcelain/50 leading-relaxed max-w-2xl mx-auto mb-10 sm:mb-16 font-light px-2"
+            className="font-body text-sm sm:text-base md:text-lg lg:text-xl text-porcelain/50 leading-relaxed max-w-2xl mx-auto mb-12 sm:mb-14 md:mb-16 font-light px-4"
           >
             We architect{' '}
             <motion.span 
