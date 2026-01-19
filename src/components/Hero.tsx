@@ -3,12 +3,8 @@ import { ArrowRight, ArrowUpRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import heroVideo from '@/assets/hero-video.mp4';
 import { MagneticButton } from './MagneticButton';
-import { useRef, Suspense, lazy } from 'react';
-
-// Lazy load the neural background for performance
-const NeuralBackground = lazy(() => 
-  import('./NeuralBackground').then(mod => ({ default: mod.NeuralBackground }))
-);
+import { useRef } from 'react';
+import { NeuralBackground } from './NeuralBackground';
 
 export const Hero = () => {
   const sectionRef = useRef<HTMLElement>(null);
@@ -69,9 +65,7 @@ export const Hero = () => {
 
       {/* Three.js Neural Particles - On top of video */}
       <div className="absolute inset-0 z-[2]">
-        <Suspense fallback={null}>
-          <NeuralBackground />
-        </Suspense>
+        <NeuralBackground />
       </div>
 
       {/* Main Content */}
