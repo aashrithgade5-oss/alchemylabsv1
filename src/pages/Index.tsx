@@ -12,6 +12,7 @@ import { ParallaxBackground } from '@/components/ParallaxBackground';
 import { VisualBreadcrumbs } from '@/components/VisualBreadcrumbs';
 import { HomepageScrollMap } from '@/components/HomepageScrollMap';
 import { ClientMarquee } from '@/components/ClientMarquee';
+import { PerformanceMetrics } from '@/components/PerformanceMetrics';
 
 const Index = () => {
   return (
@@ -24,6 +25,7 @@ const Index = () => {
       <main className="relative z-10">
         <Hero />
         <ClientMarquee />
+        <PerformanceMetrics />
         <Solutions />
         <CaseStudies />
         <Manifesto />
