@@ -158,7 +158,7 @@ export const Hero = () => {
               -Augmented{' '}
             </motion.span>
             <motion.span 
-              className="inline-block italic text-alchemy-red"
+              className="inline-block italic text-alchemy-red ml-2"
               initial={{ opacity: 0, x: 15 }}
               animate={isInView ? { opacity: 1, x: 0 } : {}}
               transition={{ duration: 0.5, delay: 1.0 }}
