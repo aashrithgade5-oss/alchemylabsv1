@@ -158,17 +158,13 @@ export const Navigation = () => {
           
           {/* Menu Content */}
           <div className="relative z-10 flex flex-col items-center justify-center h-full px-6">
-            <nav className="flex flex-col items-center gap-6">
-              {navItems.map((item, index) => (
+            <nav className="flex flex-col items-center gap-8">
+              {navItems.map((item) => (
                 <Link
                   key={item.label}
                   to={item.href}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className={`font-display text-3xl italic transition-colors ${
-                    isActive(item.href) 
-                      ? 'text-alchemy-red' 
-                      : 'text-porcelain hover:text-alchemy-red'
-                  }`}
+                  className="font-display text-3xl italic text-white underline underline-offset-4 decoration-1 hover:text-alchemy-red transition-colors"
                 >
                   {item.label}
                 </Link>
