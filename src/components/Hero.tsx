@@ -34,7 +34,7 @@ export const Hero = () => {
       ref={sectionRef} 
       className="relative min-h-[100svh] flex items-center justify-center overflow-hidden bg-alchemy-black"
     >
-      {/* Video Background - Base layer */}
+      {/* Video Background */}
       <motion.div className="absolute inset-0 z-[1]" style={{ y: isMobile ? 0 : y }}>
         <video
           autoPlay
@@ -43,15 +43,11 @@ export const Hero = () => {
           playsInline
           preload="metadata"
           className="w-full h-full object-cover scale-105 opacity-30"
-          style={{ 
-            WebkitBackfaceVisibility: 'hidden',
-            backfaceVisibility: 'hidden',
-          }}
         >
           <source src={heroVideo} type="video/mp4" />
         </video>
         
-        {/* Red-black vignette overlay */}
+        {/* Vignette overlay */}
         <div 
           className="absolute inset-0"
           style={{
@@ -61,7 +57,6 @@ export const Hero = () => {
             `,
           }}
         />
-        {/* Red accent vignette */}
         <div 
           className="absolute inset-0"
           style={{
@@ -70,7 +65,7 @@ export const Hero = () => {
         />
       </motion.div>
 
-      {/* Three.js Neural Particles - Desktop only */}
+      {/* Neural Particles - Desktop only */}
       {!isMobile && (
         <div className="absolute inset-0 z-[2]">
           <NeuralBackground />
@@ -97,7 +92,6 @@ export const Hero = () => {
               style={{
                 background: 'linear-gradient(135deg, rgba(225, 6, 19, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%)',
                 border: '1px solid rgba(225, 6, 19, 0.3)',
-                boxShadow: '0 0 25px rgba(225, 6, 19, 0.2)',
               }}
             >
               <span className="font-mono text-[9px] sm:text-[10px] tracking-[0.2em] uppercase text-porcelain/80">
@@ -106,7 +100,7 @@ export const Hero = () => {
             </span>
           </motion.div>
 
-          {/* Main Headline - ALCHEMY with italic display font */}
+          {/* Main Headline - ALCHEMY in Helvetica Caps */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={isInView ? { opacity: 1 } : {}}
@@ -115,15 +109,15 @@ export const Hero = () => {
           >
             <h1 className="text-[2.75rem] sm:text-5xl md:text-6xl lg:text-7xl xl:text-[5.5rem] leading-[1.05] tracking-[-0.02em]">
               <motion.span 
-                className="inline-block font-display italic text-porcelain"
+                className="inline-block font-body font-bold text-porcelain tracking-[0.08em] uppercase"
                 initial={{ opacity: 0, y: 35 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.7, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
               >
-                Alchemy
+                ALCHEMY
               </motion.span>
               <motion.span 
-                className="inline-block text-porcelain/40 mx-2 sm:mx-3 font-body font-light text-[0.65em]"
+                className="inline-block text-porcelain/40 mx-2 sm:mx-3 font-body font-light text-[0.5em]"
                 initial={{ opacity: 0, scale: 0 }}
                 animate={isInView ? { opacity: 1, scale: 1 } : {}}
                 transition={{ duration: 0.5, delay: 0.55, ease: [0.22, 1, 0.36, 1] }}
@@ -208,7 +202,7 @@ export const Hero = () => {
         </div>
       </motion.div>
 
-      {/* Scroll Indicator - Hidden on mobile for cleaner look */}
+      {/* Scroll Indicator - Hidden on mobile */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
