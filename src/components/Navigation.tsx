@@ -70,14 +70,18 @@ const MobileMenu = ({
           onClick={onClose}
           style={{
             color: '#FFFFFF',
-            fontSize: '32px',
-            fontFamily: '"Playfair Display", serif',
-            fontStyle: 'italic',
-            textDecoration: 'underline',
-            textUnderlineOffset: '8px',
-            textDecorationThickness: '1px',
-            padding: '8px 16px',
+            fontSize: '14px',
+            fontFamily: 'Inter, system-ui, sans-serif',
+            fontWeight: '500',
+            letterSpacing: '0.15em',
+            textTransform: 'uppercase',
+            textDecoration: 'none',
+            padding: '12px 16px',
+            opacity: 0.9,
+            transition: 'opacity 0.2s ease',
           }}
+          onMouseEnter={(e) => (e.currentTarget.style.opacity = '1')}
+          onMouseLeave={(e) => (e.currentTarget.style.opacity = '0.9')}
         >
           {item.label}
         </a>
