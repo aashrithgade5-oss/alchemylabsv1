@@ -147,39 +147,137 @@ export const Navigation = () => {
         </div>
       </motion.nav>
 
-      {/* Simple Mobile Menu - Completely Rebuilt */}
+      {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-40 md:hidden">
-          {/* Background */}
-          <div 
-            className="absolute inset-0 bg-[#0A0A0B]"
+        <div 
+          className="fixed inset-0 md:hidden"
+          style={{ 
+            zIndex: 9999,
+            backgroundColor: '#0A0A0B',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            paddingTop: '80px'
+          }}
+        >
+          {/* Close Button */}
+          <button
             onClick={() => setIsMobileMenuOpen(false)}
-          />
-          
-          {/* Menu Content */}
-          <div className="relative z-10 flex flex-col items-center justify-center h-full px-6">
-            <nav className="flex flex-col items-center gap-8">
-              {navItems.map((item) => (
-                <Link
-                  key={item.label}
-                  to={item.href}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="font-display text-3xl italic text-white underline underline-offset-4 decoration-1 hover:text-alchemy-red transition-colors"
-                >
-                  {item.label}
-                </Link>
-              ))}
-            </nav>
+            style={{
+              position: 'absolute',
+              top: '20px',
+              right: '20px',
+              padding: '10px',
+              color: 'white',
+              zIndex: 10000
+            }}
+            aria-label="Close menu"
+          >
+            <X size={28} />
+          </button>
 
-            {/* Mobile CTA */}
-            <Link
-              to="/book-sprint"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="mt-10 px-8 py-3 bg-alchemy-red text-porcelain font-body font-medium rounded-full"
-            >
-              Book a Sprint
-            </Link>
-          </div>
+          {/* Menu Links */}
+          <a 
+            href="/" 
+            onClick={() => setIsMobileMenuOpen(false)}
+            style={{ 
+              color: 'white', 
+              fontSize: '28px', 
+              fontStyle: 'italic',
+              textDecoration: 'underline',
+              marginBottom: '24px',
+              fontFamily: 'Playfair Display, serif'
+            }}
+          >
+            Home
+          </a>
+          <a 
+            href="/solutions" 
+            onClick={() => setIsMobileMenuOpen(false)}
+            style={{ 
+              color: 'white', 
+              fontSize: '28px', 
+              fontStyle: 'italic',
+              textDecoration: 'underline',
+              marginBottom: '24px',
+              fontFamily: 'Playfair Display, serif'
+            }}
+          >
+            Solutions
+          </a>
+          <a 
+            href="/about" 
+            onClick={() => setIsMobileMenuOpen(false)}
+            style={{ 
+              color: 'white', 
+              fontSize: '28px', 
+              fontStyle: 'italic',
+              textDecoration: 'underline',
+              marginBottom: '24px',
+              fontFamily: 'Playfair Display, serif'
+            }}
+          >
+            About
+          </a>
+          <a 
+            href="/work" 
+            onClick={() => setIsMobileMenuOpen(false)}
+            style={{ 
+              color: 'white', 
+              fontSize: '28px', 
+              fontStyle: 'italic',
+              textDecoration: 'underline',
+              marginBottom: '24px',
+              fontFamily: 'Playfair Display, serif'
+            }}
+          >
+            Work
+          </a>
+          <a 
+            href="/journal" 
+            onClick={() => setIsMobileMenuOpen(false)}
+            style={{ 
+              color: 'white', 
+              fontSize: '28px', 
+              fontStyle: 'italic',
+              textDecoration: 'underline',
+              marginBottom: '24px',
+              fontFamily: 'Playfair Display, serif'
+            }}
+          >
+            Journal
+          </a>
+          <a 
+            href="/contact" 
+            onClick={() => setIsMobileMenuOpen(false)}
+            style={{ 
+              color: 'white', 
+              fontSize: '28px', 
+              fontStyle: 'italic',
+              textDecoration: 'underline',
+              marginBottom: '40px',
+              fontFamily: 'Playfair Display, serif'
+            }}
+          >
+            Contact
+          </a>
+
+          {/* CTA Button */}
+          <a
+            href="/book-sprint"
+            onClick={() => setIsMobileMenuOpen(false)}
+            style={{
+              backgroundColor: '#C8102E',
+              color: 'white',
+              padding: '14px 32px',
+              borderRadius: '9999px',
+              fontWeight: '500',
+              fontSize: '16px'
+            }}
+          >
+            Book a Sprint
+          </a>
         </div>
       )}
     </>
