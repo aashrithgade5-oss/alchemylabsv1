@@ -1,4 +1,5 @@
 /* Font Imports - must come first */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&display=swap');
 @import '@fontsource/playfair-display/400.css';
 @import '@fontsource/playfair-display/500.css';
 @import '@fontsource/playfair-display/700.css';
@@ -687,14 +688,21 @@
 
   /* Luxury Margin - Breathing room between decision points */
   .luxury-margin {
-    margin-top: 120px;
-    margin-bottom: 120px;
+    margin-top: 80px;
+    margin-bottom: 80px;
+  }
+
+  @media (min-width: 640px) {
+    .luxury-margin {
+      margin-top: 100px;
+      margin-bottom: 100px;
+    }
   }
 
   @media (min-width: 768px) {
     .luxury-margin {
-      margin-top: 160px;
-      margin-bottom: 160px;
+      margin-top: 140px;
+      margin-bottom: 140px;
     }
   }
 
@@ -767,6 +775,17 @@
     max-width: 20ch;
   }
   
+  /* Mobile-first responsive text sizes */
+  .text-hero {
+    font-size: clamp(2.5rem, 8vw, 7rem);
+    line-height: 1.05;
+  }
+  
+  .text-section-title {
+    font-size: clamp(2rem, 5vw, 4rem);
+    line-height: 1.1;
+  }
+  
   /* Reduced Motion */
   @media (prefers-reduced-motion: reduce) {
     *,
@@ -776,5 +795,12 @@
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
     }
+  }
+  
+  /* Mobile safe area padding */
+  .safe-area-padding {
+    padding-left: env(safe-area-inset-left, 0);
+    padding-right: env(safe-area-inset-right, 0);
+    padding-bottom: env(safe-area-inset-bottom, 0);
   }
 }

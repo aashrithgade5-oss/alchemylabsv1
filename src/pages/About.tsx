@@ -71,7 +71,7 @@ export const About = () => {
       {/* SECTION 1 — OPENING MANIFESTO */}
       <section 
         ref={heroRef} 
-        className="relative min-h-screen flex items-center justify-center overflow-hidden pt-24"
+        className="relative min-h-[100svh] flex items-center justify-center overflow-hidden pt-20 sm:pt-24"
       >
         {/* Subtle background gradient */}
         <div className="absolute inset-0 pointer-events-none">
@@ -80,14 +80,14 @@ export const About = () => {
         
         <motion.div 
           style={{ opacity: heroOpacity }}
-          className="relative z-10 max-w-4xl mx-auto px-6 md:px-12 text-center"
+          className="relative z-10 max-w-4xl mx-auto px-5 sm:px-6 md:px-12 text-center"
         >
           {/* Serif headline with line-by-line reveal */}
           <motion.h1
             initial={{ opacity: 0, filter: 'blur(10px)' }}
             animate={{ opacity: 1, filter: 'blur(0px)' }}
             transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-            className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.1] tracking-tight text-porcelain mb-10 text-balance"
+            className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-[1.15] tracking-tight text-porcelain mb-8 sm:mb-10 text-balance"
           >
             <span className="block">We don't design brands.</span>
             <motion.span 
@@ -122,13 +122,13 @@ export const About = () => {
       </section>
 
       {/* SECTION 2 — WHY ALCHEMY LABS EXISTS (CREAM SECTION) */}
-      <section className="relative py-32 md:py-40 bg-cream-editorial overflow-hidden">
+      <section className="relative py-20 sm:py-28 md:py-40 bg-cream-editorial overflow-hidden">
         {/* Liquid glass ambient */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-0 right-1/4 w-[400px] h-[400px] bg-alchemy-red/5 rounded-full blur-[150px]" />
         </div>
 
-        <div className="relative z-10 max-w-6xl mx-auto px-6 md:px-12">
+        <div className="relative z-10 max-w-6xl mx-auto px-5 sm:px-6 md:px-12">
           {/* Two-column editorial layout */}
           <div className="grid lg:grid-cols-2 gap-16 lg:gap-24">
             {/* Left - Headline */}
@@ -137,7 +137,7 @@ export const About = () => {
                 <span className="font-mono text-xs text-alchemy-red tracking-[0.3em] uppercase mb-6 block">
                   Our Reason
                 </span>
-                <h2 className="font-display text-4xl md:text-5xl lg:text-6xl italic text-alchemy-black leading-[1.05] tracking-tight text-balance">
+                <h2 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl italic text-alchemy-black leading-[1.1] tracking-tight text-balance">
                   Why Alchemy Labs
                 </h2>
               </ScrollReveal>
@@ -170,11 +170,11 @@ export const About = () => {
           </div>
 
           {/* Micro Principles - Glass Cards */}
-          <div className="mt-20 grid md:grid-cols-3 gap-6">
+          <div className="mt-12 sm:mt-16 md:mt-20 grid sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
             {microPrinciples.map((principle, i) => (
               <ScrollReveal key={principle.text} delay={0.4 + i * 0.1}>
                 <div 
-                  className="p-8 rounded-2xl text-center"
+                  className="p-6 sm:p-8 rounded-2xl text-center"
                   style={{
                     background: 'rgba(255, 255, 255, 0.7)',
                     backdropFilter: 'blur(24px) saturate(120%)',
@@ -193,7 +193,7 @@ export const About = () => {
       </section>
 
       {/* SECTION 3 — FOUNDERS */}
-      <section className="relative py-32 md:py-40 overflow-hidden">
+      <section className="relative py-20 sm:py-28 md:py-40 overflow-hidden">
         {/* Background mesh */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-1/3 left-0 w-[600px] h-[600px] bg-alchemy-red/5 rounded-full blur-[200px]" />
@@ -209,17 +209,17 @@ export const About = () => {
                 Leadership
               </span>
             </div>
-            <h2 className="font-display text-4xl md:text-5xl lg:text-6xl italic text-porcelain mb-20 tracking-tight">
+            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl italic text-porcelain mb-12 sm:mb-16 md:mb-20 tracking-tight">
               The Founders
             </h2>
           </ScrollReveal>
 
           {/* Founder Cards - Liquid Glass */}
-          <div className="grid md:grid-cols-2 gap-8 md:gap-12">
+          <div className="grid md:grid-cols-2 gap-6 md:gap-8 lg:gap-12">
             {founders.map((founder, i) => (
               <ScrollReveal key={founder.name} delay={i * 0.15}>
                 <motion.div
-                  className="relative rounded-3xl p-8 md:p-10 group"
+                  className="relative rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-10 group"
                   style={{
                     background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 50%, rgba(225, 6, 19, 0.03) 100%)',
                     backdropFilter: 'blur(40px) saturate(180%)',
@@ -250,7 +250,7 @@ export const About = () => {
                   />
 
                   {/* Name */}
-                  <h3 className="font-display text-3xl md:text-4xl italic text-porcelain mb-2 relative z-10">
+                  <h3 className="font-display text-2xl sm:text-3xl md:text-4xl italic text-porcelain mb-2 relative z-10">
                     {founder.name}
                   </h3>
 
@@ -285,23 +285,23 @@ export const About = () => {
       </section>
 
       {/* SECTION 4 — HOW WE WORK */}
-      <section className="relative py-32 md:py-40 border-y border-porcelain/5 overflow-hidden">
-        <div className="max-w-6xl mx-auto px-6 md:px-12">
+      <section className="relative py-20 sm:py-28 md:py-40 border-y border-porcelain/5 overflow-hidden">
+        <div className="max-w-6xl mx-auto px-5 sm:px-6 md:px-12">
           <ScrollReveal>
-            <h2 className="font-display text-4xl md:text-5xl italic text-porcelain mb-16 tracking-tight text-center">
+            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl italic text-porcelain mb-12 sm:mb-16 tracking-tight text-center">
               How We Work
             </h2>
           </ScrollReveal>
 
           {/* Horizontal process flow */}
-          <div className="grid md:grid-cols-3 gap-8 md:gap-12 mb-16">
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-8 md:gap-12 mb-12 sm:mb-16">
             {processSteps.map((step, i) => (
               <ScrollReveal key={step.title} delay={i * 0.15}>
                 <div className="text-center">
-                  <span className="font-display text-5xl md:text-6xl italic text-porcelain/10 block mb-4">
+                  <span className="font-display text-4xl sm:text-5xl md:text-6xl italic text-porcelain/10 block mb-3 sm:mb-4">
                     {step.number}
                   </span>
-                  <h4 className="font-display text-2xl md:text-3xl italic text-alchemy-red mb-4">
+                  <h4 className="font-display text-xl sm:text-2xl md:text-3xl italic text-alchemy-red mb-3 sm:mb-4">
                     {step.title}
                   </h4>
                   <p className="font-body text-sm text-porcelain/50 font-light">
