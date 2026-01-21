@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { createPortal } from 'react-dom';
+import { motion } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import alchemyLogo from '@/assets/alchemy-logo.png';
@@ -12,6 +13,97 @@ const navItems = [
   { label: 'Journal', href: '/journal' },
   { label: 'Contact', href: '/contact' },
 ];
+
+// Separate Mobile Menu Component rendered via Portal
+const MobileMenu = ({ 
+  isOpen, 
+  onClose 
+}: { 
+  isOpen: boolean; 
+  onClose: () => void;
+}) => {
+  if (!isOpen) return null;
+
+  return createPortal(
+    <div
+      id="mobile-menu-overlay"
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        width: '100vw',
+        height: '100vh',
+        backgroundColor: '#0A0A0B',
+        zIndex: 99999,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '20px',
+      }}
+    >
+      {/* Close Button */}
+      <button
+        onClick={onClose}
+        style={{
+          position: 'absolute',
+          top: '24px',
+          right: '24px',
+          padding: '12px',
+          color: '#FFFFFF',
+          background: 'transparent',
+          border: 'none',
+          cursor: 'pointer',
+        }}
+        aria-label="Close menu"
+      >
+        <X size={32} strokeWidth={2} />
+      </button>
+
+      {/* Navigation Links */}
+      {navItems.map((item) => (
+        <a
+          key={item.label}
+          href={item.href}
+          onClick={onClose}
+          style={{
+            color: '#FFFFFF',
+            fontSize: '32px',
+            fontFamily: '"Playfair Display", serif',
+            fontStyle: 'italic',
+            textDecoration: 'underline',
+            textUnderlineOffset: '8px',
+            textDecorationThickness: '1px',
+            padding: '8px 16px',
+          }}
+        >
+          {item.label}
+        </a>
+      ))}
+
+      {/* CTA Button */}
+      <a
+        href="/book-sprint"
+        onClick={onClose}
+        style={{
+          marginTop: '24px',
+          backgroundColor: '#C8102E',
+          color: '#FFFFFF',
+          padding: '16px 40px',
+          borderRadius: '9999px',
+          fontWeight: '600',
+          fontSize: '18px',
+          textDecoration: 'none',
+        }}
+      >
+        Book a Sprint
+      </a>
+    </div>,
+    document.body
+  );
+};
 
 export const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -138,7 +230,8 @@ export const Navigation = () => {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden p-2 text-porcelain z-50"
+              className="md:hidden p-2 text-porcelain"
+              style={{ zIndex: 100000 }}
               aria-label="Toggle menu"
             >
               {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -147,139 +240,11 @@ export const Navigation = () => {
         </div>
       </motion.nav>
 
-      {/* Mobile Menu Overlay */}
-      {isMobileMenuOpen && (
-        <div 
-          className="fixed inset-0 md:hidden"
-          style={{ 
-            zIndex: 9999,
-            backgroundColor: '#0A0A0B',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            paddingTop: '80px'
-          }}
-        >
-          {/* Close Button */}
-          <button
-            onClick={() => setIsMobileMenuOpen(false)}
-            style={{
-              position: 'absolute',
-              top: '20px',
-              right: '20px',
-              padding: '10px',
-              color: 'white',
-              zIndex: 10000
-            }}
-            aria-label="Close menu"
-          >
-            <X size={28} />
-          </button>
-
-          {/* Menu Links */}
-          <a 
-            href="/" 
-            onClick={() => setIsMobileMenuOpen(false)}
-            style={{ 
-              color: 'white', 
-              fontSize: '28px', 
-              fontStyle: 'italic',
-              textDecoration: 'underline',
-              marginBottom: '24px',
-              fontFamily: 'Playfair Display, serif'
-            }}
-          >
-            Home
-          </a>
-          <a 
-            href="/solutions" 
-            onClick={() => setIsMobileMenuOpen(false)}
-            style={{ 
-              color: 'white', 
-              fontSize: '28px', 
-              fontStyle: 'italic',
-              textDecoration: 'underline',
-              marginBottom: '24px',
-              fontFamily: 'Playfair Display, serif'
-            }}
-          >
-            Solutions
-          </a>
-          <a 
-            href="/about" 
-            onClick={() => setIsMobileMenuOpen(false)}
-            style={{ 
-              color: 'white', 
-              fontSize: '28px', 
-              fontStyle: 'italic',
-              textDecoration: 'underline',
-              marginBottom: '24px',
-              fontFamily: 'Playfair Display, serif'
-            }}
-          >
-            About
-          </a>
-          <a 
-            href="/work" 
-            onClick={() => setIsMobileMenuOpen(false)}
-            style={{ 
-              color: 'white', 
-              fontSize: '28px', 
-              fontStyle: 'italic',
-              textDecoration: 'underline',
-              marginBottom: '24px',
-              fontFamily: 'Playfair Display, serif'
-            }}
-          >
-            Work
-          </a>
-          <a 
-            href="/journal" 
-            onClick={() => setIsMobileMenuOpen(false)}
-            style={{ 
-              color: 'white', 
-              fontSize: '28px', 
-              fontStyle: 'italic',
-              textDecoration: 'underline',
-              marginBottom: '24px',
-              fontFamily: 'Playfair Display, serif'
-            }}
-          >
-            Journal
-          </a>
-          <a 
-            href="/contact" 
-            onClick={() => setIsMobileMenuOpen(false)}
-            style={{ 
-              color: 'white', 
-              fontSize: '28px', 
-              fontStyle: 'italic',
-              textDecoration: 'underline',
-              marginBottom: '40px',
-              fontFamily: 'Playfair Display, serif'
-            }}
-          >
-            Contact
-          </a>
-
-          {/* CTA Button */}
-          <a
-            href="/book-sprint"
-            onClick={() => setIsMobileMenuOpen(false)}
-            style={{
-              backgroundColor: '#C8102E',
-              color: 'white',
-              padding: '14px 32px',
-              borderRadius: '9999px',
-              fontWeight: '500',
-              fontSize: '16px'
-            }}
-          >
-            Book a Sprint
-          </a>
-        </div>
-      )}
+      {/* Mobile Menu - Rendered via Portal */}
+      <MobileMenu 
+        isOpen={isMobileMenuOpen} 
+        onClose={() => setIsMobileMenuOpen(false)} 
+      />
     </>
   );
 };
