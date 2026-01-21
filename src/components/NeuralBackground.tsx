@@ -2,29 +2,7 @@ import { useRef, useMemo, useEffect, useState } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 
-// Check for reduced motion preference and mobile
-const useOptimizedSettings = () => {
-  const [settings, setSettings] = useState({
-    particleCount: 150,
-    enableConnections: true,
-    enableShapes: true,
-  });
-
-  useEffect(() => {
-    const isMobile = window.innerWidth < 768;
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    
-    setSettings({
-      particleCount: isMobile ? 80 : prefersReducedMotion ? 100 : 150,
-      enableConnections: !isMobile && !prefersReducedMotion,
-      enableShapes: !isMobile && !prefersReducedMotion,
-    });
-  }, []);
-
-  return settings;
-};
-
-// Optimized particle system with reduced count
+// Optimized particle system with reduced count for performance
 const Particles = ({ count }: { count: number }) => {
   const particlesRef = useRef<THREE.Points>(null);
   const mouseRef = useRef({ x: 0, y: 0 });
@@ -115,10 +93,10 @@ const Particles = ({ count }: { count: number }) => {
         />
       </bufferGeometry>
       <pointsMaterial
-        size={0.04}
+        size={0.05}
         color="#e10613"
         transparent
-        opacity={0.6}
+        opacity={0.7}
         sizeAttenuation
         blending={THREE.AdditiveBlending}
       />
@@ -130,7 +108,7 @@ const Particles = ({ count }: { count: number }) => {
 const Connections = () => {
   const linesRef = useRef<THREE.LineSegments>(null);
   
-  const lineCount = 60;
+  const lineCount = 40;
   const positions = useMemo(() => new Float32Array(lineCount * 6), []);
   
   useFrame((state) => {
@@ -167,7 +145,7 @@ const Connections = () => {
           itemSize={3}
         />
       </bufferGeometry>
-      <lineBasicMaterial color="#e10613" transparent opacity={0.05} />
+      <lineBasicMaterial color="#e10613" transparent opacity={0.08} />
     </lineSegments>
   );
 };
@@ -197,7 +175,7 @@ const FloatingShapes = () => {
           <meshBasicMaterial
             color="#e10613"
             transparent
-            opacity={0.03}
+            opacity={0.05}
             wireframe
           />
         </mesh>
@@ -207,24 +185,28 @@ const FloatingShapes = () => {
 };
 
 // Scene content wrapper
-const SceneContent = ({ settings }: { settings: ReturnType<typeof useOptimizedSettings> }) => {
+const SceneContent = ({ particleCount }: { particleCount: number }) => {
   return (
     <>
       <fog attach="fog" args={['#0a0a0b', 6, 18]} />
       <ambientLight intensity={0.3} />
-      <Particles count={settings.particleCount} />
-      {settings.enableConnections && <Connections />}
-      {settings.enableShapes && <FloatingShapes />}
+      <Particles count={particleCount} />
+      <Connections />
+      <FloatingShapes />
     </>
   );
 };
 
 export const NeuralBackground = () => {
-  const settings = useOptimizedSettings();
   const [isMounted, setIsMounted] = useState(false);
+  const [particleCount, setParticleCount] = useState(120);
 
   useEffect(() => {
     setIsMounted(true);
+    // Adjust particle count based on device
+    const isMobile = window.innerWidth < 768;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    setParticleCount(isMobile ? 60 : prefersReducedMotion ? 80 : 120);
   }, []);
 
   if (!isMounted) return null;
@@ -240,9 +222,9 @@ export const NeuralBackground = () => {
           powerPreference: 'high-performance',
         }}
         style={{ background: 'transparent' }}
-        frameloop="demand"
+        frameloop="always"
       >
-        <SceneContent settings={settings} />
+        <SceneContent particleCount={particleCount} />
       </Canvas>
     </div>
   );
