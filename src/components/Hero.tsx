@@ -100,7 +100,7 @@ export const Hero = () => {
             </span>
           </motion.div>
 
-          {/* Main Headline - ALCHEMY in Helvetica Caps */}
+          {/* Main Headline - ALCHEMY with blend-difference effect */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={isInView ? { opacity: 1 } : {}}
@@ -109,7 +109,8 @@ export const Hero = () => {
           >
             <h1 className="text-[2.75rem] sm:text-5xl md:text-6xl lg:text-7xl xl:text-[5.5rem] leading-[1.05] tracking-[-0.02em]">
               <motion.span 
-                className="inline-block font-body font-bold text-porcelain tracking-[0.08em] uppercase"
+                className="inline-block font-body font-bold text-porcelain tracking-[0.08em] uppercase mix-blend-difference"
+                style={{ willChange: 'transform, opacity' }}
                 initial={{ opacity: 0, y: 35 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.7, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
@@ -125,7 +126,8 @@ export const Hero = () => {
                 in
               </motion.span>
               <motion.span 
-                className="inline-block font-display italic motion-text relative"
+                className="inline-block font-display italic motion-text relative mix-blend-difference"
+                style={{ willChange: 'transform, opacity' }}
                 initial={{ opacity: 0, y: 35 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.7, delay: 0.65, ease: [0.22, 1, 0.36, 1] }}

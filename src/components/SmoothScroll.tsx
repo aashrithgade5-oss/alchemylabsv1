@@ -42,22 +42,23 @@ export const SmoothScroll = ({ children }: SmoothScrollProps) => {
     const isMobile = window.innerWidth < 768;
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     
-    // Skip Lenis on mobile for better performance
+    // Skip Lenis on mobile for better native scroll performance
     if (isMobile || prefersReducedMotion) {
       setIsReady(true);
       return;
     }
 
-    // Initialize Lenis with optimized settings
+    // Initialize Lenis with butter-smooth optimized settings
     const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      duration: 1.0, // Slightly faster for snappier feel
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Exponential easing
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      touchMultiplier: 1.5,
+      touchMultiplier: 1.2, // Reduced for less over-scroll
       infinite: false,
-      wheelMultiplier: 0.8,
+      wheelMultiplier: 0.9, // Slightly higher for better response
+      lerp: 0.1, // Smooth interpolation factor
     });
 
     lenisRef.current = lenis;
@@ -65,13 +66,13 @@ export const SmoothScroll = ({ children }: SmoothScrollProps) => {
     // Sync Lenis with GSAP ScrollTrigger
     lenis.on('scroll', ScrollTrigger.update);
 
-    // Use GSAP ticker for consistent updates
+    // Use GSAP ticker for consistent 60fps updates
     const tickerCallback = (time: number) => {
       lenis.raf(time * 1000);
     };
     
     gsap.ticker.add(tickerCallback);
-    gsap.ticker.lagSmoothing(0);
+    gsap.ticker.lagSmoothing(0); // Disable lag smoothing for consistent frames
 
     // Handle anchor links for smooth scrolling
     const handleAnchorClick = (e: MouseEvent) => {
@@ -86,7 +87,7 @@ export const SmoothScroll = ({ children }: SmoothScrollProps) => {
           if (targetElement) {
             lenis.scrollTo(targetElement as HTMLElement, {
               offset: -100,
-              duration: 1.5,
+              duration: 1.2,
             });
           }
         }
