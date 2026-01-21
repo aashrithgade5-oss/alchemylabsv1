@@ -51,6 +51,7 @@ export const ParallaxBackground = () => {
     <div
       ref={containerRef}
       className="fixed inset-0 pointer-events-none overflow-hidden z-0"
+      style={{ willChange: 'auto' }}
       aria-hidden="true"
     >
       {/* Static gradient for mobile, animated for desktop */}
@@ -66,7 +67,7 @@ export const ParallaxBackground = () => {
         />
       ) : (
         <>
-          {/* Primary red orb - top left */}
+          {/* Primary red orb - top left - GPU accelerated */}
           <motion.div
             className="absolute -top-[15%] -left-[8%] w-[50vw] h-[50vw] max-w-[650px] max-h-[650px] rounded-full blur-[80px]"
             style={{
@@ -74,6 +75,8 @@ export const ParallaxBackground = () => {
               scale: scale1,
               opacity: opacity1,
               background: 'radial-gradient(circle, hsl(356 94% 45% / 0.3) 0%, transparent 65%)',
+              willChange: 'transform',
+              transform: 'translateZ(0)', // Force GPU layer
             }}
           />
 
@@ -84,6 +87,8 @@ export const ParallaxBackground = () => {
               y: y2,
               opacity: 0.06,
               background: 'radial-gradient(circle, hsl(354 85% 26% / 0.4) 0%, transparent 65%)',
+              willChange: 'transform',
+              transform: 'translateZ(0)',
             }}
           />
 
@@ -94,6 +99,8 @@ export const ParallaxBackground = () => {
               y: y3,
               opacity: 0.05,
               background: 'radial-gradient(circle, hsl(356 94% 45% / 0.2) 0%, transparent 65%)',
+              willChange: 'transform',
+              transform: 'translateZ(0)',
             }}
           />
         </>
@@ -101,7 +108,7 @@ export const ParallaxBackground = () => {
 
       {/* Subtle grid pattern overlay - simplified */}
       <div
-        className="absolute inset-0 opacity-[0.01]"
+        className="absolute inset-0 opacity-[0.008]"
         style={{
           backgroundImage: `
             linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
