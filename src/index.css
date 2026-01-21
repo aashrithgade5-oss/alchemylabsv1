@@ -474,6 +474,28 @@
     font-family: var(--font-mono);
   }
   
+  /* Alchemy Logo Font - Premium serif for brand name */
+  .font-alchemy {
+    font-family: 'Cinzel', 'Playfair Display', Georgia, serif;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+  }
+  
+  /* Motion text effect - gradient with glow */
+  .motion-text {
+    background: linear-gradient(
+      135deg,
+      hsl(356 94% 50%) 0%,
+      hsl(356 94% 45%) 50%,
+      hsl(354 85% 35%) 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: none;
+    filter: drop-shadow(0 0 20px rgba(225, 6, 19, 0.4));
+  }
+  
   /* Glowing Text Effect - Use sparingly on key CTAs only */
   .text-glow {
     text-shadow: 

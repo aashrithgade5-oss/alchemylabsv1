@@ -3,22 +3,27 @@ import { ArrowRight, ArrowUpRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import heroVideo from '@/assets/hero-video.mp4';
 import { MagneticButton } from './MagneticButton';
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { NeuralBackground } from './NeuralBackground';
 
 export const Hero = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(contentRef, { once: true, margin: '-50px' });
+  const [isMobile, setIsMobile] = useState(false);
   
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 768);
+  }, []);
+
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ['start start', 'end start'],
   });
 
-  const y = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
+  const y = useTransform(scrollYProgress, [0, 1], ['0%', '20%']);
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
+  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.98]);
 
   return (
     <section 
@@ -27,15 +32,14 @@ export const Hero = () => {
       className="relative min-h-screen flex items-center justify-center overflow-hidden bg-alchemy-black"
     >
       {/* Video Background - Base layer */}
-      <motion.div className="absolute inset-0 z-[1]" style={{ y }}>
+      <motion.div className="absolute inset-0 z-[1]" style={{ y: isMobile ? 0 : y }}>
         <video
           autoPlay
           loop
           muted
           playsInline
-          webkit-playsinline="true"
-          preload="auto"
-          className="w-full h-full object-cover scale-105 opacity-50"
+          preload="metadata"
+          className="w-full h-full object-cover scale-105 opacity-40"
           style={{ 
             WebkitBackfaceVisibility: 'hidden',
             backfaceVisibility: 'hidden',
@@ -58,20 +62,22 @@ export const Hero = () => {
         <div 
           className="absolute inset-0"
           style={{
-            background: 'radial-gradient(ellipse at 50% 50%, rgba(225, 6, 19, 0.08) 0%, transparent 60%)',
+            background: 'radial-gradient(ellipse at 50% 50%, rgba(225, 6, 19, 0.06) 0%, transparent 60%)',
           }}
         />
       </motion.div>
 
-      {/* Three.js Neural Particles - On top of video */}
-      <div className="absolute inset-0 z-[2]">
-        <NeuralBackground />
-      </div>
+      {/* Three.js Neural Particles - On top of video (desktop only) */}
+      {!isMobile && (
+        <div className="absolute inset-0 z-[2]">
+          <NeuralBackground />
+        </div>
+      )}
 
       {/* Main Content */}
       <motion.div
         ref={contentRef}
-        style={{ opacity, scale }}
+        style={{ opacity, scale: isMobile ? 1 : scale }}
         className="relative z-10 w-full max-w-6xl mx-auto px-6 sm:px-8 lg:px-12"
       >
         <div className="flex flex-col items-center text-center">
@@ -97,16 +103,16 @@ export const Hero = () => {
             </span>
           </motion.div>
 
-          {/* Main Headline */}
+          {/* Main Headline - ALCHEMY with logo font + blend mode */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={isInView ? { opacity: 1 } : {}}
             transition={{ duration: 0.5, delay: 0.3 }}
             className="mb-6 sm:mb-8"
           >
-            <h1 className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[7rem] leading-[1.1] tracking-[-0.02em]">
+            <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[7rem] leading-[1.1] tracking-[-0.02em]">
               <motion.span 
-                className="inline-block bg-gradient-to-r from-porcelain via-porcelain/90 to-porcelain/70 bg-clip-text text-transparent"
+                className="inline-block font-alchemy text-porcelain mix-blend-difference"
                 initial={{ opacity: 0, y: 40 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.7, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
@@ -114,7 +120,7 @@ export const Hero = () => {
                 Alchemy
               </motion.span>
               <motion.span 
-                className="inline-block text-porcelain/40 mx-2 sm:mx-3 font-light"
+                className="inline-block text-porcelain/40 mx-2 sm:mx-3 font-body font-light"
                 initial={{ opacity: 0, scale: 0 }}
                 animate={isInView ? { opacity: 1, scale: 1 } : {}}
                 transition={{ duration: 0.5, delay: 0.55, ease: [0.22, 1, 0.36, 1] }}
@@ -122,7 +128,7 @@ export const Hero = () => {
                 in
               </motion.span>
               <motion.span 
-                className="inline-block italic bg-gradient-to-r from-alchemy-red via-alchemy-red/90 to-alchemy-red/70 bg-clip-text text-transparent"
+                className="inline-block font-display italic motion-text relative"
                 initial={{ opacity: 0, y: 40 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.7, delay: 0.65, ease: [0.22, 1, 0.36, 1] }}
@@ -185,17 +191,6 @@ export const Hero = () => {
               <MagneticButton className="glass-cta-primary group relative overflow-hidden">
                 <span className="relative z-10 font-body font-medium">Book a Strategy Sprint</span>
                 <ArrowRight className="relative z-10 w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"
-                  initial={{ x: '-100%' }}
-                  animate={{ x: '100%' }}
-                  transition={{ 
-                    duration: 2, 
-                    repeat: Infinity, 
-                    repeatDelay: 3,
-                    ease: 'easeInOut'
-                  }}
-                />
               </MagneticButton>
             </Link>
 
@@ -233,11 +228,11 @@ export const Hero = () => {
         </motion.div>
       </motion.div>
 
-      {/* Corner accents */}
-      <div className="absolute top-8 left-8 w-16 h-16 border-l border-t border-porcelain/10 pointer-events-none" />
-      <div className="absolute top-8 right-8 w-16 h-16 border-r border-t border-porcelain/10 pointer-events-none" />
-      <div className="absolute bottom-8 left-8 w-16 h-16 border-l border-b border-porcelain/10 pointer-events-none" />
-      <div className="absolute bottom-8 right-8 w-16 h-16 border-r border-b border-porcelain/10 pointer-events-none" />
+      {/* Corner accents - desktop only */}
+      <div className="hidden md:block absolute top-8 left-8 w-16 h-16 border-l border-t border-porcelain/10 pointer-events-none" />
+      <div className="hidden md:block absolute top-8 right-8 w-16 h-16 border-r border-t border-porcelain/10 pointer-events-none" />
+      <div className="hidden md:block absolute bottom-8 left-8 w-16 h-16 border-l border-b border-porcelain/10 pointer-events-none" />
+      <div className="hidden md:block absolute bottom-8 right-8 w-16 h-16 border-r border-b border-porcelain/10 pointer-events-none" />
     </section>
   );
 };
