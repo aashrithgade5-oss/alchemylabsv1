@@ -124,10 +124,10 @@ export const Navigation = () => {
                 animate={{ opacity: isScrolled ? 0.95 : 1 }}
                 transition={{ duration: 0.3 }}
               >
-                <span className="font-alchemy text-xl md:text-2xl text-porcelain tracking-wide">
-                  Alchemy
+                <span className="font-body text-lg md:text-xl text-porcelain tracking-[0.15em] uppercase font-bold">
+                  ALCHEMY
                 </span>
-                <span className="font-body text-[10px] md:text-xs font-bold text-porcelain/70 tracking-[0.35em] uppercase">
+                <span className="font-body text-[10px] md:text-xs font-medium text-porcelain/70 tracking-[0.25em] uppercase">
                   LABS
                 </span>
               </motion.div>

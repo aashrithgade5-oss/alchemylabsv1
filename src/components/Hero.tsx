@@ -106,7 +106,7 @@ export const Hero = () => {
             </span>
           </motion.div>
 
-          {/* Main Headline - ALCHEMY with premium typography */}
+          {/* Main Headline - ALCHEMY with italic display font */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={isInView ? { opacity: 1 } : {}}
@@ -115,7 +115,7 @@ export const Hero = () => {
           >
             <h1 className="text-[2.75rem] sm:text-5xl md:text-6xl lg:text-7xl xl:text-[5.5rem] leading-[1.05] tracking-[-0.02em]">
               <motion.span 
-                className="inline-block font-alchemy text-porcelain mix-blend-difference"
+                className="inline-block font-display italic text-porcelain"
                 initial={{ opacity: 0, y: 35 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.7, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
