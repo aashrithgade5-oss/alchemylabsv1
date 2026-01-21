@@ -50,11 +50,11 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
               alt="Alchemy Labs" 
               className="w-12 h-12 object-contain"
             />
-            <div className="flex flex-col leading-none">
-              <span className="font-display text-2xl md:text-3xl italic text-porcelain">
-                Alchemy
+            <div className="flex flex-col leading-none gap-0.5">
+              <span className="font-body text-xl md:text-2xl text-porcelain tracking-[0.15em] uppercase font-bold">
+                ALCHEMY
               </span>
-              <span className="font-mono text-[10px] text-porcelain/40 tracking-[0.25em] uppercase">
+              <span className="font-mono text-[10px] text-porcelain/40 tracking-[0.2em] uppercase">
                 LABS
               </span>
             </div>
