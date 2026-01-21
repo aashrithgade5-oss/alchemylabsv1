@@ -175,7 +175,7 @@ export const Hero = () => {
             className="font-body text-sm sm:text-base md:text-lg text-porcelain/50 leading-relaxed max-w-md sm:max-w-lg mx-auto mb-10 sm:mb-12 font-light px-2"
           >
             We architect <span className="text-porcelain/70">brand systems</span> for the 
-            intelligence era—where <span className="text-porcelain/70">strategy</span>, <span className="text-porcelain/70">identity</span>, 
+            intelligence era—<br className="hidden sm:block" />where <span className="text-porcelain/70">strategy</span>, <span className="text-porcelain/70">identity</span>, 
             and <span className="text-porcelain/70">culture</span> scale with precision.
           </motion.p>
 
