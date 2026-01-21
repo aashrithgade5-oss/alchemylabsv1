@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback, createContext, useContext } from 'react';
+import { useEffect, useRef, useCallback, createContext, useContext, useState } from 'react';
 import Lenis from 'lenis';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import gsap from 'gsap';
@@ -23,12 +23,7 @@ interface SmoothScrollProps {
 
 export const SmoothScroll = ({ children }: SmoothScrollProps) => {
   const lenisRef = useRef<Lenis | null>(null);
-  const rafRef = useRef<number | null>(null);
-
-  const raf = useCallback((time: number) => {
-    lenisRef.current?.raf(time);
-    rafRef.current = requestAnimationFrame(raf);
-  }, []);
+  const [isReady, setIsReady] = useState(false);
 
   const scrollTo = useCallback((
     target: string | HTMLElement | number, 
@@ -37,38 +32,46 @@ export const SmoothScroll = ({ children }: SmoothScrollProps) => {
     if (lenisRef.current) {
       lenisRef.current.scrollTo(target, {
         offset: options?.offset ?? -100,
-        duration: options?.duration ?? 2,
+        duration: options?.duration ?? 1.5,
       });
     }
   }, []);
 
   useEffect(() => {
-    // Initialize Lenis with premium, luxurious settings
+    // Check if mobile or prefers reduced motion
+    const isMobile = window.innerWidth < 768;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    
+    // Skip Lenis on mobile for better performance
+    if (isMobile || prefersReducedMotion) {
+      setIsReady(true);
+      return;
+    }
+
+    // Initialize Lenis with optimized settings
     const lenis = new Lenis({
-      duration: 1.4, // Smooth but responsive
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Exponential easing
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      touchMultiplier: 2,
+      touchMultiplier: 1.5,
       infinite: false,
-      wheelMultiplier: 1,
-      lerp: 0.1, // Linear interpolation for buttery smoothness
+      wheelMultiplier: 0.8,
     });
 
     lenisRef.current = lenis;
 
-    // Sync Lenis with GSAP ScrollTrigger for seamless integration
+    // Sync Lenis with GSAP ScrollTrigger
     lenis.on('scroll', ScrollTrigger.update);
 
-    gsap.ticker.add((time) => {
+    // Use GSAP ticker for consistent updates
+    const tickerCallback = (time: number) => {
       lenis.raf(time * 1000);
-    });
-
+    };
+    
+    gsap.ticker.add(tickerCallback);
     gsap.ticker.lagSmoothing(0);
-
-    // Start animation loop
-    rafRef.current = requestAnimationFrame(raf);
 
     // Handle anchor links for smooth scrolling
     const handleAnchorClick = (e: MouseEvent) => {
@@ -83,7 +86,7 @@ export const SmoothScroll = ({ children }: SmoothScrollProps) => {
           if (targetElement) {
             lenis.scrollTo(targetElement as HTMLElement, {
               offset: -100,
-              duration: 2,
+              duration: 1.5,
             });
           }
         }
@@ -99,17 +102,16 @@ export const SmoothScroll = ({ children }: SmoothScrollProps) => {
     document.addEventListener('modal-open', handleModalOpen);
     document.addEventListener('modal-close', handleModalClose);
 
+    setIsReady(true);
+
     return () => {
-      if (rafRef.current) {
-        cancelAnimationFrame(rafRef.current);
-      }
-      gsap.ticker.remove((time) => lenis.raf(time * 1000));
+      gsap.ticker.remove(tickerCallback);
       lenis.destroy();
       document.removeEventListener('click', handleAnchorClick);
       document.removeEventListener('modal-open', handleModalOpen);
       document.removeEventListener('modal-close', handleModalClose);
     };
-  }, [raf]);
+  }, []);
 
   return (
     <SmoothScrollContext.Provider value={{ lenis: lenisRef.current, scrollTo }}>
