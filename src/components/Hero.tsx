@@ -35,7 +35,7 @@ export const Hero = memo(() => {
     <section 
       id="hero" 
       ref={sectionRef} 
-      className="relative min-h-[100svh] flex items-center justify-center overflow-hidden bg-alchemy-black"
+      className="relative min-h-[100svh] flex flex-col justify-center overflow-hidden bg-alchemy-black"
     >
       {/* Video Background */}
       <div className="absolute inset-0 z-[1]">
@@ -84,7 +84,7 @@ export const Hero = memo(() => {
 
       {/* Neural Particles - Desktop only */}
       {!isMobile && (
-        <div className="absolute inset-0 z-[2] opacity-60">
+        <div className="absolute inset-0 z-[2] opacity-70">
           <NeuralBackground />
         </div>
       )}
@@ -92,7 +92,7 @@ export const Hero = memo(() => {
       {/* Main Content */}
       <div
         ref={contentRef}
-        className="relative z-10 w-full max-w-6xl mx-auto px-5 sm:px-8 lg:px-12 pt-24 md:pt-0"
+        className="relative z-10 w-full max-w-6xl mx-auto px-5 sm:px-8 lg:px-12 pt-28 md:pt-24"
       >
         <div className="flex flex-col items-center text-center">
           
@@ -101,7 +101,7 @@ export const Hero = memo(() => {
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="mb-6 sm:mb-8"
+            className="mb-5 sm:mb-6"
           >
             <span 
               className="inline-block px-4 py-2 rounded-full backdrop-blur-md"
@@ -121,7 +121,7 @@ export const Hero = memo(() => {
             initial={{ opacity: 0 }}
             animate={isInView ? { opacity: 1 } : {}}
             transition={{ duration: 0.4, delay: 0.2 }}
-            className="mb-4 sm:mb-5"
+            className="mb-3 sm:mb-4"
           >
             <h1 className="text-[2.75rem] sm:text-5xl md:text-6xl lg:text-7xl xl:text-[5.5rem] leading-[1.05] tracking-[-0.02em]">
               <motion.span 
@@ -163,7 +163,7 @@ export const Hero = memo(() => {
             initial={{ opacity: 0, y: 15 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.5, delay: 0.55 }}
-            className="text-lg sm:text-xl md:text-2xl lg:text-3xl leading-[1.3] tracking-[-0.01em] max-w-3xl mx-auto mb-8 sm:mb-10"
+            className="text-lg sm:text-xl md:text-2xl lg:text-3xl leading-[1.3] tracking-[-0.01em] max-w-3xl mx-auto mb-6 sm:mb-8"
           >
             <span className="block font-body font-medium text-porcelain/80">Ship production-ready products</span>
             <span className="font-body font-medium text-porcelain/60">while competitors are </span>
@@ -183,7 +183,7 @@ export const Hero = memo(() => {
             initial={{ opacity: 0, y: 15 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.5, delay: 0.65 }}
-            className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mb-8 sm:mb-10"
+            className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mb-6 sm:mb-8"
           >
             <div 
               className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 px-5 py-3 rounded-full"
@@ -206,7 +206,7 @@ export const Hero = memo(() => {
             initial={{ opacity: 0, y: 15 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.5, delay: 0.75 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-3"
+            className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-2"
           >
             <Link to="/book-sprint">
               <MagneticButton className="glass-cta-primary group relative overflow-hidden">
@@ -229,17 +229,17 @@ export const Hero = memo(() => {
             initial={{ opacity: 0 }}
             animate={isInView ? { opacity: 1 } : {}}
             transition={{ duration: 0.5, delay: 0.75 }}
-            className="font-mono text-[10px] text-porcelain/40 tracking-wider mb-10"
+            className="font-mono text-[10px] text-porcelain/40 tracking-wider mb-6"
           >
             Free first call · 24h response · NDA on request
           </motion.p>
 
-          {/* Stats - Minimal centered */}
+          {/* Minimal centered stats */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.5, delay: 0.85 }}
-            className="flex flex-col items-center"
+            className="flex flex-col items-center mb-6"
           >
             <div className="flex items-center justify-center gap-8 sm:gap-12">
               {stats.map((stat) => (
@@ -253,28 +253,106 @@ export const Hero = memo(() => {
                 </div>
               ))}
             </div>
+          </motion.div>
 
-            {/* Scroll Indicator */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1.2, duration: 0.6 }}
-              className="flex flex-col items-center gap-2 mt-10"
-            >
-              <span className="font-mono text-[8px] text-porcelain/30 uppercase tracking-[0.2em]">
-                Scroll
-              </span>
-              <div className="relative w-5 h-8 rounded-full border border-porcelain/20 flex justify-center">
-                <motion.div 
-                  className="absolute top-1.5 w-1 h-2 rounded-full bg-gradient-to-b from-alchemy-red to-alchemy-red/50"
-                  animate={{ y: [0, 10, 0], opacity: [1, 0.3, 1] }}
-                  transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
-                />
-              </div>
-            </motion.div>
+          {/* Scroll Indicator */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.2, duration: 0.6 }}
+            className="flex flex-col items-center gap-2"
+          >
+            <span className="font-mono text-[8px] text-porcelain/30 uppercase tracking-[0.2em]">
+              Scroll
+            </span>
+            <div className="relative w-5 h-8 rounded-full border border-porcelain/20 flex justify-center">
+              <motion.div 
+                className="absolute top-1.5 w-1 h-2 rounded-full bg-gradient-to-b from-alchemy-red to-alchemy-red/50"
+                animate={{ y: [0, 10, 0], opacity: [1, 0.3, 1] }}
+                transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+              />
+            </div>
           </motion.div>
         </div>
       </div>
+
+      {/* Liquid Glass Stat Cards - Bottom of section */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={isInView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.6, delay: 1 }}
+        className="relative z-10 w-full max-w-5xl mx-auto px-5 sm:px-8 lg:px-12 pb-12 pt-8 mt-auto"
+      >
+        <div className="flex flex-col md:flex-row items-stretch justify-center gap-4">
+          {stats.map((stat, i) => (
+            <motion.div
+              key={stat.label}
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5, delay: 1.1 + i * 0.1 }}
+              className="group flex-1 relative overflow-hidden rounded-2xl p-5 sm:p-6 cursor-pointer transition-all duration-500"
+              style={{
+                background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%)',
+                backdropFilter: 'blur(20px)',
+                border: '1px solid rgba(255, 255, 255, 0.06)',
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)',
+              }}
+              whileHover={{
+                scale: 1.02,
+                boxShadow: '0 0 40px rgba(220, 38, 38, 0.15), 0 12px 40px rgba(0, 0, 0, 0.3)',
+                borderColor: 'rgba(220, 38, 38, 0.3)',
+              }}
+            >
+              {/* Hover glow effect */}
+              <div 
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                style={{
+                  background: 'radial-gradient(ellipse at center, rgba(220, 38, 38, 0.08) 0%, transparent 70%)',
+                }}
+              />
+              
+              <div className="relative z-10 text-center">
+                <span 
+                  className="block font-display text-2xl sm:text-3xl italic mb-1"
+                  style={{
+                    background: 'linear-gradient(135deg, hsl(356 94% 55%) 0%, hsl(356 94% 45%) 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    backgroundClip: 'text',
+                  }}
+                >
+                  {stat.number}
+                </span>
+                <span className="block font-body text-sm text-porcelain/80 mb-1">
+                  {stat.label}
+                </span>
+                <span className="block font-mono text-[10px] text-porcelain/40 uppercase tracking-wider">
+                  {stat.subtext}
+                </span>
+              </div>
+              
+              {/* Corner accent */}
+              <div className="absolute top-0 right-0 w-8 h-8 overflow-hidden opacity-20 group-hover:opacity-40 transition-opacity">
+                <div 
+                  className="absolute -top-4 -right-4 w-8 h-8 rotate-45"
+                  style={{ background: 'linear-gradient(135deg, transparent 50%, rgba(220, 38, 38, 0.5) 50%)' }}
+                />
+              </div>
+            </motion.div>
+          ))}
+        </div>
+        
+        {/* Vision statement moved below */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={isInView ? { opacity: 1 } : {}}
+          transition={{ duration: 0.6, delay: 1.4 }}
+          className="text-center mt-8 max-w-2xl mx-auto font-body text-sm sm:text-base text-porcelain/50 leading-relaxed"
+        >
+          From vision to a live product in 24 hours—not weeks.<br className="hidden sm:block" />
+          <span className="text-porcelain/70">Work 1:1 with founders who ship, iterate, and scale with precision.</span>
+        </motion.p>
+      </motion.div>
 
       {/* Corner accents - desktop only */}
       <div className="hidden lg:block absolute top-8 left-8 w-12 h-12 border-l border-t border-porcelain/10 pointer-events-none" />
