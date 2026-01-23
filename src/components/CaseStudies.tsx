@@ -373,9 +373,12 @@ export const CaseStudies = () => {
                           border: '1px solid rgba(255, 255, 255, 0.05)',
                         }}
                       >
-                        <div className="flex items-center gap-2">
-                          <Check className="w-4 h-4 text-alchemy-red" />
-                          <span className="font-body text-sm text-porcelain">{service}</span>
+                        <div className="flex items-start gap-2">
+                          <Check className="w-4 h-4 text-alchemy-red mt-0.5 flex-shrink-0" />
+                          <div>
+                            <span className="font-body text-sm text-porcelain block">{service.title}</span>
+                            <span className="font-body text-xs text-porcelain/50">{service.description}</span>
+                          </div>
                         </div>
                       </div>
                     ))}
