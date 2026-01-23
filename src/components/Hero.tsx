@@ -221,52 +221,52 @@ export const Hero = memo(() => {
             initial={{ opacity: 0 }}
             animate={isInView ? { opacity: 1 } : {}}
             transition={{ duration: 0.5, delay: 0.75 }}
-            className="font-mono text-[10px] text-porcelain/40 tracking-wider"
+            className="font-mono text-[10px] text-porcelain/40 tracking-wider mb-10"
           >
             Free first call · 24h response · NDA on request
           </motion.p>
+
+          {/* Stats - Minimal centered */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5, delay: 0.85 }}
+            className="flex flex-col items-center"
+          >
+            <div className="flex items-center justify-center gap-8 sm:gap-12">
+              {stats.map((stat) => (
+                <div key={stat.label} className="text-center">
+                  <span className="block font-display text-lg sm:text-xl italic text-porcelain/80">
+                    {stat.number}
+                  </span>
+                  <span className="block font-mono text-[8px] sm:text-[9px] text-porcelain/40 uppercase tracking-wider">
+                    {stat.label}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            {/* Scroll Indicator */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1.2, duration: 0.6 }}
+              className="flex flex-col items-center gap-2 mt-10"
+            >
+              <span className="font-mono text-[8px] text-porcelain/30 uppercase tracking-[0.2em]">
+                Scroll
+              </span>
+              <div className="relative w-5 h-8 rounded-full border border-porcelain/20 flex justify-center">
+                <motion.div 
+                  className="absolute top-1.5 w-1 h-2 rounded-full bg-gradient-to-b from-alchemy-red to-alchemy-red/50"
+                  animate={{ y: [0, 10, 0], opacity: [1, 0.3, 1] }}
+                  transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+                />
+              </div>
+            </motion.div>
+          </motion.div>
         </div>
       </div>
-
-      {/* Stats - Minimal centered */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={isInView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.5, delay: 0.85 }}
-        className="absolute bottom-24 sm:bottom-20 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center"
-      >
-        <div className="flex items-center justify-center gap-8 sm:gap-12">
-          {stats.map((stat) => (
-            <div key={stat.label} className="text-center">
-              <span className="block font-display text-lg sm:text-xl italic text-porcelain/80">
-                {stat.number}
-              </span>
-              <span className="block font-mono text-[8px] sm:text-[9px] text-porcelain/40 uppercase tracking-wider">
-                {stat.label}
-              </span>
-            </div>
-          ))}
-        </div>
-
-        {/* Scroll Indicator */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2, duration: 0.6 }}
-          className="flex flex-col items-center gap-2 mt-8"
-        >
-          <span className="font-mono text-[8px] text-porcelain/30 uppercase tracking-[0.2em]">
-            Scroll
-          </span>
-          <div className="relative w-5 h-8 rounded-full border border-porcelain/20 flex justify-center">
-            <motion.div 
-              className="absolute top-1.5 w-1 h-2 rounded-full bg-gradient-to-b from-alchemy-red to-alchemy-red/50"
-              animate={{ y: [0, 10, 0], opacity: [1, 0.3, 1] }}
-              transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
-            />
-          </div>
-        </motion.div>
-      </motion.div>
 
       {/* Corner accents - desktop only */}
       <div className="hidden lg:block absolute top-8 left-8 w-12 h-12 border-l border-t border-porcelain/10 pointer-events-none" />
