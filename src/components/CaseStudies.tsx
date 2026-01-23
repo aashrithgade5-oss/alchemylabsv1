@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowUpRight, X, Check, Sparkles, Layers, Target, Palette, Mountain, Grid3X3 } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { ArrowUpRight, ArrowRight, X, Check, Sparkles, Layers, Target, Palette, Mountain, Grid3X3 } from 'lucide-react';
+import { useNavigate, Link } from 'react-router-dom';
 import { projects, Project } from '@/data/projects';
 import { ScrollReveal } from '@/components/ScrollReveal';
 import { SpotlightContainer, SpotlightItem } from '@/components/SpotlightGrid';
@@ -19,6 +19,16 @@ const projectIcons: Record<string, React.ElementType> = {
 
 // Filter categories
 const filterCategories = ['All', 'Branding', 'AI', 'Consultation', 'Identity'];
+
+// Proof labels for projects
+const proofLabels: Record<string, string> = {
+  'branding-solutions': '24h Build',
+  'consultation-sessions': 'Strategy Sprint',
+  'aether-rituals': 'Identity System',
+  'oakley-showcase': 'Concept Study',
+  'arcteryx-branding': 'Identity System',
+  'identity-systems': '24h Build',
+};
 
 export const CaseStudies = () => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
@@ -42,51 +52,14 @@ export const CaseStudies = () => {
 
   return (
     <section id="work" className="relative py-32 overflow-hidden">
-      {/* Dynamic gradient background */}
+      {/* Background */}
       <div className="absolute inset-0 pointer-events-none">
-        {/* Central glow */}
         <motion.div 
-          className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] rounded-full blur-[180px]"
-          animate={{
-            opacity: [0.08, 0.15, 0.08],
-            scale: [1, 1.05, 1],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-          style={{ background: 'radial-gradient(ellipse, rgba(225, 6, 19, 0.2) 0%, transparent 70%)' }}
+          className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[500px] rounded-full blur-[150px]"
+          animate={{ opacity: [0.06, 0.12, 0.06] }}
+          transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+          style={{ background: 'radial-gradient(ellipse, rgba(220, 38, 38, 0.15) 0%, transparent 70%)' }}
         />
-        {/* Left accent */}
-        <motion.div 
-          className="absolute top-1/2 left-0 w-[500px] h-[500px] rounded-full blur-[150px]"
-          animate={{
-            opacity: [0.05, 0.1, 0.05],
-            x: [-50, 0, -50],
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-          style={{ background: 'radial-gradient(circle, rgba(225, 6, 19, 0.15) 0%, transparent 70%)' }}
-        />
-        {/* Right accent */}
-        <motion.div 
-          className="absolute bottom-1/4 right-0 w-[600px] h-[600px] rounded-full blur-[160px]"
-          animate={{
-            opacity: [0.06, 0.12, 0.06],
-            x: [50, 0, 50],
-          }}
-          transition={{
-            duration: 12,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-          style={{ background: 'radial-gradient(circle, rgba(80, 4, 10, 0.2) 0%, transparent 70%)' }}
-        />
-        {/* Bottom gradient */}
         <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-alchemy-black to-transparent" />
       </div>
 
@@ -94,9 +67,16 @@ export const CaseStudies = () => {
         {/* Header */}
         <ScrollReveal>
           <motion.div className="text-center mb-16">
-            <p className="font-mono text-[11px] text-alchemy-red tracking-[0.3em] uppercase mb-5">
-              Our Portfolio
-            </p>
+            <span className="inline-block px-4 py-2 rounded-full backdrop-blur-md mb-6"
+              style={{
+                background: 'linear-gradient(135deg, rgba(220, 38, 38, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%)',
+                border: '1px solid rgba(220, 38, 38, 0.3)',
+              }}
+            >
+              <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-porcelain/80">
+                Our Portfolio
+              </span>
+            </span>
             <h2 className="font-display text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-[1.05] tracking-[-0.02em] mb-6">
               <span className="italic text-alchemy-red">Curated</span>
               <span className="text-porcelain"> Works</span>
@@ -107,16 +87,15 @@ export const CaseStudies = () => {
           </motion.div>
         </ScrollReveal>
 
-        {/* Symmetric Liquid Glass Filter Bar */}
+        {/* Filter Bar */}
         <ScrollReveal delay={0.1}>
           <div className="flex justify-center mb-16">
             <motion.div 
               className="inline-flex items-center gap-2 p-2 rounded-full"
               style={{
-                background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%)',
-                backdropFilter: 'blur(24px)',
-                border: '1px solid rgba(255, 255, 255, 0.08)',
-                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
+                background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%)',
+                backdropFilter: 'blur(16px)',
+                border: '1px solid rgba(255, 255, 255, 0.06)',
               }}
             >
               {filterCategories.map((filter) => (
@@ -136,11 +115,10 @@ export const CaseStudies = () => {
                       layoutId="activeFilter"
                       className="absolute inset-0 rounded-full"
                       style={{
-                        background: 'linear-gradient(135deg, rgba(225, 6, 19, 0.25) 0%, rgba(225, 6, 19, 0.1) 100%)',
-                        border: '1px solid rgba(225, 6, 19, 0.4)',
-                        boxShadow: '0 0 20px rgba(225, 6, 19, 0.2)',
+                        background: 'linear-gradient(135deg, rgba(220, 38, 38, 0.2) 0%, rgba(220, 38, 38, 0.08) 100%)',
+                        border: '1px solid rgba(220, 38, 38, 0.35)',
                       }}
-                      transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
+                      transition={{ type: 'spring', bounce: 0.15, duration: 0.5 }}
                     />
                   )}
                   <span className="relative z-10">{filter}</span>
@@ -150,10 +128,12 @@ export const CaseStudies = () => {
           </div>
         </ScrollReveal>
 
-        {/* Grid with rounded aesthetic */}
+        {/* Grid */}
         <SpotlightContainer className="grid grid-cols-12 gap-5 md:gap-6 auto-rows-[200px] md:auto-rows-[280px]">
           {filteredProjects.map((project, i) => {
             const Icon = projectIcons[project.id] || Sparkles;
+            const proofLabel = proofLabels[project.id] || 'Case Study';
+            const isConceptual = project.id.includes('oakley') || project.id.includes('arcteryx');
             
             return (
               <SpotlightItem key={project.id} id={project.id} className={gridPositions[i] || 'col-span-6 md:col-span-4'}>
@@ -161,99 +141,102 @@ export const CaseStudies = () => {
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: '-50px' }}
-                  transition={{ duration: 0.6, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
+                  transition={{ duration: 0.5, delay: i * 0.06, ease: [0.22, 1, 0.36, 1] }}
                   onClick={() => setSelectedProject(project)}
-                  className="group relative rounded-3xl overflow-hidden cursor-pointer h-full"
+                  className="group relative rounded-2xl overflow-hidden cursor-pointer h-full"
                   style={{
-                    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%)',
-                    backdropFilter: 'blur(20px)',
-                    border: '1px solid rgba(255, 255, 255, 0.06)',
+                    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%)',
+                    border: '1px solid rgba(255, 255, 255, 0.05)',
                   }}
                 >
                   {/* Image/Video */}
-                  <div className="absolute inset-0 overflow-hidden rounded-3xl">
+                  <div className="absolute inset-0 overflow-hidden rounded-2xl">
                     {project.video && i === 0 ? (
                       <ShimmerVideo
                         src={project.video}
                         wrapperClassName="w-full h-full"
-                        className="w-full h-full object-cover opacity-50 group-hover:opacity-70 transition-all duration-700 group-hover:scale-105"
+                        className="w-full h-full object-cover opacity-50 group-hover:opacity-70 transition-all duration-500 group-hover:scale-105"
                       />
                     ) : (
                       <ShimmerImage
                         src={project.image}
                         alt={project.title}
                         wrapperClassName="w-full h-full"
-                        className="w-full h-full object-cover opacity-40 group-hover:opacity-60 transition-all duration-700 group-hover:scale-105"
+                        className="w-full h-full object-cover opacity-40 group-hover:opacity-60 transition-all duration-500 group-hover:scale-105"
                       />
                     )}
                   </div>
 
-                  {/* Gradient overlays */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-alchemy-black via-alchemy-black/50 to-alchemy-black/20 rounded-3xl" />
-                  <div className="absolute inset-0 bg-gradient-to-br from-alchemy-red/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
+                  {/* Overlays */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-alchemy-black via-alchemy-black/50 to-alchemy-black/20 rounded-2xl" />
 
                   {/* Content */}
-                  <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-between">
+                  <div className="absolute inset-0 p-5 md:p-7 flex flex-col justify-between">
                     {/* Top row */}
                     <div className="flex items-start justify-between">
                       <motion.div
-                        className="w-12 h-12 rounded-2xl flex items-center justify-center"
+                        className="w-10 h-10 rounded-xl flex items-center justify-center"
                         style={{
-                          background: 'linear-gradient(135deg, rgba(225, 6, 19, 0.2) 0%, rgba(225, 6, 19, 0.08) 100%)',
-                          backdropFilter: 'blur(12px)',
-                          border: '1px solid rgba(225, 6, 19, 0.3)',
+                          background: 'linear-gradient(135deg, rgba(220, 38, 38, 0.15) 0%, rgba(220, 38, 38, 0.05) 100%)',
+                          border: '1px solid rgba(220, 38, 38, 0.25)',
                         }}
-                        whileHover={{ scale: 1.1, rotate: 5 }}
                       >
-                        <Icon className="w-5 h-5 text-alchemy-red" />
+                        <Icon className="w-4 h-4 text-alchemy-red" />
                       </motion.div>
                       
-                      <span 
-                        className="px-3 py-1.5 rounded-full text-[10px] font-mono text-porcelain/80 tracking-[0.15em] uppercase"
-                        style={{
-                          background: 'rgba(255, 255, 255, 0.06)',
-                          backdropFilter: 'blur(12px)',
-                          border: '1px solid rgba(255, 255, 255, 0.1)',
-                        }}
-                      >
-                        {project.category}
-                      </span>
+                      <div className="flex flex-col items-end gap-1">
+                        {/* Proof Label */}
+                        <span 
+                          className="px-2.5 py-1 rounded-full text-[9px] font-mono text-porcelain/80 tracking-[0.1em] uppercase"
+                          style={{
+                            background: 'rgba(255, 255, 255, 0.05)',
+                            border: '1px solid rgba(255, 255, 255, 0.08)',
+                          }}
+                        >
+                          {proofLabel}
+                        </span>
+                        
+                        {/* Conceptual tag */}
+                        {isConceptual && (
+                          <span className="font-mono text-[8px] text-porcelain/40 tracking-wider uppercase">
+                            Self-Initiated Study
+                          </span>
+                        )}
+                      </div>
                     </div>
 
                     {/* Bottom row */}
                     <div>
-                      <motion.h3 
-                        className={`font-display italic text-porcelain mb-3 leading-tight ${
-                          i === 0 ? 'text-3xl md:text-4xl lg:text-5xl' : 'text-xl md:text-2xl lg:text-3xl'
-                        }`}
-                        whileHover={{ x: 6 }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        {project.title}
-                      </motion.h3>
-
-                      <p className={`font-body text-porcelain/50 font-light line-clamp-2 mb-4 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0 ${
-                        i === 0 ? 'text-sm md:text-base max-w-md' : 'text-xs md:text-sm'
+                      <h3 className={`font-display italic text-porcelain mb-2 leading-tight ${
+                        i === 0 ? 'text-2xl md:text-3xl lg:text-4xl' : 'text-lg md:text-xl lg:text-2xl'
                       }`}>
-                        {project.description}
-                      </p>
+                        {project.title}
+                      </h3>
 
-                      <motion.div 
-                        className="inline-flex items-center gap-2 text-alchemy-red font-body text-sm opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0"
-                        whileHover={{ x: 4 }}
-                      >
-                        <span>Explore</span>
-                        <ArrowUpRight className="w-4 h-4" />
-                      </motion.div>
+                      {/* Hover overlay - Case study teaser */}
+                      <div className="opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
+                        <p className="font-mono text-[9px] text-alchemy-red/70 uppercase tracking-wider mb-1">
+                          What we did
+                        </p>
+                        <p className={`font-body text-porcelain/60 font-light line-clamp-2 mb-3 ${
+                          i === 0 ? 'text-sm' : 'text-xs'
+                        }`}>
+                          {project.services?.slice(0, 3).join(' · ') || project.category}
+                        </p>
+                        <div className="inline-flex items-center gap-2 text-alchemy-red font-body text-sm">
+                          <span>Explore</span>
+                          <ArrowUpRight className="w-3.5 h-3.5" />
+                        </div>
+                      </div>
                     </div>
                   </div>
 
                   {/* Border glow on hover */}
-                  <motion.div 
-                    className="absolute inset-0 rounded-3xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                  <div 
+                    className="absolute inset-0 rounded-2xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-400"
                     style={{
-                      border: '1px solid rgba(225, 6, 19, 0.35)',
-                      boxShadow: '0 0 50px rgba(225, 6, 19, 0.12), inset 0 0 60px rgba(225, 6, 19, 0.04)',
+                      border: '1px solid rgba(220, 38, 38, 0.3)',
+                      boxShadow: '0 0 40px rgba(220, 38, 38, 0.1)',
                     }}
                   />
                 </motion.div>
@@ -262,32 +245,43 @@ export const CaseStudies = () => {
           })}
         </SpotlightContainer>
 
-        {/* View All CTA */}
+        {/* Work CTA Strip */}
         <ScrollReveal delay={0.3}>
-          <motion.div className="flex justify-center mt-16">
-            <motion.button
-              onClick={() => navigate('/work')}
-              className="group inline-flex items-center gap-3 px-8 py-4 rounded-full font-body text-sm"
-              style={{
-                background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%)',
-                backdropFilter: 'blur(24px)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-              }}
-              whileHover={{ 
-                scale: 1.02,
-                boxShadow: '0 0 40px rgba(225, 6, 19, 0.2)',
-                borderColor: 'rgba(225, 6, 19, 0.3)',
-              }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <span className="text-porcelain group-hover:text-alchemy-red transition-colors">View All Works</span>
-              <ArrowUpRight className="w-4 h-4 text-porcelain/50 group-hover:text-alchemy-red group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
-            </motion.button>
+          <motion.div 
+            className="mt-16 text-center rounded-2xl py-12 px-6"
+            style={{
+              background: 'linear-gradient(135deg, rgba(220, 38, 38, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%)',
+              border: '1px solid rgba(220, 38, 38, 0.15)',
+            }}
+          >
+            <h3 className="font-display text-2xl md:text-3xl text-porcelain mb-4">
+              Want something like this <span className="italic text-alchemy-red">built fast</span>?
+            </h3>
+            <div className="flex flex-wrap justify-center gap-4">
+              <Link
+                to="/book-sprint"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-body text-sm transition-all duration-300"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(220, 38, 38, 0.2) 0%, rgba(220, 38, 38, 0.08) 100%)',
+                  border: '1px solid rgba(220, 38, 38, 0.4)',
+                }}
+              >
+                <span className="text-porcelain">Book a Sprint</span>
+                <ArrowRight className="w-4 h-4 text-porcelain" />
+              </Link>
+              <button
+                onClick={() => navigate('/work')}
+                className="inline-flex items-center gap-2 px-6 py-3 font-body text-sm text-porcelain/50 hover:text-porcelain transition-colors"
+              >
+                <span>View All Works</span>
+                <ArrowUpRight className="w-4 h-4" />
+              </button>
+            </div>
           </motion.div>
         </ScrollReveal>
       </div>
 
-      {/* Modal - keeping existing modal code */}
+      {/* Modal */}
       <AnimatePresence>
         {selectedProject && (
           <motion.div
@@ -305,27 +299,24 @@ export const CaseStudies = () => {
               exit={{ scale: 0.9, y: 50, opacity: 0 }}
               transition={{ type: 'spring', damping: 25 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative z-10 w-full max-w-5xl max-h-[90vh] overflow-y-auto rounded-3xl"
+              className="relative z-10 w-full max-w-5xl max-h-[90vh] overflow-y-auto rounded-2xl"
               style={{
-                background: 'linear-gradient(135deg, rgba(20, 20, 22, 0.95) 0%, rgba(10, 10, 11, 0.98) 100%)',
-                backdropFilter: 'blur(40px)',
-                border: '1px solid rgba(255, 255, 255, 0.08)',
-                boxShadow: '0 0 100px rgba(225, 6, 19, 0.1), 0 32px 64px rgba(0, 0, 0, 0.5)',
+                background: 'linear-gradient(135deg, rgba(20, 20, 22, 0.95) 0%, rgba(10, 10, 10, 0.98) 100%)',
+                border: '1px solid rgba(255, 255, 255, 0.06)',
               }}
             >
               <button
                 onClick={() => setSelectedProject(null)}
-                className="absolute top-6 right-6 z-20 w-12 h-12 rounded-full flex items-center justify-center hover:bg-porcelain/10 transition-colors"
+                className="absolute top-6 right-6 z-20 w-10 h-10 rounded-full flex items-center justify-center hover:bg-porcelain/10 transition-colors"
                 style={{
-                  background: 'rgba(255, 255, 255, 0.06)',
-                  backdropFilter: 'blur(12px)',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  background: 'rgba(255, 255, 255, 0.05)',
+                  border: '1px solid rgba(255, 255, 255, 0.08)',
                 }}
               >
-                <X className="w-5 h-5 text-porcelain/60" />
+                <X className="w-4 h-4 text-porcelain/60" />
               </button>
 
-              <div className="relative aspect-[16/9] overflow-hidden rounded-t-3xl">
+              <div className="relative aspect-[16/9] overflow-hidden rounded-t-2xl">
                 {selectedProject.video ? (
                   <ShimmerVideo
                     src={selectedProject.video}
@@ -342,77 +333,53 @@ export const CaseStudies = () => {
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-alchemy-black via-alchemy-black/50 to-transparent" />
 
-                <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12">
-                  <div className="flex items-center gap-3 mb-4">
-                    <span 
-                      className="inline-block px-3 py-1 rounded-full text-xs font-mono text-porcelain/80 tracking-[0.15em] uppercase"
-                      style={{
-                        background: 'rgba(255, 255, 255, 0.08)',
-                        backdropFilter: 'blur(12px)',
-                        border: '1px solid rgba(255, 255, 255, 0.1)',
-                      }}
-                    >
-                      {selectedProject.category}
-                    </span>
-                  </div>
-                  <h3 className="font-display text-4xl md:text-5xl lg:text-6xl italic text-porcelain mb-2">
+                <div className="absolute bottom-0 left-0 right-0 p-8 md:p-10">
+                  <span 
+                    className="inline-block px-3 py-1 rounded-full text-[10px] font-mono text-porcelain/80 tracking-[0.1em] uppercase mb-3"
+                    style={{
+                      background: 'rgba(255, 255, 255, 0.06)',
+                      border: '1px solid rgba(255, 255, 255, 0.08)',
+                    }}
+                  >
+                    {selectedProject.category}
+                  </span>
+                  <h3 className="font-display text-3xl md:text-4xl lg:text-5xl italic text-porcelain">
                     {selectedProject.title}
                   </h3>
                 </div>
               </div>
 
-              <div className="p-8 md:p-12">
-                <div className="mb-12">
-                  <h4 className="font-mono text-xs text-alchemy-red tracking-[0.2em] uppercase mb-4">
+              <div className="p-8 md:p-10">
+                <div className="mb-10">
+                  <h4 className="font-mono text-[10px] text-alchemy-red tracking-[0.2em] uppercase mb-4">
                     Overview
                   </h4>
-                  <p className="font-body text-base md:text-lg text-porcelain/70 leading-relaxed font-light">
+                  <p className="font-body text-base text-porcelain/70 leading-relaxed font-light">
                     {selectedProject.overview}
                   </p>
                 </div>
 
-                <div className="mb-12">
-                  <h4 className="font-mono text-xs text-alchemy-red tracking-[0.2em] uppercase mb-6">
+                <div>
+                  <h4 className="font-mono text-[10px] text-alchemy-red tracking-[0.2em] uppercase mb-5">
                     What We Offer
                   </h4>
                   <div className="grid md:grid-cols-3 gap-4">
                     {selectedProject.services.map((service, i) => (
                       <div 
                         key={i} 
-                        className="rounded-2xl p-6"
+                        className="rounded-xl p-5"
                         style={{
-                          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%)',
-                          border: '1px solid rgba(255, 255, 255, 0.06)',
+                          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%)',
+                          border: '1px solid rgba(255, 255, 255, 0.05)',
                         }}
                       >
-                        <div 
-                          className="w-8 h-8 rounded-xl flex items-center justify-center mb-4"
-                          style={{
-                            background: 'linear-gradient(135deg, rgba(225, 6, 19, 0.2) 0%, rgba(225, 6, 19, 0.08) 100%)',
-                            border: '1px solid rgba(225, 6, 19, 0.3)',
-                          }}
-                        >
+                        <div className="flex items-center gap-2">
                           <Check className="w-4 h-4 text-alchemy-red" />
+                          <span className="font-body text-sm text-porcelain">{service}</span>
                         </div>
-                        <p className="font-body text-sm text-porcelain/70">{service.title}</p>
                       </div>
                     ))}
                   </div>
-                </div>
-
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <motion.button
-                    onClick={() => setSelectedProject(null)}
-                    className="inline-flex items-center gap-3 px-8 py-4 rounded-full font-body text-sm text-porcelain/60 hover:text-porcelain transition-colors"
-                    style={{
-                      background: 'rgba(255, 255, 255, 0.04)',
-                      border: '1px solid rgba(255, 255, 255, 0.08)',
-                    }}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    Close
-                  </motion.button>
                 </div>
               </div>
             </motion.div>
