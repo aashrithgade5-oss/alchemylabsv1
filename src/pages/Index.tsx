@@ -9,17 +9,18 @@ import { Contact } from '@/components/Contact';
 import { Footer } from '@/components/Footer';
 import { ScrollProgress } from '@/components/ScrollProgress';
 import { ParallaxBackground } from '@/components/ParallaxBackground';
-import { VisualBreadcrumbs } from '@/components/VisualBreadcrumbs';
 import { HomepageScrollMap } from '@/components/HomepageScrollMap';
 import { PerformanceMetrics } from '@/components/PerformanceMetrics';
+import { memo } from 'react';
 
-const Index = () => {
+// Removed VisualBreadcrumbs - duplicate of HomepageScrollMap functionality
+
+const Index = memo(() => {
   return (
     <div className="relative">
       <ParallaxBackground />
       <ScrollProgress />
       <Navigation />
-      <VisualBreadcrumbs />
       <HomepageScrollMap />
       <main className="relative z-10">
         <Hero />
@@ -34,6 +35,8 @@ const Index = () => {
       <Footer />
     </div>
   );
-};
+});
+
+Index.displayName = 'Index';
 
 export default Index;

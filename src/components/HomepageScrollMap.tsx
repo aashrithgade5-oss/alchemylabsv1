@@ -1,5 +1,5 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { memo, useMemo } from 'react';
 
 const sections = [
   { id: 'hero', label: 'Hero' },
@@ -11,27 +11,15 @@ const sections = [
   { id: 'contact', label: 'Contact' },
 ];
 
-export const HomepageScrollMap = () => {
+export const HomepageScrollMap = memo(() => {
   const { scrollYProgress } = useScroll();
-  const [activeSection, setActiveSection] = useState(0);
-
-  // Calculate active section based on scroll progress
-  useEffect(() => {
-    const unsubscribe = scrollYProgress.on('change', (progress) => {
-      const sectionIndex = Math.min(
-        Math.floor(progress * sections.length),
-        sections.length - 1
-      );
-      setActiveSection(sectionIndex);
-    });
-    return () => unsubscribe();
-  }, [scrollYProgress]);
 
   // Progress line height
-  const lineHeight = useTransform(
-    scrollYProgress,
-    [0, 1],
-    ['0%', '100%']
+  const lineHeight = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
+
+  // Calculate active section index based on scroll progress
+  const activeIndex = useTransform(scrollYProgress, (progress) => 
+    Math.min(Math.floor(progress * sections.length), sections.length - 1)
   );
 
   return (
@@ -39,10 +27,9 @@ export const HomepageScrollMap = () => {
       className="fixed right-6 md:right-10 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col items-center"
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.8, delay: 1 }}
+      transition={{ duration: 0.6, delay: 0.8 }}
     >
       <div className="flex flex-col items-center gap-0">
-        {/* Background track with label on hover */}
         <div className="relative flex flex-col items-center">
           {/* Background line */}
           <div className="absolute left-1/2 -translate-x-1/2 top-[6px] bottom-[6px] w-[2px] bg-porcelain/10 rounded-full" />
@@ -54,35 +41,26 @@ export const HomepageScrollMap = () => {
           />
 
           {sections.map((section, i) => (
-            <div 
+            <motion.div 
               key={section.id} 
               className="relative flex items-center group"
               style={{ marginBottom: i < sections.length - 1 ? '18px' : 0 }}
             >
-              {/* Label on hover - appears to the left */}
-              <motion.span
-                className="absolute right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300 font-mono text-[10px] text-porcelain/50 tracking-wider uppercase whitespace-nowrap"
-                initial={false}
-              >
+              {/* Label on hover */}
+              <span className="absolute right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-200 font-mono text-[10px] text-porcelain/50 tracking-wider uppercase whitespace-nowrap">
                 {section.label}
-              </motion.span>
+              </span>
 
-              {/* Dot indicator */}
+              {/* Dot indicator - simplified, no per-frame animation */}
               <motion.div
-                className={`w-[8px] h-[8px] rounded-full border-[1.5px] transition-all duration-300 ${
-                  activeSection >= i
-                    ? 'bg-alchemy-red border-alchemy-red shadow-[0_0_10px_rgba(225,6,19,0.5)]'
-                    : 'bg-transparent border-porcelain/25 hover:border-porcelain/50'
-                }`}
-                animate={{
-                  scale: activeSection === i ? 1.4 : 1,
-                }}
-                transition={{ duration: 0.25 }}
+                className="w-[8px] h-[8px] rounded-full border-[1.5px] transition-all duration-300 bg-transparent border-porcelain/25 hover:border-porcelain/50"
               />
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
     </motion.div>
   );
-};
+});
+
+HomepageScrollMap.displayName = 'HomepageScrollMap';
