@@ -51,85 +51,71 @@ export const CaseStudies = () => {
   ];
 
   return (
-    <section id="work" className="relative py-32 overflow-hidden">
-      {/* Background */}
+    <section id="work" className="relative py-24 md:py-32 overflow-hidden">
+      {/* Background - simplified for performance */}
       <div className="absolute inset-0 pointer-events-none">
-        <motion.div 
-          className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[500px] rounded-full blur-[150px]"
-          animate={{ opacity: [0.06, 0.12, 0.06] }}
-          transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
-          style={{ background: 'radial-gradient(ellipse, rgba(220, 38, 38, 0.15) 0%, transparent 70%)' }}
+        <div 
+          className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full blur-[120px]"
+          style={{ background: 'radial-gradient(ellipse, rgba(220, 38, 38, 0.08) 0%, transparent 70%)' }}
         />
-        <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-alchemy-black to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-alchemy-black to-transparent" />
       </div>
 
-      <div className="relative z-10 max-w-[1600px] mx-auto px-6 md:px-12">
+      <div className="relative z-10 max-w-[1400px] mx-auto px-6 md:px-10">
         {/* Header */}
         <ScrollReveal>
-          <motion.div className="text-center mb-16">
-            <span className="inline-block px-4 py-2 rounded-full backdrop-blur-md mb-6"
+          <motion.div className="text-center mb-12 md:mb-16">
+            <span className="inline-block px-3.5 py-1.5 rounded-full mb-5"
               style={{
-                background: 'linear-gradient(135deg, rgba(220, 38, 38, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%)',
-                border: '1px solid rgba(220, 38, 38, 0.3)',
+                background: 'rgba(220, 38, 38, 0.08)',
+                border: '1px solid rgba(220, 38, 38, 0.2)',
               }}
             >
-              <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-porcelain/80">
+              <span className="font-mono text-[9px] tracking-[0.15em] uppercase text-porcelain/70">
                 Our Portfolio
               </span>
             </span>
-            <h2 className="font-display text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-[1.05] tracking-[-0.02em] mb-6">
-              <span className="italic text-alchemy-red">Curated</span>
-              <span className="text-porcelain"> Works</span>
+            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-[1.08] tracking-[-0.02em] mb-5">
+              <span className="block">
+                <span className="italic text-alchemy-red">Curated</span>
+                <span className="text-porcelain"> Works</span>
+              </span>
             </h2>
-            <p className="font-body text-base md:text-lg text-porcelain/50 max-w-lg mx-auto font-light leading-relaxed">
+            <p className="font-body text-sm md:text-base text-porcelain/50 max-w-md mx-auto font-light">
               Strategic brand transformations where intelligence meets craft.
             </p>
           </motion.div>
         </ScrollReveal>
 
-        {/* Filter Bar */}
+        {/* Filter Bar - simplified */}
         <ScrollReveal delay={0.1}>
-          <div className="flex justify-center mb-16">
-            <motion.div 
-              className="inline-flex items-center gap-2 p-2 rounded-full"
+          <div className="flex justify-center mb-12 md:mb-14">
+            <div 
+              className="inline-flex items-center gap-1 p-1.5 rounded-full"
               style={{
-                background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%)',
-                backdropFilter: 'blur(16px)',
+                background: 'rgba(255, 255, 255, 0.03)',
                 border: '1px solid rgba(255, 255, 255, 0.06)',
               }}
             >
               {filterCategories.map((filter) => (
-                <motion.button
+                <button
                   key={filter}
                   onClick={() => setActiveFilter(filter)}
-                  className={`relative px-5 py-2.5 rounded-full font-body text-sm transition-all duration-300 ${
+                  className={`relative px-4 py-2 rounded-full font-body text-sm transition-all duration-300 ${
                     activeFilter === filter 
-                      ? 'text-porcelain' 
+                      ? 'text-porcelain bg-alchemy-red/15 border border-alchemy-red/30' 
                       : 'text-porcelain/50 hover:text-porcelain/80'
                   }`}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
                 >
-                  {activeFilter === filter && (
-                    <motion.div
-                      layoutId="activeFilter"
-                      className="absolute inset-0 rounded-full"
-                      style={{
-                        background: 'linear-gradient(135deg, rgba(220, 38, 38, 0.2) 0%, rgba(220, 38, 38, 0.08) 100%)',
-                        border: '1px solid rgba(220, 38, 38, 0.35)',
-                      }}
-                      transition={{ type: 'spring', bounce: 0.15, duration: 0.5 }}
-                    />
-                  )}
-                  <span className="relative z-10">{filter}</span>
-                </motion.button>
+                  {filter}
+                </button>
               ))}
-            </motion.div>
+            </div>
           </div>
         </ScrollReveal>
 
         {/* Grid */}
-        <SpotlightContainer className="grid grid-cols-12 gap-5 md:gap-6 auto-rows-[200px] md:auto-rows-[280px]">
+        <SpotlightContainer className="grid grid-cols-12 gap-4 md:gap-5 auto-rows-[180px] md:auto-rows-[260px]">
           {filteredProjects.map((project, i) => {
             const Icon = projectIcons[project.id] || Sparkles;
             const proofLabel = proofLabels[project.id] || 'Case Study';
