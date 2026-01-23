@@ -116,66 +116,74 @@ export const Hero = memo(() => {
             </span>
           </motion.div>
 
-          {/* Main Headline */}
+          {/* Main Headline - ALCHEMY in Motion */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={isInView ? { opacity: 1 } : {}}
             transition={{ duration: 0.4, delay: 0.2 }}
-            className="mb-5 sm:mb-6"
+            className="mb-4 sm:mb-5"
           >
-            <h1 className="text-[2.5rem] sm:text-5xl md:text-6xl lg:text-7xl xl:text-[5.5rem] leading-[1.08] tracking-[-0.02em] text-balance">
+            <h1 className="text-[2.75rem] sm:text-5xl md:text-6xl lg:text-7xl xl:text-[5.5rem] leading-[1.05] tracking-[-0.02em]">
               <motion.span 
-                className="block font-body font-medium text-porcelain"
+                className="inline-block font-body font-bold text-porcelain tracking-[0.08em] uppercase mix-blend-difference"
                 initial={{ opacity: 0, y: 30 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.5, delay: 0.25 }}
               >
-                Ship production-ready products
+                ALCHEMY
               </motion.span>
               <motion.span 
-                className="block mt-1"
+                className="inline-block text-porcelain/40 mx-2 sm:mx-3 font-body font-light text-[0.5em]"
+                initial={{ opacity: 0, scale: 0 }}
+                animate={isInView ? { opacity: 1, scale: 1 } : {}}
+                transition={{ duration: 0.4, delay: 0.35 }}
+              >
+                in
+              </motion.span>
+              <motion.span 
+                className="inline-block font-display italic relative mix-blend-difference"
+                style={{
+                  background: 'linear-gradient(135deg, hsl(356 94% 50%) 0%, hsl(356 94% 45%) 50%, hsl(354 85% 35%) 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
+                  filter: 'drop-shadow(0 0 20px rgba(220, 38, 38, 0.4))',
+                }}
                 initial={{ opacity: 0, y: 30 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.5, delay: 0.35 }}
+                transition={{ duration: 0.5, delay: 0.45 }}
               >
-                <span className="font-body font-medium text-porcelain/80">while competitors are </span>
-                <span 
-                  className="font-display italic relative inline-block"
-                  style={{ 
-                    color: '#dc2626',
-                    textShadow: '0 0 30px rgba(220, 38, 38, 0.4)',
-                  }}
-                >
-                  still planning.
-                  <span 
-                    className="absolute bottom-0 left-0 w-full h-[3px] rounded-full"
-                    style={{
-                      background: 'linear-gradient(90deg, rgba(220, 38, 38, 0.8) 0%, rgba(185, 28, 28, 0.4) 100%)',
-                    }}
-                  />
-                </span>
+                Motion
               </motion.span>
             </h1>
           </motion.div>
 
-          {/* Subheadline */}
-          <motion.p
+          {/* Subheadline - Ship copy */}
+          <motion.h2
             initial={{ opacity: 0, y: 15 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5, delay: 0.45 }}
-            className="font-body text-base sm:text-lg md:text-xl text-porcelain/60 leading-relaxed max-w-2xl mx-auto mb-6 font-light"
+            transition={{ duration: 0.5, delay: 0.55 }}
+            className="text-lg sm:text-xl md:text-2xl lg:text-3xl leading-[1.3] tracking-[-0.01em] max-w-3xl mx-auto mb-8 sm:mb-10"
           >
-            From vision to a live product in 24 hours—not weeks.
-            <br className="hidden sm:block" />
-            Work 1:1 with founders who ship, iterate, and scale with precision.
-          </motion.p>
+            <span className="font-body font-medium text-porcelain/80">Ship production-ready products </span>
+            <span className="font-body font-medium text-porcelain/60">while competitors are </span>
+            <span 
+              className="font-display italic"
+              style={{ 
+                color: '#dc2626',
+                textShadow: '0 0 20px rgba(220, 38, 38, 0.4)',
+              }}
+            >
+              still planning.
+            </span>
+          </motion.h2>
 
           {/* Proof Strip */}
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5, delay: 0.55 }}
-            className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mb-10"
+            transition={{ duration: 0.5, delay: 0.65 }}
+            className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mb-8 sm:mb-10"
           >
             <div 
               className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 px-5 py-3 rounded-full"
@@ -197,8 +205,8 @@ export const Hero = memo(() => {
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5, delay: 0.65 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-4"
+            transition={{ duration: 0.5, delay: 0.75 }}
+            className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-3"
           >
             <Link to="/book-sprint">
               <MagneticButton className="glass-cta-primary group relative overflow-hidden">
