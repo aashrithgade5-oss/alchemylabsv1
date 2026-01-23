@@ -1,4 +1,4 @@
-import { motion, useInView } from 'framer-motion';
+import { motion, useInView, useScroll, useTransform } from 'framer-motion';
 import { ArrowRight, ArrowUpRight, Check } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import heroVideo from '@/assets/hero-video.mp4';
@@ -26,6 +26,16 @@ export const Hero = memo(() => {
   const isInView = useInView(contentRef, { once: true, margin: '-50px' });
   const [isMobile, setIsMobile] = useState(false);
   
+  // Parallax scroll
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start start', 'end start'],
+  });
+  
+  const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
+  const gridOpacity = useTransform(scrollYProgress, [0, 0.5], [0.015, 0]);
+  const particleOpacity = useTransform(scrollYProgress, [0, 0.6], [0.45, 0]);
+  
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
@@ -37,18 +47,30 @@ export const Hero = memo(() => {
     <section 
       id="hero" 
       ref={sectionRef} 
-      className="relative min-h-[100svh] flex items-center justify-center overflow-hidden bg-alchemy-black"
+      className="relative min-h-[100svh] flex flex-col justify-center overflow-hidden bg-alchemy-black"
     >
-      {/* Video Background - Desktop only */}
-      <div className="absolute inset-0 z-[1]">
-        {!isMobile && (
+      {/* Video/Gradient Background with Parallax */}
+      <motion.div className="absolute inset-0 z-[1]" style={{ y: bgY }}>
+        {/* Mobile: Static gradient background */}
+        {isMobile ? (
+          <div 
+            className="absolute inset-0"
+            style={{
+              background: `
+                radial-gradient(ellipse at 50% 30%, rgba(220, 38, 38, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 30% 70%, rgba(220, 38, 38, 0.08) 0%, transparent 40%),
+                linear-gradient(180deg, hsl(240 5% 4%) 0%, hsl(240 5% 3%) 100%)
+              `,
+            }}
+          />
+        ) : (
           <video
             autoPlay
             loop
             muted
             playsInline
             preload="metadata"
-            className="w-full h-full object-cover scale-105 opacity-[0.12]"
+            className="w-full h-full object-cover scale-110 opacity-[0.15]"
           >
             <source src={heroVideo} type="video/mp4" />
           </video>
@@ -59,44 +81,48 @@ export const Hero = memo(() => {
           className="absolute inset-0"
           style={{
             background: `
-              radial-gradient(ellipse at center, transparent 0%, rgba(10, 10, 10, 0.75) 55%, rgba(10, 10, 10, 0.98) 100%),
-              linear-gradient(to bottom, rgba(10, 10, 10, 0.7) 0%, transparent 25%, transparent 75%, rgba(10, 10, 10, 0.98) 100%)
+              radial-gradient(ellipse at center, transparent 0%, rgba(10, 10, 10, 0.7) 50%, rgba(10, 10, 10, 0.95) 100%),
+              linear-gradient(to bottom, rgba(10, 10, 10, 0.5) 0%, transparent 20%, transparent 80%, rgba(10, 10, 10, 0.98) 100%)
             `,
           }}
         />
         
-        {/* Subtle red accent glow */}
+        {/* Red accent glow */}
         <div 
           className="absolute inset-0"
           style={{
-            background: 'radial-gradient(ellipse at 50% 45%, rgba(220, 38, 38, 0.04) 0%, transparent 45%)',
+            background: 'radial-gradient(ellipse at 50% 40%, rgba(220, 38, 38, 0.06) 0%, transparent 50%)',
           }}
         />
         
-        {/* Subtle grid - lighter */}
-        <div 
-          className="absolute inset-0 opacity-[0.015]"
+        {/* Subtle grid with parallax fade */}
+        <motion.div 
+          className="absolute inset-0"
           style={{
+            opacity: gridOpacity,
             backgroundImage: `
               linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
               linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
             `,
-            backgroundSize: '100px 100px',
+            backgroundSize: '80px 80px',
           }}
         />
-      </div>
+      </motion.div>
 
-      {/* Neural Particles - Desktop only */}
+      {/* Neural Particles - Desktop only with parallax */}
       {!isMobile && (
-        <div className="absolute inset-0 z-[2] opacity-40">
+        <motion.div 
+          className="absolute inset-0 z-[2]"
+          style={{ opacity: particleOpacity }}
+        >
           <NeuralBackground />
-        </div>
+        </motion.div>
       )}
 
       {/* Main Content */}
       <div
         ref={contentRef}
-        className="relative z-10 w-full max-w-4xl mx-auto px-6 sm:px-8"
+        className="relative z-10 w-full max-w-5xl mx-auto px-6 sm:px-8 lg:px-12 py-20"
       >
         <div className="flex flex-col items-center text-center">
           
@@ -105,63 +131,63 @@ export const Hero = memo(() => {
             initial={{ opacity: 0, y: 12 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.5, delay: 0.1, ease: easeOut }}
-            className="mb-5"
+            className="mb-6 md:mb-8"
           >
             <span 
-              className="inline-block px-3.5 py-1.5 rounded-full"
+              className="inline-block px-4 py-2 rounded-full"
               style={{
-                background: 'rgba(220, 38, 38, 0.06)',
-                border: '1px solid rgba(220, 38, 38, 0.15)',
+                background: 'rgba(220, 38, 38, 0.08)',
+                border: '1px solid rgba(220, 38, 38, 0.2)',
               }}
             >
-              <span className="font-mono text-[8px] sm:text-[9px] tracking-[0.12em] uppercase text-porcelain/60">
+              <span className="font-mono text-[9px] sm:text-[10px] tracking-[0.12em] uppercase text-porcelain/70">
                 AI-Powered Creative Studio
               </span>
             </span>
           </motion.div>
 
-          {/* Main Headline */}
+          {/* Main Headline - Larger on desktop */}
           <motion.h1
             initial={{ opacity: 0, y: 16 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.15, ease: easeOut }}
-            className="text-[2.25rem] sm:text-[2.75rem] md:text-5xl lg:text-6xl xl:text-[4.25rem] leading-[1.08] tracking-[-0.015em] mb-4"
+            className="text-[2.5rem] sm:text-5xl md:text-6xl lg:text-7xl xl:text-[5.5rem] leading-[1.05] tracking-[-0.02em] mb-5 md:mb-6"
           >
-            <span className="inline-block font-body font-bold text-porcelain tracking-[0.04em] uppercase">
+            <span className="inline-block font-body font-bold text-porcelain tracking-[0.05em] uppercase">
               ALCHEMY
             </span>
-            <span className="inline-block text-porcelain/25 mx-1.5 sm:mx-2 font-body font-light text-[0.4em]">
+            <span className="inline-block text-porcelain/25 mx-2 sm:mx-3 font-body font-light text-[0.4em]">
               in
             </span>
             <span 
               className="inline-block font-display italic"
               style={{
-                background: 'linear-gradient(135deg, hsl(356 94% 50%) 0%, hsl(356 94% 40%) 100%)',
+                background: 'linear-gradient(135deg, hsl(356 94% 52%) 0%, hsl(356 94% 42%) 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
-                filter: 'drop-shadow(0 0 20px rgba(220, 38, 38, 0.3))',
+                filter: 'drop-shadow(0 0 25px rgba(220, 38, 38, 0.35))',
               }}
             >
               Motion
             </span>
           </motion.h1>
 
-          {/* Subheadline - proper line breaks */}
+          {/* Subheadline - Larger */}
           <motion.h2
             initial={{ opacity: 0, y: 12 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.5, delay: 0.25, ease: easeOut }}
-            className="text-sm sm:text-base md:text-lg lg:text-xl leading-[1.5] max-w-lg mx-auto mb-6"
+            className="text-base sm:text-lg md:text-xl lg:text-2xl leading-[1.45] max-w-2xl mx-auto mb-8 md:mb-10"
           >
-            <span className="block font-body font-medium text-porcelain/70">
+            <span className="block font-body font-medium text-porcelain/75">
               Ship production-ready products
             </span>
-            <span className="block font-body text-porcelain/45">
+            <span className="block font-body text-porcelain/50">
               while competitors are{' '}
               <span 
                 className="font-display italic text-alchemy-red"
-                style={{ textShadow: '0 0 16px rgba(220, 38, 38, 0.25)' }}
+                style={{ textShadow: '0 0 18px rgba(220, 38, 38, 0.3)' }}
               >
                 still planning.
               </span>
@@ -173,12 +199,12 @@ export const Hero = memo(() => {
             initial={{ opacity: 0, y: 10 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.4, delay: 0.35, ease: easeOut }}
-            className="flex flex-wrap items-center justify-center gap-4 sm:gap-5 mb-6"
+            className="flex flex-wrap items-center justify-center gap-5 sm:gap-6 mb-8 md:mb-10"
           >
             {proofPoints.map((point, i) => (
-              <div key={i} className="flex items-center gap-1.5">
-                <Check className="w-2.5 h-2.5 text-alchemy-red/70" />
-                <span className="font-body text-[11px] sm:text-xs text-porcelain/50">{point}</span>
+              <div key={i} className="flex items-center gap-2">
+                <Check className="w-3 h-3 text-alchemy-red/80" />
+                <span className="font-body text-xs sm:text-sm text-porcelain/60">{point}</span>
               </div>
             ))}
           </motion.div>
@@ -188,21 +214,21 @@ export const Hero = memo(() => {
             initial={{ opacity: 0, y: 10 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.4, delay: 0.45, ease: easeOut }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-2.5 sm:gap-3 mb-2.5"
+            className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-3"
           >
             <Link to="/book-sprint">
               <MagneticButton className="glass-cta-primary group relative overflow-hidden">
-                <span className="relative z-10 font-body font-medium text-[13px] sm:text-sm">Start Your Project Today</span>
-                <ArrowRight className="relative z-10 w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-0.5" />
+                <span className="relative z-10 font-body font-medium text-sm sm:text-base">Start Your Project Today</span>
+                <ArrowRight className="relative z-10 w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" />
               </MagneticButton>
             </Link>
 
             <a
               href="#process"
-              className="group inline-flex items-center gap-1.5 px-3 py-2 font-body text-[13px] text-porcelain/40 hover:text-porcelain/70 transition-colors duration-300"
+              className="group inline-flex items-center gap-2 px-4 py-2.5 font-body text-sm text-porcelain/45 hover:text-porcelain/75 transition-colors duration-300"
             >
               <span>See How It Works</span>
-              <ArrowUpRight className="w-3 h-3 text-alchemy-red/60 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              <ArrowUpRight className="w-3.5 h-3.5 text-alchemy-red/70 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </a>
           </motion.div>
 
@@ -211,26 +237,29 @@ export const Hero = memo(() => {
             initial={{ opacity: 0 }}
             animate={isInView ? { opacity: 1 } : {}}
             transition={{ duration: 0.4, delay: 0.55 }}
-            className="font-mono text-[8px] text-porcelain/30 tracking-wider mb-10"
+            className="font-mono text-[9px] sm:text-[10px] text-porcelain/35 tracking-wider"
           >
             Free first call · 24h response · NDA on request
           </motion.p>
+        </div>
+      </div>
 
+      {/* Bottom Section - Stats & Scroll pushed to bottom */}
+      <div className="relative z-10 mt-auto pb-8 md:pb-12">
+        <div className="flex flex-col items-center">
           {/* Minimal Stats */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={isInView ? { opacity: 1 } : {}}
-            transition={{ duration: 0.5, delay: 0.65 }}
-            className="flex items-center justify-center gap-8 sm:gap-10 mb-6"
+            transition={{ duration: 0.5, delay: 0.7 }}
+            className="flex items-center justify-center gap-10 sm:gap-14 mb-8 md:mb-10"
           >
             {stats.map((stat) => (
               <div key={stat.label} className="text-center">
-                <span 
-                  className="block font-display text-sm sm:text-base italic text-porcelain/70"
-                >
+                <span className="block font-display text-base sm:text-lg md:text-xl italic text-porcelain/75">
                   {stat.number}
                 </span>
-                <span className="block font-mono text-[6px] sm:text-[7px] text-porcelain/30 uppercase tracking-[0.08em]">
+                <span className="block font-mono text-[7px] sm:text-[8px] text-porcelain/35 uppercase tracking-[0.1em]">
                   {stat.label}
                 </span>
               </div>
@@ -241,16 +270,16 @@ export const Hero = memo(() => {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.9, duration: 0.5 }}
-            className="flex flex-col items-center gap-1.5"
+            transition={{ delay: 1, duration: 0.5 }}
+            className="flex flex-col items-center gap-2"
           >
-            <span className="font-mono text-[6px] text-porcelain/20 uppercase tracking-[0.15em]">
+            <span className="font-mono text-[7px] sm:text-[8px] text-porcelain/25 uppercase tracking-[0.15em]">
               Scroll
             </span>
-            <div className="relative w-3.5 h-6 rounded-full border border-porcelain/10 flex justify-center">
+            <div className="relative w-4 h-7 rounded-full border border-porcelain/15 flex justify-center">
               <motion.div 
-                className="absolute top-1 w-0.5 h-1 rounded-full bg-alchemy-red/50"
-                animate={{ y: [0, 6, 0], opacity: [0.7, 0.15, 0.7] }}
+                className="absolute top-1.5 w-0.5 h-1.5 rounded-full bg-alchemy-red/60"
+                animate={{ y: [0, 7, 0], opacity: [0.8, 0.2, 0.8] }}
                 transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
               />
             </div>
@@ -262,26 +291,26 @@ export const Hero = memo(() => {
       <motion.div 
         initial={{ opacity: 0, scale: 0.8 }}
         animate={isInView ? { opacity: 1, scale: 1 } : {}}
-        transition={{ delay: 1, duration: 0.6, ease: easeOut }}
-        className="hidden lg:block absolute top-10 left-10 w-8 h-8 border-l border-t border-porcelain/[0.04] pointer-events-none" 
-      />
-      <motion.div 
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={isInView ? { opacity: 1, scale: 1 } : {}}
         transition={{ delay: 1.1, duration: 0.6, ease: easeOut }}
-        className="hidden lg:block absolute top-10 right-10 w-8 h-8 border-r border-t border-porcelain/[0.04] pointer-events-none" 
+        className="hidden lg:block absolute top-10 left-10 w-10 h-10 border-l border-t border-porcelain/[0.06] pointer-events-none" 
       />
       <motion.div 
         initial={{ opacity: 0, scale: 0.8 }}
         animate={isInView ? { opacity: 1, scale: 1 } : {}}
         transition={{ delay: 1.2, duration: 0.6, ease: easeOut }}
-        className="hidden lg:block absolute bottom-10 left-10 w-8 h-8 border-l border-b border-porcelain/[0.04] pointer-events-none" 
+        className="hidden lg:block absolute top-10 right-10 w-10 h-10 border-r border-t border-porcelain/[0.06] pointer-events-none" 
       />
       <motion.div 
         initial={{ opacity: 0, scale: 0.8 }}
         animate={isInView ? { opacity: 1, scale: 1 } : {}}
         transition={{ delay: 1.3, duration: 0.6, ease: easeOut }}
-        className="hidden lg:block absolute bottom-10 right-10 w-8 h-8 border-r border-b border-porcelain/[0.04] pointer-events-none" 
+        className="hidden lg:block absolute bottom-10 left-10 w-10 h-10 border-l border-b border-porcelain/[0.06] pointer-events-none" 
+      />
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={isInView ? { opacity: 1, scale: 1 } : {}}
+        transition={{ delay: 1.4, duration: 0.6, ease: easeOut }}
+        className="hidden lg:block absolute bottom-10 right-10 w-10 h-10 border-r border-b border-porcelain/[0.06] pointer-events-none" 
       />
     </section>
   );

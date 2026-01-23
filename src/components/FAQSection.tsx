@@ -33,7 +33,7 @@ export const FAQSection = memo(() => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <section id="faq" className="relative py-32 overflow-hidden">
+    <section id="faq" className="relative py-24 md:py-32 overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 pointer-events-none">
         <div 
@@ -42,42 +42,47 @@ export const FAQSection = memo(() => {
             background: 'linear-gradient(180deg, hsl(240 5% 3%) 0%, hsl(240 8% 5%) 100%)',
           }}
         />
+        <div 
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full blur-[120px]"
+          style={{ background: 'radial-gradient(ellipse, rgba(220, 38, 38, 0.04) 0%, transparent 70%)' }}
+        />
       </div>
 
-      <div className="relative z-10 max-w-3xl mx-auto px-6 md:px-12">
+      <div className="relative z-10 max-w-2xl mx-auto px-6 md:px-8">
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
-          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-          className="text-center mb-16"
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          className="text-center mb-12 md:mb-16"
         >
-          <span className="inline-block px-4 py-2 rounded-full backdrop-blur-md mb-6"
+          <span className="inline-block px-3.5 py-1.5 rounded-full mb-5"
             style={{
-              background: 'linear-gradient(135deg, rgba(220, 38, 38, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%)',
-              border: '1px solid rgba(220, 38, 38, 0.3)',
+              background: 'rgba(220, 38, 38, 0.08)',
+              border: '1px solid rgba(220, 38, 38, 0.2)',
             }}
           >
-            <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-porcelain/80">
+            <span className="font-mono text-[9px] tracking-[0.15em] uppercase text-porcelain/70">
               FAQ
             </span>
           </span>
           
-          <h2 className="font-display text-4xl md:text-5xl lg:text-6xl leading-[1.05] tracking-[-0.02em] text-porcelain mb-6">
-            Short answers. <span className="italic text-alchemy-red">No smoke.</span>
+          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-[1.08] tracking-[-0.02em] text-porcelain">
+            <span className="block">Short answers.</span>
+            <span className="block italic text-alchemy-red">No smoke.</span>
           </h2>
         </motion.div>
 
         {/* FAQ Items */}
-        <div className="space-y-4">
+        <div className="space-y-3">
           {faqs.map((faq, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 0.35, delay: i * 0.05, ease: [0.22, 1, 0.36, 1] }}
             >
               <button
                 onClick={() => setOpenIndex(openIndex === i ? null : i)}
