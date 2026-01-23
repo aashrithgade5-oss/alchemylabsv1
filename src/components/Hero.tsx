@@ -228,53 +228,44 @@ export const Hero = memo(() => {
         </div>
       </div>
 
-      {/* Stats Cards */}
+      {/* Stats - Minimal centered */}
       <motion.div
-        initial={{ opacity: 0, y: 40 }}
+        initial={{ opacity: 0, y: 20 }}
         animate={isInView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.6, delay: 0.85 }}
-        className="absolute bottom-20 sm:bottom-16 left-1/2 -translate-x-1/2 z-10 w-full max-w-4xl px-4"
+        transition={{ duration: 0.5, delay: 0.85 }}
+        className="absolute bottom-24 sm:bottom-20 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center"
       >
-        <div className="grid grid-cols-3 gap-3 sm:gap-6">
-          {stats.map((stat, i) => (
-            <motion.div
-              key={stat.label}
-              className="group relative rounded-xl sm:rounded-2xl p-4 sm:p-6 text-center overflow-hidden"
-              style={{
-                background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%)',
-                backdropFilter: 'blur(16px)',
-                border: '1px solid rgba(255, 255, 255, 0.06)',
-              }}
-              whileHover={{ y: -4 }}
-              transition={{ duration: 0.3 }}
-            >
-              {/* Top accent line on hover */}
-              <div 
-                className="absolute top-0 left-0 right-0 h-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                style={{
-                  background: 'linear-gradient(90deg, transparent, rgba(220, 38, 38, 0.8), transparent)',
-                }}
-              />
-              
-              <span 
-                className="block font-display text-3xl sm:text-4xl md:text-5xl italic mb-1"
-                style={{
-                  background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0.7) 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                }}
-              >
+        <div className="flex items-center justify-center gap-8 sm:gap-12">
+          {stats.map((stat) => (
+            <div key={stat.label} className="text-center">
+              <span className="block font-display text-lg sm:text-xl italic text-porcelain/80">
                 {stat.number}
               </span>
-              <span className="block font-body text-[10px] sm:text-xs text-porcelain/70 mb-0.5">
+              <span className="block font-mono text-[8px] sm:text-[9px] text-porcelain/40 uppercase tracking-wider">
                 {stat.label}
               </span>
-              <span className="hidden sm:block font-mono text-[9px] text-porcelain/40">
-                {stat.subtext}
-              </span>
-            </motion.div>
+            </div>
           ))}
         </div>
+
+        {/* Scroll Indicator */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.2, duration: 0.6 }}
+          className="flex flex-col items-center gap-2 mt-8"
+        >
+          <span className="font-mono text-[8px] text-porcelain/30 uppercase tracking-[0.2em]">
+            Scroll
+          </span>
+          <div className="relative w-5 h-8 rounded-full border border-porcelain/20 flex justify-center">
+            <motion.div 
+              className="absolute top-1.5 w-1 h-2 rounded-full bg-gradient-to-b from-alchemy-red to-alchemy-red/50"
+              animate={{ y: [0, 10, 0], opacity: [1, 0.3, 1] }}
+              transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+            />
+          </div>
+        </motion.div>
       </motion.div>
 
       {/* Corner accents - desktop only */}
