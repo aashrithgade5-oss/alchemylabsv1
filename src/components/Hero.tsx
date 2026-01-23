@@ -165,7 +165,7 @@ export const Hero = memo(() => {
             transition={{ duration: 0.5, delay: 0.55 }}
             className="text-lg sm:text-xl md:text-2xl lg:text-3xl leading-[1.3] tracking-[-0.01em] max-w-3xl mx-auto mb-8 sm:mb-10"
           >
-            <span className="font-body font-medium text-porcelain/80">Ship production-ready products </span>
+            <span className="block font-body font-medium text-porcelain/80">Ship production-ready products</span>
             <span className="font-body font-medium text-porcelain/60">while competitors are </span>
             <span 
               className="font-display italic"
