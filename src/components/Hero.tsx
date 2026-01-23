@@ -111,7 +111,7 @@ export const Hero = memo(() => {
               }}
             >
               <span className="font-mono text-[9px] sm:text-[10px] tracking-[0.15em] uppercase text-porcelain/80">
-                AI Studio · Brand Systems · Founder-Led
+                AI-Powered Creative Studio
               </span>
             </span>
           </motion.div>
