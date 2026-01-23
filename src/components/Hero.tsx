@@ -130,14 +130,19 @@ export const Hero = memo(() => {
 
           {/* Subheadline */}
           <motion.h2
-            className="font-display text-xl sm:text-2xl md:text-3xl lg:text-4xl leading-[1.25] tracking-[-0.01em] mb-6 sm:mb-8"
+            className="text-xl sm:text-2xl md:text-3xl lg:text-4xl leading-[1.25] tracking-[-0.01em] mb-6 sm:mb-8"
             initial={{ opacity: 0, y: 15 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.5, delay: 0.5 }}
           >
-            <span className="italic text-alchemy-red">AI</span>
-            <span className="text-porcelain/50">-Augmented </span>
-            <span className="italic text-alchemy-red ml-2">Branding</span>
+            <span className="font-body font-medium text-porcelain tracking-wide">Brands</span>
+            <span className="text-porcelain/40 mx-1">,</span>
+            <span 
+              className="font-display italic text-alchemy-red ml-1"
+              style={{ textShadow: '0 0 20px rgba(225, 6, 19, 0.5), 0 0 40px rgba(225, 6, 19, 0.3)' }}
+            >
+              Engineered.
+            </span>
           </motion.h2>
 
           {/* Description */}
