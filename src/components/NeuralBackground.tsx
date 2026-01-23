@@ -185,10 +185,10 @@ const Particles = memo(({ count }: { count: number }) => {
           />
         </bufferGeometry>
         <pointsMaterial
-          size={0.05}
+          size={0.045}
           color="#dc2626"
           transparent
-          opacity={0.6}
+          opacity={0.5}
           sizeAttenuation
           blending={THREE.AdditiveBlending}
         />
@@ -205,10 +205,10 @@ const Particles = memo(({ count }: { count: number }) => {
           />
         </bufferGeometry>
         <pointsMaterial
-          size={0.15}
-          color="#ff4444"
+          size={0.12}
+          color="#ff3333"
           transparent
-          opacity={0.15}
+          opacity={0.1}
           sizeAttenuation
           blending={THREE.AdditiveBlending}
         />
