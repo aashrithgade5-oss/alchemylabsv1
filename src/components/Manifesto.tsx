@@ -1,5 +1,7 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
+import { ArrowRight, Check, MessageCircle } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const principles = [
   {
@@ -19,6 +21,12 @@ const principles = [
   },
 ];
 
+const firstCallSteps = [
+  'We map the fastest path to a win',
+  'You get a mini plan within 24h',
+  "If we're not the fit, we refer you",
+];
+
 export const Manifesto = () => {
   const sectionRef = useRef<HTMLElement>(null);
   
@@ -27,176 +35,167 @@ export const Manifesto = () => {
     offset: ['start end', 'end start'],
   });
 
-  // Parallax for background number
-  const numberY = useTransform(scrollYProgress, [0, 1], ['15%', '-15%']);
-  const numberOpacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 0.04, 0.04, 0]);
+  const numberOpacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 0.03, 0.03, 0]);
 
   return (
     <section
       id="manifesto"
       ref={sectionRef}
-      className="relative py-40 overflow-hidden"
+      className="relative py-32 overflow-hidden"
     >
-
-      {/* Mesh gradient background */}
+      {/* Background */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-gradient-radial from-alchemy-red/8 via-alchemy-red/3 to-transparent rounded-full blur-[100px]" />
-        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-gradient-radial from-deep-crimson/6 via-transparent to-transparent rounded-full blur-[120px]" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-gradient-conic from-alchemy-red/5 via-transparent to-alchemy-red/3 rounded-full blur-[150px] opacity-50" />
+        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-gradient-radial from-alchemy-red/6 via-transparent to-transparent rounded-full blur-[120px]" />
+        <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-gradient-radial from-deep-crimson/5 via-transparent to-transparent rounded-full blur-[100px]" />
       </div>
 
-      {/* Large background number */}
+      {/* Background number */}
       <motion.div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none"
-        style={{ y: numberY, opacity: numberOpacity }}
+        style={{ opacity: numberOpacity }}
       >
-        <span className="section-number">02</span>
+        <span className="font-display text-[30vw] leading-none text-porcelain/[0.02]">02</span>
       </motion.div>
 
-      <div className="relative z-10 max-w-6xl mx-auto px-6 md:px-12 py-16">
-        {/* Editorial Statement - Realistic for new agency */}
+      <div className="relative z-10 max-w-6xl mx-auto px-6 md:px-12">
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true, margin: '-100px' }}
-          transition={{ duration: 1.4 }}
-          className="text-center mb-24"
+          transition={{ duration: 0.8 }}
+          className="text-center mb-20"
         >
-          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-display tracking-display text-porcelain max-w-5xl mx-auto text-balance">
-            <motion.span
-              className="text-porcelain/80 inline-block"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-            >
-              We're a new studio with
-            </motion.span>
-            <motion.span
-              className="italic text-alchemy-red inline-block"
-              initial={{ opacity: 0, y: 30, filter: 'blur(15px)' }}
-              whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2, duration: 0.9 }}
-            >
-              {' '}proven instincts
-            </motion.span>
-            <motion.span
-              className="text-porcelain/80 inline-block"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.4, duration: 0.8 }}
-            >
-              {' '}and{' '}
-            </motion.span>
-            <motion.span
-              initial={{ opacity: 0, y: 25, filter: 'blur(10px)' }}
-              whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.5, duration: 0.8 }}
-              className="italic text-glow-red inline-block"
-            >
-              conceptual range
-            </motion.span>
-            <motion.span
-              className="text-porcelain/40 inline-block"
-              initial={{ opacity: 0, scale: 0 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.7, duration: 0.4, type: 'spring' }}
-            >
-              .
-            </motion.span>
-          </h2>
-          <motion.p
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.9, duration: 0.8 }}
-            className="font-body text-lg md:text-xl text-porcelain/50 mt-10 max-w-2xl mx-auto font-light leading-relaxed"
+          <span className="inline-block px-4 py-2 rounded-full backdrop-blur-md mb-6"
+            style={{
+              background: 'linear-gradient(135deg, rgba(220, 38, 38, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%)',
+              border: '1px solid rgba(220, 38, 38, 0.3)',
+            }}
           >
+            <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-porcelain/80">
+              Why Alchemy Labs
+            </span>
+          </span>
+          
+          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-[1.1] tracking-[-0.02em] text-porcelain max-w-4xl mx-auto text-balance mb-6">
+            <span className="text-porcelain/80">We're a new studio with</span>
+            <span className="italic text-alchemy-red"> proven instincts</span>
+            <span className="text-porcelain/80"> and </span>
+            <span className="italic text-alchemy-red">conceptual range</span>
+            <span className="text-porcelain/40">.</span>
+          </h2>
+          
+          <p className="font-body text-base md:text-lg text-porcelain/50 max-w-xl mx-auto font-light leading-relaxed">
             Our portfolio is conceptual—our capabilities are{' '}
-            <span className="font-display italic text-porcelain/80">production-ready</span>. 
+            <span className="font-display italic text-porcelain/70">production-ready</span>. 
             We've built the systems. Now we're looking for the brands brave enough to use them.
-          </motion.p>
+          </p>
         </motion.div>
 
-        {/* Principle Cards with liquid glass effects */}
-        <div className="grid md:grid-cols-3 gap-8">
-          {principles.map((principle, i) => (
-            <motion.div
-              key={principle.highlight}
-              initial={{ opacity: 0, y: 40, filter: 'blur(15px)' }}
-              whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-              viewport={{ once: true }}
-              transition={{
-                delay: i * 0.12,
-                duration: 0.8,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-              whileHover={{ y: -10, transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] } }}
-              className="relative rounded-2xl p-10 text-center group overflow-hidden"
-              style={{
-                background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 50%, rgba(225, 6, 19, 0.03) 100%)',
-                backdropFilter: 'blur(40px) saturate(180%)',
-                border: '1px solid rgba(255, 255, 255, 0.08)',
-                boxShadow: `
-                  0 8px 32px rgba(0, 0, 0, 0.3),
-                  0 0 60px rgba(225, 6, 19, 0.05),
-                  inset 0 1px 0 rgba(255, 255, 255, 0.1),
-                  inset 0 -1px 0 rgba(225, 6, 19, 0.05)
-                `,
-              }}
-            >
-              {/* Liquid gradient hover overlay */}
-              <div 
-                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
+        {/* Cards + Risk Reversal Panel */}
+        <div className="grid lg:grid-cols-4 gap-6 mb-16">
+          {/* Principle Cards */}
+          <div className="lg:col-span-3 grid md:grid-cols-3 gap-6">
+            {principles.map((principle, i) => (
+              <motion.div
+                key={principle.highlight}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                whileHover={{ y: -6 }}
+                className="relative rounded-2xl p-8 text-center group overflow-hidden"
                 style={{
-                  background: 'radial-gradient(ellipse at 50% 0%, rgba(225, 6, 19, 0.15) 0%, transparent 70%)',
+                  background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%)',
+                  backdropFilter: 'blur(16px)',
+                  border: '1px solid rgba(255, 255, 255, 0.06)',
                 }}
-              />
-              
-              {/* Mesh accent */}
-              <div className="absolute -top-20 -right-20 w-40 h-40 bg-gradient-radial from-alchemy-red/10 to-transparent rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              
-              <span className="font-mono text-xs text-alchemy-red/60 tracking-label uppercase relative z-10">
-                0{i + 1}
-              </span>
-              <h3 className="font-display text-2xl md:text-3xl text-porcelain mt-5 mb-5 relative z-10 text-balance">
-                <span className="italic text-alchemy-red group-hover:text-glow-red transition-all duration-500">
-                  {principle.highlight}
-                </span>{' '}
-                <span className="text-porcelain/80">{principle.rest}</span>
-              </h3>
-              <p className="font-body text-base text-porcelain/50 leading-relaxed font-light relative z-10">
-                {principle.description}
-              </p>
-            </motion.div>
-          ))}
+              >
+                {/* Hover glow */}
+                <div 
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                  style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(220, 38, 38, 0.1) 0%, transparent 70%)' }}
+                />
+                
+                <span className="font-mono text-[10px] text-alchemy-red/60 tracking-[0.2em] uppercase relative z-10">
+                  0{i + 1}
+                </span>
+                <h3 className="font-display text-xl md:text-2xl text-porcelain mt-4 mb-4 relative z-10">
+                  <span className="italic text-alchemy-red">{principle.highlight}</span>{' '}
+                  <span className="text-porcelain/80">{principle.rest}</span>
+                </h3>
+                <p className="font-body text-sm text-porcelain/50 leading-relaxed font-light relative z-10">
+                  {principle.description}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Risk Reversal Panel */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3, duration: 0.5 }}
+            className="rounded-2xl p-6 lg:p-8"
+            style={{
+              background: 'linear-gradient(135deg, rgba(220, 38, 38, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%)',
+              border: '1px solid rgba(220, 38, 38, 0.2)',
+            }}
+          >
+            <div className="flex items-center gap-3 mb-5">
+              <div 
+                className="w-10 h-10 rounded-xl flex items-center justify-center"
+                style={{
+                  background: 'rgba(220, 38, 38, 0.15)',
+                  border: '1px solid rgba(220, 38, 38, 0.3)',
+                }}
+              >
+                <MessageCircle className="w-5 h-5 text-alchemy-red" />
+              </div>
+              <h4 className="font-display text-lg italic text-porcelain">
+                What happens on the first call
+              </h4>
+            </div>
+            
+            <ul className="space-y-3 mb-6">
+              {firstCallSteps.map((step, i) => (
+                <li key={i} className="flex items-start gap-2.5">
+                  <Check className="w-4 h-4 text-alchemy-red mt-0.5 flex-shrink-0" />
+                  <span className="font-body text-sm text-porcelain/70 font-light">{step}</span>
+                </li>
+              ))}
+            </ul>
+            
+            <Link
+              to="/book-sprint"
+              className="inline-flex items-center gap-2 text-sm text-alchemy-red hover:text-porcelain transition-colors font-body"
+            >
+              <span>Book your free call</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </motion.div>
         </div>
 
-        {/* Honest positioning statement */}
+        {/* Bottom Callout */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ delay: 0.4, duration: 0.8 }}
-          className="mt-20 text-center"
+          transition={{ delay: 0.4, duration: 0.5 }}
+          className="text-center"
         >
           <div 
             className="inline-block px-8 py-6 rounded-2xl"
             style={{
-              background: 'linear-gradient(135deg, rgba(225, 6, 19, 0.08) 0%, rgba(225, 6, 19, 0.03) 100%)',
-              backdropFilter: 'blur(24px)',
-              border: '1px solid rgba(225, 6, 19, 0.15)',
+              background: 'linear-gradient(135deg, rgba(220, 38, 38, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%)',
+              border: '1px solid rgba(220, 38, 38, 0.12)',
             }}
           >
-            <p className="font-body text-base md:text-lg text-porcelain/70 font-light">
-              <span className="text-alchemy-red font-display italic">Zero clients. Infinite preparation.</span>
-              <br />
+            <p className="font-body text-base text-porcelain/70 font-light">
+              <span className="text-alchemy-red font-display italic">Every first call is free.</span>
               <span className="text-porcelain/50 text-sm mt-2 block">
-                Every concept you see is a demonstration of what we'll build for you.
+                No pressure. Just clarity on what's possible.
               </span>
             </p>
           </div>

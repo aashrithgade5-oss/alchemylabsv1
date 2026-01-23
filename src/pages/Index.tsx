@@ -4,16 +4,14 @@ import { Solutions } from '@/components/Solutions';
 import { CaseStudies } from '@/components/CaseStudies';
 import { Manifesto } from '@/components/Manifesto';
 import { EditorialSection } from '@/components/EditorialSection';
-import { Journal } from '@/components/Journal';
+import { ProcessSection } from '@/components/ProcessSection';
+import { FAQSection } from '@/components/FAQSection';
 import { Contact } from '@/components/Contact';
 import { Footer } from '@/components/Footer';
 import { ScrollProgress } from '@/components/ScrollProgress';
 import { ParallaxBackground } from '@/components/ParallaxBackground';
-import { HomepageScrollMap } from '@/components/HomepageScrollMap';
-import { PerformanceMetrics } from '@/components/PerformanceMetrics';
+import { FloatingCTA } from '@/components/FloatingCTA';
 import { memo } from 'react';
-
-// Removed VisualBreadcrumbs - duplicate of HomepageScrollMap functionality
 
 const Index = memo(() => {
   return (
@@ -21,15 +19,15 @@ const Index = memo(() => {
       <ParallaxBackground />
       <ScrollProgress />
       <Navigation />
-      <HomepageScrollMap />
+      <FloatingCTA />
       <main className="relative z-10">
         <Hero />
-        <PerformanceMetrics />
         <Solutions />
         <CaseStudies />
         <Manifesto />
         <EditorialSection />
-        <Journal />
+        <ProcessSection />
+        <FAQSection />
         <Contact />
       </main>
       <Footer />
