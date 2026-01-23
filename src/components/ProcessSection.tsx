@@ -89,10 +89,11 @@ export const ProcessSection = memo(() => {
           </span>
           
           <h2 className="font-display text-4xl md:text-5xl lg:text-6xl leading-[1.05] tracking-[-0.02em] text-porcelain mb-6">
-            A <span className="italic text-alchemy-red">sprint</span>, not a saga.
+            <span className="block">A <span className="italic text-alchemy-red">sprint</span>,</span>
+            <span className="block">not a saga.</span>
           </h2>
           
-          <p className="font-body text-base md:text-lg text-porcelain/50 max-w-lg mx-auto font-light">
+          <p className="font-body text-sm md:text-base text-porcelain/50 max-w-md mx-auto font-light">
             Four steps. Clear deliverables. No bloated decks.
           </p>
         </motion.div>

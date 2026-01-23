@@ -146,7 +146,7 @@ export const Solutions = memo(() => {
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
           >
-            Three <span className="italic text-alchemy-red">Pillars</span>
+            <span className="block">Three <span className="italic text-alchemy-red">Pillars</span></span>
           </motion.h2>
           <motion.p 
             className="font-body text-base md:text-lg text-porcelain/50 max-w-xl mx-auto font-light"
