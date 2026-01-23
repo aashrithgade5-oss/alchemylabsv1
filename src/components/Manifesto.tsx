@@ -78,17 +78,18 @@ export const Manifesto = () => {
           </span>
           
           <h2 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-[1.1] tracking-[-0.02em] text-porcelain max-w-4xl mx-auto text-balance mb-6">
-            <span className="text-porcelain/80">We're a new studio with</span>
-            <span className="italic text-alchemy-red"> proven instincts</span>
-            <span className="text-porcelain/80"> and </span>
-            <span className="italic text-alchemy-red">conceptual range</span>
-            <span className="text-porcelain/40">.</span>
+            <span className="block text-porcelain/80">We're a new studio with</span>
+            <span className="block">
+              <span className="italic text-alchemy-red">proven instincts</span>
+              <span className="text-porcelain/80"> and </span>
+              <span className="italic text-alchemy-red">conceptual range</span>
+              <span className="text-porcelain/40">.</span>
+            </span>
           </h2>
           
           <p className="font-body text-base md:text-lg text-porcelain/50 max-w-xl mx-auto font-light leading-relaxed">
             Our portfolio is conceptual—our capabilities are{' '}
-            <span className="font-display italic text-porcelain/70">production-ready</span>. 
-            We've built the systems. Now we're looking for the brands brave enough to use them.
+            <span className="font-display italic text-porcelain/70">production-ready</span>.
           </p>
         </motion.div>
 

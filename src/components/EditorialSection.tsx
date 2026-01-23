@@ -83,11 +83,14 @@ export const EditorialSection = () => {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="font-display text-4xl md:text-5xl lg:text-6xl leading-[1.08] tracking-[-0.02em] text-alchemy-black text-balance"
             >
-              Most agencies sell{' '}
-              <span className="italic" style={{ color: '#dc2626' }}>hours</span>.
-              <br />
-              We deliver{' '}
-              <span className="italic" style={{ color: '#dc2626' }}>outcomes</span>.
+              <span className="block">
+                Most agencies sell{' '}
+                <span className="italic" style={{ color: '#dc2626' }}>hours</span>.
+              </span>
+              <span className="block">
+                We deliver{' '}
+                <span className="italic" style={{ color: '#dc2626' }}>outcomes</span>.
+              </span>
             </motion.h2>
 
             <motion.p
@@ -200,10 +203,10 @@ export const EditorialSection = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="font-display text-2xl md:text-3xl lg:text-4xl italic text-alchemy-black/80 max-w-3xl mx-auto leading-[1.3] text-balance"
+            className="font-display text-2xl md:text-3xl lg:text-4xl italic text-alchemy-black/80 max-w-3xl mx-auto leading-[1.35] text-balance"
           >
-            "The best brands don't explain themselves. They 
-            <span style={{ color: '#dc2626' }}> feel inevitable</span>."
+            <span className="block">"The best brands don't explain themselves.</span>
+            <span className="block">They<span style={{ color: '#dc2626' }}> feel inevitable</span>."</span>
           </motion.blockquote>
           <motion.cite 
             initial={{ opacity: 0 }}
