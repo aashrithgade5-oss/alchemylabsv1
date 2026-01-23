@@ -4,95 +4,77 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, lazy, Suspense, memo } from "react";
 
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
-import { ServicePage } from "./pages/ServicePage";
 import { Preloader } from "./components/Preloader";
 import { SmoothScroll } from "./components/SmoothScroll";
 import { BackToTop } from "./components/BackToTop";
-import AdminAuth from "./pages/AdminAuth";
-import AdminDashboard from "./pages/AdminDashboard";
-import SolutionsHub from "./pages/SolutionsHub";
-import AISolutionsPage from "./pages/AISolutionsPage";
-import BrandingSolutionsPage from "./pages/BrandingSolutionsPage";
-import ConsultationSolutionsPage from "./pages/ConsultationSolutionsPage";
-import BookSprint from "./pages/BookSprint";
-import About from "./pages/About";
-import Work from "./pages/Work";
-import JournalPage from "./pages/JournalPage";
-import ContactPage from "./pages/ContactPage";
-import BlogPostPage from "./pages/BlogPostPage";
 import { PageAtmosphereProvider, AtmosphericBackground } from "./contexts/PageAtmosphereContext";
 
-const queryClient = new QueryClient();
+// Lazy load non-critical pages
+const ServicePage = lazy(() => import("./pages/ServicePage").then(m => ({ default: m.ServicePage })));
+const AdminAuth = lazy(() => import("./pages/AdminAuth"));
+const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
+const SolutionsHub = lazy(() => import("./pages/SolutionsHub"));
+const AISolutionsPage = lazy(() => import("./pages/AISolutionsPage"));
+const BrandingSolutionsPage = lazy(() => import("./pages/BrandingSolutionsPage"));
+const ConsultationSolutionsPage = lazy(() => import("./pages/ConsultationSolutionsPage"));
+const BookSprint = lazy(() => import("./pages/BookSprint"));
+const About = lazy(() => import("./pages/About"));
+const Work = lazy(() => import("./pages/Work"));
+const JournalPage = lazy(() => import("./pages/JournalPage"));
+const ContactPage = lazy(() => import("./pages/ContactPage"));
+const BlogPostPage = lazy(() => import("./pages/BlogPostPage"));
 
-// Scroll restoration with position memory
-const ScrollRestoration = () => {
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 60 * 1000, // 1 minute
+      gcTime: 5 * 60 * 1000, // 5 minutes
+    },
+  },
+});
+
+// Minimal loading fallback
+const PageLoader = memo(() => (
+  <div className="min-h-screen flex items-center justify-center bg-alchemy-black">
+    <div className="w-6 h-6 border-2 border-alchemy-red/30 border-t-alchemy-red rounded-full animate-spin" />
+  </div>
+));
+PageLoader.displayName = 'PageLoader';
+
+// Simplified scroll restoration
+const ScrollRestoration = memo(() => {
   const { pathname } = useLocation();
-  const scrollPositions = useRef<Record<string, number>>({});
   
   useEffect(() => {
-    // Save current scroll position before navigation
-    const currentPath = pathname;
-    
-    const handleBeforeUnload = () => {
-      scrollPositions.current[currentPath] = window.scrollY;
-    };
-    
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    
-    // Restore scroll position or scroll to top
-    const savedPosition = scrollPositions.current[pathname];
-    if (savedPosition !== undefined) {
-      window.scrollTo({ top: savedPosition, left: 0, behavior: 'instant' });
-    } else {
-      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-    }
-    
-    return () => {
-      scrollPositions.current[currentPath] = window.scrollY;
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
   }, [pathname]);
   
   return null;
-};
+});
+ScrollRestoration.displayName = 'ScrollRestoration';
 
-// Enhanced page transition variants with more dramatic effects
+// Simplified page transition variants - removed blur for performance
 const pageVariants = {
   initial: { 
     opacity: 0, 
-    y: 30,
-    scale: 0.98,
-    filter: 'blur(8px)',
+    y: 20,
   },
   animate: { 
     opacity: 1, 
     y: 0,
-    scale: 1,
-    filter: 'blur(0px)',
   },
   exit: { 
     opacity: 0, 
-    y: -20,
-    scale: 1.02,
-    filter: 'blur(8px)',
+    y: -10,
   },
 };
 
-// Get transition config based on destination
-const getTransitionConfig = (pathname: string) => {
-  if (pathname === '/contact' || pathname === '/about' || pathname === '/book-sprint') {
-    return { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const };
-  }
-  return { duration: 0.5, ease: [0.22, 1, 0.36, 1] as const };
-};
-
-const AnimatedRoutes = () => {
+const AnimatedRoutes = memo(() => {
   const location = useLocation();
-  const transitionConfig = getTransitionConfig(location.pathname);
   
   return (
     <>
@@ -104,33 +86,36 @@ const AnimatedRoutes = () => {
           initial="initial"
           animate="animate"
           exit="exit"
-          transition={transitionConfig}
+          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
           className="min-h-screen"
         >
-          <Routes location={location}>
-            <Route path="/" element={<Index />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/work" element={<Work />} />
-            <Route path="/journal" element={<JournalPage />} />
-            <Route path="/journal/:slug" element={<BlogPostPage />} />
-            <Route path="/contact" element={<ContactPage />} />
-            <Route path="/solutions" element={<SolutionsHub />} />
-            <Route path="/solutions/ai" element={<AISolutionsPage />} />
-            <Route path="/solutions/branding" element={<BrandingSolutionsPage />} />
-            <Route path="/solutions/consultation" element={<ConsultationSolutionsPage />} />
-            <Route path="/book-sprint" element={<BookSprint />} />
-            <Route path="/services/:slug" element={<ServicePage />} />
-            <Route path="/admin/auth" element={<AdminAuth />} />
-            <Route path="/admin" element={<AdminDashboard />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <Suspense fallback={<PageLoader />}>
+            <Routes location={location}>
+              <Route path="/" element={<Index />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/work" element={<Work />} />
+              <Route path="/journal" element={<JournalPage />} />
+              <Route path="/journal/:slug" element={<BlogPostPage />} />
+              <Route path="/contact" element={<ContactPage />} />
+              <Route path="/solutions" element={<SolutionsHub />} />
+              <Route path="/solutions/ai" element={<AISolutionsPage />} />
+              <Route path="/solutions/branding" element={<BrandingSolutionsPage />} />
+              <Route path="/solutions/consultation" element={<ConsultationSolutionsPage />} />
+              <Route path="/book-sprint" element={<BookSprint />} />
+              <Route path="/services/:slug" element={<ServicePage />} />
+              <Route path="/admin/auth" element={<AdminAuth />} />
+              <Route path="/admin" element={<AdminDashboard />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Suspense>
         </motion.div>
       </AnimatePresence>
     </>
   );
-};
+});
+AnimatedRoutes.displayName = 'AnimatedRoutes';
 
-const AppContent = () => (
+const AppContent = memo(() => (
   <PageAtmosphereProvider>
     <SmoothScroll>
       <AtmosphericBackground />
@@ -141,7 +126,8 @@ const AppContent = () => (
       <BackToTop />
     </SmoothScroll>
   </PageAtmosphereProvider>
-);
+));
+AppContent.displayName = 'AppContent';
 
 const App = () => (
   <QueryClientProvider client={queryClient}>

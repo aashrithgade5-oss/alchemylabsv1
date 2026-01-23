@@ -1,12 +1,12 @@
-import { motion, useScroll, useTransform, useInView } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import heroVideo from '@/assets/hero-video.mp4';
 import { MagneticButton } from './MagneticButton';
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, memo } from 'react';
 import { NeuralBackground } from './NeuralBackground';
 
-export const Hero = () => {
+export const Hero = memo(() => {
   const sectionRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(contentRef, { once: true, margin: '-50px' });
@@ -15,18 +15,10 @@ export const Hero = () => {
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    // Only listen on orientation change, not every resize
+    window.addEventListener('orientationchange', checkMobile);
+    return () => window.removeEventListener('orientationchange', checkMobile);
   }, []);
-
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start start', 'end start'],
-  });
-
-  const y = useTransform(scrollYProgress, [0, 1], ['0%', '15%']);
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.98]);
 
   return (
     <section 
@@ -34,18 +26,20 @@ export const Hero = () => {
       ref={sectionRef} 
       className="relative min-h-[100svh] flex items-center justify-center overflow-hidden bg-alchemy-black"
     >
-      {/* Video Background */}
-      <motion.div className="absolute inset-0 z-[1]" style={{ y: isMobile ? 0 : y }}>
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="metadata"
-          className="w-full h-full object-cover scale-105 opacity-30"
-        >
-          <source src={heroVideo} type="video/mp4" />
-        </video>
+      {/* Video Background - static, no parallax on scroll */}
+      <div className="absolute inset-0 z-[1]">
+        {!isMobile && (
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="metadata"
+            className="w-full h-full object-cover scale-105 opacity-25"
+          >
+            <source src={heroVideo} type="video/mp4" />
+          </video>
+        )}
         
         {/* Vignette overlay */}
         <div 
@@ -60,10 +54,10 @@ export const Hero = () => {
         <div 
           className="absolute inset-0"
           style={{
-            background: 'radial-gradient(ellipse at 50% 50%, rgba(225, 6, 19, 0.08) 0%, transparent 60%)',
+            background: 'radial-gradient(ellipse at 50% 50%, rgba(225, 6, 19, 0.06) 0%, transparent 60%)',
           }}
         />
-      </motion.div>
+      </div>
 
       {/* Neural Particles - Desktop only */}
       {!isMobile && (
@@ -73,9 +67,8 @@ export const Hero = () => {
       )}
 
       {/* Main Content */}
-      <motion.div
+      <div
         ref={contentRef}
-        style={{ opacity, scale: isMobile ? 1 : scale }}
         className="relative z-10 w-full max-w-6xl mx-auto px-5 sm:px-8 lg:px-12 pt-20 md:pt-0"
       >
         <div className="flex flex-col items-center text-center">
@@ -84,7 +77,7 @@ export const Hero = () => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
             className="mb-6 sm:mb-8"
           >
             <span 
@@ -100,20 +93,19 @@ export const Hero = () => {
             </span>
           </motion.div>
 
-          {/* Main Headline - ALCHEMY with blend-difference effect */}
+          {/* Main Headline */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={isInView ? { opacity: 1 } : {}}
-            transition={{ duration: 0.5, delay: 0.3 }}
+            transition={{ duration: 0.4, delay: 0.2 }}
             className="mb-5 sm:mb-6"
           >
             <h1 className="text-[2.75rem] sm:text-5xl md:text-6xl lg:text-7xl xl:text-[5.5rem] leading-[1.05] tracking-[-0.02em]">
               <motion.span 
                 className="inline-block font-body font-bold text-porcelain tracking-[0.08em] uppercase mix-blend-difference"
-                style={{ willChange: 'transform, opacity' }}
-                initial={{ opacity: 0, y: 35 }}
+                initial={{ opacity: 0, y: 30 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.7, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ duration: 0.5, delay: 0.25 }}
               >
                 ALCHEMY
               </motion.span>
@@ -121,16 +113,15 @@ export const Hero = () => {
                 className="inline-block text-porcelain/40 mx-2 sm:mx-3 font-body font-light text-[0.5em]"
                 initial={{ opacity: 0, scale: 0 }}
                 animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                transition={{ duration: 0.5, delay: 0.55, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ duration: 0.4, delay: 0.35 }}
               >
                 in
               </motion.span>
               <motion.span 
                 className="inline-block font-display italic motion-text relative mix-blend-difference"
-                style={{ willChange: 'transform, opacity' }}
-                initial={{ opacity: 0, y: 35 }}
+                initial={{ opacity: 0, y: 30 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.7, delay: 0.65, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ duration: 0.5, delay: 0.45 }}
               >
                 Motion
               </motion.span>
@@ -140,38 +131,20 @@ export const Hero = () => {
           {/* Subheadline */}
           <motion.h2
             className="font-display text-xl sm:text-2xl md:text-3xl lg:text-4xl leading-[1.25] tracking-[-0.01em] mb-6 sm:mb-8"
+            initial={{ opacity: 0, y: 15 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5, delay: 0.5 }}
           >
-            <motion.span 
-              className="inline-block italic text-alchemy-red"
-              initial={{ opacity: 0, x: -15 }}
-              animate={isInView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.8 }}
-            >
-              AI
-            </motion.span>
-            <motion.span 
-              className="inline-block text-porcelain/50"
-              initial={{ opacity: 0, y: 10 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.9 }}
-            >
-              -Augmented{' '}
-            </motion.span>
-            <motion.span 
-              className="inline-block italic text-alchemy-red ml-2"
-              initial={{ opacity: 0, x: 15 }}
-              animate={isInView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.5, delay: 1.0 }}
-            >
-              Branding
-            </motion.span>
+            <span className="italic text-alchemy-red">AI</span>
+            <span className="text-porcelain/50">-Augmented </span>
+            <span className="italic text-alchemy-red ml-2">Branding</span>
           </motion.h2>
 
           {/* Description */}
           <motion.p
             initial={{ opacity: 0, y: 15 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 1.1 }}
+            transition={{ duration: 0.5, delay: 0.6 }}
             className="font-body text-sm sm:text-base md:text-lg text-porcelain/50 leading-relaxed max-w-md sm:max-w-lg mx-auto mb-10 sm:mb-12 font-light px-2"
           >
             We architect <span className="text-porcelain/70">brand systems</span> for the 
@@ -183,7 +156,7 @@ export const Hero = () => {
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 1.2 }}
+            transition={{ duration: 0.5, delay: 0.7 }}
             className="flex flex-col sm:flex-row items-center justify-center gap-4"
           >
             <Link to="/book-sprint">
@@ -202,29 +175,25 @@ export const Hero = () => {
             </Link>
           </motion.div>
         </div>
-      </motion.div>
+      </div>
 
       {/* Scroll Indicator - Hidden on mobile */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1.8, duration: 0.8 }}
+        transition={{ delay: 1.2, duration: 0.6 }}
         className="absolute bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 flex-col items-center gap-2 hidden sm:flex"
       >
-        <motion.span 
-          className="font-mono text-[9px] text-porcelain/30 uppercase tracking-[0.2em]"
-          animate={{ opacity: [0.3, 0.6, 0.3] }}
-          transition={{ duration: 2, repeat: Infinity }}
-        >
+        <span className="font-mono text-[9px] text-porcelain/30 uppercase tracking-[0.2em]">
           Scroll
-        </motion.span>
-        <motion.div className="relative w-5 h-8 rounded-full border border-porcelain/20 flex justify-center">
+        </span>
+        <div className="relative w-5 h-8 rounded-full border border-porcelain/20 flex justify-center">
           <motion.div 
             className="absolute top-1.5 w-1 h-2 rounded-full bg-gradient-to-b from-alchemy-red to-alchemy-red/50"
             animate={{ y: [0, 10, 0], opacity: [1, 0.3, 1] }}
-            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+            transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
           />
-        </motion.div>
+        </div>
       </motion.div>
 
       {/* Corner accents - desktop only */}
@@ -234,4 +203,6 @@ export const Hero = () => {
       <div className="hidden lg:block absolute bottom-8 right-8 w-12 h-12 border-r border-b border-porcelain/10 pointer-events-none" />
     </section>
   );
-};
+});
+
+Hero.displayName = 'Hero';
