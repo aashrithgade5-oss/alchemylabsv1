@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 const TURNSTILE_SECRET_KEY = Deno.env.get("TURNSTILE_SECRET_KEY");
@@ -9,14 +10,39 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type",
 };
 
-interface ContactEmailRequest {
-  name: string;
-  email: string;
-  company?: string;
-  service?: string;
-  message: string;
-  turnstileToken: string;
-}
+// Zod schema for server-side input validation
+const contactEmailSchema = z.object({
+  name: z.string()
+    .trim()
+    .min(1, "Name is required")
+    .max(100, "Name must be less than 100 characters")
+    .regex(/^[a-zA-Z\s\-'.]+$/, "Name contains invalid characters"),
+  email: z.string()
+    .trim()
+    .email("Invalid email address")
+    .max(255, "Email must be less than 255 characters"),
+  company: z.string()
+    .trim()
+    .max(200, "Company name must be less than 200 characters")
+    .optional()
+    .nullable()
+    .transform(val => val || undefined),
+  service: z.string()
+    .trim()
+    .max(100, "Service must be less than 100 characters")
+    .optional()
+    .nullable()
+    .transform(val => val || undefined),
+  message: z.string()
+    .trim()
+    .max(5000, "Message must be less than 5000 characters")
+    .optional()
+    .nullable()
+    .transform(val => val || ""),
+  turnstileToken: z.string().min(1, "Security verification token is required"),
+});
+
+type ContactEmailRequest = z.infer<typeof contactEmailSchema>;
 
 // HTML escape function to prevent XSS in emails
 function escapeHtml(str: string): string {
@@ -87,15 +113,16 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const { name, email, company, service, message, turnstileToken }: ContactEmailRequest = await req.json();
+    const rawBody = await req.json();
 
-    console.log("Received contact form submission:", { name, email, company, service });
-
-    // Verify CAPTCHA token first
-    if (!turnstileToken) {
-      console.error("No Turnstile token provided");
+    // Server-side input validation with Zod
+    const validationResult = contactEmailSchema.safeParse(rawBody);
+    
+    if (!validationResult.success) {
+      const errors = validationResult.error.errors.map(e => `${e.path.join('.')}: ${e.message}`).join(', ');
+      console.error("Validation failed:", errors);
       return new Response(
-        JSON.stringify({ error: "Security verification required" }),
+        JSON.stringify({ error: `Validation failed: ${errors}` }),
         {
           status: 400,
           headers: { "Content-Type": "application/json", ...corsHeaders },
@@ -103,6 +130,11 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
+    const { name, email, company, service, message, turnstileToken } = validationResult.data;
+
+    console.log("Received validated contact form submission:", { name, email, company, service });
+
+    // Verify CAPTCHA token
     const isValidToken = await verifyTurnstileToken(turnstileToken);
     if (!isValidToken) {
       console.error("Invalid Turnstile token");
@@ -122,7 +154,7 @@ const handler = async (req: Request): Promise<Response> => {
     const safeEmail = escapeHtml(email);
     const safeCompany = company ? escapeHtml(company) : '';
     const safeService = service ? escapeHtml(service) : '';
-    const safeMessage = escapeHtml(message).replace(/\n/g, '<br>');
+    const safeMessage = message ? escapeHtml(message).replace(/\n/g, '<br>') : '';
 
     // Send notification email to admin
     const adminEmailResponse = await sendEmail(
@@ -179,7 +211,7 @@ const handler = async (req: Request): Promise<Response> => {
             
             <div class="field">
               <div class="label">Message</div>
-              <div class="message-box">${safeMessage}</div>
+              <div class="message-box">${safeMessage || '<em style="color: rgba(250,249,247,0.4);">No message provided</em>'}</div>
             </div>
             
             <div class="footer">
