@@ -4,6 +4,7 @@ import { ArrowRight } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import alchemyLogo from '@/assets/alchemy-logo.png';
+import footerBg from '@/assets/footer-bg.png';
 
 const footerLinks = {
   company: [
@@ -47,7 +48,20 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
   };
 
   return (
-    <footer ref={ref} className="relative overflow-hidden section-gradient">
+    <footer ref={ref} className="relative overflow-hidden">
+      {/* Background Image with Blur */}
+      <div className="absolute inset-0 z-0">
+        <img 
+          src={footerBg} 
+          alt="" 
+          className="absolute inset-0 w-full h-full object-cover opacity-40 blur-sm"
+        />
+        {/* Dark overlay for text readability */}
+        <div className="absolute inset-0 bg-gradient-to-t from-alchemy-black via-alchemy-black/90 to-alchemy-black/80" />
+        {/* Additional overlay for better contrast */}
+        <div className="absolute inset-0 bg-alchemy-black/60" />
+      </div>
+
       <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-6 md:px-12 py-16 sm:py-20">
         {/* Logo - Playfair Display Italic (matching nav) */}
         <motion.div
@@ -82,7 +96,7 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
           >
-            <h3 className="font-mono text-[10px] sm:text-xs text-porcelain/40 tracking-[0.15em] uppercase mb-4 sm:mb-6">
+            <h3 className="font-mono text-[10px] sm:text-xs text-porcelain/60 tracking-[0.15em] uppercase mb-4 sm:mb-6">
               Company
             </h3>
             <ul className="space-y-3 sm:space-y-4">
@@ -90,7 +104,7 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
                 <li key={link.label}>
                   <Link
                     to={link.href}
-                    className="font-body text-sm text-porcelain/60 hover:text-porcelain transition-colors duration-300"
+                    className="font-body text-sm text-porcelain/70 hover:text-porcelain transition-colors duration-300"
                   >
                     {link.label}
                   </Link>
@@ -106,7 +120,7 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
           >
-            <h3 className="font-mono text-[10px] sm:text-xs text-porcelain/40 tracking-[0.15em] uppercase mb-4 sm:mb-6">
+            <h3 className="font-mono text-[10px] sm:text-xs text-porcelain/60 tracking-[0.15em] uppercase mb-4 sm:mb-6">
               Services
             </h3>
             <ul className="space-y-3 sm:space-y-4">
@@ -114,7 +128,7 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
                 <li key={link.label}>
                   <Link
                     to={link.href}
-                    className="font-body text-sm text-porcelain/60 hover:text-porcelain transition-colors duration-300"
+                    className="font-body text-sm text-porcelain/70 hover:text-porcelain transition-colors duration-300"
                   >
                     {link.label}
                   </Link>
@@ -130,7 +144,7 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
             viewport={{ once: true }}
             transition={{ delay: 0.3 }}
           >
-            <h3 className="font-mono text-[10px] sm:text-xs text-porcelain/40 tracking-[0.15em] uppercase mb-4 sm:mb-6">
+            <h3 className="font-mono text-[10px] sm:text-xs text-porcelain/60 tracking-[0.15em] uppercase mb-4 sm:mb-6">
               Connect
             </h3>
             <ul className="space-y-3 sm:space-y-4">
@@ -140,7 +154,7 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
                     href={link.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="font-body text-sm text-porcelain/60 hover:text-porcelain transition-colors duration-300"
+                    className="font-body text-sm text-porcelain/70 hover:text-porcelain transition-colors duration-300"
                   >
                     {link.label}
                   </a>
@@ -156,10 +170,10 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
             viewport={{ once: true }}
             transition={{ delay: 0.4 }}
           >
-            <h3 className="font-mono text-[10px] sm:text-xs text-porcelain/40 tracking-[0.15em] uppercase mb-4 sm:mb-6">
+            <h3 className="font-mono text-[10px] sm:text-xs text-porcelain/60 tracking-[0.15em] uppercase mb-4 sm:mb-6">
               Newsletter
             </h3>
-            <p className="font-body text-xs sm:text-sm text-porcelain/50 mb-4 font-light">
+            <p className="font-body text-xs sm:text-sm text-porcelain/60 mb-4 font-light">
               Quarterly insights on{' '}
               <span className="font-display italic">brand systems</span> and{' '}
               <span className="font-display italic">AI</span>.
@@ -184,7 +198,7 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
             
             {/* Founder Direct Contact */}
             <div className="mt-6 pt-4 border-t border-porcelain/10">
-              <p className="font-body text-xs text-porcelain/40 mb-2 font-light">
+              <p className="font-body text-xs text-porcelain/50 mb-2 font-light">
                 Want to discuss something specific with the founder?
               </p>
               <a 
@@ -197,6 +211,19 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
           </motion.div>
         </div>
 
+        {/* Credibility Footer Line */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.45 }}
+          className="text-center mb-6"
+        >
+          <p className="font-mono text-[10px] text-porcelain/40 tracking-wider">
+            Founder-led. Systems-driven. Outcome-obsessed.
+          </p>
+        </motion.div>
+
         {/* Bottom Bar */}
         <motion.div
           initial={{ opacity: 0 }}
@@ -205,25 +232,25 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
           transition={{ delay: 0.5 }}
           className="pt-6 sm:pt-8 border-t border-porcelain/10 flex flex-col sm:flex-row justify-between items-center gap-4"
         >
-          <p className="font-mono text-[10px] sm:text-xs text-porcelain/40">
+          <p className="font-mono text-[10px] sm:text-xs text-porcelain/50">
             © 2026 <span className="font-display italic">Alchemy Labs</span>. All rights reserved.
           </p>
           <div className="flex gap-6 sm:gap-8">
             <Link
               to="/privacy"
-              className="font-body text-xs sm:text-sm text-porcelain/40 hover:text-porcelain transition-colors"
+              className="font-body text-xs sm:text-sm text-porcelain/50 hover:text-porcelain transition-colors"
             >
               Privacy
             </Link>
             <Link
               to="/terms"
-              className="font-body text-xs sm:text-sm text-porcelain/40 hover:text-porcelain transition-colors"
+              className="font-body text-xs sm:text-sm text-porcelain/50 hover:text-porcelain transition-colors"
             >
               Terms
             </Link>
             <Link
               to="/admin/auth"
-              className="font-body text-xs sm:text-sm text-porcelain/40 hover:text-porcelain transition-colors"
+              className="font-body text-xs sm:text-sm text-porcelain/50 hover:text-porcelain transition-colors"
             >
               Admin
             </Link>

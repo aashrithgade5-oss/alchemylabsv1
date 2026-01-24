@@ -27,6 +27,8 @@ const Work = lazy(() => import("./pages/Work"));
 const JournalPage = lazy(() => import("./pages/JournalPage"));
 const ContactPage = lazy(() => import("./pages/ContactPage"));
 const BlogPostPage = lazy(() => import("./pages/BlogPostPage"));
+const PrivacyPage = lazy(() => import("./pages/PrivacyPage"));
+const TermsPage = lazy(() => import("./pages/TermsPage"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -103,6 +105,8 @@ const AnimatedRoutes = memo(() => {
               <Route path="/solutions/consultation" element={<ConsultationSolutionsPage />} />
               <Route path="/book-sprint" element={<BookSprint />} />
               <Route path="/services/:slug" element={<ServicePage />} />
+              <Route path="/privacy" element={<PrivacyPage />} />
+              <Route path="/terms" element={<TermsPage />} />
               <Route path="/admin/auth" element={<AdminAuth />} />
               <Route path="/admin" element={<AdminDashboard />} />
               <Route path="*" element={<NotFound />} />
