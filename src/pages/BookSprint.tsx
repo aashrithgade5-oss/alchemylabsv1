@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Check, Loader, MessageCircle, Mail, ArrowLeft } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
+import { TurnstileWidget } from '@/components/TurnstileWidget';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
@@ -24,9 +25,31 @@ export const BookSprint = () => {
   });
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const [captchaError, setCaptchaError] = useState(false);
+
+  const handleCaptchaVerify = useCallback((token: string) => {
+    setTurnstileToken(token);
+    setCaptchaError(false);
+  }, []);
+
+  const handleCaptchaError = useCallback(() => {
+    setCaptchaError(true);
+    toast.error('Security verification failed. Please refresh and try again.');
+  }, []);
+
+  const handleCaptchaExpire = useCallback(() => {
+    setTurnstileToken(null);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!turnstileToken) {
+      toast.error('Please complete the security verification.');
+      return;
+    }
+    
     setSubmitting(true);
 
     try {
@@ -42,10 +65,10 @@ export const BookSprint = () => {
 
       if (error) throw error;
 
-      // Try to send email notification
+      // Try to send email notification with CAPTCHA token
       try {
         await supabase.functions.invoke('send-contact-email', {
-          body: formData,
+          body: { ...formData, turnstileToken },
         });
       } catch (emailError) {
         console.log('Email notification skipped');
@@ -248,10 +271,24 @@ export const BookSprint = () => {
               </div>
             </div>
             
+            {/* CAPTCHA */}
+            <div className="mb-6">
+              <TurnstileWidget
+                onVerify={handleCaptchaVerify}
+                onError={handleCaptchaError}
+                onExpire={handleCaptchaExpire}
+              />
+              {captchaError && (
+                <p className="text-red-500 text-sm text-center mt-2">
+                  Security verification failed. Please refresh and try again.
+                </p>
+              )}
+            </div>
+            
             {/* Submit */}
             <button
               type="submit"
-              disabled={submitting}
+              disabled={submitting || !turnstileToken}
               className="w-full glass-cta-primary py-5 text-lg justify-center disabled:opacity-50"
             >
               {submitting ? (
