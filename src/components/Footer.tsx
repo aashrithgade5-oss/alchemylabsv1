@@ -19,11 +19,22 @@ const footerLinks = {
     { label: 'All Solutions', href: '/solutions' },
   ],
   connect: [
-    { label: 'Twitter', href: 'https://twitter.com', external: true },
-    { label: 'LinkedIn', href: 'https://linkedin.com', external: true },
-    { label: 'Instagram', href: 'https://instagram.com/alchemylabs', external: true },
-    { label: 'Dribbble', href: 'https://dribbble.com', external: true },
+    { label: 'Instagram', href: 'https://www.instagram.com/brandalchemy._', external: true },
+    { label: 'LinkedIn', href: 'https://www.linkedin.com/company/brandalchemylabs/', external: true },
+    { label: 'YouTube', href: 'https://www.youtube.com/@brandalchemy-in', external: true },
   ],
+};
+
+// Social links for reuse across the site
+export const socialLinks = {
+  instagram: 'https://www.instagram.com/brandalchemy._',
+  linkedin: 'https://www.linkedin.com/company/brandalchemylabs/',
+  youtube: 'https://www.youtube.com/@brandalchemy-in',
+  founderEmail: 'aashrithgadework@gmail.com',
+  founders: {
+    aashrith: 'https://www.linkedin.com/in/aashrithgade',
+    eva: 'https://www.linkedin.com/in/eva-doshi-0b07b531b/',
+  },
 };
 
 export const Footer = forwardRef<HTMLElement>((_, ref) => {
@@ -170,6 +181,19 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
                 <ArrowRight className="w-3 h-3" />
               </button>
             </form>
+            
+            {/* Founder Direct Contact */}
+            <div className="mt-6 pt-4 border-t border-porcelain/10">
+              <p className="font-body text-xs text-porcelain/40 mb-2 font-light">
+                Want to discuss something specific with the founder?
+              </p>
+              <a 
+                href={`mailto:${socialLinks.founderEmail}`}
+                className="font-mono text-xs text-alchemy-red hover:text-alchemy-red/80 transition-colors"
+              >
+                {socialLinks.founderEmail}
+              </a>
+            </div>
           </motion.div>
         </div>
 
