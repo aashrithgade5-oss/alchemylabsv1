@@ -104,7 +104,7 @@ const MobileMenu = ({
 
       {/* CTA Button */}
       <motion.a
-        href="/book-sprint"
+        href="/contact"
         onClick={onClose}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -339,7 +339,7 @@ export const Navigation = () => {
             
             {/* Desktop CTA with premium hover */}
             <Link
-              to="/book-sprint"
+              to="/contact"
               onMouseEnter={() => setCtaHovered(true)}
               onMouseLeave={() => setCtaHovered(false)}
               className={`hidden md:flex items-center gap-2 text-sm font-medium px-5 py-2 rounded-full transition-all duration-300 no-glow ${
