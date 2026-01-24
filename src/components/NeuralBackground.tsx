@@ -2,30 +2,34 @@ import { useRef, useMemo, useEffect, useState, memo } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 
-// Ethereal particle system - optimized for performance
+// Premium ethereal particle system - Awwwards-level quality
 const Particles = memo(({ count }: { count: number }) => {
   const particlesRef = useRef<THREE.Points>(null);
+  const glowRef = useRef<THREE.Points>(null);
+  const outerGlowRef = useRef<THREE.Points>(null);
   const linesRef = useRef<THREE.LineSegments>(null);
   const mouseRef = useRef({ x: 0, y: 0, targetX: 0, targetY: 0 });
   const { viewport } = useThree();
   const frameSkip = useRef(0);
   
-  const { positions, originalPositions, velocities } = useMemo(() => {
+  const { positions, originalPositions, velocities, sizes, phases } = useMemo(() => {
     const positions = new Float32Array(count * 3);
     const originalPositions = new Float32Array(count * 3);
     const velocities = new Float32Array(count * 3);
+    const sizes = new Float32Array(count);
+    const phases = new Float32Array(count);
     
-    // Organic distribution - clustered in center
+    // Organic distribution - clustered with varied depth
     for (let i = 0; i < count; i++) {
       const i3 = i * 3;
       
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.acos(2 * Math.random() - 1);
-      const radius = Math.pow(Math.random(), 0.6) * 7;
+      const radius = Math.pow(Math.random(), 0.55) * 8;
       
       const x = radius * Math.sin(phi) * Math.cos(theta);
-      const y = radius * Math.sin(phi) * Math.sin(theta) * 0.55;
-      const z = (Math.random() - 0.5) * 5 - 1.5;
+      const y = radius * Math.sin(phi) * Math.sin(theta) * 0.5;
+      const z = (Math.random() - 0.5) * 6 - 2;
       
       positions[i3] = x;
       positions[i3 + 1] = y;
@@ -35,18 +39,22 @@ const Particles = memo(({ count }: { count: number }) => {
       originalPositions[i3 + 1] = y;
       originalPositions[i3 + 2] = z;
       
-      velocities[i3] = (Math.random() - 0.5) * 0.00025;
-      velocities[i3 + 1] = (Math.random() - 0.5) * 0.00025;
-      velocities[i3 + 2] = (Math.random() - 0.5) * 0.0001;
+      velocities[i3] = (Math.random() - 0.5) * 0.0002;
+      velocities[i3 + 1] = (Math.random() - 0.5) * 0.0002;
+      velocities[i3 + 2] = (Math.random() - 0.5) * 0.00008;
+      
+      // Varied sizes for depth perception
+      sizes[i] = 0.03 + Math.random() * 0.04;
+      phases[i] = Math.random() * Math.PI * 2;
     }
     
-    return { positions, originalPositions, velocities };
+    return { positions, originalPositions, velocities, sizes, phases };
   }, [count]);
 
   // Line connections geometry - pre-allocated
   const lineGeometry = useMemo(() => {
     const geometry = new THREE.BufferGeometry();
-    const maxLines = Math.min(count * 8, 400); // Limit max connections
+    const maxLines = Math.min(count * 6, 300);
     const linePositions = new Float32Array(maxLines * 6);
     geometry.setAttribute('position', new THREE.BufferAttribute(linePositions, 3));
     geometry.setDrawRange(0, 0);
@@ -66,54 +74,56 @@ const Particles = memo(({ count }: { count: number }) => {
   useFrame((state) => {
     if (!particlesRef.current || !linesRef.current) return;
     
-    // Smooth mouse interpolation
-    mouseRef.current.x += (mouseRef.current.targetX - mouseRef.current.x) * 0.04;
-    mouseRef.current.y += (mouseRef.current.targetY - mouseRef.current.y) * 0.04;
+    // Smooth mouse interpolation - silky feel
+    mouseRef.current.x += (mouseRef.current.targetX - mouseRef.current.x) * 0.03;
+    mouseRef.current.y += (mouseRef.current.targetY - mouseRef.current.y) * 0.03;
     
-    // Skip frames for performance (process every 3rd frame)
+    // Skip frames for performance (process every 2nd frame)
     frameSkip.current++;
-    if (frameSkip.current % 3 !== 0) return;
+    if (frameSkip.current % 2 !== 0) return;
     
     const positions = particlesRef.current.geometry.attributes.position.array as Float32Array;
     const time = state.clock.elapsedTime;
     
-    // Update particles
+    // Update particles with organic flow
     for (let i = 0; i < count; i++) {
       const i3 = i * 3;
+      const phase = phases[i];
       
-      // Gentle organic flow
-      const flowX = Math.sin(time * 0.12 + originalPositions[i3] * 0.4) * 0.002;
-      const flowY = Math.cos(time * 0.1 + originalPositions[i3 + 1] * 0.35) * 0.0015;
-      const breathe = Math.sin(time * 0.15 + i * 0.08) * 0.001;
+      // Multi-frequency organic flow
+      const flowX = Math.sin(time * 0.08 + originalPositions[i3] * 0.3 + phase) * 0.0015;
+      const flowY = Math.cos(time * 0.06 + originalPositions[i3 + 1] * 0.25 + phase) * 0.001;
+      const flowZ = Math.sin(time * 0.04 + phase * 2) * 0.0005;
+      const breathe = Math.sin(time * 0.12 + i * 0.1) * 0.0008;
       
       positions[i3] += flowX + velocities[i3];
       positions[i3 + 1] += flowY + breathe + velocities[i3 + 1];
-      positions[i3 + 2] += velocities[i3 + 2];
+      positions[i3 + 2] += flowZ + velocities[i3 + 2];
       
-      // Subtle mouse attraction
-      const mouseX = mouseRef.current.x * viewport.width * 0.35;
-      const mouseY = mouseRef.current.y * viewport.height * 0.35;
+      // Refined mouse attraction - softer influence
+      const mouseX = mouseRef.current.x * viewport.width * 0.4;
+      const mouseY = mouseRef.current.y * viewport.height * 0.4;
       const dx = mouseX - positions[i3];
       const dy = mouseY - positions[i3 + 1];
       const distSq = dx * dx + dy * dy;
       
-      if (distSq < 5 && distSq > 0.1) {
+      if (distSq < 6 && distSq > 0.05) {
         const dist = Math.sqrt(distSq);
-        const attraction = Math.pow((5 - dist) / 5, 2) * 0.003;
+        const attraction = Math.pow((6 - dist) / 6, 2.5) * 0.002;
         positions[i3] += dx * attraction;
         positions[i3 + 1] += dy * attraction;
       }
       
       // Gentle return to origin
-      positions[i3] += (originalPositions[i3] - positions[i3]) * 0.0015;
-      positions[i3 + 1] += (originalPositions[i3 + 1] - positions[i3 + 1]) * 0.0015;
-      positions[i3 + 2] += (originalPositions[i3 + 2] - positions[i3 + 2]) * 0.0015;
+      positions[i3] += (originalPositions[i3] - positions[i3]) * 0.001;
+      positions[i3 + 1] += (originalPositions[i3 + 1] - positions[i3 + 1]) * 0.001;
+      positions[i3 + 2] += (originalPositions[i3 + 2] - positions[i3 + 2]) * 0.001;
     }
     
-    // Draw ethereal connection lines - optimized
+    // Ethereal connection lines - very subtle neural network effect
     const linePositions = linesRef.current.geometry.attributes.position.array as Float32Array;
     let lineIndex = 0;
-    const maxDist = 1.4;
+    const maxDist = 1.2;
     const maxDistSq = maxDist * maxDist;
     const maxLines = linePositions.length;
     
@@ -143,28 +153,86 @@ const Particles = memo(({ count }: { count: number }) => {
     linesRef.current.geometry.attributes.position.needsUpdate = true;
     particlesRef.current.geometry.attributes.position.needsUpdate = true;
     
-    // Very subtle rotation
-    const rotY = Math.sin(time * 0.02) * 0.06;
-    const rotX = Math.cos(time * 0.015) * 0.03;
+    // Sync glow layers
+    if (glowRef.current) {
+      glowRef.current.geometry.attributes.position.needsUpdate = true;
+    }
+    if (outerGlowRef.current) {
+      outerGlowRef.current.geometry.attributes.position.needsUpdate = true;
+    }
+    
+    // Very subtle breathing rotation
+    const rotY = Math.sin(time * 0.015) * 0.05;
+    const rotX = Math.cos(time * 0.012) * 0.025;
     particlesRef.current.rotation.y = rotY;
     particlesRef.current.rotation.x = rotX;
     linesRef.current.rotation.y = rotY;
     linesRef.current.rotation.x = rotX;
+    if (glowRef.current) {
+      glowRef.current.rotation.y = rotY;
+      glowRef.current.rotation.x = rotX;
+    }
+    if (outerGlowRef.current) {
+      outerGlowRef.current.rotation.y = rotY;
+      outerGlowRef.current.rotation.x = rotX;
+    }
   });
   
   return (
     <group>
-      {/* Ethereal connection lines - very subtle */}
+      {/* Ethereal connection lines - whisper-thin */}
       <lineSegments ref={linesRef} geometry={lineGeometry}>
         <lineBasicMaterial
           color="#dc2626"
           transparent
-          opacity={0.04}
+          opacity={0.025}
           blending={THREE.AdditiveBlending}
         />
       </lineSegments>
       
-      {/* Main particles */}
+      {/* Outer atmospheric glow - largest, most diffuse */}
+      <points ref={outerGlowRef}>
+        <bufferGeometry>
+          <bufferAttribute
+            attach="attributes-position"
+            count={Math.floor(count / 5)}
+            array={positions.slice(0, Math.floor(count / 5) * 3)}
+            itemSize={3}
+          />
+        </bufferGeometry>
+        <pointsMaterial
+          size={0.25}
+          color="#ff3030"
+          transparent
+          opacity={0.02}
+          sizeAttenuation
+          blending={THREE.AdditiveBlending}
+          depthWrite={false}
+        />
+      </points>
+      
+      {/* Inner glow layer - medium size */}
+      <points ref={glowRef}>
+        <bufferGeometry>
+          <bufferAttribute
+            attach="attributes-position"
+            count={Math.floor(count / 3)}
+            array={positions.slice(0, Math.floor(count / 3) * 3)}
+            itemSize={3}
+          />
+        </bufferGeometry>
+        <pointsMaterial
+          size={0.12}
+          color="#ff4545"
+          transparent
+          opacity={0.04}
+          sizeAttenuation
+          blending={THREE.AdditiveBlending}
+          depthWrite={false}
+        />
+      </points>
+      
+      {/* Core particles - crisp and defined */}
       <points ref={particlesRef}>
         <bufferGeometry>
           <bufferAttribute
@@ -175,32 +243,13 @@ const Particles = memo(({ count }: { count: number }) => {
           />
         </bufferGeometry>
         <pointsMaterial
-          size={0.04}
+          size={0.035}
           color="#dc2626"
           transparent
-          opacity={0.45}
+          opacity={0.55}
           sizeAttenuation
           blending={THREE.AdditiveBlending}
-        />
-      </points>
-      
-      {/* Glow layer - larger, softer */}
-      <points>
-        <bufferGeometry>
-          <bufferAttribute
-            attach="attributes-position"
-            count={Math.floor(count / 4)}
-            array={positions.slice(0, Math.floor(count / 4) * 3)}
-            itemSize={3}
-          />
-        </bufferGeometry>
-        <pointsMaterial
-          size={0.1}
-          color="#ff4040"
-          transparent
-          opacity={0.06}
-          sizeAttenuation
-          blending={THREE.AdditiveBlending}
+          depthWrite={false}
         />
       </points>
     </group>
@@ -209,10 +258,11 @@ const Particles = memo(({ count }: { count: number }) => {
 
 Particles.displayName = 'Particles';
 
-// Scene wrapper
+// Scene wrapper with refined fog
 const SceneContent = memo(({ particleCount }: { particleCount: number }) => (
   <>
-    <fog attach="fog" args={['#0a0a0b', 4, 18]} />
+    <fog attach="fog" args={['#0a0a0a', 5, 20]} />
+    <ambientLight intensity={0.01} />
     <Particles count={particleCount} />
   </>
 ));
@@ -221,7 +271,7 @@ SceneContent.displayName = 'SceneContent';
 
 export const NeuralBackground = memo(() => {
   const [isMounted, setIsMounted] = useState(false);
-  const [particleCount, setParticleCount] = useState(60);
+  const [particleCount, setParticleCount] = useState(70);
 
   useEffect(() => {
     // Check for reduced motion preference
@@ -231,7 +281,7 @@ export const NeuralBackground = memo(() => {
     // Adjust count based on device capability
     const cores = navigator.hardwareConcurrency || 4;
     const isLowPower = cores <= 4;
-    setParticleCount(isLowPower ? 40 : 60);
+    setParticleCount(isLowPower ? 50 : 70);
     setIsMounted(true);
   }, []);
 
@@ -240,18 +290,18 @@ export const NeuralBackground = memo(() => {
   return (
     <div className="absolute inset-0" style={{ background: 'transparent' }}>
       <Canvas
-        camera={{ position: [0, 0, 6.5], fov: 50 }}
-        dpr={1}
+        camera={{ position: [0, 0, 7], fov: 48 }}
+        dpr={[1, 1.5]}
         gl={{ 
-          antialias: false, 
+          antialias: true, 
           alpha: true,
           powerPreference: 'high-performance',
           stencil: false,
-          depth: false,
+          depth: true,
         }}
         style={{ background: 'transparent' }}
         frameloop="always"
-        performance={{ min: 0.2 }}
+        performance={{ min: 0.3 }}
       >
         <SceneContent particleCount={particleCount} />
       </Canvas>
