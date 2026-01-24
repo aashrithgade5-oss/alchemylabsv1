@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { ScrollReveal } from '@/components/ScrollReveal';
+import { GlowBackground } from '@/components/GlowBackground';
+import { SEOHead } from '@/components/SEOHead';
 
 import { socialLinks } from '@/components/Footer';
 

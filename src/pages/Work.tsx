@@ -1,9 +1,12 @@
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowUpRight, X, Check, Filter, Sparkles, Layers, Target, Palette, Mountain, Grid3X3 } from 'lucide-react';
+import { ArrowUpRight, X, Check, Filter, Sparkles, Layers, Target, Palette, Mountain, Grid3X3, Briefcase } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
+import { Breadcrumbs } from '@/components/Breadcrumbs';
+import { GlowBackground } from '@/components/GlowBackground';
+import { SEOHead } from '@/components/SEOHead';
 import { projects, Project } from '@/data/projects';
 import { ScrollReveal } from '@/components/ScrollReveal';
 import { SpotlightContainer, SpotlightItem } from '@/components/SpotlightGrid';
@@ -12,6 +15,13 @@ import { Lightbox, LightboxTrigger } from '@/components/Lightbox';
 
 // Extract unique categories
 const allCategories = ['All', ...Array.from(new Set(projects.map(p => p.category)))];
+
+// Service type filters (based on project type)
+const serviceTypes = [
+  { id: 'all', label: 'All Types', icon: Briefcase },
+  { id: 'client', label: 'Client Work', icon: Check },
+  { id: 'conceptual', label: 'Conceptual', icon: Sparkles },
+];
 
 // Icon mapping for projects
 const projectIcons: Record<string, React.ElementType> = {
@@ -36,14 +46,28 @@ const gridPositions = [
 export const Work = () => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [activeCategory, setActiveCategory] = useState('All');
+  const [activeServiceType, setActiveServiceType] = useState('all');
   const [lightboxMedia, setLightboxMedia] = useState<{ src: string; type: 'image' | 'video'; caption?: string } | null>(null);
   const navigate = useNavigate();
 
-  // Filter projects based on category
+  // Filter projects based on category and service type
   const filteredProjects = useMemo(() => {
-    if (activeCategory === 'All') return projects;
-    return projects.filter(p => p.category === activeCategory);
-  }, [activeCategory]);
+    let filtered = projects;
+    
+    // Filter by category
+    if (activeCategory !== 'All') {
+      filtered = filtered.filter(p => p.category === activeCategory);
+    }
+    
+    // Filter by service type
+    if (activeServiceType === 'client') {
+      filtered = filtered.filter(p => !p.isConceptual);
+    } else if (activeServiceType === 'conceptual') {
+      filtered = filtered.filter(p => p.isConceptual);
+    }
+    
+    return filtered;
+  }, [activeCategory, activeServiceType]);
 
   const openLightbox = (src: string, type: 'image' | 'video', caption?: string) => {
     setLightboxMedia({ src, type, caption });
@@ -51,7 +75,14 @@ export const Work = () => {
 
   return (
     <div className="min-h-screen bg-background grain-overlay">
+      <SEOHead 
+        title="Portfolio"
+        description="Explore our curated works: brand architecture, AI-generated campaigns, and strategic consultation projects."
+      />
       <Navigation />
+      
+      {/* Glow Background */}
+      <GlowBackground variant="red-energy" />
       
       {/* Hero with Enhanced Mesh Gradients */}
       <section className="relative pt-32 pb-16 overflow-hidden">
@@ -62,6 +93,9 @@ export const Work = () => {
         </div>
         
         <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12">
+          {/* Breadcrumbs */}
+          <Breadcrumbs className="mb-8" />
+          
           {/* Header */}
           <ScrollReveal>
             <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-16">
@@ -124,6 +158,31 @@ export const Work = () => {
                   <span className="relative z-10">{category}</span>
                 </motion.button>
               ))}
+            </div>
+          </ScrollReveal>
+
+          {/* Service Type Filters */}
+          <ScrollReveal delay={0.3}>
+            <div className="flex flex-wrap items-center gap-2 mt-4">
+              {serviceTypes.map((type) => {
+                const TypeIcon = type.icon;
+                return (
+                  <motion.button
+                    key={type.id}
+                    onClick={() => setActiveServiceType(type.id)}
+                    className={`flex items-center gap-2 px-3 py-1.5 rounded-full font-mono text-xs transition-all duration-300 ${
+                      activeServiceType === type.id
+                        ? 'bg-alchemy-red/20 text-alchemy-red border border-alchemy-red/40'
+                        : 'text-porcelain/40 hover:text-porcelain/70 border border-transparent'
+                    }`}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <TypeIcon className="w-3 h-3" />
+                    <span className="tracking-label uppercase">{type.label}</span>
+                  </motion.button>
+                );
+              })}
             </div>
           </ScrollReveal>
         </div>
