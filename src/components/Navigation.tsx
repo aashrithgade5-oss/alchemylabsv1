@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
-import { motion } from 'framer-motion';
-import { Menu, X } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Menu, X, ArrowRight } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import alchemyLogo from '@/assets/alchemy-logo.png';
 
@@ -25,7 +25,11 @@ const MobileMenu = ({
   if (!isOpen) return null;
 
   return createPortal(
-    <div
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.25 }}
       id="mobile-menu-overlay"
       style={{
         position: 'fixed',
@@ -41,7 +45,8 @@ const MobileMenu = ({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        gap: '20px',
+        gap: '16px',
+        padding: '24px',
       }}
     >
       {/* Close Button */}
@@ -49,8 +54,8 @@ const MobileMenu = ({
         onClick={onClose}
         style={{
           position: 'absolute',
-          top: '24px',
-          right: '24px',
+          top: '20px',
+          right: '20px',
           padding: '12px',
           color: '#FFFFFF',
           background: 'transparent',
@@ -59,53 +64,122 @@ const MobileMenu = ({
         }}
         aria-label="Close menu"
       >
-        <X size={32} strokeWidth={2} />
+        <X size={28} strokeWidth={1.5} />
       </button>
 
-      {/* Navigation Links */}
-      {navItems.map((item) => (
-        <a
+      {/* Navigation Links with stagger */}
+      {navItems.map((item, index) => (
+        <motion.a
           key={item.label}
           href={item.href}
           onClick={onClose}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: index * 0.05 + 0.1, duration: 0.3 }}
           style={{
             color: '#FFFFFF',
-            fontSize: '14px',
+            fontSize: '15px',
             fontFamily: 'Inter, system-ui, sans-serif',
-            fontWeight: '500',
-            letterSpacing: '0.15em',
+            fontWeight: '400',
+            letterSpacing: '0.12em',
             textTransform: 'uppercase',
             textDecoration: 'none',
-            padding: '12px 16px',
-            opacity: 0.9,
-            transition: 'opacity 0.2s ease',
+            padding: '10px 16px',
+            opacity: 0.85,
+            transition: 'opacity 0.2s ease, color 0.2s ease',
           }}
-          onMouseEnter={(e) => (e.currentTarget.style.opacity = '1')}
-          onMouseLeave={(e) => (e.currentTarget.style.opacity = '0.9')}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.opacity = '1';
+            e.currentTarget.style.color = '#dc2626';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.opacity = '0.85';
+            e.currentTarget.style.color = '#FFFFFF';
+          }}
         >
           {item.label}
-        </a>
+        </motion.a>
       ))}
 
       {/* CTA Button */}
-      <a
+      <motion.a
         href="/book-sprint"
         onClick={onClose}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4, duration: 0.3 }}
         style={{
-          marginTop: '24px',
-          backgroundColor: '#C8102E',
+          marginTop: '20px',
+          backgroundColor: '#dc2626',
           color: '#FFFFFF',
-          padding: '16px 40px',
+          padding: '14px 32px',
           borderRadius: '9999px',
-          fontWeight: '600',
-          fontSize: '18px',
+          fontWeight: '500',
+          fontSize: '14px',
+          letterSpacing: '0.05em',
           textDecoration: 'none',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px',
         }}
       >
         Book a Sprint
-      </a>
-    </div>,
+        <ArrowRight size={16} />
+      </motion.a>
+    </motion.div>,
     document.body
+  );
+};
+
+// Premium nav link with micro-interactions
+const NavLink = ({ 
+  item, 
+  isActive 
+}: { 
+  item: { label: string; href: string }; 
+  isActive: boolean;
+}) => {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <Link
+      to={item.href}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className="relative px-4 py-2 no-glow group"
+    >
+      {/* Text with micro-interaction */}
+      <motion.span
+        className={`relative z-10 font-body text-sm transition-colors duration-300 ${
+          isActive 
+            ? 'text-alchemy-red' 
+            : 'text-porcelain/60 group-hover:text-porcelain'
+        }`}
+        animate={{
+          y: isHovered && !isActive ? -1 : 0,
+        }}
+        transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+      >
+        {item.label}
+      </motion.span>
+      
+      {/* Hover underline effect */}
+      <motion.div
+        className="absolute bottom-1 left-4 right-4 h-px bg-porcelain/30 origin-left"
+        initial={{ scaleX: 0 }}
+        animate={{ scaleX: isHovered && !isActive ? 1 : 0 }}
+        transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+      />
+      
+      {/* Active indicator */}
+      {isActive && (
+        <motion.div
+          layoutId="nav-indicator"
+          className="absolute inset-0 bg-alchemy-red/10 rounded-full border border-alchemy-red/20"
+          transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+        />
+      )}
+    </Link>
   );
 };
 
@@ -114,6 +188,7 @@ export const Navigation = () => {
   const [isHidden, setIsHidden] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const [ctaHovered, setCtaHovered] = useState(false);
   const location = useLocation();
 
   // Close menu on route change
@@ -150,7 +225,7 @@ export const Navigation = () => {
     };
   }, [isMobileMenuOpen]);
 
-  const isActive = useCallback((href: string) => {
+  const checkIsActive = useCallback((href: string) => {
     if (href === '/') return location.pathname === '/';
     return location.pathname.startsWith(href);
   }, [location.pathname]);
@@ -165,70 +240,66 @@ export const Navigation = () => {
           opacity: isHidden && !isMobileMenuOpen ? 0 : 1 
         }}
         transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-        className="fixed top-0 left-0 right-0 z-50 px-4 md:px-8 py-4"
+        className="fixed top-0 left-0 right-0 z-50 px-4 md:px-8 py-3 md:py-4"
       >
         <div className={`max-w-6xl mx-auto transition-all duration-500 ${
-          isScrolled ? 'glass-nav-pill py-3 px-6' : 'py-4 px-6'
+          isScrolled ? 'glass-nav-pill py-2.5 px-5' : 'py-3 px-5'
         }`}>
           <div className="flex items-center justify-between">
             {/* Logo - Playfair Display Italic */}
             <Link 
               to="/" 
-              className="flex items-center gap-3 group flex-shrink-0 no-glow"
+              className="flex items-center gap-2.5 group flex-shrink-0 no-glow"
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              <div className="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden relative">
+              <motion.div 
+                className="w-9 h-9 md:w-11 md:h-11 rounded-full overflow-hidden relative"
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.2 }}
+              >
                 <img 
                   src={alchemyLogo} 
                   alt="Alchemy Labs" 
                   className="w-[140%] h-[140%] object-cover absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
                 />
-              </div>
+              </motion.div>
               <div className="hidden sm:flex items-baseline gap-1.5">
-                <span className="font-display text-xl md:text-2xl italic text-porcelain">
+                <span className="font-display text-lg md:text-xl italic text-porcelain">
                   Alchemy
                 </span>
-                <span className="font-body text-[10px] md:text-xs font-medium text-porcelain/60 tracking-[0.2em] uppercase">
+                <span className="font-body text-[9px] md:text-[10px] font-medium text-porcelain/60 tracking-[0.2em] uppercase">
                   LABS
                 </span>
               </div>
             </Link>
 
-            {/* Desktop Navigation */}
-            <ul className="hidden md:flex items-center gap-1 lg:gap-2">
+            {/* Desktop Navigation with micro-interactions */}
+            <ul className="hidden md:flex items-center gap-0.5 lg:gap-1">
               {navItems.map((item) => (
                 <li key={item.label}>
-                  <Link
-                    to={item.href}
-                    className={`relative px-4 py-2 font-body text-sm transition-colors duration-300 no-glow rounded-full ${
-                      isActive(item.href) 
-                        ? 'text-alchemy-red' 
-                        : 'text-porcelain/60 hover:text-porcelain'
-                    }`}
-                  >
-                    {item.label}
-                    {isActive(item.href) && (
-                      <motion.div
-                        layoutId="nav-indicator"
-                        className="absolute inset-0 bg-alchemy-red/10 rounded-full border border-alchemy-red/20"
-                        transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-                      />
-                    )}
-                  </Link>
+                  <NavLink item={item} isActive={checkIsActive(item.href)} />
                 </li>
               ))}
             </ul>
             
-            {/* Desktop CTA */}
+            {/* Desktop CTA with premium hover */}
             <Link
               to="/book-sprint"
-              className={`hidden md:flex items-center gap-2 text-sm font-medium px-5 py-2.5 rounded-full transition-all duration-300 no-glow ${
+              onMouseEnter={() => setCtaHovered(true)}
+              onMouseLeave={() => setCtaHovered(false)}
+              className={`hidden md:flex items-center gap-2 text-sm font-medium px-5 py-2 rounded-full transition-all duration-300 no-glow ${
                 isScrolled
                   ? 'bg-alchemy-red text-porcelain hover:bg-alchemy-red/90'
                   : 'glass-cta-nav text-porcelain'
               }`}
             >
-              Book a Sprint
+              <span>Book a Sprint</span>
+              <motion.span
+                animate={{ x: ctaHovered ? 3 : 0 }}
+                transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <ArrowRight size={14} />
+              </motion.span>
             </Link>
 
             {/* Mobile Menu Button */}
@@ -238,17 +309,21 @@ export const Navigation = () => {
               style={{ zIndex: 100000 }}
               aria-label="Toggle menu"
             >
-              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
           </div>
         </div>
       </motion.nav>
 
       {/* Mobile Menu - Rendered via Portal */}
-      <MobileMenu 
-        isOpen={isMobileMenuOpen} 
-        onClose={() => setIsMobileMenuOpen(false)} 
-      />
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <MobileMenu 
+            isOpen={isMobileMenuOpen} 
+            onClose={() => setIsMobileMenuOpen(false)} 
+          />
+        )}
+      </AnimatePresence>
     </>
   );
 };
