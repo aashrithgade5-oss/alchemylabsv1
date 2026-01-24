@@ -6,6 +6,13 @@ import { projects, Project } from '@/data/projects';
 import { ScrollReveal } from '@/components/ScrollReveal';
 import { SpotlightContainer, SpotlightItem } from '@/components/SpotlightGrid';
 import { ShimmerImage, ShimmerVideo } from '@/components/ShimmerImage';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog';
 
 // Icon mapping for projects
 const projectIcons: Record<string, React.ElementType> = {
@@ -267,42 +274,19 @@ export const CaseStudies = () => {
         </ScrollReveal>
       </div>
 
-      {/* Modal */}
-      <AnimatePresence>
-        {selectedProject && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setSelectedProject(null)}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8"
-          >
-            <div className="absolute inset-0 bg-alchemy-black/95 backdrop-blur-xl" />
-
-            <motion.div
-              initial={{ scale: 0.9, y: 50, opacity: 0 }}
-              animate={{ scale: 1, y: 0, opacity: 1 }}
-              exit={{ scale: 0.9, y: 50, opacity: 0 }}
-              transition={{ type: 'spring', damping: 25 }}
-              onClick={(e) => e.stopPropagation()}
-              className="relative z-10 w-full max-w-5xl max-h-[90vh] overflow-y-auto rounded-2xl"
-              style={{
-                background: 'linear-gradient(135deg, rgba(20, 20, 22, 0.95) 0%, rgba(10, 10, 10, 0.98) 100%)',
-                border: '1px solid rgba(255, 255, 255, 0.06)',
-              }}
-            >
-              <button
-                onClick={() => setSelectedProject(null)}
-                className="absolute top-6 right-6 z-20 w-10 h-10 rounded-full flex items-center justify-center hover:bg-porcelain/10 transition-colors"
-                style={{
-                  background: 'rgba(255, 255, 255, 0.05)',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
-                }}
-              >
-                <X className="w-4 h-4 text-porcelain/60" />
-              </button>
-
-              <div className="relative aspect-[16/9] overflow-hidden rounded-t-2xl">
+      {/* Clean Dialog Modal */}
+      <Dialog open={!!selectedProject} onOpenChange={() => setSelectedProject(null)}>
+        <DialogContent 
+          className="max-w-4xl max-h-[90vh] overflow-y-auto p-0 border-0"
+          style={{
+            background: 'linear-gradient(135deg, rgba(20, 20, 22, 0.98) 0%, rgba(10, 10, 10, 0.99) 100%)',
+            border: '1px solid rgba(255, 255, 255, 0.08)',
+          }}
+        >
+          {selectedProject && (
+            <>
+              {/* Hero Image/Video */}
+              <div className="relative aspect-[16/9] overflow-hidden rounded-t-lg">
                 {selectedProject.video ? (
                   <ShimmerVideo
                     src={selectedProject.video}
@@ -319,7 +303,7 @@ export const CaseStudies = () => {
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-alchemy-black via-alchemy-black/50 to-transparent" />
 
-                <div className="absolute bottom-0 left-0 right-0 p-8 md:p-10">
+                <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
                   <span 
                     className="inline-block px-3 py-1 rounded-full text-[10px] font-mono text-porcelain/80 tracking-[0.1em] uppercase mb-3"
                     style={{
@@ -329,38 +313,44 @@ export const CaseStudies = () => {
                   >
                     {selectedProject.category}
                   </span>
-                  <h3 className="font-display text-3xl md:text-4xl lg:text-5xl italic text-porcelain">
-                    {selectedProject.title}
-                  </h3>
+                  <DialogHeader>
+                    <DialogTitle className="font-display text-2xl md:text-3xl lg:text-4xl italic text-porcelain">
+                      {selectedProject.title}
+                    </DialogTitle>
+                    <DialogDescription className="sr-only">
+                      {selectedProject.overview}
+                    </DialogDescription>
+                  </DialogHeader>
                 </div>
               </div>
 
-              <div className="p-8 md:p-10">
-                <div className="mb-10">
-                  <h4 className="font-mono text-[10px] text-alchemy-red tracking-[0.2em] uppercase mb-4">
+              {/* Content */}
+              <div className="p-6 md:p-8">
+                <div className="mb-8">
+                  <h4 className="font-mono text-[10px] text-alchemy-red tracking-[0.2em] uppercase mb-3">
                     Overview
                   </h4>
-                  <p className="font-body text-base text-porcelain/70 leading-relaxed font-light">
+                  <p className="font-body text-sm text-porcelain/70 leading-relaxed font-light">
                     {selectedProject.overview}
                   </p>
                 </div>
 
-                <div>
-                  <h4 className="font-mono text-[10px] text-alchemy-red tracking-[0.2em] uppercase mb-5">
+                <div className="mb-8">
+                  <h4 className="font-mono text-[10px] text-alchemy-red tracking-[0.2em] uppercase mb-4">
                     What We Offer
                   </h4>
-                  <div className="grid md:grid-cols-3 gap-4">
+                  <div className="grid md:grid-cols-3 gap-3">
                     {selectedProject.services.map((service, i) => (
                       <div 
                         key={i} 
-                        className="rounded-xl p-5"
+                        className="rounded-xl p-4"
                         style={{
                           background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%)',
                           border: '1px solid rgba(255, 255, 255, 0.05)',
                         }}
                       >
                         <div className="flex items-start gap-2">
-                          <Check className="w-4 h-4 text-alchemy-red mt-0.5 flex-shrink-0" />
+                          <Check className="w-3.5 h-3.5 text-alchemy-red mt-0.5 flex-shrink-0" />
                           <div>
                             <span className="font-body text-sm text-porcelain block">{service.title}</span>
                             <span className="font-body text-xs text-porcelain/50">{service.description}</span>
@@ -370,11 +360,27 @@ export const CaseStudies = () => {
                     ))}
                   </div>
                 </div>
+
+                {/* CTA */}
+                {!selectedProject.isConceptual && (
+                  <Link
+                    to={`/solutions/${selectedProject.id === 'branding-solutions' ? 'branding' : selectedProject.id === 'consultation-sessions' ? 'consultation' : 'ai'}`}
+                    className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-body text-sm transition-all duration-300 hover:gap-3"
+                    style={{
+                      background: 'linear-gradient(135deg, rgba(220, 38, 38, 0.2) 0%, rgba(220, 38, 38, 0.08) 100%)',
+                      border: '1px solid rgba(220, 38, 38, 0.4)',
+                    }}
+                    onClick={() => setSelectedProject(null)}
+                  >
+                    <span className="text-porcelain">Explore This Solution</span>
+                    <ArrowRight className="w-4 h-4 text-porcelain" />
+                  </Link>
+                )}
               </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </section>
   );
 };

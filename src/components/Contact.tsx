@@ -6,6 +6,7 @@ import { MagneticButton } from './MagneticButton';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { TurnstileWidget } from './TurnstileWidget';
+import { socialLinks } from './Footer';
 
 export const Contact = memo(() => {
   const [formData, setFormData] = useState({
@@ -368,7 +369,7 @@ export const Contact = memo(() => {
 
           {/* Instagram */}
           <motion.a
-            href="https://instagram.com/alchemylabs"
+            href={socialLinks.instagram}
             target="_blank"
             rel="noopener noreferrer"
             className="glass-deep rounded-xl p-6 text-center hover:border-pink-500/30 transition-all duration-300 group"
@@ -378,7 +379,7 @@ export const Contact = memo(() => {
               <Instagram className="w-6 h-6 text-pink-500" />
             </div>
             <h3 className="font-display text-base italic text-porcelain mb-1">DM Us</h3>
-            <p className="font-mono text-[10px] text-alchemy-red">@alchemylabs</p>
+            <p className="font-mono text-[10px] text-alchemy-red">@brandalchemy._</p>
           </motion.a>
 
           {/* Email */}
