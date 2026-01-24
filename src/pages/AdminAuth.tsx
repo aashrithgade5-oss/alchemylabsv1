@@ -1,16 +1,19 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Mail, Lock, Loader2, ArrowLeft } from 'lucide-react';
+import { Mail, Lock, Loader2, ArrowLeft, Eye, EyeOff } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { MagneticButton } from '@/components/MagneticButton';
 import alchemyLogo from '@/assets/alchemy-logo.png';
+import footerBg from '@/assets/footer-bg.png';
 
 const AdminAuth = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSignUp, setIsSignUp] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -55,42 +58,58 @@ const AdminAuth = () => {
     setIsLoading(true);
 
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
+      if (isSignUp) {
+        // Sign up flow
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password,
+        });
 
-      if (error) throw error;
+        if (error) throw error;
 
-      // Check if user is an admin
-      const { data: adminData, error: adminError } = await supabase
-        .from('admin_users')
-        .select('id')
-        .eq('user_id', data.user.id)
-        .maybeSingle();
+        toast.success('Account created! Please check your email or contact admin for access.');
+        setIsSignUp(false);
+      } else {
+        // Sign in flow
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
 
-      if (adminError) {
-        console.error('Error checking admin status:', adminError);
-        await supabase.auth.signOut();
-        toast.error('Authorization check failed');
-        return;
+        if (error) throw error;
+
+        // Check if user is an admin
+        const { data: adminData, error: adminError } = await supabase
+          .from('admin_users')
+          .select('id')
+          .eq('user_id', data.user.id)
+          .maybeSingle();
+
+        if (adminError) {
+          console.error('Error checking admin status:', adminError);
+          await supabase.auth.signOut();
+          toast.error('Authorization check failed');
+          return;
+        }
+
+        if (!adminData) {
+          // User is not an admin - sign them out
+          await supabase.auth.signOut();
+          toast.error('Access denied. You are not authorized to access this area.');
+          return;
+        }
+
+        toast.success('Welcome back!');
+        navigate('/admin');
       }
-
-      if (!adminData) {
-        // User is not an admin - sign them out
-        await supabase.auth.signOut();
-        toast.error('Access denied. You are not authorized to access this area.');
-        return;
-      }
-
-      toast.success('Welcome back!');
-      navigate('/admin');
     } catch (error: any) {
       console.error('Auth error:', error);
       if (error.message.includes('Invalid login credentials')) {
         toast.error('Invalid email or password');
+      } else if (error.message.includes('already registered')) {
+        toast.error('This email is already registered. Try signing in.');
       } else {
-        toast.error('Authentication failed');
+        toast.error(error.message || 'Authentication failed');
       }
     } finally {
       setIsLoading(false);
@@ -98,10 +117,15 @@ const AdminAuth = () => {
   };
 
   return (
-    <div className="min-h-screen bg-alchemy-black flex items-center justify-center p-6">
-      {/* Background effects */}
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-alchemy-red/10 rounded-full blur-[150px]" />
+    <div className="min-h-screen bg-alchemy-black flex items-center justify-center p-6 relative">
+      {/* Background Image */}
+      <div className="fixed inset-0 z-0">
+        <img 
+          src={footerBg} 
+          alt="" 
+          className="absolute inset-0 w-full h-full object-cover opacity-30 blur-md"
+        />
+        <div className="absolute inset-0 bg-alchemy-black/80" />
       </div>
 
       <motion.div
@@ -111,13 +135,13 @@ const AdminAuth = () => {
         className="relative z-10 w-full max-w-md"
       >
         {/* Back link */}
-        <a
-          href="/"
+        <Link
+          to="/"
           className="inline-flex items-center gap-2 text-porcelain/50 hover:text-porcelain transition-colors mb-8"
         >
           <ArrowLeft className="w-4 h-4" />
           <span className="font-body text-sm">Back to site</span>
-        </a>
+        </Link>
 
         {/* Card */}
         <div className="glass-deep rounded-3xl p-8 md:p-12">
@@ -132,14 +156,14 @@ const AdminAuth = () => {
               Admin <span className="italic text-alchemy-red">Portal</span>
             </h1>
             <p className="font-body text-sm text-porcelain/50 mt-2">
-              Sign in to manage submissions
+              {isSignUp ? 'Create an admin account' : 'Sign in to manage your site'}
             </p>
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
-              <label className="font-mono text-xs text-porcelain/50 tracking-label uppercase">
+              <label className="font-mono text-[10px] text-porcelain/50 tracking-[0.15em] uppercase">
                 Email
               </label>
               <div className="relative">
@@ -157,21 +181,28 @@ const AdminAuth = () => {
             </div>
 
             <div className="space-y-2">
-              <label className="font-mono text-xs text-porcelain/50 tracking-label uppercase">
+              <label className="font-mono text-[10px] text-porcelain/50 tracking-[0.15em] uppercase">
                 Password
               </label>
               <div className="relative">
                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-porcelain/30" />
                 <input
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="glass-input pl-12"
+                  className="glass-input pl-12 pr-12"
                   required
                   minLength={6}
                   disabled={isLoading}
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-porcelain/30 hover:text-porcelain/60 transition-colors"
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
               </div>
             </div>
 
@@ -183,17 +214,28 @@ const AdminAuth = () => {
               {isLoading ? (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin" />
-                  <span>Signing in...</span>
+                  <span>{isSignUp ? 'Creating account...' : 'Signing in...'}</span>
                 </>
               ) : (
-                <span>Sign In</span>
+                <span>{isSignUp ? 'Create Account' : 'Sign In'}</span>
               )}
             </MagneticButton>
           </form>
 
+          {/* Toggle */}
+          <div className="mt-6 text-center">
+            <button
+              type="button"
+              onClick={() => setIsSignUp(!isSignUp)}
+              className="font-body text-xs text-porcelain/50 hover:text-porcelain transition-colors"
+            >
+              {isSignUp ? 'Already have an account? Sign in' : "Don't have an account? Sign up"}
+            </button>
+          </div>
+
           {/* Info notice */}
-          <p className="text-center mt-6 font-body text-xs text-porcelain/40">
-            Admin access is invite-only. Contact your administrator if you need access.
+          <p className="text-center mt-6 font-body text-[10px] text-porcelain/40">
+            Admin access requires approval. After signup, contact the site owner to be granted access.
           </p>
         </div>
       </motion.div>
