@@ -48,18 +48,24 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
   };
 
   return (
-    <footer ref={ref} className="relative overflow-hidden">
-      {/* Background Image with Blur */}
+    <footer ref={ref} className="relative overflow-hidden bg-alchemy-black">
+      {/* Dynamic Aesthetic Background */}
       <div className="absolute inset-0 z-0">
+        {/* Main background image with enhanced visibility */}
         <img 
           src={footerBg} 
           alt="" 
-          className="absolute inset-0 w-full h-full object-cover opacity-40 blur-sm"
+          className="absolute inset-0 w-full h-full object-cover opacity-60 scale-110"
+          style={{ filter: 'blur(8px) saturate(1.2)' }}
         />
-        {/* Dark overlay for text readability */}
-        <div className="absolute inset-0 bg-gradient-to-t from-alchemy-black via-alchemy-black/90 to-alchemy-black/80" />
-        {/* Additional overlay for better contrast */}
-        <div className="absolute inset-0 bg-alchemy-black/60" />
+        {/* Gradient overlay from bottom for depth */}
+        <div className="absolute inset-0 bg-gradient-to-t from-alchemy-black via-alchemy-black/70 to-transparent" />
+        {/* Subtle red accent glow at bottom */}
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[120%] h-[60%] bg-gradient-radial from-alchemy-red/15 via-transparent to-transparent opacity-60" />
+        {/* Top fade for smooth transition */}
+        <div className="absolute inset-0 bg-gradient-to-b from-alchemy-black via-transparent to-transparent h-32" />
+        {/* Noise texture overlay */}
+        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.65\' numOctaves=\'3\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\'/%3E%3C/svg%3E")' }} />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-6 md:px-12 py-16 sm:py-20">
