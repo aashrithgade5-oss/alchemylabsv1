@@ -14,6 +14,8 @@ const AdminAuth = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
+  const [isForgotPassword, setIsForgotPassword] = useState(false);
+  const [resetSent, setResetSent] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -58,11 +60,24 @@ const AdminAuth = () => {
     setIsLoading(true);
 
     try {
-      if (isSignUp) {
+      if (isForgotPassword) {
+        // Password reset flow
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: `${window.location.origin}/admin/auth`,
+        });
+
+        if (error) throw error;
+
+        setResetSent(true);
+        toast.success('Password reset email sent! Check your inbox.');
+      } else if (isSignUp) {
         // Sign up flow
         const { data, error } = await supabase.auth.signUp({
           email,
           password,
+          options: {
+            emailRedirectTo: window.location.origin,
+          },
         });
 
         if (error) throw error;
@@ -116,6 +131,12 @@ const AdminAuth = () => {
     }
   };
 
+  const handleBackToSignIn = () => {
+    setIsForgotPassword(false);
+    setResetSent(false);
+    setEmail('');
+  };
+
   return (
     <div className="min-h-screen bg-alchemy-black flex items-center justify-center p-6 relative">
       {/* Background Image */}
@@ -156,87 +177,154 @@ const AdminAuth = () => {
               Admin <span className="italic text-alchemy-red">Portal</span>
             </h1>
             <p className="font-body text-sm text-porcelain/50 mt-2">
-              {isSignUp ? 'Create an admin account' : 'Sign in to manage your site'}
+              {isForgotPassword 
+                ? 'Reset your password' 
+                : isSignUp 
+                  ? 'Create an admin account' 
+                  : 'Sign in to manage your site'}
             </p>
           </div>
 
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div className="space-y-2">
-              <label className="font-mono text-[10px] text-porcelain/50 tracking-[0.15em] uppercase">
-                Email
-              </label>
-              <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-porcelain/30" />
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="admin@company.com"
-                  className="glass-input pl-12"
-                  required
-                  disabled={isLoading}
-                />
+          {/* Reset sent confirmation */}
+          {resetSent ? (
+            <div className="text-center space-y-6">
+              <div className="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center mx-auto">
+                <Mail className="w-8 h-8 text-green-500" />
               </div>
+              <div>
+                <h2 className="font-display text-xl text-porcelain mb-2">Check your email</h2>
+                <p className="font-body text-sm text-porcelain/50">
+                  We've sent a password reset link to <span className="text-porcelain">{email}</span>
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={handleBackToSignIn}
+                className="font-body text-sm text-alchemy-red hover:text-alchemy-red/80 transition-colors"
+              >
+                ← Back to sign in
+              </button>
             </div>
+          ) : (
+            <>
+              {/* Form */}
+              <form onSubmit={handleSubmit} className="space-y-5">
+                <div className="space-y-2">
+                  <label className="font-mono text-[10px] text-porcelain/50 tracking-[0.15em] uppercase">
+                    Email
+                  </label>
+                  <div className="relative">
+                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-porcelain/30" />
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="admin@company.com"
+                      className="glass-input pl-12"
+                      required
+                      disabled={isLoading}
+                    />
+                  </div>
+                </div>
 
-            <div className="space-y-2">
-              <label className="font-mono text-[10px] text-porcelain/50 tracking-[0.15em] uppercase">
-                Password
-              </label>
-              <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-porcelain/30" />
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="glass-input pl-12 pr-12"
-                  required
-                  minLength={6}
+                {!isForgotPassword && (
+                  <div className="space-y-2">
+                    <label className="font-mono text-[10px] text-porcelain/50 tracking-[0.15em] uppercase">
+                      Password
+                    </label>
+                    <div className="relative">
+                      <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-porcelain/30" />
+                      <input
+                        type={showPassword ? 'text' : 'password'}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="••••••••"
+                        className="glass-input pl-12 pr-12"
+                        required
+                        minLength={6}
+                        disabled={isLoading}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-porcelain/30 hover:text-porcelain/60 transition-colors"
+                      >
+                        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Forgot password link */}
+                {!isSignUp && !isForgotPassword && (
+                  <div className="text-right">
+                    <button
+                      type="button"
+                      onClick={() => setIsForgotPassword(true)}
+                      className="font-body text-xs text-porcelain/40 hover:text-alchemy-red transition-colors"
+                    >
+                      Forgot password?
+                    </button>
+                  </div>
+                )}
+
+                <MagneticButton
+                  type="submit"
+                  className="glass-cta-primary w-full justify-center"
                   disabled={isLoading}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-porcelain/30 hover:text-porcelain/60 transition-colors"
                 >
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                </button>
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <span>
+                        {isForgotPassword 
+                          ? 'Sending...' 
+                          : isSignUp 
+                            ? 'Creating account...' 
+                            : 'Signing in...'}
+                      </span>
+                    </>
+                  ) : (
+                    <span>
+                      {isForgotPassword 
+                        ? 'Send Reset Link' 
+                        : isSignUp 
+                          ? 'Create Account' 
+                          : 'Sign In'}
+                    </span>
+                  )}
+                </MagneticButton>
+              </form>
+
+              {/* Toggle */}
+              <div className="mt-6 text-center space-y-3">
+                {isForgotPassword ? (
+                  <button
+                    type="button"
+                    onClick={handleBackToSignIn}
+                    className="font-body text-xs text-porcelain/50 hover:text-porcelain transition-colors"
+                  >
+                    ← Back to sign in
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setIsSignUp(!isSignUp)}
+                    className="font-body text-xs text-porcelain/50 hover:text-porcelain transition-colors"
+                  >
+                    {isSignUp ? 'Already have an account? Sign in' : "Don't have an account? Sign up"}
+                  </button>
+                )}
               </div>
-            </div>
 
-            <MagneticButton
-              type="submit"
-              className="glass-cta-primary w-full justify-center"
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  <span>{isSignUp ? 'Creating account...' : 'Signing in...'}</span>
-                </>
-              ) : (
-                <span>{isSignUp ? 'Create Account' : 'Sign In'}</span>
+              {/* Info notice */}
+              {!isForgotPassword && (
+                <p className="text-center mt-6 font-body text-[10px] text-porcelain/40">
+                  Admin access requires approval. After signup, contact the site owner to be granted access.
+                </p>
               )}
-            </MagneticButton>
-          </form>
-
-          {/* Toggle */}
-          <div className="mt-6 text-center">
-            <button
-              type="button"
-              onClick={() => setIsSignUp(!isSignUp)}
-              className="font-body text-xs text-porcelain/50 hover:text-porcelain transition-colors"
-            >
-              {isSignUp ? 'Already have an account? Sign in' : "Don't have an account? Sign up"}
-            </button>
-          </div>
-
-          {/* Info notice */}
-          <p className="text-center mt-6 font-body text-[10px] text-porcelain/40">
-            Admin access requires approval. After signup, contact the site owner to be granted access.
-          </p>
+            </>
+          )}
         </div>
       </motion.div>
     </div>

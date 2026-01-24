@@ -5,6 +5,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { MagneticButton } from '@/components/MagneticButton';
+import { Breadcrumbs } from '@/components/Breadcrumbs';
+import { GlowBackground } from '@/components/GlowBackground';
+import { SEOHead } from '@/components/SEOHead';
 
 const services = [
   {

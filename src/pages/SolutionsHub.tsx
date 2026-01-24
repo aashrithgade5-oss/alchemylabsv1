@@ -5,6 +5,9 @@ import { useNavigate, Link } from 'react-router-dom';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { MagneticButton } from '@/components/MagneticButton';
+import { Breadcrumbs } from '@/components/Breadcrumbs';
+import { GlowBackground } from '@/components/GlowBackground';
+import { SEOHead, generateOrganizationSchema } from '@/components/SEOHead';
 import { aiServices, brandingServices, consultationServices } from '@/data/services';
 import { ScrollReveal, StaggerReveal } from '@/components/ScrollReveal';
 import { SpotlightContainer, SpotlightItem } from '@/components/SpotlightGrid';
@@ -51,7 +54,15 @@ export const SolutionsHub = () => {
 
   return (
     <div className="min-h-screen bg-background grain-overlay">
+      <SEOHead 
+        title="Solutions"
+        description="Three pillars of service: AI Solutions, Branding, and Strategic Consultation. Choose the right approach for your brand challenge."
+        structuredData={generateOrganizationSchema()}
+      />
       <Navigation />
+      
+      {/* Glow Background */}
+      <GlowBackground variant="soft-ambient" />
       
       {/* Hero Section - Minimal */}
       <section className="relative pt-24 sm:pt-32 pb-12 sm:pb-16 overflow-hidden">
@@ -60,6 +71,9 @@ export const SolutionsHub = () => {
         </div>
         
         <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-6 md:px-12">
+          {/* Breadcrumbs */}
+          <Breadcrumbs className="mb-8" />
+          
           <ScrollReveal>
             <div className="max-w-4xl">
               <div className="flex items-center gap-4 mb-8">
