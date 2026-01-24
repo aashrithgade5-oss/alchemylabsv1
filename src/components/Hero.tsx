@@ -49,68 +49,127 @@ export const Hero = memo(() => {
       ref={sectionRef} 
       className="relative min-h-[100svh] flex flex-col overflow-hidden bg-alchemy-black"
     >
-      {/* Video/Gradient Background with Parallax */}
+      {/* Premium multi-layer background with parallax */}
       <motion.div className="absolute inset-0 z-[1]" style={{ y: bgY }}>
-        {/* Mobile: Static gradient background */}
-        {isMobile ? (
-          <div 
-            className="absolute inset-0"
-            style={{
-              background: `
-                radial-gradient(ellipse at 50% 30%, rgba(220, 38, 38, 0.15) 0%, transparent 55%),
-                radial-gradient(ellipse at 30% 70%, rgba(220, 38, 38, 0.1) 0%, transparent 45%),
-                radial-gradient(ellipse at 70% 50%, rgba(220, 38, 38, 0.08) 0%, transparent 40%),
-                linear-gradient(180deg, hsl(240 5% 4%) 0%, hsl(240 5% 3%) 100%)
-              `,
-            }}
-          />
-        ) : (
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="metadata"
-            className="w-full h-full object-cover scale-110 opacity-[0.15]"
-          >
-            <source src={heroVideo} type="video/mp4" />
-          </video>
-        )}
         
-        {/* Vignette */}
+        {/* Base layer - deep atmospheric gradient */}
         <div 
           className="absolute inset-0"
           style={{
             background: `
-              radial-gradient(ellipse at center, transparent 0%, rgba(10, 10, 10, 0.7) 50%, rgba(10, 10, 10, 0.95) 100%),
-              linear-gradient(to bottom, rgba(10, 10, 10, 0.5) 0%, transparent 20%, transparent 80%, rgba(10, 10, 10, 0.98) 100%)
+              linear-gradient(180deg, 
+                hsl(0 0% 3%) 0%, 
+                hsl(0 0% 4%) 30%,
+                hsl(0 0% 3.5%) 70%,
+                hsl(0 0% 2%) 100%
+              )
             `,
           }}
         />
         
-        {/* Red accent glow */}
+        {/* Mobile: Premium static gradient atmosphere */}
+        {isMobile ? (
+          <div className="absolute inset-0">
+            {/* Primary red glow - centered */}
+            <div 
+              className="absolute inset-0"
+              style={{
+                background: `
+                  radial-gradient(ellipse 80% 60% at 50% 35%, rgba(220, 38, 38, 0.18) 0%, transparent 60%),
+                  radial-gradient(ellipse 60% 50% at 35% 65%, rgba(220, 38, 38, 0.12) 0%, transparent 50%),
+                  radial-gradient(ellipse 50% 40% at 65% 55%, rgba(220, 38, 38, 0.08) 0%, transparent 45%)
+                `,
+              }}
+            />
+            {/* Subtle noise texture overlay */}
+            <div 
+              className="absolute inset-0 opacity-[0.015]"
+              style={{
+                backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+              }}
+            />
+          </div>
+        ) : (
+          <>
+            {/* Desktop: Video layer */}
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="metadata"
+              className="absolute inset-0 w-full h-full object-cover scale-[1.08] opacity-[0.12]"
+              style={{ filter: 'blur(0.5px)' }}
+            >
+              <source src={heroVideo} type="video/mp4" />
+            </video>
+            
+            {/* Subtle grain/noise overlay for texture */}
+            <div 
+              className="absolute inset-0 opacity-[0.02] mix-blend-overlay"
+              style={{
+                backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+              }}
+            />
+          </>
+        )}
+        
+        {/* Premium vignette - smooth falloff */}
         <div 
           className="absolute inset-0"
           style={{
-            background: 'radial-gradient(ellipse at 50% 40%, rgba(220, 38, 38, 0.06) 0%, transparent 50%)',
+            background: `
+              radial-gradient(ellipse 120% 100% at 50% 50%, transparent 0%, transparent 30%, rgba(10, 10, 10, 0.4) 55%, rgba(10, 10, 10, 0.85) 80%, rgba(10, 10, 10, 0.98) 100%)
+            `,
           }}
         />
         
-        {/* Subtle grid with parallax fade */}
-        <motion.div 
+        {/* Top/bottom fade for content blending */}
+        <div 
           className="absolute inset-0"
+          style={{
+            background: `
+              linear-gradient(to bottom, rgba(10, 10, 10, 0.6) 0%, transparent 15%, transparent 85%, rgba(10, 10, 10, 0.95) 100%)
+            `,
+          }}
+        />
+        
+        {/* Primary red energy glow */}
+        <div 
+          className="absolute inset-0"
+          style={{
+            background: `
+              radial-gradient(ellipse 70% 50% at 50% 40%, rgba(220, 38, 38, 0.08) 0%, transparent 60%)
+            `,
+          }}
+        />
+        
+        {/* Secondary accent glows for depth */}
+        <div 
+          className="absolute inset-0 hidden md:block"
+          style={{
+            background: `
+              radial-gradient(ellipse 40% 35% at 25% 60%, rgba(220, 38, 38, 0.04) 0%, transparent 50%),
+              radial-gradient(ellipse 35% 30% at 75% 50%, rgba(220, 38, 38, 0.03) 0%, transparent 45%)
+            `,
+          }}
+        />
+        
+        {/* Subtle grid with parallax fade - refined */}
+        <motion.div 
+          className="absolute inset-0 hidden md:block"
           style={{
             opacity: gridOpacity,
             backgroundImage: `
-              linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
+              linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px)
             `,
-            backgroundSize: '80px 80px',
+            backgroundSize: '100px 100px',
           }}
         />
       </motion.div>
 
-      {/* Neural Particles - Desktop only with parallax */}
+      {/* Neural Particles - Desktop only with refined parallax */}
       {!isMobile && (
         <motion.div 
           className="absolute inset-0 z-[2]"
