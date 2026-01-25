@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight, Phone, Map, Zap, Rocket } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useState, memo } from 'react';
+import { DynamicGlowBg } from './DynamicGlowBg';
 
 const processSteps = [
   {
@@ -54,17 +55,16 @@ export const ProcessSection = memo(() => {
 
   return (
     <section id="process" className="relative py-32 overflow-hidden">
-      {/* Background */}
+      {/* Dynamic Glow Background */}
+      <DynamicGlowBg variant="liquid" position="left" opacity={0.3} />
+      
+      {/* Additional gradient overlay */}
       <div className="absolute inset-0 pointer-events-none">
         <div 
           className="absolute inset-0"
           style={{
-            background: 'linear-gradient(180deg, hsl(240 5% 3%) 0%, hsl(240 8% 6%) 50%, hsl(240 5% 3%) 100%)',
+            background: 'linear-gradient(180deg, hsl(0 0% 4% / 0.85) 0%, hsl(0 0% 4% / 0.65) 50%, hsl(0 0% 4% / 0.85) 100%)',
           }}
-        />
-        <div 
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] rounded-full blur-[150px]"
-          style={{ background: 'radial-gradient(ellipse, rgba(220, 38, 38, 0.08) 0%, transparent 70%)' }}
         />
       </div>
 

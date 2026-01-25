@@ -6,6 +6,7 @@ import { Footer } from '@/components/Footer';
 import { ScrollReveal } from '@/components/ScrollReveal';
 import { GlowBackground } from '@/components/GlowBackground';
 import { SEOHead } from '@/components/SEOHead';
+import { DynamicGlowBg } from '@/components/DynamicGlowBg';
 
 import { socialLinks } from '@/components/Footer';
 
@@ -79,7 +80,10 @@ export const About = () => {
         ref={heroRef} 
         className="relative min-h-[100svh] flex items-center justify-center overflow-hidden pt-20 sm:pt-24"
       >
-        {/* Subtle background gradient */}
+        {/* Dynamic Glow Background - right side like footer */}
+        <DynamicGlowBg variant="liquid" position="right" opacity={0.35} />
+        
+        {/* Additional gradient overlay */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-1/4 left-1/3 w-[500px] h-[500px] bg-alchemy-red/6 rounded-full blur-[180px]" />
         </div>
@@ -200,6 +204,9 @@ export const About = () => {
 
       {/* SECTION 3 — FOUNDERS */}
       <section className="relative py-20 sm:py-28 md:py-40 overflow-hidden">
+        {/* Dynamic Glow Background */}
+        <DynamicGlowBg variant="ascii" position="left" opacity={0.25} />
+        
         {/* Background mesh */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-1/3 left-0 w-[600px] h-[600px] bg-alchemy-red/5 rounded-full blur-[200px]" />

@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, memo } from 'react';
 import { Plus, Minus } from 'lucide-react';
+import { DynamicGlowBg } from './DynamicGlowBg';
 
 const faqs = [
   {
@@ -34,17 +35,16 @@ export const FAQSection = memo(() => {
 
   return (
     <section id="faq" className="relative py-24 md:py-32 overflow-hidden">
-      {/* Background */}
+      {/* Dynamic Glow Background */}
+      <DynamicGlowBg variant="waves" position="right" opacity={0.35} />
+      
+      {/* Additional gradient overlay */}
       <div className="absolute inset-0 pointer-events-none">
         <div 
           className="absolute inset-0"
           style={{
-            background: 'linear-gradient(180deg, hsl(240 5% 3%) 0%, hsl(240 8% 5%) 100%)',
+            background: 'linear-gradient(180deg, hsl(0 0% 4% / 0.85) 0%, hsl(0 0% 4% / 0.7) 50%, hsl(0 0% 4% / 0.85) 100%)',
           }}
-        />
-        <div 
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full blur-[120px]"
-          style={{ background: 'radial-gradient(ellipse, rgba(220, 38, 38, 0.04) 0%, transparent 70%)' }}
         />
       </div>
 
