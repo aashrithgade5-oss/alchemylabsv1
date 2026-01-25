@@ -67,52 +67,27 @@ export const Hero = memo(() => {
           }}
         />
         
-        {/* Mobile: Premium static gradient atmosphere */}
-        {isMobile ? (
-          <div className="absolute inset-0">
-            {/* Primary red glow - centered */}
-            <div 
-              className="absolute inset-0"
-              style={{
-                background: `
-                  radial-gradient(ellipse 80% 60% at 50% 35%, rgba(220, 38, 38, 0.18) 0%, transparent 60%),
-                  radial-gradient(ellipse 60% 50% at 35% 65%, rgba(220, 38, 38, 0.12) 0%, transparent 50%),
-                  radial-gradient(ellipse 50% 40% at 65% 55%, rgba(220, 38, 38, 0.08) 0%, transparent 45%)
-                `,
-              }}
-            />
-            {/* Subtle noise texture overlay */}
-            <div 
-              className="absolute inset-0 opacity-[0.015]"
-              style={{
-                backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
-              }}
-            />
-          </div>
-        ) : (
-          <>
-            {/* Desktop: Video layer */}
-            <video
-              autoPlay
-              loop
-              muted
-              playsInline
-              preload="metadata"
-              className="absolute inset-0 w-full h-full object-cover scale-[1.08] opacity-[0.12]"
-              style={{ filter: 'blur(0.5px)' }}
-            >
-              <source src={heroVideo} type="video/mp4" />
-            </video>
-            
-            {/* Subtle grain/noise overlay for texture */}
-            <div 
-              className="absolute inset-0 opacity-[0.02] mix-blend-overlay"
-              style={{
-                backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
-              }}
-            />
-          </>
-        )}
+        {/* Video layer - plays on all devices */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          webkit-playsinline="true"
+          preload="auto"
+          className={`absolute inset-0 w-full h-full object-cover scale-[1.08] ${isMobile ? 'opacity-[0.15]' : 'opacity-[0.12]'}`}
+          style={{ filter: isMobile ? 'blur(1px)' : 'blur(0.5px)' }}
+        >
+          <source src={heroVideo} type="video/mp4" />
+        </video>
+        
+        {/* Subtle grain/noise overlay for texture */}
+        <div 
+          className="absolute inset-0 opacity-[0.02] mix-blend-overlay"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+          }}
+        />
         
         {/* Premium vignette - smooth falloff */}
         <div 
@@ -169,15 +144,13 @@ export const Hero = memo(() => {
         />
       </motion.div>
 
-      {/* Neural Particles - Desktop only with refined parallax */}
-      {!isMobile && (
-        <motion.div 
-          className="absolute inset-0 z-[2]"
-          style={{ opacity: particleOpacity }}
-        >
-          <NeuralBackground />
-        </motion.div>
-      )}
+      {/* Neural Particles - with refined parallax */}
+      <motion.div 
+        className="absolute inset-0 z-[2]"
+        style={{ opacity: isMobile ? 0.6 : particleOpacity }}
+      >
+        <NeuralBackground isMobile={isMobile} />
+      </motion.div>
 
       {/* Main Content - Centered in middle of viewport */}
       <div

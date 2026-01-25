@@ -236,31 +236,38 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.5 }}
-          className="pt-6 sm:pt-8 border-t border-porcelain/10 flex flex-col sm:flex-row justify-between items-center gap-4"
+          className="pt-6 sm:pt-8 border-t border-porcelain/10 flex flex-col items-center gap-4"
         >
-          <p className="font-mono text-[10px] sm:text-xs text-porcelain/50">
-            © 2026 <span className="font-display italic">Alchemy Labs</span>. All rights reserved.
-          </p>
-          <div className="flex gap-6 sm:gap-8">
-            <Link
-              to="/privacy"
-              className="font-body text-xs sm:text-sm text-porcelain/50 hover:text-porcelain transition-colors"
-            >
-              Privacy
-            </Link>
-            <Link
-              to="/terms"
-              className="font-body text-xs sm:text-sm text-porcelain/50 hover:text-porcelain transition-colors"
-            >
-              Terms
-            </Link>
-            <Link
-              to="/admin/auth"
-              className="font-body text-xs sm:text-sm text-porcelain/50 hover:text-porcelain transition-colors"
-            >
-              Admin
-            </Link>
+          <div className="flex flex-col sm:flex-row justify-between items-center w-full gap-4">
+            <p className="font-mono text-[10px] sm:text-xs text-porcelain/50">
+              © 2026 <span className="font-display italic">Alchemy Labs</span>. All rights reserved.
+            </p>
+            <div className="flex gap-6 sm:gap-8">
+              <Link
+                to="/privacy"
+                className="font-body text-xs sm:text-sm text-porcelain/50 hover:text-porcelain transition-colors"
+              >
+                Privacy
+              </Link>
+              <Link
+                to="/terms"
+                className="font-body text-xs sm:text-sm text-porcelain/50 hover:text-porcelain transition-colors"
+              >
+                Terms
+              </Link>
+              <Link
+                to="/admin/auth"
+                className="font-body text-xs sm:text-sm text-porcelain/50 hover:text-porcelain transition-colors"
+              >
+                Admin
+              </Link>
+            </div>
           </div>
+          
+          {/* Pharmaceutical Disclaimer */}
+          <p className="font-mono text-[9px] text-porcelain/30 text-center max-w-lg">
+            Alchemy Labs is an independent creative studio and is not affiliated with any pharmaceutical entity.
+          </p>
         </motion.div>
       </div>
     </footer>
