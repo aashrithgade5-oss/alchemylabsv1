@@ -180,17 +180,17 @@ const Particles = memo(({ count }: { count: number }) => {
   
   return (
     <group>
-      {/* Ethereal connection lines - whisper-thin */}
+      {/* Ethereal connection lines - more visible */}
       <lineSegments ref={linesRef} geometry={lineGeometry}>
         <lineBasicMaterial
           color="#dc2626"
           transparent
-          opacity={0.025}
+          opacity={0.06}
           blending={THREE.AdditiveBlending}
         />
       </lineSegments>
       
-      {/* Outer atmospheric glow - largest, most diffuse */}
+      {/* Outer atmospheric glow - largest, more visible */}
       <points ref={outerGlowRef}>
         <bufferGeometry>
           <bufferAttribute
@@ -201,17 +201,17 @@ const Particles = memo(({ count }: { count: number }) => {
           />
         </bufferGeometry>
         <pointsMaterial
-          size={0.25}
+          size={0.35}
           color="#ff3030"
           transparent
-          opacity={0.02}
+          opacity={0.05}
           sizeAttenuation
           blending={THREE.AdditiveBlending}
           depthWrite={false}
         />
       </points>
       
-      {/* Inner glow layer - medium size */}
+      {/* Inner glow layer - medium size, more visible */}
       <points ref={glowRef}>
         <bufferGeometry>
           <bufferAttribute
@@ -222,17 +222,17 @@ const Particles = memo(({ count }: { count: number }) => {
           />
         </bufferGeometry>
         <pointsMaterial
-          size={0.12}
+          size={0.18}
           color="#ff4545"
           transparent
-          opacity={0.04}
+          opacity={0.08}
           sizeAttenuation
           blending={THREE.AdditiveBlending}
           depthWrite={false}
         />
       </points>
       
-      {/* Core particles - crisp and defined */}
+      {/* Core particles - crisp and more visible */}
       <points ref={particlesRef}>
         <bufferGeometry>
           <bufferAttribute
@@ -243,10 +243,10 @@ const Particles = memo(({ count }: { count: number }) => {
           />
         </bufferGeometry>
         <pointsMaterial
-          size={0.035}
+          size={0.055}
           color="#dc2626"
           transparent
-          opacity={0.55}
+          opacity={0.75}
           sizeAttenuation
           blending={THREE.AdditiveBlending}
           depthWrite={false}
@@ -269,7 +269,7 @@ const SceneContent = memo(({ particleCount }: { particleCount: number }) => (
 
 SceneContent.displayName = 'SceneContent';
 
-export const NeuralBackground = memo(() => {
+export const NeuralBackground = memo(({ isMobile = false }: { isMobile?: boolean }) => {
   const [isMounted, setIsMounted] = useState(false);
   const [particleCount, setParticleCount] = useState(70);
 
@@ -281,9 +281,10 @@ export const NeuralBackground = memo(() => {
     // Adjust count based on device capability
     const cores = navigator.hardwareConcurrency || 4;
     const isLowPower = cores <= 4;
-    setParticleCount(isLowPower ? 50 : 70);
+    // Fewer particles on mobile for performance
+    setParticleCount(isMobile ? 35 : (isLowPower ? 50 : 70));
     setIsMounted(true);
-  }, []);
+  }, [isMobile]);
 
   if (!isMounted) return null;
 
@@ -291,17 +292,17 @@ export const NeuralBackground = memo(() => {
     <div className="absolute inset-0" style={{ background: 'transparent' }}>
       <Canvas
         camera={{ position: [0, 0, 7], fov: 48 }}
-        dpr={[1, 1.5]}
+        dpr={isMobile ? [1, 1] : [1, 1.5]}
         gl={{ 
-          antialias: true, 
+          antialias: !isMobile, 
           alpha: true,
-          powerPreference: 'high-performance',
+          powerPreference: isMobile ? 'low-power' : 'high-performance',
           stencil: false,
           depth: true,
         }}
         style={{ background: 'transparent' }}
         frameloop="always"
-        performance={{ min: 0.3 }}
+        performance={{ min: isMobile ? 0.5 : 0.3 }}
       >
         <SceneContent particleCount={particleCount} />
       </Canvas>
