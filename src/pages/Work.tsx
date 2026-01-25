@@ -12,6 +12,7 @@ import { ScrollReveal } from '@/components/ScrollReveal';
 import { SpotlightContainer, SpotlightItem } from '@/components/SpotlightGrid';
 import { ShimmerImage, ShimmerVideo } from '@/components/ShimmerImage';
 import { Lightbox, LightboxTrigger } from '@/components/Lightbox';
+import { DynamicGlowBg } from '@/components/DynamicGlowBg';
 
 // Extract unique categories
 const allCategories = ['All', ...Array.from(new Set(projects.map(p => p.category)))];
@@ -190,7 +191,10 @@ export const Work = () => {
 
       {/* Abstract 6-Element Grid */}
       <section className="relative py-12">
-        <div className="max-w-[1600px] mx-auto px-6 md:px-12">
+        {/* Dynamic Glow Background for grid section */}
+        <DynamicGlowBg variant="ascii" position="center" opacity={0.25} />
+        
+        <div className="max-w-[1600px] mx-auto px-6 md:px-12 relative z-10">
           <SpotlightContainer className="grid grid-cols-12 gap-4 md:gap-6 auto-rows-[180px] md:auto-rows-[220px]">
             <AnimatePresence mode="popLayout">
               {filteredProjects.map((project, i) => {

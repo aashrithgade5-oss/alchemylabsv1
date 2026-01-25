@@ -11,6 +11,7 @@ import { SEOHead, generateOrganizationSchema } from '@/components/SEOHead';
 import { aiServices, brandingServices, consultationServices } from '@/data/services';
 import { ScrollReveal, StaggerReveal } from '@/components/ScrollReveal';
 import { SpotlightContainer, SpotlightItem } from '@/components/SpotlightGrid';
+import { DynamicGlowBg } from '@/components/DynamicGlowBg';
 
 const pillars = [
   {
@@ -100,7 +101,10 @@ export const SolutionsHub = () => {
       
       {/* Pillars - Full Width Cards with Spotlight Effect */}
       <section className="relative py-8 sm:py-12">
-        <div className="max-w-[1600px] mx-auto px-5 sm:px-6 md:px-12">
+        {/* Dynamic Glow Background */}
+        <DynamicGlowBg variant="liquid" position="right" opacity={0.3} />
+        
+        <div className="max-w-[1600px] mx-auto px-5 sm:px-6 md:px-12 relative z-10">
           <SpotlightContainer className="space-y-3 sm:space-y-4">
             {pillars.map((pillar, i) => {
               const Icon = pillar.icon;
@@ -191,7 +195,10 @@ export const SolutionsHub = () => {
 
       {/* Quick Access Services Grid with Spotlight */}
       <section className="relative py-16 sm:py-20 md:py-24 luxury-margin">
-        <div className="max-w-7xl mx-auto px-5 sm:px-6 md:px-12">
+        {/* Dynamic Glow Background */}
+        <DynamicGlowBg variant="waves" position="left" opacity={0.25} />
+        
+        <div className="max-w-7xl mx-auto px-5 sm:px-6 md:px-12 relative z-10">
           <ScrollReveal>
             <div className="flex items-center gap-3 sm:gap-4 mb-8 sm:mb-12">
               <div className="w-8 sm:w-12 h-px bg-alchemy-red/50" />

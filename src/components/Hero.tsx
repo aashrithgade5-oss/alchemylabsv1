@@ -1,15 +1,16 @@
 import { motion, useInView, useScroll, useTransform } from 'framer-motion';
-import { ArrowRight, ArrowUpRight, Check } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Sparkles, Layers, Target } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import heroVideo from '@/assets/hero-video.mp4';
 import { MagneticButton } from './MagneticButton';
 import { useRef, useState, useEffect, memo } from 'react';
 import { NeuralBackground } from './NeuralBackground';
 
-const proofPoints = [
-  'Founder-led delivery',
-  '24h first build',
-  'Unlimited iterations',
+// Three service pillars with matching icons from Solutions
+const servicePillars = [
+  { label: 'AI Creative Studio', icon: Sparkles },
+  { label: 'Branding Systems', icon: Layers },
+  { label: 'Advisory', icon: Target },
 ];
 
 const stats = [
@@ -227,19 +228,29 @@ export const Hero = memo(() => {
             </span>
           </motion.h2>
 
-          {/* Proof Strip */}
+          {/* Service Pillars Strip */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.4, delay: 0.35, ease: easeOut }}
-            className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mb-6 md:mb-8"
+            className="flex flex-wrap items-center justify-center gap-3 sm:gap-5 mb-6 md:mb-8"
           >
-            {proofPoints.map((point, i) => (
-              <div key={i} className="flex items-center gap-1.5 sm:gap-2">
-                <Check className="w-3 h-3 text-alchemy-red/80" />
-                <span className="font-body text-[11px] sm:text-sm text-porcelain/60">{point}</span>
-              </div>
-            ))}
+            {servicePillars.map((pillar, i) => {
+              const Icon = pillar.icon;
+              return (
+                <div 
+                  key={i} 
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-full"
+                  style={{
+                    background: 'rgba(220, 38, 38, 0.06)',
+                    border: '1px solid rgba(220, 38, 38, 0.15)',
+                  }}
+                >
+                  <Icon className="w-3 h-3 text-alchemy-red/80" />
+                  <span className="font-body text-[10px] sm:text-xs text-porcelain/60">{pillar.label}</span>
+                </div>
+              );
+            })}
           </motion.div>
 
           {/* CTAs */}
