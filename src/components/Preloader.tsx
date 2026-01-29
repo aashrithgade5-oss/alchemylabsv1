@@ -1,4 +1,4 @@
-import { useState, useEffect, memo } from 'react';
+import { useState, useEffect, memo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import alchemyLogo from '@/assets/alchemy-logo.png';
 
@@ -7,19 +7,21 @@ export const Preloader = memo(() => {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
+    // Faster progress increment
+    let currentProgress = 0;
     const interval = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          return 100;
-        }
-        return prev + Math.random() * 18;
-      });
-    }, 50);
+      currentProgress += Math.random() * 25 + 10;
+      if (currentProgress >= 100) {
+        currentProgress = 100;
+        clearInterval(interval);
+      }
+      setProgress(currentProgress);
+    }, 40);
 
+    // Faster preloader dismissal
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1400); // Faster preloader
+    }, 1000);
 
     return () => {
       clearInterval(interval);
@@ -34,71 +36,62 @@ export const Preloader = memo(() => {
           initial={{ opacity: 1 }}
           exit={{ 
             opacity: 0,
-            transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] }
+            transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] }
           }}
-          className="fixed inset-0 z-[100] flex flex-col items-center justify-center"
-          style={{ backgroundColor: 'hsl(240 10% 4%)' }}
+          className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-alchemy-black"
         >
-          {/* Subtle ambient glow - static, no animation */}
-          <div className="absolute inset-0 overflow-hidden">
-            <div
-              className="absolute top-1/2 left-1/2 w-[500px] h-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-25"
-              style={{
-                background: 'radial-gradient(circle, hsl(356 94% 45% / 0.15) 0%, transparent 60%)',
-                filter: 'blur(80px)',
-              }}
-            />
-          </div>
+          {/* Subtle ambient glow */}
+          <div 
+            className="absolute top-1/2 left-1/2 w-[400px] h-[400px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-20"
+            style={{
+              background: 'radial-gradient(circle, hsl(356 94% 45% / 0.15) 0%, transparent 60%)',
+              filter: 'blur(60px)',
+            }}
+          />
 
           {/* Center content */}
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
+            transition={{ duration: 0.3 }}
             className="relative z-10 flex flex-col items-center"
           >
-            {/* Logo container */}
-            <div className="relative mb-12">
-              {/* Soft glow behind logo - static */}
+            {/* Logo */}
+            <div className="relative mb-10">
               <div
-                className="absolute inset-0 -m-4 opacity-60"
+                className="absolute inset-0 -m-3 opacity-50"
                 style={{
-                  background: 'radial-gradient(circle, hsl(356 94% 45% / 0.25) 0%, transparent 70%)',
-                  filter: 'blur(25px)',
+                  background: 'radial-gradient(circle, hsl(356 94% 45% / 0.2) 0%, transparent 70%)',
+                  filter: 'blur(20px)',
                 }}
               />
-              
-              {/* Logo */}
               <img
                 src={alchemyLogo}
                 alt="Alchemy Labs"
-                className="relative w-16 h-16 md:w-20 md:h-20 object-contain"
+                className="relative w-14 h-14 md:w-16 md:h-16 object-contain"
               />
             </div>
 
             {/* Progress bar */}
-            <div className="w-48 md:w-56">
+            <div className="w-40 md:w-48">
               <div 
                 className="h-[2px] rounded-full overflow-hidden"
                 style={{ backgroundColor: 'hsl(0 0% 100% / 0.08)' }}
               >
-                <motion.div
-                  className="h-full rounded-full"
+                <div
+                  className="h-full rounded-full transition-all duration-100 ease-out"
                   style={{
+                    width: `${Math.min(progress, 100)}%`,
                     background: 'linear-gradient(90deg, hsl(356 94% 45%), hsl(356 94% 55%))',
-                    boxShadow: '0 0 15px hsl(356 94% 45% / 0.6)',
+                    boxShadow: '0 0 12px hsl(356 94% 45% / 0.5)',
                   }}
-                  initial={{ width: 0 }}
-                  animate={{ width: `${Math.min(progress, 100)}%` }}
-                  transition={{ duration: 0.15, ease: 'easeOut' }}
                 />
               </div>
               
-              {/* Progress text */}
-              <div className="flex items-center justify-center mt-6">
+              <div className="flex items-center justify-center mt-5">
                 <span 
-                  className="font-mono text-[10px] tracking-[0.3em] uppercase"
-                  style={{ color: 'hsl(0 0% 100% / 0.35)' }}
+                  className="font-mono text-[9px] tracking-[0.25em] uppercase"
+                  style={{ color: 'hsl(0 0% 100% / 0.3)' }}
                 >
                   Loading
                 </span>
@@ -110,24 +103,16 @@ export const Preloader = memo(() => {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.2, duration: 0.4 }}
-            className="absolute bottom-10 md:bottom-14"
+            transition={{ delay: 0.15, duration: 0.3 }}
+            className="absolute bottom-8 md:bottom-12"
           >
             <span 
               className="font-display text-sm italic"
-              style={{ color: 'hsl(0 0% 100% / 0.25)' }}
+              style={{ color: 'hsl(0 0% 100% / 0.2)' }}
             >
               Alchemy Labs
             </span>
           </motion.div>
-
-          {/* Subtle noise overlay */}
-          <div 
-            className="absolute inset-0 pointer-events-none opacity-[0.02]" 
-            style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`
-            }} 
-          />
         </motion.div>
       )}
     </AnimatePresence>

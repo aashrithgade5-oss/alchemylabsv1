@@ -42,16 +42,22 @@ export const DynamicGlowBg = memo(({
 
   return (
     <div className={`absolute inset-0 overflow-hidden pointer-events-none ${className}`}>
-      {/* Image layer with blur and opacity */}
+      {/* Image layer with blur and opacity - GPU optimized */}
       <div 
         className={`absolute top-1/2 -translate-y-1/2 ${position === 'full' ? 'w-full' : 'w-[80%] md:w-[60%]'} h-full ${positionClasses[position]}`}
+        style={{ willChange: 'auto' }}
       >
         <img 
           src={imageSrc} 
           alt=""
-          className="w-full h-full object-cover blur-[8px] md:blur-[12px]"
-          style={{ opacity }}
+          className="w-full h-full object-cover"
+          style={{ 
+            opacity, 
+            filter: 'blur(10px)',
+            transform: 'translateZ(0)',
+          }}
           loading="lazy"
+          decoding="async"
         />
       </div>
       
