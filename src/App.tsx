@@ -59,20 +59,11 @@ const ScrollRestoration = memo(() => {
 });
 ScrollRestoration.displayName = 'ScrollRestoration';
 
-// Simplified page transition variants - removed blur for performance
+// Simplified page transition variants - minimal for performance
 const pageVariants = {
-  initial: { 
-    opacity: 0, 
-    y: 20,
-  },
-  animate: { 
-    opacity: 1, 
-    y: 0,
-  },
-  exit: { 
-    opacity: 0, 
-    y: -10,
-  },
+  initial: { opacity: 0 },
+  animate: { opacity: 1 },
+  exit: { opacity: 0 },
 };
 
 const AnimatedRoutes = memo(() => {
@@ -88,7 +79,7 @@ const AnimatedRoutes = memo(() => {
           initial="initial"
           animate="animate"
           exit="exit"
-          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.25, ease: 'easeOut' }}
           className="min-h-screen"
         >
           <Suspense fallback={<PageLoader />}>

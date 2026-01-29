@@ -68,16 +68,20 @@ export const Hero = memo(() => {
           }}
         />
         
-        {/* Video layer - plays on all devices */}
+        {/* Video layer - plays on all devices with better mobile support */}
         <video
           autoPlay
           loop
           muted
           playsInline
           webkit-playsinline="true"
-          preload="auto"
-          className={`absolute inset-0 w-full h-full object-cover scale-[1.08] ${isMobile ? 'opacity-[0.15]' : 'opacity-[0.12]'}`}
-          style={{ filter: isMobile ? 'blur(1px)' : 'blur(0.5px)' }}
+          x5-playsinline="true"
+          preload="metadata"
+          className={`absolute inset-0 w-full h-full object-cover scale-[1.05] ${isMobile ? 'opacity-[0.18]' : 'opacity-[0.14]'}`}
+          style={{ 
+            filter: isMobile ? 'blur(0.5px)' : 'none',
+            willChange: 'auto',
+          }}
         >
           <source src={heroVideo} type="video/mp4" />
         </video>
@@ -145,13 +149,15 @@ export const Hero = memo(() => {
         />
       </motion.div>
 
-      {/* Neural Particles - with refined parallax */}
-      <motion.div 
-        className="absolute inset-0 z-[2]"
-        style={{ opacity: isMobile ? 0.6 : particleOpacity }}
-      >
-        <NeuralBackground isMobile={isMobile} />
-      </motion.div>
+      {/* Neural Particles - delayed load for performance */}
+      {!isMobile && (
+        <motion.div 
+          className="absolute inset-0 z-[2]"
+          style={{ opacity: particleOpacity }}
+        >
+          <NeuralBackground isMobile={false} />
+        </motion.div>
+      )}
 
       {/* Main Content - Centered in middle of viewport */}
       <div
