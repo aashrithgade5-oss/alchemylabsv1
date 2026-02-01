@@ -17,11 +17,29 @@ export const PhilosophySection = memo(() => {
           <div>
             <ScrollReveal>
               <div className="relative">
-                {/* Red accent mark */}
-                <span className="absolute -left-4 top-0 text-alchemy-red text-6xl font-display">"</span>
-                <blockquote className="font-display text-2xl sm:text-3xl md:text-4xl italic text-alchemy-black leading-[1.3] pl-6">
+                {/* Decorative quote mark */}
+                <motion.span 
+                  className="absolute -left-6 sm:-left-8 -top-4 text-alchemy-red text-7xl sm:text-8xl font-display leading-none select-none"
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 0.8, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                >
+                  "
+                </motion.span>
+                <blockquote className="font-display text-2xl sm:text-3xl md:text-4xl italic text-alchemy-black leading-[1.3] pl-8 sm:pl-10">
                   We don't chase trends. We build systems that survive them.
                 </blockquote>
+                {/* Closing quote mark */}
+                <motion.span 
+                  className="absolute right-0 bottom-0 text-alchemy-red/20 text-6xl sm:text-7xl font-display leading-none select-none"
+                  initial={{ opacity: 0, x: 20 }}
+                  whileInView={{ opacity: 0.4, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.4 }}
+                >
+                  "
+                </motion.span>
               </div>
             </ScrollReveal>
           </div>
@@ -30,17 +48,13 @@ export const PhilosophySection = memo(() => {
           <div className="space-y-6 sm:space-y-8">
             <ScrollReveal delay={0.1}>
               <p className="font-body text-base sm:text-lg text-alchemy-black/70 font-light leading-relaxed">
-                The modern brand landscape rewards speed—but punishes shallowness.
-                AI has multiplied output, but diluted meaning. Alchemy Labs was created 
-                to restore discipline to branding.
+                Alchemy Labs was built on a simple belief: brands don't fail because of lack of creativity—they fail because they lack structure, taste, and long-term thinking.
               </p>
             </ScrollReveal>
             
             <ScrollReveal delay={0.2}>
               <p className="font-body text-base sm:text-lg text-alchemy-black/70 font-light leading-relaxed">
-                To combine human taste with machine leverage.
-                To design not just campaigns—but infrastructure.
-                Every brand we touch emerges with a system built for longevity.
+                We operate at the intersection of brand architecture, culture, and AI-native execution—designing systems that hold attention, scale with intelligence, and age with relevance.
               </p>
             </ScrollReveal>
 
