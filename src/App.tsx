@@ -29,6 +29,8 @@ const ContactPage = lazy(() => import("./pages/ContactPage"));
 const BlogPostPage = lazy(() => import("./pages/BlogPostPage"));
 const PrivacyPage = lazy(() => import("./pages/PrivacyPage"));
 const TermsPage = lazy(() => import("./pages/TermsPage"));
+const AashrithPortfolio = lazy(() => import("./pages/AashrithPortfolio"));
+const EvaPortfolio = lazy(() => import("./pages/EvaPortfolio"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -98,6 +100,8 @@ const AnimatedRoutes = memo(() => {
               <Route path="/services/:slug" element={<ServicePage />} />
               <Route path="/privacy" element={<PrivacyPage />} />
               <Route path="/terms" element={<TermsPage />} />
+              <Route path="/AashrithGadePortfolio" element={<AashrithPortfolio />} />
+              <Route path="/EvaDoshiPortfolio" element={<EvaPortfolio />} />
               <Route path="/admin/auth" element={<AdminAuth />} />
               <Route path="/admin" element={<AdminDashboard />} />
               <Route path="*" element={<NotFound />} />
