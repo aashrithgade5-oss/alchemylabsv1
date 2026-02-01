@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback, createContext, useContext, useState } from 'react';
+import { useEffect, useRef, useCallback, createContext, useContext, useState, memo } from 'react';
 import Lenis from 'lenis';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import gsap from 'gsap';
@@ -21,9 +21,12 @@ interface SmoothScrollProps {
   children: React.ReactNode;
 }
 
-export const SmoothScroll = ({ children }: SmoothScrollProps) => {
+export const SmoothScroll = memo(({ children }: SmoothScrollProps) => {
   const lenisRef = useRef<Lenis | null>(null);
-  const [isReady, setIsReady] = useState(false);
+  const [contextValue, setContextValue] = useState<SmoothScrollContextType>({
+    lenis: null,
+    scrollTo: () => {},
+  });
 
   const scrollTo = useCallback((
     target: string | HTMLElement | number, 
@@ -32,33 +35,34 @@ export const SmoothScroll = ({ children }: SmoothScrollProps) => {
     if (lenisRef.current) {
       lenisRef.current.scrollTo(target, {
         offset: options?.offset ?? -100,
-        duration: options?.duration ?? 1.5,
+        duration: options?.duration ?? 1.2,
       });
     }
   }, []);
 
   useEffect(() => {
     // Check if mobile or prefers reduced motion
-    const isMobile = window.innerWidth < 768;
+    const isMobile = window.innerWidth < 768 || 'ontouchstart' in window;
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     
-    // Skip Lenis on mobile for better native scroll performance
+    // Skip Lenis on mobile and reduced motion for native performance
     if (isMobile || prefersReducedMotion) {
-      setIsReady(true);
+      setContextValue({ lenis: null, scrollTo: () => {
+        // Fallback to native scroll
+      }});
       return;
     }
 
-    // Initialize Lenis with butter-smooth optimized settings
+    // Initialize Lenis with optimized settings
     const lenis = new Lenis({
-      duration: 1.0, // Slightly faster for snappier feel
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Exponential easing
+      duration: 0.8, // Faster for snappier response
+      easing: (t) => 1 - Math.pow(1 - t, 3), // Cubic ease-out (simpler, faster)
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      touchMultiplier: 1.2, // Reduced for less over-scroll
-      infinite: false,
-      wheelMultiplier: 0.9, // Slightly higher for better response
-      lerp: 0.1, // Smooth interpolation factor
+      touchMultiplier: 1,
+      wheelMultiplier: 0.8,
+      lerp: 0.12, // Slightly faster interpolation
     });
 
     lenisRef.current = lenis;
@@ -66,15 +70,15 @@ export const SmoothScroll = ({ children }: SmoothScrollProps) => {
     // Sync Lenis with GSAP ScrollTrigger
     lenis.on('scroll', ScrollTrigger.update);
 
-    // Use GSAP ticker for consistent 60fps updates
-    const tickerCallback = (time: number) => {
-      lenis.raf(time * 1000);
+    // Use RAF for animation loop
+    let rafId: number;
+    const animate = (time: number) => {
+      lenis.raf(time);
+      rafId = requestAnimationFrame(animate);
     };
-    
-    gsap.ticker.add(tickerCallback);
-    gsap.ticker.lagSmoothing(0); // Disable lag smoothing for consistent frames
+    rafId = requestAnimationFrame(animate);
 
-    // Handle anchor links for smooth scrolling
+    // Handle anchor links
     const handleAnchorClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       const anchor = target.closest('a[href^="#"]') as HTMLAnchorElement | null;
@@ -87,36 +91,38 @@ export const SmoothScroll = ({ children }: SmoothScrollProps) => {
           if (targetElement) {
             lenis.scrollTo(targetElement as HTMLElement, {
               offset: -100,
-              duration: 1.2,
+              duration: 1,
             });
           }
         }
       }
     };
 
-    document.addEventListener('click', handleAnchorClick);
+    document.addEventListener('click', handleAnchorClick, { passive: false });
 
-    // Pause Lenis when interacting with modals/overlays
+    // Pause on modal
     const handleModalOpen = () => lenis.stop();
     const handleModalClose = () => lenis.start();
 
     document.addEventListener('modal-open', handleModalOpen);
     document.addEventListener('modal-close', handleModalClose);
 
-    setIsReady(true);
+    setContextValue({ lenis, scrollTo });
 
     return () => {
-      gsap.ticker.remove(tickerCallback);
+      cancelAnimationFrame(rafId);
       lenis.destroy();
       document.removeEventListener('click', handleAnchorClick);
       document.removeEventListener('modal-open', handleModalOpen);
       document.removeEventListener('modal-close', handleModalClose);
     };
-  }, []);
+  }, [scrollTo]);
 
   return (
-    <SmoothScrollContext.Provider value={{ lenis: lenisRef.current, scrollTo }}>
+    <SmoothScrollContext.Provider value={contextValue}>
       {children}
     </SmoothScrollContext.Provider>
   );
-};
+});
+
+SmoothScroll.displayName = 'SmoothScroll';

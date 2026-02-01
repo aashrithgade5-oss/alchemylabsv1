@@ -59,7 +59,7 @@ const ScrollRestoration = memo(() => {
 });
 ScrollRestoration.displayName = 'ScrollRestoration';
 
-// Simplified page transition variants - minimal for performance
+// Optimized page transitions - CSS transform only (GPU accelerated)
 const pageVariants = {
   initial: { opacity: 0 },
   animate: { opacity: 1 },
@@ -79,8 +79,8 @@ const AnimatedRoutes = memo(() => {
           initial="initial"
           animate="animate"
           exit="exit"
-          transition={{ duration: 0.25, ease: 'easeOut' }}
-          className="min-h-screen"
+          transition={{ duration: 0.2, ease: 'easeOut' }}
+          className="min-h-screen gpu-accelerated"
         >
           <Suspense fallback={<PageLoader />}>
             <Routes location={location}>
