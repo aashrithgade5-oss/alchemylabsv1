@@ -7,7 +7,7 @@ import { ScrollReveal } from '@/components/ScrollReveal';
 import { LazySection } from '@/components/LazySection';
 import { evaData } from '@/data/foundersData';
 
-// Navigation Component
+// Navigation Component with ED logo
 const PortfolioNav = memo(({ isDark, toggleTheme }: { isDark: boolean; toggleTheme: () => void }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -20,8 +20,8 @@ const PortfolioNav = memo(({ isDark, toggleTheme }: { isDark: boolean; toggleThe
 
   const navLinks = [
     { label: 'About', href: '#intro' },
-    { label: 'Work', href: '#work' },
     { label: 'Experience', href: '#experience' },
+    { label: 'Expertise', href: '#skills' },
     { label: 'Connect', href: '#contact' }
   ];
 
@@ -40,11 +40,24 @@ const PortfolioNav = memo(({ isDark, toggleTheme }: { isDark: boolean; toggleThe
       }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
-        {/* Logo */}
-        <Link to="/about" className={`flex items-center gap-2 ${textMuted} hover:${textColor} transition-colors`}>
-          <ArrowLeft className="w-4 h-4" />
-          <span className="font-mono text-xs tracking-wider hidden sm:inline">ALCHEMY LABS</span>
-        </Link>
+        {/* ED Logo Mark */}
+        <div className="flex items-center gap-4">
+          <div 
+            className="w-10 h-10 rounded-full flex items-center justify-center font-elegant italic text-sm"
+            style={{
+              background: isDark 
+                ? 'linear-gradient(135deg, rgba(251,113,133,0.2) 0%, rgba(220,38,38,0.1) 100%)'
+                : 'linear-gradient(135deg, rgba(251,113,133,0.3) 0%, rgba(220,38,38,0.2) 100%)',
+              border: '1px solid rgba(251,113,133,0.4)'
+            }}
+          >
+            <span className={isDark ? 'text-alchemy-pink' : 'text-alchemy-red'}>ED</span>
+          </div>
+          <Link to="/about" className={`flex items-center gap-2 ${textMuted} hover:text-alchemy-red transition-colors`}>
+            <ArrowLeft className="w-4 h-4" />
+            <span className="font-mono text-xs tracking-wider hidden sm:inline">ALCHEMY LABS</span>
+          </Link>
+        </div>
 
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-8">
@@ -108,7 +121,7 @@ const PortfolioNav = memo(({ isDark, toggleTheme }: { isDark: boolean; toggleThe
 
 PortfolioNav.displayName = 'PortfolioNav';
 
-// Hero Section - Editorial Luxury
+// Hero Section - Editorial Luxury with pink gradients
 const HeroSection = memo(({ isDark }: { isDark: boolean }) => {
   const bgGradient = isDark 
     ? 'linear-gradient(135deg, #0a0a0a 0%, #1a0a0a 50%, #0a0a0a 100%)'
@@ -170,7 +183,7 @@ const HeroSection = memo(({ isDark }: { isDark: boolean }) => {
       <div className="relative z-10 text-center px-4 sm:px-6">
         {/* Name with elegant typography */}
         <motion.h1
-          className={`font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl italic ${textColor} tracking-tight mb-4`}
+          className={`font-elegant text-5xl sm:text-6xl md:text-7xl lg:text-8xl italic ${textColor} tracking-tight mb-4`}
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
@@ -186,14 +199,14 @@ const HeroSection = memo(({ isDark }: { isDark: boolean }) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.8 }}
         >
-          {evaData.hero.titles.map((title, i) => (
+          {evaData.hero.titles.map((title) => (
             <p key={title} className={`font-body text-sm sm:text-base ${textMuted} tracking-[0.15em] uppercase`}>
               {title}
             </p>
           ))}
         </motion.div>
 
-        {/* Tagline */}
+        {/* Tagline with pink gradient */}
         <motion.p
           className="font-body text-sm sm:text-base md:text-lg"
           initial={{ opacity: 0 }}
@@ -220,7 +233,7 @@ const HeroSection = memo(({ isDark }: { isDark: boolean }) => {
             animate={{ y: [0, 6, 0] }}
             transition={{ duration: 2, repeat: Infinity }}
           >
-            <div className="w-1.5 h-1.5 rounded-full bg-alchemy-red/60 mx-auto" />
+            <ChevronDown className="w-5 h-5 text-alchemy-pink/60 mx-auto" />
           </motion.div>
         </motion.div>
       </div>
@@ -233,7 +246,6 @@ HeroSection.displayName = 'HeroSection';
 // Introduction Section
 const IntroSection = memo(({ isDark }: { isDark: boolean }) => {
   const bgColor = isDark ? 'bg-[#0a0a0a]' : 'bg-[#fafaf9]';
-  const textColor = isDark ? 'text-white' : 'text-neutral-900';
   const textMuted = isDark ? 'text-white/70' : 'text-neutral-600';
 
   return (
@@ -241,7 +253,7 @@ const IntroSection = memo(({ isDark }: { isDark: boolean }) => {
       <div className="max-w-5xl mx-auto px-4 sm:px-6">
         {/* Portrait + Bio */}
         <div className="flex flex-col items-center text-center">
-          {/* Portrait */}
+          {/* Portrait with gradient border */}
           <ScrollReveal>
             <div 
               className="w-48 h-48 sm:w-56 sm:h-56 rounded-full overflow-hidden relative mb-8"
@@ -254,7 +266,7 @@ const IntroSection = memo(({ isDark }: { isDark: boolean }) => {
               }}
             >
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className={`font-display text-5xl italic ${isDark ? 'text-white/10' : 'text-neutral-200'}`}>ED</span>
+                <span className={`font-elegant text-5xl italic ${isDark ? 'text-white/10' : 'text-neutral-200'}`}>ED</span>
               </div>
             </div>
           </ScrollReveal>
@@ -262,14 +274,30 @@ const IntroSection = memo(({ isDark }: { isDark: boolean }) => {
           {/* Bio */}
           <ScrollReveal delay={0.1}>
             <div className="max-w-2xl">
-              <p className={`font-body text-base sm:text-lg ${textMuted} font-light leading-relaxed mb-8`}>
+              <h2 
+                className="font-elegant text-2xl sm:text-3xl italic mb-4"
+                style={{
+                  background: 'linear-gradient(135deg, #dc2626, #fb7185)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text'
+                }}
+              >
+                Strategy Meets Storytelling
+              </h2>
+              <p className={`font-body text-base sm:text-lg ${textMuted} font-light leading-relaxed mb-6`}>
                 {evaData.bio.intro}
               </p>
+              {evaData.bio.extendedIntro && (
+                <p className={`font-body text-base ${isDark ? 'text-white/50' : 'text-neutral-500'} font-light leading-relaxed mb-8`}>
+                  {evaData.bio.extendedIntro}
+                </p>
+              )}
 
               {/* Quote */}
               <blockquote className="relative">
                 <p 
-                  className="font-display text-xl sm:text-2xl italic"
+                  className="font-elegant text-xl sm:text-2xl italic"
                   style={{
                     background: 'linear-gradient(135deg, #dc2626, #fb7185)',
                     WebkitBackgroundClip: 'text',
@@ -286,7 +314,7 @@ const IntroSection = memo(({ isDark }: { isDark: boolean }) => {
           {/* Expertise */}
           <ScrollReveal delay={0.2}>
             <div className="flex flex-wrap justify-center gap-3 mt-8">
-              {evaData.bio.expertise.map((tag, i) => (
+              {evaData.bio.expertise.map((tag) => (
                 <span
                   key={tag}
                   className="px-4 py-2 rounded-full font-body text-xs tracking-wide"
@@ -294,7 +322,7 @@ const IntroSection = memo(({ isDark }: { isDark: boolean }) => {
                     background: isDark 
                       ? 'linear-gradient(135deg, rgba(220,38,38,0.08) 0%, rgba(251,113,133,0.05) 100%)'
                       : 'linear-gradient(135deg, rgba(220,38,38,0.1) 0%, rgba(251,113,133,0.08) 100%)',
-                    border: '1px solid rgba(220,38,38,0.15)',
+                    border: '1px solid rgba(251,113,133,0.2)',
                     color: isDark ? 'rgba(251,113,133,0.9)' : '#dc2626'
                   }}
                 >
@@ -311,7 +339,7 @@ const IntroSection = memo(({ isDark }: { isDark: boolean }) => {
 
 IntroSection.displayName = 'IntroSection';
 
-// Experience Timeline
+// Experience Timeline with center-aligned connector
 const ExperienceSection = memo(({ isDark }: { isDark: boolean }) => {
   const bgColor = isDark ? 'bg-[#0f0f0f]' : 'bg-white';
   const textColor = isDark ? 'text-white' : 'text-neutral-900';
@@ -329,8 +357,8 @@ const ExperienceSection = memo(({ isDark }: { isDark: boolean }) => {
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
         <ScrollReveal>
-          <h2 className={`font-display text-3xl sm:text-4xl md:text-5xl italic ${textColor} mb-12 sm:mb-16 text-center`}>
-            Experience & Expertise
+          <h2 className={`font-elegant text-3xl sm:text-4xl md:text-5xl italic ${textColor} mb-12 sm:mb-16 text-center`}>
+            Professional Journey
           </h2>
         </ScrollReveal>
 
@@ -346,7 +374,7 @@ const ExperienceSection = memo(({ isDark }: { isDark: boolean }) => {
                 <div className="absolute left-1/2 -translate-x-1/2 top-0 w-3 h-3 rounded-full z-10"
                   style={{
                     background: 'linear-gradient(135deg, #dc2626, #fb7185)',
-                    boxShadow: '0 0 15px rgba(220,38,38,0.4)'
+                    boxShadow: '0 0 15px rgba(251,113,133,0.4)'
                   }}
                 />
 
@@ -357,12 +385,12 @@ const ExperienceSection = memo(({ isDark }: { isDark: boolean }) => {
                     background: isDark 
                       ? 'linear-gradient(135deg, rgba(255,255,255,0.02) 0%, rgba(220,38,38,0.03) 100%)'
                       : 'linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(251,241,241,0.5) 100%)',
-                    border: isDark ? '1px solid rgba(255,255,255,0.05)' : '1px solid rgba(220,38,38,0.1)',
+                    border: isDark ? '1px solid rgba(255,255,255,0.05)' : '1px solid rgba(251,113,133,0.15)',
                     boxShadow: isDark ? 'none' : '0 4px 24px rgba(0,0,0,0.05)'
                   }}
                 >
                   <div className="text-center">
-                    <h3 className={`font-display text-xl sm:text-2xl italic ${textColor} mb-1`}>
+                    <h3 className={`font-elegant text-xl sm:text-2xl italic ${textColor} mb-1`}>
                       {exp.company}
                     </h3>
                     <p 
@@ -421,9 +449,19 @@ const PhilosophySection = memo(({ isDark }: { isDark: boolean }) => {
     >
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center">
         <ScrollReveal>
-          <h3 className={`font-display text-2xl sm:text-3xl md:text-4xl italic ${textColor} mb-8`}>
-            Strategy Meets Storytelling
-          </h3>
+          {/* Process visualization */}
+          <div className="flex items-center justify-center gap-4 sm:gap-8 mb-12">
+            {evaData.philosophy.process.map((step, i) => (
+              <div key={step} className="flex items-center gap-4 sm:gap-8">
+                <span className={`font-body font-medium text-base sm:text-lg ${textColor}`}>
+                  {step}
+                </span>
+                {i < evaData.philosophy.process.length - 1 && (
+                  <span className="text-alchemy-pink text-lg">→</span>
+                )}
+              </div>
+            ))}
+          </div>
 
           <p className={`font-body text-base sm:text-lg ${isDark ? 'text-white/60' : 'text-neutral-600'} max-w-2xl mx-auto mb-10`}>
             I believe that the best brand work happens when strategic thinking and creative storytelling work in harmony. 
@@ -431,7 +469,7 @@ const PhilosophySection = memo(({ isDark }: { isDark: boolean }) => {
           </p>
 
           <blockquote 
-            className="font-display text-xl sm:text-2xl md:text-3xl italic"
+            className="font-elegant text-xl sm:text-2xl md:text-3xl italic"
             style={{
               background: 'linear-gradient(135deg, #dc2626, #fb7185, #fda4af)',
               WebkitBackgroundClip: 'text',
@@ -456,10 +494,10 @@ const SkillsSection = memo(({ isDark }: { isDark: boolean }) => {
   const textMuted = isDark ? 'text-white/60' : 'text-neutral-500';
 
   return (
-    <section className={`relative py-20 sm:py-28 ${bgColor} overflow-hidden`}>
+    <section id="skills" className={`relative py-20 sm:py-28 ${bgColor} overflow-hidden`}>
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <ScrollReveal>
-          <h2 className={`font-display text-3xl sm:text-4xl italic ${textColor} mb-12 text-center`}>
+          <h2 className={`font-elegant text-3xl sm:text-4xl italic ${textColor} mb-12 text-center`}>
             Expertise
           </h2>
         </ScrollReveal>
@@ -532,8 +570,8 @@ const ContactSection = memo(({ isDark }: { isDark: boolean }) => {
 
       <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 text-center">
         <ScrollReveal>
-          <h2 className={`font-display text-3xl sm:text-4xl md:text-5xl italic ${textColor} mb-4`}>
-            Start a Conversation
+          <h2 className={`font-elegant text-3xl sm:text-4xl md:text-5xl italic ${textColor} mb-4`}>
+            Let's Start a Conversation
           </h2>
           <p className={`font-body text-base sm:text-lg ${textMuted} mb-10`}>
             Open to discussing strategic partnerships and brand collaborations
@@ -542,10 +580,10 @@ const ContactSection = memo(({ isDark }: { isDark: boolean }) => {
           <div className="flex flex-wrap items-center justify-center gap-4">
             <a
               href={`mailto:${evaData.contact.email}`}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-body text-sm text-white transition-all duration-300"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-body text-sm text-white transition-all duration-300 hover:scale-105"
               style={{
                 background: 'linear-gradient(135deg, #dc2626, #fb7185)',
-                boxShadow: '0 4px 20px rgba(220,38,38,0.3)'
+                boxShadow: '0 4px 20px rgba(251,113,133,0.3)'
               }}
             >
               <Mail className="w-4 h-4" />
@@ -556,7 +594,7 @@ const ContactSection = memo(({ isDark }: { isDark: boolean }) => {
               href={evaData.contact.linkedin}
               target="_blank"
               rel="noopener noreferrer"
-              className={`inline-flex items-center gap-2 px-6 py-3 rounded-full font-body text-sm ${textColor} transition-all duration-300`}
+              className={`inline-flex items-center gap-2 px-6 py-3 rounded-full font-body text-sm ${textColor} transition-all duration-300 hover:scale-105`}
               style={{
                 background: isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.03)',
                 border: isDark ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(0,0,0,0.1)'
@@ -585,7 +623,7 @@ const ContactSection = memo(({ isDark }: { isDark: boolean }) => {
 
 ContactSection.displayName = 'ContactSection';
 
-// Scroll Progress Bar
+// Scroll Progress Bar with pink gradient
 const ScrollProgress = memo(() => {
   const [progress, setProgress] = useState(0);
 
@@ -617,7 +655,7 @@ ScrollProgress.displayName = 'ScrollProgress';
 
 // Main Page Component
 const EvaPortfolio = memo(() => {
-  const [isDark, setIsDark] = useState(false); // Light mode default for Eva's portfolio
+  const [isDark, setIsDark] = useState(false); // Light mode default for Eva's editorial luxury theme
   const toggleTheme = () => setIsDark(!isDark);
 
   const bgColor = isDark ? 'bg-[#0a0a0a]' : 'bg-[#fafaf9]';
@@ -625,7 +663,7 @@ const EvaPortfolio = memo(() => {
   return (
     <div className={`min-h-screen ${bgColor} transition-colors duration-500`}>
       <SEOHead 
-        title="Eva Doshi - Luxury Brand Strategy & Client Relations"
+        title="Eva Doshi - Luxury Brand Strategy & Client Relations | Alchemy Labs"
         description="Portfolio of Eva Doshi. Leading client relations, outreach, and strategic growth with a background in fashion and luxury brand strategy."
       />
       

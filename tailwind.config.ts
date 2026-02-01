@@ -20,6 +20,16 @@ export default {
         "deep-crimson": "hsl(var(--deep-crimson))",
         "crimson-bright": "hsl(var(--crimson-bright))",
         
+        // Extended Alchemy Shades
+        "alchemy-dark": "#0f0f0f",
+        "alchemy-darker": "#1a1a1a",
+        "alchemy-pink": "#fb7185",
+        "alchemy-pink-light": "#fda4af",
+        "alchemy-gray": "#a3a3a3",
+        "alchemy-gray-dark": "#737373",
+        "alchemy-white": "#fafaf9",
+        "alchemy-white-pure": "#ffffff",
+        
         // Structural Grays
         "charcoal-ui": "hsl(var(--charcoal-ui))",
         "graphite-layer": "hsl(var(--graphite-layer))",
@@ -79,6 +89,8 @@ export default {
         display: ['Playfair Display', 'Georgia', 'serif'],
         body: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
         mono: ['JetBrains Mono', 'SF Mono', 'monospace'],
+        elegant: ['Playfair Display', 'Georgia', 'serif'],
+        accent: ['JetBrains Mono', 'SF Mono', 'monospace'],
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -128,6 +140,8 @@ export default {
         "slide-up": "slide-up 0.8s ease-out",
         "blur-in": "blur-in 0.8s ease-out",
         "glow-pulse": "glow-pulse 2s ease-in-out infinite",
+        "spin-slow": "spin 30s linear infinite",
+        "pulse-slow": "pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite",
       },
       transitionTimingFunction: {
         smooth: "cubic-bezier(0.22, 1, 0.36, 1)",

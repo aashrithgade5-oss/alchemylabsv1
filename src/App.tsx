@@ -101,7 +101,9 @@ const AnimatedRoutes = memo(() => {
               <Route path="/privacy" element={<PrivacyPage />} />
               <Route path="/terms" element={<TermsPage />} />
               <Route path="/AashrithGadePortfolio" element={<AashrithPortfolio />} />
+              <Route path="/aashrith" element={<AashrithPortfolio />} />
               <Route path="/EvaDoshiPortfolio" element={<EvaPortfolio />} />
+              <Route path="/eva" element={<EvaPortfolio />} />
               <Route path="/admin/auth" element={<AdminAuth />} />
               <Route path="/admin" element={<AdminDashboard />} />
               <Route path="*" element={<NotFound />} />
