@@ -686,6 +686,26 @@
     transition-duration: 400ms;
   }
 
+  /* GPU Acceleration - Critical for 60fps animations */
+  .gpu-accelerated {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    will-change: transform;
+    contain: layout paint;
+  }
+  
+  /* Content visibility optimization for below-fold content */
+  .content-lazy {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 500px;
+  }
+  
+  /* Optimize painting for fixed/absolute positioned elements */
+  .paint-optimize {
+    contain: strict;
+    will-change: auto;
+  }
+
   /* Luxury Margin - Breathing room between decision points */
   .luxury-margin {
     margin-top: 80px;
@@ -786,7 +806,7 @@
     line-height: 1.1;
   }
   
-  /* Reduced Motion */
+  /* Reduced Motion - performance override */
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -794,6 +814,11 @@
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+    
+    .gpu-accelerated {
+      will-change: auto !important;
     }
   }
   
@@ -802,5 +827,17 @@
     padding-left: env(safe-area-inset-left, 0);
     padding-right: env(safe-area-inset-right, 0);
     padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+  
+  /* Smooth image loading */
+  img, video {
+    content-visibility: auto;
+  }
+  
+  /* Optimize scroll containers */
+  .scroll-smooth-native {
+    scroll-behavior: smooth;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
   }
 }

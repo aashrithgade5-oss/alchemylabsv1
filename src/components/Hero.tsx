@@ -1,10 +1,14 @@
-import { motion, useInView, useScroll, useTransform } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
 import { ArrowRight, ArrowUpRight, Sparkles, Layers, Target } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import heroVideo from '@/assets/hero-video.mp4';
 import { MagneticButton } from './MagneticButton';
-import { useRef, useState, useEffect, memo } from 'react';
-import { NeuralBackground } from './NeuralBackground';
+import { useRef, useState, useEffect, memo, lazy, Suspense } from 'react';
+
+// Lazy load heavy 3D component
+const NeuralBackground = lazy(() => 
+  import('./NeuralBackground').then(m => ({ default: m.NeuralBackground }))
+);
 
 // Three service pillars with matching icons from Solutions
 const servicePillars = [
@@ -25,24 +29,25 @@ export const Hero = memo(() => {
   const sectionRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(contentRef, { once: true, margin: '-50px' });
-  const [isMobile, setIsMobile] = useState(false);
-  
-  // Parallax scroll
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start start', 'end start'],
-  });
-  
-  const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
-  const gridOpacity = useTransform(scrollYProgress, [0, 0.5], [0.015, 0]);
-  const particleOpacity = useTransform(scrollYProgress, [0, 0.6], [0.45, 0]);
+  const [isMobile, setIsMobile] = useState(true); // Default to mobile for SSR
+  const [showParticles, setShowParticles] = useState(false);
   
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
     window.addEventListener('resize', checkMobile, { passive: true });
+    
+    // Delay particle loading for better initial load
+    if (!isMobile) {
+      const timer = setTimeout(() => setShowParticles(true), 300);
+      return () => {
+        clearTimeout(timer);
+        window.removeEventListener('resize', checkMobile);
+      };
+    }
+    
     return () => window.removeEventListener('resize', checkMobile);
-  }, []);
+  }, [isMobile]);
 
   return (
     <section 
@@ -50,8 +55,8 @@ export const Hero = memo(() => {
       ref={sectionRef} 
       className="relative min-h-[100svh] flex flex-col overflow-hidden bg-alchemy-black"
     >
-      {/* Premium multi-layer background with parallax */}
-      <motion.div className="absolute inset-0 z-[1]" style={{ y: bgY }}>
+      {/* Optimized multi-layer background - static for performance */}
+      <div className="absolute inset-0 z-[1]">
         
         {/* Base layer - deep atmospheric gradient */}
         <div 
@@ -68,7 +73,7 @@ export const Hero = memo(() => {
           }}
         />
         
-        {/* Video layer - plays on all devices with better mobile support */}
+        {/* Video layer - optimized loading */}
         <video
           autoPlay
           loop
@@ -77,24 +82,12 @@ export const Hero = memo(() => {
           webkit-playsinline="true"
           x5-playsinline="true"
           preload="metadata"
-          className={`absolute inset-0 w-full h-full object-cover scale-[1.05] ${isMobile ? 'opacity-[0.18]' : 'opacity-[0.14]'}`}
-          style={{ 
-            filter: isMobile ? 'blur(0.5px)' : 'none',
-            willChange: 'auto',
-          }}
+          className={`absolute inset-0 w-full h-full object-cover scale-[1.02] gpu-accelerated ${isMobile ? 'opacity-[0.15]' : 'opacity-[0.12]'}`}
         >
           <source src={heroVideo} type="video/mp4" />
         </video>
         
-        {/* Subtle grain/noise overlay for texture */}
-        <div 
-          className="absolute inset-0 opacity-[0.02] mix-blend-overlay"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
-          }}
-        />
-        
-        {/* Premium vignette - smooth falloff */}
+        {/* Premium vignette */}
         <div 
           className="absolute inset-0"
           style={{
@@ -104,7 +97,7 @@ export const Hero = memo(() => {
           }}
         />
         
-        {/* Top/bottom fade for content blending */}
+        {/* Top/bottom fade */}
         <div 
           className="absolute inset-0"
           style={{
@@ -124,39 +117,41 @@ export const Hero = memo(() => {
           }}
         />
         
-        {/* Secondary accent glows for depth */}
-        <div 
-          className="absolute inset-0 hidden md:block"
-          style={{
-            background: `
-              radial-gradient(ellipse 40% 35% at 25% 60%, rgba(220, 38, 38, 0.04) 0%, transparent 50%),
-              radial-gradient(ellipse 35% 30% at 75% 50%, rgba(220, 38, 38, 0.03) 0%, transparent 45%)
-            `,
-          }}
-        />
+        {/* Secondary accent glows - desktop only */}
+        {!isMobile && (
+          <div 
+            className="absolute inset-0"
+            style={{
+              background: `
+                radial-gradient(ellipse 40% 35% at 25% 60%, rgba(220, 38, 38, 0.04) 0%, transparent 50%),
+                radial-gradient(ellipse 35% 30% at 75% 50%, rgba(220, 38, 38, 0.03) 0%, transparent 45%)
+              `,
+            }}
+          />
+        )}
         
-        {/* Subtle grid with parallax fade - refined */}
-        <motion.div 
-          className="absolute inset-0 hidden md:block"
-          style={{
-            opacity: gridOpacity,
-            backgroundImage: `
-              linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px)
-            `,
-            backgroundSize: '100px 100px',
-          }}
-        />
-      </motion.div>
+        {/* Subtle grid - desktop only, static opacity */}
+        {!isMobile && (
+          <div 
+            className="absolute inset-0 opacity-[0.012]"
+            style={{
+              backgroundImage: `
+                linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px)
+              `,
+              backgroundSize: '100px 100px',
+            }}
+          />
+        )}
+      </div>
 
-      {/* Neural Particles - delayed load for performance */}
-      {!isMobile && (
-        <motion.div 
-          className="absolute inset-0 z-[2]"
-          style={{ opacity: particleOpacity }}
-        >
-          <NeuralBackground isMobile={false} />
-        </motion.div>
+      {/* Neural Particles - lazy loaded, desktop only */}
+      {showParticles && (
+        <div className="absolute inset-0 z-[2] opacity-40">
+          <Suspense fallback={null}>
+            <NeuralBackground isMobile={false} />
+          </Suspense>
+        </div>
       )}
 
       {/* Main Content - Centered in middle of viewport */}

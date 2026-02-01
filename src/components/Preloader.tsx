@@ -1,4 +1,4 @@
-import { useState, useEffect, memo, useCallback } from 'react';
+import { useState, useEffect, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import alchemyLogo from '@/assets/alchemy-logo.png';
 
@@ -7,21 +7,21 @@ export const Preloader = memo(() => {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    // Faster progress increment
+    // Fast progress simulation
     let currentProgress = 0;
     const interval = setInterval(() => {
-      currentProgress += Math.random() * 25 + 10;
+      currentProgress += 35;
       if (currentProgress >= 100) {
         currentProgress = 100;
         clearInterval(interval);
       }
       setProgress(currentProgress);
-    }, 40);
+    }, 30);
 
-    // Faster preloader dismissal
+    // Quick preloader dismissal - 800ms total
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1000);
+    }, 800);
 
     return () => {
       clearInterval(interval);

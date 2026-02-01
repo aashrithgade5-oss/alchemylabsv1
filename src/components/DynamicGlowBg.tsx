@@ -1,7 +1,4 @@
-import { memo } from 'react';
-import glowBg1 from '@/assets/glow-bg-1.png';
-import glowBg2 from '@/assets/glow-bg-2.png';
-import glowBg3 from '@/assets/glow-bg-3.png';
+import { memo, useState, useEffect } from 'react';
 
 type GlowVariant = 'waves' | 'ascii' | 'liquid' | 'random';
 type GlowPosition = 'left' | 'right' | 'center' | 'full';
@@ -13,27 +10,45 @@ interface DynamicGlowBgProps {
   className?: string;
 }
 
-const glowImages = {
-  waves: glowBg1,
-  ascii: glowBg2,
-  liquid: glowBg3,
+const glowImagePaths = {
+  waves: '/glow-bg-1.png',
+  ascii: '/glow-bg-2.png',
+  liquid: '/glow-bg-3.png',
 };
 
 /**
- * Dynamic glow background component using uploaded images
- * Styled like the footer with blur, gradient, and opacity effects
+ * GPU-optimized dynamic glow background
+ * Uses CSS filters with hardware acceleration
  */
 export const DynamicGlowBg = memo(({ 
   variant = 'liquid', 
   position = 'center',
-  opacity = 0.4,
+  opacity = 0.35,
   className = '' 
 }: DynamicGlowBgProps) => {
-  const imageSrc = variant === 'random' 
-    ? [glowBg1, glowBg2, glowBg3][Math.floor(Math.random() * 3)]
-    : glowImages[variant];
+  const [isVisible, setIsVisible] = useState(false);
+  const [imageSrc, setImageSrc] = useState<string>('');
 
-  const positionClasses = {
+  useEffect(() => {
+    // Lazy load image path
+    const src = variant === 'random' 
+      ? [glowImagePaths.waves, glowImagePaths.ascii, glowImagePaths.liquid][Math.floor(Math.random() * 3)]
+      : glowImagePaths[variant];
+    
+    // Import the actual image
+    import(`@/assets/glow-bg-${variant === 'waves' ? '1' : variant === 'ascii' ? '2' : '3'}.png`)
+      .then((module) => {
+        setImageSrc(module.default);
+        // Delay visibility for smooth entrance
+        requestAnimationFrame(() => setIsVisible(true));
+      })
+      .catch(() => {
+        // Fallback
+        setIsVisible(true);
+      });
+  }, [variant]);
+
+  const positionStyles: Record<GlowPosition, string> = {
     left: 'left-0 -translate-x-1/4',
     right: 'right-0 translate-x-1/4',
     center: 'left-1/2 -translate-x-1/2',
@@ -41,33 +56,45 @@ export const DynamicGlowBg = memo(({
   };
 
   return (
-    <div className={`absolute inset-0 overflow-hidden pointer-events-none ${className}`}>
-      {/* Image layer with blur and opacity - GPU optimized */}
+    <div 
+      className={`absolute inset-0 overflow-hidden pointer-events-none ${className}`}
+      aria-hidden="true"
+    >
+      {/* Image layer with GPU-accelerated blur */}
       <div 
-        className={`absolute top-1/2 -translate-y-1/2 ${position === 'full' ? 'w-full' : 'w-[80%] md:w-[60%]'} h-full ${positionClasses[position]}`}
-        style={{ willChange: 'auto' }}
+        className={`
+          absolute top-1/2 -translate-y-1/2 
+          ${position === 'full' ? 'w-full' : 'w-[80%] md:w-[60%]'} 
+          h-full ${positionStyles[position]}
+          transition-opacity duration-700
+          gpu-accelerated
+        `}
+        style={{ 
+          opacity: isVisible ? 1 : 0,
+        }}
       >
-        <img 
-          src={imageSrc} 
-          alt=""
-          className="w-full h-full object-cover"
-          style={{ 
-            opacity, 
-            filter: 'blur(10px)',
-            transform: 'translateZ(0)',
-          }}
-          loading="lazy"
-          decoding="async"
-        />
+        {imageSrc && (
+          <img 
+            src={imageSrc} 
+            alt=""
+            className="w-full h-full object-cover gpu-accelerated"
+            style={{ 
+              opacity, 
+              filter: 'blur(8px)',
+            }}
+            loading="lazy"
+            decoding="async"
+          />
+        )}
       </div>
       
-      {/* Gradient overlays for blending */}
+      {/* Gradient overlays for blending - pure CSS, no JS */}
       <div 
         className="absolute inset-0"
         style={{
           background: `
-            linear-gradient(to bottom, hsl(0 0% 4% / 0.8) 0%, transparent 20%, transparent 80%, hsl(0 0% 4% / 0.9) 100%),
-            linear-gradient(to right, hsl(0 0% 4% / 0.9) 0%, transparent 30%, transparent 70%, hsl(0 0% 4% / 0.9) 100%)
+            linear-gradient(to bottom, hsl(0 0% 4% / 0.85) 0%, transparent 25%, transparent 75%, hsl(0 0% 4% / 0.9) 100%),
+            linear-gradient(to right, hsl(0 0% 4% / 0.9) 0%, transparent 35%, transparent 65%, hsl(0 0% 4% / 0.9) 100%)
           `,
         }}
       />
@@ -76,15 +103,7 @@ export const DynamicGlowBg = memo(({
       <div 
         className="absolute inset-0"
         style={{
-          background: 'radial-gradient(ellipse at 50% 50%, rgba(220, 38, 38, 0.08) 0%, transparent 60%)',
-        }}
-      />
-      
-      {/* Noise overlay */}
-      <div 
-        className="absolute inset-0 opacity-[0.015]"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+          background: 'radial-gradient(ellipse at 50% 50%, rgba(220, 38, 38, 0.06) 0%, transparent 55%)',
         }}
       />
     </div>
