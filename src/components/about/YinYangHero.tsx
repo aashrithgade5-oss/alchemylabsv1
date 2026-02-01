@@ -218,7 +218,7 @@ export const YinYangHero = memo(() => {
             name="Aashrith"
             title="Founder · CEO · Director"
             descriptor="Brand Architecture · Creative Direction · AI-Native Strategy"
-            portfolioUrl="/AashrithGadePortfolio"
+            portfolioUrl="/aashrith"
             variant="yin"
             mouseX={mouseX}
             mouseY={mouseY}
@@ -233,7 +233,7 @@ export const YinYangHero = memo(() => {
             name="Eva Doshi"
             title="Co-Founder · Client Relations · Outreach"
             descriptor="Luxury Brand Strategy · Creative Direction · Growth & Partnerships"
-            portfolioUrl="/EvaDoshiPortfolio"
+            portfolioUrl="/eva"
             variant="yang"
             mouseX={mouseX}
             mouseY={mouseY}
