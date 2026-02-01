@@ -1,4 +1,4 @@
-import { useRef, useMemo, useEffect, useState, memo, forwardRef } from 'react';
+import { useRef, useMemo, useEffect, useState, memo } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 
@@ -307,9 +307,9 @@ const Particles = memo(({ config }: { config: DeviceConfig }) => {
 
 Particles.displayName = 'Particles';
 
-// Scene wrapper - use forwardRef to fix the warning
-const SceneContent = forwardRef<THREE.Group, { config: DeviceConfig }>(({ config }, ref) => (
-  <group ref={ref}>
+// Scene wrapper
+const SceneContent = memo(({ config }: { config: DeviceConfig }) => (
+  <group>
     <fog attach="fog" args={['#0a0a0a', 6, 18]} />
     
     {config.enableGlow && config.glowLayers >= 1 && (
