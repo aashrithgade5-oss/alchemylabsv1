@@ -6,11 +6,23 @@ import { YinYangHero } from '@/components/about/YinYangHero';
 import { PhilosophySection } from '@/components/about/PhilosophySection';
 import { LazySection, SectionSkeleton } from '@/components/LazySection';
 
-// Lazy load below-the-fold sections
-const AboutProcessSection = lazy(() => import('@/components/about/ProcessSection').then(m => ({ default: m.AboutProcessSection })));
-const PrinciplesSection = lazy(() => import('@/components/about/PrinciplesSection').then(m => ({ default: m.PrinciplesSection })));
-const WhoWeServe = lazy(() => import('@/components/about/WhoWeServe').then(m => ({ default: m.WhoWeServe })));
-const FoundersCTA = lazy(() => import('@/components/about/FoundersCTA').then(m => ({ default: m.FoundersCTA })));
+// Lazy load below-the-fold sections with correct named exports
+const AboutProcessSection = lazy(async () => {
+  const module = await import('@/components/about/ProcessSection');
+  return { default: module.AboutProcessSection };
+});
+const PrinciplesSection = lazy(async () => {
+  const module = await import('@/components/about/PrinciplesSection');
+  return { default: module.PrinciplesSection };
+});
+const WhoWeServe = lazy(async () => {
+  const module = await import('@/components/about/WhoWeServe');
+  return { default: module.WhoWeServe };
+});
+const FoundersCTA = lazy(async () => {
+  const module = await import('@/components/about/FoundersCTA');
+  return { default: module.FoundersCTA };
+});
 
 const About = memo(() => {
   return (
