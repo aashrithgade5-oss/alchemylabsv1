@@ -231,10 +231,19 @@
       rgba(10, 10, 11, 0.95) 100%
     );
     backdrop-filter: blur(32px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     box-shadow: 
       0 8px 32px rgba(0, 0, 0, 0.4),
       0 0 60px rgba(225, 6, 19, 0.05),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .glass-deep:hover {
+    border-color: rgba(220, 38, 38, 0.25);
+    box-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.4),
+      0 0 40px rgba(220, 38, 38, 0.12),
       inset 0 1px 0 rgba(255, 255, 255, 0.08);
   }
   
@@ -287,11 +296,15 @@
     color: hsl(var(--porcelain));
   }
   
+  .glass-input:hover {
+    border-color: rgba(255, 255, 255, 0.18);
+  }
+
   .glass-input:focus {
     background: rgba(255, 255, 255, 0.08);
     border-color: rgba(225, 6, 19, 0.5);
     box-shadow: 
-      0 0 0 4px rgba(225, 6, 19, 0.1),
+      0 0 0 3px rgba(225, 6, 19, 0.15),
       0 0 30px rgba(225, 6, 19, 0.15);
     outline: none;
   }

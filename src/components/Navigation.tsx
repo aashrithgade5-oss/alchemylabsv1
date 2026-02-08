@@ -70,45 +70,39 @@ const MobileMenu = ({
 
       {/* Navigation Links with stagger */}
       {navItems.map((item, index) => (
-        <motion.a
+        <Link
           key={item.label}
-          href={item.href}
+          to={item.href}
           onClick={onClose}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: index * 0.05 + 0.1, duration: 0.3 }}
           style={{
             color: '#FFFFFF',
             fontSize: '15px',
             fontFamily: 'Inter, system-ui, sans-serif',
             fontWeight: '400',
             letterSpacing: '0.12em',
-            textTransform: 'uppercase',
+            textTransform: 'uppercase' as const,
             textDecoration: 'none',
             padding: '10px 16px',
             opacity: 0.85,
             transition: 'opacity 0.2s ease, color 0.2s ease',
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.opacity = '1';
-            e.currentTarget.style.color = '#dc2626';
+            (e.currentTarget as HTMLElement).style.opacity = '1';
+            (e.currentTarget as HTMLElement).style.color = '#dc2626';
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.opacity = '0.85';
-            e.currentTarget.style.color = '#FFFFFF';
+            (e.currentTarget as HTMLElement).style.opacity = '0.85';
+            (e.currentTarget as HTMLElement).style.color = '#FFFFFF';
           }}
         >
           {item.label}
-        </motion.a>
+        </Link>
       ))}
 
       {/* CTA Button */}
-      <motion.a
-        href="/contact"
+      <Link
+        to="/contact"
         onClick={onClose}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4, duration: 0.3 }}
         style={{
           marginTop: '20px',
           backgroundColor: '#dc2626',
@@ -126,7 +120,7 @@ const MobileMenu = ({
       >
         Book a Sprint
         <ArrowRight size={16} />
-      </motion.a>
+      </Link>
       
       {/* Social Links */}
       <motion.div
@@ -226,13 +220,20 @@ const NavLink = ({
         transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
       />
       
-      {/* Active indicator */}
+      {/* Active indicator - dot below */}
       {isActive && (
-        <motion.div
-          layoutId="nav-indicator"
-          className="absolute inset-0 bg-alchemy-red/10 rounded-full border border-alchemy-red/20"
-          transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-        />
+        <>
+          <motion.div
+            layoutId="nav-indicator"
+            className="absolute inset-0 bg-alchemy-red/10 rounded-full border border-alchemy-red/20"
+            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+          />
+          <motion.div
+            layoutId="nav-dot"
+            className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-alchemy-red"
+            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+          />
+        </>
       )}
     </Link>
   );

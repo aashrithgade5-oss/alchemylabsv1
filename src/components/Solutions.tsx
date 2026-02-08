@@ -183,7 +183,7 @@ export const Solutions = memo(() => {
                 onClick={() => setActiveToggle(activeToggle === option.id ? null : option.id)}
                 className={`px-4 py-2 rounded-full font-body text-sm transition-all duration-300 ${
                   activeToggle === option.id 
-                    ? 'bg-alchemy-red/20 text-porcelain border border-alchemy-red/40' 
+                    ? 'bg-alchemy-red/25 text-porcelain border border-alchemy-red/50 shadow-[0_0_15px_rgba(220,38,38,0.2)]' 
                     : 'text-porcelain/50 hover:text-porcelain'
                 }`}
               >

@@ -1,5 +1,6 @@
-import { memo, useEffect, useState } from 'react';
+import { memo, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { getIsMobile } from '@/lib/utils';
 
 type SceneMode = 'hero' | 'system' | 'gallery' | 'experience' | 'offer' | 'contact';
 
@@ -59,50 +60,54 @@ const sceneConfigs: Record<SceneMode, {
 
 export const BackgroundScene = memo(({ mode = 'hero', className }: BackgroundSceneProps) => {
   const config = sceneConfigs[mode];
+  const [isMobile, setIsMobile] = useState(true);
+
+  useEffect(() => {
+    setIsMobile(getIsMobile());
+  }, []);
 
   return (
     <div className={`fixed inset-0 pointer-events-none z-0 ${className}`}>
       {/* Base gradient */}
-      <motion.div
+      <div
         className="absolute inset-0"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1.2 }}
         style={{ background: config.gradient }}
       />
 
-      {/* Animated orbs */}
-      <AnimatePresence mode="wait">
-        {config.orbs.map((orb, i) => (
-          <motion.div
-            key={`${mode}-orb-${i}`}
-            className="absolute rounded-full"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ 
-              opacity: 1, 
-              scale: 1,
-              x: [0, 20, 0],
-              y: [0, -15, 0],
-            }}
-            exit={{ opacity: 0, scale: 0.8 }}
-            transition={{
-              opacity: { duration: 1.2 },
-              scale: { duration: 1.2 },
-              x: { duration: 20, repeat: Infinity, ease: 'easeInOut' },
-              y: { duration: 15, repeat: Infinity, ease: 'easeInOut' },
-            }}
-            style={{
-              left: orb.x,
-              top: orb.y,
-              width: orb.size,
-              height: orb.size,
-              background: orb.color,
-              filter: `blur(${orb.blur})`,
-              transform: 'translate(-50%, -50%)',
-            }}
-          />
-        ))}
-      </AnimatePresence>
+      {/* Animated orbs - desktop only */}
+      {!isMobile && (
+        <AnimatePresence mode="wait">
+          {config.orbs.map((orb, i) => (
+            <motion.div
+              key={`${mode}-orb-${i}`}
+              className="absolute rounded-full"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ 
+                opacity: 1, 
+                scale: 1,
+                x: [0, 20, 0],
+                y: [0, -15, 0],
+              }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              transition={{
+                opacity: { duration: 1.2 },
+                scale: { duration: 1.2 },
+                x: { duration: 20, repeat: Infinity, ease: 'easeInOut' },
+                y: { duration: 15, repeat: Infinity, ease: 'easeInOut' },
+              }}
+              style={{
+                left: orb.x,
+                top: orb.y,
+                width: orb.size,
+                height: orb.size,
+                background: orb.color,
+                filter: `blur(${orb.blur})`,
+                transform: 'translate(-50%, -50%)',
+              }}
+            />
+          ))}
+        </AnimatePresence>
+      )}
 
       {/* Vignette overlay */}
       {config.vignette !== 'none' && (

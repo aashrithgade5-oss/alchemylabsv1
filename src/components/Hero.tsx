@@ -171,11 +171,11 @@ export const Hero = memo(() => {
             <span 
               className="inline-block px-4 py-2 rounded-full"
               style={{
-                background: 'rgba(220, 38, 38, 0.08)',
-                border: '1px solid rgba(220, 38, 38, 0.2)',
+                background: 'rgba(220, 38, 38, 0.12)',
+                border: '1px solid rgba(220, 38, 38, 0.35)',
               }}
             >
-              <span className="font-mono text-[9px] sm:text-[10px] tracking-[0.12em] uppercase text-porcelain/70">
+              <span className="font-mono text-[9px] sm:text-[10px] tracking-[0.12em] uppercase text-porcelain/85">
                 AI-Powered Creative Studio
               </span>
             </span>
@@ -270,7 +270,7 @@ export const Hero = memo(() => {
 
             <a
               href="#process"
-              className="group inline-flex items-center gap-2 px-4 py-2.5 font-body text-sm text-porcelain/45 hover:text-porcelain/75 transition-colors duration-300"
+              className="group inline-flex items-center gap-2 px-4 py-2.5 font-body text-sm text-porcelain/60 hover:text-porcelain/85 transition-colors duration-300 hover:underline underline-offset-4"
             >
               <span>See How It Works</span>
               <ArrowUpRight className="w-3.5 h-3.5 text-alchemy-red/70 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -301,10 +301,10 @@ export const Hero = memo(() => {
           >
             {stats.map((stat) => (
               <div key={stat.label} className="text-center">
-                <span className="block font-display text-sm sm:text-base md:text-lg italic text-porcelain/70">
+                <span className="block font-display text-base sm:text-lg md:text-xl italic text-porcelain/70">
                   {stat.number}
                 </span>
-                <span className="block font-mono text-[6px] sm:text-[7px] text-porcelain/30 uppercase tracking-[0.1em]">
+                <span className="block font-mono text-[7px] sm:text-[8px] text-porcelain/45 uppercase tracking-[0.1em]">
                   {stat.label}
                 </span>
               </div>
@@ -318,13 +318,13 @@ export const Hero = memo(() => {
             transition={{ delay: 1, duration: 0.5 }}
             className="flex flex-col items-center gap-1.5"
           >
-            <span className="font-mono text-[6px] sm:text-[7px] text-porcelain/20 uppercase tracking-[0.15em]">
+            <span className="font-mono text-[7px] sm:text-[8px] text-porcelain/35 uppercase tracking-[0.15em]">
               Scroll
             </span>
-            <div className="relative w-3.5 h-6 rounded-full border border-porcelain/10 flex justify-center">
+            <div className="relative w-4 h-7 rounded-full border border-porcelain/15 flex justify-center">
               <motion.div 
-                className="absolute top-1 w-0.5 h-1 rounded-full bg-alchemy-red/50"
-                animate={{ y: [0, 6, 0], opacity: [0.7, 0.2, 0.7] }}
+                className="absolute top-1.5 w-0.5 h-1.5 rounded-full bg-alchemy-red/60"
+                animate={{ y: [0, 6, 0], opacity: [0.8, 0.3, 0.8] }}
                 transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
               />
             </div>

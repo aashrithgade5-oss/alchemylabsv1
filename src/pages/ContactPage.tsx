@@ -47,7 +47,7 @@ export const ContactPage = () => {
               opacity: [0.1, 0.2, 0.1]
             }}
             transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-            className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-alchemy-red/15 rounded-full blur-[180px]" 
+            className="absolute top-1/4 left-1/4 w-[400px] h-[400px] bg-alchemy-red/15 rounded-full blur-[120px]" 
           />
           <motion.div 
             animate={{ 
@@ -55,7 +55,7 @@ export const ContactPage = () => {
               opacity: [0.08, 0.15, 0.08]
             }}
             transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
-            className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-deep-crimson/20 rounded-full blur-[150px]" 
+            className="absolute bottom-1/4 right-1/4 w-[350px] h-[350px] bg-deep-crimson/20 rounded-full blur-[100px]" 
           />
         </div>
         
@@ -78,7 +78,7 @@ export const ContactPage = () => {
             transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
             className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-display tracking-display text-porcelain mb-6"
           >
-            Start a <span className="italic text-alchemy-red text-glow">Conversation</span>
+            <span className="font-medium">Start a</span> <span className="italic text-alchemy-red text-glow">Conversation</span>
           </motion.h1>
           
           <motion.p
@@ -100,7 +100,7 @@ export const ContactPage = () => {
             <motion.div
               animate={{ y: [0, 10, 0] }}
               transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-              className="w-6 h-10 rounded-full border-2 border-porcelain/20 mx-auto flex items-start justify-center p-2"
+              className="w-7 h-11 rounded-full border-2 border-porcelain/25 mx-auto flex items-start justify-center p-2"
             >
               <motion.div 
                 animate={{ y: [0, 12, 0], opacity: [1, 0.3, 1] }}

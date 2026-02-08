@@ -393,6 +393,15 @@ export const Contact = memo(() => {
                     onExpire={handleTurnstileExpire}
                   />
 
+                  {/* Trust signals */}
+                  <div className="flex items-center justify-center gap-3 mb-4">
+                    <span className="font-mono text-[9px] text-porcelain/40 tracking-wider">Reply within 24h</span>
+                    <span className="text-porcelain/20">·</span>
+                    <span className="font-mono text-[9px] text-porcelain/40 tracking-wider">NDA available</span>
+                    <span className="text-porcelain/20">·</span>
+                    <span className="font-mono text-[9px] text-porcelain/40 tracking-wider">Free first call</span>
+                  </div>
+
                   {/* Submit Button */}
                   <MagneticButton
                     type="submit"

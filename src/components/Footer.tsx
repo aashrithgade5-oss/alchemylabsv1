@@ -225,7 +225,8 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
           transition={{ delay: 0.45 }}
           className="text-center mb-6"
         >
-          <p className="font-mono text-[10px] text-porcelain/40 tracking-wider">
+          <div className="w-full h-px bg-porcelain/8 mb-6" />
+          <p className="font-mono text-[10px] text-porcelain/55 tracking-wider">
             Founder-led. Systems-driven. Outcome-obsessed.
           </p>
         </motion.div>

@@ -93,18 +93,18 @@ const FounderCircle = memo(({ name, title, descriptor, portfolioUrl, variant, mo
             {descriptor}
           </p>
           
-          {/* CTA Button */}
+          {/* CTA Button - glass pill style */}
           <Link
             to={portfolioUrl}
-            className="inline-flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-body transition-all duration-300 group/btn"
+            className="inline-flex items-center gap-2 px-5 sm:px-7 py-2.5 sm:py-3 rounded-full text-xs sm:text-sm font-body font-medium transition-all duration-300 group/btn"
             style={{
-              background: 'rgba(220,38,38,0.1)',
-              border: '1px solid rgba(220,38,38,0.3)',
-              boxShadow: '0 0 20px rgba(220,38,38,0.1)'
+              background: 'rgba(220,38,38,0.15)',
+              border: '1px solid rgba(220,38,38,0.4)',
+              boxShadow: '0 0 20px rgba(220,38,38,0.15)'
             }}
           >
             <span className="text-porcelain group-hover/btn:text-alchemy-red transition-colors">
-              Discover More
+              Discover Portfolio
             </span>
             <motion.span
               className="text-alchemy-red"
@@ -174,14 +174,14 @@ export const YinYangHero = memo(() => {
         />
       </div>
 
-      {/* Particle effect dots */}
-      {[...Array(12)].map((_, i) => (
+      {/* Particle effect dots - reduced count on mobile */}
+      {[...Array(8)].map((_, i) => (
         <motion.div
           key={i}
           className="absolute w-1 h-1 rounded-full bg-alchemy-red/20"
           style={{
-            left: `${15 + (i * 7)}%`,
-            top: `${20 + (i * 5) % 60}%`,
+            left: `${15 + (i * 9)}%`,
+            top: `${20 + (i * 6) % 60}%`,
           }}
           animate={{
             y: [0, -30, 0],
@@ -207,7 +207,7 @@ export const YinYangHero = memo(() => {
           <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-porcelain tracking-tight mb-3 sm:mb-4">
             MEET OUR FOUNDERS
           </h1>
-          <p className="font-body text-base sm:text-lg md:text-xl text-porcelain/60">
+          <p className="font-mono text-xs sm:text-sm text-porcelain/60 tracking-[0.2em] uppercase">
             Architects of meaning, systems, and inevitability
           </p>
         </motion.div>
