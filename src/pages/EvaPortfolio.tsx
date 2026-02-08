@@ -181,15 +181,19 @@ const HeroSection = memo(({ isDark }: { isDark: boolean }) => {
 
       {/* Content */}
       <div className="relative z-10 text-center px-4 sm:px-6">
-        {/* Name with elegant typography */}
+        {/* Name with bold uppercase typography */}
         <motion.h1
-          className={`font-elegant text-5xl sm:text-6xl md:text-7xl lg:text-8xl italic ${textColor} tracking-tight mb-4`}
+          className="mb-4"
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-          style={{ letterSpacing: '0.02em' }}
         >
-          {evaData.hero.name}
+          <span className={`block font-body font-black text-[3.5rem] sm:text-[4.5rem] md:text-[6rem] lg:text-[7rem] uppercase leading-[0.85] tracking-[-0.03em] ${textColor}`}>
+            EVA
+          </span>
+          <span className="block font-body font-black text-[3.5rem] sm:text-[4.5rem] md:text-[6rem] lg:text-[7rem] uppercase leading-[0.85] tracking-[-0.03em] bg-gradient-to-r from-alchemy-red via-alchemy-pink to-alchemy-red bg-clip-text text-transparent bg-[length:200%_100%] animate-gradient">
+            DOSHI
+          </span>
         </motion.h1>
 
         {/* Titles */}

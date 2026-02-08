@@ -212,7 +212,7 @@ export const Solutions = memo(() => {
                 <TiltCard>
                   <div
                     className={`group glass-deep rounded-3xl p-8 md:p-10 h-full transition-all duration-500 relative overflow-hidden ${
-                      isHighlighted ? 'border-alchemy-red/40 shadow-[0_0_40px_rgba(220,38,38,0.15)]' : 'hover:border-alchemy-red/30'
+                      isHighlighted ? 'border-alchemy-red/40 shadow-[0_0_40px_rgba(220,38,38,0.15)]' : ''
                     }`}
                     style={{ 
                       transformStyle: 'preserve-3d',
@@ -226,6 +226,8 @@ export const Solutions = memo(() => {
                       }`}
                       style={{ transform: 'translateZ(-10px)' }}
                     />
+                    {/* Inner glow on hover */}
+                    <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-alchemy-red/0 via-alchemy-red/[0.03] to-alchemy-red/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
                     {/* Background number */}
                     <span 

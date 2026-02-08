@@ -161,7 +161,7 @@ export const Hero = memo(() => {
       >
         <div className="flex flex-col items-center text-center">
           
-          {/* Eyebrow Badge */}
+          {/* Eyebrow Badge — Enhanced */}
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -169,13 +169,14 @@ export const Hero = memo(() => {
             className="mb-5 md:mb-7"
           >
             <span 
-              className="inline-block px-4 py-2 rounded-full"
+              className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full"
               style={{
                 background: 'rgba(220, 38, 38, 0.12)',
-                border: '1px solid rgba(220, 38, 38, 0.35)',
+                border: '1px solid rgba(220, 38, 38, 0.4)',
               }}
             >
-              <span className="font-mono text-[9px] sm:text-[10px] tracking-[0.12em] uppercase text-porcelain/85">
+              <span className="w-1.5 h-1.5 bg-alchemy-red rounded-full animate-pulse" />
+              <span className="font-mono text-[9px] sm:text-[10px] tracking-[0.15em] uppercase text-porcelain/90">
                 AI-Powered Creative Studio
               </span>
             </span>

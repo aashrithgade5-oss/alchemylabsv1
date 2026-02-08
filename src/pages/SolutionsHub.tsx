@@ -12,6 +12,7 @@ import { aiServices, brandingServices, consultationServices } from '@/data/servi
 import { ScrollReveal, StaggerReveal } from '@/components/ScrollReveal';
 import { SpotlightContainer, SpotlightItem } from '@/components/SpotlightGrid';
 import { DynamicGlowBg } from '@/components/DynamicGlowBg';
+import { BlueprintGrid, NoiseTexture } from '@/components/effects';
 
 const pillars = [
   {
@@ -65,35 +66,80 @@ export const SolutionsHub = () => {
       {/* Glow Background */}
       <GlowBackground variant="soft-ambient" />
       
-      {/* Hero Section - Minimal */}
-      <section className="relative pt-24 sm:pt-32 pb-12 sm:pb-16 overflow-hidden">
+      {/* Hero Section - Blueprint Aesthetic */}
+      <section className="relative min-h-[70vh] flex items-end pb-16 sm:pb-20 pt-24 sm:pt-32 overflow-hidden">
+        {/* Blueprint + Noise overlays */}
         <div className="absolute inset-0 pointer-events-none">
+          <BlueprintGrid opacity={0.04} />
+          <NoiseTexture opacity={0.03} />
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] sm:w-[1000px] h-[400px] sm:h-[600px] bg-alchemy-red/5 rounded-full blur-[150px] sm:blur-[200px]" />
         </div>
+
+        {/* Corner brackets */}
+        <div className="absolute inset-0 pointer-events-none hidden lg:block">
+          <div className="absolute top-8 left-8 w-16 h-16 border-t-2 border-l-2 border-alchemy-red/20" />
+          <div className="absolute top-8 right-8 w-16 h-16 border-t-2 border-r-2 border-alchemy-red/20" />
+          <div className="absolute bottom-8 left-8 w-16 h-16 border-b-2 border-l-2 border-alchemy-red/20" />
+          <div className="absolute bottom-8 right-8 w-16 h-16 border-b-2 border-r-2 border-alchemy-red/20" />
+        </div>
+
+        {/* Technical labels */}
+        <div className="absolute top-12 left-28 font-mono text-[10px] text-alchemy-red/30 hidden lg:flex items-center gap-2">
+          <div className="w-1 h-1 bg-alchemy-red animate-pulse" />
+          <span>SOLUTIONS.MODULE</span>
+        </div>
+        <div className="absolute bottom-12 right-28 font-mono text-[10px] text-porcelain/20 hidden lg:block">
+          SYSTEM.v2.1
+        </div>
         
-        <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-6 md:px-12">
-          {/* Breadcrumbs */}
+        <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-6 md:px-12 w-full">
           <Breadcrumbs className="mb-8" />
           
           <ScrollReveal>
             <div className="max-w-4xl">
-              <div className="flex items-center gap-4 mb-8">
-                <div className="w-12 h-px bg-alchemy-red" />
-                <span className="font-mono text-xs text-alchemy-red tracking-label uppercase">
-                  Our Solutions
+              {/* Eyebrow badge */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mb-8"
+              >
+                <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-alchemy-red/20 bg-alchemy-red/5 backdrop-blur-sm">
+                  <div className="w-1.5 h-1.5 bg-alchemy-red rounded-full animate-pulse" />
+                  <span className="font-mono text-[10px] sm:text-xs uppercase tracking-[0.3em] text-alchemy-red/80">
+                    Our Framework
+                  </span>
                 </span>
-              </div>
+              </motion.div>
               
-              <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl leading-[0.95] tracking-display text-porcelain mb-6 sm:mb-8 text-balance">
-                Three pillars.
+              <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl leading-[0.95] tracking-display text-porcelain mb-4 sm:mb-6 text-balance">
+                Three{' '}
+                <span className="italic text-alchemy-red">pillars.</span>
                 <br />
-                <span className="italic text-alchemy-red">Infinite possibilities.</span>
+                <span className="font-body font-light text-porcelain/70">One{' '}<span className="font-display italic">system.</span></span>
               </h1>
               
-              <p className="font-body text-lg md:text-xl text-porcelain/50 max-w-xl font-light leading-relaxed">
-                Every brand challenge requires a different instrument. 
-                Choose yours.
+              <p className="font-body text-lg md:text-xl text-porcelain/50 max-w-2xl font-light leading-relaxed mb-12">
+                Strategic solutions engineered for brands that refuse to settle for noise.
+                Each pillar designed to compound, not just campaign.
               </p>
+
+              {/* Quick stats */}
+              <div className="flex flex-wrap gap-8 lg:gap-12">
+                {[
+                  { label: 'Delivery Speed', value: '4-6 Weeks' },
+                  { label: 'Success Rate', value: '98%' },
+                  { label: 'Client Satisfaction', value: '5.0' },
+                ].map((stat, i) => (
+                  <div key={i} className="text-left">
+                    <div className="font-display text-2xl lg:text-3xl font-bold bg-gradient-to-r from-alchemy-red to-alchemy-pink bg-clip-text text-transparent mb-1">
+                      {stat.value}
+                    </div>
+                    <div className="font-mono text-[10px] uppercase tracking-wider text-porcelain/40">
+                      {stat.label}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </ScrollReveal>
         </div>
