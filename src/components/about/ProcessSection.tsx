@@ -50,7 +50,13 @@ export const AboutProcessSection = memo(() => {
 
         {/* Process cards with vertical separators */}
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-0 mb-12 sm:mb-16">
-          {processSteps.map((step, i) => (
+          {processSteps.map((step, i) => {
+            const gradients = [
+              '', // Card 1 - neutral
+              'rgba(220,38,38,0.03)', // Card 2 - slight tint
+              'rgba(220,38,38,0.06)', // Card 3 - stronger
+            ];
+            return (
             <ScrollReveal key={step.title} delay={i * 0.15}>
               <motion.div 
                 className="relative px-4 md:px-8 py-8 text-center group"
@@ -62,11 +68,11 @@ export const AboutProcessSection = memo(() => {
                   <div className="hidden md:block absolute left-0 top-1/2 -translate-y-1/2 w-px h-24 bg-gradient-to-b from-transparent via-porcelain/10 to-transparent" />
                 )}
 
-                {/* Glass card effect on hover */}
+                {/* Glass card effect on hover + progressive gradient */}
                 <div 
                   className="absolute inset-2 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                   style={{
-                    background: 'linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(220,38,38,0.05) 100%)',
+                    background: `linear-gradient(135deg, rgba(255,255,255,0.03) 0%, ${gradients[i] || 'rgba(220,38,38,0.05)'} 100%)`,
                     border: '1px solid rgba(220,38,38,0.1)'
                   }}
                 />
@@ -100,7 +106,8 @@ export const AboutProcessSection = memo(() => {
                 </p>
               </motion.div>
             </ScrollReveal>
-          ))}
+            );
+          })}
         </div>
 
         {/* Closing statement */}

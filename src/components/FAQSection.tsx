@@ -94,6 +94,7 @@ export const FAQSection = memo(() => {
                   border: openIndex === i 
                     ? '1px solid rgba(220, 38, 38, 0.25)'
                     : '1px solid rgba(255, 255, 255, 0.06)',
+                  borderLeft: openIndex === i ? '3px solid rgba(220, 38, 38, 0.7)' : '1px solid rgba(255, 255, 255, 0.06)',
                 }}
               >
                 <div className="flex items-center justify-between gap-4">

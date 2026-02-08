@@ -50,6 +50,11 @@ export const PrinciplesSection = memo(() => {
                   }}
                 />
 
+                {/* Large serif numeral background */}
+                <span className="absolute top-4 right-4 font-display text-5xl sm:text-6xl italic text-porcelain/[0.04] leading-none pointer-events-none select-none">
+                  0{principle.index}
+                </span>
+
                 {/* Index */}
                 <span className="relative z-10 font-mono text-xs text-alchemy-red/50 tracking-wider block mb-3">
                   0{principle.index}

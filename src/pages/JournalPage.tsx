@@ -121,13 +121,14 @@ export const JournalPage = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                className="glass-deep rounded-2xl p-8 group cursor-pointer hover:border-alchemy-red/30 transition-all duration-400 interactive-hover"
+                className="glass-deep rounded-2xl p-8 group cursor-pointer transition-all duration-400"
+                whileHover={{ y: -4, borderColor: 'rgba(220,38,38,0.3)' }}
               >
                 <div className="flex items-center gap-3 mb-4">
                   <span className="px-2 py-1 rounded-full bg-alchemy-red/10 text-alchemy-red font-mono text-[10px] tracking-label uppercase">
                     {post.category}
                   </span>
-                  <span className="font-mono text-xs text-porcelain/40 tracking-label uppercase flex items-center gap-1">
+                  <span className="font-mono text-xs text-porcelain/45 tracking-label uppercase flex items-center gap-1">
                     <Calendar className="w-3 h-3" />
                     {post.date}
                   </span>
@@ -142,7 +143,7 @@ export const JournalPage = () => {
                 </p>
                 
                 <div className="flex items-center justify-between">
-                  <span className="font-mono text-xs text-porcelain/30">{post.readTime}</span>
+                  <span className="font-mono text-xs text-porcelain/45">{post.readTime}</span>
                   <Link
                     to={`/journal/${post.slug}`}
                     className="inline-flex items-center gap-2 font-body text-sm text-porcelain/50 hover:text-alchemy-red transition-colors duration-300 group/link no-glow"

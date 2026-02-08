@@ -1,6 +1,6 @@
-import { memo, useState, ReactNode } from 'react';
+import { memo, useState, useEffect, ReactNode } from 'react';
 import { motion } from 'framer-motion';
-import { cn } from '@/lib/utils';
+import { cn, getIsMobile } from '@/lib/utils';
 
 interface MarqueeRowProps {
   children: ReactNode[];
@@ -26,8 +26,27 @@ export const MarqueeRow = memo(({
   gap = 24,
 }: MarqueeRowProps) => {
   const [isPaused, setIsPaused] = useState(false);
+  const [isMobile, setIsMobile] = useState(true);
   const duration = speedDurations[speed];
   const animateX = direction === 'left' ? ['0%', '-50%'] : ['-50%', '0%'];
+
+  useEffect(() => {
+    setIsMobile(getIsMobile());
+  }, []);
+
+  // Mobile: native horizontal scroll instead of infinite animation
+  if (isMobile) {
+    return (
+      <div
+        className={cn('overflow-x-auto scroll-smooth-native snap-x snap-mandatory', className)}
+        style={{ WebkitOverflowScrolling: 'touch' }}
+      >
+        <div className="flex" style={{ gap }}>
+          {children}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -36,7 +55,7 @@ export const MarqueeRow = memo(({
       onMouseLeave={() => pauseOnHover && setIsPaused(false)}
     >
       <motion.div
-        className="flex"
+        className="flex will-change-transform"
         style={{ gap }}
         animate={{ x: animateX }}
         transition={{

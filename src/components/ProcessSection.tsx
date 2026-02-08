@@ -135,8 +135,8 @@ export const ProcessSection = memo(() => {
                     <Icon className="w-6 h-6 text-alchemy-red" />
                   </div>
 
-                  <span className="font-mono text-[10px] text-alchemy-red/60 tracking-[0.2em] uppercase">
-                    Step {step.number}
+                  <span className="font-display text-lg italic text-alchemy-red/60 tracking-[0.2em]">
+                    {step.number}
                   </span>
                   
                   <h3 className="font-display text-xl italic text-porcelain mt-2 mb-2">

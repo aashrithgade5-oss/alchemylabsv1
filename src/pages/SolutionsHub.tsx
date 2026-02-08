@@ -251,10 +251,19 @@ export const SolutionsHub = () => {
                 Ready to start?
               </h2>
               
-              <p className="font-body text-base sm:text-lg text-porcelain/50 font-light leading-relaxed max-w-xl mx-auto mb-8 sm:mb-10 px-2">
+              <p className="font-body text-base sm:text-lg text-porcelain/50 font-light leading-relaxed max-w-xl mx-auto mb-6 sm:mb-8 px-2">
                 Book a Strategy Sprint—3-5 days of intensive collaboration 
                 delivering systems ready to deploy.
               </p>
+
+              {/* Trust signals */}
+              <div className="flex items-center justify-center gap-3 mb-8">
+                <span className="font-mono text-[10px] text-porcelain/45 tracking-wider">NDA available</span>
+                <span className="text-porcelain/20">·</span>
+                <span className="font-mono text-[10px] text-porcelain/45 tracking-wider">24h reply</span>
+                <span className="text-porcelain/20">·</span>
+                <span className="font-mono text-[10px] text-porcelain/45 tracking-wider">Free first call</span>
+              </div>
               
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <MagneticButton 
