@@ -655,8 +655,19 @@ ScrollProgress.displayName = 'ScrollProgress';
 
 // Main Page Component
 const EvaPortfolio = memo(() => {
-  const [isDark, setIsDark] = useState(false); // Light mode default for Eva's editorial luxury theme
-  const toggleTheme = () => setIsDark(!isDark);
+  const [isDark, setIsDark] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    const saved = localStorage.getItem('eva-theme');
+    return saved ? saved === 'dark' : false; // Light by default
+  });
+
+  const toggleTheme = () => {
+    setIsDark(prev => {
+      const next = !prev;
+      localStorage.setItem('eva-theme', next ? 'dark' : 'light');
+      return next;
+    });
+  };
 
   const bgColor = isDark ? 'bg-[#0a0a0a]' : 'bg-[#fafaf9]';
 
