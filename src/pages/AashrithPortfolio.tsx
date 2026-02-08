@@ -1,7 +1,7 @@
 import { memo, useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Linkedin, Mail, Calendar, Menu, X, ChevronDown, Send } from 'lucide-react';
+import { ArrowLeft, Linkedin, Mail, Calendar, Menu, X, ChevronDown, Send, Sun, Moon } from 'lucide-react';
 import { SEOHead } from '@/components/SEOHead';
 import { aashrithData } from '@/data/foundersData';
 import { portfolioProjects, serviceOfferings } from '@/data/portfolioProjects';
@@ -21,7 +21,7 @@ import {
 // ============================================
 // NAVIGATION
 // ============================================
-const PortfolioNav = memo(() => {
+const PortfolioNav = memo(({ isDark, toggleTheme }: { isDark: boolean; toggleTheme: () => void }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -44,15 +44,15 @@ const PortfolioNav = memo(() => {
         scrolled ? 'py-3' : 'py-4 sm:py-6'
       }`}
       style={{
-        background: scrolled ? 'rgba(10,10,10,0.9)' : 'transparent',
+        background: scrolled ? (isDark ? 'rgba(10,10,10,0.9)' : 'rgba(250,250,249,0.9)') : 'transparent',
         backdropFilter: scrolled ? 'blur(24px)' : 'none',
-        borderBottom: scrolled ? '1px solid rgba(255,255,255,0.05)' : 'none',
+        borderBottom: scrolled ? `1px solid ${isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'}` : 'none',
       }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <div
-            className="w-10 h-10 rounded-full flex items-center justify-center font-mono text-sm font-bold text-porcelain"
+            className={`w-10 h-10 rounded-full flex items-center justify-center font-mono text-sm font-bold ${isDark ? 'text-porcelain' : 'text-neutral-900'}`}
             style={{
               background: 'linear-gradient(135deg, rgba(220,38,38,0.2) 0%, rgba(220,38,38,0.05) 100%)',
               border: '1px solid rgba(220,38,38,0.3)',
@@ -62,7 +62,7 @@ const PortfolioNav = memo(() => {
           </div>
           <Link
             to="/about"
-            className="flex items-center gap-2 text-porcelain/50 hover:text-porcelain transition-colors"
+            className={`flex items-center gap-2 ${isDark ? 'text-porcelain/50 hover:text-porcelain' : 'text-neutral-500 hover:text-neutral-900'} transition-colors`}
           >
             <ArrowLeft className="w-4 h-4" />
             <span className="font-mono text-xs tracking-wider hidden sm:inline">ALCHEMY LABS</span>
@@ -74,7 +74,7 @@ const PortfolioNav = memo(() => {
             <a
               key={link.label}
               href={link.href}
-              className="font-body text-sm text-porcelain/60 hover:text-porcelain transition-colors relative group"
+              className={`font-body text-sm ${isDark ? 'text-porcelain/60 hover:text-porcelain' : 'text-neutral-600 hover:text-neutral-900'} transition-colors relative group`}
             >
               {link.label}
               <span className="absolute -bottom-1 left-0 w-0 h-px bg-alchemy-red group-hover:w-full transition-all duration-300" />
@@ -82,12 +82,20 @@ const PortfolioNav = memo(() => {
           ))}
         </div>
 
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden p-2 rounded-full hover:bg-white/5 transition-colors"
-        >
-          {isOpen ? <X className="w-5 h-5 text-porcelain" /> : <Menu className="w-5 h-5 text-porcelain" />}
-        </button>
+        <div className="flex items-center gap-4">
+          <button
+            onClick={toggleTheme}
+            className={`p-2 rounded-full ${isDark ? 'hover:bg-white/5' : 'hover:bg-black/5'} transition-colors`}
+          >
+            {isDark ? <Sun className={`w-4 h-4 ${isDark ? 'text-porcelain/60' : 'text-neutral-600'}`} /> : <Moon className={`w-4 h-4 text-neutral-600`} />}
+          </button>
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className={`md:hidden p-2 rounded-full ${isDark ? 'hover:bg-white/5' : 'hover:bg-black/5'} transition-colors`}
+          >
+            {isOpen ? <X className={`w-5 h-5 ${isDark ? 'text-porcelain' : 'text-neutral-900'}`} /> : <Menu className={`w-5 h-5 ${isDark ? 'text-porcelain' : 'text-neutral-900'}`} />}
+          </button>
+        </div>
       </div>
 
       <AnimatePresence>
@@ -96,7 +104,7 @@ const PortfolioNav = memo(() => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden absolute top-full left-0 right-0 bg-alchemy-black/98 backdrop-blur-xl border-t border-white/5"
+            className={`md:hidden absolute top-full left-0 right-0 ${isDark ? 'bg-[#0a0a0a]/98' : 'bg-[#fafaf9]/98'} backdrop-blur-xl border-t ${isDark ? 'border-white/5' : 'border-black/5'}`}
           >
             <div className="p-6 space-y-4">
               {navLinks.map((link) => (
@@ -104,7 +112,7 @@ const PortfolioNav = memo(() => {
                   key={link.label}
                   href={link.href}
                   onClick={() => setIsOpen(false)}
-                  className="block font-body text-lg text-porcelain/80 hover:text-alchemy-red transition-colors"
+                  className={`block font-body text-lg ${isDark ? 'text-porcelain/80' : 'text-neutral-700'} hover:text-alchemy-red transition-colors`}
                 >
                   {link.label}
                 </a>
@@ -902,6 +910,23 @@ ContactSection.displayName = 'ContactSection';
 // MAIN PAGE COMPONENT
 // ============================================
 const AashrithPortfolio = () => {
+  const [isDark, setIsDark] = useState(() => {
+    if (typeof window === 'undefined') return true;
+    const saved = localStorage.getItem('aashrith-theme');
+    return saved ? saved === 'dark' : true; // Dark by default
+  });
+
+  const toggleTheme = useCallback(() => {
+    setIsDark(prev => {
+      const next = !prev;
+      localStorage.setItem('aashrith-theme', next ? 'dark' : 'light');
+      return next;
+    });
+  }, []);
+
+  const bgColor = isDark ? 'bg-transparent' : 'bg-[#fafaf9]';
+  const textColor = isDark ? 'text-porcelain' : 'text-neutral-900';
+
   return (
     <>
       <SEOHead
@@ -909,10 +934,10 @@ const AashrithPortfolio = () => {
         description="Designing brands as systems, not campaigns. Founder of Alchemy Labs, Brand Alchemy, and Ashzz.ai. AI-native brand systems with luxury-grade taste."
       />
 
-      <BackgroundScene mode="hero" />
+      {isDark && <BackgroundScene mode="hero" />}
 
-      <div className="relative z-10 min-h-screen bg-transparent text-porcelain">
-        <PortfolioNav />
+      <div className={`relative z-10 min-h-screen ${bgColor} ${textColor} transition-colors duration-500`}>
+        <PortfolioNav isDark={isDark} toggleTheme={toggleTheme} />
         <HeroSection />
         <ThinkingSection />
         <VenturesSection />
@@ -922,8 +947,8 @@ const AashrithPortfolio = () => {
         <ContactSection />
 
         {/* Footer credibility line */}
-        <footer className="py-8 text-center border-t border-white/5">
-          <p className="font-mono text-xs text-porcelain/40 tracking-wide">
+        <footer className={`py-8 text-center border-t ${isDark ? 'border-white/5' : 'border-black/5'}`}>
+          <p className={`font-mono text-xs ${isDark ? 'text-porcelain/40' : 'text-neutral-400'} tracking-wide`}>
             Founder-led. Systems-driven. Outcome-obsessed.
           </p>
         </footer>
