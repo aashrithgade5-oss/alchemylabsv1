@@ -130,6 +130,11 @@ export default {
           "0%, 100%": { boxShadow: "0 0 24px rgba(225, 6, 19, 0.2)" },
           "50%": { boxShadow: "0 0 48px rgba(225, 6, 19, 0.5)" },
         },
+        "gradient-shift": {
+          "0%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
+          "100%": { backgroundPosition: "0% 50%" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -142,6 +147,7 @@ export default {
         "glow-pulse": "glow-pulse 2s ease-in-out infinite",
         "spin-slow": "spin 30s linear infinite",
         "pulse-slow": "pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+        "gradient": "gradient-shift 6s ease infinite",
       },
       transitionTimingFunction: {
         smooth: "cubic-bezier(0.22, 1, 0.36, 1)",

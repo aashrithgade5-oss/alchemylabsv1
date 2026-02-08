@@ -17,6 +17,8 @@ import {
   TimelineEntry,
   BackgroundScene,
 } from '@/components/portfolio';
+import { BlueprintGrid } from '@/components/effects';
+import { AnimatedCapabilities } from '@/components/effects/AnimatedCapabilities';
 
 // ============================================
 // NAVIGATION
@@ -131,15 +133,15 @@ PortfolioNav.displayName = 'PortfolioNav';
 // ============================================
 const HeroSection = memo(() => {
   return (
-    <section className="relative min-h-[100svh] flex items-center justify-start overflow-hidden">
+    <section className="relative min-h-[100svh] flex items-center justify-center overflow-hidden">
+      {/* Blueprint grid overlay */}
+      <BlueprintGrid opacity={0.04} />
+
       {/* Background orb */}
       <div className="absolute inset-0 pointer-events-none">
         <motion.div
           className="absolute top-1/3 left-1/4 w-[600px] h-[400px] rounded-full opacity-50"
-          animate={{
-            scale: [1, 1.1, 1],
-            x: [0, 30, 0],
-          }}
+          animate={{ scale: [1, 1.1, 1], x: [0, 30, 0] }}
           transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
           style={{
             background: 'radial-gradient(ellipse at center, rgba(220,38,38,0.08) 0%, transparent 70%)',
@@ -148,76 +150,71 @@ const HeroSection = memo(() => {
         />
       </div>
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16">
+      {/* Technical labels — spaceship manual aesthetic */}
+      <div className="absolute top-20 right-6 sm:right-8 font-mono text-[10px] text-alchemy-red/30 hidden lg:block">
+        <div className="space-y-1">
+          <div className="flex items-center justify-end gap-2">
+            <span>PORTFOLIO.INIT</span>
+            <div className="w-1.5 h-1.5 bg-alchemy-red rounded-full animate-pulse" />
+          </div>
+          <div className="text-right text-porcelain/20">v1.0.0</div>
+        </div>
+      </div>
+
+      <div className="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-24 pb-16">
         {/* Eyebrow */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
+          className="mb-6"
         >
-          <EyebrowLabel className="mb-6">
-            FOUNDER · BRAND ARCHITECT · CREATIVE DIRECTION · AI-NATIVE
-          </EyebrowLabel>
+          <span className="font-mono text-[10px] sm:text-xs uppercase tracking-[0.4em] text-alchemy-red/70">
+            Creative Director · Brand Architect · AI-Native
+          </span>
         </motion.div>
 
         {/* Main headline with blur-to-crisp reveal */}
         <motion.h1
-          className="font-display text-[clamp(3rem,6vw,6rem)] leading-[1.05] tracking-tight text-porcelain mb-6"
+          className="mb-6"
           initial={{ opacity: 0, filter: 'blur(12px)', y: 40 }}
           animate={{ opacity: 1, filter: 'blur(0px)', y: 0 }}
           transition={{ duration: 1, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
         >
-          Aashrith Gade
-          <br />
-          <span className="font-display italic text-alchemy-red">
-            Designing brands as systems,
+          <span className="block font-display text-6xl sm:text-7xl lg:text-8xl xl:text-9xl font-light text-porcelain tracking-tight mb-2">
+            AASHRITH
           </span>
-          <br />
-          <span className="text-porcelain/60">not campaigns.</span>
+          <span className="block font-display italic text-5xl sm:text-6xl lg:text-7xl xl:text-8xl bg-gradient-to-r from-alchemy-red via-alchemy-pink to-alchemy-red bg-clip-text text-transparent bg-[length:200%_100%] animate-gradient">
+            Gade
+          </span>
         </motion.h1>
+
+        {/* Animated rotating capabilities */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.7 }}
+        >
+          <AnimatedCapabilities />
+        </motion.div>
 
         {/* Subcopy */}
         <motion.p
-          className="font-body text-base sm:text-lg text-porcelain/60 max-w-2xl mb-10 leading-relaxed"
+          className="font-body text-base sm:text-lg text-porcelain/50 max-w-2xl mx-auto mb-10 leading-relaxed"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.7 }}
+          transition={{ duration: 0.8, delay: 0.9 }}
         >
           Founder of Brand Alchemy, Ashzz.ai, and Alchemy Labs—building AI-native brand systems
           with luxury-grade taste and long-term strategic intent.
         </motion.p>
 
-        {/* Proof strip - 3 glass mini cards */}
-        <motion.div
-          className="flex flex-wrap gap-4 mb-10"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.9 }}
-        >
-          {['Founder-Led Execution', 'AI-Native Systems', 'Luxury Positioning'].map((proof, i) => (
-            <motion.div
-              key={proof}
-              className="px-4 py-3 rounded-xl"
-              style={{
-                background: 'rgba(255,255,255,0.04)',
-                border: '1px solid rgba(255,255,255,0.08)',
-                backdropFilter: 'blur(12px)',
-              }}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: 1 + i * 0.1 }}
-            >
-              <span className="font-mono text-xs text-porcelain/70 tracking-wide">{proof}</span>
-            </motion.div>
-          ))}
-        </motion.div>
-
         {/* CTAs */}
         <motion.div
-          className="flex flex-wrap gap-4"
+          className="flex flex-wrap gap-4 justify-center mb-10"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.2 }}
+          transition={{ duration: 0.8, delay: 1.1 }}
         >
           <MagneticCTA href="#work" variant="primary" size="lg">
             View Selected Work
@@ -227,18 +224,35 @@ const HeroSection = memo(() => {
           </MagneticCTA>
         </motion.div>
 
-        {/* Scroll indicator */}
+        {/* Technical metadata */}
         <motion.div
-          className="absolute bottom-8 left-1/2 -translate-x-1/2"
+          className="flex justify-center gap-6 font-mono text-[10px] sm:text-xs text-porcelain/30"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1.5 }}
+          transition={{ delay: 1.3 }}
         >
-          <motion.div animate={{ y: [0, 8, 0] }} transition={{ duration: 2, repeat: Infinity }}>
-            <ChevronDown className="w-6 h-6 text-alchemy-red/60" />
-          </motion.div>
+          <span>Mumbai, IN</span>
+          <span>·</span>
+          <span>EST. 2024</span>
+          <span>·</span>
+          <span>50+ Projects</span>
         </motion.div>
       </div>
+
+      {/* Scroll indicator — gradient line */}
+      <motion.div
+        className="absolute bottom-8 sm:bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.5 }}
+      >
+        <motion.div
+          className="w-px h-10 sm:h-12 bg-gradient-to-b from-transparent via-alchemy-red/60 to-transparent"
+          animate={{ y: [0, 8, 0] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        />
+        <span className="font-mono text-[9px] text-porcelain/40 uppercase tracking-widest">Scroll</span>
+      </motion.div>
     </section>
   );
 });
