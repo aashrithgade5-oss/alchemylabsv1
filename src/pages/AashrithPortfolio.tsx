@@ -17,8 +17,13 @@ import {
   TimelineEntry,
   BackgroundScene,
 } from '@/components/portfolio';
-import { BlueprintGrid } from '@/components/effects';
+import { BlueprintGrid, NoiseTexture } from '@/components/effects';
 import { AnimatedCapabilities } from '@/components/effects/AnimatedCapabilities';
+
+// ============================================
+// THEME HELPERS
+// ============================================
+const t = (isDark: boolean, dark: string, light: string) => isDark ? dark : light;
 
 // ============================================
 // NAVIGATION
@@ -46,15 +51,15 @@ const PortfolioNav = memo(({ isDark, toggleTheme }: { isDark: boolean; toggleThe
         scrolled ? 'py-3' : 'py-4 sm:py-6'
       }`}
       style={{
-        background: scrolled ? (isDark ? 'rgba(10,10,10,0.9)' : 'rgba(250,250,249,0.9)') : 'transparent',
+        background: scrolled ? t(isDark, 'rgba(10,10,10,0.9)', 'rgba(250,250,249,0.9)') : 'transparent',
         backdropFilter: scrolled ? 'blur(24px)' : 'none',
-        borderBottom: scrolled ? `1px solid ${isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'}` : 'none',
+        borderBottom: scrolled ? `1px solid ${t(isDark, 'rgba(255,255,255,0.05)', 'rgba(0,0,0,0.05)')}` : 'none',
       }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <div
-            className={`w-10 h-10 rounded-full flex items-center justify-center font-mono text-sm font-bold ${isDark ? 'text-porcelain' : 'text-neutral-900'}`}
+            className={`w-10 h-10 rounded-full flex items-center justify-center font-mono text-sm font-bold ${t(isDark, 'text-porcelain', 'text-neutral-900')}`}
             style={{
               background: 'linear-gradient(135deg, rgba(220,38,38,0.2) 0%, rgba(220,38,38,0.05) 100%)',
               border: '1px solid rgba(220,38,38,0.3)',
@@ -64,7 +69,7 @@ const PortfolioNav = memo(({ isDark, toggleTheme }: { isDark: boolean; toggleThe
           </div>
           <Link
             to="/about"
-            className={`flex items-center gap-2 ${isDark ? 'text-porcelain/50 hover:text-porcelain' : 'text-neutral-500 hover:text-neutral-900'} transition-colors`}
+            className={`flex items-center gap-2 ${t(isDark, 'text-porcelain/50 hover:text-porcelain', 'text-neutral-500 hover:text-neutral-900')} transition-colors`}
           >
             <ArrowLeft className="w-4 h-4" />
             <span className="font-mono text-xs tracking-wider hidden sm:inline">ALCHEMY LABS</span>
@@ -76,7 +81,7 @@ const PortfolioNav = memo(({ isDark, toggleTheme }: { isDark: boolean; toggleThe
             <a
               key={link.label}
               href={link.href}
-              className={`font-body text-sm ${isDark ? 'text-porcelain/60 hover:text-porcelain' : 'text-neutral-600 hover:text-neutral-900'} transition-colors relative group`}
+              className={`font-body text-sm ${t(isDark, 'text-porcelain/60 hover:text-porcelain', 'text-neutral-600 hover:text-neutral-900')} transition-colors relative group`}
             >
               {link.label}
               <span className="absolute -bottom-1 left-0 w-0 h-px bg-alchemy-red group-hover:w-full transition-all duration-300" />
@@ -87,15 +92,15 @@ const PortfolioNav = memo(({ isDark, toggleTheme }: { isDark: boolean; toggleThe
         <div className="flex items-center gap-4">
           <button
             onClick={toggleTheme}
-            className={`p-2 rounded-full ${isDark ? 'hover:bg-white/5' : 'hover:bg-black/5'} transition-colors`}
+            className={`p-2 rounded-full ${t(isDark, 'hover:bg-white/5', 'hover:bg-black/5')} transition-colors`}
           >
-            {isDark ? <Sun className={`w-4 h-4 ${isDark ? 'text-porcelain/60' : 'text-neutral-600'}`} /> : <Moon className={`w-4 h-4 text-neutral-600`} />}
+            {isDark ? <Sun className="w-4 h-4 text-porcelain/60" /> : <Moon className="w-4 h-4 text-neutral-600" />}
           </button>
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className={`md:hidden p-2 rounded-full ${isDark ? 'hover:bg-white/5' : 'hover:bg-black/5'} transition-colors`}
+            className={`md:hidden p-2 rounded-full ${t(isDark, 'hover:bg-white/5', 'hover:bg-black/5')} transition-colors`}
           >
-            {isOpen ? <X className={`w-5 h-5 ${isDark ? 'text-porcelain' : 'text-neutral-900'}`} /> : <Menu className={`w-5 h-5 ${isDark ? 'text-porcelain' : 'text-neutral-900'}`} />}
+            {isOpen ? <X className={`w-5 h-5 ${t(isDark, 'text-porcelain', 'text-neutral-900')}`} /> : <Menu className={`w-5 h-5 ${t(isDark, 'text-porcelain', 'text-neutral-900')}`} />}
           </button>
         </div>
       </div>
@@ -106,7 +111,7 @@ const PortfolioNav = memo(({ isDark, toggleTheme }: { isDark: boolean; toggleThe
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className={`md:hidden absolute top-full left-0 right-0 ${isDark ? 'bg-[#0a0a0a]/98' : 'bg-[#fafaf9]/98'} backdrop-blur-xl border-t ${isDark ? 'border-white/5' : 'border-black/5'}`}
+            className={`md:hidden absolute top-full left-0 right-0 ${t(isDark, 'bg-[#0a0a0a]/98', 'bg-[#fafaf9]/98')} backdrop-blur-xl border-t ${t(isDark, 'border-white/5', 'border-black/5')}`}
           >
             <div className="p-6 space-y-4">
               {navLinks.map((link) => (
@@ -114,7 +119,7 @@ const PortfolioNav = memo(({ isDark, toggleTheme }: { isDark: boolean; toggleThe
                   key={link.label}
                   href={link.href}
                   onClick={() => setIsOpen(false)}
-                  className={`block font-body text-lg ${isDark ? 'text-porcelain/80' : 'text-neutral-700'} hover:text-alchemy-red transition-colors`}
+                  className={`block font-body text-lg ${t(isDark, 'text-porcelain/80', 'text-neutral-700')} hover:text-alchemy-red transition-colors`}
                 >
                   {link.label}
                 </a>
@@ -129,13 +134,14 @@ const PortfolioNav = memo(({ isDark, toggleTheme }: { isDark: boolean; toggleThe
 PortfolioNav.displayName = 'PortfolioNav';
 
 // ============================================
-// SECTION 1: HERO
+// SECTION 1: HERO — Bold Uppercase Name
 // ============================================
-const HeroSection = memo(() => {
+const HeroSection = memo(({ isDark }: { isDark: boolean }) => {
   return (
     <section className="relative min-h-[100svh] flex items-center justify-center overflow-hidden">
       {/* Blueprint grid overlay */}
-      <BlueprintGrid opacity={0.04} />
+      <BlueprintGrid opacity={isDark ? 0.04 : 0.02} />
+      <NoiseTexture opacity={isDark ? 0.04 : 0.02} />
 
       {/* Background orb */}
       <div className="absolute inset-0 pointer-events-none">
@@ -144,48 +150,48 @@ const HeroSection = memo(() => {
           animate={{ scale: [1, 1.1, 1], x: [0, 30, 0] }}
           transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
           style={{
-            background: 'radial-gradient(ellipse at center, rgba(220,38,38,0.08) 0%, transparent 70%)',
+            background: `radial-gradient(ellipse at center, ${isDark ? 'rgba(220,38,38,0.08)' : 'rgba(220,38,38,0.05)'} 0%, transparent 70%)`,
             filter: 'blur(80px)',
           }}
         />
       </div>
 
-      {/* Technical labels — spaceship manual aesthetic */}
-      <div className="absolute top-20 right-6 sm:right-8 font-mono text-[10px] text-alchemy-red/30 hidden lg:block">
+      {/* Technical labels */}
+      <div className={`absolute top-20 right-6 sm:right-8 font-mono text-[10px] ${t(isDark, 'text-alchemy-red/30', 'text-alchemy-red/20')} hidden lg:block`}>
         <div className="space-y-1">
           <div className="flex items-center justify-end gap-2">
             <span>PORTFOLIO.INIT</span>
             <div className="w-1.5 h-1.5 bg-alchemy-red rounded-full animate-pulse" />
           </div>
-          <div className="text-right text-porcelain/20">v1.0.0</div>
+          <div className={`text-right ${t(isDark, 'text-porcelain/20', 'text-neutral-300')}`}>v1.0.0</div>
         </div>
       </div>
 
-      <div className="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-24 pb-16">
+      <div className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-24 pb-16">
         {/* Eyebrow */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="mb-6"
+          className="mb-8"
         >
-          <span className="font-mono text-[10px] sm:text-xs uppercase tracking-[0.4em] text-alchemy-red/70">
+          <span className={`font-mono text-[10px] sm:text-xs uppercase tracking-[0.4em] ${t(isDark, 'text-alchemy-red/70', 'text-alchemy-red/60')}`}>
             Creative Director · Brand Architect · AI-Native
           </span>
         </motion.div>
 
-        {/* Main headline with blur-to-crisp reveal */}
+        {/* Main headline — BOLD UPPERCASE on single line */}
         <motion.h1
           className="mb-6"
           initial={{ opacity: 0, filter: 'blur(12px)', y: 40 }}
           animate={{ opacity: 1, filter: 'blur(0px)', y: 0 }}
           transition={{ duration: 1, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
         >
-          <span className="block font-display text-6xl sm:text-7xl lg:text-8xl xl:text-9xl font-light text-porcelain tracking-tight mb-2">
+          <span className={`block font-body font-black text-[4rem] sm:text-[5.5rem] md:text-[7rem] lg:text-[8.5rem] xl:text-[10rem] uppercase leading-[0.85] tracking-[-0.03em] ${t(isDark, 'text-porcelain', 'text-neutral-900')}`}>
             AASHRITH
           </span>
-          <span className="block font-display italic text-5xl sm:text-6xl lg:text-7xl xl:text-8xl bg-gradient-to-r from-alchemy-red via-alchemy-pink to-alchemy-red bg-clip-text text-transparent bg-[length:200%_100%] animate-gradient">
-            Gade
+          <span className={`block font-body font-black text-[4rem] sm:text-[5.5rem] md:text-[7rem] lg:text-[8.5rem] xl:text-[10rem] uppercase leading-[0.85] tracking-[-0.03em] bg-gradient-to-r from-alchemy-red via-alchemy-pink to-alchemy-red bg-clip-text text-transparent bg-[length:200%_100%] animate-gradient`}>
+            GADE
           </span>
         </motion.h1>
 
@@ -194,13 +200,14 @@ const HeroSection = memo(() => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.7 }}
+          className="mb-6"
         >
           <AnimatedCapabilities />
         </motion.div>
 
         {/* Subcopy */}
         <motion.p
-          className="font-body text-base sm:text-lg text-porcelain/50 max-w-2xl mx-auto mb-10 leading-relaxed"
+          className={`font-body text-base sm:text-lg max-w-2xl mx-auto mb-10 leading-relaxed ${t(isDark, 'text-porcelain/50', 'text-neutral-500')}`}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.9 }}
@@ -226,7 +233,7 @@ const HeroSection = memo(() => {
 
         {/* Technical metadata */}
         <motion.div
-          className="flex justify-center gap-6 font-mono text-[10px] sm:text-xs text-porcelain/30"
+          className={`flex justify-center gap-6 font-mono text-[10px] sm:text-xs ${t(isDark, 'text-porcelain/30', 'text-neutral-400')}`}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.3 }}
@@ -239,7 +246,7 @@ const HeroSection = memo(() => {
         </motion.div>
       </div>
 
-      {/* Scroll indicator — gradient line */}
+      {/* Scroll indicator */}
       <motion.div
         className="absolute bottom-8 sm:bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
         initial={{ opacity: 0 }}
@@ -251,7 +258,7 @@ const HeroSection = memo(() => {
           animate={{ y: [0, 8, 0] }}
           transition={{ duration: 2, repeat: Infinity }}
         />
-        <span className="font-mono text-[9px] text-porcelain/40 uppercase tracking-widest">Scroll</span>
+        <span className={`font-mono text-[9px] uppercase tracking-widest ${t(isDark, 'text-porcelain/40', 'text-neutral-400')}`}>Scroll</span>
       </motion.div>
     </section>
   );
@@ -261,13 +268,18 @@ HeroSection.displayName = 'HeroSection';
 // ============================================
 // SECTION 2: THINKING SYSTEM
 // ============================================
-const ThinkingSection = memo(() => {
+const ThinkingSection = memo(({ isDark }: { isDark: boolean }) => {
   return (
-    <SectionShell id="thinking" className="bg-alchemy-black" padding="xl">
-      <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+    <SectionShell id="thinking" className={t(isDark, 'bg-alchemy-black', 'bg-[#fafaf9]')} padding="xl">
+      {/* Blueprint overlay */}
+      <div className="absolute inset-0 pointer-events-none">
+        <BlueprintGrid opacity={isDark ? 0.02 : 0.01} />
+      </div>
+
+      <div className="relative z-10 grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
         <div>
           <motion.h2
-            className="font-display text-[clamp(2rem,4vw,3.5rem)] leading-[1.15] text-porcelain mb-8"
+            className={`font-display text-[clamp(2rem,4vw,3.5rem)] leading-[1.15] mb-8 ${t(isDark, 'text-porcelain', 'text-neutral-900')}`}
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -294,7 +306,7 @@ const ThinkingSection = memo(() => {
             ].map((bullet, i) => (
               <div key={i} className="flex items-start gap-4">
                 <span className="w-1.5 h-1.5 rounded-full bg-alchemy-red mt-2.5 flex-shrink-0" />
-                <p className="font-body text-lg text-porcelain/70">{bullet}</p>
+                <p className={`font-body text-lg ${t(isDark, 'text-porcelain/70', 'text-neutral-600')}`}>{bullet}</p>
               </div>
             ))}
           </motion.div>
@@ -309,10 +321,9 @@ const ThinkingSection = memo(() => {
           transition={{ duration: 1, delay: 0.4 }}
         >
           <svg className="w-full h-full" viewBox="0 0 400 300">
-            {/* Connections */}
             <motion.path
               d="M100,150 Q200,80 300,150"
-              stroke="rgba(220,38,38,0.3)"
+              stroke={isDark ? 'rgba(220,38,38,0.3)' : 'rgba(220,38,38,0.2)'}
               strokeWidth="1"
               fill="none"
               initial={{ pathLength: 0 }}
@@ -322,7 +333,7 @@ const ThinkingSection = memo(() => {
             />
             <motion.path
               d="M100,150 Q200,220 300,150"
-              stroke="rgba(255,255,255,0.1)"
+              stroke={isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}
               strokeWidth="1"
               fill="none"
               initial={{ pathLength: 0 }}
@@ -332,7 +343,7 @@ const ThinkingSection = memo(() => {
             />
             <motion.path
               d="M200,50 L200,250"
-              stroke="rgba(220,38,38,0.2)"
+              stroke={isDark ? 'rgba(220,38,38,0.2)' : 'rgba(220,38,38,0.15)'}
               strokeWidth="1"
               fill="none"
               initial={{ pathLength: 0 }}
@@ -340,7 +351,6 @@ const ThinkingSection = memo(() => {
               viewport={{ once: true }}
               transition={{ duration: 1.5, delay: 0.9 }}
             />
-            {/* Nodes */}
             {[
               { cx: 100, cy: 150, r: 8, delay: 0.6 },
               { cx: 200, cy: 50, r: 6, delay: 0.8 },
@@ -361,12 +371,6 @@ const ThinkingSection = memo(() => {
               />
             ))}
           </svg>
-          {/* Slow drift effect */}
-          <motion.div
-            className="absolute inset-0"
-            animate={{ rotate: [0, 2, -2, 0] }}
-            transition={{ duration: 30, repeat: Infinity, ease: 'easeInOut' }}
-          />
         </motion.div>
       </div>
     </SectionShell>
@@ -377,7 +381,7 @@ ThinkingSection.displayName = 'ThinkingSection';
 // ============================================
 // SECTION 3: VENTURES
 // ============================================
-const VenturesSection = memo(() => {
+const VenturesSection = memo(({ isDark }: { isDark: boolean }) => {
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   const ventures = [
@@ -406,7 +410,7 @@ const VenturesSection = memo(() => {
   ];
 
   return (
-    <SectionShell id="about" padding="xl">
+    <SectionShell id="about" className={t(isDark, '', 'bg-[#fafaf9]')} padding="xl">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -414,7 +418,7 @@ const VenturesSection = memo(() => {
         className="mb-12"
       >
         <EyebrowLabel className="mb-4">VENTURES</EyebrowLabel>
-        <h2 className="font-display text-3xl sm:text-4xl text-porcelain">Building in Public</h2>
+        <h2 className={`font-display text-3xl sm:text-4xl ${t(isDark, 'text-porcelain', 'text-neutral-900')}`}>Building in Public</h2>
       </motion.div>
 
       <div className="space-y-4">
@@ -426,30 +430,32 @@ const VenturesSection = memo(() => {
             viewport={{ once: true }}
             transition={{ delay: i * 0.1 }}
           >
-            <GlassCard
-              variant="subtle"
-              padding="lg"
-              className="cursor-pointer"
+            <div
+              className={`rounded-2xl p-6 sm:p-8 cursor-pointer transition-all duration-300 ${
+                isDark
+                  ? 'bg-white/[0.03] border border-white/[0.06] hover:border-alchemy-red/20'
+                  : 'bg-white border border-neutral-200 hover:border-alchemy-red/30 shadow-sm'
+              }`}
               onClick={() => setExpandedId(expandedId === venture.id ? null : venture.id)}
             >
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
-                    <h3 className="font-body font-semibold text-xl text-porcelain">{venture.name}</h3>
+                    <h3 className={`font-body font-semibold text-xl ${t(isDark, 'text-porcelain', 'text-neutral-900')}`}>{venture.name}</h3>
                     <span className="font-mono text-xs text-alchemy-red/70 tracking-wide uppercase">
                       {venture.type}
                     </span>
                   </div>
-                  <p className="font-body text-base text-porcelain/60">{venture.oneLiner}</p>
+                  <p className={`font-body text-base ${t(isDark, 'text-porcelain/60', 'text-neutral-500')}`}>{venture.oneLiner}</p>
                   {venture.roleNote && (
-                    <p className="font-mono text-xs text-porcelain/40 mt-2">{venture.roleNote}</p>
+                    <p className={`font-mono text-xs mt-2 ${t(isDark, 'text-porcelain/40', 'text-neutral-400')}`}>{venture.roleNote}</p>
                   )}
                 </div>
                 <motion.div
                   animate={{ rotate: expandedId === venture.id ? 180 : 0 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <ChevronDown className="w-5 h-5 text-porcelain/40" />
+                  <ChevronDown className={`w-5 h-5 ${t(isDark, 'text-porcelain/40', 'text-neutral-400')}`} />
                 </motion.div>
               </div>
 
@@ -462,8 +468,8 @@ const VenturesSection = memo(() => {
                     transition={{ duration: 0.3 }}
                     className="overflow-hidden"
                   >
-                    <div className="pt-6 mt-6 border-t border-white/5">
-                      <p className="font-body text-sm text-porcelain/70 mb-4">
+                    <div className={`pt-6 mt-6 border-t ${t(isDark, 'border-white/5', 'border-neutral-100')}`}>
+                      <p className={`font-body text-sm mb-4 ${t(isDark, 'text-porcelain/70', 'text-neutral-600')}`}>
                         {venture.details.description}
                       </p>
                       {venture.details.outputs && (
@@ -479,11 +485,11 @@ const VenturesSection = memo(() => {
                         </div>
                       )}
                       {venture.details.capabilities && (
-                        <div className="flex flex-wrap gap-2">
+                        <div className="flex flex-wrap gap-2 mt-2">
                           {venture.details.capabilities.map((cap) => (
                             <span
                               key={cap}
-                              className="px-3 py-1 rounded-full text-xs font-mono text-porcelain/60 bg-white/5 border border-white/10"
+                              className={`px-3 py-1 rounded-full text-xs font-mono ${t(isDark, 'text-porcelain/60 bg-white/5 border border-white/10', 'text-neutral-600 bg-neutral-100 border border-neutral-200')}`}
                             >
                               {cap}
                             </span>
@@ -494,7 +500,7 @@ const VenturesSection = memo(() => {
                   </motion.div>
                 )}
               </AnimatePresence>
-            </GlassCard>
+            </div>
           </motion.div>
         ))}
       </div>
@@ -506,7 +512,7 @@ VenturesSection.displayName = 'VenturesSection';
 // ============================================
 // SECTION 4: SELECTED WORK (Marquee Gallery)
 // ============================================
-const WorkGallerySection = memo(() => {
+const WorkGallerySection = memo(({ isDark }: { isDark: boolean }) => {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -519,13 +525,8 @@ const WorkGallerySection = memo(() => {
     setLightboxOpen(true);
   };
 
-  const handleNext = () => {
-    setCurrentIndex((i) => (i + 1) % portfolioProjects.length);
-  };
-
-  const handlePrev = () => {
-    setCurrentIndex((i) => (i - 1 + portfolioProjects.length) % portfolioProjects.length);
-  };
+  const handleNext = () => setCurrentIndex((i) => (i + 1) % portfolioProjects.length);
+  const handlePrev = () => setCurrentIndex((i) => (i - 1 + portfolioProjects.length) % portfolioProjects.length);
 
   const ProjectTile = ({ project, index }: { project: LightboxItem; index: number }) => {
     const [hovered, setHovered] = useState(false);
@@ -536,28 +537,18 @@ const WorkGallerySection = memo(() => {
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         onClick={() => handleOpen(index)}
-        style={{
-          filter: hovered ? 'none' : 'brightness(0.7) saturate(0.8)',
-        }}
+        style={{ filter: hovered ? 'none' : 'brightness(0.7) saturate(0.8)' }}
         whileHover={{ scale: 1.03 }}
         transition={{ duration: 0.4 }}
       >
-        <img
-          src={project.image}
-          alt={project.title}
-          className="w-full h-full object-cover"
-          loading="lazy"
-        />
-        {/* Overlay */}
+        <img src={project.image} alt={project.title} className="w-full h-full object-cover" loading="lazy" />
         <motion.div
           className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-5"
           initial={{ opacity: 0 }}
           animate={{ opacity: hovered ? 1 : 0 }}
           transition={{ duration: 0.3 }}
         >
-          <EyebrowLabel color="muted" className="mb-2">
-            {project.category}
-          </EyebrowLabel>
+          <EyebrowLabel color="muted" className="mb-2">{project.category}</EyebrowLabel>
           <h4 className="font-display text-lg text-porcelain mb-1">{project.title}</h4>
           <span className="font-mono text-xs text-alchemy-red tracking-wider uppercase">VIEW</span>
         </motion.div>
@@ -566,36 +557,23 @@ const WorkGallerySection = memo(() => {
   };
 
   return (
-    <section id="work" className="relative py-20 sm:py-32 overflow-hidden">
+    <section id="work" className={`relative py-20 sm:py-32 overflow-hidden ${t(isDark, '', 'bg-[#f5f5f4]')}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 mb-12">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
+        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
           <EyebrowLabel className="mb-4">SELECTED WORK</EyebrowLabel>
-          <h2 className="font-display text-3xl sm:text-4xl text-porcelain">Moving Archive</h2>
+          <h2 className={`font-display text-3xl sm:text-4xl ${t(isDark, 'text-porcelain', 'text-neutral-900')}`}>Moving Archive</h2>
         </motion.div>
       </div>
 
-      {/* Marquee rows */}
       <div className="space-y-6">
         <MarqueeRow speed="slow" gap={24}>
-          {row1.map((project, i) => (
-            <ProjectTile key={project.id} project={project} index={i} />
-          ))}
+          {row1.map((project, i) => <ProjectTile key={project.id} project={project} index={i} />)}
         </MarqueeRow>
-
         <MarqueeRow direction="right" speed="medium" gap={24}>
-          {row2.map((project, i) => (
-            <ProjectTile key={project.id} project={project} index={i + 4} />
-          ))}
+          {row2.map((project, i) => <ProjectTile key={project.id} project={project} index={i + 4} />)}
         </MarqueeRow>
-
         <MarqueeRow speed="fast" gap={24}>
-          {row3.map((project, i) => (
-            <ProjectTile key={project.id} project={project} index={i + 8} />
-          ))}
+          {row3.map((project, i) => <ProjectTile key={project.id} project={project} index={i + 8} />)}
         </MarqueeRow>
       </div>
 
@@ -616,7 +594,7 @@ WorkGallerySection.displayName = 'WorkGallerySection';
 // ============================================
 // SECTION 5: EXPERIENCE
 // ============================================
-const ExperienceSection = memo(() => {
+const ExperienceSection = memo(({ isDark }: { isDark: boolean }) => {
   const timelineEntries: TimelineEntry[] = [
     {
       id: 'alchemy-labs',
@@ -663,7 +641,7 @@ const ExperienceSection = memo(() => {
   ];
 
   return (
-    <SectionShell id="experience" padding="xl" maxWidth="lg">
+    <SectionShell id="experience" className={t(isDark, '', 'bg-[#fafaf9]')} padding="xl" maxWidth="lg">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -671,7 +649,7 @@ const ExperienceSection = memo(() => {
         className="mb-12"
       >
         <EyebrowLabel className="mb-4">EXPERIENCE</EyebrowLabel>
-        <h2 className="font-display text-3xl sm:text-4xl text-porcelain">Credibility Rail</h2>
+        <h2 className={`font-display text-3xl sm:text-4xl ${t(isDark, 'text-porcelain', 'text-neutral-900')}`}>Credibility Rail</h2>
       </motion.div>
 
       <TimelineRail entries={timelineEntries} />
@@ -683,9 +661,9 @@ ExperienceSection.displayName = 'ExperienceSection';
 // ============================================
 // SECTION 6: WORK WITH ME (Offerings)
 // ============================================
-const OfferingsSection = memo(() => {
+const OfferingsSection = memo(({ isDark }: { isDark: boolean }) => {
   return (
-    <SectionShell padding="xl">
+    <SectionShell className={t(isDark, '', 'bg-[#f5f5f4]')} padding="xl">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -693,7 +671,7 @@ const OfferingsSection = memo(() => {
         className="text-center mb-12"
       >
         <EyebrowLabel className="mb-4">WORK WITH ME</EyebrowLabel>
-        <h2 className="font-display text-3xl sm:text-4xl text-porcelain">
+        <h2 className={`font-display text-3xl sm:text-4xl ${t(isDark, 'text-porcelain', 'text-neutral-900')}`}>
           Services & Engagement Models
         </h2>
       </motion.div>
@@ -707,14 +685,18 @@ const OfferingsSection = memo(() => {
             viewport={{ once: true }}
             transition={{ delay: i * 0.1 }}
           >
-            <GlassCard variant="elevated" padding="lg" className="h-full flex flex-col">
-              <h3 className="font-body font-semibold text-xl text-porcelain mb-2">
+            <div className={`rounded-2xl p-6 sm:p-8 h-full flex flex-col transition-all duration-300 ${
+              isDark
+                ? 'bg-white/[0.03] border border-white/[0.08] hover:border-alchemy-red/25'
+                : 'bg-white border border-neutral-200 hover:border-alchemy-red/30 shadow-sm'
+            }`}>
+              <h3 className={`font-body font-semibold text-xl mb-2 ${t(isDark, 'text-porcelain', 'text-neutral-900')}`}>
                 {service.title}
               </h3>
-              <p className="font-body text-sm text-porcelain/60 mb-6">{service.promise}</p>
+              <p className={`font-body text-sm mb-6 ${t(isDark, 'text-porcelain/60', 'text-neutral-500')}`}>{service.promise}</p>
               <ul className="space-y-2 mb-6 flex-1">
                 {service.deliverables.map((item) => (
-                  <li key={item} className="flex items-start gap-2 text-sm text-porcelain/70">
+                  <li key={item} className={`flex items-start gap-2 text-sm ${t(isDark, 'text-porcelain/70', 'text-neutral-600')}`}>
                     <span className="text-alchemy-red mt-1">•</span>
                     {item}
                   </li>
@@ -723,7 +705,7 @@ const OfferingsSection = memo(() => {
               <MagneticCTA href={`#contact?service=${service.id}`} variant="secondary" size="sm">
                 Book Sprint
               </MagneticCTA>
-            </GlassCard>
+            </div>
           </motion.div>
         ))}
       </div>
@@ -735,34 +717,33 @@ OfferingsSection.displayName = 'OfferingsSection';
 // ============================================
 // SECTION 7: CONTACT
 // ============================================
-const ContactSection = memo(() => {
+const ContactSection = memo(({ isDark }: { isDark: boolean }) => {
   const [formState, setFormState] = useState({
-    name: '',
-    email: '',
-    project: '',
-    need: '',
-    vision: '',
+    name: '', email: '', project: '', need: '', vision: '',
   });
   const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulate submission
     setSubmitted(true);
   };
 
+  const inputClass = isDark
+    ? 'glass-input w-full'
+    : 'w-full px-5 py-4 rounded-lg bg-white border border-neutral-200 text-neutral-900 placeholder:text-neutral-400 focus:border-alchemy-red/50 focus:ring-2 focus:ring-alchemy-red/10 outline-none transition-all';
+
   return (
-    <SectionShell id="contact" padding="xl" maxWidth="lg">
+    <SectionShell id="contact" className={t(isDark, '', 'bg-[#fafaf9]')} padding="xl" maxWidth="lg">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         className="text-center mb-12"
       >
-        <h2 className="font-display text-[clamp(2rem,5vw,3.5rem)] text-porcelain mb-4">
+        <h2 className={`font-display text-[clamp(2rem,5vw,3.5rem)] mb-4 ${t(isDark, 'text-porcelain', 'text-neutral-900')}`}>
           Let's build something <span className="italic text-alchemy-red">inevitable.</span>
         </h2>
-        <p className="font-body text-sm text-porcelain/50">
+        <p className={`font-body text-sm ${t(isDark, 'text-porcelain/50', 'text-neutral-500')}`}>
           Free first call · Reply within 24h · NDA available
         </p>
       </motion.div>
@@ -779,56 +760,22 @@ const ContactSection = memo(() => {
           >
             <div className="grid sm:grid-cols-2 gap-6">
               <div>
-                <label className="block font-mono text-xs text-porcelain/50 mb-2 tracking-wide uppercase">
-                  Name *
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={formState.name}
-                  onChange={(e) => setFormState({ ...formState, name: e.target.value })}
-                  className="glass-input w-full"
-                  placeholder="Your name"
-                />
+                <label className={`block font-mono text-xs mb-2 tracking-wide uppercase ${t(isDark, 'text-porcelain/50', 'text-neutral-500')}`}>Name *</label>
+                <input type="text" required value={formState.name} onChange={(e) => setFormState({ ...formState, name: e.target.value })} className={inputClass} placeholder="Your name" />
               </div>
               <div>
-                <label className="block font-mono text-xs text-porcelain/50 mb-2 tracking-wide uppercase">
-                  Email *
-                </label>
-                <input
-                  type="email"
-                  required
-                  value={formState.email}
-                  onChange={(e) => setFormState({ ...formState, email: e.target.value })}
-                  className="glass-input w-full"
-                  placeholder="you@company.com"
-                />
+                <label className={`block font-mono text-xs mb-2 tracking-wide uppercase ${t(isDark, 'text-porcelain/50', 'text-neutral-500')}`}>Email *</label>
+                <input type="email" required value={formState.email} onChange={(e) => setFormState({ ...formState, email: e.target.value })} className={inputClass} placeholder="you@company.com" />
               </div>
             </div>
-
             <div className="grid sm:grid-cols-2 gap-6">
               <div>
-                <label className="block font-mono text-xs text-porcelain/50 mb-2 tracking-wide uppercase">
-                  Project (optional)
-                </label>
-                <input
-                  type="text"
-                  value={formState.project}
-                  onChange={(e) => setFormState({ ...formState, project: e.target.value })}
-                  className="glass-input w-full"
-                  placeholder="Project or company name"
-                />
+                <label className={`block font-mono text-xs mb-2 tracking-wide uppercase ${t(isDark, 'text-porcelain/50', 'text-neutral-500')}`}>Project (optional)</label>
+                <input type="text" value={formState.project} onChange={(e) => setFormState({ ...formState, project: e.target.value })} className={inputClass} placeholder="Project or company name" />
               </div>
               <div>
-                <label className="block font-mono text-xs text-porcelain/50 mb-2 tracking-wide uppercase">
-                  Need *
-                </label>
-                <select
-                  required
-                  value={formState.need}
-                  onChange={(e) => setFormState({ ...formState, need: e.target.value })}
-                  className="glass-input select-dropdown w-full"
-                >
+                <label className={`block font-mono text-xs mb-2 tracking-wide uppercase ${t(isDark, 'text-porcelain/50', 'text-neutral-500')}`}>Need *</label>
+                <select required value={formState.need} onChange={(e) => setFormState({ ...formState, need: e.target.value })} className={`${inputClass} ${isDark ? 'select-dropdown' : ''}`}>
                   <option value="">Select an option</option>
                   <option value="ai-branding">AI Branding Studio</option>
                   <option value="branding-systems">Branding Systems</option>
@@ -837,34 +784,25 @@ const ContactSection = memo(() => {
                 </select>
               </div>
             </div>
-
             <div>
-              <label className="block font-mono text-xs text-porcelain/50 mb-2 tracking-wide uppercase">
-                Vision (max 500 chars)
-              </label>
+              <label className={`block font-mono text-xs mb-2 tracking-wide uppercase ${t(isDark, 'text-porcelain/50', 'text-neutral-500')}`}>Vision (max 500 chars)</label>
               <textarea
                 value={formState.vision}
                 onChange={(e) => setFormState({ ...formState, vision: e.target.value.slice(0, 500) })}
-                className="glass-input w-full h-32 resize-none"
+                className={`${inputClass} h-32 resize-none`}
                 placeholder="Tell me about your project..."
                 maxLength={500}
               />
-              <span className="font-mono text-xs text-porcelain/30 mt-1 block text-right">
+              <span className={`font-mono text-xs mt-1 block text-right ${t(isDark, 'text-porcelain/30', 'text-neutral-400')}`}>
                 {formState.vision.length}/500
               </span>
             </div>
-
             <div className="flex flex-wrap gap-4 justify-center pt-4">
               <MagneticCTA type="submit" variant="primary" size="lg">
                 <Send className="w-4 h-4 mr-2" />
                 Send Brief
               </MagneticCTA>
-              <MagneticCTA
-                href={aashrithData.contact.calendly || '#'}
-                variant="secondary"
-                size="lg"
-                icon={false}
-              >
+              <MagneticCTA href={aashrithData.contact.calendly || '#'} variant="secondary" size="lg" icon={false}>
                 <Calendar className="w-4 h-4 mr-2" />
                 Book a Call Instead
               </MagneticCTA>
@@ -880,8 +818,8 @@ const ContactSection = memo(() => {
             <div className="w-16 h-16 rounded-full bg-alchemy-red/20 border border-alchemy-red/40 flex items-center justify-center mx-auto mb-6">
               <Send className="w-6 h-6 text-alchemy-red" />
             </div>
-            <h3 className="font-display text-2xl text-porcelain mb-2">Brief received.</h3>
-            <p className="font-body text-porcelain/60">I'll be in touch within 24 hours.</p>
+            <h3 className={`font-display text-2xl mb-2 ${t(isDark, 'text-porcelain', 'text-neutral-900')}`}>Brief received.</h3>
+            <p className={`font-body ${t(isDark, 'text-porcelain/60', 'text-neutral-500')}`}>I'll be in touch within 24 hours.</p>
           </motion.div>
         )}
       </AnimatePresence>
@@ -894,26 +832,25 @@ const ContactSection = memo(() => {
         viewport={{ once: true }}
         transition={{ delay: 0.3 }}
       >
-        <a
-          href={aashrithData.contact.linkedin}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="p-3 rounded-full bg-white/5 border border-white/10 hover:border-alchemy-red/30 hover:bg-alchemy-red/10 transition-colors"
-        >
-          <Linkedin className="w-5 h-5 text-porcelain/70" />
-        </a>
-        <a
-          href={`mailto:${aashrithData.contact.email}`}
-          className="p-3 rounded-full bg-white/5 border border-white/10 hover:border-alchemy-red/30 hover:bg-alchemy-red/10 transition-colors"
-        >
-          <Mail className="w-5 h-5 text-porcelain/70" />
-        </a>
-        <a
-          href={aashrithData.contact.calendly || '#'}
-          className="p-3 rounded-full bg-white/5 border border-white/10 hover:border-alchemy-red/30 hover:bg-alchemy-red/10 transition-colors"
-        >
-          <Calendar className="w-5 h-5 text-porcelain/70" />
-        </a>
+        {[
+          { href: aashrithData.contact.linkedin, icon: Linkedin, external: true },
+          { href: `mailto:${aashrithData.contact.email}`, icon: Mail },
+          { href: aashrithData.contact.calendly || '#', icon: Calendar },
+        ].map(({ href, icon: Icon, external }) => (
+          <a
+            key={href}
+            href={href}
+            target={external ? '_blank' : undefined}
+            rel={external ? 'noopener noreferrer' : undefined}
+            className={`p-3 rounded-full transition-colors ${
+              isDark
+                ? 'bg-white/5 border border-white/10 hover:border-alchemy-red/30 hover:bg-alchemy-red/10'
+                : 'bg-neutral-100 border border-neutral-200 hover:border-alchemy-red/30 hover:bg-alchemy-red/5'
+            }`}
+          >
+            <Icon className={`w-5 h-5 ${t(isDark, 'text-porcelain/70', 'text-neutral-600')}`} />
+          </a>
+        ))}
       </motion.div>
     </SectionShell>
   );
@@ -927,7 +864,7 @@ const AashrithPortfolio = () => {
   const [isDark, setIsDark] = useState(() => {
     if (typeof window === 'undefined') return true;
     const saved = localStorage.getItem('aashrith-theme');
-    return saved ? saved === 'dark' : true; // Dark by default
+    return saved ? saved === 'dark' : true;
   });
 
   const toggleTheme = useCallback(() => {
@@ -938,31 +875,28 @@ const AashrithPortfolio = () => {
     });
   }, []);
 
-  const bgColor = isDark ? 'bg-transparent' : 'bg-[#fafaf9]';
-  const textColor = isDark ? 'text-porcelain' : 'text-neutral-900';
-
   return (
     <>
       <SEOHead
         title="Aashrith Gade — Brand Architect & AI-Native Strategist"
-        description="Designing brands as systems, not campaigns. Founder of Alchemy Labs, Brand Alchemy, and Ashzz.ai. AI-native brand systems with luxury-grade taste."
+        description="Designing brands as systems, not campaigns. Founder of Alchemy Labs, Brand Alchemy, and Ashzz.ai."
       />
 
       {isDark && <BackgroundScene mode="hero" />}
 
-      <div className={`relative z-10 min-h-screen ${bgColor} ${textColor} transition-colors duration-500`}>
+      <div className={`relative z-10 min-h-screen transition-colors duration-500 ${isDark ? 'bg-transparent text-porcelain' : 'bg-[#fafaf9] text-neutral-900'}`}>
         <PortfolioNav isDark={isDark} toggleTheme={toggleTheme} />
-        <HeroSection />
-        <ThinkingSection />
-        <VenturesSection />
-        <WorkGallerySection />
-        <ExperienceSection />
-        <OfferingsSection />
-        <ContactSection />
+        <HeroSection isDark={isDark} />
+        <ThinkingSection isDark={isDark} />
+        <VenturesSection isDark={isDark} />
+        <WorkGallerySection isDark={isDark} />
+        <ExperienceSection isDark={isDark} />
+        <OfferingsSection isDark={isDark} />
+        <ContactSection isDark={isDark} />
 
         {/* Footer credibility line */}
-        <footer className={`py-8 text-center border-t ${isDark ? 'border-white/5' : 'border-black/5'}`}>
-          <p className={`font-mono text-xs ${isDark ? 'text-porcelain/40' : 'text-neutral-400'} tracking-wide`}>
+        <footer className={`py-8 text-center border-t ${isDark ? 'border-white/5' : 'border-neutral-200'}`}>
+          <p className={`font-mono text-xs tracking-wide ${isDark ? 'text-porcelain/40' : 'text-neutral-400'}`}>
             Founder-led. Systems-driven. Outcome-obsessed.
           </p>
         </footer>
