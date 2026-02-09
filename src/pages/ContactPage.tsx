@@ -3,19 +3,26 @@ import { useRef } from 'react';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { Contact } from '@/components/Contact';
-import { SequentianBackground } from '@/components/SequentianBackground';
 import heroVideo from '@/assets/hero-video.mp4';
+import contactBg from '@/assets/contact-bg.png';
 
 export const ContactPage = () => {
   const heroRef = useRef<HTMLDivElement>(null);
+  const formRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: heroRef,
     offset: ['start start', 'end start']
   });
 
+  const { scrollYProgress: formScrollY } = useScroll({
+    target: formRef,
+    offset: ['start end', 'end start'],
+  });
+
   const videoScale = useTransform(scrollYProgress, [0, 1], [1, 1.2]);
   const videoOpacity = useTransform(scrollYProgress, [0, 0.8], [0.4, 0]);
   const textY = useTransform(scrollYProgress, [0, 1], [0, 100]);
+  const bgScale = useTransform(formScrollY, [0, 1], [1, 1.15]);
 
   return (
     <div className="min-h-screen bg-background grain-overlay">
@@ -100,10 +107,26 @@ export const ContactPage = () => {
         </motion.div>
       </section>
       
-      {/* Contact Form Section with Sequentian background */}
-      <section className="relative overflow-hidden -mt-16">
-        {/* Sequentian Silk Fold — high opacity for dramatic feel */}
-        <SequentianBackground variant={3} opacity={0.5} parallax />
+      {/* Contact Form Section with restored contact-bg */}
+      <section ref={formRef} className="relative overflow-hidden -mt-16">
+        {/* Original contact-bg.png with mask-image and Ken Burns */}
+        <motion.div
+          className="absolute inset-0 z-0"
+          style={{ scale: bgScale, willChange: 'transform' }}
+        >
+          <img
+            src={contactBg}
+            alt=""
+            loading="lazy"
+            decoding="async"
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{
+              maskImage: 'radial-gradient(ellipse 70% 60% at 50% 50%, black 30%, transparent 80%)',
+              WebkitMaskImage: 'radial-gradient(ellipse 70% 60% at 50% 50%, black 30%, transparent 80%)',
+              opacity: 0.45,
+            }}
+          />
+        </motion.div>
 
         {/* Overlay layers */}
         <div className="absolute inset-0 pointer-events-none z-[1]">

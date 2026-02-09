@@ -7,7 +7,7 @@ export const FoundersCTA = memo(() => {
   return (
     <section className="relative py-24 sm:py-32 md:py-40 overflow-hidden">
       {/* Sequentian Soft Nebula background */}
-      <SequentianBackground variant={2} opacity={0.25} parallax />
+      <SequentianBackground variant={2} opacity={0.4} parallax />
 
       {/* Background glow */}
       <div className="absolute inset-0 pointer-events-none">

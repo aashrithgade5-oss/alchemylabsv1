@@ -10,7 +10,7 @@ export const YinYangHero = memo(() => {
   return (
     <section className="relative min-h-[100svh] flex flex-col items-center justify-center overflow-hidden pt-20 pb-12">
       {/* Sequentian Silk Fold background */}
-      <SequentianBackground variant={3} opacity={0.35} parallax />
+      <SequentianBackground variant={1} opacity={0.4} parallax />
 
       {/* Layered background */}
       <div className="absolute inset-0">
