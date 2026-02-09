@@ -21,14 +21,20 @@ interface SequentianBackgroundProps {
   opacity?: number;
   parallax?: boolean;
   blur?: number;
+  /** Scale range end for parallax Ken Burns (default 1.15) */
+  scaleEnd?: number;
+  /** Add a color-matched ambient glow behind the image */
+  glow?: boolean;
   className?: string;
 }
 
 export const SequentianBackground = memo(({
   variant,
-  opacity = 0.35,
+  opacity = 0.45,
   parallax = true,
   blur = 0,
+  scaleEnd = 1.15,
+  glow = true,
   className = '',
 }: SequentianBackgroundProps) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -39,7 +45,7 @@ export const SequentianBackground = memo(({
     offset: ['start end', 'end start'],
   });
 
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.1]);
+  const scale = useTransform(scrollYProgress, [0, 1], [1, scaleEnd]);
   const adjustedOpacity = isMobile ? opacity * 0.85 : opacity;
 
   return (
@@ -48,6 +54,16 @@ export const SequentianBackground = memo(({
       className={`absolute inset-0 overflow-hidden pointer-events-none ${className}`}
       aria-hidden
     >
+      {/* Ambient color glow behind the image for richness */}
+      {glow && (
+        <div
+          className="absolute inset-0"
+          style={{
+            background: 'radial-gradient(ellipse 80% 60% at 50% 50%, rgba(220, 38, 38, 0.08) 0%, transparent 70%)',
+          }}
+        />
+      )}
+
       <motion.img
         src={variantMap[variant]}
         alt=""
@@ -59,17 +75,17 @@ export const SequentianBackground = memo(({
           willChange: parallax && !isMobile ? 'transform' : 'auto',
           filter: blur > 0 ? `blur(${blur}px)` : undefined,
         }}
-        className="absolute inset-0 w-full h-full object-cover origin-center"
+        className="absolute -inset-4 w-[calc(100%+2rem)] h-[calc(100%+2rem)] object-cover origin-center"
         initial={{ opacity: 0 }}
         animate={{ opacity: adjustedOpacity }}
         transition={{ duration: 1.2 }}
       />
 
-      {/* Top gradient fade */}
-      <div className="absolute top-0 inset-x-0 h-24 bg-gradient-to-b from-background to-transparent" />
+      {/* Soft top fade — short for minimal dimming */}
+      <div className="absolute top-0 inset-x-0 h-16 bg-gradient-to-b from-background/80 to-transparent" />
 
-      {/* Bottom gradient fade */}
-      <div className="absolute bottom-0 inset-x-0 h-24 bg-gradient-to-t from-background to-transparent" />
+      {/* Soft bottom fade */}
+      <div className="absolute bottom-0 inset-x-0 h-16 bg-gradient-to-t from-background/80 to-transparent" />
     </div>
   );
 });
