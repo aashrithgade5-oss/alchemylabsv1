@@ -128,7 +128,7 @@ export const BookSprint = () => {
       
       {/* Hero */}
       <section className="relative min-h-[50vh] flex items-center overflow-hidden section-gradient">
-        <SequentianBackground variant={3} opacity={0.25} parallax />
+        <SequentianBackground variant={1} opacity={0.4} parallax />
 
         <div className="relative z-10 max-w-4xl mx-auto px-6 md:px-12 pt-32 text-center">
           <motion.div
@@ -179,7 +179,7 @@ export const BookSprint = () => {
       
       {/* Form Section */}
       <section className="relative py-20 overflow-hidden section-gradient">
-        <SequentianBackground variant={4} opacity={0.1} parallax={false} />
+        <SequentianBackground variant={2} opacity={0.3} parallax={false} />
 
         <div className="relative z-10 max-w-2xl mx-auto px-6 md:px-12">
           <motion.form

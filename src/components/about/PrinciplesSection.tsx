@@ -13,7 +13,7 @@ export const PrinciplesSection = memo(() => {
   return (
     <section className="relative py-16 sm:py-24 md:py-32 overflow-hidden">
       {/* Sequentian Soft Nebula background */}
-      <SequentianBackground variant={2} opacity={0.15} parallax={false} />
+      <SequentianBackground variant={5} opacity={0.3} parallax={false} />
 
       {/* Background */}
       <div className="absolute inset-0 pointer-events-none">

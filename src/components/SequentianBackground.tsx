@@ -2,20 +2,25 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef, memo } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
 
+import sequentian1 from '@/assets/sequentian-1.png';
 import sequentian2 from '@/assets/sequentian-2.png';
 import sequentian3 from '@/assets/sequentian-3.png';
 import sequentian4 from '@/assets/sequentian-4.png';
+import sequentian5 from '@/assets/sequentian-5.png';
 
-const variantMap: Record<2 | 3 | 4, string> = {
+const variantMap: Record<1 | 2 | 3 | 4 | 5, string> = {
+  1: sequentian1,
   2: sequentian2,
   3: sequentian3,
   4: sequentian4,
+  5: sequentian5,
 };
 
 interface SequentianBackgroundProps {
-  variant: 2 | 3 | 4;
+  variant: 1 | 2 | 3 | 4 | 5;
   opacity?: number;
   parallax?: boolean;
+  blur?: number;
   className?: string;
 }
 
@@ -23,6 +28,7 @@ export const SequentianBackground = memo(({
   variant,
   opacity = 0.35,
   parallax = true,
+  blur = 0,
   className = '',
 }: SequentianBackgroundProps) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -34,7 +40,7 @@ export const SequentianBackground = memo(({
   });
 
   const scale = useTransform(scrollYProgress, [0, 1], [1, 1.1]);
-  const adjustedOpacity = isMobile ? opacity * 0.7 : opacity;
+  const adjustedOpacity = isMobile ? opacity * 0.85 : opacity;
 
   return (
     <div
@@ -51,6 +57,7 @@ export const SequentianBackground = memo(({
         style={{
           scale: parallax && !isMobile ? scale : 1,
           willChange: parallax && !isMobile ? 'transform' : 'auto',
+          filter: blur > 0 ? `blur(${blur}px)` : undefined,
         }}
         className="absolute inset-0 w-full h-full object-cover origin-center"
         initial={{ opacity: 0 }}
@@ -59,18 +66,10 @@ export const SequentianBackground = memo(({
       />
 
       {/* Top gradient fade */}
-      <div className="absolute top-0 inset-x-0 h-40 bg-gradient-to-b from-background to-transparent" />
+      <div className="absolute top-0 inset-x-0 h-24 bg-gradient-to-b from-background to-transparent" />
 
       {/* Bottom gradient fade */}
-      <div className="absolute bottom-0 inset-x-0 h-40 bg-gradient-to-t from-background to-transparent" />
-
-      {/* Radial vignette for text legibility */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background: 'radial-gradient(ellipse at 50% 50%, transparent 30%, hsl(var(--background) / 0.4) 80%)',
-        }}
-      />
+      <div className="absolute bottom-0 inset-x-0 h-24 bg-gradient-to-t from-background to-transparent" />
     </div>
   );
 });
