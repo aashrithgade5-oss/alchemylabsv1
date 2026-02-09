@@ -3,6 +3,7 @@ import { useRef } from 'react';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { Contact } from '@/components/Contact';
+import heroVideo from '@/assets/hero-video.mp4';
 import contactBg from '@/assets/contact-bg.png';
 
 export const ContactPage = () => {
@@ -12,46 +13,38 @@ export const ContactPage = () => {
     offset: ['start start', 'end start']
   });
 
-  const bgY = useTransform(scrollYProgress, [0, 1], [0, 80]);
+  const videoScale = useTransform(scrollYProgress, [0, 1], [1, 1.2]);
+  const videoOpacity = useTransform(scrollYProgress, [0, 0.8], [0.4, 0]);
   const textY = useTransform(scrollYProgress, [0, 1], [0, 100]);
 
   return (
-    <div className="min-h-screen bg-background grain-overlay relative">
-      {/* Full-page background image — blurred, dimmed, fixed feel */}
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <motion.img
-          src={contactBg}
-          alt=""
-          aria-hidden
-          style={{ y: bgY }}
-          className="w-full h-full object-cover scale-110 blur-[60px] opacity-30"
-        />
-        {/* Top fade into nav */}
-        <div className="absolute inset-0 bg-gradient-to-b from-background via-transparent to-transparent" style={{ height: '30%' }} />
-        {/* Bottom fade into footer */}
-        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-background via-background/80 to-transparent" style={{ height: '40%' }} />
-        {/* Overall darken + vignette */}
-        <div className="absolute inset-0 bg-background/50" />
-        <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at center, transparent 30%, hsl(var(--background)) 80%)' }} />
-      </div>
-
+    <div className="min-h-screen bg-background grain-overlay">
       <Navigation />
       
-      {/* Hero Header */}
-      <section ref={heroRef} className="relative pt-32 pb-24 overflow-hidden min-h-[70vh] flex items-center z-10">
+      {/* Hero Header with Video Background */}
+      <section ref={heroRef} className="relative pt-32 pb-24 overflow-hidden min-h-[70vh] flex items-center">
+        {/* Video Background */}
+        <motion.div 
+          style={{ scale: videoScale, opacity: videoOpacity }}
+          className="absolute inset-0 z-0"
+        >
+          <video autoPlay muted loop playsInline className="w-full h-full object-cover">
+            <source src={heroVideo} type="video/mp4" />
+          </video>
+          <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/60 to-background" />
+        </motion.div>
+
         {/* Animated Gradient Orbs */}
         <div className="absolute inset-0 pointer-events-none">
           <motion.div 
-            animate={{ scale: [1, 1.2, 1], opacity: [0.08, 0.15, 0.08] }}
+            animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.2, 0.1] }}
             transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-            className="absolute top-1/4 left-1/4 w-[400px] h-[400px] rounded-full blur-[120px]"
-            style={{ background: 'radial-gradient(circle, hsla(357, 95%, 45%, 0.2) 0%, transparent 70%)' }}
+            className="absolute top-1/4 left-1/4 w-[400px] h-[400px] bg-alchemy-red/15 rounded-full blur-[120px]" 
           />
           <motion.div 
-            animate={{ scale: [1.2, 1, 1.2], opacity: [0.06, 0.12, 0.06] }}
+            animate={{ scale: [1.2, 1, 1.2], opacity: [0.08, 0.15, 0.08] }}
             transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
-            className="absolute bottom-1/4 right-1/4 w-[350px] h-[350px] rounded-full blur-[100px]"
-            style={{ background: 'radial-gradient(circle, hsla(357, 95%, 35%, 0.25) 0%, transparent 70%)' }}
+            className="absolute bottom-1/4 right-1/4 w-[350px] h-[350px] bg-deep-crimson/20 rounded-full blur-[100px]" 
           />
         </div>
         
@@ -108,14 +101,32 @@ export const ContactPage = () => {
         </motion.div>
       </section>
       
-      {/* Contact Form Section */}
-      <div className="relative z-10">
-        <Contact />
-      </div>
+      {/* Contact Form Section with dynamic background */}
+      <section className="relative overflow-hidden">
+        {/* Background image — tasteful blur with character */}
+        <div className="absolute inset-0 pointer-events-none">
+          <img
+            src={contactBg}
+            alt=""
+            aria-hidden
+            className="w-full h-full object-cover blur-[40px] opacity-40 scale-110"
+          />
+          {/* Top gradient — merges hero into this section */}
+          <div className="absolute top-0 inset-x-0 h-40 bg-gradient-to-b from-background to-transparent" />
+          {/* Bottom gradient — merges into footer */}
+          <div className="absolute bottom-0 inset-x-0 h-48 bg-gradient-to-t from-background via-background/90 to-transparent" />
+          {/* Center vignette for depth */}
+          <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at 50% 40%, transparent 20%, hsl(var(--background) / 0.6) 70%)' }} />
+          {/* Subtle darken overlay */}
+          <div className="absolute inset-0 bg-background/30" />
+        </div>
+
+        <div className="relative z-10">
+          <Contact />
+        </div>
+      </section>
       
-      <div className="relative z-10">
-        <Footer />
-      </div>
+      <Footer />
     </div>
   );
 };
