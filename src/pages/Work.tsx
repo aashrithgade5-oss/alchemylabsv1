@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowUpRight, X, Check } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { ArrowUpRight, X, Check, ArrowRight } from 'lucide-react';
+import { useNavigate, Link } from 'react-router-dom';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
@@ -13,6 +13,8 @@ import { BlueprintGrid } from '@/components/effects/BlueprintGrid';
 import { NoiseTexture } from '@/components/effects/NoiseTexture';
 import { WorkProjectCard } from '@/components/work/WorkProjectCard';
 import { MediaCarousel } from '@/components/work/MediaCarousel';
+import { SequentianBackground } from '@/components/SequentianBackground';
+import { MagneticButton } from '@/components/MagneticButton';
 
 const filters: { id: string; label: string; tag?: FilterTag }[] = [
   { id: 'all', label: 'All' },
@@ -23,11 +25,11 @@ const filters: { id: string; label: string; tag?: FilterTag }[] = [
 ];
 
 const gridPositions = [
-  'col-span-12 md:col-span-8 row-span-2',   // Aether Rituals — hero
-  'col-span-12 md:col-span-4 row-span-1',   // Branding Solutions
-  'col-span-12 md:col-span-4 row-span-1',   // AI Media Gen
-  'col-span-12 md:col-span-4 row-span-1',   // Oakley
-  'col-span-12 md:col-span-4 row-span-1',   // Genesis
+  'col-span-12 md:col-span-8 row-span-2',
+  'col-span-12 md:col-span-4 row-span-1',
+  'col-span-12 md:col-span-4 row-span-1',
+  'col-span-12 md:col-span-4 row-span-1',
+  'col-span-12 md:col-span-4 row-span-1',
 ];
 
 /** Build carousel items from project media */
@@ -62,11 +64,11 @@ export const Work = () => {
 
       {/* Hero */}
       <section className="relative pt-32 pb-16 overflow-hidden">
+        <SequentianBackground variant={4} opacity={0.2} parallax />
+
         <div className="absolute inset-0 pointer-events-none">
           <BlueprintGrid opacity={0.02} />
           <NoiseTexture opacity={0.03} />
-          <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full blur-[100px] -translate-y-1/3 translate-x-1/4" style={{ background: 'radial-gradient(circle, rgba(225,6,19,0.08) 0%, transparent 70%)' }} />
-          <div className="absolute bottom-0 left-0 w-[500px] h-[400px] rounded-full blur-[80px] translate-y-1/3 -translate-x-1/4" style={{ background: 'radial-gradient(circle, rgba(225,6,19,0.05) 0%, transparent 70%)' }} />
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12">
@@ -115,9 +117,10 @@ export const Work = () => {
 
       {/* Grid */}
       <section className="relative py-8 pb-24">
+        <SequentianBackground variant={2} opacity={0.1} parallax={false} />
+
         <div className="absolute inset-0 pointer-events-none">
           <BlueprintGrid opacity={0.015} />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] rounded-full blur-[120px]" style={{ background: 'radial-gradient(circle, rgba(225,6,19,0.06) 0%, transparent 60%)' }} />
         </div>
 
         <div className="max-w-[1400px] mx-auto px-6 md:px-10 relative z-10">
@@ -159,6 +162,78 @@ export const Work = () => {
         </div>
       </section>
 
+      {/* Editorial Quote Section */}
+      <section className="relative py-20 sm:py-28 overflow-hidden">
+        <div className="max-w-4xl mx-auto px-6 md:px-12 text-center relative z-10">
+          {/* Divider */}
+          <div className="w-20 h-px mx-auto mb-12 bg-gradient-to-r from-transparent via-alchemy-red/30 to-transparent" />
+
+          <ScrollReveal>
+            <blockquote className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl italic text-porcelain/90 leading-[1.25] tracking-tight mb-12 text-balance">
+              "Every project begins with a question:{' '}
+              <span className="text-alchemy-red">What does this brand need to become?</span>"
+            </blockquote>
+          </ScrollReveal>
+
+          <ScrollReveal delay={0.2}>
+            <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
+              {[
+                { value: '50+', label: 'Projects Delivered' },
+                { value: '30+', label: 'Brands Transformed' },
+                { value: '85%', label: 'Repeat Clients' },
+              ].map((stat) => (
+                <div
+                  key={stat.label}
+                  className="glass-deep rounded-full px-6 py-3 flex items-center gap-3"
+                >
+                  <span className="font-display text-xl sm:text-2xl italic text-alchemy-red">{stat.value}</span>
+                  <span className="font-mono text-[10px] text-porcelain/40 tracking-[0.1em] uppercase">{stat.label}</span>
+                </div>
+              ))}
+            </div>
+          </ScrollReveal>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="relative py-20 sm:py-28 overflow-hidden">
+        <SequentianBackground variant={3} opacity={0.2} parallax />
+
+        <div className="relative z-10 max-w-3xl mx-auto px-6 md:px-12 text-center">
+          <ScrollReveal>
+            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl text-porcelain mb-6 text-balance">
+              Ready to create something{' '}
+              <span className="italic text-alchemy-red">extraordinary?</span>
+            </h2>
+
+            <div className="flex items-center justify-center gap-3 mb-8">
+              <span className="font-mono text-[10px] text-porcelain/45 tracking-wider">NDA available</span>
+              <span className="text-porcelain/20">·</span>
+              <span className="font-mono text-[10px] text-porcelain/45 tracking-wider">24h reply</span>
+              <span className="text-porcelain/20">·</span>
+              <span className="font-mono text-[10px] text-porcelain/45 tracking-wider">Free first call</span>
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <MagneticButton
+                onClick={() => navigate('/book-sprint')}
+                className="glass-cta-primary"
+              >
+                Book a Sprint
+                <ArrowRight className="w-4 h-4" />
+              </MagneticButton>
+
+              <Link
+                to="/contact"
+                className="font-body text-sm text-porcelain/50 hover:text-alchemy-red transition-colors px-6 py-4 no-glow"
+              >
+                or get in touch →
+              </Link>
+            </div>
+          </ScrollReveal>
+        </div>
+      </section>
+
       {/* Detail Modal */}
       <AnimatePresence>
         {selectedProject && (
@@ -185,7 +260,6 @@ export const Work = () => {
                 boxShadow: '0 0 80px rgba(225,6,19,0.08), 0 24px 48px rgba(0,0,0,0.6)',
               }}
             >
-              {/* Close */}
               <button
                 onClick={() => setSelectedProject(null)}
                 className="absolute top-5 right-5 z-20 w-11 h-11 rounded-full flex items-center justify-center hover:bg-porcelain/10 transition-colors"
@@ -194,7 +268,6 @@ export const Work = () => {
                 <X className="w-4 h-4 text-porcelain/60" />
               </button>
 
-              {/* Carousel Media */}
               <div className="p-6 md:p-8 pb-0">
                 <div className="flex items-center gap-3 mb-5">
                   <span className="px-3 py-1 rounded-full text-[10px] font-mono text-porcelain/70 tracking-[0.12em] uppercase" style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)' }}>
@@ -212,15 +285,12 @@ export const Work = () => {
                 <MediaCarousel items={buildCarouselItems(selectedProject)} title={selectedProject.title} />
               </div>
 
-              {/* Content */}
               <div className="p-6 md:p-8 pt-6 space-y-10">
-                {/* Overview */}
                 <div>
                   <h4 className="font-mono text-xs text-alchemy-red tracking-label uppercase mb-3">Overview</h4>
                   <p className="font-body text-base text-porcelain/65 leading-relaxed font-light">{selectedProject.overview}</p>
                 </div>
 
-                {/* Services */}
                 <div>
                   <h4 className="font-mono text-xs text-alchemy-red tracking-label uppercase mb-5">
                     {selectedProject.isConceptual ? 'What We Explored' : 'What We Offer'}
@@ -238,7 +308,6 @@ export const Work = () => {
                   </div>
                 </div>
 
-                {/* CTA */}
                 {!selectedProject.isConceptual && (
                   <div className="flex justify-center pt-2">
                     <motion.button
@@ -264,7 +333,6 @@ export const Work = () => {
         )}
       </AnimatePresence>
 
-      {/* Lightbox */}
       <Lightbox
         isOpen={lightboxMedia !== null}
         onClose={() => setLightboxMedia(null)}

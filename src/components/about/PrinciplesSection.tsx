@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { memo } from 'react';
 import { ScrollReveal } from '@/components/ScrollReveal';
+import { SequentianBackground } from '@/components/SequentianBackground';
 
 const principles = [
   { text: 'Restraint beats noise', index: 1 },
@@ -11,6 +12,9 @@ const principles = [
 export const PrinciplesSection = memo(() => {
   return (
     <section className="relative py-16 sm:py-24 md:py-32 overflow-hidden">
+      {/* Sequentian Soft Nebula background */}
+      <SequentianBackground variant={2} opacity={0.15} parallax={false} />
+
       {/* Background */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute bottom-0 left-1/4 w-[500px] h-[300px] bg-alchemy-red/5 rounded-full blur-[150px]" />
@@ -34,10 +38,13 @@ export const PrinciplesSection = memo(() => {
                 className="relative p-8 sm:p-10 md:p-12 rounded-2xl cursor-default group overflow-hidden"
                 style={{
                   background: 'linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)',
-                  border: '1px solid rgba(255,255,255,0.06)',
+                  borderLeft: '2px solid rgba(220,38,38,0.2)',
+                  borderTop: '1px solid rgba(255,255,255,0.06)',
+                  borderRight: '1px solid rgba(255,255,255,0.06)',
+                  borderBottom: '1px solid rgba(255,255,255,0.06)',
                 }}
                 whileHover={{
-                  borderColor: 'rgba(220,38,38,0.25)',
+                  borderColor: 'rgba(220,38,38,0.5)',
                 }}
                 transition={{ duration: 0.3 }}
               >

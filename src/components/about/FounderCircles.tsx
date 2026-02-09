@@ -156,9 +156,21 @@ const FounderCircle = memo(({ founder, index }: FounderCircleProps) => {
             border: isDark
               ? '1px solid rgba(255,255,255,0.12)'
               : '1px solid rgba(220,38,38,0.25)',
-            boxShadow: isDark
-              ? 'inset 0 1px 0 rgba(255,255,255,0.15), 0 8px 40px rgba(0,0,0,0.3)'
-              : 'inset 0 1px 0 rgba(220,38,38,0.1), 0 8px 40px rgba(220,38,38,0.15), 0 0 80px rgba(220,38,38,0.08)',
+            boxShadow: isHovered
+              ? (isDark
+                ? 'inset 0 1px 0 rgba(255,255,255,0.15), 0 8px 40px rgba(0,0,0,0.3), 0 0 60px rgba(220,38,38,0.15)'
+                : 'inset 0 1px 0 rgba(220,38,38,0.1), 0 8px 40px rgba(220,38,38,0.15), 0 0 80px rgba(220,38,38,0.2)')
+              : (isDark
+                ? 'inset 0 1px 0 rgba(255,255,255,0.15), 0 8px 40px rgba(0,0,0,0.3)'
+                : 'inset 0 1px 0 rgba(220,38,38,0.1), 0 8px 40px rgba(220,38,38,0.15), 0 0 80px rgba(220,38,38,0.08)'),
+          }}
+        />
+
+        {/* Inner glow layer for multi-layer depth */}
+        <div
+          className="absolute inset-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
+          style={{
+            background: 'radial-gradient(ellipse at 50% 40%, rgba(220,38,38,0.08) 0%, transparent 70%)',
           }}
         />
 
@@ -174,7 +186,7 @@ const FounderCircle = memo(({ founder, index }: FounderCircleProps) => {
 
         {/* Content */}
         <div className="relative z-10 text-center px-6 sm:px-8">
-          <h3 className="font-display text-xl sm:text-2xl md:text-3xl italic text-porcelain mb-1.5">
+          <h3 className="font-body text-xl sm:text-2xl md:text-3xl font-bold uppercase tracking-[0.08em] text-porcelain mb-1.5">
             {founder.fullName}
           </h3>
 

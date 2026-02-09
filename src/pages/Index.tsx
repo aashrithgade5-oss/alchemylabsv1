@@ -4,6 +4,7 @@ import { Footer } from '@/components/Footer';
 import { ScrollProgress } from '@/components/ScrollProgress';
 import { ParallaxBackground } from '@/components/ParallaxBackground';
 import { FloatingCTA } from '@/components/FloatingCTA';
+import { SequentianBackground } from '@/components/SequentianBackground';
 import { memo, lazy, Suspense } from 'react';
 import { motion } from 'framer-motion';
 
@@ -61,9 +62,12 @@ const Index = memo(() => {
         <SectionDivider />
         
         <Suspense fallback={null}>
-          <RevealSection className="content-lazy">
-            <Manifesto />
-          </RevealSection>
+          <div className="relative">
+            <SequentianBackground variant={4} opacity={0.15} parallax={false} />
+            <RevealSection className="content-lazy">
+              <Manifesto />
+            </RevealSection>
+          </div>
         </Suspense>
         
         <SectionDivider />
@@ -81,9 +85,12 @@ const Index = memo(() => {
         </Suspense>
         
         <Suspense fallback={null}>
-          <RevealSection className="content-lazy">
-            <FAQSection />
-          </RevealSection>
+          <div className="relative">
+            <SequentianBackground variant={2} opacity={0.12} parallax={false} />
+            <RevealSection className="content-lazy">
+              <FAQSection />
+            </RevealSection>
+          </div>
         </Suspense>
         
         <Suspense fallback={null}>
