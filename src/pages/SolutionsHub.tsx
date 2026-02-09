@@ -65,7 +65,7 @@ export const SolutionsHub = () => {
       {/* Hero Section */}
       <section className="relative min-h-[70vh] flex items-end pb-16 sm:pb-20 pt-24 sm:pt-32 overflow-hidden">
         {/* Sequentian Silk Fold hero background */}
-        <SequentianBackground variant={1} opacity={0.55} parallax scaleEnd={1.2} blur={1} />
+        <SequentianBackground variant={1} opacity={0.4} parallax scaleEnd={1.1} glow={false} />
 
         <div className="absolute inset-0 pointer-events-none">
           <BlueprintGrid opacity={0.04} />
@@ -233,7 +233,7 @@ export const SolutionsHub = () => {
       {/* Quick Access Services Grid */}
       <section className="relative py-16 sm:py-20 md:py-24 luxury-margin">
         {/* Sequentian Soft Nebula background */}
-        <SequentianBackground variant={2} opacity={0.45} parallax scaleEnd={1.1} />
+        <SequentianBackground variant={2} opacity={0.3} parallax scaleEnd={1.08} glow={false} />
         
         <div className="max-w-7xl mx-auto px-5 sm:px-6 md:px-12 relative z-10">
           <ScrollReveal>
@@ -278,7 +278,7 @@ export const SolutionsHub = () => {
       {/* Sprint CTA */}
       <section className="relative py-16 sm:py-20 md:py-24 overflow-hidden luxury-margin">
         {/* Sequentian Crimson Cloud background */}
-        <SequentianBackground variant={4} opacity={0.5} parallax scaleEnd={1.2} />
+        <SequentianBackground variant={4} opacity={0.35} parallax scaleEnd={1.1} glow={false} />
         
         <div className="relative z-10 max-w-4xl mx-auto px-5 sm:px-6 md:px-12">
           <ScrollReveal>

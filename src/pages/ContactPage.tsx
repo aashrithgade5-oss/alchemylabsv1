@@ -23,9 +23,9 @@ export const ContactPage = () => {
   const videoOpacity = useTransform(scrollYProgress, [0, 0.8], [0.4, 0]);
   const textY = useTransform(scrollYProgress, [0, 1], [0, 100]);
   // More dramatic zoom: 1.1 → 1.4 for immersive Ken Burns
-  const bgScale = useTransform(formScrollY, [0, 1], [1.1, 1.4]);
+  const bgScale = useTransform(formScrollY, [0, 1], [1.05, 1.18]);
   // Subtle vertical drift for living feel
-  const bgY = useTransform(formScrollY, [0, 1], ['-5%', '5%']);
+  const bgY = useTransform(formScrollY, [0, 1], ['-2%', '3%']);
 
   return (
     <div className="min-h-screen bg-background grain-overlay">
@@ -131,9 +131,9 @@ export const ContactPage = () => {
           />
         </motion.div>
 
-        {/* Ambient red glow */}
+        {/* Subtle ambient warmth */}
         <div className="absolute inset-0 pointer-events-none z-[1]">
-          <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse 60% 50% at 50% 40%, rgba(220, 38, 38, 0.12) 0%, transparent 70%)' }} />
+          <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse 60% 50% at 50% 40%, rgba(220, 38, 38, 0.06) 0%, transparent 70%)' }} />
           <div className="absolute top-0 inset-x-0 h-32 bg-gradient-to-b from-background to-transparent" />
           <div className="absolute bottom-0 inset-x-0 h-32 bg-gradient-to-t from-background to-transparent" />
         </div>

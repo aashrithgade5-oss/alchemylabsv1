@@ -7,7 +7,7 @@ export const WhoWeServe = memo(() => {
   return (
     <section className="relative py-24 sm:py-32 md:py-40 overflow-hidden">
       {/* Sequentian Crimson Cloud background */}
-      <SequentianBackground variant={4} opacity={0.5} parallax scaleEnd={1.2} />
+      <SequentianBackground variant={4} opacity={0.35} parallax scaleEnd={1.1} glow={false} />
 
       <div className="relative z-10 max-w-4xl mx-auto px-5 sm:px-6 md:px-12 text-center">
         <ScrollReveal>
