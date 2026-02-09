@@ -64,7 +64,7 @@ export const Work = () => {
 
       {/* Hero */}
       <section className="relative pt-32 pb-16 overflow-hidden">
-        <SequentianBackground variant={4} opacity={0.5} parallax scaleEnd={1.2} />
+        <SequentianBackground variant={4} opacity={0.35} parallax scaleEnd={1.1} glow={false} />
 
         <div className="absolute inset-0 pointer-events-none">
           <BlueprintGrid opacity={0.02} />
@@ -117,7 +117,7 @@ export const Work = () => {
 
       {/* Grid */}
       <section className="relative py-8 pb-24">
-        <SequentianBackground variant={1} opacity={0.4} parallax scaleEnd={1.1} blur={1} />
+        <SequentianBackground variant={1} opacity={0.3} parallax scaleEnd={1.08} glow={false} />
 
         <div className="absolute inset-0 pointer-events-none">
           <BlueprintGrid opacity={0.015} />
@@ -197,7 +197,7 @@ export const Work = () => {
 
       {/* CTA Section */}
       <section className="relative py-20 sm:py-28 overflow-hidden">
-        <SequentianBackground variant={5} opacity={0.5} parallax scaleEnd={1.2} blur={2} />
+        <SequentianBackground variant={5} opacity={0.35} parallax scaleEnd={1.1} blur={1} glow={false} />
 
         <div className="relative z-10 max-w-3xl mx-auto px-6 md:px-12 text-center">
           <ScrollReveal>

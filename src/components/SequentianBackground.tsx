@@ -54,12 +54,12 @@ export const SequentianBackground = memo(({
       className={`absolute inset-0 overflow-hidden pointer-events-none ${className}`}
       aria-hidden
     >
-      {/* Ambient color glow behind the image for richness */}
+      {/* Subtle warm ambient glow — restrained to avoid red-wash */}
       {glow && (
         <div
           className="absolute inset-0"
           style={{
-            background: 'radial-gradient(ellipse 80% 60% at 50% 50%, rgba(220, 38, 38, 0.08) 0%, transparent 70%)',
+            background: 'radial-gradient(ellipse 70% 50% at 50% 50%, rgba(220, 38, 38, 0.04) 0%, transparent 60%)',
           }}
         />
       )}

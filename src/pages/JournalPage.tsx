@@ -70,7 +70,7 @@ export const JournalPage = () => {
       {/* Hero */}
       <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden section-gradient">
         {/* Sequentian Soft Nebula hero */}
-        <SequentianBackground variant={5} opacity={0.55} parallax scaleEnd={1.2} blur={2} />
+        <SequentianBackground variant={5} opacity={0.4} parallax scaleEnd={1.1} blur={1} glow={false} />
         
         <div className="relative z-10 max-w-5xl mx-auto px-6 md:px-12 text-center pt-32">
           <motion.p
@@ -106,7 +106,7 @@ export const JournalPage = () => {
       {/* Posts Grid */}
       <section className="relative py-32 section-gradient">
         {/* Sequentian Crimson Cloud grid background */}
-        <SequentianBackground variant={4} opacity={0.45} parallax scaleEnd={1.12} />
+        <SequentianBackground variant={4} opacity={0.3} parallax scaleEnd={1.08} glow={false} />
         
         <div className="relative z-10 max-w-6xl mx-auto px-6 md:px-12">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
