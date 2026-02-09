@@ -189,7 +189,7 @@ export const Hero = memo(() => {
             transition={{ duration: 0.6, delay: 0.15, ease: easeOut }}
             className="text-[2.25rem] sm:text-5xl md:text-6xl lg:text-7xl xl:text-[5.5rem] leading-[1.05] tracking-[-0.02em] mb-4 md:mb-5"
           >
-            <span className="inline-block font-alchemy text-porcelain tracking-[0.08em] uppercase">
+            <span className="inline-block font-body font-bold text-porcelain tracking-[0.05em] uppercase">
               ALCHEMY
             </span>
             <span className="inline-block text-porcelain/25 mx-2 sm:mx-3 font-body font-light text-[0.4em]">
