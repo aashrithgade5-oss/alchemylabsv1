@@ -23,26 +23,27 @@ export const ContactPage = () => {
       
       {/* Hero Header with Video Background */}
       <section ref={heroRef} className="relative pt-32 pb-24 overflow-hidden min-h-[70vh] flex items-center">
-        {/* Video Background */}
+        {/* Video Background — full bleed, no black bars */}
         <motion.div 
           style={{ scale: videoScale, opacity: videoOpacity }}
-          className="absolute inset-0 z-0"
+          className="absolute -inset-4 z-0"
         >
           <video autoPlay muted loop playsInline className="w-full h-full object-cover">
             <source src={heroVideo} type="video/mp4" />
           </video>
-          <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/60 to-background" />
+          {/* Subtle bottom fade only — no side or top darkening */}
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background/90" />
         </motion.div>
 
         {/* Animated Gradient Orbs */}
         <div className="absolute inset-0 pointer-events-none">
           <motion.div 
-            animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.2, 0.1] }}
+            animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
             transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
             className="absolute top-1/4 left-1/4 w-[400px] h-[400px] bg-alchemy-red/15 rounded-full blur-[120px]" 
           />
           <motion.div 
-            animate={{ scale: [1.2, 1, 1.2], opacity: [0.08, 0.15, 0.08] }}
+            animate={{ scale: [1.2, 1, 1.2], opacity: [0.1, 0.2, 0.1] }}
             transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
             className="absolute bottom-1/4 right-1/4 w-[350px] h-[350px] bg-deep-crimson/20 rounded-full blur-[100px]" 
           />
