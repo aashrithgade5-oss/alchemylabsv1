@@ -1,54 +1,67 @@
 
 
-## Contact Page Visual Overhaul
+## Contact Page -- Final Polish & Immersive Overhaul
 
-### Problem
-The background image is uniformly blurred everywhere, losing its character. The form area (`glass-deep`) is too opaque (90-95% dark), blocking the background entirely. The left-column text elements lack any glass treatment, and the overall composition feels flat.
+### Overview
+Three targeted changes to eliminate all visual gaps, add cinematic depth, and bring the hero text to life against the video background.
 
-### Changes
+---
 
-**1. ContactPage.tsx -- Background image: clear center, vignette blur at edges**
+### 1. Hero Text Readability -- Text Shadow + Localized Backdrop
 
-Replace the single `blur-[12px] opacity-70` image with a two-layer approach:
-- **Layer 1 (sharp):** The image at full clarity, `opacity-80`, NO blur -- this is the "character" layer
-- **Layer 2 (vignette mask):** A CSS `mask-image` radial gradient that fades the edges to transparent, creating a natural vignette without blurring the center
-- Edge gradients stay for hero/footer merge but are reduced in height to `h-32`
-- The dark vignette overlay shifts to `hsl(var(--background) / 0.3)` at `85%` so the image breathes more
+**File: `src/pages/ContactPage.tsx`**
 
-**2. Contact.tsx -- Left column: liquid-glass card treatment**
+Add a text-shadow to the hero headline and subtitle for contrast against the bright video, plus a soft radial backdrop glow behind the text container:
 
-Wrap the entire left column content (the "Let's build something inevitable" heading, contact methods, social links, founder block) in a liquid-glass container:
-- `backdrop-filter: blur(20px) saturate(120%)`
-- `background: rgba(10, 10, 11, 0.5)` -- semi-transparent, lets background glow through
-- `border: 1px solid rgba(255, 255, 255, 0.08)`
-- `border-radius: 1.5rem`, padding `p-8`
-- Subtle `inset 0 1px 0 rgba(255,255,255,0.06)` highlight
+- On the text container (line 54), add an inline style with a radial background glow:
+  ```
+  background: radial-gradient(ellipse at 50% 50%, rgba(10,10,11,0.5) 0%, transparent 70%)
+  ```
+- On the h1 (line 69), add `style={{ textShadow: '0 2px 40px rgba(0,0,0,0.6)' }}`
+- On the subtitle paragraph (line 78), add `style={{ textShadow: '0 1px 20px rgba(0,0,0,0.5)' }}`
 
-**3. Contact.tsx -- Form card: reduce opacity for background bleed-through**
+---
 
-Update the form's `glass-deep` wrapper to use a lighter variant so the red-room background shows through:
-- Change class from `glass-deep` to a custom inline style:
-  - `background: rgba(10, 10, 11, 0.55)` (down from 0.9)
-  - `backdrop-filter: blur(24px) saturate(120%)`
-  - `border: 1px solid rgba(255, 255, 255, 0.1)`
-  - `box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.06)`
-- This keeps text perfectly readable while the warm red glow bleeds through the card
+### 2. Ken Burns Parallax on Contact Background Image
 
-**4. ContactPage.tsx -- Add a subtle warm color wash**
+**File: `src/pages/ContactPage.tsx`**
 
-Add a translucent red radial glow layer between the image and the content:
-- `radial-gradient(ellipse at 50% 40%, rgba(220, 38, 38, 0.08) 0%, transparent 60%)` -- adds warmth without overpowering
+Convert the static `<img>` for `contactBg` into a `motion.img` with scroll-driven scale animation:
 
-### Technical Details
+- Add a new `useRef` for the contact form section and a second `useScroll`/`useTransform` to drive a slow scale from 1.0 to 1.15 as user scrolls through
+- Apply `motion.img` with `style={{ scale: bgScale }}` instead of static `scale-105` class
+- This creates a subtle Ken Burns zoom as the user reads the form
+
+---
+
+### 3. Eliminate All Gaps Between Sections
+
+**File: `src/pages/ContactPage.tsx`**
+
+- Remove `pb-24` from the hero section (line 25) -- replace with `pb-0` so there's zero gap between hero and contact form
+- On the contact form section (line 106), add negative top margin: `className="relative overflow-hidden -mt-16"` to overlap slightly into the hero fade
+- Increase the top gradient merge height from `h-32` to `h-48` for a longer, smoother blend
+- On the outer wrapper (line 21), ensure `bg-background` has no extra padding/margin creating white space
+
+**File: `src/components/Contact.tsx`**
+
+- Adjust top padding: change `py-20 md:py-32` to `pt-24 md:pt-40 pb-20 md:pb-32` so the form content clears the overlap zone
+
+---
+
+### 4. Performance & Animation Optimizations
+
+**File: `src/pages/ContactPage.tsx`**
+
+- Add `will-change: transform` to the video motion div for GPU acceleration
+- Add `loading="eager"` to the contactBg image since it's above the fold of its section
+- Reduce the gradient orb blur from `blur-[120px]` to `blur-[80px]` on mobile via a responsive class for GPU savings
+
+---
+
+### Technical Summary
 
 Files modified:
-- `src/pages/ContactPage.tsx` -- background image styling (remove blur, add mask-image vignette, adjust gradients, add warm wash layer)
-- `src/components/Contact.tsx` -- left column glass wrapper, form card opacity reduction
-
-The `mask-image` approach uses:
-```css
-mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 30%, transparent 80%);
--webkit-mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 30%, transparent 80%);
-```
-This keeps the center of the image sharp and crisp while naturally fading the edges -- a cinematic vignette effect without global blur.
+- **`src/pages/ContactPage.tsx`** -- hero text shadows, radial backdrop, Ken Burns scroll effect on bg image, section gap removal, performance attributes
+- **`src/components/Contact.tsx`** -- adjusted top padding for seamless section overlap
 
