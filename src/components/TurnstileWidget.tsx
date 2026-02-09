@@ -34,6 +34,15 @@ export const TurnstileWidget = ({ onVerify, onError, onExpire }: TurnstileWidget
   const containerRef = useRef<HTMLDivElement>(null);
   const widgetIdRef = useRef<string | null>(null);
   const isRenderedRef = useRef(false);
+  const errorCountRef = useRef(0);
+
+  const handleError = useCallback(() => {
+    // Only fire the error callback once to prevent toast spam
+    errorCountRef.current++;
+    if (errorCountRef.current <= 1) {
+      onError?.();
+    }
+  }, [onError]);
 
   const renderWidget = useCallback(() => {
     if (!containerRef.current || isRenderedRef.current) return;
@@ -43,16 +52,16 @@ export const TurnstileWidget = ({ onVerify, onError, onExpire }: TurnstileWidget
       widgetIdRef.current = window.turnstile.render(containerRef.current, {
         sitekey: TURNSTILE_SITE_KEY,
         callback: onVerify,
-        'error-callback': onError,
+        'error-callback': handleError,
         'expired-callback': onExpire,
         theme: 'dark',
         size: 'normal',
       });
       isRenderedRef.current = true;
     } catch (e) {
-      console.error('Turnstile render error:', e);
+      // Silently fail - don't spam console
     }
-  }, [onVerify, onError, onExpire]);
+  }, [onVerify, handleError, onExpire]);
 
   useEffect(() => {
     // Check if script already exists
@@ -84,6 +93,7 @@ export const TurnstileWidget = ({ onVerify, onError, onExpire }: TurnstileWidget
         }
       }
       isRenderedRef.current = false;
+      errorCountRef.current = 0;
     };
   }, [renderWidget]);
 

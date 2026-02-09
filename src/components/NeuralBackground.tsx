@@ -331,7 +331,9 @@ interface NeuralBackgroundProps {
 
 export const NeuralBackground = memo(({ isMobile = false }: NeuralBackgroundProps) => {
   const [shouldRender, setShouldRender] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
   const [config, setConfig] = useState<DeviceConfig | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const capability = isMobile ? 'low' : getDeviceCapability();
@@ -339,15 +341,26 @@ export const NeuralBackground = memo(({ isMobile = false }: NeuralBackgroundProp
     
     setConfig(deviceConfig);
     
-    // Immediate render for instant visual
     const timer = requestAnimationFrame(() => setShouldRender(true));
     return () => cancelAnimationFrame(timer);
   }, [isMobile]);
+
+  // Pause canvas when not visible using IntersectionObserver
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsVisible(entry.isIntersecting),
+      { threshold: 0.01 }
+    );
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, [shouldRender]);
 
   if (!shouldRender || !config) return null;
 
   return (
     <div 
+      ref={containerRef}
       className="absolute inset-0 gpu-accelerated" 
       style={{ background: 'transparent' }}
     >
@@ -362,7 +375,7 @@ export const NeuralBackground = memo(({ isMobile = false }: NeuralBackgroundProp
           depth: false,
         }}
         style={{ background: 'transparent' }}
-        frameloop="always"
+        frameloop={isVisible ? 'always' : 'never'}
         performance={{ min: 0.4, max: 0.8 }}
       >
         <SceneContent config={config} />
