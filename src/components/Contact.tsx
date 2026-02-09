@@ -125,7 +125,7 @@ export const Contact = memo(() => {
   };
 
   return (
-    <section id="contact" className="relative py-20 md:py-32 overflow-hidden">
+    <section id="contact" className="relative pt-24 md:pt-40 pb-20 md:pb-32 overflow-hidden">
 
       <div className="relative z-10 max-w-6xl mx-auto px-6 md:px-12">
         {/* Two Column Layout */}

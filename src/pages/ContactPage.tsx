@@ -17,15 +17,23 @@ export const ContactPage = () => {
   const videoOpacity = useTransform(scrollYProgress, [0, 0.8], [0.4, 0]);
   const textY = useTransform(scrollYProgress, [0, 1], [0, 100]);
 
+  // Ken Burns parallax for contact bg
+  const contactRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress: contactProgress } = useScroll({
+    target: contactRef,
+    offset: ['start end', 'end start']
+  });
+  const bgScale = useTransform(contactProgress, [0, 1], [1, 1.15]);
+
   return (
     <div className="min-h-screen bg-background grain-overlay">
       <Navigation />
       
       {/* Hero Header with Video Background */}
-      <section ref={heroRef} className="relative pt-32 pb-24 overflow-hidden min-h-[70vh] flex items-center">
+      <section ref={heroRef} className="relative pt-32 pb-0 overflow-hidden min-h-[70vh] flex items-center">
         {/* Video Background — full bleed, no black bars */}
         <motion.div 
-          style={{ scale: videoScale, opacity: videoOpacity }}
+          style={{ scale: videoScale, opacity: videoOpacity, willChange: 'transform' }}
           className="absolute -inset-4 z-0"
         >
           <video autoPlay muted loop playsInline className="w-full h-full object-cover">
@@ -50,8 +58,8 @@ export const ContactPage = () => {
         </div>
         
         <motion.div 
-          style={{ y: textY }}
-          className="relative z-10 max-w-5xl mx-auto px-6 md:px-12 text-center"
+          style={{ y: textY, background: 'radial-gradient(ellipse at 50% 50%, rgba(10,10,11,0.5) 0%, transparent 70%)' }}
+          className="relative z-10 max-w-5xl mx-auto px-6 md:px-12 text-center py-8"
         >
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -67,6 +75,7 @@ export const ContactPage = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
             className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-display tracking-display text-porcelain mb-6"
+            style={{ textShadow: '0 2px 40px rgba(0,0,0,0.6)' }}
           >
             <span className="font-medium">Start a</span> <span className="italic text-alchemy-red text-glow">Conversation</span>
           </motion.h1>
@@ -76,6 +85,7 @@ export const ContactPage = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="font-body text-lg md:text-xl text-porcelain/50 max-w-2xl mx-auto font-light"
+            style={{ textShadow: '0 1px 20px rgba(0,0,0,0.5)' }}
           >
             Ready to transform your brand? Let's discuss your vision and craft something extraordinary together.
           </motion.p>
@@ -103,24 +113,31 @@ export const ContactPage = () => {
       </section>
       
       {/* Contact Form Section with dynamic background */}
-      <section className="relative overflow-hidden">
-        {/* Background image — tasteful blur with character */}
-        <div className="absolute inset-0 pointer-events-none">
-          {/* Sharp image with vignette mask — clear center, faded edges */}
-          <img
+      <section ref={contactRef} className="relative overflow-hidden -mt-16">
+        {/* Background image — Ken Burns parallax with vignette */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden"
+          style={{
+            maskImage: 'radial-gradient(ellipse 70% 70% at 50% 50%, black 30%, transparent 80%)',
+            WebkitMaskImage: 'radial-gradient(ellipse 70% 70% at 50% 50%, black 30%, transparent 80%)',
+          }}
+        >
+          {/* Sharp image with Ken Burns parallax */}
+          <motion.img
             src={contactBg}
             alt=""
             aria-hidden
-            className="w-full h-full object-cover opacity-80 scale-105"
-            style={{
-              maskImage: 'radial-gradient(ellipse 70% 70% at 50% 50%, black 30%, transparent 80%)',
-              WebkitMaskImage: 'radial-gradient(ellipse 70% 70% at 50% 50%, black 30%, transparent 80%)',
-            }}
+            loading="eager"
+            style={{ scale: bgScale, willChange: 'transform' }}
+            className="w-full h-full object-cover opacity-80 origin-center"
+            draggable={false}
           />
+        </div>
+        {/* Overlay layers */}
+        <div className="absolute inset-0 pointer-events-none">
           {/* Top merge into hero */}
-          <div className="absolute top-0 inset-x-0 h-32 bg-gradient-to-b from-background to-transparent" />
+          <div className="absolute top-0 inset-x-0 h-48 bg-gradient-to-b from-background to-transparent" />
           {/* Bottom merge into footer */}
-          <div className="absolute bottom-0 inset-x-0 h-32 bg-gradient-to-t from-background to-transparent" />
+          <div className="absolute bottom-0 inset-x-0 h-48 bg-gradient-to-t from-background to-transparent" />
           {/* Softer depth vignette */}
           <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at 50% 50%, transparent 40%, hsl(var(--background) / 0.3) 85%)' }} />
           {/* Warm color wash */}
