@@ -7,6 +7,7 @@ export interface FounderExperience {
   achievements: string[];
   logo?: string;
   revenueSignal?: string;
+  metrics?: { label: string; value: string }[];
 }
 
 export interface FounderVenture {
@@ -84,7 +85,7 @@ export interface FounderData {
   };
 }
 
-// Aashrith Gade Portfolio Data - Updated with Canonical Founder Dataset
+// Aashrith Gade Portfolio Data
 export const aashrithData: FounderData = {
   hero: {
     name: "AASHRITH GADE",
@@ -129,21 +130,9 @@ export const aashrithData: FounderData = {
   },
   ventures: [
     {
-      name: "Alchemy Labs",
-      type: "AI-Native Branding & Product Studio",
-      description: "A founder-led studio delivering AI-powered brand systems, rapid product builds, and strategic advisory. Designed to operate without traditional agency bloat, focusing on speed, clarity, and systems-driven execution.",
-      founderRoles: ["Founder", "CEO", "Head of Design", "Head of Project Execution"],
-      capabilities: [
-        "Brand architecture & identity systems",
-        "AI-assisted product and visual builds",
-        "Strategic brand advisory",
-        "Founder-to-founder collaboration"
-      ]
-    },
-    {
       name: "Brand Alchemy",
       type: "Thought Leadership IP",
-      description: "A research-driven thought leadership platform exploring how brands are built through culture, narrative, systems, and design. It serves as a public knowledge layer where branding theory is translated into practical frameworks.",
+      description: "A research-driven thought leadership platform exploring how brands are built through culture, narrative, systems, and design.",
       outputs: [
         "Strategic branding content",
         "Marketing and positioning insights",
@@ -155,13 +144,25 @@ export const aashrithData: FounderData = {
       type: "AI-Native Community Platform",
       communitySize: "3.8K+ members",
       audience: "Gen AI experts, builders, designers, marketers, and enthusiasts",
-      description: "An active AI-native ecosystem focused on experimentation, applied learning, and practical AI workflows. The platform emphasizes real-world value creation over surface-level trends.",
+      description: "An active AI-native ecosystem focused on experimentation, applied learning, and practical AI workflows.",
       outputs: [
         "Discord community",
         "Value-driven AI content",
         "Thought leadership posts"
       ]
-    }
+    },
+    {
+      name: "Alchemy Labs",
+      type: "AI-Native Branding & Product Studio",
+      description: "A founder-led studio delivering AI-powered brand systems, rapid product builds, and strategic advisory.",
+      founderRoles: ["Founder", "CEO", "Head of Design", "Head of Project Execution"],
+      capabilities: [
+        "Brand architecture & identity systems",
+        "AI-assisted product and visual builds",
+        "Strategic brand advisory",
+        "Founder-to-founder collaboration"
+      ]
+    },
   ],
   differentiators: [
     "Founder-led execution, not delegated work",
@@ -172,6 +173,35 @@ export const aashrithData: FounderData = {
   ],
   experience: [
     {
+      company: "@hitakkshi Collaboration",
+      role: "Videographer — Fashion Influencer Projects",
+      dates: "Feb 2025",
+      achievements: [
+        "Branded content creation for fashion and retail",
+        "Shot and edited Instagram Reels for Inorbit Mall, Bonkers Corner, Azorte, Pepe Jeans, AND",
+        "Managed end-to-end production from concept to delivery"
+      ],
+      metrics: [
+        { label: 'Brands', value: '5+' },
+        { label: 'Reels', value: '20+' },
+        { label: 'Engagement', value: '15K+' }
+      ]
+    },
+    {
+      company: "Sparsh Concept",
+      role: "Marketing, PR & Sales",
+      dates: "2024 - 2025",
+      achievements: [
+        "Led marketing and PR initiatives for events and exhibitions",
+        "Managed sales pipeline and client outreach",
+        "Coordinated press coverage and media partnerships"
+      ],
+      metrics: [
+        { label: 'Events', value: '10+' },
+        { label: 'Press Hits', value: '15+' }
+      ]
+    },
+    {
       company: "Alchemy Labs",
       role: "Founder & CEO",
       dates: "2024 - Present",
@@ -181,7 +211,12 @@ export const aashrithData: FounderData = {
         "Delivered brand systems, visual identities, and strategic positioning",
         "Led end-to-end strategy, design, and execution"
       ],
-      revenueSignal: "~$9,000+ generated within 6 months across 6+ client engagements"
+      revenueSignal: "~$9,000+ generated within 6 months across 6+ client engagements",
+      metrics: [
+        { label: 'Clients', value: '6+' },
+        { label: 'Revenue', value: '$9K+' },
+        { label: 'Projects', value: '50+' }
+      ]
     },
     {
       company: "Brand Alchemy",
@@ -200,8 +235,10 @@ export const aashrithData: FounderData = {
       achievements: [
         "AI-led creative execution platform",
         "Developed workflows for AI-augmented production",
-        "Integrated cutting-edge AI tools for brand work",
         "Built 3.8K+ member community"
+      ],
+      metrics: [
+        { label: 'Community', value: '3.8K+' }
       ]
     },
     {
@@ -222,6 +259,9 @@ export const aashrithData: FounderData = {
         "Content strategy and editing",
         "Community engagement systems",
         "Contributed to content across a 13M+ audience ecosystem"
+      ],
+      metrics: [
+        { label: 'Audience', value: '13M+' }
       ]
     },
     {
@@ -232,26 +272,18 @@ export const aashrithData: FounderData = {
         "Brand storytelling and UI-led content",
         "Scaled Instagram from 5K to 40K in 10 weeks",
         "Designed consistent visual and narrative systems"
+      ],
+      metrics: [
+        { label: 'Growth', value: '5K→40K' },
+        { label: 'Duration', value: '10 weeks' }
       ]
     }
   ],
   skills: [
-    {
-      category: "Brand Architecture",
-      items: ["Identity Systems", "Positioning Strategy", "Narrative Frameworks", "Visual Language Design"]
-    },
-    {
-      category: "Creative Direction",
-      items: ["Art Direction", "Campaign Design", "Visual Systems", "Editorial Design"]
-    },
-    {
-      category: "AI-Native Strategy",
-      items: ["Prompt Engineering", "Tool Integration", "Workflow Design", "Generative Media"]
-    },
-    {
-      category: "Technical",
-      items: ["Figma", "Adobe Creative Suite", "Midjourney", "Runway", "Notion", "Webflow"]
-    }
+    { category: "Brand Architecture", items: ["Identity Systems", "Positioning Strategy", "Narrative Frameworks", "Visual Language Design"] },
+    { category: "Creative Direction", items: ["Art Direction", "Campaign Design", "Visual Systems", "Editorial Design"] },
+    { category: "AI-Native Strategy", items: ["Prompt Engineering", "Tool Integration", "Workflow Design", "Generative Media"] },
+    { category: "Technical", items: ["Figma", "Adobe Creative Suite", "Midjourney", "Runway", "Notion", "Webflow"] }
   ],
   education: [
     {
@@ -259,25 +291,12 @@ export const aashrithData: FounderData = {
       degree: "BBA — Branding & Advertising",
       year: "Class of 2026",
       honors: "Marketing & Strategy Focus",
-      focusAreas: [
-        "Branding & Brand Strategy",
-        "Advertising & Communication",
-        "Marketing Systems",
-        "Creative Direction"
-      ]
+      focusAreas: ["Branding & Brand Strategy", "Advertising & Communication", "Marketing Systems", "Creative Direction"]
     }
   ],
   recognition: [
-    {
-      title: "Featured: AI in Creative Industries",
-      source: "Industry Publication",
-      date: "2024"
-    },
-    {
-      title: "Brand Alchemy Community Launch",
-      source: "Self-Published",
-      date: "2023"
-    }
+    { title: "Featured: AI in Creative Industries", source: "Industry Publication", date: "2024" },
+    { title: "Brand Alchemy Community Launch", source: "Self-Published", date: "2023" }
   ],
   contact: {
     email: "aashrithgadework@gmail.com",
@@ -289,8 +308,8 @@ export const aashrithData: FounderData = {
 export const evaData: FounderData = {
   hero: {
     name: "Eva Doshi",
-    titles: ["DIRECTOR OF CLIENT RELATIONS", "OUTREACH HEAD"],
-    tagline: "Luxury Brand Strategy • Creative Direction • Growth & Partnerships"
+    titles: ["CO-FOUNDER · BRAND STRATEGIST", "FASHION × LUXURY × CREATIVE DIRECTION"],
+    tagline: "Ex-Dentsu · Mumbai"
   },
   positioning: {
     short: "Strategic leader bridging creative vision with executional precision across luxury brand partnerships.",
@@ -298,9 +317,9 @@ export const evaData: FounderData = {
   },
   bio: {
     portrait: "/placeholder.svg",
-    intro: "Leading client relations, outreach, and strategic growth at Alchemy Labs. With a background in fashion and luxury brand strategy, I bring a sharp understanding of market dynamics, creative storytelling, and relationship-led growth.",
+    intro: "Leading client relations, outreach, and strategic growth at Alchemy Labs. With a background in fashion and luxury brand strategy, I bridge creative vision with executional precision—from first conversation to final delivery.",
     extendedIntro: "Ex-Dentsu professional with experience across business development, marketing, sales, and AI-led marketing initiatives. My role ensures that Alchemy Labs operates with both strategic clarity and operational excellence.",
-    quote: "Bridging creative vision with executional precision",
+    quote: "Strategy meets storytelling. Execution meets elegance.",
     location: "Mumbai",
     expertise: ["Luxury Brand Strategy", "Creative Direction", "Growth & Partnerships", "Market Dynamics", "Creative Storytelling"],
     meta: "Mumbai • Co-founder • Client-first leadership"
@@ -320,13 +339,17 @@ export const evaData: FounderData = {
   experience: [
     {
       company: "Alchemy Labs",
-      role: "Co-Founder • Chief of Client Relations",
+      role: "Co-Founder · Chief of Client Relations",
       dates: "2024 - Present",
       achievements: [
         "Built and leads client relations infrastructure",
         "Developed strategic partnerships with luxury brands",
         "Orchestrates project delivery and client success",
         "Bridges creative vision with client objectives"
+      ],
+      metrics: [
+        { label: 'Partnerships', value: '10+' },
+        { label: 'Client Retention', value: '95%' }
       ]
     },
     {
@@ -338,44 +361,36 @@ export const evaData: FounderData = {
         "Managed key client relationships",
         "Contributed to marketing and sales strategies",
         "AI-led marketing initiatives"
+      ],
+      metrics: [
+        { label: 'Clients Managed', value: '15+' },
+        { label: 'Revenue Growth', value: '30%+' }
       ]
     }
   ],
   skills: [
-    {
-      category: "Luxury Brand Strategy",
-      items: ["Market Positioning", "Brand Narrative", "Competitive Analysis", "Trend Forecasting"]
-    },
-    {
-      category: "Creative Direction",
-      items: ["Campaign Oversight", "Visual Storytelling", "Brand Guidelines", "Content Strategy"]
-    },
-    {
-      category: "Growth & Partnerships",
-      items: ["Client Relations", "Strategic Partnerships", "Business Development", "Account Management"]
-    },
-    {
-      category: "Operations",
-      items: ["Project Management", "Team Coordination", "Process Optimization", "Quality Assurance"]
-    }
+    { category: "Luxury Brand Strategy", items: ["Market Positioning", "Brand Narrative", "Competitive Analysis", "Trend Forecasting"] },
+    { category: "Creative Direction", items: ["Campaign Oversight", "Visual Storytelling", "Brand Guidelines", "Content Strategy"] },
+    { category: "Growth & Partnerships", items: ["Client Relations", "Strategic Partnerships", "Business Development", "Account Management"] },
+    { category: "Operations", items: ["Project Management", "Team Coordination", "Process Optimization", "Quality Assurance"] }
   ],
   education: [
-    {
-      institution: "University",
-      degree: "Bachelor's Degree",
-      year: "2023",
-      honors: "Fashion & Luxury Brand Focus"
-    }
+    { institution: "University", degree: "Bachelor's Degree", year: "2023", honors: "Fashion & Luxury Brand Focus" }
   ],
   recognition: [
-    {
-      title: "Ex-Dentsu Professional",
-      source: "Career Milestone",
-      date: "2024"
-    }
+    { title: "Ex-Dentsu Professional", source: "Career Milestone", date: "2024" }
   ],
   contact: {
     email: "eva@alchemylabs.in",
     linkedin: "https://www.linkedin.com/in/eva-doshi-0b07b531b/"
   }
 };
+
+// Brand collaboration data for Eva
+export const evaBrandCollaborations = [
+  { name: 'Inorbit Mall', role: 'Brand Partnership & Content', metric: 'Multi-campaign collaboration' },
+  { name: 'Bonkers Corner', role: 'Fashion Brand Strategy', metric: 'Retail brand positioning' },
+  { name: 'Azorte', role: 'Creative Direction', metric: 'Visual identity refresh' },
+  { name: 'Pepe Jeans', role: 'Campaign & Content Strategy', metric: 'Social media campaign' },
+  { name: 'AND', role: 'Luxury Brand Outreach', metric: 'Partnership development' },
+];
