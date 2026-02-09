@@ -3,8 +3,8 @@ import { useRef } from 'react';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { Contact } from '@/components/Contact';
+import { SequentianBackground } from '@/components/SequentianBackground';
 import heroVideo from '@/assets/hero-video.mp4';
-import contactBg from '@/assets/contact-bg.png';
 
 export const ContactPage = () => {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -17,21 +17,12 @@ export const ContactPage = () => {
   const videoOpacity = useTransform(scrollYProgress, [0, 0.8], [0.4, 0]);
   const textY = useTransform(scrollYProgress, [0, 1], [0, 100]);
 
-  // Ken Burns parallax for contact bg
-  const contactRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress: contactProgress } = useScroll({
-    target: contactRef,
-    offset: ['start end', 'end start']
-  });
-  const bgScale = useTransform(contactProgress, [0, 1], [1, 1.15]);
-
   return (
     <div className="min-h-screen bg-background grain-overlay">
       <Navigation />
       
       {/* Hero Header with Video Background */}
       <section ref={heroRef} className="relative pt-32 pb-0 overflow-hidden min-h-[70vh] flex items-center">
-        {/* Video Background — full bleed, no black bars */}
         <motion.div 
           style={{ scale: videoScale, opacity: videoOpacity, willChange: 'transform' }}
           className="absolute -inset-4 z-0"
@@ -39,11 +30,9 @@ export const ContactPage = () => {
           <video autoPlay muted loop playsInline className="w-full h-full object-cover">
             <source src={heroVideo} type="video/mp4" />
           </video>
-          {/* Subtle bottom fade only — no side or top darkening */}
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background/90" />
         </motion.div>
 
-        {/* Animated Gradient Orbs */}
         <div className="absolute inset-0 pointer-events-none">
           <motion.div 
             animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
@@ -90,7 +79,6 @@ export const ContactPage = () => {
             Ready to transform your brand? Let's discuss your vision and craft something extraordinary together.
           </motion.p>
 
-          {/* Scroll indicator */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -112,30 +100,15 @@ export const ContactPage = () => {
         </motion.div>
       </section>
       
-      {/* Contact Form Section with dynamic background */}
-      <section ref={contactRef} className="relative overflow-hidden -mt-16">
-        {/* Background image — Ken Burns parallax with vignette */}
-        <div className="absolute -inset-8 pointer-events-none overflow-hidden">
-          {/* Full-bleed image with Ken Burns parallax */}
-          <motion.img
-            src={contactBg}
-            alt=""
-            aria-hidden
-            loading="eager"
-            style={{ scale: bgScale, willChange: 'transform' }}
-            className="w-full h-full object-cover opacity-70 origin-center"
-            draggable={false}
-          />
-        </div>
+      {/* Contact Form Section with Sequentian background */}
+      <section className="relative overflow-hidden -mt-16">
+        {/* Sequentian Silk Fold — high opacity for dramatic feel */}
+        <SequentianBackground variant={3} opacity={0.5} parallax />
+
         {/* Overlay layers */}
-        <div className="absolute inset-0 pointer-events-none">
-          {/* Top merge into hero */}
+        <div className="absolute inset-0 pointer-events-none z-[1]">
           <div className="absolute top-0 inset-x-0 h-48 bg-gradient-to-b from-background to-transparent" />
-          {/* Bottom merge into footer */}
           <div className="absolute bottom-0 inset-x-0 h-48 bg-gradient-to-t from-background to-transparent" />
-          {/* Softer depth vignette */}
-          <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at 50% 50%, transparent 40%, hsl(var(--background) / 0.3) 85%)' }} />
-          {/* Warm color wash */}
           <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at 50% 40%, rgba(220, 38, 38, 0.08) 0%, transparent 60%)' }} />
         </div>
 

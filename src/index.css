@@ -620,6 +620,27 @@
       radial-gradient(ellipse at 20% 70%, rgba(225, 6, 19, 0.08) 0%, transparent 50%);
   }
   
+  /* Glass Portal — elevated liquid glass for founder portals */
+  .glass-portal {
+    backdrop-filter: blur(24px) saturate(180%);
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .glass-portal:hover {
+    border-color: rgba(220, 38, 38, 0.4);
+    box-shadow: 0 0 40px rgba(220, 38, 38, 0.12);
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  /* Glass Immersive — full-section elevated panels */
+  .glass-immersive {
+    backdrop-filter: blur(32px) saturate(200%);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
   /* Scroll Progress */
   .scroll-indicator {
     @apply fixed top-0 left-0 right-0 h-0.5 z-[60];

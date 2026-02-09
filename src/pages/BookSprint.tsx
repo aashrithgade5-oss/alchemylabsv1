@@ -7,6 +7,7 @@ import { Footer } from '@/components/Footer';
 import { TurnstileWidget } from '@/components/TurnstileWidget';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { SequentianBackground } from '@/components/SequentianBackground';
 
 const serviceOptions = [
   { group: 'AI Solutions', options: ['AI Media Production', 'Content Cloning', 'AI Content Planner', 'Visual Content Bot'] },
@@ -65,7 +66,6 @@ export const BookSprint = () => {
 
       if (error) throw error;
 
-      // Try to send email notification with CAPTCHA token
       try {
         await supabase.functions.invoke('send-contact-email', {
           body: { ...formData, turnstileToken },
@@ -128,10 +128,8 @@ export const BookSprint = () => {
       
       {/* Hero */}
       <section className="relative min-h-[50vh] flex items-center overflow-hidden section-gradient">
-        <div className="absolute inset-0">
-          <div className="absolute top-1/3 left-1/4 w-[600px] h-[600px] bg-alchemy-red/10 rounded-full blur-[150px]" />
-        </div>
-        
+        <SequentianBackground variant={3} opacity={0.25} parallax />
+
         <div className="relative z-10 max-w-4xl mx-auto px-6 md:px-12 pt-32 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -181,6 +179,8 @@ export const BookSprint = () => {
       
       {/* Form Section */}
       <section className="relative py-20 overflow-hidden section-gradient">
+        <SequentianBackground variant={4} opacity={0.1} parallax={false} />
+
         <div className="relative z-10 max-w-2xl mx-auto px-6 md:px-12">
           <motion.form
             initial={{ opacity: 0, y: 30 }}
@@ -190,61 +190,21 @@ export const BookSprint = () => {
             className="glass-deep rounded-3xl p-8 md:p-12"
           >
             <div className="space-y-6 mb-8">
-              {/* Name */}
               <div>
-                <label className="block font-body text-sm text-porcelain/60 mb-2">
-                  Name *
-                </label>
-                <input
-                  type="text"
-                  placeholder="Your name"
-                  value={formData.name}
-                  onChange={(e) => setFormData({...formData, name: e.target.value})}
-                  required
-                  className="glass-input"
-                />
+                <label className="block font-body text-sm text-porcelain/60 mb-2">Name *</label>
+                <input type="text" placeholder="Your name" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} required className="glass-input" />
               </div>
-              
-              {/* Email */}
               <div>
-                <label className="block font-body text-sm text-porcelain/60 mb-2">
-                  Email *
-                </label>
-                <input
-                  type="email"
-                  placeholder="you@company.com"
-                  value={formData.email}
-                  onChange={(e) => setFormData({...formData, email: e.target.value})}
-                  required
-                  className="glass-input"
-                />
+                <label className="block font-body text-sm text-porcelain/60 mb-2">Email *</label>
+                <input type="email" placeholder="you@company.com" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} required className="glass-input" />
               </div>
-              
-              {/* Company */}
               <div>
-                <label className="block font-body text-sm text-porcelain/60 mb-2">
-                  Company
-                </label>
-                <input
-                  type="text"
-                  placeholder="Company name"
-                  value={formData.company}
-                  onChange={(e) => setFormData({...formData, company: e.target.value})}
-                  className="glass-input"
-                />
+                <label className="block font-body text-sm text-porcelain/60 mb-2">Company</label>
+                <input type="text" placeholder="Company name" value={formData.company} onChange={(e) => setFormData({...formData, company: e.target.value})} className="glass-input" />
               </div>
-              
-              {/* Service */}
               <div>
-                <label className="block font-body text-sm text-porcelain/60 mb-2">
-                  Service Interest *
-                </label>
-                <select
-                  value={formData.service}
-                  onChange={(e) => setFormData({...formData, service: e.target.value})}
-                  required
-                  className="glass-input select-dropdown"
-                >
+                <label className="block font-body text-sm text-porcelain/60 mb-2">Service Interest *</label>
+                <select value={formData.service} onChange={(e) => setFormData({...formData, service: e.target.value})} required className="glass-input select-dropdown">
                   <option value="">Select a service...</option>
                   {serviceOptions.map((group) => (
                     <optgroup key={group.group} label={group.group}>
@@ -255,86 +215,43 @@ export const BookSprint = () => {
                   ))}
                 </select>
               </div>
-              
-              {/* Message */}
               <div>
-                <label className="block font-body text-sm text-porcelain/60 mb-2">
-                  Tell us about your challenge
-                </label>
-                <textarea
-                  placeholder="Brief overview of what you're looking to achieve..."
-                  rows={4}
-                  value={formData.message}
-                  onChange={(e) => setFormData({...formData, message: e.target.value})}
-                  className="glass-input resize-none"
-                />
+                <label className="block font-body text-sm text-porcelain/60 mb-2">Tell us about your challenge</label>
+                <textarea placeholder="Brief overview of what you're looking to achieve..." rows={4} value={formData.message} onChange={(e) => setFormData({...formData, message: e.target.value})} className="glass-input resize-none" />
               </div>
             </div>
             
-            {/* CAPTCHA */}
             <div className="mb-6">
-              <TurnstileWidget
-                onVerify={handleCaptchaVerify}
-                onError={handleCaptchaError}
-                onExpire={handleCaptchaExpire}
-              />
+              <TurnstileWidget onVerify={handleCaptchaVerify} onError={handleCaptchaError} onExpire={handleCaptchaExpire} />
               {captchaError && (
-                <p className="text-red-500 text-sm text-center mt-2">
-                  Security verification failed. Please refresh and try again.
-                </p>
+                <p className="text-red-500 text-sm text-center mt-2">Security verification failed. Please refresh and try again.</p>
               )}
             </div>
             
-            {/* Submit */}
-            <button
-              type="submit"
-              disabled={submitting || !turnstileToken}
-              className="w-full glass-cta-primary py-5 text-lg justify-center disabled:opacity-50"
-            >
+            <button type="submit" disabled={submitting || !turnstileToken} className="w-full glass-cta-primary py-5 text-lg justify-center disabled:opacity-50">
               {submitting ? (
-                <span className="flex items-center justify-center gap-2">
-                  <Loader className="w-5 h-5 animate-spin" />
-                  Submitting...
-                </span>
+                <span className="flex items-center justify-center gap-2"><Loader className="w-5 h-5 animate-spin" />Submitting...</span>
               ) : (
-                <span className="flex items-center justify-center gap-2">
-                  Book Session
-                  <ArrowRight className="w-5 h-5" />
-                </span>
+                <span className="flex items-center justify-center gap-2">Book Session<ArrowRight className="w-5 h-5" /></span>
               )}
             </button>
             
-            <p className="font-body text-sm text-center text-porcelain/40 mt-6">
-              We'll confirm within 24 hours. No spam, ever.
-            </p>
+            <p className="font-body text-sm text-center text-porcelain/40 mt-6">We'll confirm within 24 hours. No spam, ever.</p>
           </motion.form>
           
-          {/* Alternative Contact */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
             className="mt-12 text-center"
           >
-            <p className="font-body text-sm text-porcelain/40 mb-6">
-              Prefer to reach out directly?
-            </p>
-            
+            <p className="font-body text-sm text-porcelain/40 mb-6">Prefer to reach out directly?</p>
             <div className="flex flex-wrap justify-center gap-4">
-              <a
-                href="https://wa.me/917794912315"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="glass-deep px-6 py-3 rounded-full hover:border-green-500/30 transition-colors flex items-center gap-2"
-              >
+              <a href="https://wa.me/917794912315" target="_blank" rel="noopener noreferrer" className="glass-deep px-6 py-3 rounded-full hover:border-green-500/30 transition-colors flex items-center gap-2">
                 <MessageCircle className="w-4 h-4 text-green-500" />
                 <span className="font-body text-sm text-porcelain/70">WhatsApp</span>
               </a>
-              
-              <a
-                href="mailto:brandalchemie@gmail.com"
-                className="glass-deep px-6 py-3 rounded-full hover:border-alchemy-red/30 transition-colors flex items-center gap-2"
-              >
+              <a href="mailto:brandalchemie@gmail.com" className="glass-deep px-6 py-3 rounded-full hover:border-alchemy-red/30 transition-colors flex items-center gap-2">
                 <Mail className="w-4 h-4 text-alchemy-red" />
                 <span className="font-body text-sm text-porcelain/70">Email</span>
               </a>

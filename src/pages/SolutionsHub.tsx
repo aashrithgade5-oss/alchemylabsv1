@@ -6,13 +6,12 @@ import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { MagneticButton } from '@/components/MagneticButton';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
-import { GlowBackground } from '@/components/GlowBackground';
 import { SEOHead, generateOrganizationSchema } from '@/components/SEOHead';
 import { aiServices, brandingServices, consultationServices } from '@/data/services';
 import { ScrollReveal, StaggerReveal } from '@/components/ScrollReveal';
 import { SpotlightContainer, SpotlightItem } from '@/components/SpotlightGrid';
-import { DynamicGlowBg } from '@/components/DynamicGlowBg';
 import { BlueprintGrid, NoiseTexture } from '@/components/effects';
+import { SequentianBackground } from '@/components/SequentianBackground';
 
 const pillars = [
   {
@@ -63,16 +62,14 @@ export const SolutionsHub = () => {
       />
       <Navigation />
       
-      {/* Glow Background */}
-      <GlowBackground variant="soft-ambient" />
-      
-      {/* Hero Section - Blueprint Aesthetic */}
+      {/* Hero Section */}
       <section className="relative min-h-[70vh] flex items-end pb-16 sm:pb-20 pt-24 sm:pt-32 overflow-hidden">
-        {/* Blueprint + Noise overlays */}
+        {/* Sequentian Silk Fold hero background */}
+        <SequentianBackground variant={3} opacity={0.3} parallax />
+
         <div className="absolute inset-0 pointer-events-none">
           <BlueprintGrid opacity={0.04} />
           <NoiseTexture opacity={0.03} />
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] sm:w-[1000px] h-[400px] sm:h-[600px] bg-alchemy-red/5 rounded-full blur-[150px] sm:blur-[200px]" />
         </div>
 
         {/* Corner brackets */}
@@ -97,7 +94,6 @@ export const SolutionsHub = () => {
           
           <ScrollReveal>
             <div className="max-w-4xl">
-              {/* Eyebrow badge */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -123,7 +119,6 @@ export const SolutionsHub = () => {
                 Each pillar designed to compound, not just campaign.
               </p>
 
-              {/* Quick stats */}
               <div className="flex flex-wrap gap-8 lg:gap-12">
                 {[
                   { label: 'Delivery Speed', value: '4-6 Weeks' },
@@ -145,11 +140,8 @@ export const SolutionsHub = () => {
         </div>
       </section>
       
-      {/* Pillars - Full Width Cards with Spotlight Effect */}
+      {/* Pillars */}
       <section className="relative py-8 sm:py-12">
-        {/* Dynamic Glow Background */}
-        <DynamicGlowBg variant="liquid" position="right" opacity={0.3} />
-        
         <div className="max-w-[1600px] mx-auto px-5 sm:px-6 md:px-12 relative z-10">
           <SpotlightContainer className="space-y-3 sm:space-y-4">
             {pillars.map((pillar, i) => {
@@ -163,26 +155,27 @@ export const SolutionsHub = () => {
                       onMouseEnter={() => setHoveredPillar(pillar.id)}
                       onMouseLeave={() => setHoveredPillar(null)}
                       className="group relative"
+                      initial={{ rotateX: 2, opacity: 0 }}
+                      whileInView={{ rotateX: 0, opacity: 1 }}
+                      viewport={{ once: true, margin: '-80px' }}
+                      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: i * 0.1 }}
+                      style={{ perspective: 1000 }}
                     >
                       <Link
                         to={pillar.route}
                         className="block relative rounded-2xl overflow-hidden"
                       >
-                        {/* Background gradient */}
                         <motion.div
                           className={`absolute inset-0 bg-gradient-to-r ${pillar.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}
                         />
                         
-                        {/* Content */}
                         <div className="relative glass-deep rounded-xl sm:rounded-2xl p-5 sm:p-8 md:p-12 flex flex-col md:flex-row md:items-center gap-5 sm:gap-8 group-hover:border-alchemy-red/20 transition-colors duration-300">
-                          {/* Number - Hidden on small mobile */}
                           <div className="flex-shrink-0 hidden sm:block">
                             <span className="font-display text-5xl sm:text-6xl md:text-8xl italic text-porcelain/5 group-hover:text-alchemy-red/10 transition-colors duration-500">
                               {pillar.number}
                             </span>
                           </div>
                           
-                          {/* Icon & Title */}
                           <div className="flex items-center gap-4 sm:gap-6 flex-1">
                             <motion.div
                               className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-xl sm:rounded-2xl glass-red flex items-center justify-center flex-shrink-0"
@@ -202,14 +195,12 @@ export const SolutionsHub = () => {
                             </div>
                           </div>
                           
-                          {/* Description - Hidden on mobile */}
                           <div className="flex-1 md:max-w-md hidden sm:block">
                             <p className="font-body text-sm md:text-base text-porcelain/50 font-light">
                               {pillar.description}
                             </p>
                           </div>
                           
-                          {/* Services count & Arrow */}
                           <div className="flex items-center gap-6 flex-shrink-0">
                             <div className="text-right hidden md:block">
                               <span className="font-display text-2xl italic text-porcelain">
@@ -239,10 +230,10 @@ export const SolutionsHub = () => {
         </div>
       </section>
 
-      {/* Quick Access Services Grid with Spotlight */}
+      {/* Quick Access Services Grid */}
       <section className="relative py-16 sm:py-20 md:py-24 luxury-margin">
-        {/* Dynamic Glow Background */}
-        <DynamicGlowBg variant="waves" position="left" opacity={0.25} />
+        {/* Sequentian Soft Nebula background */}
+        <SequentianBackground variant={2} opacity={0.12} parallax={false} />
         
         <div className="max-w-7xl mx-auto px-5 sm:px-6 md:px-12 relative z-10">
           <ScrollReveal>
@@ -286,9 +277,8 @@ export const SolutionsHub = () => {
       
       {/* Sprint CTA */}
       <section className="relative py-16 sm:py-20 md:py-24 overflow-hidden luxury-margin">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] sm:w-[800px] h-[300px] sm:h-[400px] bg-alchemy-red/10 rounded-full blur-[120px] sm:blur-[150px]" />
-        </div>
+        {/* Sequentian Crimson Cloud background */}
+        <SequentianBackground variant={4} opacity={0.2} parallax />
         
         <div className="relative z-10 max-w-4xl mx-auto px-5 sm:px-6 md:px-12">
           <ScrollReveal>
@@ -302,7 +292,6 @@ export const SolutionsHub = () => {
                 delivering systems ready to deploy.
               </p>
 
-              {/* Trust signals */}
               <div className="flex items-center justify-center gap-3 mb-8">
                 <span className="font-mono text-[10px] text-porcelain/45 tracking-wider">NDA available</span>
                 <span className="text-porcelain/20">·</span>

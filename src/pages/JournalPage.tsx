@@ -3,7 +3,7 @@ import { ArrowRight, Calendar } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
-import { DynamicGlowBg } from '@/components/DynamicGlowBg';
+import { SequentianBackground } from '@/components/SequentianBackground';
 
 const posts = [
   {
@@ -69,12 +69,8 @@ export const JournalPage = () => {
       
       {/* Hero */}
       <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden section-gradient">
-        {/* Dynamic Glow Background */}
-        <DynamicGlowBg variant="liquid" position="center" opacity={0.3} />
-        
-        <div className="absolute inset-0 pointer-events-none z-[1]">
-          <div className="absolute top-1/3 left-1/3 w-[500px] h-[500px] bg-alchemy-red/8 rounded-full blur-[150px]" />
-        </div>
+        {/* Sequentian Soft Nebula hero */}
+        <SequentianBackground variant={2} opacity={0.3} parallax />
         
         <div className="relative z-10 max-w-5xl mx-auto px-6 md:px-12 text-center pt-32">
           <motion.p
@@ -109,8 +105,8 @@ export const JournalPage = () => {
 
       {/* Posts Grid */}
       <section className="relative py-32 section-gradient">
-        {/* Dynamic Glow Background */}
-        <DynamicGlowBg variant="ascii" position="right" opacity={0.2} />
+        {/* Sequentian Crimson Cloud grid background */}
+        <SequentianBackground variant={4} opacity={0.12} parallax={false} />
         
         <div className="relative z-10 max-w-6xl mx-auto px-6 md:px-12">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">

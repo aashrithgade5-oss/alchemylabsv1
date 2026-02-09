@@ -4,10 +4,14 @@ import { ChevronDown } from 'lucide-react';
 import { ParticleBackground } from './ParticleBackground';
 import { FounderCircles } from './FounderCircles';
 import { BlueprintGrid, NoiseTexture } from '@/components/effects';
+import { SequentianBackground } from '@/components/SequentianBackground';
 
 export const YinYangHero = memo(() => {
   return (
     <section className="relative min-h-[100svh] flex flex-col items-center justify-center overflow-hidden pt-20 pb-12">
+      {/* Sequentian Silk Fold background */}
+      <SequentianBackground variant={3} opacity={0.35} parallax />
+
       {/* Layered background */}
       <div className="absolute inset-0">
         <ParticleBackground />
