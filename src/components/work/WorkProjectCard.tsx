@@ -5,11 +5,10 @@ import { ShimmerImage, ShimmerVideo } from '@/components/ShimmerImage';
 
 const projectIcons: Record<string, React.ElementType> = {
   'branding-solutions': Palette,
-  'consultation-sessions': Target,
-  'aether-rituals': Sparkles,
+  'ai-media-gen': Sparkles,
+  'aether-rituals': Layers,
   'oakley-showcase': Mountain,
-  'arcteryx-branding': Layers,
-  'identity-systems': Grid3X3,
+  'genesis': Grid3X3,
 };
 
 interface WorkProjectCardProps {

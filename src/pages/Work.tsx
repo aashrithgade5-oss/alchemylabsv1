@@ -23,12 +23,11 @@ const filters: { id: string; label: string; tag?: FilterTag }[] = [
 ];
 
 const gridPositions = [
-  'col-span-12 md:col-span-7 row-span-2',
-  'col-span-12 md:col-span-5 row-span-1',
-  'col-span-12 md:col-span-5 row-span-1',
-  'col-span-12 md:col-span-5 row-span-1',
-  'col-span-12 md:col-span-7 row-span-2',
-  'col-span-12 md:col-span-5 row-span-1',
+  'col-span-12 md:col-span-8 row-span-2',   // Aether Rituals — hero
+  'col-span-12 md:col-span-4 row-span-1',   // Branding Solutions
+  'col-span-12 md:col-span-4 row-span-1',   // AI Media Gen
+  'col-span-12 md:col-span-4 row-span-1',   // Oakley
+  'col-span-12 md:col-span-4 row-span-1',   // Genesis
 ];
 
 /** Build carousel items from project media */
@@ -130,7 +129,7 @@ export const Work = () => {
             <span className="font-mono text-[10px] text-porcelain/20 uppercase tracking-[0.15em]">Grid View</span>
           </div>
 
-          <div className="grid grid-cols-12 gap-3 md:gap-4 auto-rows-[160px] md:auto-rows-[220px]">
+          <div className="grid grid-cols-12 gap-3 md:gap-4 auto-rows-[180px] md:auto-rows-[240px]">
             <AnimatePresence mode="popLayout">
               {filteredProjects.map((project, i) => {
                 const position = gridPositions[i % gridPositions.length];
