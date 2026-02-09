@@ -138,6 +138,14 @@ export const Contact = memo(() => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-100px' }}
               transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+              className="rounded-3xl p-8"
+              style={{
+                background: 'rgba(10, 10, 11, 0.5)',
+                backdropFilter: 'blur(20px) saturate(120%)',
+                WebkitBackdropFilter: 'blur(20px) saturate(120%)',
+                border: '1px solid rgba(255, 255, 255, 0.08)',
+                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)',
+              }}
             >
               <span className="inline-block px-4 py-2 rounded-full backdrop-blur-md mb-6"
                 style={{
@@ -272,7 +280,14 @@ export const Contact = memo(() => {
                   viewport={{ once: true }}
                   transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
                   onSubmit={handleSubmit}
-                  className="glass-deep rounded-2xl p-6 md:p-8"
+                  className="rounded-2xl p-6 md:p-8"
+                  style={{
+                    background: 'rgba(10, 10, 11, 0.55)',
+                    backdropFilter: 'blur(24px) saturate(120%)',
+                    WebkitBackdropFilter: 'blur(24px) saturate(120%)',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    boxShadow: '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.06)',
+                  }}
                 >
                   <div className="grid md:grid-cols-2 gap-5 mb-5">
                     {/* Name */}

@@ -105,18 +105,25 @@ export const ContactPage = () => {
       <section className="relative overflow-hidden">
         {/* Background image — tasteful blur with character */}
         <div className="absolute inset-0 pointer-events-none">
+          {/* Sharp image with vignette mask — clear center, faded edges */}
           <img
             src={contactBg}
             alt=""
             aria-hidden
-            className="w-full h-full object-cover blur-[12px] opacity-70 scale-110"
+            className="w-full h-full object-cover opacity-80 scale-105"
+            style={{
+              maskImage: 'radial-gradient(ellipse 70% 70% at 50% 50%, black 30%, transparent 80%)',
+              WebkitMaskImage: 'radial-gradient(ellipse 70% 70% at 50% 50%, black 30%, transparent 80%)',
+            }}
           />
           {/* Top merge into hero */}
-          <div className="absolute top-0 inset-x-0 h-40 bg-gradient-to-b from-background to-transparent" />
+          <div className="absolute top-0 inset-x-0 h-32 bg-gradient-to-b from-background to-transparent" />
           {/* Bottom merge into footer */}
-          <div className="absolute bottom-0 inset-x-0 h-40 bg-gradient-to-t from-background to-transparent" />
-          {/* Gentle depth vignette */}
-          <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at 50% 50%, transparent 40%, hsl(var(--background) / 0.4) 90%)' }} />
+          <div className="absolute bottom-0 inset-x-0 h-32 bg-gradient-to-t from-background to-transparent" />
+          {/* Softer depth vignette */}
+          <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at 50% 50%, transparent 40%, hsl(var(--background) / 0.3) 85%)' }} />
+          {/* Warm color wash */}
+          <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at 50% 40%, rgba(220, 38, 38, 0.08) 0%, transparent 60%)' }} />
         </div>
 
         <div className="relative z-10">
