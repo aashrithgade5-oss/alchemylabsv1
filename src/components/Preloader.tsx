@@ -107,7 +107,7 @@ export const Preloader = memo(() => {
             className="absolute bottom-8 md:bottom-12"
           >
             <span 
-              className="font-alchemy text-sm"
+              className="font-display text-sm italic"
               style={{ color: 'hsl(0 0% 100% / 0.2)' }}
             >
               Alchemy Labs

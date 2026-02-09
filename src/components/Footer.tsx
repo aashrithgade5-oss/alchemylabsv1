@@ -83,7 +83,7 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
               className="w-10 h-10 sm:w-12 sm:h-12 object-contain"
             />
             <div className="flex items-baseline gap-1.5">
-              <span className="font-alchemy text-xl sm:text-2xl md:text-3xl text-porcelain">
+              <span className="font-display text-xl sm:text-2xl md:text-3xl italic text-porcelain">
                 Alchemy
               </span>
               <span className="font-body text-[10px] sm:text-xs text-porcelain/50 tracking-[0.2em] uppercase">
@@ -241,7 +241,7 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
         >
           <div className="flex flex-col sm:flex-row justify-between items-center w-full gap-4">
             <p className="font-mono text-[10px] sm:text-xs text-porcelain/50">
-              © <span className="text-glow-red">2026</span> <span className="font-alchemy">Alchemy Labs</span>. All rights reserved.
+              © <span className="text-glow-red">2026</span> <span className="font-display italic">Alchemy Labs</span>. All rights reserved.
             </p>
             <div className="flex gap-6 sm:gap-8">
               <Link
