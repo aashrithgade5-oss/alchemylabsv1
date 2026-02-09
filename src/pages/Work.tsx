@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowUpRight, X, Check, Filter, Sparkles, Layers, Target, Palette, Mountain, Grid3X3, Briefcase } from 'lucide-react';
+import { ArrowUpRight, X, Check, Sparkles, Layers, Target, Palette, Mountain, Grid3X3 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
@@ -14,14 +14,11 @@ import { ShimmerImage, ShimmerVideo } from '@/components/ShimmerImage';
 import { Lightbox, LightboxTrigger } from '@/components/Lightbox';
 import { DynamicGlowBg } from '@/components/DynamicGlowBg';
 
-// Extract unique categories
-const allCategories = ['All', ...Array.from(new Set(projects.map(p => p.category)))];
-
-// Service type filters (based on project type)
-const serviceTypes = [
-  { id: 'all', label: 'All Types', icon: Briefcase },
-  { id: 'client', label: 'Client Work', icon: Check },
-  { id: 'conceptual', label: 'Conceptual', icon: Sparkles },
+// Unified filter options
+const filters = [
+  { id: 'all', label: 'All' },
+  { id: 'client', label: 'Client' },
+  { id: 'conceptual', label: 'Conceptual' },
 ];
 
 // Icon mapping for projects
@@ -46,29 +43,17 @@ const gridPositions = [
 
 export const Work = () => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [activeCategory, setActiveCategory] = useState('All');
-  const [activeServiceType, setActiveServiceType] = useState('all');
+  const [activeFilter, setActiveFilter] = useState('all');
   const [lightboxMedia, setLightboxMedia] = useState<{ src: string; type: 'image' | 'video'; caption?: string } | null>(null);
   const navigate = useNavigate();
 
   // Filter projects based on category and service type
   const filteredProjects = useMemo(() => {
-    let filtered = projects;
-    
-    // Filter by category
-    if (activeCategory !== 'All') {
-      filtered = filtered.filter(p => p.category === activeCategory);
-    }
-    
-    // Filter by service type
-    if (activeServiceType === 'client') {
-      filtered = filtered.filter(p => !p.isConceptual);
-    } else if (activeServiceType === 'conceptual') {
-      filtered = filtered.filter(p => p.isConceptual);
-    }
-    
-    return filtered;
-  }, [activeCategory, activeServiceType]);
+    if (activeFilter === 'all') return projects;
+    if (activeFilter === 'client') return projects.filter(p => !p.isConceptual);
+    if (activeFilter === 'conceptual') return projects.filter(p => p.isConceptual);
+    return projects;
+  }, [activeFilter]);
 
   const openLightbox = (src: string, type: 'image' | 'video', caption?: string) => {
     setLightboxMedia({ src, type, caption });
@@ -117,73 +102,29 @@ export const Work = () => {
             </div>
           </ScrollReveal>
 
-          {/* Category Filters with Liquid Glass */}
+          {/* Minimal Filter Bar */}
           <ScrollReveal delay={0.2}>
-            <div 
-              className="inline-flex flex-wrap items-center gap-3 p-2 rounded-full"
-              style={{
-                background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%)',
-                backdropFilter: 'blur(24px)',
-                border: '1px solid rgba(255, 255, 255, 0.06)',
-              }}
-            >
-              <div className="flex items-center gap-2 text-porcelain/40 px-3">
-                <Filter className="w-4 h-4" />
-                <span className="font-mono text-xs tracking-label uppercase hidden sm:inline">Filter</span>
-              </div>
-              
-              {allCategories.map((category) => (
-                <motion.button
-                  key={category}
-                  onClick={() => setActiveCategory(category)}
-                  className={`relative px-4 py-2 rounded-full font-body text-sm transition-all duration-300 ${
-                    activeCategory === category
+            <div className="inline-flex items-center gap-1 p-1 rounded-full border border-white/[0.06] bg-white/[0.03]">
+              {filters.map((filter) => (
+                <button
+                  key={filter.id}
+                  onClick={() => setActiveFilter(filter.id)}
+                  className={`relative px-5 py-2 rounded-full font-mono text-xs uppercase tracking-[0.12em] transition-colors duration-200 ${
+                    activeFilter === filter.id
                       ? 'text-porcelain'
-                      : 'text-porcelain/50 hover:text-porcelain/80'
+                      : 'text-porcelain/40 hover:text-porcelain/70'
                   }`}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
                 >
-                  {activeCategory === category && (
+                  {activeFilter === filter.id && (
                     <motion.div
-                      layoutId="filter-indicator"
-                      className="absolute inset-0 rounded-full"
-                      style={{
-                        background: 'linear-gradient(135deg, rgba(225, 6, 19, 0.2) 0%, rgba(225, 6, 19, 0.08) 100%)',
-                        border: '1px solid rgba(225, 6, 19, 0.4)',
-                        boxShadow: '0 0 20px rgba(225, 6, 19, 0.2)',
-                      }}
+                      layoutId="work-filter"
+                      className="absolute inset-0 rounded-full bg-alchemy-red/15 border border-alchemy-red/30"
                       transition={{ type: 'spring', damping: 25, stiffness: 300 }}
                     />
                   )}
-                  <span className="relative z-10">{category}</span>
-                </motion.button>
+                  <span className="relative z-10">{filter.label}</span>
+                </button>
               ))}
-            </div>
-          </ScrollReveal>
-
-          {/* Service Type Filters */}
-          <ScrollReveal delay={0.3}>
-            <div className="flex flex-wrap items-center gap-2 mt-4">
-              {serviceTypes.map((type) => {
-                const TypeIcon = type.icon;
-                return (
-                  <motion.button
-                    key={type.id}
-                    onClick={() => setActiveServiceType(type.id)}
-                    className={`flex items-center gap-2 px-3 py-1.5 rounded-full font-mono text-xs transition-all duration-300 ${
-                      activeServiceType === type.id
-                        ? 'bg-alchemy-red/20 text-alchemy-red border border-alchemy-red/40'
-                        : 'text-porcelain/40 hover:text-porcelain/70 border border-transparent'
-                    }`}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    <TypeIcon className="w-3 h-3" />
-                    <span className="tracking-label uppercase">{type.label}</span>
-                  </motion.button>
-                );
-              })}
             </div>
           </ScrollReveal>
         </div>
@@ -336,7 +277,7 @@ export const Work = () => {
                 No works in this category yet.
               </p>
               <button
-                onClick={() => setActiveCategory('All')}
+                onClick={() => setActiveFilter('all')}
                 className="mt-4 font-body text-sm text-alchemy-red hover:text-alchemy-red/80 transition-colors"
               >
                 View all works →
