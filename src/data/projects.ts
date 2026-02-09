@@ -49,7 +49,7 @@ export const projects: Project[] = [
       { title: 'Brand Identity Design', description: 'Logo systems, typography, and visual language' },
       { title: 'Hybrid Strategy', description: 'Fusing AI production with brand architecture' }
     ],
-    visuals: [caseStudy3, caseStudy1, caseStudy2],
+    visuals: [aetherRituals1, aetherRituals2, aetherRituals3, aetherRituals4, aetherRituals5],
     isConceptual: true,
     filterTags: ['conceptual', 'ai-gen', 'branding']
   },
