@@ -1,67 +1,117 @@
 
 
-## Contact Page -- Final Polish & Immersive Overhaul
+## Final Performance & Design Overhaul
 
-### Overview
-Three targeted changes to eliminate all visual gaps, add cinematic depth, and bring the hero text to life against the video background.
-
----
-
-### 1. Hero Text Readability -- Text Shadow + Localized Backdrop
-
-**File: `src/pages/ContactPage.tsx`**
-
-Add a text-shadow to the hero headline and subtitle for contrast against the bright video, plus a soft radial backdrop glow behind the text container:
-
-- On the text container (line 54), add an inline style with a radial background glow:
-  ```
-  background: radial-gradient(ellipse at 50% 50%, rgba(10,10,11,0.5) 0%, transparent 70%)
-  ```
-- On the h1 (line 69), add `style={{ textShadow: '0 2px 40px rgba(0,0,0,0.6)' }}`
-- On the subtitle paragraph (line 78), add `style={{ textShadow: '0 1px 20px rgba(0,0,0,0.5)' }}`
+A comprehensive upgrade covering media corrections, typography consolidation, performance hardening, and design refinements inspired by award-winning studio sites (e.g., Rauno Freiberg, Linear, Locomotive).
 
 ---
 
-### 2. Ken Burns Parallax on Contact Background Image
+### 1. Media Swap: Ikea Video to AI Media Gen
 
-**File: `src/pages/ContactPage.tsx`**
+**File: `src/data/projects.ts`**
 
-Convert the static `<img>` for `contactBg` into a `motion.img` with scroll-driven scale animation:
-
-- Add a new `useRef` for the contact form section and a second `useScroll`/`useTransform` to drive a slow scale from 1.0 to 1.15 as user scrolls through
-- Apply `motion.img` with `style={{ scale: bgScale }}` instead of static `scale-105` class
-- This creates a subtle Ken Burns zoom as the user reads the form
+- **AI Media Gen** (id: `ai-media-gen`): Change `video` from `aiMediaGen1` to `aiMediaGen2` (the Ikea/IKEA video) so it becomes the primary preview thumbnail
+- **Aether Rituals** (id: `aether-rituals`): Remove the `video2: aiMediaGen2` property so the Ikea video no longer appears in its carousel -- it belongs exclusively to AI Media Gen now
 
 ---
 
-### 3. Eliminate All Gaps Between Sections
+### 2. Typography Consolidation: Inter + Playfair Display + Cinzel
 
-**File: `src/pages/ContactPage.tsx`**
+Currently `font-alchemy` (Cinzel) exists in CSS but is never used in components. Apply it consistently as the brand identity font:
 
-- Remove `pb-24` from the hero section (line 25) -- replace with `pb-0` so there's zero gap between hero and contact form
-- On the contact form section (line 106), add negative top margin: `className="relative overflow-hidden -mt-16"` to overlap slightly into the hero fade
-- Increase the top gradient merge height from `h-32` to `h-48` for a longer, smoother blend
-- On the outer wrapper (line 21), ensure `bg-background` has no extra padding/margin creating white space
+**File: `tailwind.config.ts`**
+- Add `alchemy: ['Cinzel', 'Playfair Display', 'Georgia', 'serif']` to `fontFamily` extend
 
-**File: `src/components/Contact.tsx`**
+**File: `src/components/Navigation.tsx`** (line 329)
+- Change `font-display` to `font-alchemy` on the "Alchemy" text in nav logo
 
-- Adjust top padding: change `py-20 md:py-32` to `pt-24 md:pt-40 pb-20 md:pb-32` so the form content clears the overlap zone
+**File: `src/components/Hero.tsx`** (line 192)
+- Change `font-body font-bold` on "ALCHEMY" to `font-alchemy font-semibold` for the premium serif look
+
+**File: `src/components/Preloader.tsx`** (line 110)
+- Change `font-display` to `font-alchemy` on the "Alchemy Labs" tagline
+
+**File: `src/components/Footer.tsx`** (line 86)
+- Change `font-display` to `font-alchemy` on the "Alchemy" text in footer logo
 
 ---
 
-### 4. Performance & Animation Optimizations
+### 3. Performance Hardening (Everlasting)
+
+**3a. Lazy-load homepage below-fold sections (`src/pages/Index.tsx`)**
+- Wrap Solutions, CaseStudies, Manifesto, EditorialSection, ProcessSection, FAQSection, and Contact with `React.lazy()` and `Suspense` fallback (null or minimal spinner)
+- Add `content-lazy` class to each lazy section wrapper for CSS `content-visibility: auto` paint skipping
+
+**3b. Self-healing FPS monitor (`src/components/NeuralBackground.tsx`)**
+- Inside the `Particles` component, add a `performance.now()` frame timer
+- If average frame time exceeds 20ms for 30+ consecutive frames, halve particle count and disable connections at runtime
+- This makes the WebGL system self-repairing on slow devices forever, regardless of future content additions
+
+**3c. Image/Video optimization (`src/components/ShimmerImage.tsx`)**
+- Add `loading="lazy"` and `decoding="async"` to the `<img>` element
+- Add `preload="none"` to the `<video>` element for non-hero videos
+
+**3d. Hero video optimization (`src/components/Hero.tsx`)**
+- Add `fetchpriority="low"` attribute pattern awareness -- the video already has `preload="metadata"`, keep as-is
+- Verify `will-change: auto` is cleaned up on unmount (already handled by R3F IntersectionObserver)
+
+**3e. Animated gradient orbs on ContactPage (`src/pages/ContactPage.tsx`)**
+- Add responsive blur: `blur-[80px] md:blur-[120px]` to reduce GPU load on mobile
+- Add `will-change: transform` to the video motion div (already present)
+
+---
+
+### 4. Design Polish & Scroll Enhancements
+
+**4a. Staggered section entrance animations (`src/pages/Index.tsx`)**
+- Wrap each lazy-loaded section in a `motion.div` with `whileInView` opacity+translateY animation
+- Use `viewport={{ once: true, margin: '-80px' }}` for early trigger, creating a smooth cascade as the user scrolls
+
+**4b. Section divider lines (global polish)**
+- Add a subtle horizontal divider between major homepage sections (Solutions/CaseStudies/Manifesto) using a `<div className="w-full max-w-6xl mx-auto h-px bg-gradient-to-r from-transparent via-porcelain/8 to-transparent" />`
+- This creates visual breathing room without padding changes
+
+**4c. Editorial section (`src/components/EditorialSection.tsx`)**
+- Add a horizontal scroll-triggered line animation on the quote section -- a fine red line that grows from 0% to 100% width as the quote scrolls into view using `useTransform` on `scrollYProgress`
+
+**4d. FAQ accordion micro-polish (`src/components/FAQSection.tsx`)**
+- Add a `0.5px` left border accent on non-active items (currently only active items have the red left border)
+- This creates a subtle visual rail connecting all items
+
+**4e. Footer brand text (`src/components/Footer.tsx`)**
+- Apply `font-alchemy` to the "Alchemy" text for brand consistency
+- Add a subtle `text-glow` on the copyright year for a premium micro-detail
+
+**4f. Navigation scroll glass enhancement (`src/components/Navigation.tsx`)**
+- When scrolled, add a subtle `box-shadow: 0 1px 0 rgba(220, 38, 38, 0.08)` red underline glow to the glass pill (already exists but verify it's visible)
+
+---
+
+### 5. Mobile Performance Guards
+
+**File: `src/index.css`**
+- Add a mobile media query to cap all `blur()` filter values at 60px
+- Add `@media (max-width: 768px)` rule to reduce `will-change` usage (set to `auto` for non-essential animated elements)
 
 **File: `src/pages/ContactPage.tsx`**
-
-- Add `will-change: transform` to the video motion div for GPU acceleration
-- Add `loading="eager"` to the contactBg image since it's above the fold of its section
-- Reduce the gradient orb blur from `blur-[120px]` to `blur-[80px]` on mobile via a responsive class for GPU savings
+- Change gradient orb blur from `blur-[120px]` and `blur-[100px]` to responsive `blur-[60px] md:blur-[120px]` and `blur-[60px] md:blur-[100px]`
 
 ---
 
 ### Technical Summary
 
 Files modified:
-- **`src/pages/ContactPage.tsx`** -- hero text shadows, radial backdrop, Ken Burns scroll effect on bg image, section gap removal, performance attributes
-- **`src/components/Contact.tsx`** -- adjusted top padding for seamless section overlap
+- **`src/data/projects.ts`** -- Ikea video swap
+- **`tailwind.config.ts`** -- add `alchemy` font family
+- **`src/components/Navigation.tsx`** -- Cinzel brand font
+- **`src/components/Hero.tsx`** -- Cinzel on "ALCHEMY", mobile blur optimization
+- **`src/components/Preloader.tsx`** -- Cinzel brand font
+- **`src/components/Footer.tsx`** -- Cinzel brand font
+- **`src/pages/Index.tsx`** -- lazy sections, staggered entrances, section dividers
+- **`src/components/NeuralBackground.tsx`** -- self-healing FPS monitor
+- **`src/components/ShimmerImage.tsx`** -- lazy/async loading attributes
+- **`src/components/EditorialSection.tsx`** -- scroll-triggered line animation
+- **`src/components/FAQSection.tsx`** -- left border rail polish
+- **`src/pages/ContactPage.tsx`** -- responsive blur values
+- **`src/index.css`** -- mobile blur cap media query
 
