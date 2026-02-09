@@ -109,14 +109,14 @@ export const ContactPage = () => {
             src={contactBg}
             alt=""
             aria-hidden
-            className="w-full h-full object-cover blur-[20px] opacity-60 scale-105"
+            className="w-full h-full object-cover blur-[12px] opacity-70 scale-110"
           />
-          {/* Top gradient — merges hero into this section */}
-          <div className="absolute top-0 inset-x-0 h-48 bg-gradient-to-b from-background via-background/70 to-transparent" />
-          {/* Bottom gradient — merges into footer */}
-          <div className="absolute bottom-0 inset-x-0 h-48 bg-gradient-to-t from-background via-background/80 to-transparent" />
-          {/* Soft vignette for depth */}
-          <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at 50% 50%, transparent 30%, hsl(var(--background) / 0.5) 80%)' }} />
+          {/* Top merge into hero */}
+          <div className="absolute top-0 inset-x-0 h-40 bg-gradient-to-b from-background to-transparent" />
+          {/* Bottom merge into footer */}
+          <div className="absolute bottom-0 inset-x-0 h-40 bg-gradient-to-t from-background to-transparent" />
+          {/* Gentle depth vignette */}
+          <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at 50% 50%, transparent 40%, hsl(var(--background) / 0.4) 90%)' }} />
         </div>
 
         <div className="relative z-10">
