@@ -1,18 +1,18 @@
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowUpRight, X, Check, Sparkles, Layers, Target, Palette, Mountain, Grid3X3 } from 'lucide-react';
+import { ArrowUpRight, X, Check } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
-import { GlowBackground } from '@/components/GlowBackground';
 import { SEOHead } from '@/components/SEOHead';
 import { projects, Project } from '@/data/projects';
 import { ScrollReveal } from '@/components/ScrollReveal';
-import { SpotlightContainer, SpotlightItem } from '@/components/SpotlightGrid';
 import { ShimmerImage, ShimmerVideo } from '@/components/ShimmerImage';
 import { Lightbox, LightboxTrigger } from '@/components/Lightbox';
-import { DynamicGlowBg } from '@/components/DynamicGlowBg';
+import { BlueprintGrid } from '@/components/effects/BlueprintGrid';
+import { NoiseTexture } from '@/components/effects/NoiseTexture';
+import { WorkProjectCard } from '@/components/work/WorkProjectCard';
 
 // Unified filter options
 const filters = [
@@ -21,24 +21,14 @@ const filters = [
   { id: 'conceptual', label: 'Conceptual' },
 ];
 
-// Icon mapping for projects
-const projectIcons: Record<string, React.ElementType> = {
-  'branding-solutions': Palette,
-  'consultation-sessions': Target,
-  'aether-rituals': Sparkles,
-  'oakley-showcase': Mountain,
-  'arcteryx-branding': Layers,
-  'identity-systems': Grid3X3,
-};
-
-// Abstract 6-element grid positions
+// Masonry-style layout: alternating 2-col and 1-col rows
 const gridPositions = [
-  'col-span-12 md:col-span-8 row-span-2',
-  'col-span-6 md:col-span-4',
-  'col-span-6 md:col-span-4',
-  'col-span-6 md:col-span-4',
-  'col-span-6 md:col-span-4',
-  'col-span-12 md:col-span-4',
+  'col-span-12 md:col-span-7 row-span-2',
+  'col-span-12 md:col-span-5 row-span-1',
+  'col-span-12 md:col-span-5 row-span-1',
+  'col-span-12 md:col-span-5 row-span-1',
+  'col-span-12 md:col-span-7 row-span-2',
+  'col-span-12 md:col-span-5 row-span-1',
 ];
 
 export const Work = () => {
@@ -67,15 +57,14 @@ export const Work = () => {
       />
       <Navigation />
       
-      {/* Glow Background */}
-      <GlowBackground variant="red-energy" />
-      
-      {/* Hero with Enhanced Mesh Gradients */}
+      {/* Hero */}
       <section className="relative pt-32 pb-16 overflow-hidden">
+        {/* Background layers */}
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-gradient-radial from-alchemy-red/10 via-alchemy-red/3 to-transparent rounded-full blur-[150px] translate-x-1/2 -translate-y-1/2" />
-          <div className="absolute top-1/2 left-0 w-[600px] h-[600px] bg-gradient-radial from-deep-crimson/6 to-transparent rounded-full blur-[120px] -translate-x-1/2" />
-          <div className="absolute bottom-0 left-1/2 w-[1000px] h-[400px] bg-gradient-conic from-alchemy-red/5 via-transparent to-alchemy-red/3 rounded-full blur-[100px] -translate-x-1/2" />
+          <BlueprintGrid opacity={0.02} />
+          <NoiseTexture opacity={0.03} />
+          <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full blur-[100px] -translate-y-1/3 translate-x-1/4" style={{ background: 'radial-gradient(circle, rgba(225,6,19,0.08) 0%, transparent 70%)' }} />
+          <div className="absolute bottom-0 left-0 w-[500px] h-[400px] rounded-full blur-[80px] translate-y-1/3 -translate-x-1/4" style={{ background: 'radial-gradient(circle, rgba(225,6,19,0.05) 0%, transparent 70%)' }} />
         </div>
         
         <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12">
@@ -130,141 +119,49 @@ export const Work = () => {
         </div>
       </section>
 
-      {/* Abstract 6-Element Grid */}
-      <section className="relative py-12">
-        {/* Dynamic Glow Background for grid section */}
-        <DynamicGlowBg variant="ascii" position="center" opacity={0.25} />
-        
-        <div className="max-w-[1600px] mx-auto px-6 md:px-12 relative z-10">
-          <SpotlightContainer className="grid grid-cols-12 gap-4 md:gap-6 auto-rows-[180px] md:auto-rows-[220px]">
+      {/* Grid */}
+      <section className="relative py-8 pb-24">
+        {/* Subtle background texture */}
+        <div className="absolute inset-0 pointer-events-none">
+          <BlueprintGrid opacity={0.015} />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] rounded-full blur-[120px]" style={{ background: 'radial-gradient(circle, rgba(225,6,19,0.06) 0%, transparent 60%)' }} />
+        </div>
+
+        <div className="max-w-[1400px] mx-auto px-6 md:px-10 relative z-10">
+          {/* Project count */}
+          <div className="flex items-center justify-between mb-8">
+            <span className="font-mono text-[10px] text-porcelain/30 uppercase tracking-[0.15em]">
+              {filteredProjects.length} project{filteredProjects.length !== 1 ? 's' : ''}
+            </span>
+            <div className="h-px flex-1 mx-6 bg-white/[0.04]" />
+            <span className="font-mono text-[10px] text-porcelain/20 uppercase tracking-[0.15em]">
+              Grid View
+            </span>
+          </div>
+
+          <div className="grid grid-cols-12 gap-3 md:gap-4 auto-rows-[160px] md:auto-rows-[220px]">
             <AnimatePresence mode="popLayout">
               {filteredProjects.map((project, i) => {
-                const Icon = projectIcons[project.id] || Sparkles;
                 const position = gridPositions[i % gridPositions.length];
-                
+                const isHero = position.includes('row-span-2');
+
                 return (
-                  <SpotlightItem key={project.id} id={project.id} className={position}>
-                    <motion.div
-                      layout
-                      initial={{ opacity: 0, y: 40, scale: 0.95 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.9 }}
-                      transition={{ duration: 0.5, delay: i * 0.05 }}
+                  <motion.div
+                    key={project.id}
+                    className={position}
+                    layout
+                  >
+                    <WorkProjectCard
+                      project={project}
+                      index={i}
+                      isHero={isHero}
                       onClick={() => setSelectedProject(project)}
-                      className="group relative rounded-2xl overflow-hidden cursor-pointer h-full"
-                      style={{
-                        background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%)',
-                        backdropFilter: 'blur(20px)',
-                        border: '1px solid rgba(255, 255, 255, 0.06)',
-                      }}
-                    >
-                      {/* Media */}
-                      <div className="absolute inset-0 overflow-hidden">
-                        {project.video && i === 0 ? (
-                          <ShimmerVideo
-                            src={project.video}
-                            wrapperClassName="w-full h-full"
-                            className="w-full h-full object-cover opacity-50 group-hover:opacity-70 transition-all duration-700 group-hover:scale-105"
-                          />
-                        ) : (
-                          <ShimmerImage
-                            src={project.image}
-                            alt={project.title}
-                            wrapperClassName="w-full h-full"
-                            className="w-full h-full object-cover opacity-40 group-hover:opacity-60 transition-all duration-700 group-hover:scale-105"
-                          />
-                        )}
-                      </div>
-
-                      {/* Gradient overlays */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-alchemy-black via-alchemy-black/60 to-alchemy-black/20" />
-                      
-                      {/* Liquid glass hover effect */}
-                      <div 
-                        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
-                        style={{
-                          background: 'radial-gradient(ellipse at 30% 20%, rgba(225, 6, 19, 0.15) 0%, transparent 60%)',
-                        }}
-                      />
-
-                      {/* Content */}
-                      <div className="absolute inset-0 p-5 md:p-6 flex flex-col justify-between">
-                        {/* Top: Icon + Category */}
-                        <div className="flex items-start justify-between">
-                          <motion.div
-                            className="w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center"
-                            style={{
-                              background: 'linear-gradient(135deg, rgba(225, 6, 19, 0.2) 0%, rgba(225, 6, 19, 0.08) 100%)',
-                              backdropFilter: 'blur(12px)',
-                              border: '1px solid rgba(225, 6, 19, 0.3)',
-                            }}
-                            whileHover={{ scale: 1.1 }}
-                          >
-                            <Icon className="w-4 h-4 md:w-5 md:h-5 text-alchemy-red" />
-                          </motion.div>
-                          
-                          <div className="flex items-center gap-2">
-                            {project.isConceptual && (
-                              <span className="px-2 py-1 rounded-full text-[8px] md:text-[9px] font-mono text-porcelain/50 tracking-label uppercase bg-porcelain/5 border border-porcelain/10">
-                                Concept
-                              </span>
-                            )}
-                          </div>
-                        </div>
-
-                        {/* Bottom: Title + Description */}
-                        <div>
-                          <span 
-                            className="inline-block px-2 py-1 rounded-full text-[9px] md:text-[10px] font-mono text-porcelain/70 tracking-label uppercase mb-2"
-                            style={{
-                              background: 'rgba(255, 255, 255, 0.06)',
-                              backdropFilter: 'blur(12px)',
-                              border: '1px solid rgba(255, 255, 255, 0.1)',
-                            }}
-                          >
-                            {project.category}
-                          </span>
-                          
-                          <motion.h3 
-                            className={`font-display italic text-porcelain mb-2 text-balance ${
-                              i === 0 ? 'text-2xl md:text-3xl lg:text-4xl' : 'text-lg md:text-xl lg:text-2xl'
-                            }`}
-                            whileHover={{ x: 5 }}
-                            transition={{ duration: 0.3 }}
-                          >
-                            {project.title}
-                          </motion.h3>
-
-                          <p className={`font-body text-porcelain/50 font-light line-clamp-2 mb-3 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0 ${
-                            i === 0 ? 'text-sm max-w-md' : 'text-xs'
-                          }`}>
-                            {project.description}
-                          </p>
-
-                          <motion.div 
-                            className="inline-flex items-center gap-2 text-alchemy-red font-body text-xs md:text-sm opacity-0 group-hover:opacity-100 transition-all duration-300"
-                            whileHover={{ x: 5 }}
-                          >
-                            <span>Explore</span>
-                            <ArrowUpRight className="w-3 h-3 md:w-4 md:h-4" />
-                          </motion.div>
-                        </div>
-                      </div>
-
-                      {/* Border glow on hover */}
-                      <motion.div 
-                        className="absolute inset-0 rounded-2xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                        style={{
-                          border: '1px solid rgba(225, 6, 19, 0.4)',
-                          boxShadow: '0 0 40px rgba(225, 6, 19, 0.15), inset 0 0 60px rgba(225, 6, 19, 0.05)',
-                        }}
-                      />
-                    </motion.div>
-                  </SpotlightItem>
+                    />
+                  </motion.div>
                 );
               })}
             </AnimatePresence>
-          </SpotlightContainer>
+          </div>
 
           {/* Empty State */}
           {filteredProjects.length === 0 && (
@@ -278,7 +175,7 @@ export const Work = () => {
               </p>
               <button
                 onClick={() => setActiveFilter('all')}
-                className="mt-4 font-body text-sm text-alchemy-red hover:text-alchemy-red/80 transition-colors"
+                className="mt-4 font-body text-sm text-alchemy-red hover:text-alchemy-red/80 transition-colors duration-200"
               >
                 View all works →
               </button>
