@@ -29,6 +29,26 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    id: 'aether-rituals',
+    title: 'Aether Rituals',
+    brand: 'Alchemy Labs',
+    category: 'AI + Branding Hybrid',
+    description: 'A concept branding case study fusing AI media generation with strategic brand architecture.',
+    overview: 'Aether Rituals is our flagship concept study—a fusion of our two core pillars: AI-powered media generation and strategic branding. This hybrid service concept demonstrates how machine intelligence and human creative direction converge to produce identity systems, campaign assets, and motion content that neither discipline could achieve alone.',
+    image: caseStudy3,
+    video: aetherRitualsPreview,
+    video2: aiMediaGen2,
+    size: 'large',
+    services: [
+      { title: 'AI Media Generation', description: 'Studio-grade video, imagery, and motion content' },
+      { title: 'Brand Identity Design', description: 'Logo systems, typography, and visual language' },
+      { title: 'Hybrid Strategy', description: 'Fusing AI production with brand architecture' }
+    ],
+    visuals: [caseStudy3, caseStudy1, caseStudy2],
+    isConceptual: true,
+    filterTags: ['conceptual', 'ai-gen', 'branding']
+  },
+  {
     id: 'branding-solutions',
     title: 'Branding Solutions',
     brand: 'Alchemy Labs',
@@ -37,7 +57,7 @@ export const projects: Project[] = [
     overview: 'Our branding methodology fuses strategic clarity with visual poetry. We craft identity systems that don\'t just represent—they resonate. From verbal identity to visual language, every touchpoint is orchestrated to create inevitable recognition.',
     image: caseStudy1,
     video: aiMediaGen1,
-    size: 'large',
+    size: 'medium',
     services: [
       { title: 'Brand Strategy', description: 'Positioning, messaging, and narrative architecture' },
       { title: 'Visual Identity', description: 'Logo systems, typography, and color science' },
@@ -48,40 +68,22 @@ export const projects: Project[] = [
     filterTags: ['client', 'branding']
   },
   {
-    id: 'consultation-sessions',
-    title: 'Consultation Sessions',
+    id: 'ai-media-gen',
+    title: 'AI Media Gen',
     brand: 'Alchemy Labs',
-    category: 'Strategic Advisory',
-    description: 'Intensive strategy sessions that transform vision into executable roadmaps.',
-    overview: 'Our consultation sessions are not meetings—they\'re interventions. Through structured discovery and strategic synthesis, we help founders and creative directors crystallize their vision into actionable, measurable systems.',
+    category: 'AI Content Production',
+    description: 'Studio-grade AI-generated video, imagery, and motion content at scale.',
+    overview: 'Our AI media generation pipeline produces campaign-ready assets—video, stills, and motion graphics—at a fraction of traditional production timelines. Every output is guided by human creative direction and refined to meet studio-grade standards.',
     image: caseStudy2,
-    size: 'medium',
-    services: [
-      { title: 'Discovery Sessions', description: 'Deep-dive analysis of current state and aspirations' },
-      { title: 'Strategy Sprints', description: '3-5 day intensive roadmap development' },
-      { title: 'Implementation Support', description: 'Ongoing advisory for execution' }
-    ],
-    visuals: [caseStudy2, caseStudy1, caseStudy3],
-    isConceptual: false,
-    filterTags: ['client']
-  },
-  {
-    id: 'aether-rituals',
-    title: 'Aether Rituals',
-    brand: 'Alchemy Labs',
-    category: 'AI Ceremony',
-    description: 'Where machine learning meets creative intuition—our signature AI process.',
-    overview: 'Aether Rituals is our proprietary methodology for AI-augmented creative production. A carefully choreographed dance between human taste and machine capability, producing outputs that neither could achieve alone.',
-    image: caseStudy3,
-    video: aetherRitualsPreview,
+    video: aiMediaGen1,
     video2: aiMediaGen2,
     size: 'medium',
     services: [
-      { title: 'AI Media Generation', description: 'Studio-grade video and imagery' },
-      { title: 'Content Systems', description: 'Scalable production pipelines' },
-      { title: 'Style Training', description: 'Brand-specific AI model fine-tuning' }
+      { title: 'Video Production', description: 'AI-generated campaign films and reels' },
+      { title: 'Image Generation', description: 'Photorealistic and stylized stills' },
+      { title: 'Motion Design', description: 'Animated assets and visual effects' }
     ],
-    visuals: [caseStudy3, caseStudy1, caseStudy2],
+    visuals: [caseStudy2, caseStudy1, caseStudy3],
     isConceptual: false,
     filterTags: ['client', 'ai-gen']
   },
@@ -104,39 +106,21 @@ export const projects: Project[] = [
     filterTags: ['conceptual', 'ai-gen']
   },
   {
-    id: 'arcteryx-branding',
-    title: 'Arc\'teryx Concept',
-    brand: 'Arc\'teryx',
-    category: 'Conceptual Branding',
-    description: 'Technical precision meets sublime nature—a brand evolution study.',
-    overview: 'A speculative branding exercise exploring how Arc\'teryx could evolve their visual identity to capture the raw sublimity of extreme environments. We used AI to generate campaign imagery that honors their technical heritage while pushing into new aesthetic territory.',
+    id: 'genesis',
+    title: 'Genesis',
+    brand: 'Alchemy Labs',
+    category: 'AI + Branding Concept',
+    description: 'A hybrid conceptual pricing model merging AI production with brand strategy.',
+    overview: 'Genesis is our conceptual framework for pricing hybrid AI + Branding engagements. It demonstrates how we bundle generative AI media production with strategic brand architecture into a single, cohesive service offering—designed for founders and creative directors who want both pillars in one retainer.',
     image: caseStudy2,
     size: 'small',
     services: [
-      { title: 'Visual Exploration', description: 'AI-generated landscape and product imagery' },
-      { title: 'Brand Extension', description: 'Conceptual identity evolution' },
-      { title: 'Motion Concepts', description: 'Atmospheric brand films' }
+      { title: 'Hybrid Pricing Model', description: 'Unified AI + branding service packages' },
+      { title: 'Brand + AI Audit', description: 'Current-state analysis across both pillars' },
+      { title: 'Retainer Architecture', description: 'Scalable engagement frameworks' }
     ],
     visuals: [caseStudy2, caseStudy3],
     isConceptual: true,
-    filterTags: ['conceptual', 'branding']
-  },
-  {
-    id: 'identity-systems',
-    title: 'Identity Systems',
-    brand: 'Alchemy Labs',
-    category: 'Design Infrastructure',
-    description: 'Modular design systems built for scale and consistency.',
-    overview: 'We build identity infrastructure—not just logos. Our design systems approach ensures every brand asset, from business cards to billboards, speaks with one unmistakable voice. Components, not campaigns.',
-    image: caseStudy3,
-    size: 'small',
-    services: [
-      { title: 'Component Libraries', description: 'Modular design building blocks' },
-      { title: 'Style Guides', description: 'Living documentation systems' },
-      { title: 'Asset Pipelines', description: 'Automated production workflows' }
-    ],
-    visuals: [caseStudy3, caseStudy1],
-    isConceptual: false,
-    filterTags: ['client', 'branding']
+    filterTags: ['conceptual', 'ai-gen', 'branding']
   }
 ];

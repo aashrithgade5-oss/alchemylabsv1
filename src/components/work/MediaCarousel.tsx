@@ -1,5 +1,5 @@
-import { useState, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useCallback, useRef } from 'react';
+import { motion, AnimatePresence, PanInfo } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { ShimmerImage, ShimmerVideo } from '@/components/ShimmerImage';
 
@@ -14,14 +14,22 @@ interface MediaCarouselProps {
   title: string;
 }
 
+const SWIPE_THRESHOLD = 50;
+
 export const MediaCarousel = ({ items, title }: MediaCarouselProps) => {
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(0);
+  const thumbRef = useRef<HTMLDivElement>(null);
 
   const go = useCallback((dir: number) => {
     setDirection(dir);
     setCurrent((prev) => (prev + dir + items.length) % items.length);
   }, [items.length]);
+
+  const handleDragEnd = useCallback((_: unknown, info: PanInfo) => {
+    if (info.offset.x < -SWIPE_THRESHOLD) go(1);
+    else if (info.offset.x > SWIPE_THRESHOLD) go(-1);
+  }, [go]);
 
   if (items.length === 0) return null;
 
@@ -29,8 +37,14 @@ export const MediaCarousel = ({ items, title }: MediaCarouselProps) => {
 
   return (
     <div className="relative w-full">
-      {/* Main media area */}
-      <div className="relative aspect-video rounded-2xl overflow-hidden bg-alchemy-black/50">
+      {/* Main media area — swipeable */}
+      <motion.div
+        className="relative aspect-video rounded-2xl overflow-hidden bg-alchemy-black/50 touch-pan-y"
+        drag="x"
+        dragConstraints={{ left: 0, right: 0 }}
+        dragElastic={0.12}
+        onDragEnd={handleDragEnd}
+      >
         <AnimatePresence mode="wait" custom={direction}>
           <motion.div
             key={current}
@@ -101,16 +115,19 @@ export const MediaCarousel = ({ items, title }: MediaCarouselProps) => {
             {current + 1} / {items.length}
           </div>
         )}
-      </div>
+      </motion.div>
 
-      {/* Thumbnail strip */}
+      {/* Thumbnail strip — scroll-snap */}
       {items.length > 1 && (
-        <div className="flex gap-2 mt-3 overflow-x-auto pb-1 scrollbar-none">
+        <div
+          ref={thumbRef}
+          className="flex gap-2 mt-3 overflow-x-auto pb-1 scrollbar-none snap-x snap-mandatory"
+        >
           {items.map((thumb, i) => (
             <button
               key={i}
               onClick={() => { setDirection(i > current ? 1 : -1); setCurrent(i); }}
-              className={`relative flex-shrink-0 w-16 h-11 rounded-lg overflow-hidden transition-all duration-300 ${
+              className={`relative flex-shrink-0 w-16 h-11 rounded-lg overflow-hidden transition-all duration-300 snap-start ${
                 i === current
                   ? 'ring-1 ring-alchemy-red/60 opacity-100'
                   : 'opacity-40 hover:opacity-70'
