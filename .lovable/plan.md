@@ -1,54 +1,54 @@
 
 
-## Fix: Red-Room Background Visible Behind Contact Form
+## Contact Page Visual Overhaul
 
 ### Problem
-The `Contact` component applies the CSS class `section-gradient`, which creates a `::before` pseudo-element with a fully opaque dark gradient (`linear-gradient(180deg, alchemy-black -> charcoal-ui -> alchemy-black)`). This sits on top of the `contact-bg.png` image and completely obscures it, resulting in a black background instead of the red-room aesthetic.
+The background image is uniformly blurred everywhere, losing its character. The form area (`glass-deep`) is too opaque (90-95% dark), blocking the background entirely. The left-column text elements lack any glass treatment, and the overall composition feels flat.
 
-### Solution
+### Changes
 
-**1. Update `src/components/Contact.tsx` (line 128)**
-- Remove the `section-gradient` class from the Contact section wrapper
-- Also remove the inner `bg-gradient-radial` div (line 129) since it adds another dark overlay
-- Replace with a transparent background so the parent `ContactPage` background image shows through
+**1. ContactPage.tsx -- Background image: clear center, vignette blur at edges**
 
-Change:
-```tsx
-<section id="contact" className="relative py-20 md:py-32 overflow-hidden section-gradient">
-  <div className="absolute inset-0 bg-gradient-radial from-deep-crimson/8 via-transparent to-transparent" />
+Replace the single `blur-[12px] opacity-70` image with a two-layer approach:
+- **Layer 1 (sharp):** The image at full clarity, `opacity-80`, NO blur -- this is the "character" layer
+- **Layer 2 (vignette mask):** A CSS `mask-image` radial gradient that fades the edges to transparent, creating a natural vignette without blurring the center
+- Edge gradients stay for hero/footer merge but are reduced in height to `h-32`
+- The dark vignette overlay shifts to `hsl(var(--background) / 0.3)` at `85%` so the image breathes more
+
+**2. Contact.tsx -- Left column: liquid-glass card treatment**
+
+Wrap the entire left column content (the "Let's build something inevitable" heading, contact methods, social links, founder block) in a liquid-glass container:
+- `backdrop-filter: blur(20px) saturate(120%)`
+- `background: rgba(10, 10, 11, 0.5)` -- semi-transparent, lets background glow through
+- `border: 1px solid rgba(255, 255, 255, 0.08)`
+- `border-radius: 1.5rem`, padding `p-8`
+- Subtle `inset 0 1px 0 rgba(255,255,255,0.06)` highlight
+
+**3. Contact.tsx -- Form card: reduce opacity for background bleed-through**
+
+Update the form's `glass-deep` wrapper to use a lighter variant so the red-room background shows through:
+- Change class from `glass-deep` to a custom inline style:
+  - `background: rgba(10, 10, 11, 0.55)` (down from 0.9)
+  - `backdrop-filter: blur(24px) saturate(120%)`
+  - `border: 1px solid rgba(255, 255, 255, 0.1)`
+  - `box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.06)`
+- This keeps text perfectly readable while the warm red glow bleeds through the card
+
+**4. ContactPage.tsx -- Add a subtle warm color wash**
+
+Add a translucent red radial glow layer between the image and the content:
+- `radial-gradient(ellipse at 50% 40%, rgba(220, 38, 38, 0.08) 0%, transparent 60%)` -- adds warmth without overpowering
+
+### Technical Details
+
+Files modified:
+- `src/pages/ContactPage.tsx` -- background image styling (remove blur, add mask-image vignette, adjust gradients, add warm wash layer)
+- `src/components/Contact.tsx` -- left column glass wrapper, form card opacity reduction
+
+The `mask-image` approach uses:
+```css
+mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 30%, transparent 80%);
+-webkit-mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 30%, transparent 80%);
 ```
-To:
-```tsx
-<section id="contact" className="relative py-20 md:py-32 overflow-hidden">
-```
-
-**2. Update `src/pages/ContactPage.tsx` (lines 105-120)**
-- Replace the current `contact-bg.png` asset with the newly uploaded red-room image
-- Increase visibility: reduce blur to `blur-[12px]`, bump opacity to `opacity-70`
-- Adjust gradients for smoother hero-to-form and form-to-footer transitions
-- Add a subtle warm overlay instead of heavy vignette
-
-The background layer becomes:
-```tsx
-<div className="absolute inset-0 pointer-events-none">
-  <img
-    src={contactBg}
-    alt=""
-    aria-hidden
-    className="w-full h-full object-cover blur-[12px] opacity-70 scale-110"
-  />
-  {/* Top merge into hero */}
-  <div className="absolute top-0 inset-x-0 h-40 bg-gradient-to-b from-background to-transparent" />
-  {/* Bottom merge into footer */}
-  <div className="absolute bottom-0 inset-x-0 h-40 bg-gradient-to-t from-background to-transparent" />
-  {/* Gentle depth vignette */}
-  <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at 50% 50%, transparent 40%, hsl(var(--background) / 0.4) 90%)' }} />
-</div>
-```
-
-**3. Copy the new image asset**
-- Copy `user-uploads://image-16.png` to `src/assets/contact-bg.png` (replacing existing)
-
-### Why This Fixes It
-The `section-gradient::before` pseudo-element was painting a fully opaque dark background at `z-index: 0`, sitting directly above the background image layer from `ContactPage`. Removing this class makes the Contact component transparent, allowing the red-room image to show through with tasteful blur and gradient blending.
+This keeps the center of the image sharp and crisp while naturally fading the edges -- a cinematic vignette effect without global blur.
 
