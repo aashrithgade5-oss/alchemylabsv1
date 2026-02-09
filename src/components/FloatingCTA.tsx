@@ -7,9 +7,15 @@ export const FloatingCTA = memo(() => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      const scrollPercent = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
-      setIsVisible(scrollPercent > 0.2);
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const scrollPercent = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
+        setIsVisible(scrollPercent > 0.2);
+        ticking = false;
+      });
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });

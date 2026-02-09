@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ArrowRight } from 'lucide-react';
@@ -243,7 +243,6 @@ export const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [lastScrollY, setLastScrollY] = useState(0);
   const [ctaHovered, setCtaHovered] = useState(false);
   const location = useLocation();
 
@@ -252,22 +251,29 @@ export const Navigation = () => {
     setIsMobileMenuOpen(false);
   }, [location.pathname]);
 
-  // Scroll behavior
+  // Scroll behavior - use refs to avoid re-subscribing on every scroll
+  const lastScrollYRef = useRef(0);
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      setIsScrolled(currentScrollY > 50);
-      if (currentScrollY > lastScrollY && currentScrollY > 200) {
-        setIsHidden(true);
-      } else {
-        setIsHidden(false);
-      }
-      setLastScrollY(currentScrollY);
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const currentScrollY = window.scrollY;
+        setIsScrolled(currentScrollY > 50);
+        if (currentScrollY > lastScrollYRef.current && currentScrollY > 200) {
+          setIsHidden(true);
+        } else {
+          setIsHidden(false);
+        }
+        lastScrollYRef.current = currentScrollY;
+        ticking = false;
+      });
     };
     
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY]);
+  }, []);
 
   // Body scroll lock for mobile menu
   useEffect(() => {

@@ -117,10 +117,7 @@
     color: hsl(var(--porcelain));
   }
   
-  /* Smooth all transitions globally */
-  *, *::before, *::after {
-    transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
-  }
+  /* Smooth transitions only on interactive elements - not globally */
 }
 
 @layer components {
@@ -134,22 +131,9 @@
     box-shadow: 0 8px 30px rgba(225, 6, 19, 0.15);
   }
   
-  /* Button Hover Effects */
+  /* Button Hover Effects - use transform only, not transition-all */
   button, a, [role="button"] {
-    @apply transition-all duration-200 ease-out;
-  }
-  
-  button:hover, [role="button"]:hover {
-    transform: translateY(-1px);
-  }
-  
-  button:active, [role="button"]:active {
-    transform: translateY(0) scale(0.98);
-  }
-  
-  /* Link Glow on Hover */
-  a:not(.no-glow):hover {
-    text-shadow: 0 0 20px rgba(225, 6, 19, 0.3);
+    transition: transform 0.2s ease-out, color 0.2s ease-out, background-color 0.2s ease-out, border-color 0.2s ease-out, box-shadow 0.2s ease-out, opacity 0.2s ease-out;
   }
   
   /* Global Gradient Backdrop */
