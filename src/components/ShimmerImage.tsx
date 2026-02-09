@@ -36,6 +36,8 @@ export const ShimmerImage = ({
         src={src}
         alt={alt}
         className={className}
+        loading="lazy"
+        decoding="async"
         onLoad={() => setIsLoaded(true)}
         onError={() => setHasError(true)}
         initial={{ opacity: 0, scale: 1.02 }}
@@ -94,6 +96,7 @@ export const ShimmerVideo = ({
         loop={loop}
         muted={muted}
         playsInline={playsInline}
+        preload="none"
         initial={{ opacity: 0 }}
         animate={{ opacity: isLoaded ? 1 : 0 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}

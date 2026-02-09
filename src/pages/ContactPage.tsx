@@ -48,12 +48,12 @@ export const ContactPage = () => {
           <motion.div 
             animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
             transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-            className="absolute top-1/4 left-1/4 w-[400px] h-[400px] bg-alchemy-red/15 rounded-full blur-[120px]" 
+            className="absolute top-1/4 left-1/4 w-[400px] h-[400px] bg-alchemy-red/15 rounded-full blur-[60px] md:blur-[120px]" 
           />
           <motion.div 
             animate={{ scale: [1.2, 1, 1.2], opacity: [0.1, 0.2, 0.1] }}
             transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
-            className="absolute bottom-1/4 right-1/4 w-[350px] h-[350px] bg-deep-crimson/20 rounded-full blur-[100px]" 
+            className="absolute bottom-1/4 right-1/4 w-[350px] h-[350px] bg-deep-crimson/20 rounded-full blur-[60px] md:blur-[100px]" 
           />
         </div>
         

@@ -326,7 +326,7 @@ export const Navigation = () => {
                 />
               </motion.div>
               <div className="hidden sm:flex items-baseline gap-1.5">
-                <span className="font-display text-lg md:text-xl italic text-porcelain">
+                <span className="font-alchemy text-lg md:text-xl text-porcelain">
                   Alchemy
                 </span>
                 <span className="font-body text-[9px] md:text-[10px] font-medium text-porcelain/60 tracking-[0.2em] uppercase">

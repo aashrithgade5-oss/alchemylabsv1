@@ -1,5 +1,10 @@
 /* Font Imports - must come first */
+@import '@fontsource/cinzel/400.css';
+@import '@fontsource/cinzel/500.css';
+@import '@fontsource/cinzel/600.css';
+@import '@fontsource/cinzel/700.css';
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&display=swap');
+@import '@fontsource/playfair-display/400.css';
 @import '@fontsource/playfair-display/400.css';
 @import '@fontsource/playfair-display/500.css';
 @import '@fontsource/playfair-display/700.css';
@@ -836,5 +841,13 @@
     scroll-behavior: smooth;
     overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
+  }
+
+  /* Mobile performance guards */
+  @media (max-width: 768px) {
+    .gpu-accelerated {
+      will-change: auto !important;
+      contain: layout;
+    }
   }
 }
