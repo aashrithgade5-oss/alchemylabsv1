@@ -4,6 +4,11 @@ import caseStudy3 from '@/assets/case-study-3.jpg';
 import aiMediaGen1 from '@/assets/ai-media-gen-1.mov';
 import aiMediaGen2 from '@/assets/ai-media-gen-2.mov';
 import aetherRitualsPreview from '@/assets/aether-rituals-preview.mp4';
+import aetherRituals1 from '@/assets/aether-rituals-1.png';
+import aetherRituals2 from '@/assets/aether-rituals-2.png';
+import aetherRituals3 from '@/assets/aether-rituals-3.png';
+import aetherRituals4 from '@/assets/aether-rituals-4.png';
+import aetherRituals5 from '@/assets/aether-rituals-5.png';
 
 export type FilterTag = 'client' | 'conceptual' | 'ai-gen' | 'branding';
 
