@@ -115,20 +115,15 @@ export const ContactPage = () => {
       {/* Contact Form Section with dynamic background */}
       <section ref={contactRef} className="relative overflow-hidden -mt-16">
         {/* Background image — Ken Burns parallax with vignette */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden"
-          style={{
-            maskImage: 'radial-gradient(ellipse 70% 70% at 50% 50%, black 30%, transparent 80%)',
-            WebkitMaskImage: 'radial-gradient(ellipse 70% 70% at 50% 50%, black 30%, transparent 80%)',
-          }}
-        >
-          {/* Sharp image with Ken Burns parallax */}
+        <div className="absolute -inset-8 pointer-events-none overflow-hidden">
+          {/* Full-bleed image with Ken Burns parallax */}
           <motion.img
             src={contactBg}
             alt=""
             aria-hidden
             loading="eager"
             style={{ scale: bgScale, willChange: 'transform' }}
-            className="w-full h-full object-cover opacity-80 origin-center"
+            className="w-full h-full object-cover opacity-70 origin-center"
             draggable={false}
           />
         </div>
