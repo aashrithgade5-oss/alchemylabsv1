@@ -9,6 +9,7 @@ export interface TimelineEntry {
   dates: string;
   highlights: string[];
   revenueSignal?: string;
+  metrics?: { label: string; value: string }[];
 }
 
 interface TimelineRailProps {
@@ -31,6 +32,8 @@ const TimelineCard = memo(({ entry, index }: { entry: TimelineEntry; index: numb
       ref={ref}
       className="relative pl-8 sm:pl-12 pb-12 last:pb-0"
       style={{ opacity, scale }}
+      whileHover={{ y: -4 }}
+      transition={{ duration: 0.3 }}
     >
       {/* Timeline line */}
       <div className="absolute left-0 top-0 bottom-0 w-px bg-gradient-to-b from-alchemy-red/50 via-alchemy-red/20 to-transparent" />
@@ -77,6 +80,24 @@ const TimelineCard = memo(({ entry, index }: { entry: TimelineEntry; index: numb
             </li>
           ))}
         </ul>
+        {/* Metrics pills */}
+        {entry.metrics && entry.metrics.length > 0 && (
+          <div className="flex flex-wrap gap-2 mt-4">
+            {entry.metrics.map((m, i) => (
+              <span
+                key={i}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full font-mono text-[10px] tracking-wide"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(220,38,38,0.06) 100%)',
+                  border: '1px solid rgba(220,38,38,0.15)',
+                }}
+              >
+                <span className="text-porcelain/40">{m.label}:</span>
+                <span className="text-alchemy-red/80 font-semibold">{m.value}</span>
+              </span>
+            ))}
+          </div>
+        )}
       </div>
     </motion.div>
   );

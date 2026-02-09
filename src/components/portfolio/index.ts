@@ -7,3 +7,7 @@ export { MarqueeRow } from './MarqueeRow';
 export { LightboxModal, type LightboxItem } from './LightboxModal';
 export { TimelineRail, type TimelineEntry } from './TimelineRail';
 export { BackgroundScene } from './BackgroundScene';
+export { HyperLiquidGlass } from './HyperLiquidGlass';
+export { ParticleField } from './ParticleField';
+export { VideoPlaceholder } from './VideoPlaceholder';
+export { ThoughtLeadershipCard, type ThoughtLeadershipEntry } from './ThoughtLeadershipCard';
