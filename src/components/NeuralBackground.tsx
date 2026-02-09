@@ -126,6 +126,9 @@ const Particles = memo(({ config }: { config: DeviceConfig }) => {
   const mouseRef = useRef({ x: 0, y: 0, targetX: 0, targetY: 0 });
   const { viewport } = useThree();
   const frameCount = useRef(0);
+  // Self-healing FPS monitor
+  const fpsMonitor = useRef({ slowFrames: 0, degraded: false, lastTime: 0 });
+  const [activeConfig, setActiveConfig] = useState(config);
   
   const { positions, originalPositions, velocities, phases } = useMemo(() => {
     const count = config.particleCount;
@@ -192,7 +195,29 @@ const Particles = memo(({ config }: { config: DeviceConfig }) => {
     
     // Frame skipping
     frameCount.current++;
-    if (frameCount.current % config.frameSkip !== 0) return;
+    if (frameCount.current % activeConfig.frameSkip !== 0) return;
+    
+    // Self-healing FPS monitor
+    const now = performance.now();
+    if (fpsMonitor.current.lastTime > 0) {
+      const frameTime = now - fpsMonitor.current.lastTime;
+      if (frameTime > 20) {
+        fpsMonitor.current.slowFrames++;
+        if (fpsMonitor.current.slowFrames > 30 && !fpsMonitor.current.degraded) {
+          fpsMonitor.current.degraded = true;
+          setActiveConfig(prev => ({
+            ...prev,
+            particleCount: Math.max(15, Math.floor(prev.particleCount / 2)),
+            enableConnections: false,
+            enableGlow: false,
+            frameSkip: Math.min(prev.frameSkip + 2, 6),
+          }));
+        }
+      } else {
+        fpsMonitor.current.slowFrames = Math.max(0, fpsMonitor.current.slowFrames - 1);
+      }
+    }
+    fpsMonitor.current.lastTime = now;
     
     // Mouse interpolation
     mouseRef.current.x += (mouseRef.current.targetX - mouseRef.current.x) * 0.04;

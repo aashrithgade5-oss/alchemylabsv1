@@ -193,11 +193,21 @@ export const EditorialSection = () => {
           </motion.div>
         </div>
 
-        {/* Quote */}
+        {/* Quote with scroll-triggered line */}
         <motion.div
           style={{ scale: quoteScale, opacity: quoteOpacity }}
           className="mt-24 text-center"
         >
+          {/* Scroll-triggered red line */}
+          <motion.div
+            className="w-full max-w-md mx-auto h-px mb-12"
+            style={{
+              scaleX: useTransform(scrollYProgress, [0.4, 0.7], [0, 1]),
+              background: 'linear-gradient(90deg, transparent, hsl(356 94% 45%), transparent)',
+              transformOrigin: 'center',
+            }}
+          />
+          
           <motion.blockquote 
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}

@@ -89,6 +89,7 @@ export default {
         display: ['Playfair Display', 'Georgia', 'serif'],
         body: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
         mono: ['JetBrains Mono', 'SF Mono', 'monospace'],
+        alchemy: ['Cinzel', 'Playfair Display', 'Georgia', 'serif'],
         elegant: ['Playfair Display', 'Georgia', 'serif'],
         accent: ['JetBrains Mono', 'SF Mono', 'monospace'],
       },

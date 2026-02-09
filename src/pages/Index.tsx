@@ -1,17 +1,38 @@
 import { Navigation } from '@/components/Navigation';
 import { Hero } from '@/components/Hero';
-import { Solutions } from '@/components/Solutions';
-import { CaseStudies } from '@/components/CaseStudies';
-import { Manifesto } from '@/components/Manifesto';
-import { EditorialSection } from '@/components/EditorialSection';
-import { ProcessSection } from '@/components/ProcessSection';
-import { FAQSection } from '@/components/FAQSection';
-import { Contact } from '@/components/Contact';
 import { Footer } from '@/components/Footer';
 import { ScrollProgress } from '@/components/ScrollProgress';
 import { ParallaxBackground } from '@/components/ParallaxBackground';
 import { FloatingCTA } from '@/components/FloatingCTA';
-import { memo } from 'react';
+import { memo, lazy, Suspense } from 'react';
+import { motion } from 'framer-motion';
+
+// Lazy-load below-fold sections for faster initial paint
+const Solutions = lazy(() => import('@/components/Solutions').then(m => ({ default: m.Solutions })));
+const CaseStudies = lazy(() => import('@/components/CaseStudies').then(m => ({ default: m.CaseStudies })));
+const Manifesto = lazy(() => import('@/components/Manifesto').then(m => ({ default: m.Manifesto })));
+const EditorialSection = lazy(() => import('@/components/EditorialSection').then(m => ({ default: m.EditorialSection })));
+const ProcessSection = lazy(() => import('@/components/ProcessSection').then(m => ({ default: m.ProcessSection })));
+const FAQSection = lazy(() => import('@/components/FAQSection').then(m => ({ default: m.FAQSection })));
+const Contact = lazy(() => import('@/components/Contact').then(m => ({ default: m.Contact })));
+
+// Reusable reveal wrapper
+const RevealSection = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 40 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, margin: '-80px' }}
+    transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+    className={className}
+  >
+    {children}
+  </motion.div>
+);
+
+// Section divider
+const SectionDivider = () => (
+  <div className="w-full max-w-6xl mx-auto h-px bg-gradient-to-r from-transparent via-porcelain/8 to-transparent" />
+);
 
 const Index = memo(() => {
   return (
@@ -22,13 +43,54 @@ const Index = memo(() => {
       <FloatingCTA />
       <main className="relative z-10">
         <Hero />
-        <Solutions />
-        <CaseStudies />
-        <Manifesto />
-        <EditorialSection />
-        <ProcessSection />
-        <FAQSection />
-        <Contact />
+        
+        <Suspense fallback={null}>
+          <RevealSection className="content-lazy">
+            <Solutions />
+          </RevealSection>
+        </Suspense>
+        
+        <SectionDivider />
+        
+        <Suspense fallback={null}>
+          <RevealSection className="content-lazy">
+            <CaseStudies />
+          </RevealSection>
+        </Suspense>
+        
+        <SectionDivider />
+        
+        <Suspense fallback={null}>
+          <RevealSection className="content-lazy">
+            <Manifesto />
+          </RevealSection>
+        </Suspense>
+        
+        <SectionDivider />
+        
+        <Suspense fallback={null}>
+          <RevealSection className="content-lazy">
+            <EditorialSection />
+          </RevealSection>
+        </Suspense>
+        
+        <Suspense fallback={null}>
+          <RevealSection className="content-lazy">
+            <ProcessSection />
+          </RevealSection>
+        </Suspense>
+        
+        <Suspense fallback={null}>
+          <RevealSection className="content-lazy">
+            <FAQSection />
+          </RevealSection>
+        </Suspense>
+        
+        <Suspense fallback={null}>
+          <RevealSection className="content-lazy">
+            <Contact />
+          </RevealSection>
+        </Suspense>
       </main>
       <Footer />
     </div>

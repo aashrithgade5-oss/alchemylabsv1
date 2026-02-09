@@ -42,7 +42,6 @@ export const projects: Project[] = [
     overview: 'Aether Rituals is our flagship concept study—a fusion of our two core pillars: AI-powered media generation and strategic branding. This hybrid service concept demonstrates how machine intelligence and human creative direction converge to produce identity systems, campaign assets, and motion content that neither discipline could achieve alone.',
     image: caseStudy3,
     video: aetherRitualsPreview,
-    video2: aiMediaGen2,
     size: 'large',
     services: [
       { title: 'AI Media Generation', description: 'Studio-grade video, imagery, and motion content' },
@@ -80,8 +79,7 @@ export const projects: Project[] = [
     description: 'Studio-grade AI-generated video, imagery, and motion content at scale.',
     overview: 'Our AI media generation pipeline produces campaign-ready assets—video, stills, and motion graphics—at a fraction of traditional production timelines. Every output is guided by human creative direction and refined to meet studio-grade standards.',
     image: caseStudy2,
-    video: aiMediaGen1,
-    video2: aiMediaGen2,
+    video: aiMediaGen2,
     size: 'medium',
     services: [
       { title: 'Video Production', description: 'AI-generated campaign films and reels' },
