@@ -96,7 +96,7 @@ const AnimatedRoutes = memo(() => {
               <Route path="/solutions/ai" element={<AISolutionsPage />} />
               <Route path="/solutions/branding" element={<BrandingSolutionsPage />} />
               <Route path="/solutions/consultation" element={<ConsultationSolutionsPage />} />
-              <Route path="/book-sprint" element={<BookSprint />} />
+              <Route path="/book-sprint" element={<ContactPage />} />
               <Route path="/services/:slug" element={<ServicePage />} />
               <Route path="/privacy" element={<PrivacyPage />} />
               <Route path="/terms" element={<TermsPage />} />
