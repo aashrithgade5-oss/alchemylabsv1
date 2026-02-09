@@ -63,7 +63,7 @@ const Index = memo(() => {
         
         <Suspense fallback={null}>
           <div className="relative">
-            <SequentianBackground variant={4} opacity={0.35} parallax={false} />
+            <SequentianBackground variant={4} opacity={0.5} parallax scaleEnd={1.2} />
             <RevealSection className="content-lazy">
               <Manifesto />
             </RevealSection>
@@ -86,7 +86,7 @@ const Index = memo(() => {
         
         <Suspense fallback={null}>
           <div className="relative">
-            <SequentianBackground variant={2} opacity={0.3} parallax={false} />
+            <SequentianBackground variant={2} opacity={0.45} parallax scaleEnd={1.12} />
             <RevealSection className="content-lazy">
               <FAQSection />
             </RevealSection>
