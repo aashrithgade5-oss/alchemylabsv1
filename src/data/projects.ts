@@ -3,6 +3,9 @@ import caseStudy2 from '@/assets/case-study-2.jpg';
 import caseStudy3 from '@/assets/case-study-3.jpg';
 import aiMediaGen1 from '@/assets/ai-media-gen-1.mov';
 import aiMediaGen2 from '@/assets/ai-media-gen-2.mov';
+import aetherRitualsPreview from '@/assets/aether-rituals-preview.mp4';
+
+export type FilterTag = 'client' | 'conceptual' | 'ai-gen' | 'branding';
 
 export interface Project {
   id: string;
@@ -21,6 +24,7 @@ export interface Project {
   }[];
   visuals: string[];
   isConceptual?: boolean;
+  filterTags: FilterTag[];
 }
 
 export const projects: Project[] = [
@@ -40,7 +44,8 @@ export const projects: Project[] = [
       { title: 'Brand Guidelines', description: 'Comprehensive identity documentation' }
     ],
     visuals: [caseStudy1, caseStudy2, caseStudy3],
-    isConceptual: false
+    isConceptual: false,
+    filterTags: ['client', 'branding']
   },
   {
     id: 'consultation-sessions',
@@ -57,7 +62,8 @@ export const projects: Project[] = [
       { title: 'Implementation Support', description: 'Ongoing advisory for execution' }
     ],
     visuals: [caseStudy2, caseStudy1, caseStudy3],
-    isConceptual: false
+    isConceptual: false,
+    filterTags: ['client']
   },
   {
     id: 'aether-rituals',
@@ -67,7 +73,8 @@ export const projects: Project[] = [
     description: 'Where machine learning meets creative intuition—our signature AI process.',
     overview: 'Aether Rituals is our proprietary methodology for AI-augmented creative production. A carefully choreographed dance between human taste and machine capability, producing outputs that neither could achieve alone.',
     image: caseStudy3,
-    video: aiMediaGen2,
+    video: aetherRitualsPreview,
+    video2: aiMediaGen2,
     size: 'medium',
     services: [
       { title: 'AI Media Generation', description: 'Studio-grade video and imagery' },
@@ -75,7 +82,8 @@ export const projects: Project[] = [
       { title: 'Style Training', description: 'Brand-specific AI model fine-tuning' }
     ],
     visuals: [caseStudy3, caseStudy1, caseStudy2],
-    isConceptual: false
+    isConceptual: false,
+    filterTags: ['client', 'ai-gen']
   },
   {
     id: 'oakley-showcase',
@@ -92,7 +100,8 @@ export const projects: Project[] = [
       { title: 'Campaign Architecture', description: 'Multi-touchpoint narrative design' }
     ],
     visuals: [caseStudy1, caseStudy2],
-    isConceptual: true
+    isConceptual: true,
+    filterTags: ['conceptual', 'ai-gen']
   },
   {
     id: 'arcteryx-branding',
@@ -109,7 +118,8 @@ export const projects: Project[] = [
       { title: 'Motion Concepts', description: 'Atmospheric brand films' }
     ],
     visuals: [caseStudy2, caseStudy3],
-    isConceptual: true
+    isConceptual: true,
+    filterTags: ['conceptual', 'branding']
   },
   {
     id: 'identity-systems',
@@ -126,6 +136,7 @@ export const projects: Project[] = [
       { title: 'Asset Pipelines', description: 'Automated production workflows' }
     ],
     visuals: [caseStudy3, caseStudy1],
-    isConceptual: false
+    isConceptual: false,
+    filterTags: ['client', 'branding']
   }
 ];
