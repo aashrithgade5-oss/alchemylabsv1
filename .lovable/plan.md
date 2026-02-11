@@ -1,236 +1,118 @@
 
+## About Page -- Cinematic Overhaul
 
-## Founder Portfolios Magnum Opus - Execution Plan
-
-A complete restructuring of both founder portfolios into scroll-stopping, award-worthy experiences. This plan maximizes reuse of existing components while adding 4 new ones to deliver the full vision.
-
----
-
-### What Already Exists (Reuse, Don't Rebuild)
-
-These components are production-ready and will be reused directly:
-- **MarqueeRow** -- infinite scroll with pause-on-hover, mobile horizontal scroll fallback
-- **MagneticCTA** -- magnetic mouse tracking, arrow glide, primary/secondary/ghost variants
-- **GlassCard** -- default/elevated/subtle/red glass variants with hover glow
-- **SectionShell** -- consistent section layout with configurable padding/maxWidth
-- **EyebrowLabel** -- mono uppercase tracking labels (red/white/muted)
-- **LightboxModal** -- full-screen overlay with keyboard nav
-- **TimelineRail** -- scroll-reactive timeline with dot pulse animation
-- **BackgroundScene** -- mode-aware gradient orbs with vignette
-- **AnimatedCapabilities** -- rotating glitch-text capabilities
-- **BlueprintGrid / NoiseTexture** -- subtle background overlays
+A complete reimagining of the About page into a seamless, immersive cinematic experience with a full-viewport video hero featuring liquid glass effects, redesigned founder sections, and elevated below-fold sections with strategic Sequentian backgrounds.
 
 ---
 
-### Phase 1: New Reusable Components (4 files)
+### Hero Overhaul: `YinYangHero.tsx`
 
-**1. `src/components/portfolio/HyperLiquidGlass.tsx`**
-- Glass container with animated edge glow pulse (2s loop via box-shadow animation)
-- Props: `variant` (default | hover-glow | static), `children`, `className`
-- Uses backdrop-blur(24px), multi-layer gradient background, border transitions
-- Hover: border warms from white/12 to red/40, box-shadow glow intensifies
-- Edge glow: subtle animated red pulse on border using Framer Motion
+**Video Background with Cinematic Treatment**
 
-**2. `src/components/portfolio/ParticleField.tsx`**
-- Floating particles background using Framer Motion (not Canvas/WebGL)
-- Props: `count` (default 30, auto-reduces to 15 on mobile), `color`, `opacity`, `speed`
-- Each particle: random position, floating Y animation (random range), blur(20px)
-- Performance: `will-change: transform`, reduces count on mobile, respects `prefers-reduced-motion`
-- Particles are simple divs with rounded-full, gradient color, and staggered float animations
+Replace the current Sequentian + ParticleBackground hero with the uploaded red-cloak video as a full-bleed background. The video gets a multi-layer cinematic treatment inspired by the Homepage hero pattern:
 
-**3. `src/components/portfolio/VideoPlaceholder.tsx`**
-- Aspect-ratio locked container for future video upload
-- Props: `aspectRatio` (default "1/1"), `gradient`, `className`
-- Renders: shimmer sweep animation (linear-gradient moving left-to-right in 2s loop)
-- Background: radial gradient (configurable, default red-to-transparent)
-- Center icon: subtle play button outline at low opacity
+- Layer 1: Deep atmospheric base gradient (black)
+- Layer 2: Video element (`object-cover`, muted, looped, playsInline, `preload="metadata"`) at ~15% opacity
+- Layer 3: Premium vignette (radial gradient, dark edges fading to center transparency)
+- Layer 4: Top/bottom fade gradients for seamless section transitions
+- Layer 5: Red energy glow (radial gradient, `rgba(220,38,38,0.08)`)
+- Layer 6: Secondary accent glows on desktop (two offset red radials)
+- Layer 7: Subtle technical grid (desktop only, 0.012 opacity)
+- Layer 8: Lazy-loaded NeuralBackground (R3F particles, desktop only, delayed 300ms) at 35% opacity -- this provides the "different particles" from the homepage since it uses the same system but at different opacity and without the homepage video underneath
+- Layer 9: BlueprintGrid (0.02 opacity) + NoiseTexture (0.03 opacity) for grain
 
-**4. `src/components/portfolio/ThoughtLeadershipCard.tsx`**
-- LinkedIn post / case study showcase card
-- Props: `type` (linkedin | case-study), `title`, `excerpt`, `image`, `engagement` (views/comments/shares), `onClick`
-- Layout: Glass card, image top (aspect 16:9) with gradient overlay, content bottom
-- Hover: scale 1.02, border glow red/40, image inside scales 1.05
-- Engagement stats: mono font, small, alchemy-red/60 color
+Video fades in smoothly over 1.2s with `[0.22, 1, 0.36, 1]` easing. On mobile, video opacity is slightly higher (18%) and NeuralBackground is skipped.
+
+**Title Typography -- Repositioned**
+
+Move the editorial title to center-bottom of viewport for a more cinematic, film-poster feel:
+- Eyebrow stays ("Meet Our Founders" with hand-drawn SVG underline)
+- Main title stays ("Architects of meaning, systems, and inevitability")
+- Subtitle stays
+- All positioned in a `flex-col justify-end pb-32` layout so content anchors to the lower third
+
+The FounderCircles component is **removed from the hero** and becomes its own dedicated section below.
 
 ---
 
-### Phase 2: Aashrith Portfolio Rebuild
+### Founder Section: New Standalone `FounderCircles` Section
 
-**Current sections (7):** Hero, Thinking, Ventures, WorkGallery, Experience, Offerings, Contact
+Instead of circles crammed inside the hero, the founders get their own full-width cinematic section immediately below the hero.
 
-**New sections (5):** Hero, Venture Ecosystem, Thought Leadership, Career Timeline, Philosophy+CTA
+**Layout**: Two side-by-side editorial panels on desktop (50/50 split with 1px red divider), stacked on mobile.
 
-The page is a complete rewrite of `src/pages/AashrithPortfolio.tsx` with this structure:
+**Each panel**:
+- Tall aspect ratio (~3:4 on desktop, auto on mobile)
+- Glass background: `backdrop-blur(24px)`, multi-layer gradient (Aashrith: dark/neutral tones, Eva: warm red/pink tint)
+- Border: `1px solid rgba(255,255,255,0.08)` warming to `rgba(220,38,38,0.4)` on hover
+- Content: Large uppercase name (font-black, tracking-wide), title in mono, specialty in body, "Discover Portfolio" glass-pill CTA at bottom
+- Hover: lift -6px translateY, inner red glow appears, border warms, 3D perspective tilt on desktop (existing spring physics reused)
+- Background per panel: subtle Sequentian image (variant 1 for Aashrith at 15% opacity, variant 4 for Eva at 12% opacity) for visual differentiation
 
-**Section 1: Hero (Hypnotic Entry)**
-- ParticleField background (30 particles, red/30 opacity)
-- Right side: VideoPlaceholder wrapped in HyperLiquidGlass (aspect 1:1, 40% width on desktop)
-- Left side: Massive uppercase name "AASHRITH GADE" (font-black, responsive sizing from 4rem to 10rem)
-- Below name: AnimatedCapabilities rotator (keep existing component)
-- Subtitle: "Founder of Brand Alchemy, Ashzz.ai & Alchemy Labs"
-- Technical metadata row: "Mumbai, IN . EST. 2024 . 50+ Projects"
-- Scroll indicator with 3s delayed fade-in
-- Layout: flex row on desktop (text left, video right), stacked on mobile
+**Animated reveal on scroll**:
+- Left panel slides in from left, right panel from right
+- 0.2s stagger delay
+- Center divider: animated red line drawing from 0 to 100% height over 1s with 0.6s delay
+- `viewport={{ once: true, margin: '-100px' }}`
 
-**Section 2: Venture Ecosystem (Marquee Archive)**
-- Eyebrow: "VENTURES & INTELLECTUAL PROPERTY"
-- Heading: "Three systems. One vision."
-- 3 MarqueeRow components with placeholder image tiles (10-12 per row):
-  - Row 1: Brand Alchemy tiles, speed="slow", direction="left"
-  - Row 2: Ashzz.ai tiles, speed="medium", direction="right"  
-  - Row 3: Alchemy Labs tiles, speed="slow", direction="left"
-- Each row prefixed with a venture label card (number + name + type)
-- Tiles: aspect 4:3, rounded-xl, border white/10, hover dims non-hovered siblings
-- 80px vertical gap between rows
-
-**Section 3: Thought Leadership (Proof Layer)**
-- Eyebrow: "THOUGHT LEADERSHIP"
-- Heading: "Systems thinking, documented."
-- Subheading: "Frameworks, case studies, and strategic narratives..."
-- Grid: 3 columns desktop, 1 mobile, 6 ThoughtLeadershipCard placeholders
-- Mix of LinkedIn posts and case studies with placeholder images
-- Stagger fade-up animation (0.08s delay each)
-
-**Section 4: Career Timeline (Journey Validation)**
-- Eyebrow: "CAREER JOURNEY"
-- Heading: "From execution to architecture."
-- Enhanced TimelineRail with metrics pills for each entry
-- Entries include metrics (e.g., "Brands: 5+", "Reels: 20+", "Engagement: 15K+")
-- The TimelineRail component will be enhanced to support a `metrics` array
-- Timeline data includes videographer work, Sparsh Concept, Alchemy Labs, Cipla, S8UL, Velocity Gaming
-
-**Section 5: Philosophy + CTA (Soft Conversion)**
-- Large centered quote in Playfair Display italic: "Brands don't fail because of lack of creativity..."
-- Attribution: "-- Aashrith Gade, Founder"
-- Primary CTA: MagneticCTA linking to /contact ("Start a Conversation")
-- Secondary link: "Download Portfolio PDF" (ghost variant, placeholder)
-- Trust signals row: "NDA Available . 24h Reply . Free First Call"
-- Subtle ParticleField (15 particles, low opacity) background
-
-**Removed sections:**
-- ThinkingSection (philosophy merged into final CTA)
-- OfferingsSection (services already on /solutions page, removes redundancy)
-- ContactSection form (CTA links to /contact page instead -- no duplicate forms)
-
-**Kept/Enhanced:**
-- PortfolioNav (keep as-is, already excellent)
-- Theme toggle (keep, already working)
-- BackgroundScene (keep for dark mode)
-- ScrollProgress indicator in footer
+**Remove**: FloatingDots component, rotating conic-gradient border rings (too busy with the new video hero above)
 
 ---
 
-### Phase 3: Eva Portfolio Rebuild
+### Section-Level Background Strategy
 
-**Current sections (6):** Hero, Intro, Experience, Philosophy, Skills, Contact
+Each section gets a distinct atmospheric treatment for seamless visual flow:
 
-**New sections (6):** Hero, Creative Philosophy, Venture Contributions, Client Showcase, Career Journey, Final Statement+CTA
-
-Complete rewrite of `src/pages/EvaPortfolio.tsx`:
-
-**Section 1: Hero (Elegant Authority)**
-- Soft gradient background (red/5 to pink/5) -- no particles (cleaner than Aashrith)
-- Center-aligned name: "EVA DOSHI" in font-black uppercase (same scale as current)
-- Subtitles: "Co-Founder . Brand Strategist" and "Fashion x Luxury x Creative Direction"
-- Tagline with pink gradient text
-- Decorative SVG flourish (small circular motif below tagline)
-- Scroll indicator (ChevronDown, pink-tinted)
-
-**Section 2: Creative Philosophy**
-- Large centered quote: "Strategy meets storytelling. Execution meets elegance."
-- Supporting paragraph from evaData.bio.intro
-- Extended intro paragraph
-- Expertise tags as glass pills
-- Process visualization: CONNECT -> STRATEGIZE -> DELIVER
-
-**Section 3: Venture Contributions**
-- Eyebrow: "VENTURE CONTRIBUTIONS"
-- Focus heading: "Co-Founder, Brand Alchemy"
-- Description of her role in Brand Alchemy infrastructure
-- Single MarqueeRow (speed="slow") with placeholder images showing co-founder work
-- Simpler than Aashrith's 3-row setup
-
-**Section 4: Client Relations Showcase**
-- Eyebrow: "CLIENT PORTFOLIO"
-- Heading: "Fashion x Luxury Brand Collaborations"
-- Grid of 4-6 brand cards (2 columns desktop, 1 mobile)
-- Each card: glass container with brand name, role description, key metric
-- Brands: Inorbit Mall, Bonkers Corner, Azorte, Pepe Jeans, AND
-- Uses GlassCard component with subtle hover
-
-**Section 5: Career Journey**
-- Enhanced TimelineRail (same component as Aashrith)
-- Entries: Alchemy Labs (Co-Founder), Dentsu (Business Development)
-- Metrics focused on client relations outcomes
-- Center-aligned timeline connector (pink gradient line)
-
-**Section 6: Final Statement + CTA**
-- Quote: "Excellence isn't a moment -- it's a system."
-- Attribution: "-- Eva Doshi, Co-Founder"
-- Primary CTA: MagneticCTA linking to /contact ("Let's Collaborate")
-- Social links: Email + LinkedIn
-- Trust signals: same as Aashrith
-- Back to About link
-
-**Kept/Enhanced:**
-- PortfolioNav with ED logo (keep as-is)
-- Theme toggle with pink accent (keep)
-- ScrollProgress bar with pink gradient (keep)
+1. **Hero** (video + NeuralBackground + grid + grain)
+2. **Founders** (dark background, per-panel Sequentian subtlety, divider accent)
+3. **Philosophy** -- stays cream/editorial (already excellent), add Sequentian 2 at very low opacity (0.15) behind the right column for warmth
+4. **Process** -- add Sequentian 1 (Glass Lines) at 0.3 opacity for the "blueprint/technical" feel that matches the process metaphor
+5. **Principles** -- keep Sequentian 5 (Satin Wave) as-is (already well-placed)
+6. **WhoWeServe** -- keep Sequentian 4 (Crimson Cloud) as-is
+7. **FoundersCTA** -- keep Sequentian 2 as-is, add subtle ParticleField (15 particles, low opacity) for a callback to the hero
 
 ---
 
-### Phase 4: Data & Content Updates
+### Files Changed
 
-**File: `src/data/foundersData.ts`**
-- Add `metrics` field to experience entries for both founders
-- Add videographer experience entry for Aashrith (Feb 2025, @hitakkshi, Sparsh Concept)
-- Add brand collaboration data for Eva (Inorbit Mall, Bonkers Corner, etc.)
+**Modified files (4):**
 
-**File: `src/data/portfolioProjects.ts`**
-- Add thought leadership entries with type field (linkedin | case-study)
-- Update placeholder images to maintain proper aspect ratios
+- `src/components/about/YinYangHero.tsx` -- Complete rewrite: video background with NeuralBackground particles, cinematic overlay layers, bottom-anchored typography, FounderCircles removed from this component
+- `src/components/about/FounderCircles.tsx` -- Complete rewrite: standalone section with two side-by-side editorial glass panels, animated slide-in reveal, center divider, remove FloatingDots and circle layout
+- `src/components/about/ProcessSection.tsx` -- Add SequentianBackground variant 1 at 0.3 opacity
+- `src/pages/About.tsx` -- Move FounderCircles to its own section between hero and philosophy (wrap in its own section element)
 
-**File: `src/components/portfolio/TimelineRail.tsx`**
-- Add optional `metrics` array to `TimelineEntry` interface: `{ label: string; value: string }[]`
-- Render metrics as horizontal glass pills below highlights
-- Add hover lift animation (-4px translateY)
+**New files (0)** -- no new files needed, reuses existing NeuralBackground, SequentianBackground, BlueprintGrid, NoiseTexture, ScrollReveal
 
-**File: `src/components/portfolio/index.ts`**
-- Export new components: HyperLiquidGlass, ParticleField, VideoPlaceholder, ThoughtLeadershipCard
+**Copied files (1):**
+- Upload the user video as `src/assets/about-hero-video.mp4`
 
 ---
 
-### Phase 5: Polish and Performance
+### Animation Spec
 
-- All animations use `viewport={{ once: true, margin: '-100px' }}` (no re-trigger)
-- All easing: `[0.22, 1, 0.36, 1]` (ease-out-expo)
-- Stagger delays: cards 0.08s, list items 0.05s, timeline 0.12s
-- ParticleField: auto-reduce to 15 particles on mobile
-- MarqueeRow: already has mobile horizontal scroll fallback
-- Images: all use `loading="lazy"`
-- `prefers-reduced-motion`: skip all animations when enabled
-- Hover states: cards lift -4px, border warms to red/40, images scale 1.05
+| Element | Animation | Duration | Delay | Easing |
+|---|---|---|---|---|
+| Video opacity | 0 to 0.15 | 1.2s | 0s | [0.22,1,0.36,1] |
+| NeuralBackground | Lazy load + fade | 0.5s | 0.3s | ease |
+| Eyebrow | fade-up | 0.5s | 0.3s | [0.22,1,0.36,1] |
+| Title lines | fade-up | 0.8s | 0.4s | [0.22,1,0.36,1] |
+| Subtitle | fade-in | 0.6s | 0.6s | [0.22,1,0.36,1] |
+| Scroll indicator | fade-in + bounce | 2s loop | 1.5s | easeInOut |
+| Founder panel L | slide from left | 0.8s | 0s | [0.22,1,0.36,1] |
+| Founder panel R | slide from right | 0.8s | 0.2s | [0.22,1,0.36,1] |
+| Divider line | height 0 to 100% | 1s | 0.6s | [0.22,1,0.36,1] |
+| Panel hover | lift + glow | 0.3s | -- | ease |
+
+All animations respect `prefers-reduced-motion`.
 
 ---
 
-### Technical Summary
+### Performance Considerations
 
-**New files (4):**
-- `src/components/portfolio/HyperLiquidGlass.tsx`
-- `src/components/portfolio/ParticleField.tsx`
-- `src/components/portfolio/VideoPlaceholder.tsx`
-- `src/components/portfolio/ThoughtLeadershipCard.tsx`
-
-**Modified files (5):**
-- `src/pages/AashrithPortfolio.tsx` -- full rebuild (5 sections)
-- `src/pages/EvaPortfolio.tsx` -- full rebuild (6 sections)
-- `src/data/foundersData.ts` -- add metrics, new experience entries
-- `src/components/portfolio/TimelineRail.tsx` -- add metrics support
-- `src/components/portfolio/index.ts` -- export new components
-
-**Unchanged files (reused as-is):**
-- MarqueeRow, MagneticCTA, GlassCard, SectionShell, EyebrowLabel
-- LightboxModal, BackgroundScene, AnimatedCapabilities
-- BlueprintGrid, NoiseTexture
-- App.tsx routes (paths unchanged)
-
+- Video: `preload="metadata"`, `playsInline`, `muted`, `loop`, mobile opacity bumped slightly
+- NeuralBackground: lazy-loaded via `React.lazy`, desktop only, delayed 300ms, visibility-gated via IntersectionObserver (already built in)
+- Self-healing FPS monitor in NeuralBackground auto-degrades if frame times exceed 20ms
+- Sequentian images: `loading="lazy"`, `decoding="async"`
+- Mobile: no NeuralBackground, no grid overlay, no secondary accent glows, founder panels stack vertically, no 3D tilt
+- All viewport triggers use `once: true` to prevent re-animation
