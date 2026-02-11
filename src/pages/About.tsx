@@ -3,6 +3,7 @@ import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { SEOHead } from '@/components/SEOHead';
 import { YinYangHero } from '@/components/about/YinYangHero';
+import { FounderCircles } from '@/components/about/FounderCircles';
 import { PhilosophySection } from '@/components/about/PhilosophySection';
 import { LazySection, SectionSkeleton } from '@/components/LazySection';
 
@@ -33,10 +34,13 @@ const About = memo(() => {
       />
       <Navigation />
       
-      {/* SECTION 1 — Dynamic Yin Yang Founder Introduction */}
+      {/* SECTION 1 — Cinematic Video Hero */}
       <YinYangHero />
 
-      {/* SECTION 2 — Philosophy (Elevated from existing "Why Alchemy Labs") */}
+      {/* SECTION 2 — Founder Panels */}
+      <FounderCircles />
+
+      {/* SECTION 3 — Philosophy (Elevated from existing "Why Alchemy Labs") */}
       <PhilosophySection />
 
       {/* SECTION 3 — How We Work (Lazy loaded) */}

@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { memo } from 'react';
 import { ScrollReveal } from '@/components/ScrollReveal';
 import { Scan, Layers, Zap } from 'lucide-react';
+import { SequentianBackground } from '@/components/SequentianBackground';
 
 const processSteps = [
   {
@@ -30,6 +31,9 @@ const processSteps = [
 export const AboutProcessSection = memo(() => {
   return (
     <section className="relative py-20 sm:py-28 md:py-40 border-y border-porcelain/5 overflow-hidden">
+      {/* Sequentian Glass Lines background */}
+      <SequentianBackground variant={1} opacity={0.3} parallax blur={0} glow={false} />
+
       {/* Background */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-b from-background via-graphite-layer/30 to-background" />
