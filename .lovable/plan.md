@@ -1,118 +1,128 @@
 
-## About Page -- Cinematic Overhaul
+## Aashrith Portfolio -- Complete Cinematic Overhaul
 
-A complete reimagining of the About page into a seamless, immersive cinematic experience with a full-viewport video hero featuring liquid glass effects, redesigned founder sections, and elevated below-fold sections with strategic Sequentian backgrounds.
-
----
-
-### Hero Overhaul: `YinYangHero.tsx`
-
-**Video Background with Cinematic Treatment**
-
-Replace the current Sequentian + ParticleBackground hero with the uploaded red-cloak video as a full-bleed background. The video gets a multi-layer cinematic treatment inspired by the Homepage hero pattern:
-
-- Layer 1: Deep atmospheric base gradient (black)
-- Layer 2: Video element (`object-cover`, muted, looped, playsInline, `preload="metadata"`) at ~15% opacity
-- Layer 3: Premium vignette (radial gradient, dark edges fading to center transparency)
-- Layer 4: Top/bottom fade gradients for seamless section transitions
-- Layer 5: Red energy glow (radial gradient, `rgba(220,38,38,0.08)`)
-- Layer 6: Secondary accent glows on desktop (two offset red radials)
-- Layer 7: Subtle technical grid (desktop only, 0.012 opacity)
-- Layer 8: Lazy-loaded NeuralBackground (R3F particles, desktop only, delayed 300ms) at 35% opacity -- this provides the "different particles" from the homepage since it uses the same system but at different opacity and without the homepage video underneath
-- Layer 9: BlueprintGrid (0.02 opacity) + NoiseTexture (0.03 opacity) for grain
-
-Video fades in smoothly over 1.2s with `[0.22, 1, 0.36, 1]` easing. On mobile, video opacity is slightly higher (18%) and NeuralBackground is skipped.
-
-**Title Typography -- Repositioned**
-
-Move the editorial title to center-bottom of viewport for a more cinematic, film-poster feel:
-- Eyebrow stays ("Meet Our Founders" with hand-drawn SVG underline)
-- Main title stays ("Architects of meaning, systems, and inevitability")
-- Subtitle stays
-- All positioned in a `flex-col justify-end pb-32` layout so content anchors to the lower third
-
-The FounderCircles component is **removed from the hero** and becomes its own dedicated section below.
+A multi-faceted upgrade covering the hero, navigation, timeline, thought leadership, founder panels, footer, and strategic Sequentian backgrounds throughout.
 
 ---
 
-### Founder Section: New Standalone `FounderCircles` Section
+### 1. Founder Panel Visual Differentiation (`FounderCircles.tsx`)
 
-Instead of circles crammed inside the hero, the founders get their own full-width cinematic section immediately below the hero.
+Enhance the two About page founder panels with distinct visual treatments:
 
-**Layout**: Two side-by-side editorial panels on desktop (50/50 split with 1px red divider), stacked on mobile.
-
-**Each panel**:
-- Tall aspect ratio (~3:4 on desktop, auto on mobile)
-- Glass background: `backdrop-blur(24px)`, multi-layer gradient (Aashrith: dark/neutral tones, Eva: warm red/pink tint)
-- Border: `1px solid rgba(255,255,255,0.08)` warming to `rgba(220,38,38,0.4)` on hover
-- Content: Large uppercase name (font-black, tracking-wide), title in mono, specialty in body, "Discover Portfolio" glass-pill CTA at bottom
-- Hover: lift -6px translateY, inner red glow appears, border warms, 3D perspective tilt on desktop (existing spring physics reused)
-- Background per panel: subtle Sequentian image (variant 1 for Aashrith at 15% opacity, variant 4 for Eva at 12% opacity) for visual differentiation
-
-**Animated reveal on scroll**:
-- Left panel slides in from left, right panel from right
-- 0.2s stagger delay
-- Center divider: animated red line drawing from 0 to 100% height over 1s with 0.6s delay
-- `viewport={{ once: true, margin: '-100px' }}`
-
-**Remove**: FloatingDots component, rotating conic-gradient border rings (too busy with the new video hero above)
+- **Aashrith panel**: Cool-toned treatment -- `rgba(255,255,255,0.04)` base gradient, Sequentian 1 (Glass Lines) at 0.18 opacity, border warms to white/red on hover. Subtle blue-steel undertone in the glass: `rgba(180,200,220,0.02)`.
+- **Eva panel**: Warm-toned treatment -- `rgba(251,113,133,0.06)` base gradient, Sequentian 4 (Crimson Cloud) at 0.15 opacity, border warms to pink/red on hover. Subtle rose undertone: `rgba(251,113,133,0.03)`.
+- Each panel gets a unique radial glow color on hover (Aashrith: white-red, Eva: pink-rose).
+- Add a subtle monogram watermark behind each name (large, 20% opacity, offset) for editorial depth.
 
 ---
 
-### Section-Level Background Strategy
+### 2. Hero Section -- Remove Video Placeholder, Center Layout (`AashrithPortfolio.tsx`)
 
-Each section gets a distinct atmospheric treatment for seamless visual flow:
-
-1. **Hero** (video + NeuralBackground + grid + grain)
-2. **Founders** (dark background, per-panel Sequentian subtlety, divider accent)
-3. **Philosophy** -- stays cream/editorial (already excellent), add Sequentian 2 at very low opacity (0.15) behind the right column for warmth
-4. **Process** -- add Sequentian 1 (Glass Lines) at 0.3 opacity for the "blueprint/technical" feel that matches the process metaphor
-5. **Principles** -- keep Sequentian 5 (Satin Wave) as-is (already well-placed)
-6. **WhoWeServe** -- keep Sequentian 4 (Crimson Cloud) as-is
-7. **FoundersCTA** -- keep Sequentian 2 as-is, add subtle ParticleField (15 particles, low opacity) for a callback to the hero
+- **Remove** the `HyperLiquidGlass` + `VideoPlaceholder` block entirely from the hero.
+- Switch to a **full-width centered layout** (remove the `flex-row` split).
+- Name "AASHRITH GADE" centered, full-width, maximum impact.
+- `AnimatedCapabilities` centered below with `lg:justify-center`.
+- Subtitle and meta info centered.
+- Add cinematic layer stack: `SequentianBackground variant={1}` at 0.2 opacity behind the hero for atmospheric depth.
+- Add a secondary red radial glow at center-bottom.
 
 ---
 
-### Files Changed
+### 3. Thought Leadership -- Minimized, End-of-Page, Real Links (`AashrithPortfolio.tsx` + `portfolioProjects.ts`)
 
-**Modified files (4):**
+Replace the current ThoughtLeadership section with a **minimal liquid-glass panel row** positioned just before the footer:
 
-- `src/components/about/YinYangHero.tsx` -- Complete rewrite: video background with NeuralBackground particles, cinematic overlay layers, bottom-anchored typography, FounderCircles removed from this component
-- `src/components/about/FounderCircles.tsx` -- Complete rewrite: standalone section with two side-by-side editorial glass panels, animated slide-in reveal, center divider, remove FloatingDots and circle layout
-- `src/components/about/ProcessSection.tsx` -- Add SequentianBackground variant 1 at 0.3 opacity
-- `src/pages/About.tsx` -- Move FounderCircles to its own section between hero and philosophy (wrap in its own section element)
+**New data** (replaces `thoughtLeadershipEntries`):
+| Title | Platform | URL |
+|---|---|---|
+| CS30: Marketing Strategy | LinkedIn | https://www.linkedin.com/posts/aashrithgade_cs30-... |
+| Alchemy Casefiles Vol. 1 | LinkedIn | https://www.linkedin.com/posts/aashrithgade_alchemy-casefiles... |
+| CS35: AI Strategic Analysis | LinkedIn | https://www.linkedin.com/posts/aashrithgade_cs35-ai... |
+| Jonathan Anderson x Dior | LinkedIn | https://www.linkedin.com/posts/aashrithgade_jonathan-anderson-dior... |
+| AshArchives Post | Instagram | https://www.instagram.com/p/DPWNjBBDF02/... |
 
-**New files (0)** -- no new files needed, reuses existing NeuralBackground, SequentianBackground, BlueprintGrid, NoiseTexture, ScrollReveal
-
-**Copied files (1):**
-- Upload the user video as `src/assets/about-hero-video.mp4`
-
----
-
-### Animation Spec
-
-| Element | Animation | Duration | Delay | Easing |
-|---|---|---|---|---|
-| Video opacity | 0 to 0.15 | 1.2s | 0s | [0.22,1,0.36,1] |
-| NeuralBackground | Lazy load + fade | 0.5s | 0.3s | ease |
-| Eyebrow | fade-up | 0.5s | 0.3s | [0.22,1,0.36,1] |
-| Title lines | fade-up | 0.8s | 0.4s | [0.22,1,0.36,1] |
-| Subtitle | fade-in | 0.6s | 0.6s | [0.22,1,0.36,1] |
-| Scroll indicator | fade-in + bounce | 2s loop | 1.5s | easeInOut |
-| Founder panel L | slide from left | 0.8s | 0s | [0.22,1,0.36,1] |
-| Founder panel R | slide from right | 0.8s | 0.2s | [0.22,1,0.36,1] |
-| Divider line | height 0 to 100% | 1s | 0.6s | [0.22,1,0.36,1] |
-| Panel hover | lift + glow | 0.3s | -- | ease |
-
-All animations respect `prefers-reduced-motion`.
+**Design**: 
+- Section title: "INSIGHTS" eyebrow, "Recent thinking." as headline -- compact, one line.
+- Cards: Horizontal scrollable row on mobile, 5-column grid on desktop.
+- Each card: Small liquid-glass panel (~160px tall), platform icon (LinkedIn/Instagram), truncated title, no excerpt. Entire card is an `<a>` linking to the post (`target="_blank"`).
+- Hover: lift -3px, border warms to red/30, subtle glow.
+- No engagement metrics -- purely minimal.
 
 ---
 
-### Performance Considerations
+### 4. Career Timeline -- Rename, Move Jobs, Elevate Design
 
-- Video: `preload="metadata"`, `playsInline`, `muted`, `loop`, mobile opacity bumped slightly
-- NeuralBackground: lazy-loaded via `React.lazy`, desktop only, delayed 300ms, visibility-gated via IntersectionObserver (already built in)
-- Self-healing FPS monitor in NeuralBackground auto-degrades if frame times exceed 20ms
-- Sequentian images: `loading="lazy"`, `decoding="async"`
-- Mobile: no NeuralBackground, no grid overlay, no secondary accent glows, founder panels stack vertically, no 3D tilt
-- All viewport triggers use `once: true` to prevent re-animation
+**Rename**: "CAREER JOURNEY / From execution to architecture" becomes **"CAREER TIMELINE / Building with Intent"**.
+
+**Move 2 jobs to Eva's portfolio**:
+- Remove "Videographer -- Fashion Influencer Projects (@hitakkshi)" and "Marketing, PR & Sales (Sparsh Concept)" from `aashrithData.experience` in `foundersData.ts`.
+- Add these two entries to `evaData.experience` in `foundersData.ts` (before Dentsu entry).
+
+**Elevate timeline design** (`AashrithPortfolio.tsx` CareerTimeline section):
+- Replace the basic `TimelineRail` rendering with **liquid-glass gradient panels** per job.
+- Each timeline entry becomes a glass card with:
+  - Left accent bar (2px, gradient red-to-transparent).
+  - Company name in `font-body font-bold`, role below in `font-mono text-xs`.
+  - Achievements as subtle bullet list.
+  - Metrics pills at bottom (existing style).
+  - Scroll-triggered reveal: `opacity 0 -> 1`, `y: 30 -> 0`, staggered by 0.1s per card.
+- Background: `SequentianBackground variant={2}` at 0.15 opacity behind the section.
+
+---
+
+### 5. Philosophy/Quote Section -- More Subtle
+
+- Reduce quote font size from `text-2xl/3xl/4xl` to `text-xl/2xl/3xl`.
+- Reduce quote opacity slightly (porcelain/80 instead of full porcelain).
+- Remove `ParticleField` from this section (too heavy for a closing quote).
+- Add `SequentianBackground variant={4}` at 0.2 opacity for dramatic warmth.
+- Increase spacing between quote and CTA buttons (`mt-16` instead of `mt-12`).
+
+---
+
+### 6. Dynamic Footer -- Reuse Main Footer
+
+- Import and render the main site `Footer` component at the bottom of the Aashrith portfolio page.
+- This gives the portfolio the same premium footer with background image, newsletter, links, and social icons -- matching the main site.
+
+---
+
+### 7. Sequentian Background Strategy Across Portfolio
+
+Strategic placement of Sequentian backgrounds for visual rhythm:
+
+| Section | Variant | Opacity | Effect |
+|---|---|---|---|
+| Hero | Seq 1 (Glass Lines) | 0.20 | Technical depth behind name |
+| Ventures | Seq 3 (Silk Fold) | 0.15 | Soft texture behind marquees |
+| Career Timeline | Seq 2 (Soft Nebula) | 0.15 | Atmospheric behind glass cards |
+| Insights (new) | Seq 5 (Satin Wave) | 0.12 | Elegant behind minimal cards |
+| Philosophy/CTA | Seq 4 (Crimson Cloud) | 0.20 | Dramatic warmth for closing |
+
+Add gradient fade dividers (h-24, transparent-to-dark-to-transparent) between each major section for seamless flow.
+
+---
+
+### Technical Details
+
+**Files modified (4):**
+
+- `src/pages/AashrithPortfolio.tsx` -- Hero rewrite (remove video, center layout, add Sequentian), new minimal Insights section, elevated CareerTimeline with glass cards, subtler PhilosophyCTA, add Footer import, add Sequentian backgrounds per section, add section dividers
+- `src/data/foundersData.ts` -- Move 2 experience entries from aashrithData to evaData, reorder
+- `src/data/portfolioProjects.ts` -- Replace `thoughtLeadershipEntries` with 5 real-link entries (add `url` and `platform` fields to the type)
+- `src/components/about/FounderCircles.tsx` -- Add distinct color tints, unique radial glows, monogram watermarks per panel
+- `src/components/portfolio/ThoughtLeadershipCard.tsx` -- Add `url` prop support, make card an `<a>` tag when url provided
+
+**Animation specs:**
+| Element | Animation | Duration | Delay |
+|---|---|---|---|
+| Timeline glass cards | fade-up stagger | 0.6s | i * 0.1s |
+| Insight cards | fade-up stagger | 0.5s | i * 0.06s |
+| Section dividers | opacity fade | 0.3s | -- |
+| Sequentian Ken Burns | scale 1.0 to 1.12 | scroll-linked | -- |
+
+**Performance:**
+- All Sequentian images: `loading="lazy"`, `decoding="async"`
+- All viewport triggers: `once: true`
+- Footer: reuses existing component (no duplication)
+- Mobile: Sequentian opacities reduced by 15%, no 3D tilt on timeline cards
