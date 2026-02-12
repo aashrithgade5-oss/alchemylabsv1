@@ -173,35 +173,6 @@ export const aashrithData: FounderData = {
   ],
   experience: [
     {
-      company: "@hitakkshi Collaboration",
-      role: "Videographer — Fashion Influencer Projects",
-      dates: "Feb 2025",
-      achievements: [
-        "Branded content creation for fashion and retail",
-        "Shot and edited Instagram Reels for Inorbit Mall, Bonkers Corner, Azorte, Pepe Jeans, AND",
-        "Managed end-to-end production from concept to delivery"
-      ],
-      metrics: [
-        { label: 'Brands', value: '5+' },
-        { label: 'Reels', value: '20+' },
-        { label: 'Engagement', value: '15K+' }
-      ]
-    },
-    {
-      company: "Sparsh Concept",
-      role: "Marketing, PR & Sales",
-      dates: "2024 - 2025",
-      achievements: [
-        "Led marketing and PR initiatives for events and exhibitions",
-        "Managed sales pipeline and client outreach",
-        "Coordinated press coverage and media partnerships"
-      ],
-      metrics: [
-        { label: 'Events', value: '10+' },
-        { label: 'Press Hits', value: '15+' }
-      ]
-    },
-    {
       company: "Alchemy Labs",
       role: "Founder & CEO",
       dates: "2024 - Present",
@@ -350,6 +321,35 @@ export const evaData: FounderData = {
       metrics: [
         { label: 'Partnerships', value: '10+' },
         { label: 'Client Retention', value: '95%' }
+      ]
+    },
+    {
+      company: "@hitakkshi Collaboration",
+      role: "Videographer — Fashion Influencer Projects",
+      dates: "Feb 2025",
+      achievements: [
+        "Branded content creation for fashion and retail",
+        "Shot and edited Instagram Reels for Inorbit Mall, Bonkers Corner, Azorte, Pepe Jeans, AND",
+        "Managed end-to-end production from concept to delivery"
+      ],
+      metrics: [
+        { label: 'Brands', value: '5+' },
+        { label: 'Reels', value: '20+' },
+        { label: 'Engagement', value: '15K+' }
+      ]
+    },
+    {
+      company: "Sparsh Concept",
+      role: "Marketing, PR & Sales",
+      dates: "2024 - 2025",
+      achievements: [
+        "Led marketing and PR initiatives for events and exhibitions",
+        "Managed sales pipeline and client outreach",
+        "Coordinated press coverage and media partnerships"
+      ],
+      metrics: [
+        { label: 'Events', value: '10+' },
+        { label: 'Press Hits', value: '15+' }
       ]
     },
     {
