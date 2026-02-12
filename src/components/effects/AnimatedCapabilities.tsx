@@ -9,7 +9,7 @@ const capabilities = [
   'Narrative Engineering',
 ];
 
-export const AnimatedCapabilities = memo(() => {
+export const AnimatedCapabilities = memo(({ isDark = true }: { isDark?: boolean }) => {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
@@ -28,7 +28,7 @@ export const AnimatedCapabilities = memo(() => {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: -40, opacity: 0 }}
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          className="font-body text-xl sm:text-2xl lg:text-3xl text-porcelain/60 tracking-wide"
+          className={`font-body text-xl sm:text-2xl lg:text-3xl tracking-wide ${isDark ? 'text-porcelain/60' : 'text-neutral-500'}`}
         >
           <span className="relative inline-block">
             {capabilities[index]}
