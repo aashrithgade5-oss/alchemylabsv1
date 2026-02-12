@@ -131,7 +131,7 @@ export const aashrithData: FounderData = {
   ventures: [
     {
       name: "Brand Alchemy",
-      type: "Thought Leadership IP",
+      type: "Creative Community for Branding & Marketing Aspirants",
       description: "A research-driven thought leadership platform exploring how brands are built through culture, narrative, systems, and design.",
       outputs: [
         "Strategic branding content",
@@ -141,8 +141,8 @@ export const aashrithData: FounderData = {
     },
     {
       name: "Ashzz.ai",
-      type: "AI-Native Community Platform",
-      communitySize: "3.8K+ members",
+      type: "Creative AI-Native Community for AI Media Gen & Productivity",
+      communitySize: "3.8K+ on Discord · 1K+ on Instagram",
       audience: "Gen AI experts, builders, designers, marketers, and enthusiasts",
       description: "An active AI-native ecosystem focused on experimentation, applied learning, and practical AI workflows.",
       outputs: [
