@@ -50,8 +50,8 @@ const connectFooterLinks = [
 
 // Section divider
 const SectionDivider = ({ isDark }: { isDark: boolean }) => (
-  <div className="h-24 w-full relative">
-    <div className={`absolute inset-0 bg-gradient-to-b from-transparent ${t(isDark, 'via-alchemy-black/50', 'via-neutral-200/50')} to-transparent`} />
+  <div className="h-16 w-full relative">
+    <div className={`absolute inset-0 bg-gradient-to-b from-transparent ${t(isDark, 'via-alchemy-black/30', 'via-neutral-100')} to-transparent`} />
   </div>
 );
 
@@ -260,18 +260,21 @@ const HeroSection = memo(({ isDark }: { isDark: boolean }) => {
         className="absolute inset-0 w-full h-full object-cover"
         style={{ scale: videoScale }}
         initial={{ opacity: 0 }}
-        animate={{ opacity: isDark ? 0.25 : 0.15 }}
+        animate={{ opacity: isDark ? 0.25 : 0.35 }}
         transition={{ duration: 1.2, ease: EASE }}
       />
 
       {/* Layer 3: Vignette */}
-      <div className="absolute inset-0" style={{ background: t(isDark, 'radial-gradient(ellipse 70% 60% at 50% 50%, transparent 30%, rgba(10,10,10,0.7) 100%)', 'radial-gradient(ellipse 70% 60% at 50% 50%, transparent 30%, rgba(250,250,249,0.6) 100%)') }} />
+      {/* Light mode dark overlay for video contrast */}
+      {!isDark && <div className="absolute inset-0" style={{ background: 'rgba(0,0,0,0.05)' }} />}
+
+      <div className="absolute inset-0" style={{ background: t(isDark, 'radial-gradient(ellipse 70% 60% at 50% 50%, transparent 30%, rgba(10,10,10,0.7) 100%)', 'radial-gradient(ellipse 70% 60% at 50% 50%, transparent 30%, rgba(250,250,249,0.85) 100%)') }} />
 
       {/* Layer 4: Red energy glow */}
       <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 50% 50% at 50% 70%, rgba(220,38,38,0.06) 0%, transparent 70%)' }} />
 
       {/* Layer 5: Sequentian - subtle */}
-      <SequentianBackground variant={1} opacity={0.12} blur={0} glow={false} />
+      <SequentianBackground variant={1} opacity={isDark ? 0.12 : 0.07} blur={0} glow={false} />
 
       {/* Layer 6: Grid + Grain */}
       <BlueprintGrid opacity={0.02} />
@@ -414,7 +417,7 @@ const CareerTimeline = memo(({ isDark }: { isDark: boolean }) => {
 
   return (
     <SectionShell id="journey" padding="xl" className={`relative ${t(isDark, '', 'bg-[#fafaf9]')}`}>
-      <SequentianBackground variant={5} opacity={0.10} glow={false} />
+      <SequentianBackground variant={5} opacity={isDark ? 0.10 : 0.06} glow={false} />
       <div className="relative z-10">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: 0.6, ease: EASE }} className="mb-16">
           <EyebrowLabel className="mb-4">CAREER TIMELINE</EyebrowLabel>
@@ -503,7 +506,7 @@ const creativePursuits = [
 
 const BeyondTheWork = memo(({ isDark }: { isDark: boolean }) => (
   <SectionShell padding="xl" className={`relative ${t(isDark, '', 'bg-[#fafaf9]')}`}>
-    <SequentianBackground variant={2} opacity={0.12} glow={false} />
+    <SequentianBackground variant={2} opacity={isDark ? 0.12 : 0.07} glow={false} />
     <div className="relative z-10 max-w-4xl mx-auto">
       <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: 0.6, ease: EASE }} className="mb-12">
         <EyebrowLabel className="mb-4">BEYOND THE WORK</EyebrowLabel>
@@ -647,7 +650,7 @@ InsightsSection.displayName = 'InsightsSection';
 // ============================================
 const PhilosophyCTA = memo(({ isDark }: { isDark: boolean }) => (
   <SectionShell id="connect" padding="xl" className={`relative ${t(isDark, '', 'bg-[#fafaf9]')} text-center`}>
-    <SequentianBackground variant={4} opacity={0.18} glow={false} />
+    <SequentianBackground variant={4} opacity={isDark ? 0.18 : 0.10} glow={false} />
 
     <div className="relative z-10 max-w-3xl mx-auto">
       <motion.blockquote initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: 0.8, ease: EASE }}>

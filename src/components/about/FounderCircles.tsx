@@ -15,7 +15,7 @@ const founders = [
     fullName: 'Aashrith Gade',
     monogram: 'AG',
     title: 'Founder · CEO · Director',
-    specialty: 'Brand Architecture · Creative Direction · AI-Native Strategy',
+    specialty: 'Brand Architecture · Luxury Brand Strategy · AI-Native Luxury Brand Strategy · Creative Direction',
     slug: '/aashrith',
     bg: sequentian1,
     bgOpacity: 0.18,
@@ -29,14 +29,15 @@ const founders = [
     fullName: 'Eva Doshi',
     monogram: 'ED',
     title: 'Co-Founder · Client Relations · Outreach',
-    specialty: 'Luxury Brand Strategy · Creative Direction · Growth & Partnerships',
+    specialty: 'Growth & Partnerships · Luxury Branding · AI-Native Marketing',
     slug: '/eva',
     bg: sequentian4,
-    bgOpacity: 0.15,
-    gradient: 'linear-gradient(135deg, rgba(251,113,133,0.06) 0%, rgba(251,113,133,0.03) 50%, rgba(255,255,255,0.02) 100%)',
-    hoverGlow: 'radial-gradient(ellipse at 50% 40%, rgba(251,113,133,0.12) 0%, transparent 70%)',
-    hoverBorder: 'rgba(251,113,133,0.5)',
-    monogramColor: 'rgba(251,113,133,0.05)',
+    bgOpacity: 0.20,
+    gradient: 'linear-gradient(135deg, rgba(236,72,153,0.08) 0%, rgba(251,113,133,0.05) 50%, rgba(255,255,255,0.02) 100%)',
+    hoverGlow: 'radial-gradient(ellipse at 50% 40%, rgba(236,72,153,0.18) 0%, transparent 70%)',
+    hoverBorder: 'rgba(236,72,153,0.5)',
+    monogramColor: 'rgba(236,72,153,0.08)',
+    isPink: true,
   },
 ];
 
@@ -145,9 +146,11 @@ const FounderPanel = memo(({ founder, index }: { founder: typeof founders[0]; in
             to={founder.slug}
             className="inline-flex items-center gap-2.5 px-7 py-3 rounded-full text-xs sm:text-sm font-body font-medium transition-all duration-300 group/btn no-glow"
             style={{
-              background: 'rgba(220,38,38,0.15)',
-              border: '1px solid rgba(220,38,38,0.4)',
-              boxShadow: isHovered ? '0 0 30px rgba(220,38,38,0.2)' : '0 0 20px rgba(220,38,38,0.1)',
+              background: (founder as any).isPink ? 'rgba(236,72,153,0.15)' : 'rgba(220,38,38,0.15)',
+              border: `1px solid ${(founder as any).isPink ? 'rgba(236,72,153,0.4)' : 'rgba(220,38,38,0.4)'}`,
+              boxShadow: isHovered
+                ? `0 0 30px ${(founder as any).isPink ? 'rgba(236,72,153,0.2)' : 'rgba(220,38,38,0.2)'}`
+                : `0 0 20px ${(founder as any).isPink ? 'rgba(236,72,153,0.1)' : 'rgba(220,38,38,0.1)'}`,
             }}
           >
             <span className="text-porcelain group-hover/btn:text-alchemy-red transition-colors">
