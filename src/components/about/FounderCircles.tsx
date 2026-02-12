@@ -13,22 +13,30 @@ const founders = [
   {
     name: 'Aashrith',
     fullName: 'Aashrith Gade',
+    monogram: 'AG',
     title: 'Founder · CEO · Director',
     specialty: 'Brand Architecture · Creative Direction · AI-Native Strategy',
     slug: '/aashrith',
     bg: sequentian1,
-    bgOpacity: 0.15,
-    gradient: 'linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 50%, rgba(220,38,38,0.03) 100%)',
+    bgOpacity: 0.18,
+    gradient: 'linear-gradient(135deg, rgba(180,200,220,0.02) 0%, rgba(255,255,255,0.04) 50%, rgba(220,38,38,0.03) 100%)',
+    hoverGlow: 'radial-gradient(ellipse at 50% 40%, rgba(220,38,38,0.12) 0%, transparent 70%)',
+    hoverBorder: 'rgba(220,38,38,0.4)',
+    monogramColor: 'rgba(255,255,255,0.06)',
   },
   {
     name: 'Eva',
     fullName: 'Eva Doshi',
+    monogram: 'ED',
     title: 'Co-Founder · Client Relations · Outreach',
     specialty: 'Luxury Brand Strategy · Creative Direction · Growth & Partnerships',
     slug: '/eva',
     bg: sequentian4,
-    bgOpacity: 0.12,
-    gradient: 'linear-gradient(135deg, rgba(220,38,38,0.06) 0%, rgba(185,28,28,0.03) 50%, rgba(255,255,255,0.02) 100%)',
+    bgOpacity: 0.15,
+    gradient: 'linear-gradient(135deg, rgba(251,113,133,0.06) 0%, rgba(251,113,133,0.03) 50%, rgba(255,255,255,0.02) 100%)',
+    hoverGlow: 'radial-gradient(ellipse at 50% 40%, rgba(251,113,133,0.12) 0%, transparent 70%)',
+    hoverBorder: 'rgba(251,113,133,0.5)',
+    monogramColor: 'rgba(251,113,133,0.05)',
   },
 ];
 
@@ -95,37 +103,44 @@ const FounderPanel = memo(({ founder, index }: { founder: typeof founders[0]; in
             background: founder.gradient,
             backdropFilter: 'blur(24px) saturate(180%)',
             border: isHovered
-              ? '1px solid rgba(220,38,38,0.4)'
+              ? `1px solid ${founder.hoverBorder}`
               : '1px solid rgba(255,255,255,0.08)',
           }}
         />
 
-        {/* Inner red glow on hover */}
+        {/* Monogram watermark */}
+        <div
+          className="absolute inset-0 flex items-center justify-center pointer-events-none select-none"
+          style={{ opacity: isHovered ? 0.08 : 0.05 }}
+        >
+          <span
+            className="font-body font-black text-[12rem] sm:text-[16rem] lg:text-[20rem] uppercase leading-none tracking-[-0.05em] transition-opacity duration-500"
+            style={{ color: founder.monogramColor }}
+          >
+            {founder.monogram}
+          </span>
+        </div>
+
+        {/* Inner glow on hover */}
         <div
           className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-          style={{
-            background: 'radial-gradient(ellipse at 50% 40%, rgba(220,38,38,0.1) 0%, transparent 70%)',
-          }}
+          style={{ background: founder.hoverGlow }}
         />
 
         {/* Content */}
         <div className="relative z-10 flex flex-col items-center justify-center text-center h-full px-6 sm:px-10 py-12 sm:py-16 lg:py-0">
-          {/* Large uppercase name */}
           <h3 className="font-body text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black uppercase tracking-[0.1em] text-porcelain mb-3">
             {founder.fullName}
           </h3>
 
-          {/* Title */}
           <p className="font-mono text-[10px] sm:text-xs text-alchemy-red/80 tracking-[0.15em] uppercase mb-3">
             {founder.title}
           </p>
 
-          {/* Specialty */}
           <p className="font-body text-xs sm:text-sm text-porcelain/40 mb-8 max-w-xs leading-relaxed">
             {founder.specialty}
           </p>
 
-          {/* Discover Portfolio CTA */}
           <Link
             to={founder.slug}
             className="inline-flex items-center gap-2.5 px-7 py-3 rounded-full text-xs sm:text-sm font-body font-medium transition-all duration-300 group/btn no-glow"
@@ -152,7 +167,6 @@ export const FounderCircles = memo(() => {
 
   return (
     <section className="relative py-16 sm:py-24 lg:py-32 overflow-hidden">
-      {/* Dark background */}
       <div className="absolute inset-0 bg-background" />
       <div
         className="absolute inset-0 pointer-events-none"
@@ -163,10 +177,8 @@ export const FounderCircles = memo(() => {
 
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6">
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-0 items-stretch">
-          {/* Left panel */}
           <FounderPanel founder={founders[0]} index={0} />
 
-          {/* Center divider (desktop only) */}
           {!isMobile && (
             <div className="relative flex items-center justify-center w-px mx-4">
               <motion.div
@@ -179,7 +191,6 @@ export const FounderCircles = memo(() => {
             </div>
           )}
 
-          {/* Right panel */}
           <FounderPanel founder={founders[1]} index={1} />
         </div>
       </div>

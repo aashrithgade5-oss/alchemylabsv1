@@ -1,6 +1,19 @@
 // Project/Work gallery data for Aashrith portfolio
 import { LightboxItem } from '@/components/portfolio/LightboxModal';
-import { ThoughtLeadershipEntry } from '@/components/portfolio/ThoughtLeadershipCard';
+
+export interface ThoughtLeadershipEntry {
+  id: string;
+  type: 'linkedin' | 'case-study' | 'instagram';
+  title: string;
+  excerpt?: string;
+  image?: string;
+  url?: string;
+  engagement?: {
+    views?: string;
+    comments?: string;
+    shares?: string;
+  };
+}
 
 export const portfolioProjects: LightboxItem[] = [
   { id: 'brand-1', image: '/placeholder.svg', title: 'Luxury Brand Identity System', context: 'End-to-end brand architecture for a luxury fashion house', tags: ['Brand Architecture', 'Identity Design', 'Strategy'], category: 'BRAND ALCHEMY' },
@@ -17,62 +30,36 @@ export const portfolioProjects: LightboxItem[] = [
   { id: 'content-4', image: '/placeholder.svg', title: 'Luxury Brand Principles', context: 'Visual essay on luxury brand building principles', tags: ['Luxury', 'Principles', 'Design'], category: 'LINKEDIN' },
 ];
 
-// Thought leadership entries
+// Thought leadership entries -- real links to recent posts
 export const thoughtLeadershipEntries: ThoughtLeadershipEntry[] = [
   {
     id: 'tl-1',
     type: 'linkedin',
-    title: 'Why Brand Architecture Matters More Than Brand Identity',
-    excerpt: 'Most founders obsess over logos. The ones who win obsess over systems. Here\'s the framework I use to build brands that compound.',
-    engagement: { views: '12.4K', comments: '89', shares: '34' },
+    title: 'CS30: Marketing Strategy & Brand Strategy',
+    url: 'https://www.linkedin.com/posts/aashrithgade_cs30-marketingstrategy-brandstrategy-activity-7411284898843443200-sHM1?utm_source=share&utm_medium=member_desktop&rcm=ACoAAEFBi2MBcc1G5NPfy7QAFNMSihZeedgx3is',
   },
   {
     id: 'tl-2',
-    type: 'case-study',
-    title: 'From Zero to $9K in 6 Months: The Alchemy Labs Blueprint',
-    excerpt: 'How we built a founder-led studio that generates revenue through systems, not hustle. A transparent look at our first 6 months.',
-    engagement: { views: '8.2K', comments: '67' },
+    type: 'linkedin',
+    title: 'Alchemy Casefiles Vol. 1',
+    url: 'https://www.linkedin.com/posts/aashrithgade_alchemy-casefiles-vol-1-activity-7413112047418142720-GLGu?utm_source=share&utm_medium=member_desktop&rcm=ACoAAEFBi2MBcc1G5NPfy7QAFNMSihZeedgx3is',
   },
   {
     id: 'tl-3',
     type: 'linkedin',
-    title: 'AI Won\'t Replace Designers. But AI-Native Designers Will.',
-    excerpt: 'The shift from tool-based to system-based creative work. Why the next wave of branding is built on AI infrastructure.',
-    engagement: { views: '15.1K', comments: '142', shares: '56' },
+    title: 'CS35: AI & Strategic Analysis',
+    url: 'https://www.linkedin.com/posts/aashrithgade_cs35-ai-strategicanalysis-activity-7423934475736248320-xvtb?utm_source=share&utm_medium=member_desktop&rcm=ACoAAEFBi2MBcc1G5NPfy7QAFNMSihZeedgx3is',
   },
   {
     id: 'tl-4',
     type: 'linkedin',
-    title: 'The 3-Layer Brand System: Strategy → Narrative → Design',
-    excerpt: 'Every brand I build follows this exact framework. Strategy defines the why. Narrative defines the voice. Design makes it visible.',
-    engagement: { views: '9.7K', comments: '54', shares: '28' },
+    title: 'Jonathan Anderson × Dior — Jan 2026',
+    url: 'https://www.linkedin.com/posts/aashrithgade_jonathan-anderson-dior-jan-2026-activity-7417528823618883584-HMQN?utm_source=share&utm_medium=member_desktop&rcm=ACoAAEFBi2MBcc1G5NPfy7QAFNMSihZeedgx3is',
   },
   {
     id: 'tl-5',
-    type: 'case-study',
-    title: 'Building a 3.8K AI Community from Scratch',
-    excerpt: 'How Ashzz.ai grew a Discord community of GenAI builders through value-first content and genuine expertise.',
-    engagement: { views: '6.3K', comments: '43' },
+    type: 'instagram',
+    title: 'AshArchives — Latest Drop',
+    url: 'https://www.instagram.com/p/DPWNjBBDF02/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==',
   },
-  {
-    id: 'tl-6',
-    type: 'linkedin',
-    title: 'Luxury Brands Don\'t Compete on Features. They Compete on Taste.',
-    excerpt: 'What I learned studying luxury positioning across fashion, tech, and lifestyle brands. Restraint is the ultimate differentiator.',
-    engagement: { views: '11.8K', comments: '76', shares: '41' },
-  },
-];
-
-// Services/Offerings data
-export interface ServiceOffering {
-  id: string;
-  title: string;
-  promise: string;
-  deliverables: string[];
-}
-
-export const serviceOfferings: ServiceOffering[] = [
-  { id: 'ai-branding', title: 'AI Branding Studio', promise: 'AI-native brand systems with luxury-grade taste and speed', deliverables: ['Brand Strategy & Positioning', 'AI-Assisted Visual Identity', 'Campaign & Content Systems'] },
-  { id: 'branding-systems', title: 'Branding Systems', promise: 'Complete identity infrastructure that scales with your business', deliverables: ['Brand Architecture', 'Identity Guidelines', 'Narrative Framework'] },
-  { id: 'advisory', title: 'Founder Advisory', promise: 'Strategic counsel for founder-led brands and ventures', deliverables: ['Brand Strategy Sessions', 'Positioning Audits', 'Growth Roadmapping'] },
 ];
