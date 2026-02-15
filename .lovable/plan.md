@@ -1,74 +1,55 @@
 
 
-## Fix: Case Study Overlay Positioning & Final Polish
+## Fix: Case Study Overlay Using Radix Dialog
 
 ### Root Cause
 
-The `CaseStudyOverlay` is rendered inside `CreativeProjectsSection` (line 808), which lives inside a `div` with `height: 400vh` for the sticky-scroll effect. Even though the overlay uses `position: fixed`, the sticky parent and scroll container create a stacking context that breaks viewport-relative positioning. The overlay renders at the wrong scroll position instead of centered on screen.
+The current custom portal + `position: fixed` + `inset-0` + `flex items-center justify-center` approach is broken by the `.gpu-accelerated` class in `index.css` (line 714), which applies `transform: translateZ(0)` to the page wrapper in `App.tsx`. CSS transforms create new containing blocks that break `position: fixed` positioning. Additionally, the manual scroll lock via `body.style.overflow = 'hidden'` does not stop Lenis's RAF-based scroll loop, allowing users to scroll while the modal is "open."
 
-### Fix 1: Portal-Based Overlay Rendering
+### Solution: Rebuild Using Radix Dialog
 
-**File: `src/components/portfolio/CaseStudyOverlay.tsx`**
+Replace the custom portal implementation with Radix Dialog primitives (`@radix-ui/react-dialog`), which are already installed and proven to work in this project. Radix Dialog handles:
 
-Wrap the entire overlay output in `ReactDOM.createPortal(jsx, document.body)`. This ensures the overlay renders at the document root, completely outside the sticky-scroll container hierarchy. It will always be centered on the viewport regardless of scroll position.
+- **Portaling**: Renders content outside all stacking contexts via its own portal
+- **Scroll lock**: Natively prevents background scroll (works with any scroll system)
+- **Centering**: Uses `fixed left-[50%] top-[50%] translate-x/y-[-50%]` which is immune to parent transforms
+- **Focus trap + ESC key**: Built-in accessibility
+- **Animation**: Compatible with Tailwind `animate-in`/`animate-out` classes
 
-Additionally, dispatch `modal-open` and `modal-close` custom events so the Lenis smooth scroll system (in `SmoothScroll.tsx`, lines 100-103) pauses/resumes correctly. This provides proper scroll lock.
+### Changes
 
-### Fix 2: Move State to Page Level
+**File 1: `src/components/portfolio/CaseStudyOverlay.tsx`** -- Complete rewrite
 
-**File: `src/pages/AashrithPortfolio.tsx`**
+- Remove `createPortal`, manual scroll lock effects, and manual ESC key handler
+- Use `Dialog` (controlled via `open`/`onOpenChange`), `DialogPortal`, and `DialogOverlay` from Radix
+- Custom `DialogOverlay` with `backdrop-filter: blur(16px)` + dark overlay for depth-of-field
+- Custom `DialogContent` (not the default UI one) positioned at viewport center using `fixed left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]`
+- Content panel: `max-w-4xl w-[95vw] max-h-[85vh] overflow-y-auto rounded-2xl`
+- Keep all existing visual elements: per-case accent system, hero image with Ken Burns, challenge/approach/impact sections, tags
+- Prominent close button: `w-11 h-11` glass pill at top-right with `z-[100]`
+- Add `DialogTitle` (visually hidden for accessibility) to satisfy Radix requirements
+- Lenis integration: dispatch `modal-open`/`modal-close` events in `useEffect` for Lenis stop/start as a secondary safety measure
 
-Move `activeCaseStudy` state from `CreativeProjectsSection` up to the main `AashrithPortfolio` component. Render the `CaseStudyOverlay` at the page root level (after all sections, before the closing `</div>`), completely outside any section containers. Pass `setActiveCaseStudy` down to `CreativeProjectsSection` as a prop.
+**File 2: `src/pages/AashrithPortfolio.tsx`** -- Minor update
 
-This is the belt-and-suspenders approach: portal handles the DOM placement, and top-level rendering ensures no stacking context interference.
+- Update the `CaseStudyOverlay` usage: change `isOpen` prop to `open`, and `onClose` to `onOpenChange`
+- The state management stays at the page root level (already correct)
 
-### Fix 3: Overlay Visual Upgrades
+### Visual Appearance (Unchanged)
 
-**File: `src/components/portfolio/CaseStudyOverlay.tsx`**
+The overlay will look and feel identical to the current design:
+- Dark glass background: `rgba(12,12,12,0.97)` with `backdrop-filter: blur(40px)`
+- Per-case thematic accents (gold/silver/purple/orange)
+- Accent glow line at top
+- Ken Burns hero image entrance
+- Staggered content reveal (using CSS animation delays)
+- `z-50` (Radix default) -- high enough to sit above everything
 
-- Wider panel: Change `max-w-2xl` to `max-w-4xl` for a 16:9 cinematic proportion
-- Larger close button: `w-11 h-11` with `X` icon at `w-5 h-5`, prominent glass styling with hover glow
-- Hero image: Keep `aspect-[16/9]` with a subtle Ken Burns entrance (scale 1.08 to 1.0)
-- Accent glow line: Make it `h-[2px]` instead of `h-px` for more visibility
-- All content stagger delays stay
+### What This Fixes
 
-### Fix 4: Lenis Integration for Scroll Lock
-
-**File: `src/components/portfolio/CaseStudyOverlay.tsx`**
-
-In the `useEffect` for body overflow, also dispatch custom events:
-
-```text
-if (isOpen) {
-  document.body.style.overflow = 'hidden';
-  document.dispatchEvent(new Event('modal-open'));
-} else {
-  document.body.style.overflow = '';
-  document.dispatchEvent(new Event('modal-close'));
-}
-```
-
-This tells Lenis (SmoothScroll.tsx lines 100-103) to call `lenis.stop()` / `lenis.start()`, giving a proper scroll lock that works with the smooth scroll system.
-
----
-
-### Technical Summary
-
-**Modified files (2):**
-
-1. **`src/components/portfolio/CaseStudyOverlay.tsx`**:
-   - Import `createPortal` from `react-dom`
-   - Wrap entire `AnimatePresence` output in `createPortal(..., document.body)`
-   - Dispatch `modal-open` / `modal-close` events for Lenis scroll lock
-   - Widen modal to `max-w-4xl`
-   - Enlarge close button (`w-11 h-11`) with stronger glass styling
-   - Thicken accent glow line to `h-[2px]`
-
-2. **`src/pages/AashrithPortfolio.tsx`**:
-   - Move `activeCaseStudy` state from `CreativeProjectsSection` to `AashrithPortfolio`
-   - Pass `onDiscover` callback and `activeCaseStudy` as props to `CreativeProjectsSection`
-   - Render `CaseStudyOverlay` at the page root level (after `PortfolioFooter`, before closing `</div>`)
-   - `CreativeProjectsSection` no longer manages overlay state or renders the overlay
-
-**No new dependencies.** `createPortal` is built into `react-dom`.
+1. Modal will always appear centered on the viewport regardless of scroll position
+2. Background scroll will be locked (Radix handles this natively + Lenis stop as backup)
+3. ESC key and backdrop click close will work reliably
+4. No stacking context interference from `.gpu-accelerated` transforms
+5. Proper accessibility (focus trap, aria attributes)
 
