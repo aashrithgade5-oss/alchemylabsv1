@@ -1,7 +1,7 @@
 import { memo, useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Sun, Moon, Menu, X, Linkedin, Instagram, Youtube, ExternalLink, Film, Music, Sparkles, Users, Shield, Clock, Phone } from 'lucide-react';
+import { ArrowLeft, Sun, Moon, Menu, X, Linkedin, Instagram, Youtube, ExternalLink, Film, Music, Sparkles, Users, Shield, Clock, Phone, ArrowRight } from 'lucide-react';
 import { SEOHead } from '@/components/SEOHead';
 import { aashrithData } from '@/data/foundersData';
 import { thoughtLeadershipEntries } from '@/data/portfolioProjects';
@@ -16,6 +16,7 @@ import {
 import { PortfolioFooter } from '@/components/portfolio/PortfolioFooter';
 import { BlueprintGrid, NoiseTexture } from '@/components/effects';
 import { SequentianBackground } from '@/components/SequentianBackground';
+import { CaseStudyOverlay, type CaseStudyData } from '@/components/portfolio/CaseStudyOverlay';
 import { useIsMobile } from '@/hooks/use-mobile';
 import aashrithHeroBg from '@/assets/aashrith-hero-bg.mp4';
 import aetherBento from '@/assets/aether-bento.png';
@@ -52,6 +53,108 @@ const connectFooterLinks = [
   { label: 'AshArchives (@asharchiveszz)', href: 'https://www.instagram.com/asharchiveszz/', external: true },
   { label: 'YouTube', href: 'https://www.youtube.com/@aashrithxd8587', external: true },
 ];
+
+// Case study data
+const caseStudyData: Record<string, CaseStudyData> = {
+  'aether-rituals': {
+    id: 'aether-rituals',
+    title: 'Aether Rituals',
+    subtitle: '48-hour luxury wellness brand architecture experiment',
+    image: aetherBento,
+    challenge: 'Create a complete luxury wellness brand identity from zero — including color system, product design, spatial design, and brand narrative — using AI-native tools in just 48 hours. The challenge was to prove that AI could produce luxury-grade creative work at unprecedented speed without sacrificing refinement.',
+    approach: 'We architected a transcendent brand system blending ancient ritual with modern minimalism. Using Midjourney for product visualization, ChatGPT for narrative architecture, and Figma for system design, we created a four-color palette (Aether Black, Gold, Ivory, Gray) that speaks to transformation and elevated living.',
+    process: [
+      'Brand strategy & positioning: Defined "the pause that transforms" as core philosophy',
+      'Color system architecture: Four tones representing performance, transcendence, purity, and subtlety',
+      'Product line design: Ritual essentials — containers, packaging, spatial elements',
+      'Spatial design: Showroom concepts merging minimalism with organic textures',
+      'Brand collateral: Typography system, product photography style, lifestyle imagery',
+    ],
+    results: [
+      'Complete brand identity system in 48 hours',
+      'Visual language competitive with $50K+ agency work',
+      'Proof-of-concept for AI-native luxury branding',
+      'Featured in creative portfolio, driving client interest',
+    ],
+    timeline: '48 Hours',
+    tools: ['Midjourney', 'ChatGPT', 'Figma', 'Photoshop'],
+    tags: ['Luxury', 'Wellness', 'AI-Native', 'Brand Architecture', '48-Hour Sprint'],
+  },
+  'genesis': {
+    id: 'genesis',
+    title: 'Genesis',
+    subtitle: 'Experimental AI-native streetwear brand with full video generation',
+    image: genesisBento,
+    challenge: 'Build a complete streetwear brand for the AI generation — including apparel design, video campaigns, logo system, and brand personality — entirely through AI generation tools. The brand needed to feel dystopian yet aspirational, targeting Gen Z builders and tech-forward audiences.',
+    approach: 'Genesis emerged as a monochromatic visual system built on contrast, mystery, and apocalyptic aesthetics. We used Runway ML for video generation, Midjourney for product mockups, and developed a brand voice that speaks to those building the future. The result: clothing for the architects of tomorrow.',
+    process: [
+      'Brand positioning: "Apocalyptic streetwear for the AI generation"',
+      'Visual system: Monochrome palette with high contrast and geometric logo',
+      'Apparel design: Hoodies, tees, outerwear with branded elements',
+      'Video campaign: AI-generated lifestyle footage using Runway ML',
+      'Typography & graphics: Technical, utilitarian, future-forward',
+      'Social presence: Instagram mockups, campaign rollout strategy',
+    ],
+    results: [
+      'Full streetwear brand identity with video assets',
+      'Distinctive visual language separating from generic streetwear',
+      'Demonstrated capability of AI video generation for fashion',
+      'Ready-to-launch brand system (conceptual)',
+    ],
+    timeline: '5 Days',
+    tools: ['Runway ML', 'Midjourney', 'ChatGPT', 'Premiere Pro', 'Figma'],
+    tags: ['Streetwear', 'AI Video', 'Brand Identity', 'Gen Z', 'Dystopian'],
+  },
+  'dior-campaign': {
+    id: 'dior-campaign',
+    title: 'Dior: Dual Fragrance Campaign',
+    subtitle: "Luxury AI campaign for J'adore & Poison",
+    image: diorBento,
+    challenge: "Create two distinct luxury fragrance campaigns for Dior's iconic scents — J'adore and Poison — each with its own visual language, yet unified under one premium creative direction. This was our most ambitious luxury brand AI execution, requiring cinematic production value and editorial sophistication.",
+    approach: "We architected two parallel color stories: J'adore in gold and amber light (sovereign, celestial), Poison in purple and shadow (dark, seductive). Both campaigns use AI-generated cinematic imagery that rivals traditional luxury photography, proving AI can operate at the highest tier of brand work.",
+    process: [
+      'Campaign strategy: Duality of desire — light vs. dark, sovereign vs. seductive',
+      "J'adore visual system: Gold, amber, warm light, ethereal environments",
+      'Poison visual system: Purple, shadow, mystery, dramatic compositions',
+      'Product integration: Bottle placement, lighting, atmosphere',
+      'Typography & layout: Premium editorial design language',
+      'Unified direction: Consistent luxury feel across both campaigns',
+    ],
+    results: [
+      'Two complete luxury fragrance campaigns',
+      'Visual quality matching $100K+ traditional production',
+      'Demonstrated AI capability in ultra-premium category',
+      'Case study for luxury brand AI adoption',
+    ],
+    timeline: '1 Week',
+    tools: ['Midjourney', 'ChatGPT', 'Photoshop', 'InDesign'],
+    tags: ['Luxury', 'Fragrance', 'Dual Campaign', 'AI Creative Direction', 'Editorial'],
+  },
+  'oakley-showcase': {
+    id: 'oakley-showcase',
+    title: 'Oakley: Equipment Redefined',
+    subtitle: '24-hour AI campaign for performance eyewear',
+    image: oakleyBento,
+    challenge: "Create a visually arresting product campaign for Oakley eyewear in 24 hours using only AI tools. The campaign needed to match Oakley's bold, athletic heritage while pushing visual boundaries. Goal: prove AI can produce campaign-grade creative on extreme timelines.",
+    approach: 'We developed a bold orange-red visual system emphasizing speed, precision, and satisfaction. Using AI-powered product photography and dynamic compositions, we created a campaign language that feels like performance without sacrificing craft. Every frame built for impact.',
+    process: [
+      'Visual strategy: Bold orange-red gradient system',
+      'Product photography: AI-generated hero shots with dramatic lighting',
+      'Campaign tagline: "Equipment for our world" / "Satisfy"',
+      'Layout design: Asymmetric grids, kinetic energy, motion blur',
+      'Asset variations: Multiple colorways and product angles',
+    ],
+    results: [
+      'Campaign-ready visual assets in 24 hours',
+      'Distinctive aesthetic matching Oakley brand DNA',
+      'Proof of AI capability in athletic/product categories',
+      'Portfolio piece demonstrating speed + quality',
+    ],
+    timeline: '24 Hours',
+    tools: ['Midjourney', 'Photoshop', 'Figma'],
+    tags: ['Athletic', 'Product Photography', 'AI Campaign', '24-Hour Sprint'],
+  },
+};
 
 // Creative projects data
 const creativeProjects = [
@@ -100,15 +203,6 @@ const creativeProjects = [
     sequentianVariant: 3 as const,
   },
 ];
-
-// ============================================
-// GRADIENT TRANSITION — seamless section blends
-// ============================================
-const GradientTransition = ({ isDark, height = 'h-32 sm:h-48' }: { isDark: boolean; height?: string }) => (
-  <div className={`${height} relative pointer-events-none`}>
-    <div className={`absolute inset-0 bg-gradient-to-b ${t(isDark, 'from-transparent via-alchemy-black/50 to-transparent', 'from-transparent via-neutral-100/50 to-transparent')}`} />
-  </div>
-);
 
 // ============================================
 // FIXED CORNER CONTROLS
@@ -309,20 +403,21 @@ const HeroSection = memo(({ isDark }: { isDark: boolean }) => {
       {!isDark && <div className="absolute inset-0" style={{ background: 'rgba(0,0,0,0.05)' }} />}
       <div className="absolute inset-0" style={{ background: t(isDark, 'radial-gradient(ellipse 70% 60% at 50% 50%, transparent 30%, rgba(10,10,10,0.7) 100%)', 'radial-gradient(ellipse 70% 60% at 50% 50%, transparent 30%, rgba(250,250,249,0.85) 100%)') }} />
       <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 50% 50% at 50% 70%, rgba(220,38,38,0.06) 0%, transparent 70%)' }} />
+      {/* Radial glow behind name for readability */}
+      <div className="absolute inset-0 pointer-events-none" style={{ background: t(isDark, 'radial-gradient(ellipse 40% 30% at 50% 45%, rgba(10,10,10,0.5) 0%, transparent 70%)', 'radial-gradient(ellipse 40% 30% at 50% 45%, rgba(250,250,249,0.4) 0%, transparent 70%)') }} />
 
-      <SequentianBackground variant={1} opacity={isDark ? 0.10 : 0.06} blur={0} glow={false} />
+      <SequentianBackground variant={1} opacity={isDark ? 0.15 : 0.08} blur={0} glow={false} />
       <BlueprintGrid opacity={0.02} />
       <NoiseTexture opacity={0.03} />
       <ParticleField count={35} color="rgba(220,38,38,0.3)" opacity={0.4} />
       <ParticleField count={15} color={t(isDark, 'rgba(245,245,244,0.15)', 'rgba(0,0,0,0.08)')} opacity={0.2} speed={0.7} />
 
       <div className={`absolute top-0 inset-x-0 h-32 bg-gradient-to-b ${t(isDark, 'from-alchemy-black', 'from-[#fafaf9]')} to-transparent z-[1]`} />
-      <div className={`absolute bottom-0 inset-x-0 h-32 bg-gradient-to-t ${t(isDark, 'from-alchemy-black', 'from-[#fafaf9]')} to-transparent z-[1]`} />
 
       <div className="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 text-center">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }}>
           <span className={`font-mono text-[10px] sm:text-xs uppercase tracking-[0.4em] ${t(isDark, 'text-alchemy-red/70', 'text-alchemy-red/60')}`}>
-            FOUNDER · BRAND ARCHITECT · CREATIVE DIRECTOR
+            FOUNDER · BRAND ARCHITECT · SYSTEMS THINKER
           </span>
         </motion.div>
 
@@ -340,7 +435,6 @@ const HeroSection = memo(({ isDark }: { isDark: boolean }) => {
           </span>
         </motion.h1>
 
-        {/* Static powerful tagline replacing AnimatedCapabilities */}
         <motion.p
           className={`font-body text-base sm:text-lg lg:text-xl max-w-2xl mx-auto ${t(isDark, 'text-porcelain/50', 'text-neutral-500')}`}
           initial={{ opacity: 0, y: 10 }}
@@ -350,7 +444,6 @@ const HeroSection = memo(({ isDark }: { isDark: boolean }) => {
           I don't design brands. I architect the systems that make them <span className="text-alchemy-red italic">inevitable.</span>
         </motion.p>
 
-        {/* Floating venture labels with horizontal drift */}
         <motion.div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-8" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.9 }}>
           <span className={`font-mono text-xs sm:text-sm ${t(isDark, 'text-porcelain/40', 'text-neutral-400')}`}>Founder of</span>
           {['Brand Alchemy', 'Ashzz.ai', 'Alchemy Labs'].map((name, i) => (
@@ -369,7 +462,7 @@ const HeroSection = memo(({ isDark }: { isDark: boolean }) => {
         </motion.div>
 
         <motion.div className={`flex justify-center gap-6 font-mono text-[10px] sm:text-xs ${t(isDark, 'text-porcelain/30', 'text-neutral-400')} mt-5`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.1 }}>
-          <span>Mumbai, IN</span><span>·</span><span>NMIMS '26</span><span>·</span><span>Building in public</span>
+          <span>Mumbai, IN</span><span>·</span><span>NMIMS '26</span><span>·</span><span>Founder-led practice</span>
         </motion.div>
       </div>
 
@@ -450,13 +543,16 @@ const VentureEcosystem = memo(({ isDark }: { isDark: boolean }) => {
     ));
 
   return (
-    <SectionShell id="ventures" padding="xl" maxWidth="full" className={`relative ${t(isDark, '', 'bg-[#fafaf9]')}`}>
+    <section id="ventures" className={`relative overflow-hidden ${t(isDark, 'bg-alchemy-black', 'bg-[#fafaf9]')}`}>
       <SequentianBackground variant={2} opacity={isDark ? 0.10 : 0.06} glow={false} />
       <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 60% 50% at 50% 50%, rgba(220,38,38,0.04) 0%, transparent 70%)' }} />
       <ParticleField count={10} color="rgba(220,38,38,0.2)" opacity={0.15} />
 
-      <div className="relative z-10">
-        <div className="max-w-6xl mx-auto mb-12">
+      {/* Top edge blend from Hero */}
+      <div className={`absolute top-0 inset-x-0 h-24 bg-gradient-to-b ${t(isDark, 'from-alchemy-black', 'from-[#fafaf9]')} to-transparent z-[2] pointer-events-none`} />
+
+      <div className="relative z-10 py-24 sm:py-40">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 mb-12">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: 0.6, ease: EASE }}>
             <EyebrowLabel className="mb-4">VENTURES & INTELLECTUAL PROPERTY</EyebrowLabel>
             <h2 className={`font-display text-3xl sm:text-4xl lg:text-5xl ${t(isDark, 'text-porcelain', 'text-neutral-900')} mb-3`}>
@@ -503,7 +599,7 @@ const VentureEcosystem = memo(({ isDark }: { isDark: boolean }) => {
           ))}
         </div>
       </div>
-    </SectionShell>
+    </section>
   );
 });
 VentureEcosystem.displayName = 'VentureEcosystem';
@@ -511,7 +607,7 @@ VentureEcosystem.displayName = 'VentureEcosystem';
 // ============================================
 // CREATIVE PROJECTS — "The Proof" — Immersive Sticky Scroll
 // ============================================
-const ImmersiveProject = memo(({ project, index, isDark, isMobile }: { project: typeof creativeProjects[0]; index: number; isDark: boolean; isMobile: boolean }) => {
+const ImmersiveProject = memo(({ project, index, isDark, isMobile, onDiscover }: { project: typeof creativeProjects[0]; index: number; isDark: boolean; isMobile: boolean; onDiscover: () => void }) => {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -527,21 +623,26 @@ const ImmersiveProject = memo(({ project, index, isDark, isMobile }: { project: 
       style={{ zIndex: 10 + index }}
     >
       {/* Sequentian atmospheric layer */}
-      <SequentianBackground variant={project.sequentianVariant} opacity={isDark ? 0.08 : 0.05} glow={false} />
+      <SequentianBackground variant={project.sequentianVariant} opacity={isDark ? 0.12 : 0.07} glow={false} />
 
-      {/* Full-bleed background image */}
+      {/* Full-bleed background image with better cropping */}
       <motion.img
         src={project.image}
         alt={project.title}
         className="absolute inset-0 w-full h-full object-cover"
-        style={isMobile ? {} : { y, scale: imgScale, willChange: 'transform' }}
+        style={{
+          ...(isMobile ? {} : { y, scale: imgScale, willChange: 'transform' }),
+          objectPosition: 'center 30%',
+        }}
         loading={index === 0 ? 'eager' : 'lazy'}
         decoding="async"
       />
 
-      {/* Dark gradient overlay for text legibility */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/20" />
+      {/* 4-edge vignette for immersive depth */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/30" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-transparent" />
       <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-l from-black/30 via-transparent to-transparent" />
 
       {/* Ghost number */}
       <div className="absolute top-8 right-8 sm:top-12 sm:right-16 pointer-events-none select-none">
@@ -553,7 +654,6 @@ const ImmersiveProject = memo(({ project, index, isDark, isMobile }: { project: 
       {/* Editorial text overlay — bottom left */}
       <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-12 lg:p-20 z-10">
         <div className="max-w-2xl">
-          {/* Conceptual label */}
           <motion.div
             className="flex items-center gap-3 mb-4"
             initial={{ opacity: 0, y: 15 }}
@@ -571,7 +671,6 @@ const ImmersiveProject = memo(({ project, index, isDark, isMobile }: { project: 
             </span>
           </motion.div>
 
-          {/* Title with blur-in */}
           <motion.h3
             className="font-display text-3xl sm:text-5xl lg:text-7xl text-white mb-4 leading-[0.95]"
             initial={{ opacity: 0, filter: 'blur(8px)' }}
@@ -582,7 +681,6 @@ const ImmersiveProject = memo(({ project, index, isDark, isMobile }: { project: 
             {project.title}
           </motion.h3>
 
-          {/* Description */}
           <motion.p
             className="font-body text-sm sm:text-base text-white/60 max-w-lg leading-relaxed mb-5"
             initial={{ opacity: 0, y: 10 }}
@@ -593,9 +691,9 @@ const ImmersiveProject = memo(({ project, index, isDark, isMobile }: { project: 
             {project.description}
           </motion.p>
 
-          {/* Tags */}
+          {/* Tags + Discover More row */}
           <motion.div
-            className="flex flex-wrap gap-2 mb-3"
+            className="flex flex-wrap items-center gap-2 mb-3"
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -619,16 +717,42 @@ const ImmersiveProject = memo(({ project, index, isDark, isMobile }: { project: 
             ))}
           </motion.div>
 
-          {/* Year */}
-          <motion.span
-            className="font-mono text-[10px] text-white/25 tracking-wider"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.5 }}
-          >
-            {project.year}
-          </motion.span>
+          <div className="flex items-center justify-between mt-4">
+            <motion.span
+              className="font-mono text-[10px] text-white/25 tracking-wider"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.5 }}
+            >
+              {project.year}
+            </motion.span>
+
+            {/* Discover More CTA */}
+            <motion.button
+              onClick={onDiscover}
+              className="group flex items-center gap-2 px-5 py-2.5 rounded-full font-mono text-[11px] sm:text-xs tracking-wider text-white/70 transition-all duration-300"
+              style={{
+                background: 'rgba(255,255,255,0.08)',
+                backdropFilter: 'blur(20px)',
+                border: '1px solid rgba(255,255,255,0.12)',
+              }}
+              whileHover={{
+                scale: 1.05,
+                background: 'rgba(220,38,38,0.15)',
+                borderColor: 'rgba(220,38,38,0.4)',
+                boxShadow: '0 0 30px rgba(220,38,38,0.2)',
+              }}
+              whileTap={{ scale: 0.97 }}
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: 0.5, ease: EASE }}
+            >
+              Discover More
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+            </motion.button>
+          </div>
         </div>
       </div>
     </div>
@@ -638,6 +762,7 @@ ImmersiveProject.displayName = 'ImmersiveProject';
 
 const CreativeProjectsSection = memo(({ isDark }: { isDark: boolean }) => {
   const isMobile = useIsMobile();
+  const [activeCaseStudy, setActiveCaseStudy] = useState<string | null>(null);
 
   return (
     <section id="work" className="relative">
@@ -666,9 +791,23 @@ const CreativeProjectsSection = memo(({ isDark }: { isDark: boolean }) => {
       {/* Immersive sticky-stacked projects (desktop) / simple stack (mobile) */}
       <div style={isMobile ? {} : { height: `${creativeProjects.length * 100}vh` }}>
         {creativeProjects.map((project, i) => (
-          <ImmersiveProject key={project.id} project={project} index={i} isDark={isDark} isMobile={isMobile} />
+          <ImmersiveProject
+            key={project.id}
+            project={project}
+            index={i}
+            isDark={isDark}
+            isMobile={isMobile}
+            onDiscover={() => setActiveCaseStudy(project.id)}
+          />
         ))}
       </div>
+
+      {/* Case Study Overlay */}
+      <CaseStudyOverlay
+        isOpen={!!activeCaseStudy}
+        onClose={() => setActiveCaseStudy(null)}
+        caseStudy={activeCaseStudy ? caseStudyData[activeCaseStudy] || null : null}
+      />
     </section>
   );
 });
@@ -763,17 +902,43 @@ TimelineCard.displayName = 'TimelineCard';
 const CareerTimeline = memo(({ isDark }: { isDark: boolean }) => {
   const entries = aashrithData.experience;
   const timelineRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: timelineRef, offset: ['start end', 'end start'] });
+  const { scrollYProgress: sectionScrollProgress } = useScroll({ target: sectionRef, offset: ['start end', 'end start'] });
+  const bgScale = useTransform(sectionScrollProgress, [0, 1], [1, 1.08]);
 
   return (
-    <SectionShell id="journey" padding="xl" className={`relative ${t(isDark, '', 'bg-[#fafaf9]')}`}>
-      <SequentianBackground variant={5} opacity={isDark ? 0.10 : 0.06} glow={false} />
-      <div className="relative z-10">
+    <section ref={sectionRef} id="journey" className={`relative overflow-hidden ${t(isDark, 'bg-alchemy-black', 'bg-[#fafaf9]')}`}>
+      {/* Enhanced Sequentian with Ken Burns */}
+      <motion.div className="absolute inset-0" style={{ scale: bgScale }}>
+        <SequentianBackground variant={5} opacity={isDark ? 0.22 : 0.14} glow={false} />
+      </motion.div>
+
+      {/* Animated radial red glow */}
+      <motion.div
+        className="absolute inset-0 pointer-events-none"
+        animate={{
+          opacity: [0.6, 1, 0.6],
+        }}
+        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+      >
+        <div style={{ 
+          position: 'absolute', inset: 0,
+          background: isDark 
+            ? 'radial-gradient(ellipse 60% 40% at 50% 30%, rgba(220,38,38,0.08) 0%, transparent 70%)'
+            : 'radial-gradient(ellipse 60% 40% at 50% 30%, rgba(220,38,38,0.05) 0%, transparent 70%)',
+        }} />
+      </motion.div>
+
+      <div className="relative z-10 py-24 sm:py-40 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: 0.6, ease: EASE }} className="mb-16">
           <EyebrowLabel className="mb-4">CAREER TIMELINE</EyebrowLabel>
-          <h2 className={`font-display text-3xl sm:text-4xl lg:text-5xl ${t(isDark, 'text-porcelain', 'text-neutral-900')}`}>
+          <h2 className={`font-display text-4xl sm:text-5xl lg:text-6xl ${t(isDark, 'text-porcelain', 'text-neutral-900')} mb-4`}>
             The arc of <span className="text-alchemy-red italic">intent.</span>
           </h2>
+          <p className={`font-body text-sm sm:text-base max-w-xl ${t(isDark, 'text-porcelain/45', 'text-neutral-500')}`}>
+            From execution to architecture. Each role built the foundation for systems-level thinking.
+          </p>
         </motion.div>
 
         <div className="relative max-w-3xl mx-auto" ref={timelineRef}>
@@ -795,7 +960,7 @@ const CareerTimeline = memo(({ isDark }: { isDark: boolean }) => {
           </div>
         </div>
       </div>
-    </SectionShell>
+    </section>
   );
 });
 CareerTimeline.displayName = 'CareerTimeline';
@@ -846,10 +1011,10 @@ const WordRevealQuote = memo(({ isDark }: { isDark: boolean }) => {
 WordRevealQuote.displayName = 'WordRevealQuote';
 
 const PhilosophyCTA = memo(({ isDark }: { isDark: boolean }) => (
-  <SectionShell id="connect" padding="xl" className={`relative ${t(isDark, '', 'bg-[#fafaf9]')} text-center`}>
-    <SequentianBackground variant={4} opacity={isDark ? 0.18 : 0.10} glow={false} />
+  <section id="connect" className={`relative overflow-hidden ${t(isDark, 'bg-alchemy-black', 'bg-[#fafaf9]')} text-center`}>
+    <SequentianBackground variant={4} opacity={isDark ? 0.22 : 0.12} glow={false} />
 
-    <div className="relative z-10 max-w-3xl mx-auto">
+    <div className="relative z-10 max-w-3xl mx-auto py-24 sm:py-40 px-4 sm:px-6">
       <WordRevealQuote isDark={isDark} />
 
       <motion.p className={`font-mono text-xs tracking-wider mt-8 ${t(isDark, 'text-porcelain/30', 'text-neutral-400')}`} initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: 0.3 }}>
@@ -858,13 +1023,13 @@ const PhilosophyCTA = memo(({ isDark }: { isDark: boolean }) => (
 
       {/* Beyond the work — compact pills */}
       <motion.div
-        className={`flex flex-wrap justify-center gap-3 mt-14 mb-14`}
+        className="flex flex-wrap justify-center gap-3 mt-14 mb-14"
         initial={{ opacity: 0, y: 15 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ delay: 0.4, duration: 0.5 }}
       >
-        {creativePursuits.map((item, i) => (
+        {creativePursuits.map((item) => (
           <div
             key={item.title}
             className="flex items-center gap-2 px-4 py-2 rounded-full font-mono text-[10px] sm:text-xs"
@@ -891,8 +1056,19 @@ const PhilosophyCTA = memo(({ isDark }: { isDark: boolean }) => (
         </motion.div>
 
         <MagneticCTA href="/contact" variant="primary" size="lg">
-          Let's Build Something Inevitable
+          Let's Create Something Extraordinary
         </MagneticCTA>
+
+        {/* Micro-line */}
+        <motion.p
+          className={`font-mono text-[10px] tracking-wider mt-2 ${t(isDark, 'text-porcelain/25', 'text-neutral-400')}`}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.7 }}
+        >
+          Founder-to-founder. No gatekeepers.
+        </motion.p>
       </motion.div>
 
       {/* Trust signals */}
@@ -933,7 +1109,7 @@ const PhilosophyCTA = memo(({ isDark }: { isDark: boolean }) => (
         </motion.div>
       )}
     </div>
-  </SectionShell>
+  </section>
 ));
 PhilosophyCTA.displayName = 'PhilosophyCTA';
 
@@ -968,7 +1144,7 @@ const ScrollProgressBar = memo(() => {
 ScrollProgressBar.displayName = 'ScrollProgressBar';
 
 // ============================================
-// MAIN PAGE — Continuous Narrative Flow
+// MAIN PAGE — Continuous Narrative Flow (No Gaps)
 // ============================================
 const AashrithPortfolio = () => {
   const [isDark, setIsDark] = useState(() => {
@@ -995,23 +1171,19 @@ const AashrithPortfolio = () => {
       <FixedControls isDark={isDark} toggleTheme={toggleTheme} />
       <PortfolioNav isDark={isDark} />
 
+      {/* Seamless section flow — no gap divs */}
       <HeroSection isDark={isDark} />
-      <GradientTransition isDark={isDark} />
       <VentureEcosystem isDark={isDark} />
-      <GradientTransition isDark={isDark} />
       <CreativeProjectsSection isDark={isDark} />
-      <GradientTransition isDark={isDark} />
       <CareerTimeline isDark={isDark} />
-      <GradientTransition isDark={isDark} />
       <PhilosophyCTA isDark={isDark} />
-      <GradientTransition isDark={isDark} height="h-16 sm:h-24" />
 
       <PortfolioFooter
         isDark={isDark}
         founderName="Aashrith Gade"
         monogram="AG"
         copyright="Designed and built by Aashrith Gade"
-        signoff="Always building. Always learning."
+        signoff="Always building. Always iterating."
         portfolioLinks={portfolioFooterLinks}
         ventureLinks={ventureFooterLinks}
         connectLinks={connectFooterLinks}
