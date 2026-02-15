@@ -9,6 +9,7 @@ interface PortfolioFooterProps {
   founderName: string;
   monogram: string;
   copyright: string;
+  signoff?: string;
   portfolioLinks?: { label: string; href: string }[];
   ventureLinks?: { label: string; href: string; external?: boolean }[];
   connectLinks?: { label: string; href: string; external?: boolean }[];
@@ -21,6 +22,7 @@ export const PortfolioFooter = memo(({
   founderName,
   monogram,
   copyright,
+  signoff,
   portfolioLinks = [],
   ventureLinks = [],
   connectLinks = [],
@@ -37,6 +39,19 @@ export const PortfolioFooter = memo(({
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-6 md:px-12 py-16 sm:py-20">
+        {/* Personal sign-off */}
+        {signoff && (
+          <motion.p
+            className="font-display text-lg sm:text-xl italic text-porcelain/40 mb-10"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+          >
+            {signoff}
+          </motion.p>
+        )}
+
         {/* Logo area */}
         <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="mb-12 sm:mb-16">
           <div className="inline-flex items-center gap-4">
@@ -99,7 +114,7 @@ export const PortfolioFooter = memo(({
           </p>
           <div className="flex gap-6 sm:gap-8">
             <Link to="/about" className="font-body text-xs sm:text-sm text-porcelain/50 hover:text-porcelain transition-colors">
-              Back to Alchemy Labs
+              Alchemy Labs
             </Link>
             <Link to="/privacy" className="font-body text-xs sm:text-sm text-porcelain/50 hover:text-porcelain transition-colors">
               Privacy
