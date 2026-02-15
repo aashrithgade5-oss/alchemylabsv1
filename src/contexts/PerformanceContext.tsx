@@ -69,14 +69,9 @@ export const PerformanceProvider = memo(({ children }: { children: ReactNode }) 
     setTier(detected);
     document.documentElement.setAttribute('data-perf-tier', detected);
 
-    // If we're actively calibrating (fresh acceptance), show feedback sequence
+    // Skip calibration feedback - just go straight to idle
     if (calibrationState === 'calibrating') {
-      const doneTimer = setTimeout(() => setCalibrationState('done'), 1500);
-      const hideTimer = setTimeout(() => setCalibrationState('idle'), 3000);
-      return () => {
-        clearTimeout(doneTimer);
-        clearTimeout(hideTimer);
-      };
+      setCalibrationState('idle');
     }
   }, [hasConsented, calibrationState]);
 
