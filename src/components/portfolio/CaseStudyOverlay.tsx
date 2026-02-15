@@ -1,5 +1,5 @@
-import { memo, useEffect } from 'react';
-import * as DialogPrimitive from '@radix-ui/react-dialog';
+import { memo, useEffect, useCallback, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { X, ArrowRight } from 'lucide-react';
 
 export interface CaseStudyData {
@@ -23,7 +23,6 @@ interface CaseStudyOverlayProps {
   caseStudy: CaseStudyData | null;
 }
 
-// Per-case accent system
 const accentMap: Record<string, { color: string; glow: string }> = {
   'aether-rituals': { color: 'rgba(212,175,55,0.8)', glow: 'rgba(212,175,55,0.15)' },
   'genesis': { color: 'rgba(180,180,180,0.8)', glow: 'rgba(180,180,180,0.1)' },
@@ -35,193 +34,282 @@ const fallbackAccent = { color: 'rgba(220,38,38,0.8)', glow: 'rgba(220,38,38,0.1
 
 export const CaseStudyOverlay = memo(({ open, onOpenChange, caseStudy }: CaseStudyOverlayProps) => {
   const accent = caseStudy ? (accentMap[caseStudy.id] || fallbackAccent) : fallbackAccent;
+  const contentRef = useRef<HTMLDivElement>(null);
 
-  // Lenis integration — stop/start smooth scroll
+  const close = useCallback(() => onOpenChange(false), [onOpenChange]);
+
+  // Lenis scroll lock
   useEffect(() => {
     if (open) {
       document.dispatchEvent(new Event('modal-open'));
+      document.body.style.overflow = 'hidden';
     } else {
       document.dispatchEvent(new Event('modal-close'));
+      document.body.style.overflow = '';
     }
     return () => {
       document.dispatchEvent(new Event('modal-close'));
+      document.body.style.overflow = '';
     };
   }, [open]);
 
-  return (
-    <DialogPrimitive.Root open={open} onOpenChange={onOpenChange}>
-      <DialogPrimitive.Portal>
-        {/* Backdrop — depth-of-field blur */}
-        <DialogPrimitive.Overlay
-          className="fixed inset-0 z-50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
+  // ESC key
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') close(); };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [open, close]);
+
+  // Focus trap — focus the content on open
+  useEffect(() => {
+    if (open && contentRef.current) {
+      contentRef.current.focus();
+    }
+  }, [open]);
+
+  if (!open || !caseStudy) return null;
+
+  const portalTarget = document.getElementById('overlay-root');
+  if (!portalTarget) return null;
+
+  return createPortal(
+    <div
+      style={{
+        position: 'fixed',
+        inset: 0,
+        zIndex: 9999,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: 'rgba(0,0,0,0.75)',
+        backdropFilter: 'blur(16px)',
+        WebkitBackdropFilter: 'blur(16px)',
+        animation: 'overlayFadeIn 0.3s ease-out',
+      }}
+      onClick={(e) => { if (e.target === e.currentTarget) close(); }}
+      role="dialog"
+      aria-modal="true"
+      aria-label={caseStudy.title}
+    >
+      <div
+        ref={contentRef}
+        tabIndex={-1}
+        className="outline-none"
+        style={{
+          width: '95vw',
+          maxWidth: '56rem',
+          maxHeight: '85vh',
+          overflowY: 'auto',
+          borderRadius: '1rem',
+          background: 'linear-gradient(135deg, rgba(12,12,12,0.97) 0%, rgba(6,6,6,0.99) 100%)',
+          border: '1px solid rgba(255,255,255,0.08)',
+          boxShadow: `0 0 80px ${accent.glow}, 0 40px 120px rgba(0,0,0,0.8)`,
+          position: 'relative',
+          animation: 'overlayScaleIn 0.35s cubic-bezier(0.22, 1, 0.36, 1)',
+        }}
+      >
+        {/* Accent glow line */}
+        <div
           style={{
-            background: 'rgba(0,0,0,0.7)',
-            backdropFilter: 'blur(16px)',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: '2px',
+            borderRadius: '1rem 1rem 0 0',
+            background: `linear-gradient(90deg, transparent, ${accent.color}, transparent)`,
           }}
         />
 
-        {/* Content — centered via translate, immune to parent transforms */}
-        <DialogPrimitive.Content
-          className="fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] w-[95vw] max-w-4xl max-h-[85vh] overflow-y-auto rounded-2xl outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%]"
+        {/* Close button */}
+        <button
+          onClick={close}
           style={{
-            background: 'linear-gradient(135deg, rgba(12,12,12,0.97) 0%, rgba(6,6,6,0.99) 100%)',
-            backdropFilter: 'blur(40px)',
-            border: '1px solid rgba(255,255,255,0.08)',
-            boxShadow: `0 0 80px ${accent.glow}, 0 40px 120px rgba(0,0,0,0.8)`,
+            position: 'absolute',
+            top: '1rem',
+            right: '1rem',
+            zIndex: 100,
+            width: '2.75rem',
+            height: '2.75rem',
+            borderRadius: '9999px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: 'rgba(255,255,255,0.08)',
+            border: '1px solid rgba(255,255,255,0.15)',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.4)',
+            cursor: 'pointer',
+            transition: 'transform 0.2s',
           }}
+          onMouseEnter={(e) => { (e.target as HTMLElement).style.transform = 'scale(1.1)'; }}
+          onMouseLeave={(e) => { (e.target as HTMLElement).style.transform = 'scale(1)'; }}
+          aria-label="Close"
         >
-          {/* Visually hidden title for accessibility */}
-          <DialogPrimitive.Title className="sr-only">
-            {caseStudy?.title || 'Case Study'}
-          </DialogPrimitive.Title>
+          <X style={{ width: '1.25rem', height: '1.25rem', color: 'rgba(255,255,255,0.8)' }} />
+        </button>
 
-          {/* Accent glow line at top */}
-          <div
-            className="absolute top-0 inset-x-0 h-[2px] rounded-t-2xl"
-            style={{ background: `linear-gradient(90deg, transparent, ${accent.color}, transparent)` }}
-          />
-
-          {/* Close button */}
-          <DialogPrimitive.Close
-            className="absolute top-4 right-4 z-[100] w-11 h-11 rounded-full flex items-center justify-center transition-all hover:scale-110"
+        {/* Hero image */}
+        <div style={{ position: 'relative', width: '100%', aspectRatio: '16/9', overflow: 'hidden', borderRadius: '1rem 1rem 0 0' }}>
+          <img
+            src={caseStudy.image}
+            alt={caseStudy.title}
             style={{
-              background: 'rgba(255,255,255,0.08)',
-              border: '1px solid rgba(255,255,255,0.15)',
-              boxShadow: '0 4px 20px rgba(0,0,0,0.4)',
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              objectPosition: 'center',
+              animation: 'kenBurns 8s ease-out forwards',
+            }}
+          />
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(12,12,12,0.97), rgba(12,12,12,0.3) 50%, transparent)' }} />
+          <div style={{ position: 'absolute', inset: 0, background: `radial-gradient(ellipse at center bottom, ${accent.glow} 0%, transparent 60%)` }} />
+        </div>
+
+        {/* Content */}
+        <div style={{ padding: '0 1.5rem 2.5rem', marginTop: '-2.5rem', position: 'relative', zIndex: 10 }}>
+          {/* Header */}
+          <span
+            className="font-mono"
+            style={{
+              display: 'inline-block',
+              fontSize: '9px',
+              textTransform: 'uppercase',
+              letterSpacing: '0.2em',
+              padding: '6px 12px',
+              borderRadius: '9999px',
+              marginBottom: '1rem',
+              background: accent.glow,
+              border: `1px solid ${accent.color.replace('0.8', '0.3')}`,
+              color: accent.color,
             }}
           >
-            <X className="w-5 h-5 text-white/80" />
-            <span className="sr-only">Close</span>
-          </DialogPrimitive.Close>
+            Conceptual Exploration
+          </span>
 
-          {caseStudy && (
-            <>
-              {/* Hero image with Ken Burns */}
-              <div className="relative w-full aspect-[16/9] overflow-hidden rounded-t-2xl">
-                <img
-                  src={caseStudy.image}
-                  alt={caseStudy.title}
-                  className="w-full h-full object-cover object-center animate-in zoom-in-[1.08] duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[rgba(12,12,12,0.97)] via-[rgba(12,12,12,0.3)] to-transparent" />
-                <div
-                  className="absolute inset-0"
-                  style={{ background: `radial-gradient(ellipse at center bottom, ${accent.glow} 0%, transparent 60%)` }}
-                />
-              </div>
+          <h2 className="font-display" style={{ fontSize: 'clamp(1.5rem, 4vw, 3rem)', color: 'white', lineHeight: 1.1, marginBottom: '0.5rem' }}>
+            {caseStudy.title}
+          </h2>
+          <p className="font-body" style={{ fontSize: '0.875rem', color: 'rgba(255,255,255,0.5)', lineHeight: 1.6, marginBottom: '1.5rem' }}>
+            {caseStudy.subtitle}
+          </p>
 
-              <div className="px-6 sm:px-10 -mt-10 relative z-10 pb-10">
-                {/* Header */}
-                <div className="animate-in fade-in slide-in-from-bottom-4 duration-500" style={{ animationDelay: '150ms', animationFillMode: 'backwards' }}>
-                  <span
-                    className="inline-block font-mono text-[9px] uppercase tracking-[0.2em] px-3 py-1.5 rounded-full mb-4"
+          {/* Meta */}
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', marginBottom: '2rem' }}>
+            <span className="font-mono" style={{ fontSize: '10px', color: 'rgba(255,255,255,0.4)' }}>
+              <span style={{ color: 'rgba(255,255,255,0.25)' }}>Timeline: </span>
+              <span style={{ color: accent.color }}>{caseStudy.timeline}</span>
+            </span>
+            <span className="font-mono" style={{ fontSize: '10px', color: 'rgba(255,255,255,0.4)' }}>
+              <span style={{ color: 'rgba(255,255,255,0.25)' }}>Tools: </span>
+              {caseStudy.tools.join(', ')}
+            </span>
+          </div>
+
+          {/* Divider */}
+          <div style={{ width: '100%', height: '1px', marginBottom: '2rem', background: `linear-gradient(90deg, ${accent.color.replace('0.8', '0.4')} 0%, rgba(255,255,255,0.05) 100%)` }} />
+
+          {/* Challenge */}
+          <div style={{ marginBottom: '2rem' }}>
+            <h3 className="font-mono" style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: '0.75rem', color: accent.color.replace('0.8', '0.6') }}>
+              The Challenge
+            </h3>
+            <p className="font-body" style={{ fontSize: '0.875rem', color: 'rgba(255,255,255,0.6)', lineHeight: 1.6 }}>
+              {caseStudy.challenge}
+            </p>
+          </div>
+
+          {/* Approach */}
+          <div style={{ marginBottom: '2rem' }}>
+            <h3 className="font-mono" style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: '0.75rem', color: accent.color.replace('0.8', '0.6') }}>
+              Our Approach
+            </h3>
+            <p className="font-body" style={{ fontSize: '0.875rem', color: 'rgba(255,255,255,0.6)', lineHeight: 1.6, marginBottom: '1.25rem' }}>
+              {caseStudy.approach}
+            </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+              {caseStudy.process.map((step, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
+                  <div
+                    className="font-mono"
                     style={{
+                      flexShrink: 0,
+                      width: '1.5rem',
+                      height: '1.5rem',
+                      borderRadius: '9999px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '10px',
+                      fontWeight: 700,
+                      marginTop: '2px',
                       background: accent.glow,
                       border: `1px solid ${accent.color.replace('0.8', '0.3')}`,
                       color: accent.color,
                     }}
                   >
-                    Conceptual Exploration
-                  </span>
-                  <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl text-white leading-tight mb-2">
-                    {caseStudy.title}
-                  </h2>
-                  <p className="font-body text-sm text-white/50 leading-relaxed mb-6">
-                    {caseStudy.subtitle}
-                  </p>
-
-                  {/* Meta */}
-                  <div className="flex flex-wrap gap-4 mb-8">
-                    <div className="font-mono text-[10px] text-white/40">
-                      <span className="text-white/25">Timeline: </span>
-                      <span style={{ color: accent.color }}>{caseStudy.timeline}</span>
-                    </div>
-                    <div className="font-mono text-[10px] text-white/40">
-                      <span className="text-white/25">Tools: </span>
-                      {caseStudy.tools.join(', ')}
-                    </div>
+                    {i + 1}
                   </div>
+                  <p className="font-body" style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.5)', lineHeight: 1.6 }}>{step}</p>
                 </div>
+              ))}
+            </div>
+          </div>
 
-                {/* Divider */}
-                <div
-                  className="w-full h-px mb-8"
-                  style={{ background: `linear-gradient(90deg, ${accent.color.replace('0.8', '0.4')} 0%, rgba(255,255,255,0.05) 100%)` }}
-                />
-
-                {/* Challenge */}
-                <div className="mb-8 animate-in fade-in slide-in-from-bottom-3 duration-500" style={{ animationDelay: '250ms', animationFillMode: 'backwards' }}>
-                  <h3 className="font-mono text-[10px] uppercase tracking-[0.2em] mb-3" style={{ color: accent.color.replace('0.8', '0.6') }}>
-                    The Challenge
-                  </h3>
-                  <p className="font-body text-sm text-white/60 leading-relaxed">
-                    {caseStudy.challenge}
-                  </p>
+          {/* Results */}
+          <div style={{ marginBottom: '2rem' }}>
+            <h3 className="font-mono" style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: '0.75rem', color: accent.color.replace('0.8', '0.6') }}>
+              Impact
+            </h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              {caseStudy.results.map((result, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem' }}>
+                  <ArrowRight style={{ width: '0.75rem', height: '0.75rem', marginTop: '4px', flexShrink: 0, color: accent.color.replace('0.8', '0.5') }} />
+                  <p className="font-body" style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.55)', lineHeight: 1.6 }}>{result}</p>
                 </div>
+              ))}
+            </div>
+          </div>
 
-                {/* Approach */}
-                <div className="mb-8 animate-in fade-in slide-in-from-bottom-3 duration-500" style={{ animationDelay: '350ms', animationFillMode: 'backwards' }}>
-                  <h3 className="font-mono text-[10px] uppercase tracking-[0.2em] mb-3" style={{ color: accent.color.replace('0.8', '0.6') }}>
-                    Our Approach
-                  </h3>
-                  <p className="font-body text-sm text-white/60 leading-relaxed mb-5">
-                    {caseStudy.approach}
-                  </p>
-                  <div className="space-y-3">
-                    {caseStudy.process.map((step, i) => (
-                      <div key={i} className="flex items-start gap-3">
-                        <div
-                          className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center font-mono text-[10px] font-bold mt-0.5"
-                          style={{
-                            background: accent.glow,
-                            border: `1px solid ${accent.color.replace('0.8', '0.3')}`,
-                            color: accent.color,
-                          }}
-                        >
-                          {i + 1}
-                        </div>
-                        <p className="font-body text-xs text-white/50 leading-relaxed">{step}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+          {/* Tags */}
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+            {caseStudy.tags.map((tag) => (
+              <span
+                key={tag}
+                className="font-mono"
+                style={{
+                  fontSize: '10px',
+                  padding: '6px 12px',
+                  borderRadius: '9999px',
+                  color: 'rgba(255,255,255,0.5)',
+                  background: 'rgba(255,255,255,0.04)',
+                  border: '1px solid rgba(255,255,255,0.08)',
+                }}
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
 
-                {/* Results */}
-                <div className="mb-8 animate-in fade-in slide-in-from-bottom-3 duration-500" style={{ animationDelay: '450ms', animationFillMode: 'backwards' }}>
-                  <h3 className="font-mono text-[10px] uppercase tracking-[0.2em] mb-3" style={{ color: accent.color.replace('0.8', '0.6') }}>
-                    Impact
-                  </h3>
-                  <div className="space-y-2">
-                    {caseStudy.results.map((result, i) => (
-                      <div key={i} className="flex items-start gap-2">
-                        <ArrowRight className="w-3 h-3 mt-1 flex-shrink-0" style={{ color: accent.color.replace('0.8', '0.5') }} />
-                        <p className="font-body text-xs text-white/55 leading-relaxed">{result}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Tags */}
-                <div className="flex flex-wrap gap-2 animate-in fade-in slide-in-from-bottom-2 duration-500" style={{ animationDelay: '550ms', animationFillMode: 'backwards' }}>
-                  {caseStudy.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="font-mono text-[10px] px-3 py-1.5 rounded-full text-white/50"
-                      style={{
-                        background: 'rgba(255,255,255,0.04)',
-                        border: '1px solid rgba(255,255,255,0.08)',
-                      }}
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </>
-          )}
-        </DialogPrimitive.Content>
-      </DialogPrimitive.Portal>
-    </DialogPrimitive.Root>
+      {/* Keyframe animations injected inline */}
+      <style>{`
+        @keyframes overlayFadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes overlayScaleIn {
+          from { opacity: 0; transform: scale(0.95); }
+          to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes kenBurns {
+          from { transform: scale(1.08); }
+          to { transform: scale(1); }
+        }
+      `}</style>
+    </div>,
+    portalTarget
   );
 });
 

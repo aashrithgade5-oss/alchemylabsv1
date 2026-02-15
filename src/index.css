@@ -714,7 +714,7 @@
     transform: translateZ(0);
     backface-visibility: hidden;
     will-change: transform;
-    contain: layout paint;
+    /* contain: layout paint removed — breaks fixed-position portals */
   }
   
   /* Content visibility optimization for below-fold content */

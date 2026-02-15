@@ -653,7 +653,7 @@ const ImmersiveProject = memo(({ project, index, isDark, isMobile, onDiscover }:
       </div>
 
       {/* Editorial text overlay — bottom left */}
-      <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-12 lg:p-20 z-10">
+      <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-12 lg:p-20 z-[50]">
         <div className="max-w-2xl">
           <motion.div
             className="flex items-center gap-3 mb-4"
