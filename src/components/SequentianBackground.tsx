@@ -1,6 +1,7 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef, memo } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { usePerformance } from '@/contexts/PerformanceContext';
 
 import sequentian1 from '@/assets/sequentian-1.png';
 import sequentian2 from '@/assets/sequentian-2.png';
@@ -39,13 +40,17 @@ export const SequentianBackground = memo(({
 }: SequentianBackgroundProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
+  const { shouldParallax, maxBlur } = usePerformance();
+
+  const effectiveParallax = parallax && shouldParallax;
+  const effectiveBlur = Math.min(blur, maxBlur);
 
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ['start end', 'end start'],
   });
 
-  const scale = useTransform(scrollYProgress, [0, 1], [1, scaleEnd]);
+  const scale = useTransform(scrollYProgress, [0, 1], [1, effectiveParallax ? scaleEnd : 1]);
   const adjustedOpacity = isMobile ? opacity * 0.85 : opacity;
 
   return (
@@ -71,9 +76,9 @@ export const SequentianBackground = memo(({
         decoding="async"
         draggable={false}
         style={{
-          scale: parallax && !isMobile ? scale : 1,
-          willChange: parallax && !isMobile ? 'transform' : 'auto',
-          filter: blur > 0 ? `blur(${blur}px)` : undefined,
+          scale: effectiveParallax && !isMobile ? scale : 1,
+          willChange: effectiveParallax && !isMobile ? 'transform' : 'auto',
+          filter: effectiveBlur > 0 ? `blur(${effectiveBlur}px)` : undefined,
         }}
         className="absolute -inset-4 w-[calc(100%+2rem)] h-[calc(100%+2rem)] object-cover origin-center"
         initial={{ opacity: 0 }}

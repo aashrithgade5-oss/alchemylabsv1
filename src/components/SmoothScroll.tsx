@@ -2,6 +2,7 @@ import { useEffect, useRef, useCallback, createContext, useContext, useState, me
 import Lenis from 'lenis';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import gsap from 'gsap';
+import { usePerformance } from '@/contexts/PerformanceContext';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -23,6 +24,7 @@ interface SmoothScrollProps {
 
 export const SmoothScroll = memo(({ children }: SmoothScrollProps) => {
   const lenisRef = useRef<Lenis | null>(null);
+  const { tier } = usePerformance();
   const [contextValue, setContextValue] = useState<SmoothScrollContextType>({
     lenis: null,
     scrollTo: () => {},
@@ -62,7 +64,7 @@ export const SmoothScroll = memo(({ children }: SmoothScrollProps) => {
       smoothWheel: true,
       touchMultiplier: 1,
       wheelMultiplier: 0.8,
-      lerp: 0.12, // Slightly faster interpolation
+      lerp: tier === 'low' ? 0.2 : tier === 'medium' ? 0.15 : 0.12,
     });
 
     lenisRef.current = lenis;

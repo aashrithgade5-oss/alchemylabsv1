@@ -2,6 +2,7 @@ import { memo, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { usePerformance } from '@/contexts/PerformanceContext';
 
 interface ParticleFieldProps {
   count?: number;
@@ -57,11 +58,12 @@ export const ParticleField = memo(({
   className,
 }: ParticleFieldProps) => {
   const isMobile = useIsMobile();
+  const { shouldUseParticles, particleFactor } = usePerformance();
   const prefersReduced = useMemo(() =>
     typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches,
   []);
 
-  const particleCount = prefersReduced ? 0 : (isMobile ? Math.min(count, 15) : count);
+  const particleCount = prefersReduced || !shouldUseParticles ? 0 : Math.round((isMobile ? Math.min(count, 15) : count) * particleFactor);
   const particles = useMemo(() => Array.from({ length: particleCount }, (_, i) => i), [particleCount]);
 
   if (prefersReduced) return null;
