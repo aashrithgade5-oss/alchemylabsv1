@@ -1,87 +1,87 @@
 
-## Cookie Consent Banner -- Liquid Glass Aesthetic + Device-Adaptive Performance
 
-A sleek cookie consent system that matches the site's luxury aesthetic and, upon acceptance, applies device-aware performance optimizations to ensure butter-smooth rendering across all hardware tiers.
+## Cookie Consent -- Cinematic Center-Stage Dialog Overhaul
 
----
-
-### 1. Cookie Consent Banner Component
-
-**New file: `src/components/CookieConsent.tsx`**
-
-A floating liquid-glass banner that appears at the bottom of the viewport on first visit:
-
-- **Design**: Liquid-glass pill at `bottom-6 left-1/2 -translate-x-1/2`, max-width 600px, with `backdrop-blur-xl`, white/6 border, noise texture overlay.
-- **Content**: A single line -- "We use cookies to optimize your experience." with an "Accept All" button styled as a MagneticCTA-like red pill, and a subtle "Privacy Policy" link.
-- **Animation**: Slides up from below with a 1.5s delay after page load (so it doesn't compete with the Preloader). Framer Motion `animate` from `y: 100, opacity: 0` to `y: 0, opacity: 1`.
-- **Dismissal**: On "Accept All" click, the banner slides back down and fades out. Consent is stored in `localStorage` as `alchemy-cookie-consent: accepted` with a timestamp. Banner never shows again for that browser.
-- **Mobile**: Full-width with horizontal padding, stacked layout (text above button) on screens below 480px.
+Transform the cookie consent from a bottom-bar toast into a full-screen cinematic dialog that commands attention as the site's first impression, then seamlessly calibrates performance.
 
 ---
 
-### 2. Device-Adaptive Performance System
+### 1. Full-Screen Cinematic Overlay (`CookieConsent.tsx` -- Complete Rewrite)
 
-**New file: `src/hooks/useDevicePerformance.ts`**
+**Layout -- Centered Dialog with Shallow Depth-of-Field:**
+- Full-viewport overlay (`fixed inset-0 z-[200]`) with a red-tinted backdrop blur: `backdrop-filter: blur(20px)` + `background: rgba(10,0,0,0.6)` creating a shallow depth-of-field cinema effect
+- Subtle animated red gradient orbs behind the backdrop (two radial gradients pulsing slowly) for atmospheric red tint
+- Center-stage dialog card: `max-w-md`, vertically and horizontally centered
 
-A hook that runs after cookie acceptance to profile the device and apply performance tiers:
+**Dialog Card Design -- Liquid Glass Premium:**
+- Glass card with `bg-black/50 backdrop-blur-2xl border border-white/[0.08]` and `rounded-3xl`
+- Noise texture overlay at 3% opacity
+- Top edge shimmer line (`h-px bg-gradient-to-r from-transparent via-alchemy-red/40 to-transparent`) -- red-tinted, not white
+- Inner subtle red radial glow at top: `radial-gradient(ellipse at 50% 0%, rgba(220,38,38,0.08) 0%, transparent 60%)`
 
-**Device Profiling (runs once, cached in localStorage):**
-- `navigator.hardwareConcurrency` (CPU cores)
-- `navigator.deviceMemory` (RAM in GB, where supported)
-- Screen resolution and pixel ratio
-- GPU detection via a tiny offscreen WebGL canvas (`renderer.getParameter(UNMASKED_RENDERER)`)
-- Connection speed via `navigator.connection.effectiveType`
+**Content -- Personalized, Quirky, Professional:**
+- Top: Animated cookie icon with a subtle pulse glow (red-tinted `drop-shadow`)
+- Headline: "We bake experiences, not just cookies." -- `text-2xl font-display` (Playfair Display Italic) in white
+- Subtext: "Accept to let us calibrate your experience for butter-smooth performance tailored to your device." -- `text-sm text-white/60`
+- Privacy link: Small inline link with Shield icon to `/privacy`
 
-**Three Performance Tiers:**
-| Tier | Criteria | Optimizations |
-|---|---|---|
-| High | 8+ cores, 8GB+ RAM, dedicated GPU, 4G+ | Full animations, all particles, max blur, Sequentian parallax |
-| Medium | 4-7 cores, 4GB RAM, integrated GPU | Particle counts halved, blur capped at 40px, parallax disabled |
-| Low | 1-3 cores, under 4GB, weak GPU, slow connection | Particles disabled, blur capped at 20px, Sequentian static (no parallax/scale), reduced motion |
+**CTA Button -- Statement Piece:**
+- Full-width red gradient button: `bg-gradient-to-r from-alchemy-red to-red-700` with `rounded-2xl py-4`
+- Text: "Accept & Optimize" -- `text-base font-medium tracking-wide`
+- Hover: brighter red gradient + scanline overlay + subtle scale(1.02)
+- Below button: micro-text "One click. Tailored performance." in `text-xs text-white/30`
 
-**How it applies:**
-- Exposes a `performanceTier` value (`'high' | 'medium' | 'low'`) via React Context
-- Components like `ParticleField`, `SequentianBackground`, `NeuralBackground`, `SmoothScroll` read the tier and self-adjust
-- CSS custom property `--perf-tier` set on `<html>` for CSS-level adjustments (e.g., `blur()` caps)
-
----
-
-### 3. Performance Context Provider
-
-**New file: `src/contexts/PerformanceContext.tsx`**
-
-- Wraps the app and provides `performanceTier`, `hasConsented`, and helper like `shouldUseParticles`, `maxBlur`, `shouldParallax`
-- Only runs profiling after consent is given (respects user choice)
-- Falls back to "medium" tier if profiling APIs are unavailable
+**Animations:**
+- Backdrop fades in over 0.8s with cinematic easing
+- Red orbs start animating (slow scale pulse, 8s loop)
+- Dialog card scales in from 0.9 to 1.0 with opacity 0 to 1, delayed 0.3s after backdrop
+- On accept: card scales to 1.05 and fades out, then backdrop dissolves -- total exit 0.6s
+- After exit: a brief "Calibrating..." micro-toast at bottom (1s, then fade) as profiling runs
 
 ---
 
-### 4. Integration Points
+### 2. Homepage-Only Trigger Logic
 
-**`src/App.tsx`:**
-- Add `<PerformanceProvider>` wrapping `<AppContent>`
-- Add `<CookieConsent />` inside `<AppContent>`, after `<BackToTop />`
+**Current behavior:** Shows on every page on first visit.
 
-**Existing components that read the tier (minimal changes):**
-- `ParticleField`: multiply `count` by tier factor (high: 1x, medium: 0.5x, low: 0)
-- `SequentianBackground`: disable `parallax` and `scaleEnd` on low tier
-- `SmoothScroll` (Lenis): adjust `lerp` value per tier for smoother scroll on weaker devices
+**New behavior:**
+- CookieConsent reads `useLocation()` and only renders when `pathname === '/'`
+- If user lands on `/about` or `/aashrith` first, no dialog -- it waits until they visit home
+- Once accepted, never shows again (same localStorage logic)
+
+---
+
+### 3. Enhanced Calibration Feedback
+
+**After acceptance, add a brief calibration indicator:**
+- A small `fixed bottom-6 left-1/2` pill appears: "Calibrating your experience..." with a spinning loader icon
+- Stays for 1.5s while `profileDevice()` + `classifyTier()` runs
+- Then morphs text to "Optimized for your device" with a checkmark, then fades out after 1s
+- This gives the user feedback that something meaningful happened
+
+**PerformanceContext update:**
+- Add a `calibrationState: 'idle' | 'calibrating' | 'done'` to the context
+- `acceptCookies()` sets state to `'calibrating'`, runs profiling, then sets `'done'` after a brief delay
+- CookieConsent and a new `CalibrationToast` sub-component read this state
 
 ---
 
 ### Technical Details
 
-**New files (3):**
-- `src/components/CookieConsent.tsx` -- Liquid glass banner with accept button, localStorage persistence, slide animation
-- `src/hooks/useDevicePerformance.ts` -- Device profiling hook (cores, RAM, GPU, connection)
-- `src/contexts/PerformanceContext.tsx` -- React context exposing performance tier and helper flags
+**Files modified (2):**
+- `src/components/CookieConsent.tsx` -- Complete rewrite: full-screen cinematic overlay with red-tinted depth-of-field backdrop, centered liquid-glass dialog, quirky headline, full-width CTA, homepage-only rendering via `useLocation()`, calibration toast sub-component
+- `src/contexts/PerformanceContext.tsx` -- Add `calibrationState` to context, update `acceptCookies` to include calibrating/done state transitions
 
-**Modified files (1):**
-- `src/App.tsx` -- Add PerformanceProvider and CookieConsent component
+**No new files or dependencies.**
 
-**No external dependencies needed** -- uses native browser APIs and existing framer-motion.
+**Animation specs:**
+| Element | Animation | Duration |
+|---|---|---|
+| Backdrop (red-tinted blur) | fade-in | 0.8s, ease `[0.22, 1, 0.36, 1]` |
+| Red gradient orbs | scale pulse 1.0-1.3 | 8s loop, infinite |
+| Dialog card | scale 0.9 to 1.0 + fade | 0.6s, 0.3s delay |
+| Cookie icon pulse | drop-shadow pulse | 3s loop |
+| Exit (card) | scale to 1.05 + fade out | 0.4s |
+| Exit (backdrop) | fade out | 0.5s, 0.2s delay |
+| Calibration toast | slide-up + fade | 0.4s in, 0.4s out |
 
-**Privacy compliance:**
-- Banner links to `/privacy` page
-- No third-party tracking cookies -- this is purely functional (performance profiling stored locally)
-- Consent timestamp stored for audit trail
