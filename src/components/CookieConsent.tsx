@@ -47,18 +47,31 @@ export const CookieConsent = memo(() => {
   // Only show on homepage
   const isHomepage = location.pathname === '/';
 
+  // Lock scroll when dialog is visible
+  useEffect(() => {
+    if (!visible || exiting) return;
+    document.body.style.overflow = 'hidden';
+    document.dispatchEvent(new CustomEvent('modal-open'));
+    return () => {
+      document.body.style.overflow = '';
+      document.dispatchEvent(new CustomEvent('modal-close'));
+    };
+  }, [visible, exiting]);
+
   useEffect(() => {
     if (hasConsented || !isHomepage) return;
-    const timer = setTimeout(() => setVisible(true), 1200);
+    const timer = setTimeout(() => setVisible(true), 600);
     return () => clearTimeout(timer);
   }, [hasConsented, isHomepage]);
 
   const handleAccept = () => {
     setExiting(true);
+    document.body.style.overflow = '';
+    document.dispatchEvent(new CustomEvent('modal-close'));
     setTimeout(() => {
       acceptCookies();
       setVisible(false);
-    }, 500);
+    }, 300);
   };
 
   if (hasConsented) return <CalibrationToast state={calibrationState} />;

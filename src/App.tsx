@@ -127,8 +127,8 @@ const AppContent = memo(() => (
       <Sonner />
       <AnimatedRoutes />
       <BackToTop />
-      <CookieConsent />
     </SmoothScroll>
+    <CookieConsent />
   </PageAtmosphereProvider>
 ));
 AppContent.displayName = 'AppContent';
