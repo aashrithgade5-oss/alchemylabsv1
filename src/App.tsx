@@ -12,6 +12,8 @@ import { Preloader } from "./components/Preloader";
 import { SmoothScroll } from "./components/SmoothScroll";
 import { BackToTop } from "./components/BackToTop";
 import { PageAtmosphereProvider, AtmosphericBackground } from "./contexts/PageAtmosphereContext";
+import { PerformanceProvider } from "./contexts/PerformanceContext";
+import { CookieConsent } from "./components/CookieConsent";
 
 // Lazy load non-critical pages
 const ServicePage = lazy(() => import("./pages/ServicePage").then(m => ({ default: m.ServicePage })));
@@ -125,6 +127,7 @@ const AppContent = memo(() => (
       <Sonner />
       <AnimatedRoutes />
       <BackToTop />
+      <CookieConsent />
     </SmoothScroll>
   </PageAtmosphereProvider>
 ));
@@ -133,9 +136,11 @@ AppContent.displayName = 'AppContent';
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <BrowserRouter>
-        <AppContent />
-      </BrowserRouter>
+      <PerformanceProvider>
+        <BrowserRouter>
+          <AppContent />
+        </BrowserRouter>
+      </PerformanceProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );
