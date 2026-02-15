@@ -544,8 +544,9 @@ const VentureEcosystem = memo(({ isDark }: { isDark: boolean }) => {
 
   return (
     <section id="ventures" className={`relative overflow-hidden ${t(isDark, 'bg-alchemy-black', 'bg-[#fafaf9]')}`}>
-      <SequentianBackground variant={2} opacity={isDark ? 0.10 : 0.06} glow={false} />
-      <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 60% 50% at 50% 50%, rgba(220,38,38,0.04) 0%, transparent 70%)' }} />
+      <SequentianBackground variant={2} opacity={isDark ? 0.16 : 0.09} glow={false} />
+      <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 60% 50% at 50% 50%, rgba(220,38,38,0.06) 0%, transparent 70%)' }} />
+      <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 50% 40% at 30% 60%, rgba(220,38,38,0.04) 0%, transparent 60%)' }} />
       <ParticleField count={10} color="rgba(220,38,38,0.2)" opacity={0.15} />
 
       {/* Top edge blend from Hero */}
@@ -646,7 +647,7 @@ const ImmersiveProject = memo(({ project, index, isDark, isMobile, onDiscover }:
 
       {/* Ghost number */}
       <div className="absolute top-8 right-8 sm:top-12 sm:right-16 pointer-events-none select-none">
-        <span className="font-mono text-[15vw] sm:text-[20vw] font-black text-white/[0.03] leading-none block">
+        <span className="font-mono text-[15vw] sm:text-[20vw] font-black leading-none block bg-gradient-to-b from-alchemy-red/[0.1] to-alchemy-red/[0.03] bg-clip-text text-transparent">
           {project.num}
         </span>
       </div>
@@ -717,18 +718,8 @@ const ImmersiveProject = memo(({ project, index, isDark, isMobile, onDiscover }:
             ))}
           </motion.div>
 
-          <div className="flex items-center justify-between mt-4">
-            <motion.span
-              className="font-mono text-[10px] text-white/25 tracking-wider"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.5 }}
-            >
-              {project.year}
-            </motion.span>
-
-            {/* Discover More CTA */}
+          {/* Year + Discover More — left-aligned */}
+          <div className="flex items-center gap-4 mt-5">
             <motion.button
               onClick={onDiscover}
               className="group flex items-center gap-2 px-5 py-2.5 rounded-full font-mono text-[11px] sm:text-xs tracking-wider text-white/70 transition-all duration-300"
@@ -752,6 +743,15 @@ const ImmersiveProject = memo(({ project, index, isDark, isMobile, onDiscover }:
               Discover More
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
             </motion.button>
+            <motion.span
+              className="font-mono text-[10px] text-white/20 tracking-wider"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.55 }}
+            >
+              {project.year}
+            </motion.span>
           </div>
         </div>
       </div>
@@ -768,6 +768,8 @@ const CreativeProjectsSection = memo(({ isDark }: { isDark: boolean }) => {
     <section id="work" className="relative">
       {/* Section intro */}
       <div className={`${t(isDark, 'bg-alchemy-black', 'bg-[#fafaf9]')} relative z-20`}>
+        {/* Top gradient blend from Ventures */}
+        <div className={`absolute top-0 inset-x-0 h-32 bg-gradient-to-b ${t(isDark, 'from-alchemy-black/0 via-alchemy-black/50', 'from-[#fafaf9]/0 via-[#fafaf9]/50')} to-transparent pointer-events-none`} />
         <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-20 sm:pt-32 pb-12 sm:pb-20">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
