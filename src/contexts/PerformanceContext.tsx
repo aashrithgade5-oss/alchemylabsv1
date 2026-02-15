@@ -3,10 +3,13 @@ import { profileDevice, classifyTier, type PerformanceTier } from '@/hooks/useDe
 
 const CONSENT_KEY = 'alchemy-cookie-consent';
 
+type CalibrationState = 'idle' | 'calibrating' | 'done';
+
 interface PerformanceContextType {
   tier: PerformanceTier;
   hasConsented: boolean;
   acceptCookies: () => void;
+  calibrationState: CalibrationState;
   shouldUseParticles: boolean;
   shouldParallax: boolean;
   maxBlur: number;
@@ -17,6 +20,7 @@ const defaults: PerformanceContextType = {
   tier: 'medium',
   hasConsented: false,
   acceptCookies: () => {},
+  calibrationState: 'idle',
   shouldUseParticles: true,
   shouldParallax: true,
   maxBlur: 60,
@@ -29,8 +33,7 @@ export const usePerformance = () => useContext(PerformanceContext);
 
 function getStoredConsent(): boolean {
   try {
-    const val = localStorage.getItem(CONSENT_KEY);
-    return val !== null;
+    return localStorage.getItem(CONSENT_KEY) !== null;
   } catch {
     return false;
   }
@@ -45,23 +48,37 @@ const tierConfig: Record<PerformanceTier, { particles: boolean; parallax: boolea
 export const PerformanceProvider = memo(({ children }: { children: ReactNode }) => {
   const [hasConsented, setHasConsented] = useState(getStoredConsent);
   const [tier, setTier] = useState<PerformanceTier>('medium');
+  const [calibrationState, setCalibrationState] = useState<CalibrationState>(
+    getStoredConsent() ? 'done' : 'idle'
+  );
 
   const acceptCookies = useCallback(() => {
     try {
       localStorage.setItem(CONSENT_KEY, JSON.stringify({ accepted: true, timestamp: Date.now() }));
     } catch { /* quota */ }
     setHasConsented(true);
+    setCalibrationState('calibrating');
   }, []);
 
   // Run profiling after consent
   useEffect(() => {
     if (!hasConsented) return;
+
     const profile = profileDevice();
     const detected = classifyTier(profile);
     setTier(detected);
-    // Set CSS custom property for CSS-level adjustments
     document.documentElement.setAttribute('data-perf-tier', detected);
-  }, [hasConsented]);
+
+    // If we're actively calibrating (fresh acceptance), show feedback sequence
+    if (calibrationState === 'calibrating') {
+      const doneTimer = setTimeout(() => setCalibrationState('done'), 1500);
+      const hideTimer = setTimeout(() => setCalibrationState('idle'), 3000);
+      return () => {
+        clearTimeout(doneTimer);
+        clearTimeout(hideTimer);
+      };
+    }
+  }, [hasConsented, calibrationState]);
 
   const cfg = tierConfig[tier];
 
@@ -70,6 +87,7 @@ export const PerformanceProvider = memo(({ children }: { children: ReactNode }) 
       tier,
       hasConsented,
       acceptCookies,
+      calibrationState,
       shouldUseParticles: cfg.particles,
       shouldParallax: cfg.parallax,
       maxBlur: cfg.maxBlur,
