@@ -1,120 +1,87 @@
 
-## Complete Portfolio System Overhaul -- Theme, Eva Upgrade, Founder Panels & Backgrounds
+## Cookie Consent Banner -- Liquid Glass Aesthetic + Device-Adaptive Performance
 
-A comprehensive update across both founder portfolios and the About page panels, addressing light mode visibility, Eva's complete creative overhaul, founder panel text/styling, and Sequentian background strategy.
-
----
-
-### 1. About Page -- Founder Panel Updates (`FounderCircles.tsx`)
-
-**Text Changes:**
-- Aashrith's specialty: "Brand Architecture · Luxury Brand Strategy · AI-Native Luxury Brand Strategy · Creative Direction"
-- Eva's specialty: "Growth & Partnerships · Luxury Branding · AI-Native Marketing"
-
-**Eva Panel -- Pink Aesthetic Differentiation:**
-- Change Eva's gradient from subtle rose to a visibly pink treatment: `linear-gradient(135deg, rgba(236,72,153,0.08) 0%, rgba(251,113,133,0.05) 50%, rgba(255,255,255,0.02) 100%)`
-- Background image stays Sequentian 4 but opacity bumped to 0.20 for more presence
-- Hover glow: `radial-gradient(ellipse at 50% 40%, rgba(236,72,153,0.18) 0%, transparent 70%)` -- visibly pink, not red
-- Hover border: `rgba(236,72,153,0.5)` (pink-500)
-- Monogram color: `rgba(236,72,153,0.08)` -- pink tinted
-- CTA button: pink gradient instead of red (`rgba(236,72,153,0.15)` bg, `rgba(236,72,153,0.4)` border)
-
-**Aashrith Panel stays red/black** -- no changes needed, already correct.
+A sleek cookie consent system that matches the site's luxury aesthetic and, upon acceptance, applies device-aware performance optimizations to ensure butter-smooth rendering across all hardware tiers.
 
 ---
 
-### 2. Aashrith Portfolio -- Light Mode & Video Fixes (`AashrithPortfolio.tsx`)
+### 1. Cookie Consent Banner Component
 
-**Light Mode Video Visibility:**
-- Increase light mode video opacity from `0.15` to `0.35` so the video is clearly visible against the light background
-- Add a subtle dark overlay in light mode: `rgba(0,0,0,0.05)` on top of video for contrast
-- Light mode vignette: use darker edges `rgba(250,250,249,0.85)` instead of `0.6`
+**New file: `src/components/CookieConsent.tsx`**
 
-**Section Divider Fix for Light Mode:**
-- Replace the `via-alchemy-black/50` / `via-neutral-200/50` gradient with a cleaner approach: in light mode use `via-neutral-100` (soft grey) instead of semi-transparent values that create burn effects
-- Reduce divider height from `h-24` to `h-16` for less visual weight
+A floating liquid-glass banner that appears at the bottom of the viewport on first visit:
 
-**Sequentian Background Light Mode:**
-- All SequentianBackground components: in light mode, reduce opacity by 40% and add a `mix-blend-multiply` treatment so they don't wash out against white
-- Hero Seq 1: dark 0.12, light 0.07
-- Career Seq 5: dark 0.10, light 0.06
-- Beyond Seq 2: dark 0.12, light 0.07
-- Philosophy Seq 4: dark 0.18, light 0.10
+- **Design**: Liquid-glass pill at `bottom-6 left-1/2 -translate-x-1/2`, max-width 600px, with `backdrop-blur-xl`, white/6 border, noise texture overlay.
+- **Content**: A single line -- "We use cookies to optimize your experience." with an "Accept All" button styled as a MagneticCTA-like red pill, and a subtle "Privacy Policy" link.
+- **Animation**: Slides up from below with a 1.5s delay after page load (so it doesn't compete with the Preloader). Framer Motion `animate` from `y: 100, opacity: 0` to `y: 0, opacity: 1`.
+- **Dismissal**: On "Accept All" click, the banner slides back down and fades out. Consent is stored in `localStorage` as `alchemy-cookie-consent: accepted` with a timestamp. Banner never shows again for that browser.
+- **Mobile**: Full-width with horizontal padding, stacked layout (text above button) on screens below 480px.
 
 ---
 
-### 3. Eva Portfolio -- Complete Creative Overhaul (`EvaPortfolio.tsx`)
+### 2. Device-Adaptive Performance System
 
-Transform Eva's portfolio into a distinctly different experience from Aashrith's, using a pink/rose color palette and unique visual treatments.
+**New file: `src/hooks/useDevicePerformance.ts`**
 
-**Navigation -- Match Aashrith's Pattern:**
-- Extract Back button and Theme toggle to fixed corners (same as Aashrith's `FixedControls`)
-- Convert nav to liquid-glass pill style (same pattern)
-- Add social links to mobile menu: LinkedIn (from data), email
-- Remove toggleTheme and back from the navbar itself
+A hook that runs after cookie acceptance to profile the device and apply performance tiers:
 
-**Hero -- Pink-Toned Cinematic:**
-- Add Sequentian 4 (Crimson Cloud) at 0.15 opacity as background -- distinct from Aashrith's Seq 1
-- Add subtle pink gradient orbs (keep existing ones but make them more prominent in dark mode)
-- Add ParticleField (20 particles, `rgba(236,72,153,0.25)`) for atmospheric depth -- pink particles, not red
-- Add BlueprintGrid (0.015 opacity) and NoiseTexture (0.02 opacity)
-- Add top/bottom fade gradients
+**Device Profiling (runs once, cached in localStorage):**
+- `navigator.hardwareConcurrency` (CPU cores)
+- `navigator.deviceMemory` (RAM in GB, where supported)
+- Screen resolution and pixel ratio
+- GPU detection via a tiny offscreen WebGL canvas (`renderer.getParameter(UNMASKED_RENDERER)`)
+- Connection speed via `navigator.connection.effectiveType`
 
-**Section Backgrounds -- All Different from Aashrith:**
-
-| Section | Background | Color Accent |
+**Three Performance Tiers:**
+| Tier | Criteria | Optimizations |
 |---|---|---|
-| Hero | Seq 4 (Crimson Cloud, 0.15) + pink particles | Pink/Rose |
-| Philosophy | Seq 5 (Satin Wave, 0.10) | Elegant pink |
-| Ventures | Seq 2 (Soft Nebula, 0.12) + pink radial glow | Soft nebula |
-| Clients | No Sequentian, subtle pink radial | Clean |
-| Career | Seq 3 (Silk Fold, 0.10) | Silk texture |
-| CTA | Seq 1 (Glass Lines, 0.15) | Technical close |
+| High | 8+ cores, 8GB+ RAM, dedicated GPU, 4G+ | Full animations, all particles, max blur, Sequentian parallax |
+| Medium | 4-7 cores, 4GB RAM, integrated GPU | Particle counts halved, blur capped at 40px, parallax disabled |
+| Low | 1-3 cores, under 4GB, weak GPU, slow connection | Particles disabled, blur capped at 20px, Sequentian static (no parallax/scale), reduced motion |
 
-None of these match Aashrith's section-to-background mapping (Aashrith uses Seq 1, 5, 2, 4).
-
-**Add Section Dividers** between all sections (same component as Aashrith but with adjusted colors).
-
-**Scroll Progress Bar** -- Move from bottom to top (h-1, z-[80]) with pink-to-red gradient and glow, matching Aashrith's pattern.
-
-**Portfolio Footer** -- Replace the inline "Back to About" link with the `PortfolioFooter` component:
-- Monogram: "ED"
-- Name: "Eva Doshi"
-- Links: Portfolio sections, Alchemy Labs venture, Connect (LinkedIn, Email)
-
-**Career Timeline -- Elevated Glass Cards:**
-- Replace `TimelineRail` with the same liquid-glass card pattern used in Aashrith's CareerTimeline
-- Pink accent dots instead of red
-- Same scroll-triggered stagger animations
-
-**Light Mode Theme Fixes:**
-- Apply the same systematic `t(isDark, dark, light)` pattern to every text, border, and background element
-- Ensure all glass panels, expertise pills, and sections properly switch contrast
+**How it applies:**
+- Exposes a `performanceTier` value (`'high' | 'medium' | 'low'`) via React Context
+- Components like `ParticleField`, `SequentianBackground`, `NeuralBackground`, `SmoothScroll` read the tier and self-adjust
+- CSS custom property `--perf-tier` set on `<html>` for CSS-level adjustments (e.g., `blur()` caps)
 
 ---
 
-### 4. AnimatedCapabilities -- Already Has isDark Prop
+### 3. Performance Context Provider
 
-No changes needed -- already accepts `isDark` prop.
+**New file: `src/contexts/PerformanceContext.tsx`**
+
+- Wraps the app and provides `performanceTier`, `hasConsented`, and helper like `shouldUseParticles`, `maxBlur`, `shouldParallax`
+- Only runs profiling after consent is given (respects user choice)
+- Falls back to "medium" tier if profiling APIs are unavailable
+
+---
+
+### 4. Integration Points
+
+**`src/App.tsx`:**
+- Add `<PerformanceProvider>` wrapping `<AppContent>`
+- Add `<CookieConsent />` inside `<AppContent>`, after `<BackToTop />`
+
+**Existing components that read the tier (minimal changes):**
+- `ParticleField`: multiply `count` by tier factor (high: 1x, medium: 0.5x, low: 0)
+- `SequentianBackground`: disable `parallax` and `scaleEnd` on low tier
+- `SmoothScroll` (Lenis): adjust `lerp` value per tier for smoother scroll on weaker devices
 
 ---
 
 ### Technical Details
 
-**Files modified (3):**
-- `src/components/about/FounderCircles.tsx` -- Update specialty text for both founders, make Eva's panel visibly pink (gradient, glow, border, monogram, CTA all pink-toned)
-- `src/pages/AashrithPortfolio.tsx` -- Fix light mode video opacity (0.35), fix section dividers (no burn effect), adjust Sequentian opacities for light mode
-- `src/pages/EvaPortfolio.tsx` -- Complete rewrite: add FixedControls, liquid-glass nav, Sequentian backgrounds per section (all different from Aashrith), section dividers, elevated career timeline with glass cards, PortfolioFooter, top scroll progress bar, pink color palette throughout, full light/dark theme support
+**New files (3):**
+- `src/components/CookieConsent.tsx` -- Liquid glass banner with accept button, localStorage persistence, slide animation
+- `src/hooks/useDevicePerformance.ts` -- Device profiling hook (cores, RAM, GPU, connection)
+- `src/contexts/PerformanceContext.tsx` -- React context exposing performance tier and helper flags
 
-**No new files** -- reuses existing `PortfolioFooter`, `SequentianBackground`, `BlueprintGrid`, `NoiseTexture`, `ParticleField`, `EyebrowLabel`, `SectionShell`, `MagneticCTA`.
+**Modified files (1):**
+- `src/App.tsx` -- Add PerformanceProvider and CookieConsent component
 
-**Key Differentiation -- Aashrith vs Eva:**
-| Aspect | Aashrith | Eva |
-|---|---|---|
-| Color | Red/Black | Pink/Black |
-| Hero BG | Video + Seq 1 | Gradient orbs + Seq 4 |
-| Particles | Red | Pink |
-| Ventures BG | Radial glow only | Seq 2 (Soft Nebula) |
-| Timeline BG | Seq 5 (Satin Wave) | Seq 3 (Silk Fold) |
-| CTA BG | Seq 4 (Crimson Cloud) | Seq 1 (Glass Lines) |
-| Scroll bar | Red gradient | Pink-to-red gradient |
+**No external dependencies needed** -- uses native browser APIs and existing framer-motion.
+
+**Privacy compliance:**
+- Banner links to `/privacy` page
+- No third-party tracking cookies -- this is purely functional (performance profiling stored locally)
+- Consent timestamp stored for audit trail
