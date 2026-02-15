@@ -1,4 +1,5 @@
 import { memo, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ArrowRight } from 'lucide-react';
 
@@ -38,15 +39,22 @@ const fallbackAccent = { color: 'rgba(220,38,38,0.8)', glow: 'rgba(220,38,38,0.1
 export const CaseStudyOverlay = memo(({ isOpen, onClose, caseStudy }: CaseStudyOverlayProps) => {
   const accent = caseStudy ? (accentMap[caseStudy.id] || fallbackAccent) : fallbackAccent;
 
+  // Scroll lock + Lenis integration
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
+      document.dispatchEvent(new Event('modal-open'));
     } else {
       document.body.style.overflow = '';
+      document.dispatchEvent(new Event('modal-close'));
     }
-    return () => { document.body.style.overflow = ''; };
+    return () => {
+      document.body.style.overflow = '';
+      document.dispatchEvent(new Event('modal-close'));
+    };
   }, [isOpen]);
 
+  // Escape key
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
@@ -57,13 +65,13 @@ export const CaseStudyOverlay = memo(({ isOpen, onClose, caseStudy }: CaseStudyO
     }
   }, [isOpen, onClose]);
 
-  return (
+  const overlay = (
     <AnimatePresence>
       {isOpen && caseStudy && (
         <>
           {/* Backdrop — shallow depth-of-field */}
           <motion.div
-            className="fixed inset-0 z-[90] flex items-center justify-center"
+            className="fixed inset-0 z-[9990]"
             style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(16px)' }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -74,13 +82,13 @@ export const CaseStudyOverlay = memo(({ isOpen, onClose, caseStudy }: CaseStudyO
 
           {/* Centered Modal */}
           <motion.div
-            className="fixed inset-0 z-[95] flex items-center justify-center p-4 sm:p-8 pointer-events-none"
+            className="fixed inset-0 z-[9995] flex items-center justify-center p-4 sm:p-8 pointer-events-none"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
             <motion.div
-              className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-2xl pointer-events-auto"
+              className="relative w-full max-w-4xl max-h-[85vh] overflow-y-auto rounded-2xl pointer-events-auto"
               style={{
                 background: 'linear-gradient(135deg, rgba(12,12,12,0.97) 0%, rgba(6,6,6,0.99) 100%)',
                 backdropFilter: 'blur(40px)',
@@ -95,28 +103,29 @@ export const CaseStudyOverlay = memo(({ isOpen, onClose, caseStudy }: CaseStudyO
             >
               {/* Accent glow line at top */}
               <div
-                className="absolute top-0 inset-x-0 h-px"
+                className="absolute top-0 inset-x-0 h-[2px]"
                 style={{ background: `linear-gradient(90deg, transparent, ${accent.color}, transparent)` }}
               />
 
               {/* Close */}
               <button
                 onClick={onClose}
-                className="absolute top-4 right-4 z-[100] w-9 h-9 rounded-full flex items-center justify-center transition-all hover:scale-110"
+                className="absolute top-4 right-4 z-[100] w-11 h-11 rounded-full flex items-center justify-center transition-all hover:scale-110"
                 style={{
-                  background: 'rgba(255,255,255,0.06)',
-                  border: '1px solid rgba(255,255,255,0.1)',
+                  background: 'rgba(255,255,255,0.08)',
+                  border: '1px solid rgba(255,255,255,0.15)',
+                  boxShadow: '0 4px 20px rgba(0,0,0,0.4)',
                 }}
               >
-                <X className="w-4 h-4 text-white/70" />
+                <X className="w-5 h-5 text-white/80" />
               </button>
 
-              {/* Hero image */}
+              {/* Hero image with Ken Burns */}
               <motion.div
                 className="relative w-full aspect-[16/9] overflow-hidden rounded-t-2xl"
-                initial={{ scale: 1.05, opacity: 0 }}
+                initial={{ scale: 1.08, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                transition={{ duration: 0.6, ease: EASE }}
+                transition={{ duration: 0.8, ease: EASE }}
               >
                 <img
                   src={caseStudy.image}
@@ -124,14 +133,13 @@ export const CaseStudyOverlay = memo(({ isOpen, onClose, caseStudy }: CaseStudyO
                   className="w-full h-full object-cover object-center"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[rgba(12,12,12,0.97)] via-[rgba(12,12,12,0.3)] to-transparent" />
-                {/* Accent vignette */}
                 <div
                   className="absolute inset-0"
                   style={{ background: `radial-gradient(ellipse at center bottom, ${accent.glow} 0%, transparent 60%)` }}
                 />
               </motion.div>
 
-              <div className="px-6 sm:px-8 -mt-10 relative z-10 pb-10">
+              <div className="px-6 sm:px-10 -mt-10 relative z-10 pb-10">
                 {/* Header */}
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
@@ -148,7 +156,7 @@ export const CaseStudyOverlay = memo(({ isOpen, onClose, caseStudy }: CaseStudyO
                   >
                     Conceptual Exploration
                   </span>
-                  <h2 className="font-display text-3xl sm:text-4xl text-white leading-tight mb-2">
+                  <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl text-white leading-tight mb-2">
                     {caseStudy.title}
                   </h2>
                   <p className="font-body text-sm text-white/50 leading-relaxed mb-6">
@@ -268,6 +276,8 @@ export const CaseStudyOverlay = memo(({ isOpen, onClose, caseStudy }: CaseStudyO
       )}
     </AnimatePresence>
   );
+
+  return createPortal(overlay, document.body);
 });
 
 CaseStudyOverlay.displayName = 'CaseStudyOverlay';

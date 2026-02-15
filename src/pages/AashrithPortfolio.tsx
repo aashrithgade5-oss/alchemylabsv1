@@ -760,9 +760,8 @@ const ImmersiveProject = memo(({ project, index, isDark, isMobile, onDiscover }:
 });
 ImmersiveProject.displayName = 'ImmersiveProject';
 
-const CreativeProjectsSection = memo(({ isDark }: { isDark: boolean }) => {
+const CreativeProjectsSection = memo(({ isDark, onDiscover }: { isDark: boolean; onDiscover: (id: string) => void }) => {
   const isMobile = useIsMobile();
-  const [activeCaseStudy, setActiveCaseStudy] = useState<string | null>(null);
 
   return (
     <section id="work" className="relative">
@@ -799,17 +798,10 @@ const CreativeProjectsSection = memo(({ isDark }: { isDark: boolean }) => {
             index={i}
             isDark={isDark}
             isMobile={isMobile}
-            onDiscover={() => setActiveCaseStudy(project.id)}
+            onDiscover={() => onDiscover(project.id)}
           />
         ))}
       </div>
-
-      {/* Case Study Overlay */}
-      <CaseStudyOverlay
-        isOpen={!!activeCaseStudy}
-        onClose={() => setActiveCaseStudy(null)}
-        caseStudy={activeCaseStudy ? caseStudyData[activeCaseStudy] || null : null}
-      />
     </section>
   );
 });
@@ -1156,6 +1148,7 @@ const AashrithPortfolio = () => {
     }
     return true;
   });
+  const [activeCaseStudy, setActiveCaseStudy] = useState<string | null>(null);
 
   const toggleTheme = () => {
     setIsDark((prev) => {
@@ -1176,7 +1169,7 @@ const AashrithPortfolio = () => {
       {/* Seamless section flow — no gap divs */}
       <HeroSection isDark={isDark} />
       <VentureEcosystem isDark={isDark} />
-      <CreativeProjectsSection isDark={isDark} />
+      <CreativeProjectsSection isDark={isDark} onDiscover={setActiveCaseStudy} />
       <CareerTimeline isDark={isDark} />
       <PhilosophyCTA isDark={isDark} />
 
@@ -1189,6 +1182,13 @@ const AashrithPortfolio = () => {
         portfolioLinks={portfolioFooterLinks}
         ventureLinks={ventureFooterLinks}
         connectLinks={connectFooterLinks}
+      />
+
+      {/* Case Study Overlay — rendered at page root, portaled to document.body */}
+      <CaseStudyOverlay
+        isOpen={!!activeCaseStudy}
+        onClose={() => setActiveCaseStudy(null)}
+        caseStudy={activeCaseStudy ? caseStudyData[activeCaseStudy] || null : null}
       />
     </div>
   );
