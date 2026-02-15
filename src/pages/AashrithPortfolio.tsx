@@ -1,7 +1,7 @@
 import { memo, useState, useEffect, useRef, useCallback } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Sun, Moon, Menu, X, Download, Linkedin, Instagram, Youtube, ExternalLink, Film, Music, Sparkles, Users, Shield, Clock, Phone } from 'lucide-react';
+import { ArrowLeft, Sun, Moon, Menu, X, Linkedin, Instagram, Youtube, ExternalLink, Film, Music, Sparkles, Users, Shield, Clock, Phone } from 'lucide-react';
 import { SEOHead } from '@/components/SEOHead';
 import { aashrithData } from '@/data/foundersData';
 import { thoughtLeadershipEntries } from '@/data/portfolioProjects';
@@ -14,8 +14,9 @@ import {
   ParticleField,
 } from '@/components/portfolio';
 import { PortfolioFooter } from '@/components/portfolio/PortfolioFooter';
-import { BlueprintGrid, NoiseTexture, AnimatedCapabilities } from '@/components/effects';
+import { BlueprintGrid, NoiseTexture } from '@/components/effects';
 import { SequentianBackground } from '@/components/SequentianBackground';
+import { useIsMobile } from '@/hooks/use-mobile';
 import aashrithHeroBg from '@/assets/aashrith-hero-bg.mp4';
 import aetherBento from '@/assets/aether-bento.png';
 import genesisBento from '@/assets/genesis-bento.png';
@@ -38,7 +39,6 @@ const portfolioFooterLinks = [
   { label: 'Ventures', href: '#ventures' },
   { label: 'Work', href: '#work' },
   { label: 'Timeline', href: '#journey' },
-  { label: 'Insights', href: '#insights' },
   { label: 'Connect', href: '#connect' },
 ];
 const ventureFooterLinks = [
@@ -60,56 +60,53 @@ const creativeProjects = [
     num: '01',
     title: 'Aether Rituals',
     category: 'Luxury Lifestyle Brand',
-    description: 'A transcendent luxury brand architecture blending ancient rituals with modern minimalism. The color palette—Aether Black, Gold, Ivory, and Gray—creates a system of refined elegance. Each element speaks to transformation: the pause that reshapes reality.',
+    description: 'A transcendent luxury brand architecture blending ancient rituals with modern minimalism. The system speaks to transformation: the pause that reshapes reality.',
     image: aetherBento,
     tags: ['Brand Architecture', 'Product Design', 'Luxury Lifestyle'],
     year: '2024',
+    sequentianVariant: 4 as const,
   },
   {
     id: 'genesis',
     num: '02',
     title: 'Genesis',
     category: 'Streetwear Brand',
-    description: 'Apocalyptic streetwear for the AI generation. Genesis is a monochromatic visual system built on contrast, mystery, and dystopian aesthetics. The brand exists at the intersection of technology and rebellion—clothing for those who build the future.',
+    description: 'Apocalyptic streetwear for the AI generation. A monochromatic visual system built on contrast, mystery, and dystopian aesthetics—clothing for those who build the future.',
     image: genesisBento,
     tags: ['Streetwear', 'Branding', 'AI-Generated Visuals'],
     year: '2024',
+    sequentianVariant: 1 as const,
   },
   {
     id: 'dior-campaign',
     num: '03',
     title: 'Dior: Dual Fragrance',
     category: 'Conceptual Fragrance Campaign',
-    description: "AI-generated cinematic campaigns for two iconic fragrances—J'adore and Poison. One speaks in gold and amber light, the other in purple and shadow. Two color stories, one visual language: the duality of desire.",
+    description: "AI-generated cinematic campaigns for two iconic fragrances. One speaks in gold and amber light, the other in purple and shadow. Two color stories, one visual language.",
     image: diorBento,
     tags: ['Fragrance', 'Campaign Creative', 'AI Direction'],
     year: '2024',
+    sequentianVariant: 5 as const,
   },
   {
     id: 'oakley-showcase',
     num: '04',
     title: 'Oakley: Equipment Redefined',
     category: 'Athletic Brand Showcase',
-    description: 'Bold orange-red visual system for performance eyewear. AI-powered product photography pushing the boundaries of athletic brand aesthetics. Every frame is built for speed, precision, and satisfaction—equipment for our world.',
+    description: 'Bold visual system for performance eyewear. AI-powered product photography pushing the boundaries of athletic brand aesthetics. Built for speed, precision, and impact.',
     image: oakleyBento,
     tags: ['Athletic', 'Product Photography', 'AI Asset Generation'],
     year: '2024',
+    sequentianVariant: 3 as const,
   },
 ];
 
-// Section divider with red dot
-const SectionDivider = ({ isDark }: { isDark: boolean }) => (
-  <div className="h-16 w-full relative">
-    <div className={`absolute inset-0 bg-gradient-to-b from-transparent ${t(isDark, 'via-alchemy-black/30', 'via-neutral-100')} to-transparent`} />
-  </div>
-);
-
-// Project divider between creative projects
-const ProjectDivider = ({ isDark }: { isDark: boolean }) => (
-  <div className="flex items-center justify-center py-8 sm:py-12">
-    <div className={`flex-1 h-px ${t(isDark, 'bg-gradient-to-r from-transparent via-porcelain/8 to-transparent', 'bg-gradient-to-r from-transparent via-neutral-200 to-transparent')}`} />
-    <div className="w-2 h-2 rounded-full bg-alchemy-red/50 mx-6 animate-pulse" />
-    <div className={`flex-1 h-px ${t(isDark, 'bg-gradient-to-r from-transparent via-porcelain/8 to-transparent', 'bg-gradient-to-r from-transparent via-neutral-200 to-transparent')}`} />
+// ============================================
+// GRADIENT TRANSITION — seamless section blends
+// ============================================
+const GradientTransition = ({ isDark, height = 'h-32 sm:h-48' }: { isDark: boolean; height?: string }) => (
+  <div className={`${height} relative pointer-events-none`}>
+    <div className={`absolute inset-0 bg-gradient-to-b ${t(isDark, 'from-transparent via-alchemy-black/50 to-transparent', 'from-transparent via-neutral-100/50 to-transparent')}`} />
   </div>
 );
 
@@ -175,7 +172,6 @@ const PortfolioNav = memo(({ isDark }: { isDark: boolean }) => {
     { label: 'Ventures', href: '#ventures' },
     { label: 'Work', href: '#work' },
     { label: 'Timeline', href: '#journey' },
-    { label: 'Insights', href: '#insights' },
     { label: 'Connect', href: '#connect' },
   ];
 
@@ -261,7 +257,7 @@ const PortfolioNav = memo(({ isDark }: { isDark: boolean }) => {
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.4, ease: EASE }}>
                   <Link to="/about" onClick={() => setIsOpen(false)} className={`inline-flex items-center gap-2 font-mono text-sm ${t(isDark, 'text-porcelain/50', 'text-neutral-500')} hover:text-alchemy-red transition-colors mt-4`}>
                     <ArrowLeft className="w-4 h-4" />
-                    Back to Alchemy Labs
+                    Alchemy Labs
                   </Link>
                 </motion.div>
               </div>
@@ -289,13 +285,12 @@ const PortfolioNav = memo(({ isDark }: { isDark: boolean }) => {
 PortfolioNav.displayName = 'PortfolioNav';
 
 // ============================================
-// HERO — Cinematic with perspective tilt + enhanced blur reveal + floating labels
+// HERO — "The Arrival"
 // ============================================
 const HeroSection = memo(({ isDark }: { isDark: boolean }) => {
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
   const videoScale = useTransform(scrollYProgress, [0, 1], [1, 1.15]);
-  const perspectiveTilt = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
 
   return (
     <section ref={heroRef} className={`relative min-h-[100svh] flex flex-col items-center justify-center overflow-hidden ${t(isDark, 'bg-alchemy-black', 'bg-[#fafaf9]')}`}>
@@ -315,7 +310,7 @@ const HeroSection = memo(({ isDark }: { isDark: boolean }) => {
       <div className="absolute inset-0" style={{ background: t(isDark, 'radial-gradient(ellipse 70% 60% at 50% 50%, transparent 30%, rgba(10,10,10,0.7) 100%)', 'radial-gradient(ellipse 70% 60% at 50% 50%, transparent 30%, rgba(250,250,249,0.85) 100%)') }} />
       <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 50% 50% at 50% 70%, rgba(220,38,38,0.06) 0%, transparent 70%)' }} />
 
-      <SequentianBackground variant={1} opacity={isDark ? 0.12 : 0.07} blur={0} glow={false} />
+      <SequentianBackground variant={1} opacity={isDark ? 0.10 : 0.06} blur={0} glow={false} />
       <BlueprintGrid opacity={0.02} />
       <NoiseTexture opacity={0.03} />
       <ParticleField count={35} color="rgba(220,38,38,0.3)" opacity={0.4} />
@@ -324,21 +319,13 @@ const HeroSection = memo(({ isDark }: { isDark: boolean }) => {
       <div className={`absolute top-0 inset-x-0 h-32 bg-gradient-to-b ${t(isDark, 'from-alchemy-black', 'from-[#fafaf9]')} to-transparent z-[1]`} />
       <div className={`absolute bottom-0 inset-x-0 h-32 bg-gradient-to-t ${t(isDark, 'from-alchemy-black', 'from-[#fafaf9]')} to-transparent z-[1]`} />
 
-      {/* Content with perspective tilt */}
-      <motion.div
-        className="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 text-center"
-        style={{
-          perspective: 1000,
-          rotateX: perspectiveTilt,
-        }}
-      >
+      <div className="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 text-center">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }}>
           <span className={`font-mono text-[10px] sm:text-xs uppercase tracking-[0.4em] ${t(isDark, 'text-alchemy-red/70', 'text-alchemy-red/60')}`}>
-            Creative Director · Brand Architect · AI-Native
+            FOUNDER · BRAND ARCHITECT · CREATIVE DIRECTOR
           </span>
         </motion.div>
 
-        {/* Enhanced blur reveal: 20px → 0 */}
         <motion.h1
           className="mt-8 mb-6"
           initial={{ opacity: 0, filter: 'blur(20px)', y: 40 }}
@@ -353,12 +340,18 @@ const HeroSection = memo(({ isDark }: { isDark: boolean }) => {
           </span>
         </motion.h1>
 
-        <motion.div className="flex justify-center" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.7 }}>
-          <AnimatedCapabilities isDark={isDark} />
-        </motion.div>
+        {/* Static powerful tagline replacing AnimatedCapabilities */}
+        <motion.p
+          className={`font-body text-base sm:text-lg lg:text-xl max-w-2xl mx-auto ${t(isDark, 'text-porcelain/50', 'text-neutral-500')}`}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.7 }}
+        >
+          I don't design brands. I architect the systems that make them <span className="text-alchemy-red italic">inevitable.</span>
+        </motion.p>
 
         {/* Floating venture labels with horizontal drift */}
-        <motion.div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-6" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.9 }}>
+        <motion.div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-8" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.9 }}>
           <span className={`font-mono text-xs sm:text-sm ${t(isDark, 'text-porcelain/40', 'text-neutral-400')}`}>Founder of</span>
           {['Brand Alchemy', 'Ashzz.ai', 'Alchemy Labs'].map((name, i) => (
             <span key={name} className="flex items-center gap-2 sm:gap-3">
@@ -376,11 +369,11 @@ const HeroSection = memo(({ isDark }: { isDark: boolean }) => {
         </motion.div>
 
         <motion.div className={`flex justify-center gap-6 font-mono text-[10px] sm:text-xs ${t(isDark, 'text-porcelain/30', 'text-neutral-400')} mt-5`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.1 }}>
-          <span>Mumbai, IN</span><span>·</span><span>EST. 2024</span><span>·</span><span>50+ Projects</span>
+          <span>Mumbai, IN</span><span>·</span><span>NMIMS '26</span><span>·</span><span>Building in public</span>
         </motion.div>
-      </motion.div>
+      </div>
 
-      {/* Upgraded scroll indicator — capsule pill with "Explore" */}
+      {/* Scroll indicator */}
       <motion.div className="absolute bottom-8 sm:bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-10" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 3 }}>
         <motion.div
           className="flex items-center gap-2 px-4 py-2 rounded-full font-mono text-[9px] uppercase tracking-widest"
@@ -396,10 +389,10 @@ const HeroSection = memo(({ isDark }: { isDark: boolean }) => {
               '0 0 12px rgba(220,38,38,0.15)',
             ],
           }}
-          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+          transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
         >
-          <motion.div className="w-px h-3 bg-alchemy-red/60" animate={{ y: [0, 4, 0] }} transition={{ duration: 1.5, repeat: Infinity }} />
-          Explore
+          <motion.div className="w-px h-3 bg-alchemy-red/60" animate={{ y: [0, 4, 0] }} transition={{ duration: 2, repeat: Infinity }} />
+          Scroll to explore
         </motion.div>
       </motion.div>
     </section>
@@ -408,47 +401,21 @@ const HeroSection = memo(({ isDark }: { isDark: boolean }) => {
 HeroSection.displayName = 'HeroSection';
 
 // ============================================
-// VENTURE ECOSYSTEM — Glass tiles with shimmer + counter animation
+// VENTURE ECOSYSTEM — "The System"
 // ============================================
-const AnimatedCounter = ({ target, suffix = '' }: { target: string; suffix?: string }) => {
-  const [count, setCount] = useState(0);
-  const ref = useRef<HTMLSpanElement>(null);
-  const [triggered, setTriggered] = useState(false);
-
-  useEffect(() => {
-    if (!ref.current || triggered) return;
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        setTriggered(true);
-        const numericTarget = parseFloat(target.replace(/[^0-9.]/g, ''));
-        const duration = 1500;
-        const start = performance.now();
-        const animate = (now: number) => {
-          const elapsed = now - start;
-          const progress = Math.min(elapsed / duration, 1);
-          const eased = 1 - Math.pow(1 - progress, 3);
-          setCount(Math.floor(numericTarget * eased));
-          if (progress < 1) requestAnimationFrame(animate);
-        };
-        requestAnimationFrame(animate);
-      }
-    }, { threshold: 0.5 });
-    observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, [target, triggered]);
-
-  return <span ref={ref}>{count}{suffix}</span>;
-};
-
 const VentureEcosystem = memo(({ isDark }: { isDark: boolean }) => {
   const ventures = aashrithData.ventures || [];
+  const ventureDescriptions = [
+    'Thought leadership platform. Where brand strategy meets systems thinking.',
+    'AI-native creative community. 3.8K+ builders experimenting at the frontier.',
+    'Founder-led studio. AI-powered brand systems for ventures that think long-term.',
+  ];
   const ventureConfig = [
     { venture: ventures[0], num: '01', speed: 'slow' as const, direction: 'left' as const, gradient: 'rgba(220,38,38,0.06)', monogram: 'BA' },
     { venture: ventures[1], num: '02', speed: 'medium' as const, direction: 'right' as const, gradient: 'rgba(255,255,255,0.04)', monogram: 'AZ' },
     { venture: ventures[2], num: '03', speed: 'slow' as const, direction: 'left' as const, gradient: 'rgba(220,38,38,0.04)', monogram: 'AL' },
   ];
 
-  // Styled glass tiles instead of placeholders
   const createTiles = (gradientTint: string, monogram: string) =>
     Array.from({ length: 10 }, (_, i) => (
       <motion.div
@@ -468,7 +435,6 @@ const VentureEcosystem = memo(({ isDark }: { isDark: boolean }) => {
         }}
         transition={{ duration: 0.3 }}
       >
-        {/* Top shimmer line */}
         <div className="absolute top-0 left-0 right-0 h-px overflow-hidden">
           <motion.div
             className="h-full w-1/3"
@@ -485,6 +451,7 @@ const VentureEcosystem = memo(({ isDark }: { isDark: boolean }) => {
 
   return (
     <SectionShell id="ventures" padding="xl" maxWidth="full" className={`relative ${t(isDark, '', 'bg-[#fafaf9]')}`}>
+      <SequentianBackground variant={2} opacity={isDark ? 0.10 : 0.06} glow={false} />
       <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 60% 50% at 50% 50%, rgba(220,38,38,0.04) 0%, transparent 70%)' }} />
       <ParticleField count={10} color="rgba(220,38,38,0.2)" opacity={0.15} />
 
@@ -493,10 +460,10 @@ const VentureEcosystem = memo(({ isDark }: { isDark: boolean }) => {
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: 0.6, ease: EASE }}>
             <EyebrowLabel className="mb-4">VENTURES & INTELLECTUAL PROPERTY</EyebrowLabel>
             <h2 className={`font-display text-3xl sm:text-4xl lg:text-5xl ${t(isDark, 'text-porcelain', 'text-neutral-900')} mb-3`}>
-              Three systems. <span className="text-alchemy-red italic">One vision.</span>
+              Three ventures. <span className="text-alchemy-red italic">One operating system.</span>
             </h2>
             <p className={`font-body text-base sm:text-lg max-w-2xl ${t(isDark, 'text-porcelain/50', 'text-neutral-500')}`}>
-              Live portfolio. Proof-of-work. Building in public.
+              Each venture is a living laboratory — proof that the frameworks work before they reach a client.
             </p>
           </motion.div>
         </div>
@@ -524,11 +491,8 @@ const VentureEcosystem = memo(({ isDark }: { isDark: boolean }) => {
                 <span className="font-mono text-2xl sm:text-3xl font-bold text-alchemy-red/30">{num}</span>
                 <div>
                   <h3 className={`font-body font-bold text-lg sm:text-xl ${t(isDark, 'text-porcelain', 'text-neutral-900')}`}>{venture.name}</h3>
-                  <p className={`font-mono text-[10px] sm:text-xs tracking-wider ${t(isDark, 'text-porcelain/40', 'text-neutral-500')}`}>
-                    {venture.type}
-                    {venture.communitySize && (
-                      <span> · <AnimatedCounter target="3800" suffix="+" /> Members</span>
-                    )}
+                  <p className={`font-body text-xs sm:text-sm ${t(isDark, 'text-porcelain/45', 'text-neutral-500')} mt-1 max-w-md`}>
+                    {ventureDescriptions[idx]}
                   </p>
                 </div>
               </motion.div>
@@ -545,171 +509,173 @@ const VentureEcosystem = memo(({ isDark }: { isDark: boolean }) => {
 VentureEcosystem.displayName = 'VentureEcosystem';
 
 // ============================================
-// CREATIVE PROJECTS — The Main Event (NEW)
+// CREATIVE PROJECTS — "The Proof" — Immersive Sticky Scroll
 // ============================================
-const CreativeProjectsSection = memo(({ isDark }: { isDark: boolean }) => {
+const ImmersiveProject = memo(({ project, index, isDark, isMobile }: { project: typeof creativeProjects[0]; index: number; isDark: boolean; isMobile: boolean }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start end', 'end start'],
+  });
+  const y = useTransform(scrollYProgress, [0, 1], ['0%', '-15%']);
+  const imgScale = useTransform(scrollYProgress, [0, 1], [1, 1.06]);
+
   return (
-    <section id="work" className={`relative ${t(isDark, '', 'bg-[#fafaf9]')}`}>
-      {/* Section intro */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-20 sm:pt-32 pb-8 sm:pb-16">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
-          transition={{ duration: 0.8, ease: EASE }}
-          className="text-center"
-        >
-          <EyebrowLabel className="mb-4">SELECTED CREATIVE WORK</EyebrowLabel>
-          <h2 className={`font-display text-3xl sm:text-4xl lg:text-6xl ${t(isDark, 'text-porcelain', 'text-neutral-900')} mb-4`}>
-            Systems executed<br />
-            <span className="text-alchemy-red italic">at the highest level.</span>
-          </h2>
-          <p className={`font-body text-sm sm:text-base max-w-xl mx-auto ${t(isDark, 'text-porcelain/45', 'text-neutral-500')}`}>
-            Four AI-native campaigns spanning luxury, streetwear, fragrance, and athletic brands.
-            Each built on strategic architecture, not surface aesthetics.
-          </p>
-        </motion.div>
+    <div
+      ref={ref}
+      className={`${isMobile ? 'relative min-h-[75vh]' : 'sticky top-0 h-screen'} w-full overflow-hidden`}
+      style={{ zIndex: 10 + index }}
+    >
+      {/* Sequentian atmospheric layer */}
+      <SequentianBackground variant={project.sequentianVariant} opacity={isDark ? 0.08 : 0.05} glow={false} />
+
+      {/* Full-bleed background image */}
+      <motion.img
+        src={project.image}
+        alt={project.title}
+        className="absolute inset-0 w-full h-full object-cover"
+        style={isMobile ? {} : { y, scale: imgScale, willChange: 'transform' }}
+        loading={index === 0 ? 'eager' : 'lazy'}
+        decoding="async"
+      />
+
+      {/* Dark gradient overlay for text legibility */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/20" />
+      <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-transparent" />
+
+      {/* Ghost number */}
+      <div className="absolute top-8 right-8 sm:top-12 sm:right-16 pointer-events-none select-none">
+        <span className="font-mono text-[15vw] sm:text-[20vw] font-black text-white/[0.03] leading-none block">
+          {project.num}
+        </span>
       </div>
 
-      {/* Project showcases */}
-      {creativeProjects.map((project, i) => (
-        <div key={project.id}>
-          <div className={`max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-32 ${i % 2 === 1 ? 'lg:flex-row-reverse' : ''}`}>
-            <div className={`flex flex-col ${i % 2 === 1 ? 'lg:flex-row-reverse' : 'lg:flex-row'} gap-8 sm:gap-12 lg:gap-16 items-center`}>
-              {/* Metadata column */}
-              <motion.div
-                className="w-full lg:w-[40%] space-y-5"
-                initial={{ opacity: 0, x: i % 2 === 0 ? -30 : 30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, margin: '-100px' }}
-                transition={{ duration: 0.7, ease: EASE }}
-              >
-                {/* Number */}
-                <motion.span
-                  className="font-mono text-5xl sm:text-7xl font-bold text-alchemy-red/15 block"
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, ease: EASE }}
-                >
-                  {project.num}
-                </motion.span>
+      {/* Editorial text overlay — bottom left */}
+      <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-12 lg:p-20 z-10">
+        <div className="max-w-2xl">
+          {/* Conceptual label */}
+          <motion.div
+            className="flex items-center gap-3 mb-4"
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, ease: EASE }}
+          >
+            <span className="font-mono text-[10px] sm:text-xs uppercase tracking-[0.2em] text-white/40">
+              {project.category}
+            </span>
+            <span className="font-mono text-[9px] px-2.5 py-1 rounded-full text-white/35 uppercase tracking-wider"
+              style={{ border: '1px solid rgba(255,255,255,0.12)' }}
+            >
+              Conceptual Exploration
+            </span>
+          </motion.div>
 
-                {/* Category */}
-                <span className={`font-mono text-[10px] sm:text-xs uppercase tracking-[0.2em] ${t(isDark, 'text-porcelain/40', 'text-neutral-400')}`}>
-                  {project.category}
-                </span>
+          {/* Title with blur-in */}
+          <motion.h3
+            className="font-display text-3xl sm:text-5xl lg:text-7xl text-white mb-4 leading-[0.95]"
+            initial={{ opacity: 0, filter: 'blur(8px)' }}
+            whileInView={{ opacity: 1, filter: 'blur(0px)' }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.1, ease: EASE }}
+          >
+            {project.title}
+          </motion.h3>
 
-                {/* Title with blur-in */}
-                <motion.h3
-                  className={`font-display text-2xl sm:text-3xl lg:text-4xl ${t(isDark, 'text-porcelain', 'text-neutral-900')}`}
-                  initial={{ opacity: 0, filter: 'blur(8px)' }}
-                  whileInView={{ opacity: 1, filter: 'blur(0px)' }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.15, ease: EASE }}
-                >
-                  {project.title}
-                </motion.h3>
+          {/* Description */}
+          <motion.p
+            className="font-body text-sm sm:text-base text-white/60 max-w-lg leading-relaxed mb-5"
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2, ease: EASE }}
+          >
+            {project.description}
+          </motion.p>
 
-                {/* Description */}
-                <motion.p
-                  className={`font-body text-sm sm:text-base leading-relaxed ${t(isDark, 'text-porcelain/55', 'text-neutral-500')}`}
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: 0.25, ease: EASE }}
-                >
-                  {project.description}
-                </motion.p>
-
-                {/* Tag pills */}
-                <motion.div
-                  className="flex flex-wrap gap-2"
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: 0.35, ease: EASE }}
-                >
-                  {project.tags.map((tag, j) => (
-                    <motion.span
-                      key={tag}
-                      className="font-mono text-[10px] px-3 py-1.5 rounded-full"
-                      style={{
-                        background: t(isDark, 'rgba(220,38,38,0.08)', 'rgba(220,38,38,0.06)'),
-                        border: `1px solid ${t(isDark, 'rgba(220,38,38,0.15)', 'rgba(220,38,38,0.12)')}`,
-                        color: t(isDark, 'rgba(220,38,38,0.8)', 'rgba(220,38,38,0.7)'),
-                      }}
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.3, delay: 0.4 + j * 0.05 }}
-                    >
-                      {tag}
-                    </motion.span>
-                  ))}
-                </motion.div>
-              </motion.div>
-
-              {/* Image column */}
-              <motion.div
-                className="w-full lg:w-[60%] relative group"
-                initial={{ opacity: 0, scale: 1.03 }}
+          {/* Tags */}
+          <motion.div
+            className="flex flex-wrap gap-2 mb-3"
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.3, ease: EASE }}
+          >
+            {project.tags.map((tag, j) => (
+              <motion.span
+                key={tag}
+                className="font-mono text-[10px] px-3 py-1.5 rounded-full text-white/60"
+                style={{
+                  background: 'rgba(220,38,38,0.12)',
+                  border: '1px solid rgba(220,38,38,0.2)',
+                }}
+                initial={{ opacity: 0, scale: 0.9 }}
                 whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true, margin: '-100px' }}
-                transition={{ duration: 0.8, ease: EASE, delay: 0.1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.3, delay: 0.35 + j * 0.05 }}
               >
-                <div
-                  className="relative rounded-2xl overflow-hidden"
-                  style={{
-                    border: `1px solid ${t(isDark, 'rgba(255,255,255,0.08)', 'rgba(0,0,0,0.06)')}`,
-                  }}
-                >
-                  {/* Glass overlay */}
-                  <div
-                    className="absolute inset-0 z-10 pointer-events-none transition-opacity duration-500 group-hover:opacity-0"
-                    style={{
-                      background: 'linear-gradient(135deg, rgba(255,255,255,0.04) 0%, transparent 50%, rgba(0,0,0,0.1) 100%)',
-                    }}
-                  />
+                {tag}
+              </motion.span>
+            ))}
+          </motion.div>
 
-                  <motion.img
-                    src={project.image}
-                    alt={project.title}
-                    className="w-full h-auto object-cover"
-                    loading="lazy"
-                    decoding="async"
-                    whileHover={{
-                      scale: 1.02,
-                    }}
-                    transition={{ duration: 0.5 }}
-                  />
-
-                  {/* Hover glow border */}
-                  <motion.div
-                    className="absolute inset-0 rounded-2xl pointer-events-none z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                    style={{
-                      boxShadow: '0 0 40px rgba(220,38,38,0.15), inset 0 0 40px rgba(220,38,38,0.03)',
-                      border: '1px solid rgba(220,38,38,0.25)',
-                    }}
-                  />
-                </div>
-              </motion.div>
-            </div>
-          </div>
-
-          {/* Divider between projects */}
-          {i < creativeProjects.length - 1 && (
-            <ProjectDivider isDark={isDark} />
-          )}
+          {/* Year */}
+          <motion.span
+            className="font-mono text-[10px] text-white/25 tracking-wider"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.5 }}
+          >
+            {project.year}
+          </motion.span>
         </div>
-      ))}
+      </div>
+    </div>
+  );
+});
+ImmersiveProject.displayName = 'ImmersiveProject';
+
+const CreativeProjectsSection = memo(({ isDark }: { isDark: boolean }) => {
+  const isMobile = useIsMobile();
+
+  return (
+    <section id="work" className="relative">
+      {/* Section intro */}
+      <div className={`${t(isDark, 'bg-alchemy-black', 'bg-[#fafaf9]')} relative z-20`}>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-20 sm:pt-32 pb-12 sm:pb-20">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.8, ease: EASE }}
+            className="text-center"
+          >
+            <EyebrowLabel className="mb-4">SELECTED CREATIVE WORK</EyebrowLabel>
+            <h2 className={`font-display text-3xl sm:text-4xl lg:text-6xl ${t(isDark, 'text-porcelain', 'text-neutral-900')} mb-4`}>
+              The proof is in<br />
+              <span className="text-alchemy-red italic">the systems.</span>
+            </h2>
+            <p className={`font-body text-sm sm:text-base max-w-xl mx-auto ${t(isDark, 'text-porcelain/45', 'text-neutral-500')}`}>
+              Four AI-native brand explorations. Each built on strategic architecture, not surface aesthetics.
+            </p>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* Immersive sticky-stacked projects (desktop) / simple stack (mobile) */}
+      <div style={isMobile ? {} : { height: `${creativeProjects.length * 100}vh` }}>
+        {creativeProjects.map((project, i) => (
+          <ImmersiveProject key={project.id} project={project} index={i} isDark={isDark} isMobile={isMobile} />
+        ))}
+      </div>
     </section>
   );
 });
 CreativeProjectsSection.displayName = 'CreativeProjectsSection';
 
 // ============================================
-// CAREER TIMELINE — Scroll-linked opacity + pulse dots
+// CAREER TIMELINE — "The Arc"
 // ============================================
 const TimelineCard = memo(({ exp, i, isDark }: { exp: typeof aashrithData.experience[0]; i: number; isDark: boolean }) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -737,14 +703,14 @@ const TimelineCard = memo(({ exp, i, isDark }: { exp: typeof aashrithData.experi
       </div>
 
       <div
-        className="rounded-2xl p-6 sm:p-8 hover:-translate-y-1 transition-all duration-300"
+        className="rounded-2xl p-5 sm:p-6 mb-2"
         style={{
           background: t(isDark, 'linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)', 'linear-gradient(135deg, rgba(0,0,0,0.02) 0%, rgba(0,0,0,0.005) 100%)'),
           border: `1px solid ${t(isDark, 'rgba(255,255,255,0.06)', 'rgba(0,0,0,0.06)')}`,
           backdropFilter: 'blur(12px)',
         }}
       >
-        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-4">
+        <div className="flex items-start justify-between gap-4 mb-3">
           <div>
             <h3 className={`font-body font-bold text-base sm:text-lg ${t(isDark, 'text-porcelain', 'text-neutral-900')}`}>{exp.company}</h3>
             <p className="font-mono text-xs text-alchemy-red/70 tracking-wider mt-0.5">{exp.role}</p>
@@ -777,12 +743,9 @@ const TimelineCard = memo(({ exp, i, isDark }: { exp: typeof aashrithData.experi
                   color: t(isDark, 'rgba(220,38,38,0.7)', 'rgba(220,38,38,0.8)'),
                 }}
               >
-                {/* Shimmer sweep on hover */}
                 <div
                   className="absolute inset-0 -translate-x-full group-hover/pill:translate-x-full transition-transform duration-700"
-                  style={{
-                    background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent)',
-                  }}
+                  style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent)' }}
                 />
                 <span className="relative z-10">
                   <span className="opacity-60">{m.label}:</span> {m.value}
@@ -809,7 +772,7 @@ const CareerTimeline = memo(({ isDark }: { isDark: boolean }) => {
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: 0.6, ease: EASE }} className="mb-16">
           <EyebrowLabel className="mb-4">CAREER TIMELINE</EyebrowLabel>
           <h2 className={`font-display text-3xl sm:text-4xl lg:text-5xl ${t(isDark, 'text-porcelain', 'text-neutral-900')}`}>
-            Building with <span className="text-alchemy-red italic">Intent.</span>
+            The arc of <span className="text-alchemy-red italic">intent.</span>
           </h2>
         </motion.div>
 
@@ -838,225 +801,18 @@ const CareerTimeline = memo(({ isDark }: { isDark: boolean }) => {
 CareerTimeline.displayName = 'CareerTimeline';
 
 // ============================================
-// BEYOND THE WORK — 3D tilt + icon glow
+// PHILOSOPHY + CTA — "The Invitation"
 // ============================================
 const creativePursuits = [
-  { icon: Film, title: 'Film & Visual Storytelling', desc: 'Interest in cinematic narratives and visual direction.' },
-  { icon: Music, title: 'Music & Sound Design', desc: 'Curating soundscapes that inform creative rhythm.' },
-  { icon: Sparkles, title: 'AI Art Experimentation', desc: 'Pushing boundaries of generative media.' },
-  { icon: Users, title: 'Community Building', desc: 'Nurturing spaces for creative minds.' },
+  { icon: Film, title: 'Film', desc: 'Visual storytelling' },
+  { icon: Music, title: 'Music', desc: 'Sound design' },
+  { icon: Sparkles, title: 'AI Art', desc: 'Generative media' },
+  { icon: Users, title: 'Community', desc: '3.8K+ builders' },
 ];
 
-const TiltCard = memo(({ children, isDark, delay }: { children: React.ReactNode; isDark: boolean; delay: number }) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
-
-  const handleMouseMove = useCallback((e: React.MouseEvent) => {
-    if (!ref.current) return;
-    const rect = ref.current.getBoundingClientRect();
-    const x = (e.clientY - rect.top - rect.height / 2) / rect.height * -6;
-    const y = (e.clientX - rect.left - rect.width / 2) / rect.width * 6;
-    setTilt({ x: Math.max(-3, Math.min(3, x)), y: Math.max(-3, Math.min(3, y)) });
-  }, []);
-
-  const handleMouseLeave = useCallback(() => setTilt({ x: 0, y: 0 }), []);
-
-  return (
-    <motion.div
-      ref={ref}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      className="rounded-2xl p-6 sm:p-8 transition-all duration-300"
-      style={{
-        background: t(isDark, 'linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)', 'linear-gradient(135deg, rgba(0,0,0,0.02) 0%, rgba(0,0,0,0.005) 100%)'),
-        border: `1px solid ${t(isDark, 'rgba(255,255,255,0.06)', 'rgba(0,0,0,0.06)')}`,
-        backdropFilter: 'blur(12px)',
-        transform: `perspective(800px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
-      }}
-      initial={{ opacity: 0, y: 20, scale: 0.95 }}
-      whileInView={{ opacity: 1, y: 0, scale: 1 }}
-      viewport={{ once: true }}
-      transition={{ delay, duration: 0.6, ease: EASE }}
-    >
-      {children}
-    </motion.div>
-  );
-});
-TiltCard.displayName = 'TiltCard';
-
-const BeyondTheWork = memo(({ isDark }: { isDark: boolean }) => (
-  <SectionShell padding="xl" className={`relative ${t(isDark, '', 'bg-[#fafaf9]')}`}>
-    <SequentianBackground variant={2} opacity={isDark ? 0.12 : 0.07} glow={false} />
-    <div className="relative z-10 max-w-4xl mx-auto">
-      <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: 0.6, ease: EASE }} className="mb-12">
-        <EyebrowLabel className="mb-4">BEYOND THE WORK</EyebrowLabel>
-        <h2 className={`font-display text-2xl sm:text-3xl lg:text-4xl italic ${t(isDark, 'text-porcelain', 'text-neutral-900')}`}>
-          When the screens go dark.
-        </h2>
-      </motion.div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-        {creativePursuits.map((item, i) => (
-          <TiltCard key={item.title} isDark={isDark} delay={i * 0.15}>
-            {/* Icon with pulsing glow */}
-            <motion.div
-              className="mb-4"
-              animate={{
-                filter: [
-                  'drop-shadow(0 0 4px rgba(220,38,38,0.3))',
-                  'drop-shadow(0 0 12px rgba(220,38,38,0.6))',
-                  'drop-shadow(0 0 4px rgba(220,38,38,0.3))',
-                ],
-              }}
-              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut', delay: i * 0.5 }}
-            >
-              <item.icon className={`w-5 h-5 ${t(isDark, 'text-alchemy-red/60', 'text-alchemy-red/70')}`} />
-            </motion.div>
-            <h3 className={`font-body font-bold text-sm sm:text-base mb-2 ${t(isDark, 'text-porcelain', 'text-neutral-900')}`}>{item.title}</h3>
-            <p className={`font-body text-xs sm:text-sm ${t(isDark, 'text-porcelain/45', 'text-neutral-500')}`}>{item.desc}</p>
-          </TiltCard>
-        ))}
-      </div>
-    </div>
-  </SectionShell>
-));
-BeyondTheWork.displayName = 'BeyondTheWork';
-
-// ============================================
-// INSIGHTS — Watermark numbers + bottom hover glow
-// ============================================
-const InsightsSection = memo(({ isDark }: { isDark: boolean }) => (
-  <SectionShell id="insights" padding="xl" className={`relative ${t(isDark, '', 'bg-[#fafaf9]')}`}>
-    <div className="relative z-10">
-      <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: 0.6, ease: EASE }} className="mb-10">
-        <EyebrowLabel className="mb-3">INSIGHTS</EyebrowLabel>
-        <h2 className={`font-display text-2xl sm:text-3xl lg:text-4xl italic ${t(isDark, 'text-porcelain', 'text-neutral-900')}`}>
-          Recent public thought leadership.
-        </h2>
-      </motion.div>
-
-      {/* Desktop grid */}
-      <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        {thoughtLeadershipEntries.map((entry, i) => (
-          <motion.a
-            key={entry.id}
-            href={entry.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group rounded-2xl p-6 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 relative overflow-hidden"
-            style={{
-              minHeight: '220px',
-              background: t(isDark, 'linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)', 'linear-gradient(135deg, rgba(0,0,0,0.02) 0%, rgba(0,0,0,0.005) 100%)'),
-              border: `1px solid ${t(isDark, 'rgba(255,255,255,0.06)', 'rgba(0,0,0,0.06)')}`,
-              backdropFilter: 'blur(12px)',
-            }}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: i * 0.06, duration: 0.5, ease: EASE }}
-            whileHover={{
-              borderColor: 'rgba(220,38,38,0.3)',
-              boxShadow: '0 8px 30px rgba(220,38,38,0.08)',
-            }}
-          >
-            {/* Watermark number */}
-            <span className={`absolute top-3 right-4 font-mono text-6xl font-black ${t(isDark, 'text-porcelain/[0.03]', 'text-neutral-900/[0.03]')} pointer-events-none select-none`}>
-              {String(i + 1).padStart(2, '0')}
-            </span>
-
-            {/* Bottom hover glow line */}
-            <div className="absolute bottom-0 left-0 h-px w-0 group-hover:w-full bg-gradient-to-r from-alchemy-red/60 to-alchemy-red/20 transition-all duration-500" />
-
-            <div>
-              <div className="flex items-center gap-1.5 mb-4">
-                {entry.type === 'instagram' ? (
-                  <Instagram className="w-3.5 h-3.5 text-alchemy-red/60" />
-                ) : (
-                  <Linkedin className="w-3.5 h-3.5 text-alchemy-red/60" />
-                )}
-                <span className={`font-mono text-[9px] uppercase tracking-wider ${t(isDark, 'text-porcelain/30', 'text-neutral-400')}`}>
-                  {entry.type === 'instagram' ? 'Instagram' : 'LinkedIn'}
-                </span>
-              </div>
-              <h4 className={`font-display text-base sm:text-lg font-medium ${t(isDark, 'text-porcelain/80', 'text-neutral-700')} line-clamp-3 leading-snug`}>
-                {entry.title}
-              </h4>
-              {entry.excerpt && (
-                <p className={`font-body text-xs mt-3 line-clamp-2 ${t(isDark, 'text-porcelain/40', 'text-neutral-400')}`}>{entry.excerpt}</p>
-              )}
-            </div>
-            <ExternalLink className={`w-4 h-4 mt-4 ${t(isDark, 'text-porcelain/20', 'text-neutral-300')} group-hover:text-alchemy-red transition-colors`} />
-          </motion.a>
-        ))}
-      </div>
-
-      {/* Mobile horizontal scroll with fade hint */}
-      <div className="sm:hidden relative">
-        <div className="flex gap-3 overflow-x-auto pb-4 snap-x snap-mandatory -mx-4 px-4">
-          {thoughtLeadershipEntries.map((entry, i) => (
-            <motion.a
-              key={entry.id}
-              href={entry.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-shrink-0 w-[280px] snap-start group rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden"
-              style={{
-                minHeight: '180px',
-                background: t(isDark, 'linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)', 'linear-gradient(135deg, rgba(0,0,0,0.02) 0%, rgba(0,0,0,0.005) 100%)'),
-                border: `1px solid ${t(isDark, 'rgba(255,255,255,0.06)', 'rgba(0,0,0,0.06)')}`,
-                backdropFilter: 'blur(12px)',
-              }}
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.06, duration: 0.5 }}
-            >
-              <span className={`absolute top-2 right-3 font-mono text-5xl font-black ${t(isDark, 'text-porcelain/[0.03]', 'text-neutral-900/[0.03]')} pointer-events-none select-none`}>
-                {String(i + 1).padStart(2, '0')}
-              </span>
-              <div>
-                <div className="flex items-center gap-1.5 mb-3">
-                  {entry.type === 'instagram' ? (
-                    <Instagram className="w-3.5 h-3.5 text-alchemy-red/60" />
-                  ) : (
-                    <Linkedin className="w-3.5 h-3.5 text-alchemy-red/60" />
-                  )}
-                  <span className={`font-mono text-[9px] uppercase tracking-wider ${t(isDark, 'text-porcelain/30', 'text-neutral-400')}`}>
-                    {entry.type === 'instagram' ? 'Instagram' : 'LinkedIn'}
-                  </span>
-                </div>
-                <h4 className={`font-display text-base font-medium ${t(isDark, 'text-porcelain/80', 'text-neutral-700')} line-clamp-3 leading-snug`}>
-                  {entry.title}
-                </h4>
-              </div>
-              <ExternalLink className={`w-3.5 h-3.5 mt-3 ${t(isDark, 'text-porcelain/20', 'text-neutral-300')}`} />
-            </motion.a>
-          ))}
-        </div>
-        {/* Right fade hint */}
-        <div className={`absolute top-0 right-0 w-8 h-full pointer-events-none ${t(isDark, 'bg-gradient-to-l from-alchemy-black to-transparent', 'bg-gradient-to-l from-[#fafaf9] to-transparent')}`} />
-      </div>
-    </div>
-  </SectionShell>
-));
-InsightsSection.displayName = 'InsightsSection';
-
-// ============================================
-// PHILOSOPHY + CTA — Word-by-word reveal + radial pulse + trust icons
-// ============================================
 const WordRevealQuote = memo(({ isDark }: { isDark: boolean }) => {
-  const words = "Brands don't fail because of lack of creativity—they fail because they lack".split(' ');
-  const highlightWords: Record<string, boolean> = {};
-  // Highlight keywords
-  const fullSentence = [
-    ...words,
-    'structure,',
-    'taste,',
-    'and',
-    'long-term',
-    'thinking.',
-  ];
-  const highlightSet = new Set(['structure,', 'taste,', 'long-term', 'thinking.']);
+  const fullSentence = "The best brands aren't designed — they're engineered to feel inevitable.".split(' ');
+  const highlightSet = new Set(['engineered', 'inevitable.']);
 
   return (
     <motion.blockquote
@@ -1097,32 +853,49 @@ const PhilosophyCTA = memo(({ isDark }: { isDark: boolean }) => (
       <WordRevealQuote isDark={isDark} />
 
       <motion.p className={`font-mono text-xs tracking-wider mt-8 ${t(isDark, 'text-porcelain/30', 'text-neutral-400')}`} initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: 0.3 }}>
-        — Aashrith Gade, Founder
+        — Aashrith Gade
       </motion.p>
 
+      {/* Beyond the work — compact pills */}
+      <motion.div
+        className={`flex flex-wrap justify-center gap-3 mt-14 mb-14`}
+        initial={{ opacity: 0, y: 15 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ delay: 0.4, duration: 0.5 }}
+      >
+        {creativePursuits.map((item, i) => (
+          <div
+            key={item.title}
+            className="flex items-center gap-2 px-4 py-2 rounded-full font-mono text-[10px] sm:text-xs"
+            style={{
+              background: t(isDark, 'rgba(255,255,255,0.03)', 'rgba(0,0,0,0.03)'),
+              border: `1px solid ${t(isDark, 'rgba(255,255,255,0.06)', 'rgba(0,0,0,0.06)')}`,
+              color: t(isDark, 'rgba(245,245,244,0.5)', 'rgba(64,64,64,0.6)'),
+            }}
+          >
+            <item.icon className="w-3 h-3 text-alchemy-red/50" />
+            <span>{item.title}</span>
+          </div>
+        ))}
+      </motion.div>
+
       {/* CTA with radial red pulse */}
-      <motion.div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-16 relative" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.5, duration: 0.6 }}>
-        {/* Radial pulse behind CTA */}
+      <motion.div className="flex flex-col items-center justify-center gap-4 relative" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.5, duration: 0.6 }}>
         <motion.div
           className="absolute inset-0 -z-10 flex items-center justify-center pointer-events-none"
-          animate={{
-            opacity: [0.3, 0.6, 0.3],
-          }}
+          animate={{ opacity: [0.3, 0.6, 0.3] }}
           transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
         >
           <div className="w-64 h-32 rounded-full" style={{ background: 'radial-gradient(ellipse, rgba(220,38,38,0.15) 0%, transparent 70%)' }} />
         </motion.div>
 
         <MagneticCTA href="/contact" variant="primary" size="lg">
-          Start a Conversation
-        </MagneticCTA>
-        <MagneticCTA href="#" variant="ghost" size="lg" icon={false}>
-          <Download className="w-4 h-4 mr-2" />
-          Download Portfolio PDF
+          Let's Build Something Inevitable
         </MagneticCTA>
       </motion.div>
 
-      {/* Trust signals with icons */}
+      {/* Trust signals */}
       <motion.div className={`flex justify-center gap-4 sm:gap-6 font-mono text-[10px] sm:text-xs uppercase tracking-wider mt-10 ${t(isDark, 'text-porcelain/30', 'text-neutral-400')}`} initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: 0.7 }}>
         <span className="flex items-center gap-1.5"><Shield className="w-3 h-3" />NDA Available</span>
         <span>·</span>
@@ -1130,6 +903,35 @@ const PhilosophyCTA = memo(({ isDark }: { isDark: boolean }) => (
         <span>·</span>
         <span className="flex items-center gap-1.5"><Phone className="w-3 h-3" />Free First Call</span>
       </motion.div>
+
+      {/* Featured writing micro-row */}
+      {thoughtLeadershipEntries.length > 0 && (
+        <motion.div
+          className="mt-12 pt-8"
+          style={{ borderTop: `1px solid ${t(isDark, 'rgba(255,255,255,0.06)', 'rgba(0,0,0,0.06)')}` }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.8 }}
+        >
+          <p className={`font-mono text-[10px] uppercase tracking-widest mb-4 ${t(isDark, 'text-porcelain/25', 'text-neutral-400')}`}>Featured Writing</p>
+          <div className="flex flex-wrap justify-center gap-3">
+            {thoughtLeadershipEntries.slice(0, 3).map((entry) => (
+              <a
+                key={entry.id}
+                href={entry.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`inline-flex items-center gap-1.5 font-body text-xs ${t(isDark, 'text-porcelain/40 hover:text-porcelain/70', 'text-neutral-500 hover:text-neutral-700')} transition-colors`}
+              >
+                {entry.type === 'instagram' ? <Instagram className="w-3 h-3" /> : <Linkedin className="w-3 h-3" />}
+                <span className="line-clamp-1 max-w-[180px]">{entry.title}</span>
+                <ExternalLink className="w-2.5 h-2.5 opacity-40" />
+              </a>
+            ))}
+          </div>
+        </motion.div>
+      )}
     </div>
   </SectionShell>
 ));
@@ -1166,7 +968,7 @@ const ScrollProgressBar = memo(() => {
 ScrollProgressBar.displayName = 'ScrollProgressBar';
 
 // ============================================
-// MAIN PAGE — Reordered sections
+// MAIN PAGE — Continuous Narrative Flow
 // ============================================
 const AashrithPortfolio = () => {
   const [isDark, setIsDark] = useState(() => {
@@ -1192,24 +994,24 @@ const AashrithPortfolio = () => {
       <ScrollProgressBar />
       <FixedControls isDark={isDark} toggleTheme={toggleTheme} />
       <PortfolioNav isDark={isDark} />
+
       <HeroSection isDark={isDark} />
-      <SectionDivider isDark={isDark} />
+      <GradientTransition isDark={isDark} />
       <VentureEcosystem isDark={isDark} />
-      <SectionDivider isDark={isDark} />
+      <GradientTransition isDark={isDark} />
       <CreativeProjectsSection isDark={isDark} />
-      <SectionDivider isDark={isDark} />
+      <GradientTransition isDark={isDark} />
       <CareerTimeline isDark={isDark} />
-      <SectionDivider isDark={isDark} />
-      <BeyondTheWork isDark={isDark} />
-      <SectionDivider isDark={isDark} />
+      <GradientTransition isDark={isDark} />
       <PhilosophyCTA isDark={isDark} />
-      <SectionDivider isDark={isDark} />
-      <InsightsSection isDark={isDark} />
+      <GradientTransition isDark={isDark} height="h-16 sm:h-24" />
+
       <PortfolioFooter
         isDark={isDark}
         founderName="Aashrith Gade"
         monogram="AG"
-        copyright="Aashrith Gade"
+        copyright="Designed and built by Aashrith Gade"
+        signoff="Always building. Always learning."
         portfolioLinks={portfolioFooterLinks}
         ventureLinks={ventureFooterLinks}
         connectLinks={connectFooterLinks}
