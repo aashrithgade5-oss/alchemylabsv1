@@ -1186,8 +1186,8 @@ const AashrithPortfolio = () => {
 
       {/* Case Study Overlay — rendered at page root, portaled to document.body */}
       <CaseStudyOverlay
-        isOpen={!!activeCaseStudy}
-        onClose={() => setActiveCaseStudy(null)}
+        open={!!activeCaseStudy}
+        onOpenChange={(isOpen) => { if (!isOpen) setActiveCaseStudy(null); }}
         caseStudy={activeCaseStudy ? caseStudyData[activeCaseStudy] || null : null}
       />
     </div>

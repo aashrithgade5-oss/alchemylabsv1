@@ -1,6 +1,5 @@
 import { memo, useEffect } from 'react';
-import { createPortal } from 'react-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { X, ArrowRight } from 'lucide-react';
 
 export interface CaseStudyData {
@@ -19,12 +18,10 @@ export interface CaseStudyData {
 }
 
 interface CaseStudyOverlayProps {
-  isOpen: boolean;
-  onClose: () => void;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
   caseStudy: CaseStudyData | null;
 }
-
-const EASE = [0.22, 1, 0.36, 1] as const;
 
 // Per-case accent system
 const accentMap: Record<string, { color: string; glow: string }> = {
@@ -36,116 +33,86 @@ const accentMap: Record<string, { color: string; glow: string }> = {
 
 const fallbackAccent = { color: 'rgba(220,38,38,0.8)', glow: 'rgba(220,38,38,0.12)' };
 
-export const CaseStudyOverlay = memo(({ isOpen, onClose, caseStudy }: CaseStudyOverlayProps) => {
+export const CaseStudyOverlay = memo(({ open, onOpenChange, caseStudy }: CaseStudyOverlayProps) => {
   const accent = caseStudy ? (accentMap[caseStudy.id] || fallbackAccent) : fallbackAccent;
 
-  // Scroll lock + Lenis integration
+  // Lenis integration — stop/start smooth scroll
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
+    if (open) {
       document.dispatchEvent(new Event('modal-open'));
     } else {
-      document.body.style.overflow = '';
       document.dispatchEvent(new Event('modal-close'));
     }
     return () => {
-      document.body.style.overflow = '';
       document.dispatchEvent(new Event('modal-close'));
     };
-  }, [isOpen]);
+  }, [open]);
 
-  // Escape key
-  useEffect(() => {
-    const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    if (isOpen) {
-      window.addEventListener('keydown', handleEsc);
-      return () => window.removeEventListener('keydown', handleEsc);
-    }
-  }, [isOpen, onClose]);
+  return (
+    <DialogPrimitive.Root open={open} onOpenChange={onOpenChange}>
+      <DialogPrimitive.Portal>
+        {/* Backdrop — depth-of-field blur */}
+        <DialogPrimitive.Overlay
+          className="fixed inset-0 z-50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
+          style={{
+            background: 'rgba(0,0,0,0.7)',
+            backdropFilter: 'blur(16px)',
+          }}
+        />
 
-  const overlay = (
-    <AnimatePresence>
-      {isOpen && caseStudy && (
-        <>
-          {/* Backdrop — shallow depth-of-field */}
-          <motion.div
-            className="fixed inset-0 z-[9990]"
-            style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(16px)' }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            onClick={onClose}
+        {/* Content — centered via translate, immune to parent transforms */}
+        <DialogPrimitive.Content
+          className="fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] w-[95vw] max-w-4xl max-h-[85vh] overflow-y-auto rounded-2xl outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%]"
+          style={{
+            background: 'linear-gradient(135deg, rgba(12,12,12,0.97) 0%, rgba(6,6,6,0.99) 100%)',
+            backdropFilter: 'blur(40px)',
+            border: '1px solid rgba(255,255,255,0.08)',
+            boxShadow: `0 0 80px ${accent.glow}, 0 40px 120px rgba(0,0,0,0.8)`,
+          }}
+        >
+          {/* Visually hidden title for accessibility */}
+          <DialogPrimitive.Title className="sr-only">
+            {caseStudy?.title || 'Case Study'}
+          </DialogPrimitive.Title>
+
+          {/* Accent glow line at top */}
+          <div
+            className="absolute top-0 inset-x-0 h-[2px] rounded-t-2xl"
+            style={{ background: `linear-gradient(90deg, transparent, ${accent.color}, transparent)` }}
           />
 
-          {/* Centered Modal */}
-          <motion.div
-            className="fixed inset-0 z-[9995] flex items-center justify-center p-4 sm:p-8 pointer-events-none"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+          {/* Close button */}
+          <DialogPrimitive.Close
+            className="absolute top-4 right-4 z-[100] w-11 h-11 rounded-full flex items-center justify-center transition-all hover:scale-110"
+            style={{
+              background: 'rgba(255,255,255,0.08)',
+              border: '1px solid rgba(255,255,255,0.15)',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.4)',
+            }}
           >
-            <motion.div
-              className="relative w-full max-w-4xl max-h-[85vh] overflow-y-auto rounded-2xl pointer-events-auto"
-              style={{
-                background: 'linear-gradient(135deg, rgba(12,12,12,0.97) 0%, rgba(6,6,6,0.99) 100%)',
-                backdropFilter: 'blur(40px)',
-                border: '1px solid rgba(255,255,255,0.08)',
-                boxShadow: `0 0 80px ${accent.glow}, 0 40px 120px rgba(0,0,0,0.8)`,
-              }}
-              initial={{ scale: 0.92, opacity: 0, y: 30 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.95, opacity: 0, y: 20 }}
-              transition={{ duration: 0.5, ease: EASE }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Accent glow line at top */}
-              <div
-                className="absolute top-0 inset-x-0 h-[2px]"
-                style={{ background: `linear-gradient(90deg, transparent, ${accent.color}, transparent)` }}
-              />
+            <X className="w-5 h-5 text-white/80" />
+            <span className="sr-only">Close</span>
+          </DialogPrimitive.Close>
 
-              {/* Close */}
-              <button
-                onClick={onClose}
-                className="absolute top-4 right-4 z-[100] w-11 h-11 rounded-full flex items-center justify-center transition-all hover:scale-110"
-                style={{
-                  background: 'rgba(255,255,255,0.08)',
-                  border: '1px solid rgba(255,255,255,0.15)',
-                  boxShadow: '0 4px 20px rgba(0,0,0,0.4)',
-                }}
-              >
-                <X className="w-5 h-5 text-white/80" />
-              </button>
-
+          {caseStudy && (
+            <>
               {/* Hero image with Ken Burns */}
-              <motion.div
-                className="relative w-full aspect-[16/9] overflow-hidden rounded-t-2xl"
-                initial={{ scale: 1.08, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ duration: 0.8, ease: EASE }}
-              >
+              <div className="relative w-full aspect-[16/9] overflow-hidden rounded-t-2xl">
                 <img
                   src={caseStudy.image}
                   alt={caseStudy.title}
-                  className="w-full h-full object-cover object-center"
+                  className="w-full h-full object-cover object-center animate-in zoom-in-[1.08] duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[rgba(12,12,12,0.97)] via-[rgba(12,12,12,0.3)] to-transparent" />
                 <div
                   className="absolute inset-0"
                   style={{ background: `radial-gradient(ellipse at center bottom, ${accent.glow} 0%, transparent 60%)` }}
                 />
-              </motion.div>
+              </div>
 
               <div className="px-6 sm:px-10 -mt-10 relative z-10 pb-10">
                 {/* Header */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.15, ease: EASE }}
-                >
+                <div className="animate-in fade-in slide-in-from-bottom-4 duration-500" style={{ animationDelay: '150ms', animationFillMode: 'backwards' }}>
                   <span
                     className="inline-block font-mono text-[9px] uppercase tracking-[0.2em] px-3 py-1.5 rounded-full mb-4"
                     style={{
@@ -174,7 +141,7 @@ export const CaseStudyOverlay = memo(({ isOpen, onClose, caseStudy }: CaseStudyO
                       {caseStudy.tools.join(', ')}
                     </div>
                   </div>
-                </motion.div>
+                </div>
 
                 {/* Divider */}
                 <div
@@ -183,27 +150,17 @@ export const CaseStudyOverlay = memo(({ isOpen, onClose, caseStudy }: CaseStudyO
                 />
 
                 {/* Challenge */}
-                <motion.div
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.25, ease: EASE }}
-                  className="mb-8"
-                >
+                <div className="mb-8 animate-in fade-in slide-in-from-bottom-3 duration-500" style={{ animationDelay: '250ms', animationFillMode: 'backwards' }}>
                   <h3 className="font-mono text-[10px] uppercase tracking-[0.2em] mb-3" style={{ color: accent.color.replace('0.8', '0.6') }}>
                     The Challenge
                   </h3>
                   <p className="font-body text-sm text-white/60 leading-relaxed">
                     {caseStudy.challenge}
                   </p>
-                </motion.div>
+                </div>
 
                 {/* Approach */}
-                <motion.div
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.35, ease: EASE }}
-                  className="mb-8"
-                >
+                <div className="mb-8 animate-in fade-in slide-in-from-bottom-3 duration-500" style={{ animationDelay: '350ms', animationFillMode: 'backwards' }}>
                   <h3 className="font-mono text-[10px] uppercase tracking-[0.2em] mb-3" style={{ color: accent.color.replace('0.8', '0.6') }}>
                     Our Approach
                   </h3>
@@ -227,15 +184,10 @@ export const CaseStudyOverlay = memo(({ isOpen, onClose, caseStudy }: CaseStudyO
                       </div>
                     ))}
                   </div>
-                </motion.div>
+                </div>
 
                 {/* Results */}
-                <motion.div
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.45, ease: EASE }}
-                  className="mb-8"
-                >
+                <div className="mb-8 animate-in fade-in slide-in-from-bottom-3 duration-500" style={{ animationDelay: '450ms', animationFillMode: 'backwards' }}>
                   <h3 className="font-mono text-[10px] uppercase tracking-[0.2em] mb-3" style={{ color: accent.color.replace('0.8', '0.6') }}>
                     Impact
                   </h3>
@@ -247,15 +199,10 @@ export const CaseStudyOverlay = memo(({ isOpen, onClose, caseStudy }: CaseStudyO
                       </div>
                     ))}
                   </div>
-                </motion.div>
+                </div>
 
                 {/* Tags */}
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.55, ease: EASE }}
-                  className="flex flex-wrap gap-2"
-                >
+                <div className="flex flex-wrap gap-2 animate-in fade-in slide-in-from-bottom-2 duration-500" style={{ animationDelay: '550ms', animationFillMode: 'backwards' }}>
                   {caseStudy.tags.map((tag) => (
                     <span
                       key={tag}
@@ -268,16 +215,14 @@ export const CaseStudyOverlay = memo(({ isOpen, onClose, caseStudy }: CaseStudyO
                       {tag}
                     </span>
                   ))}
-                </motion.div>
+                </div>
               </div>
-            </motion.div>
-          </motion.div>
-        </>
-      )}
-    </AnimatePresence>
+            </>
+          )}
+        </DialogPrimitive.Content>
+      </DialogPrimitive.Portal>
+    </DialogPrimitive.Root>
   );
-
-  return createPortal(overlay, document.body);
 });
 
 CaseStudyOverlay.displayName = 'CaseStudyOverlay';
