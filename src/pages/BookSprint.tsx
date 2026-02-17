@@ -251,7 +251,7 @@ export const BookSprint = () => {
                 <MessageCircle className="w-4 h-4 text-green-500" />
                 <span className="font-body text-sm text-porcelain/70">WhatsApp</span>
               </a>
-              <a href="mailto:brandalchemie@gmail.com" className="glass-deep px-6 py-3 rounded-full hover:border-alchemy-red/30 transition-colors flex items-center gap-2">
+              <a href="mailto:alchemylabs.work@gmail.com?subject=Strategy Sprint – Alchemy Labs" className="glass-deep px-6 py-3 rounded-full hover:border-alchemy-red/30 transition-colors flex items-center gap-2">
                 <Mail className="w-4 h-4 text-alchemy-red" />
                 <span className="font-body text-sm text-porcelain/70">Email</span>
               </a>

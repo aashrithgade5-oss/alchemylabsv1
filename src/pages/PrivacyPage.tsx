@@ -93,8 +93,8 @@ const PrivacyPage = () => {
                 <h2 className="font-display text-2xl text-porcelain mb-4">6. Contact Us</h2>
                 <p>
                   If you have any questions about this Privacy Policy or our data practices, please contact us at{' '}
-                  <a href="mailto:brandalchemie@gmail.com" className="text-alchemy-red hover:underline">
-                    brandalchemie@gmail.com
+                  <a href="mailto:alchemylabs.work@gmail.com?subject=Privacy Inquiry – Alchemy Labs" className="text-alchemy-red hover:underline">
+                    alchemylabs.work@gmail.com
                   </a>
                 </p>
               </section>

@@ -270,7 +270,7 @@ export const aashrithData: FounderData = {
     { title: "Brand Alchemy Community Launch", source: "Self-Published", date: "2023" }
   ],
   contact: {
-    email: "aashrithgadework@gmail.com",
+    email: "alchemylabs.work@gmail.com",
     linkedin: "https://www.linkedin.com/in/aashrithgade"
   }
 };
