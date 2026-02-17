@@ -31,7 +31,7 @@ export const socialLinks = {
   instagram: 'https://www.instagram.com/brandalchemy._',
   linkedin: 'https://www.linkedin.com/company/brandalchemylabs/',
   youtube: 'https://www.youtube.com/@brandalchemy-in',
-  founderEmail: 'aashrithgadework@gmail.com',
+  founderEmail: 'alchemylabs.work@gmail.com',
   founders: {
     aashrith: 'https://www.linkedin.com/in/aashrithgade',
     eva: 'https://www.linkedin.com/in/eva-doshi-0b07b531b/',

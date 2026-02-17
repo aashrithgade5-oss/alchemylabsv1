@@ -105,8 +105,8 @@ const TermsPage = () => {
                 <h2 className="font-display text-2xl text-porcelain mb-4">8. Contact</h2>
                 <p>
                   For questions about these Terms of Service, please contact us at{' '}
-                  <a href="mailto:brandalchemie@gmail.com" className="text-alchemy-red hover:underline">
-                    brandalchemie@gmail.com
+                  <a href="mailto:alchemylabs.work@gmail.com?subject=Terms Inquiry – Alchemy Labs" className="text-alchemy-red hover:underline">
+                    alchemylabs.work@gmail.com
                   </a>
                 </p>
               </section>

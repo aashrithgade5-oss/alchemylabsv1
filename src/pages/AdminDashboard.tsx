@@ -1292,7 +1292,7 @@ const AdminDashboard = () => {
                 <h3 className="font-body text-sm text-porcelain/60 mb-4">Quick Actions</h3>
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   <a
-                    href="mailto:brandalchemie@gmail.com"
+                    href="mailto:alchemylabs.work@gmail.com"
                     className="flex items-center gap-4 p-4 glass rounded-xl hover:bg-alchemy-red/5 transition-colors group border border-transparent hover:border-alchemy-red/20"
                   >
                     <div className="w-12 h-12 rounded-xl bg-alchemy-red/10 flex items-center justify-center">

@@ -191,7 +191,7 @@ export const Contact = memo(() => {
                 </motion.a>
 
                 <motion.a
-                  href="mailto:brandalchemie@gmail.com"
+                  href="mailto:alchemylabs.work@gmail.com?subject=Inquiry – Alchemy Labs"
                   className="flex items-center gap-4 p-4 rounded-xl transition-all duration-300 group"
                   style={{
                     background: 'rgba(255, 255, 255, 0.03)',
