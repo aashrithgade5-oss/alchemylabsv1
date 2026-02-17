@@ -11,11 +11,11 @@ import { socialLinks } from './Footer';
 // Service options with clear 3 pillars
 const serviceOptions = [
   { value: '', label: 'Select what you need...', disabled: true },
-  { value: 'fast-24h', label: '⚡ Fast — 24h AI Build', group: 'pillars' },
-  { value: 'foundation-brand', label: '🏛️ Foundation — Brand System', group: 'pillars' },
-  { value: 'clarity-advisory', label: '💡 Clarity — Strategy Advisory', group: 'pillars' },
-  { value: 'not-sure', label: '🤔 Not sure yet — Help me figure out', group: 'other' },
-  { value: 'specific-request', label: '✉️ Specific request — Direct to founder', group: 'other' },
+  { value: 'fast-24h', label: 'Fast — 24h AI Build', group: 'pillars' },
+  { value: 'foundation-brand', label: 'Foundation — Brand System', group: 'pillars' },
+  { value: 'clarity-advisory', label: 'Clarity — Strategy Advisory', group: 'pillars' },
+  { value: 'not-sure', label: 'Not sure yet — Help me figure out', group: 'other' },
+  { value: 'specific-request', label: 'Specific request — Direct to founder', group: 'other' },
 ];
 
 export const Contact = memo(() => {
@@ -81,6 +81,9 @@ export const Contact = memo(() => {
     
     setIsSubmitting(true);
 
+    // Open Calendly synchronously to avoid popup blocker
+    const calendlyWindow = window.open('', '_blank');
+
     try {
       const { error: dbError } = await supabase
         .from('contact_submissions')
@@ -109,12 +112,16 @@ export const Contact = memo(() => {
         console.error('Email notification error:', emailError);
       }
 
-      // Open Calendly in new tab for Strategy Sprint scheduling
-      window.open('https://calendly.com/alchemylabs-work/30min', '_blank');
+      // Navigate the pre-opened window to Calendly
+      if (calendlyWindow) {
+        calendlyWindow.location.href = 'https://calendly.com/alchemylabs-work/30min';
+      }
       setIsSubmitted(true);
       setTurnstileToken(null);
     } catch (error) {
       console.error('Error submitting form:', error);
+      // Close the blank window on error
+      if (calendlyWindow) calendlyWindow.close();
       toast.error('Something went wrong. Please try again.');
       setIsSubmitting(false);
     }
@@ -184,14 +191,13 @@ export const Contact = memo(() => {
                   <div className="w-10 h-10 rounded-lg bg-green-500/10 flex items-center justify-center group-hover:shadow-[0_0_15px_rgba(34,197,94,0.25)] transition-shadow">
                     <MessageCircle className="w-5 h-5 text-green-500" />
                   </div>
-                  <div>
-                    <p className="font-body text-sm text-porcelain">WhatsApp</p>
-                    <p className="font-mono text-[10px] text-porcelain/50">+91 7794912315</p>
-                  </div>
+                  <p className="font-body text-sm text-porcelain">WhatsApp</p>
                 </motion.a>
 
                 <motion.a
                   href="mailto:alchemylabs.work@gmail.com?subject=Inquiry – Alchemy Labs"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="flex items-center gap-4 p-4 rounded-xl transition-all duration-300 group"
                   style={{
                     background: 'rgba(255, 255, 255, 0.03)',
@@ -202,10 +208,7 @@ export const Contact = memo(() => {
                   <div className="w-10 h-10 rounded-lg bg-alchemy-red/10 flex items-center justify-center group-hover:shadow-[0_0_15px_rgba(220,38,38,0.25)] transition-shadow">
                     <Mail className="w-5 h-5 text-alchemy-red" />
                   </div>
-                  <div>
-                    <p className="font-body text-sm text-porcelain">Email</p>
-                    <p className="font-mono text-[10px] text-porcelain/50">alchemylabs.work@gmail.com</p>
-                  </div>
+                  <p className="font-body text-sm text-porcelain">Email</p>
                 </motion.a>
               </div>
 
@@ -257,21 +260,31 @@ export const Contact = memo(() => {
                 background: 'linear-gradient(135deg, rgba(220, 38, 38, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%)',
                 border: '1px solid rgba(220, 38, 38, 0.15)',
               }}>
-                <p className="font-body text-xs text-porcelain/60 mb-2">
+                <p className="font-body text-xs text-porcelain/60 mb-3">
                   Need to speak directly with the founders?
                 </p>
-                <a 
-                  href="mailto:aashrithgade5@gmail.com?subject=Direct Inquiry – Alchemy Labs"
-                  className="font-mono text-xs text-alchemy-red hover:underline transition-colors block"
-                >
-                  aashrithgade5@gmail.com
-                </a>
-                <a 
-                  href="mailto:evadoshi05@gmail.com?subject=Direct Inquiry – Alchemy Labs"
-                  className="font-mono text-xs text-alchemy-red hover:underline transition-colors block mt-1"
-                >
-                  evadoshi05@gmail.com
-                </a>
+                <div className="flex gap-3">
+                  <a 
+                    href="mailto:aashrithgade5@gmail.com?subject=Direct Inquiry – Alchemy Labs"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-mono text-xs text-alchemy-red hover:bg-alchemy-red/10 transition-colors"
+                    style={{ border: '1px solid rgba(220, 38, 38, 0.25)' }}
+                  >
+                    <Mail className="w-3.5 h-3.5" />
+                    Aashrith
+                  </a>
+                  <a 
+                    href="mailto:evadoshi05@gmail.com?subject=Direct Inquiry – Alchemy Labs"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-mono text-xs text-alchemy-red hover:bg-alchemy-red/10 transition-colors"
+                    style={{ border: '1px solid rgba(220, 38, 38, 0.25)' }}
+                  >
+                    <Mail className="w-3.5 h-3.5" />
+                    Eva
+                  </a>
+                </div>
               </div>
             </motion.div>
           </div>
@@ -297,6 +310,13 @@ export const Contact = memo(() => {
                     boxShadow: '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.06)',
                   }}
                 >
+                  {/* Strategy Call Heading */}
+                  <div className="mb-8 text-center">
+                    <h3 className="font-display text-2xl md:text-3xl text-porcelain tracking-[-0.01em]">
+                      15 min Strategy Call, <span className="italic text-alchemy-red">First one for free.</span>
+                    </h3>
+                  </div>
+
                   <div className="grid md:grid-cols-2 gap-5 mb-5">
                     {/* Name */}
                     <div className="space-y-2">
