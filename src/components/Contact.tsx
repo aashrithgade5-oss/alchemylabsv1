@@ -109,6 +109,8 @@ export const Contact = memo(() => {
         console.error('Email notification error:', emailError);
       }
 
+      // Open Calendly in new tab for Strategy Sprint scheduling
+      window.open('https://calendly.com/alchemylabs-work/30min', '_blank');
       setIsSubmitted(true);
       setTurnstileToken(null);
     } catch (error) {
@@ -425,19 +427,19 @@ export const Contact = memo(() => {
                     {isSubmitting ? (
                       <>
                         <Loader2 className="w-4 h-4 animate-spin" />
-                        <span>Sending...</span>
+                        <span>Submitting...</span>
                       </>
                     ) : (
                       <>
-                        <span>Send Brief</span>
-                        <Send className="w-4 h-4" />
+                        <span>Schedule a Meeting</span>
+                        <Calendar className="w-4 h-4" />
                       </>
                     )}
                   </MagneticButton>
 
                   {/* After submit microtext */}
                   <p className="font-mono text-[10px] text-center text-porcelain/40 mt-4">
-                    Next: we reply within 24h with a tailored plan and suggested sprint slot.
+                    Next: pick a time slot on Calendly for your 15-min Strategy Sprint.
                   </p>
                 </motion.form>
               ) : (
@@ -460,13 +462,27 @@ export const Contact = memo(() => {
                   </div>
                   
                   <h3 className="font-display text-3xl md:text-4xl italic text-porcelain mb-3">
-                    Received.
+                    You're almost there.
                   </h3>
                   <p className="font-body text-base text-porcelain/60 font-light mb-8">
-                    We'll reply within 24 hours with a tailored plan.
+                    Your brief has been sent. Complete your booking on Calendly to lock in your Strategy Sprint.
                   </p>
                   
                   <div className="flex flex-wrap justify-center gap-4">
+                    <a
+                      href="https://calendly.com/alchemylabs-work/30min"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-body text-sm transition-all duration-300"
+                      style={{
+                        background: 'linear-gradient(135deg, rgba(220, 38, 38, 0.25) 0%, rgba(220, 38, 38, 0.1) 100%)',
+                        border: '1px solid rgba(220, 38, 38, 0.5)',
+                      }}
+                    >
+                      <Calendar className="w-4 h-4 text-alchemy-red" />
+                      <span className="text-porcelain">Open Calendly</span>
+                    </a>
+
                     <Link
                       to="/"
                       className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-body text-sm text-porcelain/60 hover:text-porcelain transition-colors"
