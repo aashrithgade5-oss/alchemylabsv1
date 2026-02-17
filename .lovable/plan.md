@@ -1,31 +1,37 @@
 
 
-## Contact Form: Calendly Integration
+## Minimal Bottom-Left Liquid Glass Cookie Consent
 
-### What Changes
+### What's changing
 
-**Flow update**: After the user fills the form and clicks submit, the form data is saved to the database and the notification email is sent (existing behavior stays). Then, instead of showing the current static "Received" success screen, the user is redirected to the Calendly scheduling link in a new tab, and the success screen is updated to reflect that a meeting is being scheduled.
+The cookie consent popup moves from **bottom-center** to **bottom-left** of the Hero section, gets a refined **liquid glass** aesthetic, and keeps all existing performance optimization logic intact.
+
+### Current state
+
+- The popup already works: shows only on homepage, only once, saves consent to localStorage, triggers device profiling (CPU cores, RAM, GPU, connection speed) to set a performance tier (high/medium/low) that adapts particles, blur, and parallax across the entire site
+- It disappears permanently after clicking Accept
+- Styling is decent but centered and not quite "liquid glass"
 
 ### Changes (1 file)
 
-**`src/components/Contact.tsx`**
+**`src/components/CookieConsent.tsx`**
 
-1. **Rename the submit button**: Change "Send Brief" to "Schedule a Meeting" and swap the `Send` icon for the `Calendar` icon (already imported)
-2. **Open Calendly after successful submission**: In `handleSubmit`, after the DB insert and email function call succeed, open `https://calendly.com/alchemylabs-work/30min` in a new tab via `window.open()`
-3. **Update the success state screen**:
-   - Change heading from "Received." to "You're almost there."
-   - Update body text to: "Your brief has been sent. Complete your booking on Calendly to lock in your Strategy Sprint."
-   - Add a prominent "Open Calendly" button (in case the popup was blocked) linking to the same Calendly URL
-   - Keep the existing "Back to Home" and "WhatsApp Us" buttons
-4. **Update the "Sending..." state text** to "Submitting..."
-5. **Update the after-submit microtext** from the current "Next: we reply within 24h..." to "Next: pick a time slot on Calendly for your 15-min Strategy Sprint."
+1. **Position**: Move from `left-1/2 -translate-x-1/2` (centered) to `left-6` (bottom-left corner)
+2. **Size**: Shrink from `max-w-lg w-[calc(100%-2rem)]` to `max-w-sm` for a compact, minimal footprint
+3. **Liquid glass styling**:
+   - Background: `rgba(255,255,255,0.04)` with `backdrop-blur-2xl` (48px blur) for that frosted liquid glass look
+   - Border: `1px solid rgba(255,255,255,0.10)` with a subtle inner glow
+   - Top edge highlight: thin `rgba(255,255,255,0.15)` line simulating light refraction
+   - Subtle box-shadow with layered depth
+4. **Button**: Change from "Accept" to "Allow" with a refined glass-red gradient
+5. **Animation**: Keep the existing slide-up entrance but adjust from `y: 100` to `y: 40` for a subtler, more refined entrance
+6. **Copy**: Keep minimal — "We use cookies to optimize your experience." with Privacy link
 
-### What Stays the Same
+### What stays the same
 
-- All form fields (name, email, company, service, message)
-- Database save to `contact_submissions`
-- Email notification via `send-contact-email` edge function
-- Turnstile CAPTCHA verification
-- Validation logic
-- Left column info panel
+- Only appears on homepage, only on first visit
+- Disappears permanently after clicking Allow
+- Triggers device profiling for performance optimization (high/medium/low tier)
+- All performance tier logic in `PerformanceContext.tsx` remains untouched
+- localStorage persistence via `alchemy-cookie-consent` key
 
