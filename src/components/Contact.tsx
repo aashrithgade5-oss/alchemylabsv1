@@ -456,8 +456,18 @@ export const Contact = memo(() => {
                     )}
                   </button>
 
-                  <p className="font-mono text-[10px] text-center text-porcelain/40 mt-4">
-                    Next: pick a time slot on Calendly for your 15-min Strategy Sprint.
+                  {/* Calendly text link — uses official popup widget */}
+                  <p className="text-center mt-4">
+                    <a
+                      href=""
+                      onClick={(e) => {
+                        e.preventDefault();
+                        (window as any).Calendly?.initPopupWidget({ url: CALENDLY_URL });
+                      }}
+                      className="font-mono text-[11px] text-alchemy-red/70 hover:text-alchemy-red transition-colors underline underline-offset-4 decoration-alchemy-red/30"
+                    >
+                      Or skip the form — book directly on Calendly
+                    </a>
                   </p>
                 </motion.form>
               ) : (
@@ -505,12 +515,14 @@ export const Contact = memo(() => {
                     transition={{ delay: 0.5 }}
                     className="flex flex-col items-center gap-4"
                   >
-                    {/* Primary Calendly CTA — direct anchor, never blocked */}
+                    {/* Primary Calendly CTA — uses official popup widget */}
                     <a
-                      href={CALENDLY_URL}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="gradient-border-glow inline-flex items-center gap-3 px-8 py-4 rounded-full font-body font-medium text-sm text-porcelain transition-all duration-300 hover:brightness-110"
+                      href=""
+                      onClick={(e) => {
+                        e.preventDefault();
+                        (window as any).Calendly?.initPopupWidget({ url: CALENDLY_URL });
+                      }}
+                      className="gradient-border-glow inline-flex items-center gap-3 px-8 py-4 rounded-full font-body font-medium text-sm text-porcelain transition-all duration-300 hover:brightness-110 cursor-pointer"
                     >
                       <Calendar className="w-5 h-5 text-alchemy-red" />
                       <span>Book Your Call</span>
