@@ -437,29 +437,24 @@ export const Contact = memo(() => {
                     <span className="font-mono text-[9px] text-porcelain/40 tracking-wider">Free first call</span>
                   </div>
 
-                  {/* Submit Button — Animated Gradient Border */}
-                  <div className="gradient-border-wrapper rounded-full p-[2px]">
-                    <button
-                      type="submit"
-                      disabled={isSubmitting || !turnstileToken || Object.keys(fieldErrors).length > 0}
-                      className="w-full flex items-center justify-center gap-3 py-4 px-8 rounded-full font-body font-medium text-sm text-porcelain transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed hover:brightness-110"
-                      style={{
-                        background: 'linear-gradient(135deg, rgba(220, 38, 38, 0.2) 0%, rgba(10, 10, 11, 0.95) 50%, rgba(220, 38, 38, 0.1) 100%)',
-                      }}
-                    >
-                      {isSubmitting ? (
-                        <>
-                          <Loader2 className="w-4 h-4 animate-spin" />
-                          <span>Submitting...</span>
-                        </>
-                      ) : (
-                        <>
-                          <span>Schedule a Meeting</span>
-                          <Calendar className="w-4 h-4" />
-                        </>
-                      )}
-                    </button>
-                  </div>
+                  {/* Submit Button — Animated Gradient Border with Glass Interior */}
+                  <button
+                    type="submit"
+                    disabled={isSubmitting || Object.keys(fieldErrors).length > 0}
+                    className="gradient-border-glow-btn w-full flex items-center justify-center gap-3 py-4 px-8 rounded-full font-body font-medium text-sm text-porcelain transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed hover:brightness-110 relative"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <span>Submitting...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>Schedule a Meeting</span>
+                        <Calendar className="w-4 h-4" />
+                      </>
+                    )}
+                  </button>
 
                   <p className="font-mono text-[10px] text-center text-porcelain/40 mt-4">
                     Next: pick a time slot on Calendly for your 15-min Strategy Sprint.
@@ -511,20 +506,15 @@ export const Contact = memo(() => {
                     className="flex flex-col items-center gap-4"
                   >
                     {/* Primary Calendly CTA — direct anchor, never blocked */}
-                    <div className="gradient-border-wrapper rounded-full p-[2px]">
-                      <a
-                        href={CALENDLY_URL}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-3 px-8 py-4 rounded-full font-body font-medium text-sm text-porcelain transition-all duration-300 hover:brightness-110"
-                        style={{
-                          background: 'linear-gradient(135deg, rgba(220, 38, 38, 0.25) 0%, rgba(10, 10, 11, 0.95) 50%, rgba(220, 38, 38, 0.15) 100%)',
-                        }}
-                      >
-                        <Calendar className="w-5 h-5 text-alchemy-red" />
-                        <span>Book Your Call</span>
-                      </a>
-                    </div>
+                    <a
+                      href={CALENDLY_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="gradient-border-glow inline-flex items-center gap-3 px-8 py-4 rounded-full font-body font-medium text-sm text-porcelain transition-all duration-300 hover:brightness-110"
+                    >
+                      <Calendar className="w-5 h-5 text-alchemy-red" />
+                      <span>Book Your Call</span>
+                    </a>
 
                     <div className="flex flex-wrap justify-center gap-3 mt-2">
                       <Link
