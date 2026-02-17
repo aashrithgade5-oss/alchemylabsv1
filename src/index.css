@@ -322,18 +322,29 @@
     }
   }
 
-  /* Animated gradient border wrapper for CTA buttons */
-  .gradient-border-wrapper {
-    position: relative;
-    background: conic-gradient(
-      from var(--gradient-angle, 0deg),
-      rgba(220, 38, 38, 0.8),
-      rgba(251, 146, 60, 0.6),
-      rgba(220, 38, 38, 0.3),
-      rgba(251, 146, 60, 0.6),
-      rgba(220, 38, 38, 0.8)
-    );
-    animation: gradient-border-spin 3s linear infinite;
+  /* Animated glow border for CTA buttons — uses box-shadow, no z-index issues */
+  .gradient-border-glow-btn {
+    background: hsl(240, 5%, 4%);
+    border: 2px solid rgba(220, 38, 38, 0.6);
+    animation: glow-pulse 3s ease-in-out infinite;
+  }
+
+  @keyframes glow-pulse {
+    0%, 100% {
+      border-color: rgba(220, 38, 38, 0.7);
+      box-shadow: 0 0 15px rgba(220, 38, 38, 0.3), 0 0 40px rgba(220, 38, 38, 0.1);
+    }
+    50% {
+      border-color: rgba(251, 146, 60, 0.7);
+      box-shadow: 0 0 20px rgba(251, 146, 60, 0.35), 0 0 50px rgba(220, 38, 38, 0.15);
+    }
+  }
+
+  /* Wrapper version for non-button elements (like anchor tags on success screen) */
+  .gradient-border-glow {
+    background: hsl(240, 5%, 4%);
+    border: 2px solid rgba(220, 38, 38, 0.6);
+    animation: glow-pulse 3s ease-in-out infinite;
   }
 
   @keyframes gradient-border-spin {
