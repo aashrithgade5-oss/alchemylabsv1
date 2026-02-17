@@ -437,37 +437,18 @@ export const Contact = memo(() => {
                     <span className="font-mono text-[9px] text-porcelain/40 tracking-wider">Free first call</span>
                   </div>
 
-                  {/* Submit Button — Animated Gradient Border with Glass Interior */}
+                  {/* CTA Button — Opens Calendly popup */}
                   <button
-                    type="submit"
-                    disabled={isSubmitting || Object.keys(fieldErrors).length > 0}
-                    className="gradient-border-glow-btn w-full flex items-center justify-center gap-3 py-4 px-8 rounded-full font-body font-medium text-sm text-porcelain transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed hover:brightness-110 relative"
+                    type="button"
+                    onClick={() => (window as any).Calendly?.initPopupWidget({ url: CALENDLY_URL })}
+                    className="gradient-border-glow-btn w-full flex items-center justify-center gap-3 py-4 px-8 rounded-full font-body font-medium text-sm text-porcelain transition-all duration-300 hover:brightness-110 relative overflow-hidden"
                   >
-                    {isSubmitting ? (
-                      <>
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                        <span>Submitting...</span>
-                      </>
-                    ) : (
-                      <>
-                        <span>Schedule a Meeting</span>
-                        <Calendar className="w-4 h-4" />
-                      </>
-                    )}
+                    <span>Schedule a Meeting</span>
+                    <Calendar className="w-4 h-4" />
                   </button>
 
-                  {/* Calendly text link — uses official popup widget */}
-                  <p className="text-center mt-4">
-                    <a
-                      href=""
-                      onClick={(e) => {
-                        e.preventDefault();
-                        (window as any).Calendly?.initPopupWidget({ url: CALENDLY_URL });
-                      }}
-                      className="font-mono text-[11px] text-alchemy-red/70 hover:text-alchemy-red transition-colors underline underline-offset-4 decoration-alchemy-red/30"
-                    >
-                      Or skip the form — book directly on Calendly
-                    </a>
+                  <p className="font-mono text-[10px] text-center text-porcelain/35 mt-4">
+                    Opens our Calendly page to book your 15-min Strategy Sprint.
                   </p>
                 </motion.form>
               ) : (
