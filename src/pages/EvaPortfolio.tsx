@@ -22,7 +22,7 @@ const t = (isDark: boolean, dark: string, light: string) => isDark ? dark : ligh
 // Social links
 const socialLinks = [
   { icon: Linkedin, href: 'https://www.linkedin.com/in/eva-doshi-0b07b531b/', label: 'LinkedIn' },
-  { icon: Mail, href: 'mailto:eva@alchemylabs.in', label: 'Email' },
+  { icon: Mail, href: 'mailto:evadoshi05@gmail.com?subject=Direct Inquiry – Eva Doshi', label: 'Email' },
 ];
 
 // Footer config
@@ -39,7 +39,7 @@ const ventureFooterLinks = [
 ];
 const connectFooterLinks = [
   { label: 'LinkedIn', href: 'https://www.linkedin.com/in/eva-doshi-0b07b531b/', external: true },
-  { label: 'Email', href: 'mailto:eva@alchemylabs.in', external: true },
+  { label: 'Email', href: 'mailto:evadoshi05@gmail.com?subject=Direct Inquiry – Eva Doshi', external: true },
 ];
 
 // Section divider

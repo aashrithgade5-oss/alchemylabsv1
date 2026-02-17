@@ -205,13 +205,19 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
             {/* Founder Direct Contact */}
             <div className="mt-6 pt-4 border-t border-porcelain/10">
               <p className="font-body text-xs text-porcelain/50 mb-2 font-light">
-                Want to discuss something specific with the founder?
+                Want to discuss something specific with the founders?
               </p>
               <a 
-                href={`mailto:${socialLinks.founderEmail}`}
-                className="font-mono text-xs text-alchemy-red hover:text-alchemy-red/80 transition-colors"
+                href="mailto:aashrithgade5@gmail.com?subject=Direct Inquiry – Alchemy Labs"
+                className="font-mono text-xs text-alchemy-red hover:text-alchemy-red/80 transition-colors block"
               >
-                {socialLinks.founderEmail}
+                aashrithgade5@gmail.com
+              </a>
+              <a 
+                href="mailto:evadoshi05@gmail.com?subject=Direct Inquiry – Alchemy Labs"
+                className="font-mono text-xs text-alchemy-red hover:text-alchemy-red/80 transition-colors block mt-1"
+              >
+                evadoshi05@gmail.com
               </a>
             </div>
           </motion.div>

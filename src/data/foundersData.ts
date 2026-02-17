@@ -270,7 +270,7 @@ export const aashrithData: FounderData = {
     { title: "Brand Alchemy Community Launch", source: "Self-Published", date: "2023" }
   ],
   contact: {
-    email: "alchemylabs.work@gmail.com",
+    email: "aashrithgade5@gmail.com",
     linkedin: "https://www.linkedin.com/in/aashrithgade"
   }
 };
@@ -381,7 +381,7 @@ export const evaData: FounderData = {
     { title: "Ex-Dentsu Professional", source: "Career Milestone", date: "2024" }
   ],
   contact: {
-    email: "eva@alchemylabs.in",
+    email: "evadoshi05@gmail.com",
     linkedin: "https://www.linkedin.com/in/eva-doshi-0b07b531b/"
   }
 };
