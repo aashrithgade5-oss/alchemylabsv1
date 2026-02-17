@@ -1,45 +1,101 @@
 
 
-## Fix Contact Form: Calendly Redirect, Clean Options, Updated Copy
+## Contact Page Overhaul — Bulletproof Calendly, Working Emails, Premium 2026 Aesthetic
 
-### Root Cause: Calendly Not Opening
+### Problem Summary
 
-The `window.open('https://calendly.com/alchemylabs-work/30min', '_blank')` call on line 113 happens **after** two `await` calls (database insert + edge function). Most browsers block `window.open` in async callbacks because it's no longer within the "user gesture" context. The fix is to open Calendly **before** the async calls or use a pre-created window reference.
+1. **Calendly still broken**: `window.open('', '_blank')` opens a blank tab synchronously, then tries to set `location.href` after async calls — but many browsers (especially Safari, mobile Chrome) still block or ignore this pattern. The blank tab often stays blank or gets closed by the browser.
+2. **Email buttons not working**: `mailto:` links with `target="_blank"` don't work reliably — `mailto:` should NOT use `target="_blank"` as it confuses browsers. The emails need to either open natively or show copyable text.
+3. **Design needs elevation**: The heading, form inputs, and CTA button need a more premium 2026 aesthetic with micro-animations.
 
-### Changes (1 file: `src/components/Contact.tsx`)
+---
 
-**1. Fix Calendly redirect (critical)**
-- Open a blank window reference synchronously (inside the click handler, before any `await`), then set its URL after the async calls complete. This bypasses popup blockers.
-- Alternative: redirect to Calendly via `window.location.href` as a fallback if the popup is blocked.
+### Solution Architecture
 
-**2. Remove emojis from service options**
-Replace the current options:
-- `⚡ Fast — 24h AI Build` becomes `Fast — 24h AI Build`
-- `🏛️ Foundation — Brand System` becomes `Foundation — Brand System`
-- `💡 Clarity — Strategy Advisory` becomes `Clarity — Strategy Advisory`
-- `🤔 Not sure yet — Help me figure out` becomes `Not sure yet — Help me figure out`
-- `✉️ Specific request — Direct to founder` becomes `Specific request — Direct to founder`
+#### 1. Calendly — Bulletproof Approach (Critical Fix)
 
-**3. Add "15 min Strategy Call" heading**
-Add a heading above the form: **"15 min Strategy Call, First one for free."** styled with `font-display` in the existing design language.
+Abandon the `window.open` pattern entirely. Instead:
 
-**4. WhatsApp and Email buttons — hide numbers/addresses**
-In the left info panel, remove the phone number (`+91 7794912315`) and email address (`alchemylabs.work@gmail.com`) text. Keep only the icon + label ("WhatsApp", "Email") as clean abstract buttons that open the respective links in new tabs.
+- The "Schedule a Meeting" button submits the form data via async calls in the background
+- On success, the success screen shows immediately with a prominent, direct `<a href="https://calendly.com/alchemylabs-work/30min" target="_blank">` link — a standard anchor tag that the user clicks themselves
+- This is the same pattern used by Typeform, HubSpot, and Calendly's own embed — no popup blocker issues because the user initiates the navigation directly
+- The success screen copy reads: **"Done! We'll get back to you."** with a prominent **"Book Your Call"** button linking to Calendly
 
-**5. Founder contact section — same treatment**
-Replace the raw email addresses with clean "Aashrith" and "Eva" buttons that open `mailto:` links, without displaying the actual email addresses.
+```text
+Flow:
+  1. User fills form, clicks "Schedule a Meeting"
+  2. Async: DB insert + edge function (show loading state)
+  3. On success: Show success screen with direct Calendly link
+  4. User clicks "Book Your Call" → opens Calendly (user-initiated, never blocked)
+```
+
+#### 2. Email Buttons — Revert to Reliable Pattern
+
+- Remove `target="_blank"` from all `mailto:` links (this is the bug — mailto should just be `<a href="mailto:...">`)
+- Show the actual email address as small text below each button label so users can copy it if their mail client doesn't open
+- WhatsApp button: keep as-is (works fine with `target="_blank"`)
+
+#### 3. Heading — Premium Typography
+
+Replace the current heading with:
+```text
+15 MIN STRATEGY CALL
+First one for free.
+```
+- Line 1: All caps, `font-mono`, `tracking-[0.25em]`, `text-porcelain/60` — editorial label style
+- Line 2: `font-display`, `italic`, `text-alchemy-red` — the accent line
+
+#### 4. CTA Button — Animated Gradient Border Glow
+
+The "Schedule a Meeting" button gets a looping animated gradient border:
+- Use a CSS `@keyframes` animation that rotates a `conic-gradient` around the button border
+- Implementation: outer wrapper with rotating gradient background, inner element with solid background, creating a glowing border effect
+- Colors cycle through `alchemy-red` to warm amber and back
+- Subtle 3s infinite loop, `ease-in-out`
+
+#### 5. Form Inputs — Elevated Glass Aesthetic
+
+- Increase padding, add subtle inner shadow for depth
+- Focus state: animated border glow (red pulse) instead of static color change
+- Rounded corners from `rounded-lg` to `rounded-xl` for softer modern feel
+
+#### 6. Button Micro-Animations
+
+- All contact method buttons (WhatsApp, Email, Aashrith, Eva): subtle `scale(1.02)` on hover with `transition-transform`
+- Social icons: gentle `rotate(5deg)` micro-tilt on hover
+- Form fields: smooth label float animation on focus
+
+#### 7. Success Screen — Better Copy
+
+```text
+Done! We'll get back to you.
+Your brief is in our hands. Book your free strategy call below.
+```
+With a prominent "Book Your Call" Calendly button and secondary "Back to Home" link.
+
+---
 
 ### Technical Details
 
-```text
-handleSubmit flow (fixed):
-  1. User clicks "Schedule a Meeting"
-  2. Synchronously: calendlyWindow = window.open('', '_blank')
-  3. Await: DB insert + edge function
-  4. On success: calendlyWindow.location.href = calendly URL
-  5. Show success state with fallback Calendly button
-  6. On error: close the blank window, show error toast
-```
+**Files modified: 2**
 
-This ensures the browser doesn't block the popup since `window.open` is called synchronously within the user gesture.
+**`src/components/Contact.tsx`** (full overhaul):
+- Remove `window.open` logic from `handleSubmit` — just do the async DB + email calls, then set `isSubmitted = true`
+- Fix all `mailto:` links: remove `target="_blank"`, add visible email text below button labels
+- Update heading to split caps/italic layout
+- Wrap submit button in animated gradient border container
+- Update success screen copy and make Calendly link a standard `<a>` tag
+- Add `motion.div` hover animations to contact method buttons
+
+**`src/index.css`** (add keyframes):
+- Add `@keyframes gradient-border-spin` for the rotating conic gradient on the CTA button
+- Add `.glass-input` focus animation enhancement
+
+### What stays the same
+- All form validation logic
+- Turnstile security verification
+- Supabase DB insert + edge function email
+- Left panel layout structure
+- Social links data from Footer exports
+- Service options (already clean, no emojis)
 
