@@ -204,7 +204,7 @@ export const Contact = memo(() => {
                   </div>
                   <div>
                     <p className="font-body text-sm text-porcelain">Email</p>
-                    <p className="font-mono text-[10px] text-porcelain/50">brandalchemie@gmail.com</p>
+                    <p className="font-mono text-[10px] text-porcelain/50">alchemylabs.work@gmail.com</p>
                   </div>
                 </motion.a>
               </div>
@@ -258,13 +258,19 @@ export const Contact = memo(() => {
                 border: '1px solid rgba(220, 38, 38, 0.15)',
               }}>
                 <p className="font-body text-xs text-porcelain/60 mb-2">
-                  Need to speak directly with the founder?
+                  Need to speak directly with the founders?
                 </p>
                 <a 
-                  href={`mailto:${socialLinks.founderEmail}`}
-                  className="font-mono text-xs text-alchemy-red hover:underline transition-colors"
+                  href="mailto:aashrithgade5@gmail.com?subject=Direct Inquiry – Alchemy Labs"
+                  className="font-mono text-xs text-alchemy-red hover:underline transition-colors block"
                 >
-                  {socialLinks.founderEmail}
+                  aashrithgade5@gmail.com
+                </a>
+                <a 
+                  href="mailto:evadoshi05@gmail.com?subject=Direct Inquiry – Alchemy Labs"
+                  className="font-mono text-xs text-alchemy-red hover:underline transition-colors block mt-1"
+                >
+                  evadoshi05@gmail.com
                 </a>
               </div>
             </motion.div>
