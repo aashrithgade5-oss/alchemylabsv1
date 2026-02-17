@@ -322,29 +322,37 @@
     }
   }
 
-  /* Animated glow border for CTA buttons — uses box-shadow, no z-index issues */
+  /* Animated glow border for CTA buttons — smooth flowing gradient */
   .gradient-border-glow-btn {
     background: hsl(240, 5%, 4%);
-    border: 2px solid rgba(220, 38, 38, 0.6);
-    animation: glow-pulse 3s ease-in-out infinite;
+    border: 2px solid rgba(220, 38, 38, 0.5);
+    animation: glow-flow 6s ease-in-out infinite;
   }
 
-  @keyframes glow-pulse {
+  @keyframes glow-flow {
     0%, 100% {
+      border-color: rgba(220, 38, 38, 0.55);
+      box-shadow: 0 0 12px rgba(220, 38, 38, 0.2), 0 0 35px rgba(220, 38, 38, 0.08);
+    }
+    25% {
       border-color: rgba(220, 38, 38, 0.7);
-      box-shadow: 0 0 15px rgba(220, 38, 38, 0.3), 0 0 40px rgba(220, 38, 38, 0.1);
+      box-shadow: 0 0 18px rgba(220, 38, 38, 0.3), 0 0 45px rgba(220, 38, 38, 0.12);
     }
     50% {
-      border-color: rgba(251, 146, 60, 0.7);
-      box-shadow: 0 0 20px rgba(251, 146, 60, 0.35), 0 0 50px rgba(220, 38, 38, 0.15);
+      border-color: rgba(251, 146, 60, 0.55);
+      box-shadow: 0 0 16px rgba(251, 146, 60, 0.25), 0 0 40px rgba(251, 146, 60, 0.1);
+    }
+    75% {
+      border-color: rgba(220, 38, 38, 0.65);
+      box-shadow: 0 0 14px rgba(220, 38, 38, 0.25), 0 0 38px rgba(220, 38, 38, 0.1);
     }
   }
 
   /* Wrapper version for non-button elements (like anchor tags on success screen) */
   .gradient-border-glow {
     background: hsl(240, 5%, 4%);
-    border: 2px solid rgba(220, 38, 38, 0.6);
-    animation: glow-pulse 3s ease-in-out infinite;
+    border: 2px solid rgba(220, 38, 38, 0.5);
+    animation: glow-flow 6s ease-in-out infinite;
   }
 
   @keyframes gradient-border-spin {
