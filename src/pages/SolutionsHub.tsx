@@ -1,329 +1,237 @@
-import { useState } from 'react';
+import { memo } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Sparkles, Layers, Target, ChevronRight } from 'lucide-react';
-import { useNavigate, Link } from 'react-router-dom';
+import { ArrowRight, ChevronDown } from 'lucide-react';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
-import { MagneticButton } from '@/components/MagneticButton';
-import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { SEOHead, generateOrganizationSchema } from '@/components/SEOHead';
-import { aiServices, brandingServices, consultationServices } from '@/data/services';
-import { ScrollReveal, StaggerReveal } from '@/components/ScrollReveal';
-import { SpotlightContainer, SpotlightItem } from '@/components/SpotlightGrid';
-import { BlueprintGrid, NoiseTexture } from '@/components/effects';
-import { SequentianBackground } from '@/components/SequentianBackground';
+import { CategoryHeader } from '@/components/services/CategoryHeader';
+import { NewServiceCard } from '@/components/services/NewServiceCard';
+import { serviceCategories } from '@/data/servicesData';
+import { NoiseTexture } from '@/components/effects';
 
-const pillars = [
-  {
-    id: 'ai',
-    title: 'AI Solutions',
-    subtitle: 'The Intelligence Engine',
-    description: 'Studio-grade media and systems—built for speed, finished with taste.',
-    icon: Sparkles,
-    route: '/solutions/ai',
-    number: '01',
-    services: aiServices,
-    gradient: 'from-alchemy-red/20 to-transparent',
-  },
-  {
-    id: 'branding',
-    title: 'Branding Solutions',
-    subtitle: 'The Identity System',
-    description: 'Identity infrastructure. Narrative precision. Visual inevitability.',
-    icon: Layers,
-    route: '/solutions/branding',
-    number: '02',
-    services: brandingServices,
-    gradient: 'from-deep-crimson/20 to-transparent',
-  },
-  {
-    id: 'consultation',
-    title: 'Consultation',
-    subtitle: 'The Strategic Insight',
-    description: 'Clarity with a plan. Simulation, not theory.',
-    icon: Target,
-    route: '/solutions/consultation',
-    number: '03',
-    services: consultationServices,
-    gradient: 'from-crimson-bright/20 to-transparent',
-  },
-];
+const CALENDLY_URL = 'https://calendly.com/alchemylabs-work/30min';
+const easing = [0.22, 1, 0.36, 1] as const;
 
-export const SolutionsHub = () => {
-  const navigate = useNavigate();
-  const [hoveredPillar, setHoveredPillar] = useState<string | null>(null);
+const openCalendly = () => {
+  (window as any).Calendly?.initPopupWidget({ url: CALENDLY_URL });
+};
+
+// ── HERO ──
+const HeroSection = memo(() => (
+  <section className="relative min-h-[85vh] flex items-end pb-16 sm:pb-24 pt-28 sm:pt-36 overflow-hidden">
+    {/* Animated gradient bg */}
+    <div className="absolute inset-0 pointer-events-none">
+      <div className="absolute top-1/4 left-1/3 w-[600px] h-[600px] bg-alchemy-red/8 rounded-full blur-[160px] animate-pulse-slow" />
+      <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-purple-500/5 rounded-full blur-[120px] animate-pulse-slow" style={{ animationDelay: '2s' }} />
+      <NoiseTexture opacity={0.03} />
+    </div>
+
+    <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-6 md:px-12 w-full">
+      {/* Eyebrow */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: easing }}
+        className="mb-8"
+      >
+        <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-alchemy-red/20 bg-alchemy-red/5 backdrop-blur-sm">
+          <div className="w-1.5 h-1.5 bg-alchemy-red rounded-full animate-pulse" />
+          <span className="font-mono text-[10px] sm:text-xs uppercase tracking-[0.3em] text-alchemy-red/80">
+            Services
+          </span>
+        </span>
+      </motion.div>
+
+      {/* Headline */}
+      <motion.h1
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.9, delay: 0.1, ease: easing }}
+        className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl leading-[0.95] text-porcelain mb-6 text-balance"
+      >
+        Built for brands that
+        <br />
+        <span className="italic text-alchemy-red">refuse to move slowly.</span>
+      </motion.h1>
+
+      {/* Sub */}
+      <motion.p
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.3, ease: easing }}
+        className="font-body text-base sm:text-lg md:text-xl text-porcelain/50 max-w-2xl font-light leading-relaxed mb-10"
+      >
+        Every engagement is a precision instrument — designed around your business model,
+        calibrated to your moment, and built to compound.
+      </motion.p>
+
+      {/* Value props */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.6, delay: 0.5 }}
+        className="flex flex-wrap gap-3 sm:gap-4 mb-16"
+      >
+        {['AI-Native', 'Founder-First', 'Outcome-Engineered'].map((tag) => (
+          <span key={tag} className="font-mono text-[10px] sm:text-xs tracking-[0.15em] uppercase text-porcelain/40 border border-porcelain/10 rounded-full px-4 py-1.5">
+            {tag}
+          </span>
+        ))}
+      </motion.div>
+
+      {/* Scroll indicator */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1, duration: 0.6 }}
+        className="flex items-center gap-3 text-porcelain/30"
+      >
+        <span className="font-mono text-[10px] tracking-wider uppercase">Explore Services</span>
+        <motion.div
+          animate={{ y: [0, 6, 0] }}
+          transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+        >
+          <ChevronDown className="w-4 h-4" />
+        </motion.div>
+      </motion.div>
+    </div>
+  </section>
+));
+HeroSection.displayName = 'HeroSection';
+
+// ── SERVICE SECTION ──
+const ServiceSection = memo(({ categoryIndex }: { categoryIndex: number }) => {
+  const category = serviceCategories[categoryIndex];
+  const isSingle = category.services.length === 1;
 
   return (
-    <div className="min-h-screen bg-background grain-overlay">
-      <SEOHead 
-        title="Solutions"
-        description="Three pillars of service: AI Solutions, Branding, and Strategic Consultation. Choose the right approach for your brand challenge."
-        structuredData={generateOrganizationSchema()}
-      />
-      <Navigation />
-      
-      {/* Hero Section */}
-      <section className="relative min-h-[70vh] flex items-end pb-16 sm:pb-20 pt-24 sm:pt-32 overflow-hidden">
-        {/* Sequentian Silk Fold hero background */}
-        <SequentianBackground variant={1} opacity={0.4} parallax scaleEnd={1.1} glow={false} />
+    <section className="relative py-16 sm:py-24 md:py-32">
+      {/* Subtle gradient accent per section */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div
+          className="absolute w-[500px] h-[500px] rounded-full blur-[180px] opacity-[0.04]"
+          style={{
+            background: 'radial-gradient(circle, hsl(var(--alchemy-red)), transparent)',
+            top: '20%',
+            left: categoryIndex % 2 === 0 ? '10%' : '60%',
+          }}
+        />
+      </div>
 
-        <div className="absolute inset-0 pointer-events-none">
-          <BlueprintGrid opacity={0.04} />
-          <NoiseTexture opacity={0.03} />
-        </div>
+      <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-6 md:px-12">
+        <CategoryHeader
+          number={category.number}
+          title={category.title}
+          subtitle={category.subtitle}
+          description={category.description}
+        />
 
-        {/* Corner brackets */}
-        <div className="absolute inset-0 pointer-events-none hidden lg:block">
-          <div className="absolute top-8 left-8 w-16 h-16 border-t-2 border-l-2 border-alchemy-red/20" />
-          <div className="absolute top-8 right-8 w-16 h-16 border-t-2 border-r-2 border-alchemy-red/20" />
-          <div className="absolute bottom-8 left-8 w-16 h-16 border-b-2 border-l-2 border-alchemy-red/20" />
-          <div className="absolute bottom-8 right-8 w-16 h-16 border-b-2 border-r-2 border-alchemy-red/20" />
+        <div
+          className={
+            isSingle
+              ? 'max-w-2xl'
+              : category.services.length === 2
+              ? 'grid grid-cols-1 lg:grid-cols-2 gap-6'
+              : category.services.length === 4
+              ? 'grid grid-cols-1 md:grid-cols-2 gap-6'
+              : 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'
+          }
+        >
+          {category.services.map((service, i) => (
+            <NewServiceCard key={service.id} service={service} index={i} />
+          ))}
         </div>
-
-        {/* Technical labels */}
-        <div className="absolute top-12 left-28 font-mono text-[10px] text-alchemy-red/30 hidden lg:flex items-center gap-2">
-          <div className="w-1 h-1 bg-alchemy-red animate-pulse" />
-          <span>SOLUTIONS.MODULE</span>
-        </div>
-        <div className="absolute bottom-12 right-28 font-mono text-[10px] text-porcelain/20 hidden lg:block">
-          SYSTEM.v2.1
-        </div>
-        
-        <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-6 md:px-12 w-full">
-          <Breadcrumbs className="mb-8" />
-          
-          <ScrollReveal>
-            <div className="max-w-4xl">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="mb-8"
-              >
-                <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-alchemy-red/20 bg-alchemy-red/5 backdrop-blur-sm">
-                  <div className="w-1.5 h-1.5 bg-alchemy-red rounded-full animate-pulse" />
-                  <span className="font-mono text-[10px] sm:text-xs uppercase tracking-[0.3em] text-alchemy-red/80">
-                    Our Framework
-                  </span>
-                </span>
-              </motion.div>
-              
-              <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl leading-[0.95] tracking-display text-porcelain mb-4 sm:mb-6 text-balance">
-                Three{' '}
-                <span className="italic text-alchemy-red">pillars.</span>
-                <br />
-                <span className="font-body font-light text-porcelain/70">One{' '}<span className="font-display italic">system.</span></span>
-              </h1>
-              
-              <p className="font-body text-lg md:text-xl text-porcelain/50 max-w-2xl font-light leading-relaxed mb-12">
-                Strategic solutions engineered for brands that refuse to settle for noise.
-                Each pillar designed to compound, not just campaign.
-              </p>
-
-              <div className="flex flex-wrap gap-8 lg:gap-12">
-                {[
-                  { label: 'Delivery Speed', value: '4-6 Weeks' },
-                  { label: 'Success Rate', value: '98%' },
-                  { label: 'Client Satisfaction', value: '5.0' },
-                ].map((stat, i) => (
-                  <div key={i} className="text-left">
-                    <div className="font-display text-2xl lg:text-3xl font-bold bg-gradient-to-r from-alchemy-red to-alchemy-pink bg-clip-text text-transparent mb-1">
-                      {stat.value}
-                    </div>
-                    <div className="font-mono text-[10px] uppercase tracking-wider text-porcelain/40">
-                      {stat.label}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </ScrollReveal>
-        </div>
-      </section>
-      
-      {/* Pillars */}
-      <section className="relative py-8 sm:py-12">
-        <div className="max-w-[1600px] mx-auto px-5 sm:px-6 md:px-12 relative z-10">
-          <SpotlightContainer className="space-y-3 sm:space-y-4">
-            {pillars.map((pillar, i) => {
-              const Icon = pillar.icon;
-              const isHovered = hoveredPillar === pillar.id;
-              
-              return (
-                <SpotlightItem key={pillar.id} id={pillar.id}>
-                  <ScrollReveal delay={i * 0.1}>
-                    <motion.div
-                      onMouseEnter={() => setHoveredPillar(pillar.id)}
-                      onMouseLeave={() => setHoveredPillar(null)}
-                      className="group relative"
-                      initial={{ rotateX: 2, opacity: 0 }}
-                      whileInView={{ rotateX: 0, opacity: 1 }}
-                      viewport={{ once: true, margin: '-80px' }}
-                      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: i * 0.1 }}
-                      style={{ perspective: 1000 }}
-                    >
-                      <Link
-                        to={pillar.route}
-                        className="block relative rounded-2xl overflow-hidden"
-                      >
-                        <motion.div
-                          className={`absolute inset-0 bg-gradient-to-r ${pillar.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}
-                        />
-                        
-                        <div className="relative glass-deep rounded-xl sm:rounded-2xl p-5 sm:p-8 md:p-12 flex flex-col md:flex-row md:items-center gap-5 sm:gap-8 group-hover:border-alchemy-red/20 transition-colors duration-300">
-                          <div className="flex-shrink-0 hidden sm:block">
-                            <span className="font-display text-5xl sm:text-6xl md:text-8xl italic text-porcelain/5 group-hover:text-alchemy-red/10 transition-colors duration-500">
-                              {pillar.number}
-                            </span>
-                          </div>
-                          
-                          <div className="flex items-center gap-4 sm:gap-6 flex-1">
-                            <motion.div
-                              className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-xl sm:rounded-2xl glass-red flex items-center justify-center flex-shrink-0"
-                              animate={{ scale: isHovered ? 1.1 : 1 }}
-                              transition={{ duration: 0.3 }}
-                            >
-                              <Icon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-alchemy-red" />
-                            </motion.div>
-                            
-                            <div className="flex-1">
-                              <h3 className="font-display text-xl sm:text-2xl md:text-3xl lg:text-4xl italic text-porcelain group-hover:text-alchemy-red transition-colors duration-300 mb-1 text-balance">
-                                {pillar.title}
-                              </h3>
-                              <p className="font-mono text-[10px] sm:text-xs text-alchemy-red/60 tracking-label uppercase">
-                                {pillar.subtitle}
-                              </p>
-                            </div>
-                          </div>
-                          
-                          <div className="flex-1 md:max-w-md hidden sm:block">
-                            <p className="font-body text-sm md:text-base text-porcelain/50 font-light">
-                              {pillar.description}
-                            </p>
-                          </div>
-                          
-                          <div className="flex items-center gap-6 flex-shrink-0">
-                            <div className="text-right hidden md:block">
-                              <span className="font-display text-2xl italic text-porcelain">
-                                {pillar.services.length}
-                              </span>
-                              <p className="font-mono text-[10px] text-porcelain/40 tracking-label uppercase">
-                                Services
-                              </p>
-                            </div>
-                            
-                            <motion.div
-                              className="w-12 h-12 rounded-full glass flex items-center justify-center group-hover:bg-alchemy-red/20 transition-colors duration-300"
-                              animate={{ x: isHovered ? 5 : 0 }}
-                              transition={{ duration: 0.3 }}
-                            >
-                              <ChevronRight className="w-5 h-5 text-porcelain/60 group-hover:text-alchemy-red transition-colors" />
-                            </motion.div>
-                          </div>
-                        </div>
-                      </Link>
-                    </motion.div>
-                  </ScrollReveal>
-                </SpotlightItem>
-              );
-            })}
-          </SpotlightContainer>
-        </div>
-      </section>
-
-      {/* Quick Access Services Grid */}
-      <section className="relative py-16 sm:py-20 md:py-24 luxury-margin">
-        {/* Sequentian Soft Nebula background */}
-        <SequentianBackground variant={2} opacity={0.3} parallax scaleEnd={1.08} glow={false} />
-        
-        <div className="max-w-7xl mx-auto px-5 sm:px-6 md:px-12 relative z-10">
-          <ScrollReveal>
-            <div className="flex items-center gap-3 sm:gap-4 mb-8 sm:mb-12">
-              <div className="w-8 sm:w-12 h-px bg-alchemy-red/50" />
-              <span className="font-mono text-[10px] sm:text-xs text-porcelain/40 tracking-label uppercase">Popular Services</span>
-            </div>
-          </ScrollReveal>
-
-          <SpotlightContainer className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-            {[...aiServices.slice(0, 2), ...brandingServices.slice(0, 1), ...consultationServices.slice(0, 1)].map((service, i) => {
-              const ServiceIcon = service.icon;
-              return (
-                <SpotlightItem key={service.id} id={service.id}>
-                  <ScrollReveal delay={i * 0.1}>
-                    <Link
-                      to={`/services/${service.slug}`}
-                      className="block p-4 sm:p-6 rounded-xl sm:rounded-2xl glass group hover:border-alchemy-red/30 transition-all duration-300 h-full"
-                    >
-                      <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-alchemy-red/10 flex items-center justify-center mb-3 sm:mb-4 group-hover:bg-alchemy-red/20 transition-colors">
-                        <ServiceIcon className="w-4 h-4 sm:w-5 sm:h-5 text-alchemy-red" />
-                      </div>
-                      <h4 className="font-display text-base sm:text-lg md:text-xl italic text-porcelain group-hover:text-alchemy-red transition-colors mb-1 sm:mb-2 text-balance line-clamp-2">
-                        {service.title}
-                      </h4>
-                      <p className="font-body text-xs sm:text-sm text-porcelain/40 font-light line-clamp-2 hidden sm:block">
-                        {service.description.slice(0, 80)}...
-                      </p>
-                      <div className="flex items-center gap-2 mt-4 text-alchemy-red font-mono text-xs opacity-0 group-hover:opacity-100 transition-opacity">
-                        <span>Learn more</span>
-                        <ArrowRight className="w-3 h-3" />
-                      </div>
-                    </Link>
-                  </ScrollReveal>
-                </SpotlightItem>
-              );
-            })}
-          </SpotlightContainer>
-        </div>
-      </section>
-      
-      {/* Sprint CTA */}
-      <section className="relative py-16 sm:py-20 md:py-24 overflow-hidden luxury-margin">
-        {/* Sequentian Crimson Cloud background */}
-        <SequentianBackground variant={4} opacity={0.35} parallax scaleEnd={1.1} glow={false} />
-        
-        <div className="relative z-10 max-w-4xl mx-auto px-5 sm:px-6 md:px-12">
-          <ScrollReveal>
-            <div className="text-center">
-              <h2 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl italic text-porcelain mb-4 sm:mb-6 text-balance">
-                Ready to start?
-              </h2>
-              
-              <p className="font-body text-base sm:text-lg text-porcelain/50 font-light leading-relaxed max-w-xl mx-auto mb-6 sm:mb-8 px-2">
-                Book a Strategy Sprint—3-5 days of intensive collaboration 
-                delivering systems ready to deploy.
-              </p>
-
-              <div className="flex items-center justify-center gap-3 mb-8">
-                <span className="font-mono text-[10px] text-porcelain/45 tracking-wider">NDA available</span>
-                <span className="text-porcelain/20">·</span>
-                <span className="font-mono text-[10px] text-porcelain/45 tracking-wider">24h reply</span>
-                <span className="text-porcelain/20">·</span>
-                <span className="font-mono text-[10px] text-porcelain/45 tracking-wider">Free first call</span>
-              </div>
-              
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <MagneticButton 
-                  onClick={() => navigate('/book-sprint')}
-                  className="glass-cta-primary"
-                >
-                  Book a Sprint
-                  <ArrowRight className="w-4 h-4" />
-                </MagneticButton>
-                
-                <Link
-                  to="/contact"
-                  className="font-body text-sm text-porcelain/50 hover:text-alchemy-red transition-colors px-6 py-4 no-glow"
-                >
-                  or get in touch →
-                </Link>
-              </div>
-            </div>
-          </ScrollReveal>
-        </div>
-      </section>
-      
-      <Footer />
-    </div>
+      </div>
+    </section>
   );
-};
+});
+ServiceSection.displayName = 'ServiceSection';
+
+// ── FINAL CTA ──
+const FinalCTA = memo(() => (
+  <section className="relative py-24 sm:py-32 md:py-40 overflow-hidden">
+    <div className="absolute inset-0 pointer-events-none">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-alchemy-red/6 rounded-full blur-[200px]" />
+    </div>
+
+    <div className="relative z-10 max-w-3xl mx-auto px-5 sm:px-6 md:px-12 text-center">
+      <motion.h2
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8, ease: easing }}
+        className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl italic text-porcelain mb-6 leading-tight"
+      >
+        We don't work with
+        <br />
+        <span className="text-alchemy-red">everyone.</span>
+        <br />
+        We work with the
+        <br />
+        <span className="text-porcelain/60">right ones.</span>
+      </motion.h2>
+
+      <motion.p
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 0.2, ease: easing }}
+        className="font-body text-base sm:text-lg text-porcelain/45 font-light max-w-xl mx-auto mb-8 leading-relaxed"
+      >
+        Alchemy Labs is built for founders and operators who take their positioning seriously —
+        who understand that the right creative is never an accident.
+      </motion.p>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 0.3, ease: easing }}
+      >
+        <button
+          type="button"
+          onClick={openCalendly}
+          className="gradient-border-glow-btn inline-flex items-center gap-3 px-8 py-4 rounded-xl font-body text-base text-porcelain transition-all duration-300 hover:text-white"
+        >
+          Book a Sprint Call
+          <ArrowRight className="w-4 h-4" />
+        </button>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ delay: 0.5 }}
+        className="flex items-center justify-center gap-3 mt-6"
+      >
+        <span className="font-mono text-[10px] text-porcelain/35 tracking-wider">NDA available</span>
+        <span className="text-porcelain/15">·</span>
+        <span className="font-mono text-[10px] text-porcelain/35 tracking-wider">24h reply</span>
+        <span className="text-porcelain/15">·</span>
+        <span className="font-mono text-[10px] text-porcelain/35 tracking-wider">Free first call</span>
+      </motion.div>
+    </div>
+  </section>
+));
+FinalCTA.displayName = 'FinalCTA';
+
+// ── PAGE ──
+export const SolutionsHub = () => (
+  <div className="min-h-screen bg-background">
+    <SEOHead
+      title="Services — Alchemy Labs"
+      description="AI Advisory, Campaign & Creative, Brand Systems, Growth Infrastructure, and Strategic Consulting. Built for brands that refuse to move slowly."
+      structuredData={generateOrganizationSchema()}
+    />
+    <Navigation />
+    <HeroSection />
+    {serviceCategories.map((_, i) => (
+      <ServiceSection key={i} categoryIndex={i} />
+    ))}
+    <FinalCTA />
+    <Footer />
+  </div>
+);
 
 export default SolutionsHub;
