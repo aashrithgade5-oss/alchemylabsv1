@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 
-import sequentian1 from '@/assets/sequentian-1.png';
-import sequentian4 from '@/assets/sequentian-4.png';
+import founderAashrith from '@/assets/founder-aashrith-silhouette.png';
+import founderEva from '@/assets/founder-eva-silhouette.png';
 
 const CINEMATIC_EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -17,12 +17,13 @@ const founders = [
     title: 'Founder · CEO · Director',
     specialty: 'Brand Architecture · Luxury Brand Strategy · AI-Native Luxury Brand Strategy · Creative Direction',
     slug: '/aashrith',
-    bg: sequentian1,
-    bgOpacity: 0.18,
+    photo: founderAashrith,
+    photoPosition: 'center 20%',
     gradient: 'linear-gradient(135deg, rgba(180,200,220,0.02) 0%, rgba(255,255,255,0.04) 50%, rgba(220,38,38,0.03) 100%)',
-    hoverGlow: 'radial-gradient(ellipse at 50% 40%, rgba(220,38,38,0.12) 0%, transparent 70%)',
+    overlayGradient: 'linear-gradient(180deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.2) 30%, rgba(0,0,0,0.15) 50%, rgba(220,38,38,0.12) 70%, rgba(0,0,0,0.7) 100%)',
+    hoverGlow: 'radial-gradient(ellipse at 50% 40%, rgba(220,38,38,0.18) 0%, transparent 70%)',
     hoverBorder: 'rgba(220,38,38,0.4)',
-    monogramColor: 'rgba(255,255,255,0.06)',
+    monogramColor: 'rgba(255,255,255,0.04)',
   },
   {
     name: 'Eva',
@@ -31,12 +32,13 @@ const founders = [
     title: 'Co-Founder · Client Relations · Outreach',
     specialty: 'Growth & Partnerships · Luxury Branding · AI-Native Marketing',
     slug: '/eva',
-    bg: sequentian4,
-    bgOpacity: 0.20,
+    photo: founderEva,
+    photoPosition: 'center 25%',
     gradient: 'linear-gradient(135deg, rgba(236,72,153,0.08) 0%, rgba(251,113,133,0.05) 50%, rgba(255,255,255,0.02) 100%)',
+    overlayGradient: 'linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.15) 30%, rgba(0,0,0,0.1) 50%, rgba(236,72,153,0.1) 70%, rgba(0,0,0,0.7) 100%)',
     hoverGlow: 'radial-gradient(ellipse at 50% 40%, rgba(236,72,153,0.18) 0%, transparent 70%)',
     hoverBorder: 'rgba(236,72,153,0.5)',
-    monogramColor: 'rgba(236,72,153,0.08)',
+    monogramColor: 'rgba(236,72,153,0.05)',
     isPink: true,
   },
 ];
@@ -87,22 +89,31 @@ const FounderPanel = memo(({ founder, index }: { founder: typeof founders[0]; in
         whileHover={!isMobile ? { y: -6 } : undefined}
         transition={{ duration: 0.3 }}
       >
-        {/* Sequentian background per panel */}
-        <img
-          src={founder.bg}
+        {/* Silhouette photo background */}
+        <motion.img
+          src={founder.photo}
           alt=""
           loading="lazy"
           decoding="async"
           className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-          style={{ opacity: founder.bgOpacity }}
+          style={{ objectPosition: founder.photoPosition }}
+          initial={{ scale: 1.05 }}
+          animate={{ scale: isHovered ? 1.08 : 1.05 }}
+          transition={{ duration: 0.7, ease: CINEMATIC_EASE }}
         />
 
-        {/* Glass background */}
+        {/* Color + gradient overlay on photo */}
+        <div
+          className="absolute inset-0 pointer-events-none transition-opacity duration-500"
+          style={{ background: founder.overlayGradient }}
+        />
+
+        {/* Glass tint layer */}
         <div
           className="absolute inset-0 transition-all duration-500"
           style={{
             background: founder.gradient,
-            backdropFilter: 'blur(24px) saturate(180%)',
+            backdropFilter: 'blur(2px) saturate(140%)',
             border: isHovered
               ? `1px solid ${founder.hoverBorder}`
               : '1px solid rgba(255,255,255,0.08)',
@@ -112,7 +123,7 @@ const FounderPanel = memo(({ founder, index }: { founder: typeof founders[0]; in
         {/* Monogram watermark */}
         <div
           className="absolute inset-0 flex items-center justify-center pointer-events-none select-none"
-          style={{ opacity: isHovered ? 0.08 : 0.05 }}
+          style={{ opacity: isHovered ? 0.06 : 0.04 }}
         >
           <span
             className="font-body font-black text-[12rem] sm:text-[16rem] lg:text-[20rem] uppercase leading-none tracking-[-0.05em] transition-opacity duration-500"
@@ -129,7 +140,7 @@ const FounderPanel = memo(({ founder, index }: { founder: typeof founders[0]; in
         />
 
         {/* Content */}
-        <div className="relative z-10 flex flex-col items-center justify-center text-center h-full px-6 sm:px-10 py-12 sm:py-16 lg:py-0">
+        <div className="relative z-10 flex flex-col items-center justify-end text-center h-full px-6 sm:px-10 py-10 sm:py-14 lg:py-12">
           <h3 className="font-body text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black uppercase tracking-[0.1em] text-porcelain mb-3">
             {founder.fullName}
           </h3>

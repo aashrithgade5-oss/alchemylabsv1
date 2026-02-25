@@ -1,16 +1,15 @@
-import { memo } from 'react';
+import { memo, useRef, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { ArrowRight, Sparkles, Layers, Target } from 'lucide-react';
+import { ArrowRight, Zap, Layers, Target } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { SEOHead, generateOrganizationSchema } from '@/components/SEOHead';
 import { NoiseTexture } from '@/components/effects';
 import solutionsBgTexture from '@/assets/solutions-bg-texture.png';
-import { useRef } from 'react';
 
 const CALENDLY_URL = 'https://calendly.com/alchemylabs-work/30min';
-const easing = [0.22, 1, 0.36, 1] as const;
+const EASE = [0.22, 1, 0.36, 1] as const;
 
 const openCalendly = () => {
   (window as any).Calendly?.initPopupWidget({ url: CALENDLY_URL });
@@ -20,50 +19,47 @@ const pillars = [
   {
     id: 'ai',
     number: '01',
+    label: 'PILLAR 01 · FAST TRACK',
     title: 'AI Product Studio',
-    subtitle: 'Fast (24h build)',
-    description: 'Studio-grade media and systems—built for speed, finished with taste. From AI audits to cinematic campaigns and content engines.',
-    icon: Sparkles,
+    tagline: 'Production in hours, not weeks.',
+    body: 'Studio-grade creative systems — built for speed, finished with taste. AI audits, campaign sprints, and content engines that actually compound.',
+    icon: Zap,
     route: '/solutions/ai',
-    deliverables: ['AI Leverage Audit', 'Campaign Sprint', 'Content Engine'],
-    trust: 'Production in hours, not weeks',
-    gradient: 'from-violet-500/15 via-purple-500/8 to-transparent',
-    serviceCount: 6,
+    includes: ['AI Leverage Audit', 'Campaign Sprint', 'Content Engine'],
+    ctaCount: 6,
   },
   {
     id: 'branding',
     number: '02',
+    label: 'PILLAR 02 · FOUNDATION',
     title: 'Brand Systems',
-    subtitle: 'Foundation',
-    description: 'Identity infrastructure. Narrative precision. Visual inevitability. Complete brand ecosystems from logo to launch.',
+    tagline: 'Brands that feel inevitable.',
+    body: 'Identity infrastructure built for permanence. Narrative precision. Visual inevitability. From logo to full brand ecosystem — built to last.',
     icon: Layers,
     route: '/solutions/branding',
-    deliverables: ['Brand World', 'Identity System', 'Branding 360'],
-    trust: 'Brands that feel inevitable',
-    gradient: 'from-blue-500/15 via-cyan-500/8 to-transparent',
-    serviceCount: 4,
+    includes: ['Brand World', 'Identity System', 'Branding 360'],
+    ctaCount: 4,
   },
   {
     id: 'consultation',
     number: '03',
+    label: 'PILLAR 03 · CLARITY',
     title: 'Advisory',
-    subtitle: 'Clarity',
-    description: 'Clarity with a plan. From a single precision audit to full system simulation. Strategy you can execute today.',
+    tagline: 'Strategy you can execute today.',
+    body: 'From a single precision audit to full system simulation — we hand you a plan that works, not a deck that collects dust.',
     icon: Target,
     route: '/solutions/consultation',
-    deliverables: ['Precision Audit', 'Strategy Build', 'Full Simulation'],
-    trust: 'Strategy you can execute today',
-    gradient: 'from-rose-500/15 via-pink-500/8 to-transparent',
-    serviceCount: 3,
+    includes: ['Precision Audit', 'Strategy Build', 'Full Simulation'],
+    ctaCount: 3,
   },
 ];
 
-// ── IMMERSIVE TEXTURE BACKGROUND ──
-const ImmersiveTextureBg = memo(() => {
+// ── TEXTURE BACKGROUND ──
+const TextureBg = memo(() => {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end end'] });
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.15]);
-  const y = useTransform(scrollYProgress, [0, 1], ['0%', '10%']);
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.1]);
+  const y = useTransform(scrollYProgress, [0, 1], ['0%', '8%']);
 
   return (
     <div ref={ref} className="fixed inset-0 pointer-events-none z-0" aria-hidden>
@@ -74,82 +70,75 @@ const ImmersiveTextureBg = memo(() => {
         decoding="async"
         draggable={false}
         style={{ scale, y }}
-        className="absolute inset-0 w-full h-full object-cover opacity-[0.35]"
+        className="absolute inset-0 w-full h-full object-cover opacity-[0.25]"
       />
-      {/* Dark overlay for legibility */}
-      <div className="absolute inset-0 bg-background/70" />
-      {/* Bottom gradient fade */}
+      <div className="absolute inset-0" style={{ background: 'rgba(8,8,8,0.78)' }} />
       <div className="absolute bottom-0 inset-x-0 h-64 bg-gradient-to-t from-background to-transparent" />
       <NoiseTexture opacity={0.03} />
     </div>
   );
 });
-ImmersiveTextureBg.displayName = 'ImmersiveTextureBg';
+TextureBg.displayName = 'TextureBg';
 
 // ── HERO ──
 const HeroSection = memo(() => (
-  <section className="relative min-h-[90vh] flex items-end pb-20 sm:pb-28 pt-32 sm:pt-40 overflow-hidden">
-    {/* Floating ambient orbs */}
-    <div className="absolute inset-0 pointer-events-none overflow-hidden">
-      <motion.div
-        className="absolute top-1/4 left-1/3 w-[500px] h-[500px] bg-alchemy-red/6 rounded-full blur-[180px]"
-        animate={{ x: [0, 30, 0], y: [0, -20, 0] }}
-        transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
-      />
-      <motion.div
-        className="absolute bottom-1/3 right-1/4 w-[350px] h-[350px] bg-deep-crimson/5 rounded-full blur-[140px]"
-        animate={{ x: [0, -20, 0], y: [0, 25, 0] }}
-        transition={{ duration: 11, repeat: Infinity, ease: 'easeInOut' }}
-      />
-    </div>
-
+  <section className="relative min-h-[85vh] flex items-end pb-20 sm:pb-28 pt-32 sm:pt-40 overflow-hidden">
     <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-6 md:px-12 w-full">
+      {/* Eyebrow */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: easing }}
-        className="mb-6"
+        transition={{ duration: 0.6, ease: EASE }}
+        className="mb-8"
       >
-        <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full"
-          style={{
-            background: 'linear-gradient(135deg, rgba(220,38,38,0.08) 0%, rgba(220,38,38,0.02) 100%)',
-            border: '1px solid rgba(220,38,38,0.15)',
-          }}
-        >
-          <div className="w-1.5 h-1.5 bg-alchemy-red rounded-full animate-pulse" />
-          <span className="font-mono text-[10px] sm:text-xs uppercase tracking-[0.3em] text-alchemy-red/80">
-            Our Services
+        <span className="inline-flex items-center gap-2.5">
+          <div className="w-1.5 h-1.5 bg-alchemy-red rounded-full" />
+          <span className="font-mono text-[10px] sm:text-xs uppercase tracking-[0.3em]"
+            style={{ color: 'hsl(var(--muted-foreground))' }}>
+            Our Solutions
           </span>
         </span>
       </motion.div>
 
+      {/* Title */}
       <motion.h1
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.9, delay: 0.1, ease: easing }}
-        className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl leading-[0.95] text-porcelain mb-6"
+        transition={{ duration: 0.9, delay: 0.12, ease: EASE }}
+        className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[6.5rem] leading-[0.92] text-porcelain mb-6"
       >
-        Three <span className="italic text-alchemy-red">Pillars</span>
+        Three{' '}
+        <span className="italic text-alchemy-red">Pillars.</span>
       </motion.h1>
 
+      {/* Subtext */}
       <motion.p
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.25, ease: easing }}
-        className="font-body text-base sm:text-lg md:text-xl text-porcelain/50 max-w-2xl font-light leading-relaxed mb-10"
+        transition={{ duration: 0.6, delay: 0.24, ease: EASE }}
+        className="font-body text-sm sm:text-base md:text-lg max-w-2xl font-light leading-relaxed mb-10"
+        style={{ color: 'hsl(var(--muted-foreground))' }}
       >
-        Every brand challenge requires a different approach. We've engineered three —
-        each a precision instrument built to compound.
+        Every brand challenge demands a different instrument.
+        We've engineered three — each built to compound.
       </motion.p>
 
+      {/* Tag pills */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.6, delay: 0.4 }}
+        transition={{ duration: 0.6, delay: 0.36 }}
         className="flex flex-wrap gap-3"
       >
-        {['AI-Native', 'Founder-First', 'Outcome-Engineered'].map((tag) => (
-          <span key={tag} className="font-mono text-[10px] sm:text-xs tracking-[0.15em] uppercase text-porcelain/35 border border-porcelain/8 rounded-full px-4 py-1.5">
+        {['AI-NATIVE', 'FOUNDER-FIRST', 'OUTCOME-ENGINEERED'].map((tag) => (
+          <span
+            key={tag}
+            className="font-mono text-[10px] sm:text-[11px] tracking-[0.15em] uppercase px-4 py-1.5 rounded-full transition-all duration-300 hover:tracking-[0.2em]"
+            style={{
+              color: 'hsl(var(--muted-foreground))',
+              border: '1px solid rgba(255,255,255,0.06)',
+            }}
+          >
             {tag}
           </span>
         ))}
@@ -160,135 +149,203 @@ const HeroSection = memo(() => (
 HeroSection.displayName = 'HeroSection';
 
 // ── PILLAR CARD ──
-const PillarCard = memo(({ pillar, index }: { pillar: typeof pillars[0]; index: number }) => {
+const PillarCard = memo(({ pillar, index, size }: { pillar: typeof pillars[0]; index: number; size: 'large' | 'medium' }) => {
   const Icon = pillar.icon;
+  const [isHovered, setIsHovered] = useState(false);
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 40 }}
+      initial={{ opacity: 0, y: 32 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-60px' }}
-      transition={{ duration: 0.6, delay: index * 0.12, ease: easing }}
+      transition={{ duration: 0.6, delay: index * 0.08, ease: EASE }}
+      className="h-full"
     >
-      <div
-        className="group relative rounded-2xl overflow-hidden h-full transition-all duration-500"
-        style={{
-          background: 'linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%)',
-          border: '1px solid rgba(255,255,255,0.08)',
-        }}
+      <Link
+        to={pillar.route}
+        className="block h-full"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
       >
-        {/* Gradient hover bg */}
-        <div className={`absolute inset-0 bg-gradient-to-br ${pillar.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-700`} />
-        
-        {/* Inner glow */}
-        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-          style={{ boxShadow: 'inset 0 0 60px rgba(220,38,38,0.04)' }}
-        />
+        <div
+          className="group relative h-full rounded-2xl overflow-hidden transition-all duration-300"
+          style={{
+            background: isHovered ? '#141414' : '#0f0f0f',
+            border: isHovered ? '1px solid rgba(255,255,255,0.14)' : '1px solid rgba(255,255,255,0.06)',
+            borderLeft: isHovered ? '4px solid hsl(var(--alchemy-red))' : '4px solid transparent',
+            transform: isHovered ? 'translateY(-4px)' : 'translateY(0)',
+            boxShadow: isHovered ? '0 24px 48px rgba(0,0,0,0.4)' : '0 4px 12px rgba(0,0,0,0.2)',
+          }}
+        >
+          {/* Ghost number */}
+          <span
+            className="absolute -top-4 -right-2 font-display leading-none pointer-events-none select-none transition-opacity duration-300"
+            style={{
+              fontSize: 'clamp(120px, 15vw, 200px)',
+              color: 'hsl(var(--porcelain))',
+              opacity: isHovered ? 0.06 : 0.03,
+            }}
+          >
+            {pillar.number}
+          </span>
 
-        {/* Ghost number */}
-        <span className="absolute -top-6 -right-2 font-display text-[120px] text-porcelain/[0.02] leading-none pointer-events-none select-none">
-          {pillar.number}
-        </span>
+          <div className={`relative z-10 flex flex-col h-full ${size === 'large' ? 'p-8 sm:p-10 lg:p-12' : 'p-7 sm:p-8'}`}>
+            {/* Icon */}
+            <div className="mb-5">
+              <div
+                className="w-10 h-10 rounded-lg flex items-center justify-center"
+                style={{
+                  background: 'rgba(200,57,43,0.15)',
+                }}
+              >
+                <Icon className="w-[18px] h-[18px] text-alchemy-red" />
+              </div>
+            </div>
 
-        <div className="relative z-10 p-7 sm:p-8 md:p-10 flex flex-col h-full">
-          {/* Icon */}
-          <div className="mb-5">
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center group-hover:shadow-[0_0_25px_rgba(220,38,38,0.2)] transition-shadow duration-500"
-              style={{
-                background: 'linear-gradient(135deg, rgba(220,38,38,0.1) 0%, rgba(220,38,38,0.03) 100%)',
-                border: '1px solid rgba(220,38,38,0.2)',
-              }}
-            >
-              <Icon className="w-5 h-5 text-alchemy-red" />
+            {/* Label */}
+            <p className="font-mono text-[10px] tracking-[0.2em] uppercase mb-3"
+              style={{ color: 'hsl(var(--muted-foreground))' }}>
+              {pillar.label}
+            </p>
+
+            {/* Title */}
+            <h3 className="font-display text-2xl sm:text-3xl md:text-4xl text-porcelain mb-2 group-hover:text-alchemy-red transition-colors duration-300">
+              {pillar.title}
+            </h3>
+
+            {/* Tagline */}
+            <p className="font-mono text-[10px] sm:text-xs text-alchemy-red/60 tracking-wide uppercase mb-4">
+              {pillar.tagline}
+            </p>
+
+            {/* Body */}
+            <p className="font-body text-sm font-light leading-relaxed mb-6 flex-1"
+              style={{ color: 'hsl(var(--muted-foreground))' }}>
+              {pillar.body}
+            </p>
+
+            {/* Divider */}
+            <div className="w-full h-px mb-5" style={{ background: 'rgba(255,255,255,0.06)' }} />
+
+            {/* Includes */}
+            <div className="mb-6">
+              <p className="font-mono text-[9px] uppercase tracking-[0.2em] mb-3"
+                style={{ color: 'rgba(255,255,255,0.25)' }}>
+                Includes
+              </p>
+              <ul className="space-y-2">
+                {pillar.includes.map((item, j) => (
+                  <li
+                    key={j}
+                    className="flex items-center gap-2.5 font-mono text-xs transition-transform duration-200"
+                    style={{
+                      color: 'hsl(var(--muted-foreground))',
+                      transform: isHovered ? `translateX(${4}px)` : 'translateX(0)',
+                      transitionDelay: `${j * 40}ms`,
+                    }}
+                  >
+                    <span className="text-alchemy-red/70">→</span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* CTA */}
+            <div className="mt-auto">
+              <span className="inline-flex items-center gap-2 font-body text-sm text-porcelain/60 group-hover:text-alchemy-red transition-colors duration-300">
+                <span className="relative">
+                  Discover {pillar.ctaCount} Services
+                  <span
+                    className="absolute bottom-0 left-0 h-px bg-alchemy-red transition-all duration-300"
+                    style={{ width: isHovered ? '100%' : '0%' }}
+                  />
+                </span>
+                <ArrowRight
+                  className="w-3.5 h-3.5 transition-transform duration-300"
+                  style={{ transform: isHovered ? 'translateX(4px)' : 'translateX(0)' }}
+                />
+              </span>
             </div>
           </div>
-
-          {/* Label + Title */}
-          <p className="font-mono text-[10px] text-alchemy-red/60 tracking-[0.2em] uppercase mb-2">
-            Pillar {pillar.number} · {pillar.subtitle}
-          </p>
-          <h3 className="font-display text-2xl md:text-3xl italic text-porcelain mb-3 group-hover:text-alchemy-red transition-colors duration-300">
-            {pillar.title}
-          </h3>
-
-          <p className="font-body text-sm text-porcelain/45 font-light leading-relaxed mb-5 flex-1">
-            {pillar.description}
-          </p>
-
-          {/* Trust */}
-          <p className="font-mono text-[10px] text-porcelain/25 uppercase tracking-wider mb-4">
-            {pillar.trust}
-          </p>
-
-          {/* Deliverables preview */}
-          <div className="mb-6 pt-4 border-t border-porcelain/5">
-            <p className="font-mono text-[9px] text-alchemy-red/50 uppercase tracking-wider mb-2">
-              Includes
-            </p>
-            <ul className="space-y-1.5">
-              {pillar.deliverables.map((item, j) => (
-                <li key={j} className="flex items-center gap-2 text-xs text-porcelain/45 font-light">
-                  <span className="w-1 h-1 rounded-full bg-alchemy-red/50" />
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* CTA */}
-          <Link
-            to={pillar.route}
-            className="inline-flex items-center gap-2 text-porcelain/55 group-hover:text-alchemy-red transition-colors duration-300"
-          >
-            <span className="font-body text-sm">Discover {pillar.serviceCount} Services</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
-          </Link>
         </div>
-      </div>
+      </Link>
     </motion.div>
   );
 });
 PillarCard.displayName = 'PillarCard';
 
-// ── PILLARS GRID ──
-const PillarsSection = memo(() => (
-  <section className="relative py-8 sm:py-16">
+// ── BENTO GRID ──
+const PillarsBento = memo(() => (
+  <section className="relative py-4 sm:py-12">
     <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-6 md:px-12">
-      <div className="grid md:grid-cols-3 gap-5 sm:gap-6 mb-16 sm:mb-20">
-        {pillars.map((pillar, i) => (
-          <PillarCard key={pillar.id} pillar={pillar} index={i} />
-        ))}
-      </div>
-
-      {/* Bottom CTA */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5, delay: 0.2, ease: easing }}
-        className="text-center"
-      >
-        <button
-          type="button"
-          onClick={openCalendly}
-          className="gradient-border-glow-btn inline-flex items-center gap-3 px-8 py-4 rounded-xl font-body text-base text-porcelain transition-all duration-300 hover:text-white"
-        >
-          Book a Free 15-Min Consult
-          <ArrowRight className="w-4 h-4" />
-        </button>
-
-        <div className="flex items-center justify-center gap-3 mt-5">
-          <span className="font-mono text-[10px] text-porcelain/30 tracking-wider">NDA available</span>
-          <span className="text-porcelain/15">·</span>
-          <span className="font-mono text-[10px] text-porcelain/30 tracking-wider">24h reply</span>
-          <span className="text-porcelain/15">·</span>
-          <span className="font-mono text-[10px] text-porcelain/30 tracking-wider">Free first call</span>
+      {/* Asymmetric bento: Pillar 01 large left, 02+03 stacked right */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6">
+        {/* Large card */}
+        <div className="lg:col-span-7">
+          <PillarCard pillar={pillars[0]} index={0} size="large" />
         </div>
-      </motion.div>
+        {/* Two medium cards stacked */}
+        <div className="lg:col-span-5 flex flex-col gap-5 sm:gap-6">
+          <PillarCard pillar={pillars[1]} index={1} size="medium" />
+          <PillarCard pillar={pillars[2]} index={2} size="medium" />
+        </div>
+      </div>
     </div>
   </section>
 ));
-PillarsSection.displayName = 'PillarsSection';
+PillarsBento.displayName = 'PillarsBento';
+
+// ── BOTTOM CTA ──
+const BottomCTA = memo(() => (
+  <motion.section
+    initial={{ opacity: 0, y: 20 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true }}
+    transition={{ duration: 0.5, delay: 0.15, ease: EASE }}
+    className="relative py-16 sm:py-24"
+  >
+    <div className="max-w-7xl mx-auto px-5 sm:px-6 md:px-12">
+      <div
+        className="rounded-2xl px-8 sm:px-12 py-12 sm:py-16"
+        style={{
+          background: '#0f0f0f',
+          borderTop: '1px solid rgba(255,255,255,0.06)',
+          borderBottom: '1px solid rgba(255,255,255,0.06)',
+        }}
+      >
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-8">
+          <div>
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl italic text-porcelain mb-3">
+              Ready to build something{' '}
+              <span className="text-alchemy-red">inevitable</span>?
+            </h2>
+            <div className="flex items-center gap-3">
+              <span className="font-mono text-[10px] uppercase tracking-wider"
+                style={{ color: 'rgba(255,255,255,0.25)' }}>NDA available</span>
+              <span style={{ color: 'rgba(255,255,255,0.12)' }}>·</span>
+              <span className="font-mono text-[10px] uppercase tracking-wider"
+                style={{ color: 'rgba(255,255,255,0.25)' }}>24h reply</span>
+              <span style={{ color: 'rgba(255,255,255,0.12)' }}>·</span>
+              <span className="font-mono text-[10px] uppercase tracking-wider"
+                style={{ color: 'rgba(255,255,255,0.25)' }}>Free first call</span>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={openCalendly}
+            className="gradient-border-glow-btn inline-flex items-center gap-3 px-8 py-4 rounded-xl font-body text-sm text-porcelain transition-all duration-300 hover:text-white whitespace-nowrap"
+          >
+            Book a Free 15-Min Consult
+            <ArrowRight className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+    </div>
+  </motion.section>
+));
+BottomCTA.displayName = 'BottomCTA';
 
 // ── PAGE ──
 export const SolutionsHub = () => (
@@ -299,10 +356,11 @@ export const SolutionsHub = () => (
       structuredData={generateOrganizationSchema()}
     />
     <Navigation />
-    <ImmersiveTextureBg />
+    <TextureBg />
     <div className="relative z-10">
       <HeroSection />
-      <PillarsSection />
+      <PillarsBento />
+      <BottomCTA />
     </div>
     <Footer />
   </div>
