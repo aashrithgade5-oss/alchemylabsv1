@@ -7,6 +7,7 @@ import { Footer } from '@/components/Footer';
 import { SEOHead, generateOrganizationSchema } from '@/components/SEOHead';
 import { NoiseTexture } from '@/components/effects';
 import solutionsBgTexture from '@/assets/solutions-bg-texture.png';
+import heroVideo from '@/assets/about-hero-red-curves.mp4';
 
 const CALENDLY_URL = 'https://calendly.com/alchemylabs-work/30min';
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -81,8 +82,28 @@ const TextureBg = memo(() => {
 TextureBg.displayName = 'TextureBg';
 
 // ── HERO ──
-const HeroSection = memo(() => (
+const HeroSection = memo(() => {
+  const [videoReady, setVideoReady] = useState(false);
+
+  return (
   <section className="relative min-h-[85vh] flex items-end pb-20 sm:pb-28 pt-32 sm:pt-40 overflow-hidden">
+    {/* Hero video background */}
+    <motion.video
+      src={heroVideo}
+      autoPlay
+      muted
+      loop
+      playsInline
+      preload="metadata"
+      onCanPlay={() => setVideoReady(true)}
+      className="absolute inset-0 w-full h-full object-cover"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: videoReady ? 0.18 : 0 }}
+      transition={{ duration: 1.2, ease: EASE }}
+    />
+    {/* Dark overlay for legibility */}
+    <div className="absolute inset-0 bg-black/60" />
+    <div className="absolute bottom-0 inset-x-0 h-48 bg-gradient-to-t from-background to-transparent" />
     <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-6 md:px-12 w-full">
       {/* Eyebrow */}
       <motion.div
@@ -145,7 +166,8 @@ const HeroSection = memo(() => (
       </motion.div>
     </div>
   </section>
-));
+  );
+});
 HeroSection.displayName = 'HeroSection';
 
 // ── PILLAR CARD ──
