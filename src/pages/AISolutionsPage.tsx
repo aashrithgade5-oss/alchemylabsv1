@@ -6,36 +6,21 @@ import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { SEOHead } from '@/components/SEOHead';
 import { NoiseTexture } from '@/components/effects';
+import { SequentianBackground } from '@/components/SequentianBackground';
 import { BentoServiceCard } from '@/components/services/BentoServiceCard';
 import { serviceCategories } from '@/data/servicesData';
-import solutionsBgTexture from '@/assets/solutions-bg-texture.png';
 
 const CALENDLY_URL = 'https://calendly.com/alchemylabs-work/30min';
-const easing = [0.22, 1, 0.36, 1] as const;
+const EASE = [0.22, 1, 0.36, 1] as const;
 const openCalendly = () => {
   (window as any).Calendly?.initPopupWidget({ url: CALENDLY_URL });
 };
 
-// Combine AI Advisory + Campaign & Creative + Systems & Growth
 const aiServices = [
-  ...serviceCategories[0].services, // AI Advisory
-  ...serviceCategories[1].services, // Campaign & Creative
-  ...serviceCategories[3].services, // Systems & Growth
+  ...serviceCategories[0].services,
+  ...serviceCategories[1].services,
+  ...serviceCategories[3].services,
 ];
-
-const TextureBg = memo(() => (
-  <div className="fixed inset-0 pointer-events-none z-0" aria-hidden>
-    <img
-      src={solutionsBgTexture}
-      alt=""
-      loading="eager"
-      className="absolute inset-0 w-full h-full object-cover opacity-[0.25]"
-    />
-    <div className="absolute inset-0 bg-background/75" />
-    <NoiseTexture opacity={0.03} />
-  </div>
-));
-TextureBg.displayName = 'TextureBg';
 
 export const AISolutionsPage = () => (
   <div className="min-h-screen bg-background">
@@ -44,18 +29,23 @@ export const AISolutionsPage = () => (
       description="AI Advisory, Campaign Sprints, Cinematic Films, Content Engines. Studio-grade output at machine velocity."
     />
     <Navigation />
-    <TextureBg />
+
+    {/* Dynamic background */}
+    <div className="fixed inset-0 pointer-events-none z-0" aria-hidden>
+      <div className="absolute inset-0" style={{ background: '#060606' }} />
+      <div className="absolute inset-0" style={{
+        background: `
+          radial-gradient(ellipse 50% 40% at 30% 30%, rgba(200,57,43,0.08) 0%, transparent 60%),
+          radial-gradient(ellipse 40% 35% at 70% 70%, rgba(220,38,38,0.06) 0%, transparent 55%)
+        `,
+      }} />
+      <NoiseTexture opacity={0.03} />
+    </div>
 
     <div className="relative z-10">
       {/* Hero */}
-      <section className="relative min-h-[75vh] flex items-end pb-16 sm:pb-24 pt-28 sm:pt-36 overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <motion.div
-            className="absolute top-1/3 left-1/4 w-[600px] h-[600px] bg-alchemy-red/8 rounded-full blur-[180px]"
-            animate={{ x: [0, 25, 0] }}
-            transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
-          />
-        </div>
+      <section className="relative min-h-[80vh] flex items-end pb-16 sm:pb-24 pt-28 sm:pt-36 overflow-hidden">
+        <SequentianBackground variant={1} opacity={0.2} parallax scaleEnd={1.08} glow={false} />
 
         <div className="absolute top-1/2 right-0 -translate-y-1/2 pointer-events-none select-none">
           <span className="font-display text-[250px] sm:text-[400px] md:text-[500px] text-porcelain/[0.02] leading-none">01</span>
@@ -75,7 +65,7 @@ export const AISolutionsPage = () => (
             Pillar 01 · AI Product Studio
           </motion.p>
 
-          <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15, duration: 0.8, ease: easing }}
+          <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15, duration: 0.8, ease: EASE }}
             className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[0.95] text-porcelain mb-5"
           >
             <span className="italic text-alchemy-red">Intelligence</span>
@@ -90,7 +80,7 @@ export const AISolutionsPage = () => (
         </div>
       </section>
 
-      {/* Bento Services Grid */}
+      {/* Services Grid */}
       <section className="relative py-12 sm:py-20">
         <div className="max-w-6xl mx-auto px-5 sm:px-6 md:px-12">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
@@ -104,14 +94,20 @@ export const AISolutionsPage = () => (
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {aiServices.map((service, i) => (
-              <BentoServiceCard
-                key={service.id}
-                service={service}
-                index={i}
-                featured={i === 0}
-              />
+              <BentoServiceCard key={service.id} service={service} index={i} featured={i === 0} />
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Editorial quote */}
+      <section className="relative py-20 sm:py-28 overflow-hidden">
+        <SequentianBackground variant={4} opacity={0.15} parallax scaleEnd={1.05} glow={false} />
+        <div className="relative z-10 max-w-3xl mx-auto px-5 sm:px-6 md:px-12 text-center">
+          <div className="w-16 h-px mx-auto mb-8 bg-gradient-to-r from-transparent via-alchemy-red/30 to-transparent" />
+          <blockquote className="font-display text-xl sm:text-2xl md:text-3xl italic text-porcelain/70 leading-[1.4] mb-6">
+            "AI isn't the shortcut. <span className="text-alchemy-red">It's the new standard.</span>"
+          </blockquote>
         </div>
       </section>
 
@@ -119,7 +115,7 @@ export const AISolutionsPage = () => (
       <section className="relative py-20 sm:py-28">
         <div className="max-w-3xl mx-auto px-5 sm:px-6 md:px-12 text-center">
           <motion.h2 initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-            transition={{ duration: 0.7, ease: easing }}
+            transition={{ duration: 0.7, ease: EASE }}
             className="font-display text-3xl sm:text-4xl md:text-5xl italic text-porcelain mb-5"
           >
             Ready to <span className="text-alchemy-red">build</span>?
@@ -133,6 +129,7 @@ export const AISolutionsPage = () => (
               Book a Sprint Call
               <ArrowRight className="w-4 h-4" />
             </button>
+            <p className="font-mono text-[10px] text-porcelain/25 tracking-wider mt-4">Free first call · 24h response · NDA on request</p>
           </motion.div>
         </div>
       </section>

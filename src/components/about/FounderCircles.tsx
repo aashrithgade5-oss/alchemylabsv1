@@ -89,23 +89,41 @@ const FounderPanel = memo(({ founder, index }: { founder: typeof founders[0]; in
         whileHover={!isMobile ? { y: -6 } : undefined}
         transition={{ duration: 0.3 }}
       >
-        {/* Silhouette photo background */}
+        {/* Silhouette photo background — blurred for premium dim aesthetic */}
         <motion.img
           src={founder.photo}
           alt=""
           loading="lazy"
           decoding="async"
           className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-          style={{ objectPosition: founder.photoPosition }}
-          initial={{ scale: 1.05 }}
-          animate={{ scale: isHovered ? 1.08 : 1.05 }}
+          style={{
+            objectPosition: founder.photoPosition,
+            filter: 'blur(6px) brightness(0.55) saturate(1.2)',
+          }}
+          initial={{ scale: 1.08 }}
+          animate={{ scale: isHovered ? 1.12 : 1.08 }}
           transition={{ duration: 0.7, ease: CINEMATIC_EASE }}
         />
 
-        {/* Color + gradient overlay on photo */}
+        {/* Deep black/red/pink gradient overlay on blurred image */}
         <div
-          className="absolute inset-0 pointer-events-none transition-opacity duration-500"
-          style={{ background: founder.overlayGradient }}
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: `
+              linear-gradient(180deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 25%, rgba(0,0,0,0.15) 45%, transparent 55%, rgba(0,0,0,0.5) 80%, rgba(0,0,0,0.85) 100%),
+              ${founder.overlayGradient}
+            `,
+          }}
+        />
+
+        {/* Red/pink energy glow layer */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: (founder as any).isPink
+              ? 'radial-gradient(ellipse 70% 60% at 50% 55%, rgba(236,72,153,0.15) 0%, rgba(236,72,153,0.05) 40%, transparent 70%)'
+              : 'radial-gradient(ellipse 70% 60% at 50% 55%, rgba(220,38,38,0.15) 0%, rgba(220,38,38,0.05) 40%, transparent 70%)',
+          }}
         />
 
         {/* Glass tint layer */}
@@ -113,7 +131,6 @@ const FounderPanel = memo(({ founder, index }: { founder: typeof founders[0]; in
           className="absolute inset-0 transition-all duration-500"
           style={{
             background: founder.gradient,
-            backdropFilter: 'blur(2px) saturate(140%)',
             border: isHovered
               ? `1px solid ${founder.hoverBorder}`
               : '1px solid rgba(255,255,255,0.08)',
