@@ -6,26 +6,17 @@ import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { SEOHead } from '@/components/SEOHead';
 import { NoiseTexture } from '@/components/effects';
+import { SequentianBackground } from '@/components/SequentianBackground';
 import { BentoServiceCard } from '@/components/services/BentoServiceCard';
 import { serviceCategories } from '@/data/servicesData';
-import solutionsBgTexture from '@/assets/solutions-bg-texture.png';
 
 const CALENDLY_URL = 'https://calendly.com/alchemylabs-work/30min';
-const easing = [0.22, 1, 0.36, 1] as const;
+const EASE = [0.22, 1, 0.36, 1] as const;
 const openCalendly = () => {
   (window as any).Calendly?.initPopupWidget({ url: CALENDLY_URL });
 };
 
-const consultingServices = serviceCategories[4].services; // Consulting
-
-const TextureBg = memo(() => (
-  <div className="fixed inset-0 pointer-events-none z-0" aria-hidden>
-    <img src={solutionsBgTexture} alt="" loading="eager" className="absolute inset-0 w-full h-full object-cover opacity-[0.25]" />
-    <div className="absolute inset-0 bg-background/75" />
-    <NoiseTexture opacity={0.03} />
-  </div>
-));
-TextureBg.displayName = 'TextureBg';
+const consultingServices = serviceCategories[4].services;
 
 export const ConsultationSolutionsPage = () => (
   <div className="min-h-screen bg-background">
@@ -34,18 +25,22 @@ export const ConsultationSolutionsPage = () => (
       description="Precision Audit, Strategy Build, Full System Simulation. Clarity with a plan — simulation, not theory."
     />
     <Navigation />
-    <TextureBg />
+
+    <div className="fixed inset-0 pointer-events-none z-0" aria-hidden>
+      <div className="absolute inset-0" style={{ background: '#060606' }} />
+      <div className="absolute inset-0" style={{
+        background: `
+          radial-gradient(ellipse 50% 40% at 40% 35%, rgba(200,57,43,0.06) 0%, transparent 60%),
+          radial-gradient(ellipse 40% 30% at 65% 60%, rgba(139,0,0,0.04) 0%, transparent 50%)
+        `,
+      }} />
+      <NoiseTexture opacity={0.03} />
+    </div>
 
     <div className="relative z-10">
       {/* Hero */}
-      <section className="relative min-h-[75vh] flex items-end pb-16 sm:pb-24 pt-28 sm:pt-36 overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <motion.div
-            className="absolute top-1/3 right-1/3 w-[450px] h-[450px] bg-alchemy-red/5 rounded-full blur-[150px]"
-            animate={{ y: [0, 20, 0] }}
-            transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }}
-          />
-        </div>
+      <section className="relative min-h-[80vh] flex items-end pb-16 sm:pb-24 pt-28 sm:pt-36 overflow-hidden">
+        <SequentianBackground variant={3} opacity={0.18} parallax scaleEnd={1.08} glow={false} />
 
         <div className="absolute top-1/2 right-0 -translate-y-1/2 pointer-events-none select-none">
           <span className="font-display text-[250px] sm:text-[400px] md:text-[500px] text-porcelain/[0.02] leading-none">03</span>
@@ -65,7 +60,7 @@ export const ConsultationSolutionsPage = () => (
             Pillar 03 · Advisory
           </motion.p>
 
-          <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15, duration: 0.8, ease: easing }}
+          <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15, duration: 0.8, ease: EASE }}
             className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[0.95] text-porcelain mb-5"
           >
             <span className="italic text-alchemy-red">Clarity</span>
@@ -80,7 +75,7 @@ export const ConsultationSolutionsPage = () => (
         </div>
       </section>
 
-      {/* Bento Services Grid */}
+      {/* Services */}
       <section className="relative py-12 sm:py-20">
         <div className="max-w-6xl mx-auto px-5 sm:px-6 md:px-12">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
@@ -100,11 +95,22 @@ export const ConsultationSolutionsPage = () => (
         </div>
       </section>
 
+      {/* Editorial quote */}
+      <section className="relative py-20 sm:py-28 overflow-hidden">
+        <SequentianBackground variant={1} opacity={0.12} parallax scaleEnd={1.05} glow={false} />
+        <div className="relative z-10 max-w-3xl mx-auto px-5 sm:px-6 md:px-12 text-center">
+          <div className="w-16 h-px mx-auto mb-8 bg-gradient-to-r from-transparent via-alchemy-red/30 to-transparent" />
+          <blockquote className="font-display text-xl sm:text-2xl md:text-3xl italic text-porcelain/70 leading-[1.4] mb-6">
+            "Strategy without execution is theatre. <span className="text-alchemy-red">This is both.</span>"
+          </blockquote>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="relative py-20 sm:py-28">
         <div className="max-w-3xl mx-auto px-5 sm:px-6 md:px-12 text-center">
           <motion.h2 initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-            transition={{ duration: 0.7, ease: easing }}
+            transition={{ duration: 0.7, ease: EASE }}
             className="font-display text-3xl sm:text-4xl md:text-5xl italic text-porcelain mb-5"
           >
             Ready for <span className="text-alchemy-red">clarity</span>?
@@ -118,6 +124,7 @@ export const ConsultationSolutionsPage = () => (
               Book a Consultation
               <ArrowRight className="w-4 h-4" />
             </button>
+            <p className="font-mono text-[10px] text-porcelain/25 tracking-wider mt-4">Free first call · 24h response · NDA on request</p>
           </motion.div>
         </div>
       </section>
