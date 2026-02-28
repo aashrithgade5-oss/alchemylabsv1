@@ -111,7 +111,7 @@ export const generateOrganizationSchema = () => ({
   name: 'Alchemy Labs',
   description: 'AI-Augmented Brand Architecture Agency',
   url: 'https://alchemylabsv1.lovable.app',
-  logo: 'https://alchemylabsv1.lovable.app/favicon.ico',
+  logo: 'https://alchemylabsv1.lovable.app/favicon.png',
   sameAs: [
     'https://instagram.com/alchemylabs',
     'https://twitter.com/AlchemyLabs',

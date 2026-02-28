@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ArrowRight } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
-import alchemyLogo from '@/assets/alchemy-logo.png';
+import alchemyLogo from '@/assets/alchemy-minimal-logo.png';
 import { socialLinks } from './Footer';
 
 const navItems = [
@@ -315,14 +315,14 @@ export const Navigation = () => {
               onClick={() => setIsMobileMenuOpen(false)}
             >
               <motion.div 
-                className="w-9 h-9 md:w-10 md:h-10 rounded-lg overflow-hidden relative bg-transparent"
+                className="w-10 h-10 md:w-11 md:h-11 rounded-lg overflow-hidden relative bg-transparent flex items-center justify-center"
                 whileHover={{ scale: 1.05 }}
                 transition={{ duration: 0.2 }}
               >
                 <img 
                   src={alchemyLogo} 
                   alt="Alchemy Labs" 
-                  className="w-full h-full object-contain"
+                  className="w-[130%] h-[130%] object-contain"
                 />
               </motion.div>
               <div className="hidden sm:flex items-baseline gap-1.5">
