@@ -91,9 +91,11 @@
   }
   
   html {
-    scroll-behavior: smooth;
+    /* scroll-behavior handled by Lenis - don't use CSS smooth scroll */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* Prevent Safari overscroll bounce */
+    overscroll-behavior: none;
   }
   
   body {
@@ -101,9 +103,9 @@
     font-family: var(--font-body);
     font-weight: 400;
     overflow-x: hidden;
-    /* Enable hardware acceleration for smooth animations */
-    transform: translateZ(0);
-    backface-visibility: hidden;
+    overscroll-behavior: none;
+    /* Safari: prevent elastic scrolling on body */
+    -webkit-overflow-scrolling: touch;
   }
   
   h1, h2, h3, h4, h5, h6 {
