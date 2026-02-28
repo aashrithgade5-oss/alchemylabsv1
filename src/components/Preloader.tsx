@@ -1,6 +1,6 @@
 import { useState, useEffect, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import alchemyLogo from '@/assets/alchemy-logo.png';
+import alchemyLogo from '@/assets/alchemy-minimal-logo.png';
 
 export const Preloader = memo(() => {
   const [isLoading, setIsLoading] = useState(true);

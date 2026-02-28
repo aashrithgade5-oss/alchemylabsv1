@@ -96,7 +96,22 @@
   </head>
 
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Static fallback content for crawlers / SEO -->
+      <noscript>
+        <header style="background:#0A0A0B;color:#fff;padding:60px 24px;text-align:center;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center">
+          <h1 style="font-size:2.5rem;margin-bottom:16px">Alchemy Labs — AI-Augmented Brand Architecture</h1>
+          <p style="max-width:640px;opacity:0.8;line-height:1.6">Strategic brand systems engineered for the AI era. We architect identity, culture, and execution that scales through precision. Services include Brand Architecture, AI Media Production, and Strategic Consultation.</p>
+          <nav style="margin-top:32px;display:flex;gap:24px">
+            <a href="/solutions" style="color:#dc2626">Solutions</a>
+            <a href="/about" style="color:#dc2626">About</a>
+            <a href="/work" style="color:#dc2626">Work</a>
+            <a href="/journal" style="color:#dc2626">Journal</a>
+            <a href="/contact" style="color:#dc2626">Contact</a>
+          </nav>
+        </header>
+      </noscript>
+    </div>
     <div id="overlay-root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
