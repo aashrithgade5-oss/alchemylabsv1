@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ArrowRight } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
-import alchemyLogo from '@/assets/alchemy-logo.png';
+import alchemyLogo from '@/assets/alchemy-minimal-logo.png';
 import { socialLinks } from './Footer';
 
 const navItems = [
