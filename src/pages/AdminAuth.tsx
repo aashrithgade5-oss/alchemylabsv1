@@ -5,7 +5,7 @@ import { Mail, Lock, Loader2, ArrowLeft, Eye, EyeOff } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { MagneticButton } from '@/components/MagneticButton';
-import alchemyLogo from '@/assets/alchemy-logo.png';
+import alchemyLogo from '@/assets/alchemy-minimal-logo.png';
 import footerBg from '@/assets/footer-bg.png';
 
 const AdminAuth = () => {

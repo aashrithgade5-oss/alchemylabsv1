@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import alchemyLogo from '@/assets/alchemy-logo.png';
+import alchemyLogo from '@/assets/alchemy-minimal-logo.png';
 import footerBg from '@/assets/footer-bg.png';
 
 const footerLinks = {
