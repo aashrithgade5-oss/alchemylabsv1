@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface ShimmerImageProps {
@@ -71,9 +71,23 @@ export const ShimmerVideo = ({
   playsInline = true
 }: ShimmerVideoProps) => {
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Only load video when it enters viewport (saves bandwidth on large videos)
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setIsVisible(true); observer.disconnect(); } },
+      { rootMargin: '200px' }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <div className={`relative overflow-hidden ${wrapperClassName}`}>
+    <div ref={containerRef} className={`relative overflow-hidden ${wrapperClassName}`}>
       <AnimatePresence>
         {!isLoaded && (
           <motion.div
@@ -87,20 +101,22 @@ export const ShimmerVideo = ({
         )}
       </AnimatePresence>
       
-      <motion.video
-        src={src}
-        className={className}
-        onLoadedData={() => setIsLoaded(true)}
-        onCanPlay={() => setIsLoaded(true)}
-        autoPlay={autoPlay}
-        loop={loop}
-        muted={muted}
-        playsInline={playsInline}
-        preload="none"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: isLoaded ? 1 : 0 }}
-        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      />
+      {isVisible && (
+        <motion.video
+          src={src}
+          className={className}
+          onLoadedData={() => setIsLoaded(true)}
+          onCanPlay={() => setIsLoaded(true)}
+          autoPlay={autoPlay}
+          loop={loop}
+          muted={muted}
+          playsInline={playsInline}
+          preload="metadata"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: isLoaded ? 1 : 0 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        />
+      )}
     </div>
   );
 };

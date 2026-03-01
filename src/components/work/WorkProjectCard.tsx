@@ -20,14 +20,16 @@ interface WorkProjectCardProps {
 
 export const WorkProjectCard = ({ project, index, isHero, onClick }: WorkProjectCardProps) => {
   const Icon = projectIcons[project.id] || Sparkles;
+  const hasVideo = Boolean(project.video);
 
   return (
     <motion.div
       layout
       initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
+      whileInView={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.95 }}
-      transition={{ duration: 0.45, delay: index * 0.06, ease: [0.22, 1, 0.36, 1] }}
+      viewport={{ once: true, margin: '-60px' }}
+      transition={{ duration: 0.55, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
       onClick={onClick}
       whileHover={{ y: -6 }}
       className="group relative rounded-2xl overflow-hidden cursor-pointer h-full"
@@ -36,20 +38,20 @@ export const WorkProjectCard = ({ project, index, isHero, onClick }: WorkProject
         border: '1px solid rgba(255,255,255,0.06)',
       }}
     >
-      {/* Media layer */}
+      {/* Media layer — video plays in thumbnail for projects with video */}
       <div className="absolute inset-0 overflow-hidden rounded-2xl">
-        {project.video && isHero ? (
+        {hasVideo ? (
           <ShimmerVideo
-            src={project.video}
+            src={project.video!}
             wrapperClassName="w-full h-full"
-            className="w-full h-full object-cover opacity-40 group-hover:opacity-65 group-hover:scale-110 transition-[opacity,transform] duration-700"
+            className="w-full h-full object-cover opacity-40 group-hover:opacity-65 group-hover:scale-105 transition-[opacity,transform] duration-700 ease-out"
           />
         ) : (
           <ShimmerImage
             src={project.image}
             alt={project.title}
             wrapperClassName="w-full h-full"
-            className="w-full h-full object-cover opacity-35 group-hover:opacity-55 group-hover:scale-110 transition-[opacity,transform] duration-700"
+            className="w-full h-full object-cover opacity-35 group-hover:opacity-55 group-hover:scale-105 transition-[opacity,transform] duration-700 ease-out"
           />
         )}
       </div>
@@ -65,19 +67,31 @@ export const WorkProjectCard = ({ project, index, isHero, onClick }: WorkProject
         }}
       />
 
+      {/* Scanline sweep on hover */}
+      <div 
+        className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700"
+        style={{
+          background: 'linear-gradient(180deg, transparent 0%, rgba(220,38,38,0.04) 50%, transparent 100%)',
+          backgroundSize: '100% 6px',
+          mixBlendMode: 'overlay',
+        }}
+      />
+
       {/* Content */}
       <div className="absolute inset-0 p-5 md:p-6 flex flex-col justify-between">
         {/* Top */}
         <div className="flex items-start justify-between">
-          <div
+          <motion.div
             className="w-9 h-9 rounded-lg flex items-center justify-center backdrop-blur-sm"
             style={{
               background: 'rgba(225,6,19,0.12)',
               border: '1px solid rgba(225,6,19,0.25)',
             }}
+            whileHover={{ scale: 1.15, rotate: 5 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 15 }}
           >
             <Icon className="w-4 h-4 text-alchemy-red" />
-          </div>
+          </motion.div>
 
           {project.isConceptual && (
             <span className="px-2.5 py-1 rounded-full text-[8px] font-mono text-porcelain/50 tracking-[0.12em] uppercase bg-white/[0.04] border border-white/[0.08]">
@@ -88,9 +102,12 @@ export const WorkProjectCard = ({ project, index, isHero, onClick }: WorkProject
 
         {/* Bottom */}
         <div>
-          <span className="inline-block px-2 py-0.5 rounded-full text-[9px] font-mono text-porcelain/60 tracking-[0.1em] uppercase mb-2 bg-white/[0.05] border border-white/[0.08]">
+          <motion.span 
+            className="inline-block px-2 py-0.5 rounded-full text-[9px] font-mono text-porcelain/60 tracking-[0.1em] uppercase mb-2 bg-white/[0.05] border border-white/[0.08]"
+            initial={false}
+          >
             {project.category}
-          </span>
+          </motion.span>
 
           <h3 className={`font-display italic text-porcelain leading-tight mb-1.5 ${
             isHero ? 'text-2xl md:text-3xl lg:text-4xl' : 'text-lg md:text-xl'
@@ -99,15 +116,15 @@ export const WorkProjectCard = ({ project, index, isHero, onClick }: WorkProject
           </h3>
 
           {/* Reveal on hover */}
-          <div className="opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+          <div className="opacity-0 group-hover:opacity-100 translate-y-3 group-hover:translate-y-0 transition-all duration-400 ease-out">
             <p className={`font-body text-porcelain/50 font-light line-clamp-2 mb-2 ${
               isHero ? 'text-sm max-w-md' : 'text-xs'
             }`}>
               {project.description}
             </p>
-            <span className="inline-flex items-center gap-1.5 text-alchemy-red font-mono text-[10px] uppercase tracking-[0.12em]">
+            <span className="inline-flex items-center gap-1.5 text-alchemy-red font-mono text-[10px] uppercase tracking-[0.12em] group-hover:gap-2.5 transition-all duration-300">
               <span>Explore</span>
-              <ArrowUpRight className="w-3 h-3" />
+              <ArrowUpRight className="w-3 h-3 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </span>
           </div>
         </div>

@@ -124,13 +124,26 @@ export const Work = () => {
         </div>
 
         <div className="max-w-[1400px] mx-auto px-6 md:px-10 relative z-10">
-          <div className="flex items-center justify-between mb-8">
+          <motion.div 
+            className="flex items-center justify-between mb-8"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
             <span className="font-mono text-[10px] text-porcelain/30 uppercase tracking-[0.15em]">
               {filteredProjects.length} project{filteredProjects.length !== 1 ? 's' : ''}
             </span>
-            <div className="h-px flex-1 mx-6 bg-white/[0.04]" />
+            <motion.div 
+              className="h-px flex-1 mx-6 bg-white/[0.04]" 
+              initial={{ scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+              style={{ transformOrigin: 'left' }}
+            />
             <span className="font-mono text-[10px] text-porcelain/20 uppercase tracking-[0.15em]">Grid View</span>
-          </div>
+          </motion.div>
 
           <div className="grid grid-cols-12 gap-3 md:gap-4 auto-rows-[180px] md:auto-rows-[240px]">
             <AnimatePresence mode="popLayout">
@@ -165,8 +178,14 @@ export const Work = () => {
       {/* Editorial Quote Section */}
       <section className="relative py-20 sm:py-28 overflow-hidden">
         <div className="max-w-4xl mx-auto px-6 md:px-12 text-center relative z-10">
-          {/* Divider */}
-          <div className="w-20 h-px mx-auto mb-12 bg-gradient-to-r from-transparent via-alchemy-red/30 to-transparent" />
+          {/* Animated divider */}
+          <motion.div 
+            className="w-20 h-px mx-auto mb-12 bg-gradient-to-r from-transparent via-alchemy-red/30 to-transparent"
+            initial={{ scaleX: 0, opacity: 0 }}
+            whileInView={{ scaleX: 1, opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+          />
 
           <ScrollReveal>
             <blockquote className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl italic text-porcelain/90 leading-[1.25] tracking-tight mb-12 text-balance">
@@ -181,14 +200,16 @@ export const Work = () => {
                 { value: '50+', label: 'Projects Delivered' },
                 { value: '30+', label: 'Brands Transformed' },
                 { value: '85%', label: 'Repeat Clients' },
-              ].map((stat) => (
-                <div
+              ].map((stat, i) => (
+                <motion.div
                   key={stat.label}
                   className="glass-deep rounded-full px-6 py-3 flex items-center gap-3"
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 20 }}
                 >
                   <span className="font-display text-xl sm:text-2xl italic text-alchemy-red">{stat.value}</span>
                   <span className="font-mono text-[10px] text-porcelain/40 tracking-[0.1em] uppercase">{stat.label}</span>
-                </div>
+                </motion.div>
               ))}
             </div>
           </ScrollReveal>
