@@ -9,6 +9,8 @@ import aetherRituals2 from '@/assets/aether-rituals-2.png';
 import aetherRituals3 from '@/assets/aether-rituals-3.png';
 import aetherRituals4 from '@/assets/aether-rituals-4.png';
 import aetherRituals5 from '@/assets/aether-rituals-5.png';
+import genesisBento from '@/assets/genesis-bento.png';
+import oakleyBento from '@/assets/oakley-bento.png';
 
 export type FilterTag = 'client' | 'conceptual' | 'ai-gen' | 'branding';
 
@@ -79,7 +81,8 @@ export const projects: Project[] = [
     description: 'Studio-grade AI-generated video, imagery, and motion content at scale.',
     overview: 'Our AI media generation pipeline produces campaign-ready assets—video, stills, and motion graphics—at a fraction of traditional production timelines. Every output is guided by human creative direction and refined to meet studio-grade standards.',
     image: caseStudy2,
-    video: aiMediaGen2,
+    video: aiMediaGen1,
+    video2: aiMediaGen2,
     size: 'medium',
     services: [
       { title: 'Video Production', description: 'AI-generated campaign films and reels' },
@@ -97,14 +100,14 @@ export const projects: Project[] = [
     category: 'Conceptual Campaign',
     description: 'Reimagining performance eyewear through AI-generated visual narratives.',
     overview: 'A conceptual exploration of how Oakley could leverage generative AI to create otherworldly campaign visuals. We imagined a future where sport meets science fiction—athletes transcending human limits in environments that blur reality and imagination.',
-    image: caseStudy1,
+    image: oakleyBento,
     size: 'small',
     services: [
       { title: 'Concept Development', description: 'Visual strategy and creative direction' },
       { title: 'AI Visualization', description: 'Generative imagery and motion' },
       { title: 'Campaign Architecture', description: 'Multi-touchpoint narrative design' }
     ],
-    visuals: [caseStudy1, caseStudy2],
+    visuals: [oakleyBento, caseStudy2],
     isConceptual: true,
     filterTags: ['conceptual', 'ai-gen']
   },
@@ -115,14 +118,14 @@ export const projects: Project[] = [
     category: 'AI + Branding Concept',
     description: 'A hybrid conceptual pricing model merging AI production with brand strategy.',
     overview: 'Genesis is our conceptual framework for pricing hybrid AI + Branding engagements. It demonstrates how we bundle generative AI media production with strategic brand architecture into a single, cohesive service offering—designed for founders and creative directors who want both pillars in one retainer.',
-    image: caseStudy2,
+    image: genesisBento,
     size: 'small',
     services: [
       { title: 'Hybrid Pricing Model', description: 'Unified AI + branding service packages' },
       { title: 'Brand + AI Audit', description: 'Current-state analysis across both pillars' },
       { title: 'Retainer Architecture', description: 'Scalable engagement frameworks' }
     ],
-    visuals: [caseStudy2, caseStudy3],
+    visuals: [genesisBento, caseStudy3],
     isConceptual: true,
     filterTags: ['conceptual', 'ai-gen', 'branding']
   }
