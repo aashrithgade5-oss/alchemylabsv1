@@ -124,13 +124,26 @@ export const Work = () => {
         </div>
 
         <div className="max-w-[1400px] mx-auto px-6 md:px-10 relative z-10">
-          <div className="flex items-center justify-between mb-8">
+          <motion.div 
+            className="flex items-center justify-between mb-8"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
             <span className="font-mono text-[10px] text-porcelain/30 uppercase tracking-[0.15em]">
               {filteredProjects.length} project{filteredProjects.length !== 1 ? 's' : ''}
             </span>
-            <div className="h-px flex-1 mx-6 bg-white/[0.04]" />
+            <motion.div 
+              className="h-px flex-1 mx-6 bg-white/[0.04]" 
+              initial={{ scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+              style={{ transformOrigin: 'left' }}
+            />
             <span className="font-mono text-[10px] text-porcelain/20 uppercase tracking-[0.15em]">Grid View</span>
-          </div>
+          </motion.div>
 
           <div className="grid grid-cols-12 gap-3 md:gap-4 auto-rows-[180px] md:auto-rows-[240px]">
             <AnimatePresence mode="popLayout">
