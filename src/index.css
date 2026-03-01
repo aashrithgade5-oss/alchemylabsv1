@@ -951,3 +951,31 @@
     }
   }
 }
+
+/* Hero fluid gradient text animation */
+@keyframes fluidGradient {
+  0% { background-position: 0% 50%; }
+  25% { background-position: 50% 100%; }
+  50% { background-position: 100% 50%; }
+  75% { background-position: 50% 0%; }
+  100% { background-position: 0% 50%; }
+}
+
+.hero-fluid-text {
+  background: linear-gradient(
+    -45deg,
+    hsl(356 94% 52%),
+    hsl(0 0% 5%),
+    hsl(356 94% 38%),
+    hsl(0 0% 8%),
+    hsl(356 80% 55%),
+    hsl(0 0% 3%),
+    hsl(356 94% 45%)
+  );
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: fluidGradient 6s ease infinite;
+  filter: drop-shadow(0 0 30px rgba(220,38,38,0.3));
+}

@@ -7,25 +7,41 @@ export const Preloader = memo(() => {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    // Fast progress simulation
     let currentProgress = 0;
+    let dismissed = false;
+
+    // Simulate progress up to 85% quickly, then hold until page is ready
     const interval = setInterval(() => {
-      currentProgress += 35;
-      if (currentProgress >= 100) {
-        currentProgress = 100;
-        clearInterval(interval);
+      if (dismissed) return;
+      if (currentProgress < 85) {
+        currentProgress += Math.random() * 12 + 3;
+        currentProgress = Math.min(currentProgress, 85);
       }
       setProgress(currentProgress);
-    }, 30);
+    }, 60);
 
-    // Quick preloader dismissal - 800ms total
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 800);
+    const dismiss = () => {
+      if (dismissed) return;
+      dismissed = true;
+      clearInterval(interval);
+      // Finish progress bar then hide
+      setProgress(100);
+      setTimeout(() => setIsLoading(false), 350);
+    };
+
+    // Wait for full page load (fonts, images, etc.)
+    if (document.readyState === 'complete') {
+      // Already loaded — short minimum display
+      setTimeout(dismiss, 600);
+    } else {
+      window.addEventListener('load', () => setTimeout(dismiss, 300));
+      // Safety timeout — never block more than 4s
+      setTimeout(dismiss, 4000);
+    }
 
     return () => {
       clearInterval(interval);
-      clearTimeout(timer);
+      window.removeEventListener('load', dismiss);
     };
   }, []);
 
