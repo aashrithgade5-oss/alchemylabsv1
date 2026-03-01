@@ -124,6 +124,7 @@ export const CaseStudyOverlay = memo(({ open, onOpenChange, caseStudy }: CaseStu
         tabIndex={-1}
         className="outline-none"
         style={{
+          position: 'relative',
           width: '100%',
           maxWidth: '52rem',
           maxHeight: '88vh',

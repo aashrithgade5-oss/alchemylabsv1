@@ -133,25 +133,16 @@ export const Hero = memo(() => {
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.7, delay: 0.15, ease: easeOut }}
-            className="mb-6 md:mb-8"
+            className="mb-6 md:mb-8 flex items-baseline justify-center gap-3 sm:gap-4 md:gap-5 flex-wrap"
           >
-            <span className="block font-body font-black text-[2.5rem] sm:text-6xl md:text-7xl lg:text-8xl xl:text-[6.5rem] leading-[0.95] tracking-[0.04em] uppercase text-porcelain">
+            <span className="font-body font-black text-[2.5rem] sm:text-6xl md:text-7xl lg:text-8xl xl:text-[6.5rem] leading-[0.95] tracking-[0.04em] uppercase text-porcelain">
               ALCHEMY
             </span>
-            <span className="block mt-2 sm:mt-3">
-              <span className="font-body font-light text-lg sm:text-2xl md:text-3xl text-porcelain/25 mr-3 sm:mr-4">in</span>
-              <span 
-                className="font-display italic text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[5.5rem]"
-                style={{
-                  background: 'linear-gradient(135deg, hsl(356 94% 52%) 0%, hsl(356 94% 42%) 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
-                  filter: 'drop-shadow(0 0 30px rgba(220,38,38,0.3))',
-                }}
-              >
-                Motion
-              </span>
+            <span className="font-body font-light text-lg sm:text-2xl md:text-3xl text-porcelain/25">in</span>
+            <span 
+              className="font-display italic text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[5.5rem] hero-fluid-text"
+            >
+              Motion
             </span>
           </motion.h1>
 

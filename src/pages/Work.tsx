@@ -242,7 +242,10 @@ export const Work = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setSelectedProject(null)}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8"
+            className="fixed inset-0 z-[9999] flex items-center justify-center p-4 md:p-8"
+            style={{ overflowY: 'auto' }}
+            onAnimationStart={() => { document.body.style.overflow = 'hidden'; document.dispatchEvent(new Event('modal-open')); }}
+            onAnimationComplete={(def: any) => { if (def?.opacity === 0) { document.body.style.overflow = ''; document.dispatchEvent(new Event('modal-close')); } }}
           >
             <div className="absolute inset-0 bg-alchemy-black/95 backdrop-blur-xl" />
 

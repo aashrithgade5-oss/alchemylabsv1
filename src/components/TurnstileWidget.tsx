@@ -37,7 +37,12 @@ export const TurnstileWidget = ({ onVerify, onError, onExpire }: TurnstileWidget
   const errorCountRef = useRef(0);
 
   const handleError = useCallback(() => {
-    // Only fire the error callback once to prevent toast spam
+    // Suppress errors entirely in preview/localhost environments
+    // Turnstile will always fail on non-whitelisted domains
+    const hostname = window.location.hostname;
+    const isPreview = hostname.includes('lovable.app') || hostname === 'localhost' || hostname === '127.0.0.1';
+    if (isPreview) return;
+
     errorCountRef.current++;
     if (errorCountRef.current <= 1) {
       onError?.();
