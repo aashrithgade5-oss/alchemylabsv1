@@ -446,7 +446,7 @@ const HeroSection = memo(({ isDark }: { isDark: boolean }) => {
 
         <motion.div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-8" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.9 }}>
           <span className={`font-mono text-xs sm:text-sm ${t(isDark, 'text-porcelain/40', 'text-neutral-400')}`}>Founder of</span>
-          {['Brand Alchemy', 'Ashzz.ai', 'Alchemy Labs'].map((name, i) => (
+          {['Brand Alchemy', 'Ashzz.ai', 'Ash Archives'].map((name, i) => (
             <span key={name} className="flex items-center gap-2 sm:gap-3">
               <motion.span
                 className="font-body font-bold text-xs sm:text-sm bg-gradient-to-r from-alchemy-red to-alchemy-pink bg-clip-text text-transparent"
