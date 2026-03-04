@@ -1160,12 +1160,34 @@ const CareerTimeline = memo(({ isDark }: { isDark: boolean }) => {
 
       <div className="relative z-10 py-24 sm:py-40 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: 0.6, ease: EASE }} className="mb-16">
-          <EyebrowLabel className="mb-4">CAREER TIMELINE</EyebrowLabel>
-          <h2 className={`font-display text-4xl sm:text-5xl lg:text-6xl ${t(isDark, 'text-porcelain', 'text-neutral-900')} mb-4`}>
-            The arc of <span className="text-alchemy-red italic">intent.</span>
+          <motion.span
+            className="inline-block font-mono text-[10px] sm:text-xs uppercase tracking-[0.5em] mb-6"
+            style={{
+              background: 'linear-gradient(90deg, rgba(220,38,38,0.8), rgba(220,38,38,0.4))',
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              color: 'transparent',
+            }}
+            initial={{ opacity: 0, letterSpacing: '0.3em' }}
+            whileInView={{ opacity: 1, letterSpacing: '0.5em' }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, ease: EASE }}
+          >
+            THE ARC OF INTENT
+          </motion.span>
+          <h2 className={`font-display text-4xl sm:text-5xl lg:text-7xl leading-[0.9] ${t(isDark, 'text-porcelain', 'text-neutral-900')} mb-5`}>
+            Every role was a{' '}
+            <span className="italic" style={{
+              background: 'linear-gradient(-45deg, hsl(356 94% 52%), hsl(20 90% 60%))',
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              color: 'transparent',
+            }}>
+              rehearsal.
+            </span>
           </h2>
           <p className={`font-body text-sm sm:text-base max-w-xl ${t(isDark, 'text-porcelain/45', 'text-neutral-500')}`}>
-            From execution to architecture. Each role built the foundation for systems-level thinking.
+            From execution to architecture. Each chapter sharpened the instinct for systems-level thinking.
           </p>
         </motion.div>
 
