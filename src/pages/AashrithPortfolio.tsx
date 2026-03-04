@@ -23,6 +23,15 @@ import aetherBento from '@/assets/aether-bento.png';
 import genesisBento from '@/assets/genesis-bento.png';
 import diorBento from '@/assets/dior-bento.png';
 import oakleyBento from '@/assets/oakley-bento.png';
+import tl1 from '@/assets/thought-leadership-1.png';
+import tl2 from '@/assets/thought-leadership-2.png';
+import tl3 from '@/assets/thought-leadership-3.png';
+import tl4 from '@/assets/thought-leadership-4.png';
+import tl5 from '@/assets/thought-leadership-5.png';
+import tl6 from '@/assets/thought-leadership-6.png';
+import tl7 from '@/assets/thought-leadership-7.png';
+import tl8 from '@/assets/thought-leadership-8.png';
+import tl9 from '@/assets/thought-leadership-9.png';
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 const t = (isDark: boolean, dark: string, light: string) => isDark ? dark : light;
