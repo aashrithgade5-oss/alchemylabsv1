@@ -23,6 +23,15 @@ import aetherBento from '@/assets/aether-bento.png';
 import genesisBento from '@/assets/genesis-bento.png';
 import diorBento from '@/assets/dior-bento.png';
 import oakleyBento from '@/assets/oakley-bento.png';
+import tl1 from '@/assets/thought-leadership-1.png';
+import tl2 from '@/assets/thought-leadership-2.png';
+import tl3 from '@/assets/thought-leadership-3.png';
+import tl4 from '@/assets/thought-leadership-4.png';
+import tl5 from '@/assets/thought-leadership-5.png';
+import tl6 from '@/assets/thought-leadership-6.png';
+import tl7 from '@/assets/thought-leadership-7.png';
+import tl8 from '@/assets/thought-leadership-8.png';
+import tl9 from '@/assets/thought-leadership-9.png';
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 const t = (isDark: boolean, dark: string, light: string) => isDark ? dark : light;
@@ -45,7 +54,7 @@ const portfolioFooterLinks = [
 const ventureFooterLinks = [
   { label: 'Brand Alchemy', href: '#ventures', external: false },
   { label: 'Ashzz.ai', href: '#ventures', external: false },
-  { label: 'Alchemy Labs', href: '#ventures', external: false },
+  { label: 'Ash Archives', href: '#ventures', external: false },
 ];
 const connectFooterLinks = [
   { label: 'LinkedIn', href: 'https://www.linkedin.com/in/aashrithgade', external: true },
@@ -446,7 +455,7 @@ const HeroSection = memo(({ isDark }: { isDark: boolean }) => {
 
         <motion.div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-8" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.9 }}>
           <span className={`font-mono text-xs sm:text-sm ${t(isDark, 'text-porcelain/40', 'text-neutral-400')}`}>Founder of</span>
-          {['Brand Alchemy', 'Ashzz.ai', 'Alchemy Labs'].map((name, i) => (
+          {['Brand Alchemy', 'Ashzz.ai', 'Ash Archives'].map((name, i) => (
             <span key={name} className="flex items-center gap-2 sm:gap-3">
               <motion.span
                 className="font-body font-bold text-xs sm:text-sm bg-gradient-to-r from-alchemy-red to-alchemy-pink bg-clip-text text-transparent"
@@ -496,105 +505,309 @@ HeroSection.displayName = 'HeroSection';
 // ============================================
 // VENTURE ECOSYSTEM — "The System"
 // ============================================
+const thoughtLeadershipPosts = [
+  { image: tl1, title: 'AI vs Humans — The Creative Renaissance', desc: 'Exploring the intersection where artificial intelligence meets human creativity in modern brand building.', link: '#' },
+  { image: tl2, title: 'The Era of Brand Gravity', desc: 'Why the brands that win aren\'t louder — they\'re heavier. A thesis on gravitational pull in positioning.', link: '#' },
+  { image: tl3, title: 'LVMH × AI — When Data Learns to Feel', desc: 'A strategic deep-dive into how luxury conglomerates are weaponizing AI without losing soul.', link: '#' },
+  { image: tl4, title: 'Vision Pro — The Most Brilliant Product Nobody Wants', desc: 'Deconstructing Apple\'s spatial computing gamble through the lens of brand perception.', link: '#' },
+  { image: tl5, title: 'Patience — The Luxury of Slowness', desc: 'In a speed-addicted world, the brands that endure are the ones that refuse to rush.', link: '#' },
+  { image: tl6, title: 'When Work Gets Done While You Sleep', desc: 'Building autonomous AI workflows that operate around the clock — a systems-first approach.', link: '#' },
+  { image: tl7, title: 'The Founder Is the Algorithm', desc: 'Personal branding in 2025: why the founder\'s identity IS the competitive moat.', link: '#' },
+  { image: tl8, title: 'Design That Thinks', desc: 'Moving beyond aesthetic decoration into design systems that reason, adapt, and compound.', link: '#' },
+  { image: tl9, title: 'Marty Supreme — New Movie Marketing Peak?', desc: 'Breaking down the cultural marketing machinery behind cinema\'s most viral campaign.', link: '#' },
+];
+
 const VentureEcosystem = memo(({ isDark }: { isDark: boolean }) => {
-  const ventures = aashrithData.ventures || [];
-  const ventureDescriptions = [
-    'Thought leadership platform. Where brand strategy meets systems thinking.',
-    'AI-native creative community. 3.8K+ builders experimenting at the frontier.',
-    'Founder-led studio. AI-powered brand systems for ventures that think long-term.',
-  ];
-  const ventureConfig = [
-    { venture: ventures[0], num: '01', speed: 'slow' as const, direction: 'left' as const, gradient: 'rgba(220,38,38,0.06)', monogram: 'BA' },
-    { venture: ventures[1], num: '02', speed: 'medium' as const, direction: 'right' as const, gradient: 'rgba(255,255,255,0.04)', monogram: 'AZ' },
-    { venture: ventures[2], num: '03', speed: 'slow' as const, direction: 'left' as const, gradient: 'rgba(220,38,38,0.04)', monogram: 'AL' },
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start end', 'end start'] });
+  const bgScale = useTransform(scrollYProgress, [0, 1], [1, 1.06]);
+  const [hoveredPost, setHoveredPost] = useState<number | null>(null);
+
+  const ventureData = [
+    {
+      num: '01',
+      name: 'Brand Alchemy',
+      tagline: 'Where strategy becomes scripture.',
+      description: 'A research-driven thought leadership platform decoding how brands are truly built — through culture, systems, narrative, and design. Not a blog. A body of work.',
+      accent: 'rgba(220,38,38,0.5)',
+      monogram: 'BA',
+      speed: 'slow' as const,
+      direction: 'left' as const,
+    },
+    {
+      num: '02',
+      name: 'Ashzz.ai',
+      tagline: '3.8K+ builders. One frontier.',
+      description: 'An AI-native creative ecosystem where builders, designers, and strategists experiment at the bleeding edge of generative media, prompt engineering, and applied AI workflows.',
+      accent: 'rgba(168,85,247,0.4)',
+      monogram: 'AZ',
+      speed: 'medium' as const,
+      direction: 'right' as const,
+    },
+    {
+      num: '03',
+      name: 'Ash Archives',
+      tagline: 'The feed is the portfolio.',
+      description: 'Cross-platform personal brand thought leadership across LinkedIn and Instagram — distilling brand strategy, AI-native thinking, and cultural commentary into editorial-grade visual content.',
+      accent: 'rgba(251,146,60,0.4)',
+      monogram: 'AA',
+      speed: 'slow' as const,
+      direction: 'left' as const,
+    },
   ];
 
-  const createTiles = (gradientTint: string, monogram: string) =>
-    Array.from({ length: 10 }, (_, i) => (
+  const createVentureTiles = (ventureIdx: number, accent: string, monogram: string) => {
+    if (ventureIdx === 2) {
+      // Thought Leadership — use real images
+      return thoughtLeadershipPosts.map((post, i) => (
+        <motion.div
+          key={i}
+          className="flex-shrink-0 w-72 sm:w-80 rounded-2xl overflow-hidden relative group cursor-pointer"
+          style={{ aspectRatio: '16/9' }}
+          onMouseEnter={() => setHoveredPost(i)}
+          onMouseLeave={() => setHoveredPost(null)}
+          whileHover={{ scale: 1.04, y: -6 }}
+          transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+        >
+          {/* Image */}
+          <img src={post.image} alt={post.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
+          
+          {/* Liquid glass overlay */}
+          <div className="absolute inset-0 transition-opacity duration-500"
+            style={{
+              background: 'linear-gradient(180deg, transparent 20%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.85) 100%)',
+              opacity: hoveredPost === i ? 1 : 0.6,
+            }}
+          />
+
+          {/* Top shine sweep */}
+          <div className="absolute top-0 left-0 right-0 h-px overflow-hidden">
+            <motion.div
+              className="h-full w-1/3"
+              style={{ background: `linear-gradient(90deg, transparent, ${accent}, transparent)` }}
+              animate={{ x: ['-100%', '400%'] }}
+              transition={{ duration: 4, repeat: Infinity, ease: 'linear', delay: i * 0.5 }}
+            />
+          </div>
+
+          {/* Border glow on hover */}
+          <motion.div className="absolute inset-0 rounded-2xl pointer-events-none transition-opacity duration-300"
+            style={{
+              border: `1px solid ${hoveredPost === i ? accent : 'rgba(255,255,255,0.08)'}`,
+              boxShadow: hoveredPost === i ? `0 0 40px ${accent}, inset 0 0 20px rgba(0,0,0,0.3)` : 'none',
+            }}
+          />
+
+          {/* Content overlay */}
+          <div className="absolute bottom-0 left-0 right-0 p-4 z-10">
+            <motion.p
+              className="font-body font-semibold text-sm text-white leading-tight mb-1"
+              initial={false}
+              animate={{ y: hoveredPost === i ? -4 : 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              {post.title}
+            </motion.p>
+            <motion.p
+              className="font-body text-[11px] text-white/60 leading-snug line-clamp-2"
+              initial={false}
+              animate={{ opacity: hoveredPost === i ? 1 : 0, y: hoveredPost === i ? 0 : 8 }}
+              transition={{ duration: 0.3 }}
+            >
+              {post.desc}
+            </motion.p>
+          </div>
+
+          {/* External link indicator */}
+          <motion.div
+            className="absolute top-3 right-3 z-10"
+            initial={false}
+            animate={{ opacity: hoveredPost === i ? 1 : 0, scale: hoveredPost === i ? 1 : 0.8 }}
+            transition={{ duration: 0.2 }}
+          >
+            <div className="w-7 h-7 rounded-full flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(12px)' }}>
+              <ExternalLink className="w-3 h-3 text-white/80" />
+            </div>
+          </motion.div>
+        </motion.div>
+      ));
+    }
+
+    // Default glass tiles for Brand Alchemy & Ashzz.ai
+    return Array.from({ length: 10 }, (_, i) => (
       <motion.div
         key={i}
-        className="flex-shrink-0 w-48 sm:w-56 rounded-xl overflow-hidden relative group cursor-pointer"
+        className="flex-shrink-0 w-48 sm:w-56 rounded-2xl overflow-hidden relative group cursor-pointer"
         style={{
           aspectRatio: '4/3',
-          border: `1px solid ${t(isDark, 'rgba(255,255,255,0.08)', 'rgba(0,0,0,0.06)')}`,
-          background: `linear-gradient(135deg, ${gradientTint} 0%, ${t(isDark, 'rgba(255,255,255,0.02)', 'rgba(0,0,0,0.01)')} 100%)`,
-          backdropFilter: 'blur(8px)',
+          background: t(isDark,
+            `linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%)`,
+            `linear-gradient(135deg, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0.01) 100%)`
+          ),
+          backdropFilter: 'blur(16px) saturate(150%)',
+          border: `1px solid ${t(isDark, 'rgba(255,255,255,0.06)', 'rgba(0,0,0,0.05)')}`,
         }}
         whileHover={{
-          scale: 1.05,
-          rotate: 1,
-          borderColor: 'rgba(220,38,38,0.4)',
-          boxShadow: '0 0 30px rgba(220,38,38,0.15)',
+          scale: 1.06,
+          borderColor: accent,
+          boxShadow: `0 8px 40px ${accent.replace('0.5', '0.15').replace('0.4', '0.12')}`,
         }}
-        transition={{ duration: 0.3 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 25 }}
       >
+        {/* Shimmer sweep */}
         <div className="absolute top-0 left-0 right-0 h-px overflow-hidden">
           <motion.div
             className="h-full w-1/3"
-            style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)' }}
+            style={{ background: `linear-gradient(90deg, transparent, ${accent}, transparent)` }}
             animate={{ x: ['-100%', '400%'] }}
-            transition={{ duration: 3, repeat: Infinity, ease: 'linear', delay: i * 0.3 }}
+            transition={{ duration: 3.5, repeat: Infinity, ease: 'linear', delay: i * 0.3 }}
           />
         </div>
+        {/* Monogram */}
         <div className="w-full h-full flex items-center justify-center">
-          <span className={`font-mono text-lg font-bold ${t(isDark, 'text-porcelain/10', 'text-neutral-200')}`}>{monogram}</span>
+          <span className={`font-mono text-xl font-bold ${t(isDark, 'text-porcelain/8', 'text-neutral-200/40')}`}>{monogram}</span>
         </div>
       </motion.div>
     ));
+  };
 
   return (
-    <section id="ventures" className={`relative overflow-hidden ${t(isDark, 'bg-alchemy-black', 'bg-[#fafaf9]')}`}>
-      <SequentianBackground variant={2} opacity={isDark ? 0.16 : 0.09} glow={false} />
-      <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 60% 50% at 50% 50%, rgba(220,38,38,0.06) 0%, transparent 70%)' }} />
-      <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 50% 40% at 30% 60%, rgba(220,38,38,0.04) 0%, transparent 60%)' }} />
-      <ParticleField count={10} color="rgba(220,38,38,0.2)" opacity={0.15} />
+    <section ref={sectionRef} id="ventures" className={`relative overflow-hidden ${t(isDark, 'bg-alchemy-black', 'bg-[#fafaf9]')}`}>
+      <motion.div className="absolute inset-0" style={{ scale: bgScale }}>
+        <SequentianBackground variant={2} opacity={isDark ? 0.16 : 0.09} glow={false} />
+      </motion.div>
+      <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 60% 50% at 50% 50%, rgba(220,38,38,0.05) 0%, transparent 70%)' }} />
+      <ParticleField count={12} color="rgba(220,38,38,0.2)" opacity={0.15} />
 
-      {/* Top edge blend from Hero */}
+      {/* Top blend */}
       <div className={`absolute top-0 inset-x-0 h-24 bg-gradient-to-b ${t(isDark, 'from-alchemy-black', 'from-[#fafaf9]')} to-transparent z-[2] pointer-events-none`} />
 
-      <div className="relative z-10 py-24 sm:py-40">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 mb-12">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: 0.6, ease: EASE }}>
-            <EyebrowLabel className="mb-4">VENTURES & INTELLECTUAL PROPERTY</EyebrowLabel>
-            <h2 className={`font-display text-3xl sm:text-4xl lg:text-5xl ${t(isDark, 'text-porcelain', 'text-neutral-900')} mb-3`}>
-              Three ventures. <span className="text-alchemy-red italic">One operating system.</span>
+      <div className="relative z-10 py-28 sm:py-44">
+        {/* Section header */}
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 mb-20">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.8, ease: EASE }}
+            className="text-center"
+          >
+            <motion.span
+              className="inline-block font-mono text-[10px] sm:text-xs uppercase tracking-[0.5em] mb-6"
+              style={{
+                background: 'linear-gradient(90deg, rgba(220,38,38,0.7), rgba(251,146,60,0.7), rgba(168,85,247,0.6))',
+                backgroundClip: 'text',
+                WebkitBackgroundClip: 'text',
+                color: 'transparent',
+              }}
+              initial={{ opacity: 0, letterSpacing: '0.3em' }}
+              whileInView={{ opacity: 1, letterSpacing: '0.5em' }}
+              viewport={{ once: true }}
+              transition={{ duration: 1, ease: EASE }}
+            >
+              THE ECOSYSTEM
+            </motion.span>
+
+            <h2 className={`font-display text-4xl sm:text-5xl lg:text-7xl leading-[0.9] mb-6 ${t(isDark, 'text-porcelain', 'text-neutral-900')}`}>
+              <motion.span
+                className="block"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.1, ease: EASE }}
+              >
+                Three verticals.
+              </motion.span>
+              <motion.span
+                className="block mt-1"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.2, ease: EASE }}
+              >
+                One{' '}
+                <span className="italic" style={{
+                  background: 'linear-gradient(-45deg, hsl(356 94% 52%), hsl(356 94% 38%), hsl(20 90% 60%))',
+                  backgroundSize: '300% 300%',
+                  backgroundClip: 'text',
+                  WebkitBackgroundClip: 'text',
+                  color: 'transparent',
+                  animation: 'fluidGradient 6s ease infinite',
+                }}>
+                  compounding thesis.
+                </span>
+              </motion.span>
             </h2>
-            <p className={`font-body text-base sm:text-lg max-w-2xl ${t(isDark, 'text-porcelain/50', 'text-neutral-500')}`}>
-              Each venture is a living laboratory — proof that the frameworks work before they reach a client.
-            </p>
+
+            <motion.p
+              className={`font-body text-base sm:text-lg max-w-2xl mx-auto ${t(isDark, 'text-porcelain/45', 'text-neutral-500')} leading-relaxed`}
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.35, ease: EASE }}
+            >
+              Research. Community. Content. Each venture sharpens the same blade —
+              building intellectual infrastructure that compounds before it ever reaches a client.
+            </motion.p>
           </motion.div>
         </div>
 
-        <div className="space-y-20">
-          {ventureConfig.map(({ venture, num, speed, direction, gradient, monogram }, idx) => venture && (
+        {/* Ventures */}
+        <div className="space-y-24 sm:space-y-32">
+          {ventureData.map((venture, idx) => (
             <motion.div
               key={venture.name}
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              viewport={{ once: true, margin: '-100px' }}
-              transition={{ delay: idx * 0.3, duration: 0.6 }}
+              viewport={{ once: true, margin: '-80px' }}
+              transition={{ duration: 0.8, delay: idx * 0.15 }}
             >
-              <motion.div
-                className="max-w-6xl mx-auto px-4 sm:px-6 mb-6 flex items-center gap-4"
-                style={{
-                  borderTop: idx > 0 ? `1px solid ${t(isDark, 'rgba(255,255,255,0.04)', 'rgba(0,0,0,0.04)')}` : 'none',
-                  paddingTop: idx > 0 ? '2rem' : '0',
-                }}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, ease: EASE }}
-              >
-                <span className="font-mono text-2xl sm:text-3xl font-bold text-alchemy-red/30">{num}</span>
-                <div>
-                  <h3 className={`font-body font-bold text-lg sm:text-xl ${t(isDark, 'text-porcelain', 'text-neutral-900')}`}>{venture.name}</h3>
-                  <p className={`font-body text-xs sm:text-sm ${t(isDark, 'text-porcelain/45', 'text-neutral-500')} mt-1 max-w-md`}>
-                    {ventureDescriptions[idx]}
-                  </p>
-                </div>
-              </motion.div>
-              <MarqueeRow speed={speed} direction={direction} gap={16}>
-                {createTiles(gradient, monogram)}
+              {/* Venture header */}
+              <div className="max-w-5xl mx-auto px-4 sm:px-6 mb-8">
+                <motion.div
+                  className="flex items-start gap-5 sm:gap-8"
+                  initial={{ opacity: 0, x: -30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.7, ease: EASE }}
+                >
+                  {/* Number with accent glow */}
+                  <div className="relative flex-shrink-0">
+                    <span className="font-mono text-4xl sm:text-5xl font-black" style={{
+                      background: `linear-gradient(135deg, ${venture.accent}, ${venture.accent.replace(/[\d.]+\)$/, '0.15)')})`,
+                      backgroundClip: 'text',
+                      WebkitBackgroundClip: 'text',
+                      color: 'transparent',
+                    }}>
+                      {venture.num}
+                    </span>
+                    <motion.div
+                      className="absolute -inset-3 rounded-full pointer-events-none"
+                      style={{ background: `radial-gradient(circle, ${venture.accent.replace(/[\d.]+\)$/, '0.08)')} 0%, transparent 70%)` }}
+                      animate={{ scale: [1, 1.2, 1], opacity: [0.5, 1, 0.5] }}
+                      transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+                    />
+                  </div>
+
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-baseline gap-3 flex-wrap">
+                      <h3 className={`font-body font-black text-2xl sm:text-3xl tracking-tight ${t(isDark, 'text-porcelain', 'text-neutral-900')}`}>
+                        {venture.name}
+                      </h3>
+                      <span className={`font-display text-sm sm:text-base italic ${t(isDark, 'text-porcelain/30', 'text-neutral-400')}`}>
+                        — {venture.tagline}
+                      </span>
+                    </div>
+                    <p className={`font-body text-sm sm:text-base mt-2 max-w-xl leading-relaxed ${t(isDark, 'text-porcelain/40', 'text-neutral-500')}`}>
+                      {venture.description}
+                    </p>
+                  </div>
+                </motion.div>
+              </div>
+
+              {/* Marquee */}
+              <MarqueeRow speed={venture.speed} direction={venture.direction} gap={16}>
+                {createVentureTiles(idx, venture.accent, venture.monogram)}
               </MarqueeRow>
             </motion.div>
           ))}
@@ -777,10 +990,31 @@ const CreativeProjectsSection = memo(({ isDark, onDiscover }: { isDark: boolean;
             transition={{ duration: 0.8, ease: EASE }}
             className="text-center"
           >
-            <EyebrowLabel className="mb-4">SELECTED CREATIVE WORK</EyebrowLabel>
-            <h2 className={`font-display text-3xl sm:text-4xl lg:text-6xl ${t(isDark, 'text-porcelain', 'text-neutral-900')} mb-4`}>
-              The proof is in<br />
-              <span className="text-alchemy-red italic">the systems.</span>
+            <motion.span
+              className="inline-block font-mono text-[10px] sm:text-xs uppercase tracking-[0.5em] mb-6"
+              style={{
+                background: 'linear-gradient(90deg, rgba(220,38,38,0.8), rgba(220,38,38,0.4))',
+                backgroundClip: 'text',
+                WebkitBackgroundClip: 'text',
+                color: 'transparent',
+              }}
+              initial={{ opacity: 0, letterSpacing: '0.3em' }}
+              whileInView={{ opacity: 1, letterSpacing: '0.5em' }}
+              viewport={{ once: true }}
+              transition={{ duration: 1, ease: EASE }}
+            >
+              SELECTED CREATIVE WORK
+            </motion.span>
+            <h2 className={`font-display text-4xl sm:text-5xl lg:text-7xl leading-[0.9] ${t(isDark, 'text-porcelain', 'text-neutral-900')} mb-5`}>
+              Every system leaves{' '}
+              <span className="italic" style={{
+                background: 'linear-gradient(-45deg, hsl(356 94% 52%), hsl(356 94% 38%))',
+                backgroundClip: 'text',
+                WebkitBackgroundClip: 'text',
+                color: 'transparent',
+              }}>
+                fingerprints.
+              </span>
             </h2>
             <p className={`font-body text-sm sm:text-base max-w-xl mx-auto ${t(isDark, 'text-porcelain/45', 'text-neutral-500')}`}>
               Four AI-native brand explorations. Each built on strategic architecture, not surface aesthetics.
@@ -926,12 +1160,34 @@ const CareerTimeline = memo(({ isDark }: { isDark: boolean }) => {
 
       <div className="relative z-10 py-24 sm:py-40 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: 0.6, ease: EASE }} className="mb-16">
-          <EyebrowLabel className="mb-4">CAREER TIMELINE</EyebrowLabel>
-          <h2 className={`font-display text-4xl sm:text-5xl lg:text-6xl ${t(isDark, 'text-porcelain', 'text-neutral-900')} mb-4`}>
-            The arc of <span className="text-alchemy-red italic">intent.</span>
+          <motion.span
+            className="inline-block font-mono text-[10px] sm:text-xs uppercase tracking-[0.5em] mb-6"
+            style={{
+              background: 'linear-gradient(90deg, rgba(220,38,38,0.8), rgba(220,38,38,0.4))',
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              color: 'transparent',
+            }}
+            initial={{ opacity: 0, letterSpacing: '0.3em' }}
+            whileInView={{ opacity: 1, letterSpacing: '0.5em' }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, ease: EASE }}
+          >
+            THE ARC OF INTENT
+          </motion.span>
+          <h2 className={`font-display text-4xl sm:text-5xl lg:text-7xl leading-[0.9] ${t(isDark, 'text-porcelain', 'text-neutral-900')} mb-5`}>
+            Every role was a{' '}
+            <span className="italic" style={{
+              background: 'linear-gradient(-45deg, hsl(356 94% 52%), hsl(20 90% 60%))',
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              color: 'transparent',
+            }}>
+              rehearsal.
+            </span>
           </h2>
           <p className={`font-body text-sm sm:text-base max-w-xl ${t(isDark, 'text-porcelain/45', 'text-neutral-500')}`}>
-            From execution to architecture. Each role built the foundation for systems-level thinking.
+            From execution to architecture. Each chapter sharpened the instinct for systems-level thinking.
           </p>
         </motion.div>
 

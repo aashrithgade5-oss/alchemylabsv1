@@ -152,15 +152,15 @@ export const aashrithData: FounderData = {
       ]
     },
     {
-      name: "Alchemy Labs",
-      type: "AI-Native Branding & Product Studio",
-      description: "A founder-led studio delivering AI-powered brand systems, rapid product builds, and strategic advisory.",
-      founderRoles: ["Founder", "CEO", "Head of Design", "Head of Project Execution"],
+      name: "Ash Archives",
+      type: "Cross-Platform Personal Brand & Thought Leadership",
+      description: "A personal brand thought leadership presence across LinkedIn and Instagram — distilling brand strategy, AI-native thinking, and cultural commentary into editorial-grade content.",
+      founderRoles: ["Creator", "Strategist", "Writer", "Visual Director"],
       capabilities: [
-        "Brand architecture & identity systems",
-        "AI-assisted product and visual builds",
-        "Strategic brand advisory",
-        "Founder-to-founder collaboration"
+        "Strategic brand commentary on LinkedIn",
+        "Visual thought leadership on Instagram",
+        "Editorial content design & storytelling",
+        "Cross-platform narrative architecture"
       ]
     },
   ],
