@@ -45,7 +45,7 @@ const portfolioFooterLinks = [
 const ventureFooterLinks = [
   { label: 'Brand Alchemy', href: '#ventures', external: false },
   { label: 'Ashzz.ai', href: '#ventures', external: false },
-  { label: 'Alchemy Labs', href: '#ventures', external: false },
+  { label: 'Ash Archives', href: '#ventures', external: false },
 ];
 const connectFooterLinks = [
   { label: 'LinkedIn', href: 'https://www.linkedin.com/in/aashrithgade', external: true },
