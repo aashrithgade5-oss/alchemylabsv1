@@ -990,10 +990,31 @@ const CreativeProjectsSection = memo(({ isDark, onDiscover }: { isDark: boolean;
             transition={{ duration: 0.8, ease: EASE }}
             className="text-center"
           >
-            <EyebrowLabel className="mb-4">SELECTED CREATIVE WORK</EyebrowLabel>
-            <h2 className={`font-display text-3xl sm:text-4xl lg:text-6xl ${t(isDark, 'text-porcelain', 'text-neutral-900')} mb-4`}>
-              The proof is in<br />
-              <span className="text-alchemy-red italic">the systems.</span>
+            <motion.span
+              className="inline-block font-mono text-[10px] sm:text-xs uppercase tracking-[0.5em] mb-6"
+              style={{
+                background: 'linear-gradient(90deg, rgba(220,38,38,0.8), rgba(220,38,38,0.4))',
+                backgroundClip: 'text',
+                WebkitBackgroundClip: 'text',
+                color: 'transparent',
+              }}
+              initial={{ opacity: 0, letterSpacing: '0.3em' }}
+              whileInView={{ opacity: 1, letterSpacing: '0.5em' }}
+              viewport={{ once: true }}
+              transition={{ duration: 1, ease: EASE }}
+            >
+              SELECTED CREATIVE WORK
+            </motion.span>
+            <h2 className={`font-display text-4xl sm:text-5xl lg:text-7xl leading-[0.9] ${t(isDark, 'text-porcelain', 'text-neutral-900')} mb-5`}>
+              Every system leaves{' '}
+              <span className="italic" style={{
+                background: 'linear-gradient(-45deg, hsl(356 94% 52%), hsl(356 94% 38%))',
+                backgroundClip: 'text',
+                WebkitBackgroundClip: 'text',
+                color: 'transparent',
+              }}>
+                fingerprints.
+              </span>
             </h2>
             <p className={`font-body text-sm sm:text-base max-w-xl mx-auto ${t(isDark, 'text-porcelain/45', 'text-neutral-500')}`}>
               Four AI-native brand explorations. Each built on strategic architecture, not surface aesthetics.
