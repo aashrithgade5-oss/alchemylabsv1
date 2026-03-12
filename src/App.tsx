@@ -124,6 +124,7 @@ const AppContent = memo(() => (
     <SmoothScroll>
       <AtmosphericBackground />
       <Preloader />
+      <ScrollProgress />
       <Toaster />
       <Sonner />
       <AnimatedRoutes />

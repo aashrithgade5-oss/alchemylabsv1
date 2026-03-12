@@ -38,7 +38,6 @@ const Index = memo(() => {
   return (
     <div className="relative">
       <ParallaxBackground />
-      <ScrollProgress />
       <Navigation />
       <FloatingCTA />
       <main className="relative z-10">
