@@ -1,7 +1,6 @@
 import { Navigation } from '@/components/Navigation';
 import { Hero } from '@/components/Hero';
 import { Footer } from '@/components/Footer';
-import { ScrollProgress } from '@/components/ScrollProgress';
 import { ParallaxBackground } from '@/components/ParallaxBackground';
 import { FloatingCTA } from '@/components/FloatingCTA';
 import { SequentianBackground } from '@/components/SequentianBackground';
@@ -39,7 +38,6 @@ const Index = memo(() => {
   return (
     <div className="relative">
       <ParallaxBackground />
-      <ScrollProgress />
       <Navigation />
       <FloatingCTA />
       <main className="relative z-10">

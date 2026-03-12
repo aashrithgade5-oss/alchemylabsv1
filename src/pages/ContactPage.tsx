@@ -72,7 +72,7 @@ export const ContactPage = () => {
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
             className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-display tracking-display text-porcelain mb-6"
             style={{ textShadow: '0 2px 40px rgba(0,0,0,0.6)' }}
           >
@@ -89,11 +89,36 @@ export const ContactPage = () => {
             Ready to transform your brand? Let's discuss your vision and craft something extraordinary together.
           </motion.p>
 
+          {/* Trust pills */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.5 }}
+            className="flex flex-wrap items-center justify-center gap-3 mt-8"
+          >
+            {['24h Response', 'NDA Available', 'Free First Call'].map((text, i) => (
+              <motion.span
+                key={text}
+                className="px-4 py-1.5 rounded-full font-mono text-[10px] tracking-wider uppercase"
+                style={{
+                  background: 'rgba(255,255,255,0.04)',
+                  border: '1px solid rgba(255,255,255,0.08)',
+                  color: 'rgba(255,255,255,0.5)',
+                  backdropFilter: 'blur(8px)',
+                }}
+                whileHover={{ borderColor: 'rgba(220,38,38,0.3)', color: 'rgba(220,38,38,0.8)', scale: 1.05 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+              >
+                {text}
+              </motion.span>
+            ))}
+          </motion.div>
+
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1, duration: 0.8 }}
-            className="mt-16"
+            className="mt-12"
           >
             <motion.div
               animate={{ y: [0, 10, 0] }}

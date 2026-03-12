@@ -35,6 +35,9 @@ export const BookSprint = () => {
   }, []);
 
   const handleCaptchaError = useCallback(() => {
+    // Suppress error on preview/localhost — Turnstile always fails there
+    const h = window.location.hostname;
+    if (h.includes('lovable.app') || h === 'localhost' || h === '127.0.0.1') return;
     setCaptchaError(true);
     toast.error('Security verification failed. Please refresh and try again.');
   }, []);

@@ -11,6 +11,7 @@ import NotFound from "./pages/NotFound";
 import { Preloader } from "./components/Preloader";
 import { SmoothScroll } from "./components/SmoothScroll";
 import { BackToTop } from "./components/BackToTop";
+import { ScrollProgress } from "./components/ScrollProgress";
 import { PageAtmosphereProvider, AtmosphericBackground } from "./contexts/PageAtmosphereContext";
 import { PerformanceProvider } from "./contexts/PerformanceContext";
 import { CookieConsent } from "./components/CookieConsent";
@@ -123,6 +124,7 @@ const AppContent = memo(() => (
     <SmoothScroll>
       <AtmosphericBackground />
       <Preloader />
+      <ScrollProgress />
       <Toaster />
       <Sonner />
       <AnimatedRoutes />
