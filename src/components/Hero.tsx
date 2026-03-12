@@ -177,17 +177,24 @@ export const Hero = memo(() => {
             {servicePillars.map((pillar, i) => {
               const Icon = pillar.icon;
               return (
-                <div 
+                <motion.div 
                   key={i} 
-                  className="flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 hover:border-alchemy-red/30"
+                  className="flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 cursor-default group/pillar"
                   style={{
                     background: 'rgba(220,38,38,0.05)',
                     border: '1px solid rgba(220,38,38,0.12)',
                   }}
+                  whileHover={{ 
+                    scale: 1.06, 
+                    y: -2,
+                    borderColor: 'rgba(220,38,38,0.35)',
+                    boxShadow: '0 4px 20px rgba(220,38,38,0.15)',
+                  }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 20 }}
                 >
-                  <Icon className="w-3.5 h-3.5 text-alchemy-red/70" />
-                  <span className="font-body text-[11px] sm:text-xs text-porcelain/55">{pillar.label}</span>
-                </div>
+                  <Icon className="w-3.5 h-3.5 text-alchemy-red/70 group-hover/pillar:text-alchemy-red transition-colors" />
+                  <span className="font-body text-[11px] sm:text-xs text-porcelain/55 group-hover/pillar:text-porcelain/80 transition-colors">{pillar.label}</span>
+                </motion.div>
               );
             })}
           </motion.div>

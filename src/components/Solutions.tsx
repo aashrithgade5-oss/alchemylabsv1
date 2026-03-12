@@ -107,17 +107,28 @@ export const Solutions = memo(() => {
 
   return (
     <section id="solutions" className="relative py-32 overflow-hidden section-gradient">
-      {/* Background */}
+      {/* Background with parallax orbs */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <motion.div 
           className="absolute top-1/4 -left-32 w-96 h-96 rounded-full bg-alchemy-red/5 blur-[100px]"
-          animate={{ x: [0, 30, 0], y: [0, 20, 0] }}
+          animate={{ x: [0, 30, 0], y: [0, 20, 0], scale: [1, 1.1, 1] }}
           transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
         />
         <motion.div 
           className="absolute bottom-1/4 -right-32 w-80 h-80 rounded-full bg-deep-crimson/5 blur-[80px]"
-          animate={{ x: [0, -20, 0], y: [0, -30, 0] }}
+          animate={{ x: [0, -20, 0], y: [0, -30, 0], scale: [1.1, 1, 1.1] }}
           transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        {/* Subtle floating particles */}
+        <motion.div
+          className="absolute top-1/2 left-1/2 w-2 h-2 rounded-full bg-alchemy-red/20"
+          animate={{ x: [-100, 100, -100], y: [-50, 50, -50], opacity: [0, 0.6, 0] }}
+          transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <motion.div
+          className="absolute top-1/3 left-1/3 w-1.5 h-1.5 rounded-full bg-porcelain/10"
+          animate={{ x: [50, -80, 50], y: [30, -60, 30], opacity: [0, 0.4, 0] }}
+          transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut', delay: 3 }}
         />
       </div>
 
