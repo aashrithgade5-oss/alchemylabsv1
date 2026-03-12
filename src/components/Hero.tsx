@@ -115,13 +115,17 @@ export const Hero = memo(() => {
             className="mb-8 md:mb-10"
           >
             <span 
-              className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full"
+              className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full group/pill cursor-default"
               style={{
                 background: 'rgba(220, 38, 38, 0.1)',
                 border: '1px solid rgba(220, 38, 38, 0.3)',
               }}
             >
-              <span className="w-1.5 h-1.5 bg-alchemy-red rounded-full animate-pulse" />
+              <motion.span
+                className="w-1.5 h-1.5 bg-alchemy-red rounded-full"
+                animate={{ scale: [1, 1.4, 1], opacity: [1, 0.6, 1] }}
+                transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+              />
               <span className="font-mono text-[9px] sm:text-[10px] tracking-[0.18em] uppercase text-porcelain/80">
                 AI-Powered Creative Studio
               </span>
