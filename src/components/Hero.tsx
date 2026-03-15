@@ -1,9 +1,9 @@
-import { motion, useInView } from 'framer-motion';
-import { ArrowRight, ArrowUpRight, Sparkles, Layers, Target, ChevronDown } from 'lucide-react';
+import { motion, useInView, useScroll, useTransform } from 'framer-motion';
+import { ArrowRight, ArrowUpRight, Sparkles, Layers, Target } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import heroVideo from '@/assets/hero-video.mp4';
 import { MagneticButton } from './MagneticButton';
-import { useRef, useState, useEffect, memo, lazy, Suspense } from 'react';
+import { useRef, useState, useEffect, memo, lazy, Suspense, useMemo } from 'react';
 
 const NeuralBackground = lazy(() => 
   import('./NeuralBackground').then(m => ({ default: m.NeuralBackground }))
@@ -23,6 +23,23 @@ export const Hero = memo(() => {
   const isInView = useInView(contentRef, { once: true, margin: '-50px' });
   const [isMobile, setIsMobile] = useState(true);
   const [showParticles, setShowParticles] = useState(false);
+  const [prefersReduced, setPrefersReduced] = useState(false);
+  
+  // Scroll-driven parallax
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start start', 'end start'],
+  });
+
+  const videoScale = useTransform(scrollYProgress, [0, 1], [1.02, 1.18]);
+  const videoOpacity = useTransform(scrollYProgress, [0, 1], [0.12, 0.03]);
+  const headlineY = useTransform(scrollYProgress, [0, 1], [0, -60]);
+  const pillarsY = useTransform(scrollYProgress, [0, 1], [0, -30]);
+  const neuralScale = useTransform(scrollYProgress, [0, 1], [1, 1.08]);
+
+  useEffect(() => {
+    setPrefersReduced(window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  }, []);
   
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
@@ -40,6 +57,11 @@ export const Hero = memo(() => {
     return () => window.removeEventListener('resize', checkMobile);
   }, [isMobile]);
 
+  const parallaxStyles = useMemo(() => {
+    if (prefersReduced) return { videoScale: 1.02, videoOpacity: isMobile ? 0.15 : 0.12 };
+    return null;
+  }, [prefersReduced, isMobile]);
+
   return (
     <section 
       id="hero" 
@@ -52,13 +74,20 @@ export const Hero = memo(() => {
           background: 'linear-gradient(180deg, hsl(0 0% 3%) 0%, hsl(0 0% 4%) 30%, hsl(0 0% 3.5%) 70%, hsl(0 0% 2%) 100%)',
         }} />
         
-        <video
-          autoPlay loop muted playsInline
-          preload="metadata"
-          className={`absolute inset-0 w-full h-full object-cover scale-[1.02] ${isMobile ? 'opacity-[0.15]' : 'opacity-[0.12]'}`}
+        {/* Parallax video layer */}
+        <motion.div
+          className="absolute inset-0"
+          style={!prefersReduced ? { scale: videoScale, opacity: videoOpacity } : undefined}
         >
-          <source src={heroVideo} type="video/mp4" />
-        </video>
+          <video
+            autoPlay loop muted playsInline
+            preload="metadata"
+            className={`absolute inset-0 w-full h-full object-cover ${prefersReduced ? (isMobile ? 'opacity-[0.15]' : 'opacity-[0.12]') : ''}`}
+            style={prefersReduced ? { transform: 'scale(1.02)' } : undefined}
+          >
+            <source src={heroVideo} type="video/mp4" />
+          </video>
+        </motion.div>
         
         <div className="absolute inset-0" style={{
           background: 'radial-gradient(ellipse 120% 100% at 50% 50%, transparent 0%, transparent 30%, rgba(10,10,10,0.4) 55%, rgba(10,10,10,0.85) 80%, rgba(10,10,10,0.98) 100%)',
@@ -68,9 +97,10 @@ export const Hero = memo(() => {
           background: 'linear-gradient(to bottom, rgba(10,10,10,0.6) 0%, transparent 15%, transparent 85%, rgba(10,10,10,0.95) 100%)',
         }} />
         
-        <div className="absolute inset-0" style={{
-          background: 'radial-gradient(ellipse 70% 50% at 50% 40%, rgba(220,38,38,0.08) 0%, transparent 60%)',
-        }} />
+        {/* Aurora conic mesh */}
+        {!prefersReduced && (
+          <div className="absolute inset-0 aurora-bg opacity-80" />
+        )}
         
         {!isMobile && (
           <div className="absolute inset-0" style={{
@@ -93,11 +123,14 @@ export const Hero = memo(() => {
       </div>
 
       {showParticles && (
-        <div className="absolute inset-0 z-[2] opacity-40">
+        <motion.div 
+          className="absolute inset-0 z-[2] opacity-40"
+          style={!prefersReduced ? { scale: neuralScale } : undefined}
+        >
           <Suspense fallback={null}>
             <NeuralBackground isMobile={false} />
           </Suspense>
-        </div>
+        </motion.div>
       )}
 
       {/* Main Content */}
@@ -132,25 +165,31 @@ export const Hero = memo(() => {
             </span>
           </motion.div>
 
-          {/* Headline — bigger, bolder, more spacing */}
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.7, delay: 0.15, ease: easeOut }}
-            className="mb-6 md:mb-8 flex items-baseline justify-center gap-3 sm:gap-4 md:gap-5 flex-wrap"
-          >
-            <span className="font-body font-black text-[2.5rem] sm:text-6xl md:text-7xl lg:text-8xl xl:text-[6.5rem] leading-[0.95] tracking-[0.04em] uppercase text-porcelain">
-              ALCHEMY
-            </span>
-            <span className="font-body font-light text-lg sm:text-2xl md:text-3xl text-porcelain/25">in</span>
-            <span 
-              className="font-display italic text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[5.5rem] hero-fluid-text"
+          {/* Headline — parallax drift */}
+          <motion.div style={!prefersReduced ? { y: headlineY } : undefined}>
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.7, delay: 0.15, ease: easeOut }}
+              className="mb-6 md:mb-8 flex items-baseline justify-center gap-3 sm:gap-4 md:gap-5 flex-wrap"
             >
-              Motion
-            </span>
-          </motion.h1>
+              <span 
+                className="font-body font-black text-[2.5rem] sm:text-6xl md:text-7xl lg:text-8xl xl:text-[6.5rem] leading-[0.95] tracking-[0.04em] uppercase text-porcelain"
+                style={{ textShadow: '0 0 120px rgba(220,38,38,0.08), 0 2px 0 rgba(0,0,0,0.5)' }}
+              >
+                ALCHEMY
+              </span>
+              <span className="font-body font-light text-lg sm:text-2xl md:text-3xl text-porcelain/25">in</span>
+              <span 
+                className="font-display italic text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[5.5rem] hero-fluid-text"
+                style={{ filter: 'drop-shadow(0 0 50px rgba(220,38,38,0.4)) drop-shadow(0 0 120px rgba(220,38,38,0.15))' }}
+              >
+                Motion
+              </span>
+            </motion.h1>
+          </motion.div>
 
-          {/* Subheadline — cleaner, more impactful */}
+          {/* Subheadline */}
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -167,12 +206,13 @@ export const Hero = memo(() => {
             </p>
           </motion.div>
 
-          {/* Service Pillars */}
+          {/* Service Pillars — parallax drift */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.4, delay: 0.35, ease: easeOut }}
             className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mb-10 md:mb-12"
+            style={!prefersReduced ? { y: pillarsY } : undefined}
           >
             {servicePillars.map((pillar, i) => {
               const Icon = pillar.icon;
@@ -234,23 +274,26 @@ export const Hero = memo(() => {
         </div>
       </div>
 
-      {/* Bottom — Scroll to Explore indicator */}
+      {/* Bottom — Enhanced Scroll Indicator */}
       <div className="absolute bottom-0 left-0 right-0 z-10 pb-8 sm:pb-10">
         <div className="flex flex-col items-center">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1.2, duration: 0.6 }}
-            className="flex flex-col items-center gap-2"
+            className="flex flex-col items-center gap-3"
           >
             <span className="font-mono text-[8px] sm:text-[9px] text-porcelain/25 uppercase tracking-[0.2em]">
               Scroll to explore
             </span>
-            <div className="relative w-5 h-8 rounded-full border border-porcelain/10 flex justify-center">
+            {/* Premium vertical line indicator */}
+            <div className="relative w-px h-10">
+              <div className="absolute inset-0 bg-porcelain/[0.12]" />
               <motion.div 
-                className="absolute top-2 w-0.5 h-2 rounded-full bg-alchemy-red/50"
-                animate={{ y: [0, 8, 0], opacity: [0.7, 0.2, 0.7] }}
-                transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+                className="absolute left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-alchemy-red"
+                animate={{ y: [0, 32, 0], opacity: [0, 1, 0] }}
+                transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                style={{ boxShadow: '0 0 6px rgba(220,38,38,0.6)' }}
               />
             </div>
           </motion.div>
