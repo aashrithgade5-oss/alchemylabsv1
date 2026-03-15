@@ -5,7 +5,7 @@ import { ParallaxBackground } from '@/components/ParallaxBackground';
 import { FloatingCTA } from '@/components/FloatingCTA';
 import { SequentianBackground } from '@/components/SequentianBackground';
 import { memo, lazy, Suspense } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useScroll } from 'framer-motion';
 
 // Lazy-load below-fold sections for faster initial paint
 const Solutions = lazy(() => import('@/components/Solutions').then(m => ({ default: m.Solutions })));
@@ -16,23 +16,78 @@ const ProcessSection = lazy(() => import('@/components/ProcessSection').then(m =
 const FAQSection = lazy(() => import('@/components/FAQSection').then(m => ({ default: m.FAQSection })));
 const Contact = lazy(() => import('@/components/Contact').then(m => ({ default: m.Contact })));
 
-// Reusable reveal wrapper
-const RevealSection = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 40 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true, margin: '-80px' }}
-    transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-    className={className}
-  >
-    {children}
-  </motion.div>
-);
+// Enhanced reveal wrapper with blur + scale + directional stagger
+const RevealSection = memo(({ 
+  children, 
+  className = '', 
+  direction = 'up',
+  delay = 0 
+}: { 
+  children: React.ReactNode; 
+  className?: string; 
+  direction?: 'up' | 'left' | 'right';
+  delay?: number;
+}) => {
+  const xMap = { up: 0, left: -32, right: 32 };
+  return (
+    <motion.div
+      initial={{ 
+        opacity: 0, 
+        y: direction === 'up' ? 40 : 20, 
+        x: xMap[direction],
+        scale: 0.97,
+        filter: 'blur(8px)',
+      }}
+      whileInView={{ 
+        opacity: 1, 
+        y: 0, 
+        x: 0,
+        scale: 1,
+        filter: 'blur(0px)',
+      }}
+      viewport={{ once: true, margin: '-80px' }}
+      transition={{ 
+        duration: 0.8, 
+        delay,
+        ease: [0.22, 1, 0.36, 1] 
+      }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+});
+RevealSection.displayName = 'RevealSection';
 
-// Section divider
-const SectionDivider = () => (
-  <div className="w-full max-w-6xl mx-auto h-px bg-gradient-to-r from-transparent via-porcelain/8 to-transparent" />
-);
+// Enhanced section divider with animated center scale
+const SectionDivider = memo(() => (
+  <div className="w-full max-w-6xl mx-auto py-4 flex items-center justify-center gap-3">
+    <motion.div 
+      className="flex-1 h-px"
+      style={{ background: 'linear-gradient(to right, transparent, rgba(250,250,249,0.06))' }}
+      initial={{ scaleX: 0, originX: 1 }}
+      whileInView={{ scaleX: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+    />
+    <motion.div 
+      className="w-1 h-1 rounded-full bg-alchemy-red/30"
+      initial={{ scale: 0 }}
+      whileInView={{ scale: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.4, delay: 0.3 }}
+    />
+    <motion.div 
+      className="flex-1 h-px"
+      style={{ background: 'linear-gradient(to left, transparent, rgba(250,250,249,0.06))' }}
+      initial={{ scaleX: 0, originX: 0 }}
+      whileInView={{ scaleX: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+    />
+  </div>
+));
+SectionDivider.displayName = 'SectionDivider';
 
 const Index = memo(() => {
   return (
@@ -44,7 +99,7 @@ const Index = memo(() => {
         <Hero />
         
         <Suspense fallback={null}>
-          <RevealSection className="content-lazy">
+          <RevealSection className="content-lazy" direction="up" delay={0}>
             <Solutions />
           </RevealSection>
         </Suspense>
@@ -52,7 +107,7 @@ const Index = memo(() => {
         <SectionDivider />
         
         <Suspense fallback={null}>
-          <RevealSection className="content-lazy">
+          <RevealSection className="content-lazy" direction="left" delay={0.05}>
             <CaseStudies />
           </RevealSection>
         </Suspense>
@@ -62,7 +117,7 @@ const Index = memo(() => {
         <Suspense fallback={null}>
           <div className="relative">
             <SequentianBackground variant={4} opacity={0.35} parallax scaleEnd={1.1} glow={false} />
-            <RevealSection className="content-lazy">
+            <RevealSection className="content-lazy" direction="up" delay={0}>
               <Manifesto />
             </RevealSection>
           </div>
@@ -71,13 +126,13 @@ const Index = memo(() => {
         <SectionDivider />
         
         <Suspense fallback={null}>
-          <RevealSection className="content-lazy">
+          <RevealSection className="content-lazy" direction="right" delay={0.05}>
             <EditorialSection />
           </RevealSection>
         </Suspense>
         
         <Suspense fallback={null}>
-          <RevealSection className="content-lazy">
+          <RevealSection className="content-lazy" direction="left" delay={0}>
             <ProcessSection />
           </RevealSection>
         </Suspense>
@@ -85,14 +140,14 @@ const Index = memo(() => {
         <Suspense fallback={null}>
           <div className="relative">
             <SequentianBackground variant={2} opacity={0.3} parallax scaleEnd={1.08} glow={false} />
-            <RevealSection className="content-lazy">
+            <RevealSection className="content-lazy" direction="up" delay={0.05}>
               <FAQSection />
             </RevealSection>
           </div>
         </Suspense>
         
         <Suspense fallback={null}>
-          <RevealSection className="content-lazy">
+          <RevealSection className="content-lazy" direction="up" delay={0}>
             <Contact />
           </RevealSection>
         </Suspense>

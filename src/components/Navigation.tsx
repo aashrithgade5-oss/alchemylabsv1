@@ -55,7 +55,7 @@ const MobileMenu = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
         padding: '24px',
       }}
     >
-      {/* Liquid glass background */}
+      {/* Liquid glass background — enhanced */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -64,9 +64,22 @@ const MobileMenu = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
         style={{
           position: 'absolute',
           inset: 0,
-          background: 'radial-gradient(ellipse 120% 80% at 50% 30%, rgba(220,38,38,0.08) 0%, rgba(10,10,11,0.97) 60%)',
-          backdropFilter: 'blur(40px) saturate(180%)',
-          WebkitBackdropFilter: 'blur(40px) saturate(180%)',
+          background: 'radial-gradient(ellipse 140% 100% at 50% 20%, rgba(220,38,38,0.10) 0%, rgba(8,8,10,0.97) 55%)',
+          backdropFilter: 'blur(60px) saturate(220%)',
+          WebkitBackdropFilter: 'blur(60px) saturate(220%)',
+        }}
+      />
+
+      {/* Grain texture overlay */}
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          opacity: 0.015,
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+          backgroundSize: '200px 200px',
+          mixBlendMode: 'overlay' as const,
+          pointerEvents: 'none' as const,
         }}
       />
 
@@ -255,6 +268,9 @@ export const Navigation = () => {
   const [isHidden, setIsHidden] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [ctaHovered, setCtaHovered] = useState(false);
+  const [logoHovered, setLogoHovered] = useState(false);
+  const [blurIntensity, setBlurIntensity] = useState(16);
+  const [glowIntensity, setGlowIntensity] = useState(0);
   const location = useLocation();
 
   useEffect(() => {
@@ -275,6 +291,12 @@ export const Navigation = () => {
         } else {
           setIsHidden(false);
         }
+        // Dynamic blur + glow
+        const blur = Math.min(16 + currentScrollY * 0.04, 40);
+        setBlurIntensity(blur);
+        const glow = Math.min(currentScrollY * 0.08, 20);
+        setGlowIntensity(glow);
+
         lastScrollYRef.current = currentScrollY;
         ticking = false;
       });
@@ -308,17 +330,43 @@ export const Navigation = () => {
         transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
         className="fixed top-0 left-0 right-0 z-50 px-4 md:px-8 py-3 md:py-4"
       >
-        <div className={`max-w-6xl mx-auto transition-all duration-500 ${
-          isScrolled ? 'glass-nav-pill py-2.5 px-5' : 'py-3 px-5'
-        }`}>
+        <div 
+          className={`max-w-6xl mx-auto transition-all duration-500 relative ${
+            isScrolled ? 'glass-nav-pill py-2.5 px-5' : 'py-3 px-5'
+          }`}
+          style={isScrolled ? { 
+            backdropFilter: `blur(${blurIntensity}px) saturate(200%)`,
+            WebkitBackdropFilter: `blur(${blurIntensity}px) saturate(200%)`,
+            boxShadow: `0 0 ${glowIntensity}px rgba(220,38,38,0.15), 0 0 ${glowIntensity * 3}px rgba(220,38,38,0.06), 0 8px 32px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.08)`,
+          } : {}}
+        >
+          {/* Specular top highlight */}
+          {isScrolled && (
+            <div 
+              className="absolute inset-x-0 top-0 h-px rounded-full pointer-events-none"
+              style={{
+                background: 'linear-gradient(90deg, transparent 5%, rgba(255,255,255,0.18) 30%, rgba(255,255,255,0.09) 70%, transparent 95%)',
+              }}
+            />
+          )}
+
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center gap-2.5 group flex-shrink-0 no-glow" onClick={() => setIsMobileMenuOpen(false)}>
               <motion.div
                 className="w-10 h-10 md:w-11 md:h-11 rounded-lg overflow-hidden relative bg-transparent flex items-center justify-center"
                 whileHover={{ scale: 1.05, rotate: 3 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 15 }}
+                onHoverStart={() => setLogoHovered(true)}
+                onHoverEnd={() => setLogoHovered(false)}
               >
-                <img src={alchemyLogo} alt="Alchemy Labs" className="w-[130%] h-[130%] object-contain" />
+                <img 
+                  src={alchemyLogo} 
+                  alt="Alchemy Labs" 
+                  className="w-[130%] h-[130%] object-contain transition-[filter] duration-200"
+                  style={logoHovered ? { 
+                    filter: 'drop-shadow(2px 0 0 rgba(220,38,38,0.5)) drop-shadow(-2px 0 0 rgba(100,180,255,0.3))' 
+                  } : { filter: 'none' }}
+                />
               </motion.div>
               <div className="hidden sm:flex items-baseline gap-1.5">
                 <span className="font-display text-lg md:text-xl italic text-porcelain">Alchemy</span>
