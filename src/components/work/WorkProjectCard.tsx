@@ -132,6 +132,23 @@ export const WorkProjectCard = ({ project, index, isHero, onClick }: WorkProject
         </div>
       </div>
 
+      {/* Shimmer sweep on hover */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+        <div
+          className="absolute inset-0"
+          style={{
+            background: 'linear-gradient(108deg, transparent 35%, rgba(255,255,255,0.04) 50%, transparent 65%)',
+            filter: 'blur(6px)',
+            animation: 'shimmerSweep 1.2s ease-out forwards',
+          }}
+        />
+      </div>
+
+      {/* Specular top edge */}
+      <div className="absolute inset-x-0 top-0 h-px pointer-events-none rounded-t-2xl"
+        style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.1) 40%, rgba(255,255,255,0.04) 60%, transparent)' }}
+      />
+
       {/* Border glow on hover */}
       <div
         className="absolute inset-0 rounded-2xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500"

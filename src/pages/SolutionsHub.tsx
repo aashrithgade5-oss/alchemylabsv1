@@ -435,11 +435,12 @@ const ProcessStrip = memo(() => (
         {processSteps.map((s, i) => (
           <motion.div
             key={i}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 20, filter: 'blur(4px)' }}
+            whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: i * 0.1, ease: EASE }}
-            className="relative p-8 sm:p-10"
+            whileHover={{ scale: 1.02, y: -2 }}
+            className="relative p-8 sm:p-10 group"
             style={{ background: 'rgba(10,10,10,0.95)' }}
           >
             <span className="font-display text-5xl sm:text-6xl text-porcelain/[0.04] absolute top-4 right-6 leading-none select-none">

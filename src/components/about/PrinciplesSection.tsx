@@ -35,8 +35,10 @@ export const PrinciplesSection = memo(() => {
           {principles.map((principle, i) => (
             <ScrollReveal key={principle.text} delay={i * 0.12}>
               <motion.div
-                className="relative p-8 sm:p-10 md:p-12 rounded-2xl cursor-default group overflow-hidden"
+                className="relative p-8 sm:p-10 md:p-12 rounded-2xl cursor-default group overflow-hidden motion-sweep"
                 style={{
+                  perspective: '900px',
+                  transformStyle: 'preserve-3d' as const,
                   background: 'linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)',
                   borderLeft: '2px solid rgba(220,38,38,0.2)',
                   borderTop: '1px solid rgba(255,255,255,0.06)',
@@ -45,8 +47,12 @@ export const PrinciplesSection = memo(() => {
                 }}
                 whileHover={{
                   borderColor: 'rgba(220,38,38,0.5)',
+                  rotateX: -1,
+                  rotateY: 2,
+                  scale: 1.01,
+                  y: -4,
                 }}
-                transition={{ duration: 0.3 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 25 }}
               >
                 {/* Hover glow */}
                 <div
