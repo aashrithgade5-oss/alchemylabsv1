@@ -31,9 +31,11 @@ export const WorkProjectCard = ({ project, index, isHero, onClick }: WorkProject
       viewport={{ once: true, margin: '-60px' }}
       transition={{ duration: 0.55, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
       onClick={onClick}
-      whileHover={{ y: -6 }}
+      whileHover={{ y: -6, rotateX: -2, rotateY: 3, scale: 1.02 }}
       className="group relative rounded-2xl overflow-hidden cursor-pointer h-full"
       style={{
+        perspective: '900px',
+        transformStyle: 'preserve-3d' as const,
         background: 'linear-gradient(160deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%)',
         border: '1px solid rgba(255,255,255,0.06)',
       }}
