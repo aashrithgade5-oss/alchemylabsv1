@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion';
-import { memo, lazy, Suspense, useState } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { memo, lazy, Suspense, useState, useRef } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { BlueprintGrid, NoiseTexture } from '@/components/effects';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -14,26 +14,32 @@ const CINEMATIC_EASE = [0.22, 1, 0.36, 1] as const;
 export const YinYangHero = memo(() => {
   const isMobile = useIsMobile();
   const [videoReady, setVideoReady] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start start', 'end start'] });
+  const videoScale = useTransform(scrollYProgress, [0, 1], [1, 1.15]);
+  const textY = useTransform(scrollYProgress, [0, 1], [0, -50]);
 
   return (
-    <section className="relative h-[100svh] flex flex-col justify-end overflow-hidden">
+    <section ref={sectionRef} className="relative h-[100svh] flex flex-col justify-end overflow-hidden">
       {/* Layer 1: Deep black base */}
       <div className="absolute inset-0 bg-black" />
 
-      {/* Layer 2: Video background */}
-      <motion.video
-        src={aboutHeroVideo}
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="metadata"
-        onCanPlay={() => setVideoReady(true)}
-        className="absolute inset-0 w-full h-full object-cover"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: videoReady ? (isMobile ? 0.18 : 0.15) : 0 }}
-        transition={{ duration: 1.2, ease: CINEMATIC_EASE }}
-      />
+      {/* Layer 2: Video background with scroll parallax */}
+      <motion.div className="absolute inset-0" style={{ scale: isMobile ? 1 : videoScale }}>
+        <motion.video
+          src={aboutHeroVideo}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          onCanPlay={() => setVideoReady(true)}
+          className="absolute inset-0 w-full h-full object-cover"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: videoReady ? (isMobile ? 0.18 : 0.15) : 0 }}
+          transition={{ duration: 1.2, ease: CINEMATIC_EASE }}
+        />
+      </motion.div>
 
       {/* Layer 3: Premium vignette */}
       <div
@@ -105,7 +111,7 @@ export const YinYangHero = memo(() => {
       />
 
       {/* Main content — anchored to bottom third */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 pb-24 sm:pb-32">
+      <motion.div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 pb-24 sm:pb-32" style={{ y: isMobile ? 0 : textY }}>
         {/* Eyebrow */}
         <motion.div
           className="relative inline-block mb-6"
@@ -160,7 +166,7 @@ export const YinYangHero = memo(() => {
         >
           Two founders. One vision. Building brands with discipline, structure, and AI-native execution.
         </motion.p>
-      </div>
+      </motion.div>
 
       {/* Scroll indicator */}
       <motion.div

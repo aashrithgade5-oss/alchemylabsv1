@@ -233,11 +233,13 @@ const PillarCard = memo(({ pillar, index, size }: { pillar: typeof pillars[0]; i
         <div
           className="group relative h-full rounded-2xl overflow-hidden transition-all duration-300"
           style={{
+            perspective: '900px',
+            transformStyle: 'preserve-3d' as const,
             background: isHovered ? 'rgba(20,20,20,0.95)' : 'rgba(15,15,15,0.9)',
             border: isHovered ? '1px solid rgba(255,255,255,0.14)' : '1px solid rgba(255,255,255,0.06)',
             borderLeft: isHovered ? '4px solid hsl(var(--alchemy-red))' : '4px solid transparent',
-            transform: isHovered ? 'translateY(-4px)' : 'translateY(0)',
-            boxShadow: isHovered ? '0 24px 48px rgba(0,0,0,0.5), 0 0 40px rgba(200,57,43,0.08)' : '0 4px 12px rgba(0,0,0,0.3)',
+            transform: isHovered ? 'perspective(900px) rotateX(-2deg) rotateY(3deg) translateY(-4px) scale(1.015)' : 'translateY(0)',
+            boxShadow: isHovered ? '0 24px 48px rgba(0,0,0,0.5), 0 0 40px rgba(200,57,43,0.12)' : '0 4px 12px rgba(0,0,0,0.3)',
             backdropFilter: 'blur(12px)',
           }}
         >
@@ -374,12 +376,15 @@ const WhySection = memo(() => (
           return (
             <motion.div
               key={i}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 24, filter: 'blur(6px)' }}
+              whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.08, ease: EASE }}
-              className="rounded-xl p-6 sm:p-8 transition-all duration-300 hover:translate-y-[-2px] group"
+              transition={{ duration: 0.6, delay: i * 0.08, ease: EASE }}
+              whileHover={{ y: -4, scale: 1.02, rotateX: -2, rotateY: 3 }}
+              className="rounded-xl p-6 sm:p-8 transition-all duration-300 group motion-sweep"
               style={{
+                perspective: '900px',
+                transformStyle: 'preserve-3d' as const,
                 background: 'rgba(15,15,15,0.8)',
                 border: '1px solid rgba(255,255,255,0.06)',
                 backdropFilter: 'blur(8px)',
@@ -430,11 +435,12 @@ const ProcessStrip = memo(() => (
         {processSteps.map((s, i) => (
           <motion.div
             key={i}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 20, filter: 'blur(4px)' }}
+            whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: i * 0.1, ease: EASE }}
-            className="relative p-8 sm:p-10"
+            whileHover={{ scale: 1.02, y: -2 }}
+            className="relative p-8 sm:p-10 group"
             style={{ background: 'rgba(10,10,10,0.95)' }}
           >
             <span className="font-display text-5xl sm:text-6xl text-porcelain/[0.04] absolute top-4 right-6 leading-none select-none">

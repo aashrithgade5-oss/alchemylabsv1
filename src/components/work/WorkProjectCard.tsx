@@ -31,9 +31,11 @@ export const WorkProjectCard = ({ project, index, isHero, onClick }: WorkProject
       viewport={{ once: true, margin: '-60px' }}
       transition={{ duration: 0.55, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
       onClick={onClick}
-      whileHover={{ y: -6 }}
+      whileHover={{ y: -6, rotateX: -2, rotateY: 3, scale: 1.02 }}
       className="group relative rounded-2xl overflow-hidden cursor-pointer h-full"
       style={{
+        perspective: '900px',
+        transformStyle: 'preserve-3d' as const,
         background: 'linear-gradient(160deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%)',
         border: '1px solid rgba(255,255,255,0.06)',
       }}
@@ -129,6 +131,23 @@ export const WorkProjectCard = ({ project, index, isHero, onClick }: WorkProject
           </div>
         </div>
       </div>
+
+      {/* Shimmer sweep on hover */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+        <div
+          className="absolute inset-0"
+          style={{
+            background: 'linear-gradient(108deg, transparent 35%, rgba(255,255,255,0.04) 50%, transparent 65%)',
+            filter: 'blur(6px)',
+            animation: 'shimmerSweep 1.2s ease-out forwards',
+          }}
+        />
+      </div>
+
+      {/* Specular top edge */}
+      <div className="absolute inset-x-0 top-0 h-px pointer-events-none rounded-t-2xl"
+        style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.1) 40%, rgba(255,255,255,0.04) 60%, transparent)' }}
+      />
 
       {/* Border glow on hover */}
       <div
