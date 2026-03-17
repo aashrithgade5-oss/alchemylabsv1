@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion';
-import { memo, lazy, Suspense, useState } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { memo, lazy, Suspense, useState, useRef } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { BlueprintGrid, NoiseTexture } from '@/components/effects';
 import { useIsMobile } from '@/hooks/use-mobile';
