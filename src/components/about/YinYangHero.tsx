@@ -111,7 +111,7 @@ export const YinYangHero = memo(() => {
       />
 
       {/* Main content — anchored to bottom third */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 pb-24 sm:pb-32">
+      <motion.div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 pb-24 sm:pb-32" style={{ y: isMobile ? 0 : textY }}>
         {/* Eyebrow */}
         <motion.div
           className="relative inline-block mb-6"
