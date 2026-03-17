@@ -233,11 +233,13 @@ const PillarCard = memo(({ pillar, index, size }: { pillar: typeof pillars[0]; i
         <div
           className="group relative h-full rounded-2xl overflow-hidden transition-all duration-300"
           style={{
+            perspective: '900px',
+            transformStyle: 'preserve-3d' as const,
             background: isHovered ? 'rgba(20,20,20,0.95)' : 'rgba(15,15,15,0.9)',
             border: isHovered ? '1px solid rgba(255,255,255,0.14)' : '1px solid rgba(255,255,255,0.06)',
             borderLeft: isHovered ? '4px solid hsl(var(--alchemy-red))' : '4px solid transparent',
-            transform: isHovered ? 'translateY(-4px)' : 'translateY(0)',
-            boxShadow: isHovered ? '0 24px 48px rgba(0,0,0,0.5), 0 0 40px rgba(200,57,43,0.08)' : '0 4px 12px rgba(0,0,0,0.3)',
+            transform: isHovered ? 'perspective(900px) rotateX(-2deg) rotateY(3deg) translateY(-4px) scale(1.015)' : 'translateY(0)',
+            boxShadow: isHovered ? '0 24px 48px rgba(0,0,0,0.5), 0 0 40px rgba(200,57,43,0.12)' : '0 4px 12px rgba(0,0,0,0.3)',
             backdropFilter: 'blur(12px)',
           }}
         >
