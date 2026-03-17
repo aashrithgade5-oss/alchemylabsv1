@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import heroVideo from '@/assets/hero-video.mp4';
 import { MagneticButton } from './MagneticButton';
 import { useRef, useState, useEffect, memo, lazy, Suspense, useMemo } from 'react';
+import { FloatingOrbs } from './FloatingOrbs';
 
 const NeuralBackground = lazy(() => 
   import('./NeuralBackground').then(m => ({ default: m.NeuralBackground }))
