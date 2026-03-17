@@ -20,7 +20,7 @@ export const YinYangHero = memo(() => {
   const textY = useTransform(scrollYProgress, [0, 1], [0, -50]);
 
   return (
-    <section className="relative h-[100svh] flex flex-col justify-end overflow-hidden">
+    <section ref={sectionRef} className="relative h-[100svh] flex flex-col justify-end overflow-hidden">
       {/* Layer 1: Deep black base */}
       <div className="absolute inset-0 bg-black" />
 
