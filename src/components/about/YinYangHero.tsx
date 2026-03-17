@@ -14,6 +14,10 @@ const CINEMATIC_EASE = [0.22, 1, 0.36, 1] as const;
 export const YinYangHero = memo(() => {
   const isMobile = useIsMobile();
   const [videoReady, setVideoReady] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start start', 'end start'] });
+  const videoScale = useTransform(scrollYProgress, [0, 1], [1, 1.15]);
+  const textY = useTransform(scrollYProgress, [0, 1], [0, -50]);
 
   return (
     <section className="relative h-[100svh] flex flex-col justify-end overflow-hidden">
