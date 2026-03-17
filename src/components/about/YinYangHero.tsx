@@ -166,7 +166,7 @@ export const YinYangHero = memo(() => {
         >
           Two founders. One vision. Building brands with discipline, structure, and AI-native execution.
         </motion.p>
-      </div>
+      </motion.div>
 
       {/* Scroll indicator */}
       <motion.div

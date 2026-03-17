@@ -1126,3 +1126,40 @@
   pointer-events: none;
   border-radius: inherit;
 }
+
+/* ENHANCEMENT 9 — Shimmer sweep keyframe */
+@keyframes shimmerSweep {
+  0% { transform: translateX(-120%); }
+  100% { transform: translateX(220%); }
+}
+
+/* ENHANCEMENT 10 — Floating entrance for sections */
+@keyframes floatEntrance {
+  0% { opacity: 0; transform: translateY(32px) scale(0.97); filter: blur(8px); }
+  100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0px); }
+}
+
+.float-entrance {
+  animation: floatEntrance 0.8s var(--ease-spring) both;
+}
+
+/* ENHANCEMENT 11 — Red pulse ring */
+@keyframes pulseRing {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(220,38,38,0.3); }
+  50% { box-shadow: 0 0 0 8px rgba(220,38,38,0); }
+}
+
+.pulse-ring {
+  animation: pulseRing 2s ease-in-out infinite;
+}
+
+/* ENHANCEMENT 12 — Gradient text shimmer */
+@keyframes textShimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.text-shimmer {
+  background-size: 200% 100%;
+  animation: textShimmer 3s ease-in-out infinite;
+}
