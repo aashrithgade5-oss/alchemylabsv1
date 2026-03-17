@@ -102,6 +102,14 @@ export const Hero = memo(() => {
         {!prefersReduced && (
           <div className="absolute inset-0 aurora-bg opacity-80" />
         )}
+
+        {/* Floating 3D glass orbs for depth */}
+        {!prefersReduced && !isMobile && (
+          <FloatingOrbs count={6} className="z-[2] opacity-60" />
+        )}
+        {!prefersReduced && isMobile && (
+          <FloatingOrbs count={3} className="z-[2] opacity-40" />
+        )}
         
         {!isMobile && (
           <div className="absolute inset-0" style={{
