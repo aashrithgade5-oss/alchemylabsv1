@@ -376,12 +376,15 @@ const WhySection = memo(() => (
           return (
             <motion.div
               key={i}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 24, filter: 'blur(6px)' }}
+              whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.08, ease: EASE }}
-              className="rounded-xl p-6 sm:p-8 transition-all duration-300 hover:translate-y-[-2px] group"
+              transition={{ duration: 0.6, delay: i * 0.08, ease: EASE }}
+              whileHover={{ y: -4, scale: 1.02, rotateX: -2, rotateY: 3 }}
+              className="rounded-xl p-6 sm:p-8 transition-all duration-300 group motion-sweep"
               style={{
+                perspective: '900px',
+                transformStyle: 'preserve-3d' as const,
                 background: 'rgba(15,15,15,0.8)',
                 border: '1px solid rgba(255,255,255,0.06)',
                 backdropFilter: 'blur(8px)',
