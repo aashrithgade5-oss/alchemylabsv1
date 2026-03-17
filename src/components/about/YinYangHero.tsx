@@ -24,20 +24,22 @@ export const YinYangHero = memo(() => {
       {/* Layer 1: Deep black base */}
       <div className="absolute inset-0 bg-black" />
 
-      {/* Layer 2: Video background */}
-      <motion.video
-        src={aboutHeroVideo}
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="metadata"
-        onCanPlay={() => setVideoReady(true)}
-        className="absolute inset-0 w-full h-full object-cover"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: videoReady ? (isMobile ? 0.18 : 0.15) : 0 }}
-        transition={{ duration: 1.2, ease: CINEMATIC_EASE }}
-      />
+      {/* Layer 2: Video background with scroll parallax */}
+      <motion.div className="absolute inset-0" style={{ scale: isMobile ? 1 : videoScale }}>
+        <motion.video
+          src={aboutHeroVideo}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          onCanPlay={() => setVideoReady(true)}
+          className="absolute inset-0 w-full h-full object-cover"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: videoReady ? (isMobile ? 0.18 : 0.15) : 0 }}
+          transition={{ duration: 1.2, ease: CINEMATIC_EASE }}
+        />
+      </motion.div>
 
       {/* Layer 3: Premium vignette */}
       <div
