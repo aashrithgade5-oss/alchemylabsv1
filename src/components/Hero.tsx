@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import heroVideo from '@/assets/hero-video.mp4';
 import { MagneticButton } from './MagneticButton';
 import { useRef, useState, useEffect, memo, lazy, Suspense, useMemo } from 'react';
+import { FloatingOrbs } from './FloatingOrbs';
 
 const NeuralBackground = lazy(() => 
   import('./NeuralBackground').then(m => ({ default: m.NeuralBackground }))
@@ -100,6 +101,14 @@ export const Hero = memo(() => {
         {/* Aurora conic mesh */}
         {!prefersReduced && (
           <div className="absolute inset-0 aurora-bg opacity-80" />
+        )}
+
+        {/* Floating 3D glass orbs for depth */}
+        {!prefersReduced && !isMobile && (
+          <FloatingOrbs count={6} className="z-[2] opacity-60" />
+        )}
+        {!prefersReduced && isMobile && (
+          <FloatingOrbs count={3} className="z-[2] opacity-40" />
         )}
         
         {!isMobile && (

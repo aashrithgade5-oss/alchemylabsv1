@@ -94,6 +94,37 @@
         "areaServed": "Worldwide"
       }
     </script>
+
+    <!-- Structured Data - WebSite (for Google Sitelinks Search Box) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Alchemy Labs",
+        "url": "https://alchemylabsv1.lovable.app",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://alchemylabsv1.lovable.app/?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      }
+    </script>
+
+    <!-- Structured Data - BreadcrumbList -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://alchemylabsv1.lovable.app/"},
+          {"@type": "ListItem", "position": 2, "name": "Solutions", "item": "https://alchemylabsv1.lovable.app/solutions"},
+          {"@type": "ListItem", "position": 3, "name": "About", "item": "https://alchemylabsv1.lovable.app/about"},
+          {"@type": "ListItem", "position": 4, "name": "Work", "item": "https://alchemylabsv1.lovable.app/work"},
+          {"@type": "ListItem", "position": 5, "name": "Journal", "item": "https://alchemylabsv1.lovable.app/journal"},
+          {"@type": "ListItem", "position": 6, "name": "Contact", "item": "https://alchemylabsv1.lovable.app/contact"}
+        ]
+      }
+    </script>
   </head>
 
   <body>
