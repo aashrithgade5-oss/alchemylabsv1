@@ -11,158 +11,139 @@ const LazyNeuralBackground = lazy(() =>
 
 const CINEMATIC_EASE = [0.22, 1, 0.36, 1] as const;
 
+// Dramatic text reveal with clip-path
+const ClipReveal = ({ children, delay = 0, className = '' }: { children: React.ReactNode; delay?: number; className?: string }) => (
+  <div className="overflow-hidden">
+    <motion.div
+      initial={{ y: '120%', opacity: 0, rotateX: -60 }}
+      animate={{ y: '0%', opacity: 1, rotateX: 0 }}
+      transition={{ duration: 1.0, delay, ease: [0.16, 1, 0.3, 1] }}
+      style={{ transformOrigin: 'bottom center' }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  </div>
+);
+
 export const YinYangHero = memo(() => {
   const isMobile = useIsMobile();
   const [videoReady, setVideoReady] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start start', 'end start'] });
-  const videoScale = useTransform(scrollYProgress, [0, 1], [1, 1.15]);
-  const textY = useTransform(scrollYProgress, [0, 1], [0, -50]);
+  const videoScale = useTransform(scrollYProgress, [0, 1], [1, 1.25]);
+  const videoOpacity = useTransform(scrollYProgress, [0, 0.5], [isMobile ? 0.2 : 0.18, 0.03]);
+  const textY = useTransform(scrollYProgress, [0, 1], [0, -70]);
+  const overlayOpacity = useTransform(scrollYProgress, [0, 0.8], [0, 0.5]);
 
   return (
     <section ref={sectionRef} className="relative h-[100svh] flex flex-col justify-end overflow-hidden">
-      {/* Layer 1: Deep black base */}
       <div className="absolute inset-0 bg-black" />
 
-      {/* Layer 2: Video background with scroll parallax */}
-      <motion.div className="absolute inset-0" style={{ scale: isMobile ? 1 : videoScale }}>
-        <motion.video
+      {/* Video with enhanced parallax */}
+      <motion.div className="absolute inset-0" style={{ scale: isMobile ? 1 : videoScale, opacity: videoOpacity }}>
+        <video
           src={aboutHeroVideo}
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
+          autoPlay muted loop playsInline preload="metadata"
           onCanPlay={() => setVideoReady(true)}
           className="absolute inset-0 w-full h-full object-cover"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: videoReady ? (isMobile ? 0.18 : 0.15) : 0 }}
-          transition={{ duration: 1.2, ease: CINEMATIC_EASE }}
+          style={{ opacity: videoReady ? 1 : 0, transition: 'opacity 1.2s' }}
         />
       </motion.div>
 
-      {/* Layer 3: Premium vignette */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: 'radial-gradient(ellipse 80% 70% at 50% 50%, transparent 20%, rgba(0,0,0,0.6) 70%, rgba(0,0,0,0.85) 100%)',
-        }}
+      {/* Premium vignette */}
+      <div className="absolute inset-0 pointer-events-none"
+        style={{ background: 'radial-gradient(ellipse 80% 70% at 50% 50%, transparent 20%, rgba(0,0,0,0.6) 70%, rgba(0,0,0,0.9) 100%)' }}
       />
 
-      {/* Layer 4: Top/bottom fade gradients */}
-      <div className="absolute top-0 inset-x-0 h-32 bg-gradient-to-b from-black/80 to-transparent pointer-events-none" />
-      <div className="absolute bottom-0 inset-x-0 h-40 bg-gradient-to-t from-black/90 to-transparent pointer-events-none" />
-
-      {/* Layer 5: Red energy glow */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: 'radial-gradient(ellipse 60% 50% at 50% 60%, rgba(220,38,38,0.08) 0%, transparent 70%)',
-        }}
-      />
-
-      {/* Layer 6: Secondary accent glows (desktop only) */}
+      {/* Animated aurora */}
       {!isMobile && (
-        <>
-          <div
-            className="absolute pointer-events-none"
-            style={{
-              width: '40%', height: '50%', top: '10%', left: '-5%',
-              background: 'radial-gradient(ellipse at center, rgba(220,38,38,0.04) 0%, transparent 70%)',
-            }}
-          />
-          <div
-            className="absolute pointer-events-none"
-            style={{
-              width: '35%', height: '45%', bottom: '5%', right: '-5%',
-              background: 'radial-gradient(ellipse at center, rgba(220,38,38,0.05) 0%, transparent 70%)',
-            }}
-          />
-        </>
+        <motion.div
+          className="absolute inset-0 pointer-events-none"
+          animate={{
+            background: [
+              'conic-gradient(from 0deg at 50% 60%, rgba(220,38,38,0) 0deg, rgba(220,38,38,0.12) 80deg, rgba(220,38,38,0) 160deg, rgba(220,38,38,0.08) 240deg, rgba(220,38,38,0) 360deg)',
+              'conic-gradient(from 120deg at 50% 60%, rgba(220,38,38,0) 0deg, rgba(220,38,38,0.08) 80deg, rgba(220,38,38,0) 160deg, rgba(220,38,38,0.12) 240deg, rgba(220,38,38,0) 360deg)',
+              'conic-gradient(from 240deg at 50% 60%, rgba(220,38,38,0) 0deg, rgba(220,38,38,0.12) 80deg, rgba(220,38,38,0) 160deg, rgba(220,38,38,0.08) 240deg, rgba(220,38,38,0) 360deg)',
+            ],
+          }}
+          transition={{ duration: 15, repeat: Infinity, ease: 'linear' }}
+          style={{ filter: 'blur(60px)' }}
+        />
       )}
 
-      {/* Layer 7: Technical grid (desktop only) */}
-      {!isMobile && <BlueprintGrid opacity={0.012} />}
+      {/* Top/bottom gradients */}
+      <div className="absolute top-0 inset-x-0 h-40 bg-gradient-to-b from-black/90 to-transparent pointer-events-none" />
+      <div className="absolute bottom-0 inset-x-0 h-48 bg-gradient-to-t from-black to-transparent pointer-events-none" />
 
-      {/* Layer 8: NeuralBackground particles (desktop only, lazy) */}
+      {/* Scroll fade */}
+      <motion.div className="absolute inset-0 bg-black pointer-events-none" style={{ opacity: overlayOpacity }} />
+
+      {/* Particles */}
       {!isMobile && (
-        <div className="absolute inset-0 opacity-25 pointer-events-none">
-          <Suspense fallback={null}>
-            <LazyNeuralBackground />
-          </Suspense>
+        <div className="absolute inset-0 opacity-20 pointer-events-none">
+          <Suspense fallback={null}><LazyNeuralBackground /></Suspense>
         </div>
       )}
 
-      {/* Layer 9: Grain */}
-      <BlueprintGrid opacity={0.02} />
-      <NoiseTexture opacity={0.03} />
+      <BlueprintGrid opacity={0.015} />
+      <NoiseTexture opacity={0.025} />
 
-      {/* Animated gradient mesh */}
-      <motion.div
-        className="absolute inset-0 opacity-25 pointer-events-none"
-        animate={{
-          background: [
-            'radial-gradient(circle at 20% 50%, rgba(220,38,38,0.15) 0%, transparent 50%)',
-            'radial-gradient(circle at 80% 50%, rgba(220,38,38,0.15) 0%, transparent 50%)',
-            'radial-gradient(circle at 20% 50%, rgba(220,38,38,0.15) 0%, transparent 50%)',
-          ],
-        }}
-        transition={{ duration: 15, repeat: Infinity, ease: 'linear' }}
-      />
-
-      {/* Main content — anchored to bottom third */}
+      {/* Main content — dramatic cinematic reveal */}
       <motion.div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 pb-24 sm:pb-32" style={{ y: isMobile ? 0 : textY }}>
         {/* Eyebrow */}
         <motion.div
           className="relative inline-block mb-6"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.3, ease: CINEMATIC_EASE }}
+          initial={{ opacity: 0, y: 20, filter: 'blur(6px)' }}
+          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+          transition={{ duration: 0.7, delay: 0.3, ease: CINEMATIC_EASE }}
         >
-          <span className="font-mono text-xs sm:text-sm tracking-[0.3em] uppercase text-alchemy-red/70">
-            Meet Our Founders
-          </span>
-          <svg
-            className="absolute -bottom-2 left-0 w-full h-1"
-            viewBox="0 0 200 4"
-            preserveAspectRatio="none"
+          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full"
+            style={{
+              background: 'rgba(220,38,38,0.1)',
+              border: '1px solid rgba(220,38,38,0.3)',
+              boxShadow: '0 0 25px rgba(220,38,38,0.1)',
+            }}
           >
-            <path
-              d="M 0 2 Q 50 0, 100 2 T 200 2"
-              stroke="hsl(var(--alchemy-red))"
-              strokeWidth="1"
-              fill="none"
-              opacity="0.4"
+            <motion.span
+              className="w-2 h-2 bg-alchemy-red rounded-full"
+              animate={{ scale: [1, 1.5, 1], opacity: [1, 0.5, 1] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+              style={{ boxShadow: '0 0 10px rgba(220,38,38,0.8)' }}
             />
-          </svg>
-        </motion.div>
-
-        {/* Main title */}
-        <motion.h1
-          className="tracking-tight mb-5"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4, ease: CINEMATIC_EASE }}
-        >
-          <span className="font-body text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light text-porcelain/80 block mb-1">
-            Architects of
-          </span>
-          <span className="block">
-            <span className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl italic bg-gradient-to-r from-alchemy-red via-alchemy-pink to-alchemy-red bg-clip-text text-transparent">
-              meaning, systems,
+            <span className="font-mono text-[10px] sm:text-xs tracking-[0.25em] uppercase text-porcelain/80">
+              Meet Our Founders
             </span>
           </span>
-          <span className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl italic text-porcelain block">
-            and inevitability
-          </span>
-        </motion.h1>
+        </motion.div>
+
+        {/* Title — staggered 3D reveal */}
+        <div className="mb-5">
+          <ClipReveal delay={0.4}>
+            <span className="font-body text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light text-porcelain/80 block mb-1">
+              Architects of
+            </span>
+          </ClipReveal>
+          <ClipReveal delay={0.55}>
+            <span className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl italic bg-gradient-to-r from-alchemy-red via-red-400 to-alchemy-red bg-clip-text text-transparent block"
+              style={{ filter: 'drop-shadow(0 0 30px rgba(220,38,38,0.4))' }}
+            >
+              meaning, systems,
+            </span>
+          </ClipReveal>
+          <ClipReveal delay={0.7}>
+            <span className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl italic text-porcelain block">
+              and inevitability
+            </span>
+          </ClipReveal>
+        </div>
 
         {/* Subtitle */}
         <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.6, ease: CINEMATIC_EASE }}
-          className="font-body text-base sm:text-lg md:text-xl text-porcelain/50 max-w-2xl leading-relaxed"
+          initial={{ opacity: 0, y: 15, filter: 'blur(6px)' }}
+          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+          transition={{ duration: 0.7, delay: 0.9, ease: CINEMATIC_EASE }}
+          className="font-body text-base sm:text-lg md:text-xl text-porcelain/45 max-w-2xl leading-relaxed"
         >
           Two founders. One vision. Building brands with discipline, structure, and AI-native execution.
         </motion.p>
@@ -175,12 +156,16 @@ export const YinYangHero = memo(() => {
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5 }}
       >
-        <span className="font-mono text-[10px] text-porcelain/25 tracking-[0.2em] uppercase">
-          Scroll
-        </span>
-        <motion.div animate={{ y: [0, 6, 0] }} transition={{ duration: 2, repeat: Infinity }}>
-          <ChevronDown className="w-4 h-4 text-alchemy-red/40" />
-        </motion.div>
+        <span className="font-mono text-[9px] text-porcelain/20 tracking-[0.25em] uppercase">Scroll</span>
+        <div className="relative w-px h-10">
+          <div className="absolute inset-0 bg-gradient-to-b from-porcelain/[0.12] to-transparent" />
+          <motion.div
+            className="absolute left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-alchemy-red"
+            animate={{ y: [0, 32, 0], opacity: [0, 1, 0] }}
+            transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+            style={{ boxShadow: '0 0 8px rgba(220,38,38,0.8)' }}
+          />
+        </div>
       </motion.div>
     </section>
   );
