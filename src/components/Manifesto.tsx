@@ -1,5 +1,5 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { useRef } from 'react';
+import { useRef, memo } from 'react';
 import { ArrowRight, Check, MessageCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -8,16 +8,19 @@ const principles = [
     highlight: 'Conceptual',
     rest: 'Depth',
     description: 'We prototype visions. Every project is a proof of possibility.',
+    number: '01',
   },
   {
     highlight: 'Systems',
     rest: 'Thinking',
     description: 'Infrastructure over incidents. Scalable foundations.',
+    number: '02',
   },
   {
     highlight: 'Taste',
     rest: 'First',
     description: 'AI amplifies capability—human judgment ensures quality.',
+    number: '03',
   },
 ];
 
@@ -27,52 +30,44 @@ const firstCallSteps = [
   "If we're not the fit, we refer you",
 ];
 
-export const Manifesto = () => {
+export const Manifesto = memo(() => {
   const sectionRef = useRef<HTMLElement>(null);
-  
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ['start end', 'end start'],
   });
 
-  const numberOpacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 0.03, 0.03, 0]);
+  const lineWidth = useTransform(scrollYProgress, [0.3, 0.6], ['0%', '100%']);
 
   return (
-    <section
-      id="manifesto"
-      ref={sectionRef}
-      className="relative py-32 overflow-hidden"
-    >
+    <section id="manifesto" ref={sectionRef} className="relative py-32 overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-gradient-radial from-alchemy-red/6 via-transparent to-transparent rounded-full blur-[120px]" />
-        <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-gradient-radial from-deep-crimson/5 via-transparent to-transparent rounded-full blur-[100px]" />
+        <motion.div
+          className="absolute top-0 left-1/4 w-[600px] h-[600px] rounded-full blur-[150px]"
+          style={{ background: 'rgba(220,38,38,0.06)' }}
+          animate={{ scale: [1, 1.15, 1], x: [0, 30, 0] }}
+          transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
+        />
       </div>
 
-      {/* Background number */}
-      <motion.div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none"
-        style={{ opacity: numberOpacity }}
-      >
-        <span className="font-display text-[30vw] leading-none text-porcelain/[0.02]">02</span>
-      </motion.div>
-
       <div className="relative z-10 max-w-6xl mx-auto px-6 md:px-12">
-        {/* Header */}
+        {/* Header — dramatic */}
         <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
+          initial={{ opacity: 0, y: 50, filter: 'blur(10px)' }}
+          whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
           viewport={{ once: true, margin: '-100px' }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           className="text-center mb-20"
         >
-          <span className="inline-block px-4 py-2 rounded-full backdrop-blur-md mb-6"
+          <span className="inline-block px-4 py-2 rounded-full mb-6"
             style={{
-              background: 'linear-gradient(135deg, rgba(220, 38, 38, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%)',
-              border: '1px solid rgba(220, 38, 38, 0.3)',
+              background: 'rgba(220,38,38,0.1)',
+              border: '1px solid rgba(220,38,38,0.3)',
+              boxShadow: '0 0 20px rgba(220,38,38,0.1)',
             }}
           >
-            <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-porcelain/80">
+            <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-porcelain/80">
               Why Alchemy Labs
             </span>
           </span>
@@ -80,9 +75,27 @@ export const Manifesto = () => {
           <h2 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-[1.1] tracking-[-0.02em] text-porcelain max-w-4xl mx-auto text-balance mb-6">
             <span className="block text-porcelain/80">We're a new studio with</span>
             <span className="block">
-              <span className="italic text-alchemy-red">proven instincts</span>
+              <motion.span 
+                className="italic text-alchemy-red inline-block"
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3, duration: 0.6 }}
+                style={{ textShadow: '0 0 40px rgba(220,38,38,0.3)' }}
+              >
+                proven instincts
+              </motion.span>
               <span className="text-porcelain/80"> and </span>
-              <span className="italic text-alchemy-red">conceptual range</span>
+              <motion.span 
+                className="italic text-alchemy-red inline-block"
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.4, duration: 0.6 }}
+                style={{ textShadow: '0 0 40px rgba(220,38,38,0.3)' }}
+              >
+                conceptual range
+              </motion.span>
               <span className="text-porcelain/40">.</span>
             </span>
           </h2>
@@ -93,36 +106,43 @@ export const Manifesto = () => {
           </p>
         </motion.div>
 
-        {/* Cards + Risk Reversal Panel */}
+        {/* Cards + Risk Reversal */}
         <div className="grid lg:grid-cols-4 gap-6 mb-16">
-          {/* Principle Cards */}
           <div className="lg:col-span-3 grid md:grid-cols-3 gap-6">
             {principles.map((principle, i) => (
               <motion.div
                 key={principle.highlight}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 40, scale: 0.95, filter: 'blur(6px)' }}
+                whileInView={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.1, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                whileHover={{ y: -6 }}
-                className="relative rounded-2xl p-8 text-center group overflow-hidden"
+                transition={{ delay: 0.1 + i * 0.12, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                whileHover={{ y: -8, scale: 1.02 }}
+                className="relative rounded-2xl p-8 text-center group overflow-hidden cursor-default"
                 style={{
-                  background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%)',
+                  background: 'linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%)',
                   backdropFilter: 'blur(16px)',
-                  border: '1px solid rgba(255, 255, 255, 0.06)',
+                  border: '1px solid rgba(255,255,255,0.07)',
                 }}
               >
                 {/* Hover glow */}
-                <div 
-                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                  style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(220, 38, 38, 0.1) 0%, transparent 70%)' }}
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                  style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(220,38,38,0.12) 0%, transparent 70%)' }}
                 />
                 
-                <span className="font-mono text-[10px] text-alchemy-red/60 tracking-[0.2em] uppercase relative z-10">
-                  0{i + 1}
+                {/* Top specular */}
+                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+
+                {/* Animated border on hover */}
+                <motion.div 
+                  className="absolute inset-0 rounded-2xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                  style={{ border: '1px solid rgba(220,38,38,0.3)', boxShadow: '0 0 30px rgba(220,38,38,0.1)' }}
+                />
+                
+                <span className="font-mono text-[10px] text-alchemy-red/60 tracking-[0.25em] uppercase relative z-10">
+                  {principle.number}
                 </span>
                 <h3 className="font-display text-xl md:text-2xl text-porcelain mt-4 mb-4 relative z-10">
-                  <span className="italic text-alchemy-red">{principle.highlight}</span>{' '}
+                  <span className="italic text-alchemy-red" style={{ textShadow: '0 0 20px rgba(220,38,38,0.2)' }}>{principle.highlight}</span>{' '}
                   <span className="text-porcelain/80">{principle.rest}</span>
                 </h3>
                 <p className="font-body text-sm text-porcelain/50 leading-relaxed font-light relative z-10">
@@ -134,22 +154,23 @@ export const Manifesto = () => {
 
           {/* Risk Reversal Panel */}
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, x: 40, filter: 'blur(8px)' }}
+            whileInView={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
             viewport={{ once: true }}
-            transition={{ delay: 0.3, duration: 0.5 }}
+            transition={{ delay: 0.4, duration: 0.6 }}
             className="rounded-2xl p-6 lg:p-8"
             style={{
-              background: 'linear-gradient(135deg, rgba(220, 38, 38, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%)',
-              border: '1px solid rgba(220, 38, 38, 0.2)',
+              background: 'linear-gradient(145deg, rgba(220,38,38,0.1) 0%, rgba(255,255,255,0.02) 100%)',
+              border: '1px solid rgba(220,38,38,0.25)',
+              boxShadow: '0 0 40px rgba(220,38,38,0.08)',
             }}
           >
             <div className="flex items-center gap-3 mb-5">
-              <div 
-                className="w-10 h-10 rounded-xl flex items-center justify-center"
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center"
                 style={{
-                  background: 'rgba(220, 38, 38, 0.15)',
-                  border: '1px solid rgba(220, 38, 38, 0.3)',
+                  background: 'rgba(220,38,38,0.15)',
+                  border: '1px solid rgba(220,38,38,0.3)',
+                  boxShadow: '0 0 20px rgba(220,38,38,0.15)',
                 }}
               >
                 <MessageCircle className="w-5 h-5 text-alchemy-red" />
@@ -161,47 +182,62 @@ export const Manifesto = () => {
             
             <ul className="space-y-3 mb-6">
               {firstCallSteps.map((step, i) => (
-                <li key={i} className="flex items-start gap-2.5">
+                <motion.li 
+                  key={i} 
+                  className="flex items-start gap-2.5"
+                  initial={{ opacity: 0, x: -10 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.5 + i * 0.1 }}
+                >
                   <Check className="w-4 h-4 text-alchemy-red mt-0.5 flex-shrink-0" />
                   <span className="font-body text-sm text-porcelain/70 font-light">{step}</span>
-                </li>
+                </motion.li>
               ))}
             </ul>
             
             <Link
               to="/book-sprint"
-              className="inline-flex items-center gap-2 text-sm text-alchemy-red hover:text-porcelain transition-colors font-body"
+              className="inline-flex items-center gap-2 text-sm text-alchemy-red hover:text-porcelain transition-colors font-body group"
             >
               <span>Book your free call</span>
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </motion.div>
         </div>
 
-        {/* Bottom Callout */}
+        {/* Bottom quote with animated line */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ delay: 0.4, duration: 0.5 }}
-          className="text-center"
+          transition={{ delay: 0.3, duration: 0.6 }}
+          className="text-center mt-8"
         >
-          <div 
-            className="inline-block px-8 py-6 rounded-2xl"
+          {/* Animated expanding line */}
+          <motion.div
+            className="w-full max-w-md mx-auto h-px mb-12"
             style={{
-              background: 'linear-gradient(135deg, rgba(220, 38, 38, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%)',
-              border: '1px solid rgba(220, 38, 38, 0.12)',
+              width: lineWidth,
+              background: 'linear-gradient(90deg, transparent, hsl(356 94% 45%), transparent)',
+              margin: '0 auto 48px',
             }}
-          >
-            <p className="font-body text-base text-porcelain/70 font-light">
-              <span className="text-alchemy-red font-display italic">Every first call is free.</span>
-              <span className="text-porcelain/50 text-sm mt-2 block">
-                No pressure. Just clarity on what's possible.
-              </span>
-            </p>
-          </div>
+          />
+
+          <blockquote className="font-display text-2xl md:text-3xl lg:text-4xl italic text-porcelain/80 max-w-3xl mx-auto leading-[1.35] text-balance">
+            <span className="block">"The best brands don't explain themselves.</span>
+            <span className="block">
+              They
+              <span className="text-alchemy-red" style={{ textShadow: '0 0 30px rgba(220,38,38,0.3)' }}> feel inevitable</span>."
+            </span>
+          </blockquote>
+          <cite className="block mt-6 font-mono text-[10px] text-porcelain/25 not-italic uppercase tracking-[0.25em]">
+            — Alchemy Labs Philosophy
+          </cite>
         </motion.div>
       </div>
     </section>
   );
-};
+});
+
+Manifesto.displayName = 'Manifesto';
