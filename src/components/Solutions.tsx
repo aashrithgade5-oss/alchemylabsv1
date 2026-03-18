@@ -12,7 +12,8 @@ const pillars = [
     icon: Sparkles,
     route: '/solutions/ai',
     number: '01',
-    gradient: 'from-violet-500/20 via-purple-500/10 to-transparent',
+    accentColor: 'rgba(139,92,246,0.6)',
+    glowColor: 'rgba(139,92,246,0.15)',
     deliverables: ['Landing + flow', 'Visual system', 'Live deploy'],
     trust: 'Production in hours, not weeks',
   },
@@ -24,7 +25,8 @@ const pillars = [
     icon: Layers,
     route: '/solutions/branding',
     number: '02',
-    gradient: 'from-blue-500/20 via-cyan-500/10 to-transparent',
+    accentColor: 'rgba(220,38,38,0.6)',
+    glowColor: 'rgba(220,38,38,0.15)',
     deliverables: ['Identity kit', 'Narrative', 'Launch-ready assets'],
     trust: 'Brands that feel inevitable',
   },
@@ -36,176 +38,166 @@ const pillars = [
     icon: Target,
     route: '/solutions/consultation',
     number: '03',
-    gradient: 'from-rose-500/20 via-pink-500/10 to-transparent',
+    accentColor: 'rgba(244,63,94,0.6)',
+    glowColor: 'rgba(244,63,94,0.15)',
     deliverables: ['Diagnosis', 'Roadmap', 'Next 7 days plan'],
     trust: 'Strategy you can execute today',
   },
 ];
 
-const toggleOptions = [
-  { id: 'ai', label: 'Fast (24h build)' },
-  { id: 'branding', label: 'Foundation' },
-  { id: 'consultation', label: 'Clarity' },
-];
-
-// 3D Tilt Card Component
-const TiltCard = memo(({ children, className = '' }: { children: React.ReactNode; className?: string }) => {
+// Interactive 3D Tilt Card
+const TiltCard = memo(({ children, className = '', accentColor }: { children: React.ReactNode; className?: string; accentColor: string }) => {
   const ref = useRef<HTMLDivElement>(null);
+  const [isHovered, setIsHovered] = useState(false);
   
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   
   const springConfig = { damping: 20, stiffness: 200 };
-  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [8, -8]), springConfig);
-  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-8, 8]), springConfig);
+  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [12, -12]), springConfig);
+  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-12, 12]), springConfig);
+  const glowX = useSpring(useTransform(x, [-0.5, 0.5], [0, 100]), springConfig);
+  const glowY = useSpring(useTransform(y, [-0.5, 0.5], [0, 100]), springConfig);
   
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!ref.current) return;
     const rect = ref.current.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-    
-    x.set((e.clientX - centerX) / rect.width);
-    y.set((e.clientY - centerY) / rect.height);
+    x.set((e.clientX - rect.left - rect.width / 2) / rect.width);
+    y.set((e.clientY - rect.top - rect.height / 2) / rect.height);
   };
   
   const handleMouseLeave = () => {
     x.set(0);
     y.set(0);
+    setIsHovered(false);
   };
 
   return (
     <motion.div
       ref={ref}
-      className={className}
+      className={`relative ${className}`}
       onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={handleMouseLeave}
       style={{
         rotateX,
         rotateY,
         transformStyle: 'preserve-3d',
-        perspective: 1000,
+        perspective: 1200,
       }}
     >
+      {/* Dynamic cursor-following glow */}
+      {isHovered && (
+        <motion.div
+          className="absolute inset-0 rounded-3xl pointer-events-none z-0"
+          style={{
+            background: `radial-gradient(400px circle at ${glowX}% ${glowY}%, ${accentColor}, transparent 60%)`,
+            opacity: 0.4,
+          }}
+        />
+      )}
       {children}
     </motion.div>
   );
 });
-
 TiltCard.displayName = 'TiltCard';
 
 export const Solutions = memo(() => {
   const [activeToggle, setActiveToggle] = useState<string | null>(null);
 
-  const scrollToContact = (service: string) => {
-    const contactSection = document.getElementById('contact');
-    if (contactSection) {
-      contactSection.scrollIntoView({ behavior: 'smooth' });
-      // Note: In a real implementation, you'd also set the service dropdown
-    }
-  };
-
   return (
-    <section id="solutions" className="relative py-32 overflow-hidden section-gradient">
-      {/* Background with parallax orbs */}
+    <section id="solutions" className="relative py-32 overflow-hidden">
+      {/* Animated background orbs */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <motion.div 
-          className="absolute top-1/4 -left-32 w-96 h-96 rounded-full bg-alchemy-red/5 blur-[100px]"
-          animate={{ x: [0, 30, 0], y: [0, 20, 0], scale: [1, 1.1, 1] }}
-          transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
-        />
-        <motion.div 
-          className="absolute bottom-1/4 -right-32 w-80 h-80 rounded-full bg-deep-crimson/5 blur-[80px]"
-          animate={{ x: [0, -20, 0], y: [0, -30, 0], scale: [1.1, 1, 1.1] }}
-          transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
-        />
-        {/* Subtle floating particles */}
-        <motion.div
-          className="absolute top-1/2 left-1/2 w-2 h-2 rounded-full bg-alchemy-red/20"
-          animate={{ x: [-100, 100, -100], y: [-50, 50, -50], opacity: [0, 0.6, 0] }}
+          className="absolute top-1/4 -left-32 w-[500px] h-[500px] rounded-full blur-[140px]"
+          style={{ background: 'rgba(220,38,38,0.06)' }}
+          animate={{ x: [0, 40, 0], y: [0, 30, 0], scale: [1, 1.2, 1] }}
           transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut' }}
         />
-        <motion.div
-          className="absolute top-1/3 left-1/3 w-1.5 h-1.5 rounded-full bg-porcelain/10"
-          animate={{ x: [50, -80, 50], y: [30, -60, 30], opacity: [0, 0.4, 0] }}
-          transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut', delay: 3 }}
+        <motion.div 
+          className="absolute bottom-1/4 -right-32 w-[400px] h-[400px] rounded-full blur-[120px]"
+          style={{ background: 'rgba(139,92,246,0.04)' }}
+          animate={{ x: [0, -30, 0], y: [0, -40, 0], scale: [1.1, 1, 1.1] }}
+          transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
         />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12">
-        {/* Section Header */}
+        {/* Section Header — dramatic reveal */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: 40, filter: 'blur(10px)' }}
+          whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
           viewport={{ once: true, margin: '-100px' }}
-          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-          className="text-center mb-12"
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          className="text-center mb-16"
         >
           <motion.p 
-            className="font-mono text-xs text-alchemy-red tracking-[0.25em] uppercase mb-4"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            className="font-mono text-xs text-alchemy-red tracking-[0.3em] uppercase mb-5"
+            initial={{ opacity: 0, letterSpacing: '0.5em' }}
+            whileInView={{ opacity: 1, letterSpacing: '0.3em' }}
             viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
+            transition={{ delay: 0.2, duration: 0.8 }}
           >
             Our Services
           </motion.p>
-          <motion.h2 
-            className="font-display text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-[1.05] tracking-[-0.02em] text-porcelain mb-6"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-          >
-            <span className="block">Three <span className="italic text-alchemy-red">Pillars</span></span>
-          </motion.h2>
-          <motion.p 
-            className="font-body text-base md:text-lg text-porcelain/50 max-w-xl mx-auto font-light"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.3 }}
-          >
+          <h2 className="font-display text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-[1.05] tracking-[-0.02em] text-porcelain mb-6">
+            <span className="block">
+              Three{' '}
+              <motion.span 
+                className="italic text-alchemy-red inline-block"
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.4, duration: 0.6 }}
+                style={{ textShadow: '0 0 40px rgba(220,38,38,0.3)' }}
+              >
+                Pillars
+              </motion.span>
+            </span>
+          </h2>
+          <p className="font-body text-base md:text-lg text-porcelain/50 max-w-xl mx-auto font-light">
             Every brand challenge requires a different approach. We've engineered three.
-          </motion.p>
+          </p>
         </motion.div>
 
         {/* Pick Your Speed Toggle */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: 20, scale: 0.95 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
           viewport={{ once: true }}
-          transition={{ delay: 0.35, duration: 0.5 }}
-          className="flex justify-center mb-12"
+          transition={{ delay: 0.3, duration: 0.5 }}
+          className="flex justify-center mb-14"
         >
           <div 
             className="inline-flex items-center gap-1 p-1.5 rounded-full"
             style={{
               background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%)',
               border: '1px solid rgba(255, 255, 255, 0.08)',
+              boxShadow: '0 4px 24px rgba(0,0,0,0.3)',
             }}
           >
             <span className="font-mono text-[10px] text-porcelain/40 tracking-wider uppercase px-3">
               Pick Your Speed:
             </span>
-            {toggleOptions.map((option) => (
+            {pillars.map((p) => (
               <button
-                key={option.id}
-                onClick={() => setActiveToggle(activeToggle === option.id ? null : option.id)}
+                key={p.id}
+                onClick={() => setActiveToggle(activeToggle === p.id ? null : p.id)}
                 className={`px-4 py-2 rounded-full font-body text-sm transition-all duration-300 ${
-                  activeToggle === option.id 
-                    ? 'bg-alchemy-red/25 text-porcelain border border-alchemy-red/50 shadow-[0_0_15px_rgba(220,38,38,0.2)]' 
+                  activeToggle === p.id 
+                    ? 'bg-alchemy-red/25 text-porcelain border border-alchemy-red/50 shadow-[0_0_20px_rgba(220,38,38,0.25)]' 
                     : 'text-porcelain/50 hover:text-porcelain'
                 }`}
               >
-                {option.label}
+                {p.subtitle}
               </button>
             ))}
           </div>
         </motion.div>
 
-        {/* Pillar Cards */}
-        <div className="grid md:grid-cols-3 gap-6 mb-16">
+        {/* Pillar Cards — 3D interactive */}
+        <div className="grid md:grid-cols-3 gap-8 mb-16">
           {pillars.map((pillar, i) => {
             const Icon = pillar.icon;
             const isHighlighted = activeToggle === pillar.id;
@@ -214,52 +206,86 @@ export const Solutions = memo(() => {
             return (
               <motion.div
                 key={pillar.id}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] }}
-                className={`transition-all duration-300 ${isDimmed ? 'opacity-50 scale-[0.98]' : ''}`}
+                transition={{ duration: 0.6, delay: i * 0.15, ease: [0.22, 1, 0.36, 1] }}
+                className={`transition-all duration-500 ${isDimmed ? 'opacity-40 scale-[0.96] blur-[1px]' : ''}`}
               >
-                <TiltCard>
+                <TiltCard accentColor={pillar.accentColor}>
                   <div
-                    className={`group glass-deep rounded-3xl p-8 md:p-10 h-full transition-all duration-500 relative overflow-hidden ${
-                      isHighlighted ? 'border-alchemy-red/40 shadow-[0_0_40px_rgba(220,38,38,0.15)]' : ''
+                    className={`group rounded-3xl p-8 md:p-10 h-full relative overflow-hidden transition-all duration-500 ${
+                      isHighlighted ? 'shadow-[0_0_60px_rgba(220,38,38,0.2)]' : ''
                     }`}
                     style={{ 
-                      transformStyle: 'preserve-3d',
+                      background: 'linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%)',
+                      border: isHighlighted 
+                        ? '1px solid rgba(220,38,38,0.4)' 
+                        : '1px solid rgba(255,255,255,0.07)',
+                      backdropFilter: 'blur(20px)',
                       transform: isHighlighted ? 'scale(1.02)' : undefined,
                     }}
                   >
-                    {/* Gradient background */}
-                    <motion.div 
-                      className={`absolute inset-0 bg-gradient-to-br ${pillar.gradient} transition-opacity duration-500 ${
-                        isHighlighted ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
-                      }`}
-                      style={{ transform: 'translateZ(-10px)' }}
+                    {/* Animated border glow on hover */}
+                    <div className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
+                      style={{
+                        background: `linear-gradient(145deg, ${pillar.glowColor} 0%, transparent 50%)`,
+                      }}
                     />
-                    {/* Inner glow on hover */}
-                    <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-alchemy-red/0 via-alchemy-red/[0.03] to-alchemy-red/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
-                    {/* Background number */}
-                    <span 
-                      className="absolute -top-6 -right-2 font-display text-[120px] text-porcelain/[0.02] leading-none pointer-events-none"
-                      style={{ transform: 'translateZ(-20px)' }}
+                    {/* Shimmer sweep */}
+                    <div className="absolute inset-0 rounded-3xl overflow-hidden pointer-events-none">
+                      <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out"
+                        style={{
+                          background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent)',
+                        }}
+                      />
+                    </div>
+
+                    {/* Specular top edge */}
+                    <div className="absolute inset-x-0 top-0 h-px pointer-events-none"
+                      style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.15) 50%, transparent)' }}
+                    />
+
+                    {/* Background number — large ghost */}
+                    <span className="absolute -top-4 -right-1 font-display text-[100px] leading-none pointer-events-none select-none"
+                      style={{ 
+                        background: 'linear-gradient(180deg, rgba(255,255,255,0.04) 0%, transparent 80%)',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent',
+                      }}
                     >
                       {pillar.number}
                     </span>
 
                     {/* Content */}
-                    <div className="relative z-10" style={{ transform: 'translateZ(20px)' }}>
-                      {/* Icon */}
-                      <div className="mb-5">
-                        <div className="w-12 h-12 rounded-xl glass-red flex items-center justify-center group-hover:shadow-[0_0_25px_rgba(220,38,38,0.25)] transition-shadow duration-500">
-                          <Icon className="w-5 h-5 text-alchemy-red" />
+                    <div className="relative z-10">
+                      {/* Icon with animated glow ring */}
+                      <div className="mb-6">
+                        <div className="relative w-14 h-14">
+                          <motion.div 
+                            className="absolute -inset-1 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                            style={{
+                              background: `conic-gradient(from 0deg, ${pillar.accentColor}, transparent, ${pillar.accentColor})`,
+                              filter: 'blur(4px)',
+                            }}
+                            animate={{ rotate: 360 }}
+                            transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
+                          />
+                          <div className="relative z-10 w-14 h-14 rounded-xl flex items-center justify-center transition-all duration-500 group-hover:shadow-lg"
+                            style={{
+                              background: 'linear-gradient(135deg, rgba(220,38,38,0.15) 0%, rgba(220,38,38,0.05) 100%)',
+                              border: '1px solid rgba(220,38,38,0.25)',
+                            }}
+                          >
+                            <Icon className="w-6 h-6 text-alchemy-red" />
+                          </div>
                         </div>
                       </div>
 
                       {/* Text */}
                       <div className="mb-5">
-                        <p className="font-mono text-[10px] text-alchemy-red/70 tracking-[0.15em] uppercase mb-2">
+                        <p className="font-mono text-[10px] text-alchemy-red/70 tracking-[0.2em] uppercase mb-2">
                           Pillar {pillar.number} · {pillar.subtitle}
                         </p>
                         <h3 className="font-display text-2xl italic text-porcelain mb-2 group-hover:text-alchemy-red transition-colors duration-300">
@@ -271,20 +297,19 @@ export const Solutions = memo(() => {
                         {pillar.description}
                       </p>
 
-                      {/* Trust line */}
                       <p className="font-mono text-[10px] text-porcelain/30 uppercase tracking-wider mb-4">
                         {pillar.trust}
                       </p>
 
                       {/* Deliverables */}
-                      <div className="mb-6 pt-4 border-t border-porcelain/5">
+                      <div className="mb-6 pt-4 border-t border-porcelain/[0.06]">
                         <p className="font-mono text-[9px] text-alchemy-red/60 uppercase tracking-wider mb-2">
                           Deliverables
                         </p>
                         <ul className="space-y-1.5">
                           {pillar.deliverables.map((item, j) => (
                             <li key={j} className="flex items-center gap-2 text-xs text-porcelain/50 font-light">
-                              <span className="w-1 h-1 rounded-full bg-alchemy-red/60" />
+                              <span className="w-1.5 h-1.5 rounded-full bg-alchemy-red/60" />
                               {item}
                             </li>
                           ))}
@@ -292,13 +317,13 @@ export const Solutions = memo(() => {
                       </div>
 
                       {/* CTA */}
-                      <button
-                        onClick={() => scrollToContact(pillar.id)}
-                        className="flex items-center gap-2 text-porcelain/60 group-hover:text-alchemy-red transition-colors duration-300"
+                      <Link
+                        to={pillar.route}
+                        className="inline-flex items-center gap-2 text-porcelain/60 group-hover:text-alchemy-red transition-colors duration-300"
                       >
                         <span className="font-body text-sm">Start this sprint</span>
-                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
-                      </button>
+                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform duration-300" />
+                      </Link>
                     </div>
                   </div>
                 </TiltCard>
@@ -309,10 +334,10 @@ export const Solutions = memo(() => {
 
         {/* Bottom CTA */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.4 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
           className="text-center"
         >
           <Link
