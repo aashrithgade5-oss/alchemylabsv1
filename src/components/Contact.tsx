@@ -129,6 +129,13 @@ export const Contact = memo(() => {
 
   return (
     <section id="contact" className="relative pt-24 md:pt-40 pb-20 md:pb-32 overflow-hidden">
+      {/* Background atmosphere */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] rounded-full blur-[180px] opacity-40"
+          style={{ background: 'radial-gradient(ellipse, rgba(220,38,38,0.08), transparent 70%)' }} />
+        <div className="absolute bottom-0 right-0 w-[500px] h-[500px] rounded-full blur-[150px] opacity-30"
+          style={{ background: 'radial-gradient(ellipse, rgba(220,38,38,0.06), transparent 70%)' }} />
+      </div>
       <div className="relative z-10 max-w-6xl mx-auto px-6 md:px-12">
         <div className="grid lg:grid-cols-5 gap-12 lg:gap-16">
           
