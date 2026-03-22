@@ -136,6 +136,7 @@ export const Contact = memo(() => {
         <div className="absolute bottom-0 right-0 w-[500px] h-[500px] rounded-full blur-[150px] opacity-30"
           style={{ background: 'radial-gradient(ellipse, rgba(220,38,38,0.06), transparent 70%)' }} />
       </div>
+      <div className="relative z-10 max-w-6xl mx-auto px-6 md:px-12">
         <div className="grid lg:grid-cols-5 gap-12 lg:gap-16">
           
           {/* Left Column - Info & Socials */}
