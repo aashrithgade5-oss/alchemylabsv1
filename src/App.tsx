@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef, lazy, Suspense, memo } from "react";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
@@ -144,6 +145,7 @@ const App = () => (
         </BrowserRouter>
       </PerformanceProvider>
     </TooltipProvider>
+    <SpeedInsights />
   </QueryClientProvider>
 );
 
