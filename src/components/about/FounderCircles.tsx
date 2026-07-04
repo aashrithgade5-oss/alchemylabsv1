@@ -1,11 +1,12 @@
+'use client';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { memo, useState, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 
-import founderAashrith from '@/assets/founder-aashrith-silhouette.png';
-import founderEva from '@/assets/founder-eva-silhouette.png';
+const founderAashrith = '/assets/founder-aashrith-silhouette.png';
+const founderEva = '/assets/founder-eva-silhouette.png';
 
 const CINEMATIC_EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -171,7 +172,7 @@ const FounderPanel = memo(({ founder, index }: { founder: typeof founders[0]; in
           </p>
 
           <Link
-            to={founder.slug}
+            href={founder.slug}
             className="inline-flex items-center gap-2.5 px-7 py-3 rounded-full text-xs sm:text-sm font-body font-medium transition-all duration-300 group/btn no-glow"
             style={{
               background: (founder as any).isPink ? 'rgba(236,72,153,0.15)' : 'rgba(220,38,38,0.15)',

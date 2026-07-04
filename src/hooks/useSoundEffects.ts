@@ -1,3 +1,5 @@
+'use client';
+
 import { useCallback, useRef } from 'react';
 
 // Sound effects disabled for a cleaner, more premium experience

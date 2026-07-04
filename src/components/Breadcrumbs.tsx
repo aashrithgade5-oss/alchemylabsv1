@@ -1,5 +1,7 @@
+'use client';
 import { memo } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { ChevronRight, Home } from 'lucide-react';
 
 interface BreadcrumbItem {
@@ -26,11 +28,11 @@ const routeLabels: Record<string, string> = {
 };
 
 export const Breadcrumbs = memo(({ items, className = '' }: BreadcrumbsProps) => {
-  const location = useLocation();
-  
+  const pathname = usePathname();
+
   // Auto-generate breadcrumbs from path if items not provided
   const breadcrumbs: BreadcrumbItem[] = items || (() => {
-    const pathParts = location.pathname.split('/').filter(Boolean);
+    const pathParts = pathname.split('/').filter(Boolean);
     const crumbs: BreadcrumbItem[] = [];
     
     pathParts.forEach((part, index) => {
@@ -53,8 +55,8 @@ export const Breadcrumbs = memo(({ items, className = '' }: BreadcrumbsProps) =>
       aria-label="Breadcrumb"
       className={`flex items-center gap-2 font-mono text-xs ${className}`}
     >
-      <Link 
-        to="/" 
+      <Link
+        href="/"
         className="text-porcelain/40 hover:text-alchemy-red transition-colors"
         aria-label="Home"
       >
@@ -65,8 +67,8 @@ export const Breadcrumbs = memo(({ items, className = '' }: BreadcrumbsProps) =>
         <div key={index} className="flex items-center gap-2">
           <ChevronRight className="w-3 h-3 text-porcelain/20" />
           {crumb.href ? (
-            <Link 
-              to={crumb.href}
+            <Link
+              href={crumb.href}
               className="text-porcelain/40 hover:text-alchemy-red transition-colors tracking-label uppercase"
             >
               {crumb.label}

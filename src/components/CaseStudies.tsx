@@ -1,7 +1,9 @@
+'use client';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUpRight, ArrowRight, X, Check, Sparkles, Layers, Target, Palette, Mountain, Grid3X3 } from 'lucide-react';
-import { useNavigate, Link } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { projects, Project } from '@/data/projects';
 import { ScrollReveal } from '@/components/ScrollReveal';
 import { SpotlightContainer, SpotlightItem } from '@/components/SpotlightGrid';
@@ -40,7 +42,7 @@ const proofLabels: Record<string, string> = {
 export const CaseStudies = () => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [activeFilter, setActiveFilter] = useState('All');
-  const navigate = useNavigate();
+  const router = useRouter();
 
   // Filter projects based on active filter
   const filteredProjects = activeFilter === 'All' 
@@ -252,7 +254,7 @@ export const CaseStudies = () => {
             </h3>
             <div className="flex flex-wrap justify-center gap-4">
               <Link
-                to="/book-sprint"
+                href="/book-sprint"
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-body text-sm transition-all duration-300"
                 style={{
                   background: 'linear-gradient(135deg, rgba(220, 38, 38, 0.2) 0%, rgba(220, 38, 38, 0.08) 100%)',
@@ -263,7 +265,7 @@ export const CaseStudies = () => {
                 <ArrowRight className="w-4 h-4 text-porcelain" />
               </Link>
               <button
-                onClick={() => navigate('/work')}
+                onClick={() => router.push('/work')}
                 className="inline-flex items-center gap-2 px-6 py-3 font-body text-sm text-porcelain/50 hover:text-porcelain transition-colors"
               >
                 <span>View All Works</span>
@@ -364,7 +366,7 @@ export const CaseStudies = () => {
                 {/* CTA */}
                 {!selectedProject.isConceptual && (
                   <Link
-                    to={`/solutions/${selectedProject.id === 'branding-solutions' ? 'branding' : selectedProject.id === 'consultation-sessions' ? 'consultation' : 'ai'}`}
+                    href={`/solutions/${selectedProject.id === 'branding-solutions' ? 'branding' : selectedProject.id === 'consultation-sessions' ? 'consultation' : 'ai'}`}
                     className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-body text-sm transition-all duration-300 hover:gap-3"
                     style={{
                       background: 'linear-gradient(135deg, rgba(220, 38, 38, 0.2) 0%, rgba(220, 38, 38, 0.08) 100%)',

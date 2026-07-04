@@ -1,7 +1,8 @@
+'use client';
 import { useRef, useEffect } from 'react';
 import { motion, useScroll, useTransform, useSpring, useInView } from 'framer-motion';
 import { ArrowUpRight, Sparkles, Palette, Target, Layers, Mountain, Grid3X3 } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { projects } from '@/data/projects';
 import { ShimmerImage, ShimmerVideo } from './ShimmerImage';
 
@@ -20,7 +21,7 @@ interface HorizontalScrollProps {
 
 export const HorizontalScroll = ({ onProjectSelect }: HorizontalScrollProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const navigate = useNavigate();
+  const router = useRouter();
   const isInView = useInView(containerRef, { once: false, margin: '-100px' });
   
   const { scrollYProgress } = useScroll({
@@ -233,7 +234,7 @@ export const HorizontalScroll = ({ onProjectSelect }: HorizontalScrollProps) => 
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: false }}
-            onClick={() => navigate('/work')}
+            onClick={() => router.push('/work')}
             style={{
               background: 'linear-gradient(135deg, rgba(225, 6, 19, 0.08) 0%, rgba(225, 6, 19, 0.02) 100%)',
               backdropFilter: 'blur(20px)',

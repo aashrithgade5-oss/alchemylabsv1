@@ -1,7 +1,8 @@
+'use client';
 import { useState, useCallback, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send, Calendar, MessageCircle, Instagram, Mail, Loader2, Check, Home, Linkedin, Youtube, Copy } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { TurnstileWidget } from './TurnstileWidget';
@@ -521,7 +522,7 @@ export const Contact = memo(() => {
 
                     <div className="flex flex-wrap justify-center gap-3 mt-2">
                       <Link
-                        to="/"
+                        href="/"
                         className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-body text-sm text-porcelain/60 hover:text-porcelain transition-colors"
                         style={{
                           background: 'rgba(255, 255, 255, 0.04)',

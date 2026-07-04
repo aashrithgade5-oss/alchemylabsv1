@@ -1,8 +1,9 @@
+'use client';
 import { memo } from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
+import Image from 'next/image';
 import { ExternalLink } from 'lucide-react';
-import footerBg from '@/assets/footer-bg.png';
 
 interface PortfolioFooterProps {
   isDark: boolean;
@@ -31,7 +32,7 @@ export const PortfolioFooter = memo(({
     <footer className={`relative overflow-hidden ${t(isDark, 'bg-alchemy-black', 'bg-neutral-950')}`}>
       {/* Background */}
       <div className="absolute inset-0 z-0">
-        <img src={footerBg} alt="" className="absolute inset-0 w-full h-full object-cover opacity-60 scale-110" style={{ filter: 'blur(8px) saturate(1.2)' }} />
+        <Image src="/assets/footer-bg.png" alt="" fill className="object-cover opacity-60 scale-110" style={{ filter: 'blur(8px) saturate(1.2)' }} />
         <div className="absolute inset-0 bg-gradient-to-t from-alchemy-black via-alchemy-black/70 to-transparent" />
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[120%] h-[60%] bg-gradient-radial from-alchemy-red/15 via-transparent to-transparent opacity-60" />
         <div className="absolute inset-0 bg-gradient-to-b from-alchemy-black via-transparent to-transparent h-32" />
@@ -113,13 +114,13 @@ export const PortfolioFooter = memo(({
             © <span className="text-glow-red">2026</span> {copyright}. All rights reserved.
           </p>
           <div className="flex gap-6 sm:gap-8">
-            <Link to="/about" className="font-body text-xs sm:text-sm text-porcelain/50 hover:text-porcelain transition-colors">
+            <Link href="/about" className="font-body text-xs sm:text-sm text-porcelain/50 hover:text-porcelain transition-colors">
               Alchemy Labs
             </Link>
-            <Link to="/privacy" className="font-body text-xs sm:text-sm text-porcelain/50 hover:text-porcelain transition-colors">
+            <Link href="/privacy" className="font-body text-xs sm:text-sm text-porcelain/50 hover:text-porcelain transition-colors">
               Privacy
             </Link>
-            <Link to="/terms" className="font-body text-xs sm:text-sm text-porcelain/50 hover:text-porcelain transition-colors">
+            <Link href="/terms" className="font-body text-xs sm:text-sm text-porcelain/50 hover:text-porcelain transition-colors">
               Terms
             </Link>
           </div>

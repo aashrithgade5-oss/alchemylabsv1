@@ -1,3 +1,5 @@
+'use client';
+
 import { createContext, useContext, useState, useEffect, useCallback, memo, type ReactNode } from 'react';
 import { profileDevice, classifyTier, type PerformanceTier } from '@/hooks/useDevicePerformance';
 

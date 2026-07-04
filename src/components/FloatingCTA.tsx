@@ -1,6 +1,7 @@
+'use client';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { useEffect, useState, memo } from 'react';
 
 export const FloatingCTA = memo(() => {
@@ -33,7 +34,7 @@ export const FloatingCTA = memo(() => {
           className="fixed bottom-6 right-6 z-40 hidden md:block"
         >
           <Link
-            to="/book-sprint"
+            href="/book-sprint"
             className="group flex flex-col items-end gap-1 px-5 py-3 rounded-full transition-all duration-300"
             style={{
               background: 'linear-gradient(135deg, rgba(220, 38, 38, 0.2) 0%, rgba(220, 38, 38, 0.08) 100%)',

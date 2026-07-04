@@ -1,6 +1,7 @@
+'use client';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowRight, Phone, Map, Zap, Rocket } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { useState, memo, useRef } from 'react';
 import { DynamicGlowBg } from './DynamicGlowBg';
 
@@ -188,7 +189,7 @@ export const ProcessSection = memo(() => {
           className="text-center"
         >
           <Link
-            to="/book-sprint"
+            href="/book-sprint"
             className="inline-flex items-center gap-3 glass-cta-primary group relative overflow-hidden"
           >
             <span className="relative z-10 font-body font-medium text-sm">Book a Sprint</span>

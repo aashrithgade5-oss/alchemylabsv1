@@ -1,3 +1,5 @@
+'use client';
+
 import { memo, useState, useEffect, ReactNode } from 'react';
 import { motion } from 'framer-motion';
 import { cn, getIsMobile } from '@/lib/utils';

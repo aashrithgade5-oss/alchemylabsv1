@@ -1,7 +1,10 @@
+'use client';
+
 import { memo } from 'react';
 import { motion } from 'framer-motion';
-import glowBg1 from '@/assets/glow-background-1.png';
-import glowBg2 from '@/assets/glow-background-2.png';
+
+const glowBg1 = '/assets/glow-background-1.png';
+const glowBg2 = '/assets/glow-background-2.png';
 
 type GlowVariant = 'red-energy' | 'soft-ambient' | 'subtle' | 'hero';
 

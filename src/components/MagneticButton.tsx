@@ -1,3 +1,5 @@
+'use client';
+
 import { useRef, useState, ReactNode, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { useSoundEffects } from '@/hooks/useSoundEffects';

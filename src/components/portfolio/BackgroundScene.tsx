@@ -1,3 +1,5 @@
+'use client';
+
 import { memo, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getIsMobile } from '@/lib/utils';

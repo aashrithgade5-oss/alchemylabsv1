@@ -1,17 +1,19 @@
+'use client';
 import { memo, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePerformance } from '@/contexts/PerformanceContext';
 import { Cookie, Shield } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 const EASE_CINEMATIC = [0.22, 1, 0.36, 1] as const;
 
 export const CookieConsent = memo(() => {
   const { hasConsented, acceptCookies } = usePerformance();
-  const location = useLocation();
+  const pathname = usePathname();
   const [visible, setVisible] = useState(false);
 
-  const isHomepage = location.pathname === '/';
+  const isHomepage = pathname === '/';
 
   useEffect(() => {
     if (hasConsented || !isHomepage) return;
@@ -56,7 +58,7 @@ export const CookieConsent = memo(() => {
               <div className="flex-1 min-w-0">
                 <p className="text-sm text-white/70 leading-relaxed">
                   We use cookies to optimize your experience.{' '}
-                  <Link to="/privacy" className="inline-flex items-center gap-1 text-white/40 hover:text-white/60 transition-colors">
+                  <Link href="/privacy" className="inline-flex items-center gap-1 text-white/40 hover:text-white/60 transition-colors">
                     <Shield className="w-3 h-3" />
                     Privacy
                   </Link>

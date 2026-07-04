@@ -19,6 +19,10 @@
 
 /* Alchemy Labs Design System - Luxury AI Agency */
 
+html {
+  scroll-behavior: smooth;
+}
+
 @layer base {
   :root {
     /* Core Alchemy Palette */

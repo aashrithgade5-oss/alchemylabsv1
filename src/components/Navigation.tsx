@@ -1,9 +1,11 @@
+'use client';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ArrowRight } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
-import alchemyLogo from '@/assets/alchemy-minimal-logo.png';
+import Link from 'next/link';
+import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import { socialLinks } from './Footer';
 
 const navItems = [
@@ -121,7 +123,7 @@ const MobileMenu = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
       {navItems.map((item) => (
         <motion.div key={item.label} variants={menuItemVariants}>
           <Link
-            to={item.href}
+            href={item.href}
             onClick={onClose}
             style={{
               color: '#FFFFFF',
@@ -147,7 +149,7 @@ const MobileMenu = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
       {/* CTA */}
       <motion.div variants={menuItemVariants}>
         <Link
-          to="/contact"
+          href="/contact"
           onClick={onClose}
           style={{
             marginTop: '20px',
@@ -223,7 +225,7 @@ const NavLink = ({ item, isActive }: { item: { label: string; href: string }; is
 
   return (
     <Link
-      to={item.href}
+      href={item.href}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className="relative px-4 py-2 no-glow group"
@@ -271,11 +273,11 @@ export const Navigation = () => {
   const [logoHovered, setLogoHovered] = useState(false);
   const [blurIntensity, setBlurIntensity] = useState(16);
   const [glowIntensity, setGlowIntensity] = useState(0);
-  const location = useLocation();
+  const pathname = usePathname();
 
   useEffect(() => {
     setIsMobileMenuOpen(false);
-  }, [location.pathname]);
+  }, [pathname]);
 
   const lastScrollYRef = useRef(0);
   useEffect(() => {
@@ -315,9 +317,9 @@ export const Navigation = () => {
   }, [isMobileMenuOpen]);
 
   const checkIsActive = useCallback((href: string) => {
-    if (href === '/') return location.pathname === '/';
-    return location.pathname.startsWith(href);
-  }, [location.pathname]);
+    if (href === '/') return pathname === '/';
+    return pathname.startsWith(href);
+  }, [pathname]);
 
   return (
     <>
@@ -351,7 +353,7 @@ export const Navigation = () => {
           )}
 
           <div className="flex items-center justify-between">
-            <Link to="/" className="flex items-center gap-2.5 group flex-shrink-0 no-glow" onClick={() => setIsMobileMenuOpen(false)}>
+            <Link href="/" className="flex items-center gap-2.5 group flex-shrink-0 no-glow" onClick={() => setIsMobileMenuOpen(false)}>
               <motion.div
                 className="w-10 h-10 md:w-11 md:h-11 rounded-lg overflow-hidden relative bg-transparent flex items-center justify-center"
                 whileHover={{ scale: 1.05, rotate: 3 }}
@@ -359,12 +361,14 @@ export const Navigation = () => {
                 onHoverStart={() => setLogoHovered(true)}
                 onHoverEnd={() => setLogoHovered(false)}
               >
-                <img 
-                  src={alchemyLogo} 
-                  alt="Alchemy Labs" 
+                <Image
+                  src="/assets/alchemy-minimal-logo.png"
+                  alt="Alchemy Labs"
+                  width={44}
+                  height={44}
                   className="w-[130%] h-[130%] object-contain transition-[filter] duration-200"
-                  style={logoHovered ? { 
-                    filter: 'drop-shadow(2px 0 0 rgba(220,38,38,0.5)) drop-shadow(-2px 0 0 rgba(100,180,255,0.3))' 
+                  style={logoHovered ? {
+                    filter: 'drop-shadow(2px 0 0 rgba(220,38,38,0.5)) drop-shadow(-2px 0 0 rgba(100,180,255,0.3))'
                   } : { filter: 'none' }}
                 />
               </motion.div>
@@ -383,7 +387,7 @@ export const Navigation = () => {
             </ul>
 
             <Link
-              to="/contact"
+              href="/contact"
               onMouseEnter={() => setCtaHovered(true)}
               onMouseLeave={() => setCtaHovered(false)}
               className={`hidden md:flex items-center gap-2 text-sm font-medium px-5 py-2 rounded-full transition-all duration-300 no-glow relative overflow-hidden ${

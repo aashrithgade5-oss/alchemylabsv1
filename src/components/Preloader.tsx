@@ -1,6 +1,9 @@
+'use client';
+
 import { useState, useEffect, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import alchemyLogo from '@/assets/alchemy-minimal-logo.png';
+
+const alchemyLogo = '/assets/alchemy-minimal-logo.png';
 
 export const Preloader = memo(() => {
   const [isLoading, setIsLoading] = useState(true);

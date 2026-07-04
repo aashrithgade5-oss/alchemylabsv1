@@ -1,16 +1,16 @@
-import caseStudy1 from '@/assets/case-study-1.jpg';
-import caseStudy2 from '@/assets/case-study-2.jpg';
-import caseStudy3 from '@/assets/case-study-3.jpg';
-import aiMediaGen1 from '@/assets/ai-media-gen-1.mov';
-import aiMediaGen2 from '@/assets/ai-media-gen-2.mov';
-import aetherRitualsPreview from '@/assets/aether-rituals-preview.mp4';
-import aetherRituals1 from '@/assets/aether-rituals-1.png';
-import aetherRituals2 from '@/assets/aether-rituals-2.png';
-import aetherRituals3 from '@/assets/aether-rituals-3.png';
-import aetherRituals4 from '@/assets/aether-rituals-4.png';
-import aetherRituals5 from '@/assets/aether-rituals-5.png';
-import genesisBento from '@/assets/genesis-bento.png';
-import oakleyBento from '@/assets/oakley-bento.png';
+const caseStudy1 = '/assets/case-study-1.jpg';
+const caseStudy2 = '/assets/case-study-2.jpg';
+const caseStudy3 = '/assets/case-study-3.jpg';
+const aiMediaGen1 = '/assets/ai-media-gen-1.mov';
+const aiMediaGen2 = '/assets/ai-media-gen-2.mov';
+const aetherRitualsPreview = '/assets/aether-rituals-preview.mp4';
+const aetherRituals1 = '/assets/aether-rituals-1.png';
+const aetherRituals2 = '/assets/aether-rituals-2.png';
+const aetherRituals3 = '/assets/aether-rituals-3.png';
+const aetherRituals4 = '/assets/aether-rituals-4.png';
+const aetherRituals5 = '/assets/aether-rituals-5.png';
+const genesisBento = '/assets/genesis-bento.png';
+const oakleyBento = '/assets/oakley-bento.png';
 
 export type FilterTag = 'client' | 'conceptual' | 'ai-gen' | 'branding';
 

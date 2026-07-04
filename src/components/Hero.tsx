@@ -1,7 +1,8 @@
+'use client';
 import { motion, useInView, useScroll, useTransform, animate } from 'framer-motion';
 import { ArrowRight, ArrowUpRight, Sparkles, Layers, Target } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import heroVideo from '@/assets/hero-video.mp4';
+import Link from 'next/link';
+const heroVideo = '/assets/hero-video.mp4';
 import { MagneticButton } from './MagneticButton';
 import { useRef, useState, useEffect, memo, lazy, Suspense } from 'react';
 
@@ -291,7 +292,7 @@ export const Hero = memo(() => {
             transition={{ duration: 0.5, delay: 1.15, ease: easeOut }}
             className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-5 mb-6"
           >
-            <Link to="/book-sprint">
+            <Link href="/book-sprint">
               <MagneticButton className="glass-cta-primary group relative overflow-hidden">
                 <span className="relative z-10 font-body font-medium text-sm sm:text-base tracking-wide">Start Your Project</span>
                 <ArrowRight className="relative z-10 w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />

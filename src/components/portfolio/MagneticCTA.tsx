@@ -1,3 +1,5 @@
+'use client';
+
 import { memo, useRef, useState, ReactNode } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';

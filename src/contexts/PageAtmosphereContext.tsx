@@ -1,5 +1,6 @@
+'use client';
 import React, { createContext, useContext, useEffect, useState, ReactNode, useMemo, memo } from 'react';
-import { useLocation } from 'react-router-dom';
+import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
 
 interface AtmosphereConfig {
@@ -65,14 +66,14 @@ interface PageAtmosphereProviderProps {
 }
 
 export const PageAtmosphereProvider = ({ children }: PageAtmosphereProviderProps) => {
-  const location = useLocation();
+  const pathname = usePathname();
   const [hasVisitedContact, setHasVisitedContact] = useState(false);
 
   // Memoize atmosphere config
   const atmosphere = useMemo(() => {
-    const basePath = '/' + location.pathname.split('/')[1];
-    return atmosphereConfigs[location.pathname] || atmosphereConfigs[basePath] || defaultAtmosphere;
-  }, [location.pathname]);
+    const basePath = '/' + pathname.split('/')[1];
+    return atmosphereConfigs[pathname] || atmosphereConfigs[basePath] || defaultAtmosphere;
+  }, [pathname]);
 
   // Check session storage for contact visit
   useEffect(() => {
@@ -82,11 +83,11 @@ export const PageAtmosphereProvider = ({ children }: PageAtmosphereProviderProps
 
   // Track contact page visits
   useEffect(() => {
-    if (location.pathname === '/contact') {
+    if (pathname === '/contact') {
       sessionStorage.setItem('hasVisitedContact', 'true');
       setHasVisitedContact(true);
     }
-  }, [location.pathname]);
+  }, [pathname]);
 
   const contextValue = useMemo(() => ({
     atmosphere,

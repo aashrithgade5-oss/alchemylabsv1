@@ -1,7 +1,8 @@
+'use client';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef, memo } from 'react';
 import { ArrowRight, Check, MessageCircle } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 const principles = [
   {
@@ -197,7 +198,7 @@ export const Manifesto = memo(() => {
             </ul>
             
             <Link
-              to="/book-sprint"
+              href="/book-sprint"
               className="inline-flex items-center gap-2 text-sm text-alchemy-red hover:text-porcelain transition-colors font-body group"
             >
               <span>Book your free call</span>

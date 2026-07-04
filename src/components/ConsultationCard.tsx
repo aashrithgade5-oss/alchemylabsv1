@@ -1,7 +1,8 @@
+'use client';
 import { motion } from 'framer-motion';
 import { ArrowRight, Check } from 'lucide-react';
 import { ConsultationService } from '@/data/services';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 interface ConsultationCardProps {
   service: ConsultationService;
@@ -81,7 +82,7 @@ export const ConsultationCard = ({ service, index }: ConsultationCardProps) => {
         {/* CTA */}
         <div className="mt-auto">
           <Link
-            to={`/services/${service.slug}`}
+            href={`/services/${service.slug}`}
             className="inline-flex items-center gap-2 glass-cta-primary w-full justify-center py-3"
           >
             <span className="font-body text-sm">Book {service.duration.split(' ')[0]} Session</span>

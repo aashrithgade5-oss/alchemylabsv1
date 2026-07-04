@@ -1,6 +1,7 @@
+'use client';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { ArrowRight, Sparkles, Layers, Target } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { useRef, useState, memo } from 'react';
 
 const pillars = [
@@ -318,7 +319,7 @@ export const Solutions = memo(() => {
 
                       {/* CTA */}
                       <Link
-                        to={pillar.route}
+                        href={pillar.route}
                         className="inline-flex items-center gap-2 text-porcelain/60 group-hover:text-alchemy-red transition-colors duration-300"
                       >
                         <span className="font-body text-sm">Start this sprint</span>
@@ -341,7 +342,7 @@ export const Solutions = memo(() => {
           className="text-center"
         >
           <Link
-            to="/book-sprint"
+            href="/book-sprint"
             className="inline-flex items-center gap-3 glass-cta-primary group relative overflow-hidden"
           >
             <span className="relative z-10 font-body">Book a Free 15-Min Consult</span>

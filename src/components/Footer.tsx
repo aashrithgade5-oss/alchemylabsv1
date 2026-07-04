@@ -1,10 +1,10 @@
+'use client';
 import { forwardRef } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import alchemyLogo from '@/assets/alchemy-minimal-logo.png';
-import footerBg from '@/assets/footer-bg.png';
+import Link from 'next/link';
+import Image from 'next/image';
 
 const footerLinks = {
   company: [
@@ -52,10 +52,11 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
       {/* Dynamic Aesthetic Background */}
       <div className="absolute inset-0 z-0">
         {/* Main background image with enhanced visibility */}
-        <img 
-          src={footerBg} 
-          alt="" 
-          className="absolute inset-0 w-full h-full object-cover opacity-60 scale-110"
+        <Image
+          src="/assets/footer-bg.png"
+          alt=""
+          fill
+          className="object-cover opacity-60 scale-110"
           style={{ filter: 'blur(8px) saturate(1.2)' }}
         />
         {/* Gradient overlay from bottom for depth */}
@@ -76,10 +77,12 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
           viewport={{ once: true }}
           className="mb-12 sm:mb-16"
         >
-          <Link to="/" className="inline-flex items-center gap-4">
-            <img 
-              src={alchemyLogo} 
-              alt="Alchemy Labs" 
+          <Link href="/" className="inline-flex items-center gap-4">
+            <Image
+              src="/assets/alchemy-minimal-logo.png"
+              alt="Alchemy Labs"
+              width={48}
+              height={48}
               className="w-10 h-10 sm:w-12 sm:h-12 object-contain"
             />
             <div className="flex items-baseline gap-1.5">
@@ -109,7 +112,7 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
               {footerLinks.company.map((link) => (
                 <li key={link.label}>
                   <Link
-                    to={link.href}
+                    href={link.href}
                     className="font-body text-sm text-porcelain/70 hover:text-porcelain transition-colors duration-300"
                   >
                     {link.label}
@@ -133,7 +136,7 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
               {footerLinks.services.map((link) => (
                 <li key={link.label}>
                   <Link
-                    to={link.href}
+                    href={link.href}
                     className="font-body text-sm text-porcelain/70 hover:text-porcelain transition-colors duration-300"
                   >
                     {link.label}
@@ -251,19 +254,19 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
             </p>
             <div className="flex gap-6 sm:gap-8">
               <Link
-                to="/privacy"
+                href="/privacy"
                 className="font-body text-xs sm:text-sm text-porcelain/50 hover:text-porcelain transition-colors"
               >
                 Privacy
               </Link>
               <Link
-                to="/terms"
+                href="/terms"
                 className="font-body text-xs sm:text-sm text-porcelain/50 hover:text-porcelain transition-colors"
               >
                 Terms
               </Link>
               <Link
-                to="/admin/auth"
+                href="/admin/auth"
                 className="font-body text-xs sm:text-sm text-porcelain/50 hover:text-porcelain transition-colors"
               >
                 Admin

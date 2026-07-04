@@ -1,3 +1,5 @@
+'use client';
+
 import { memo } from 'react';
 import { ScrollReveal } from '@/components/ScrollReveal';
 import { MagneticCTA } from '@/components/portfolio/MagneticCTA';

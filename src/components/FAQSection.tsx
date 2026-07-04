@@ -1,3 +1,5 @@
+'use client';
+
 import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from 'framer-motion';
 import { useState, useRef, useEffect, memo } from 'react';
 import { ChevronRight, MessageCircle } from 'lucide-react';

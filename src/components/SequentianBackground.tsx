@@ -1,13 +1,15 @@
+'use client';
+
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef, memo } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { usePerformance } from '@/contexts/PerformanceContext';
 
-import sequentian1 from '@/assets/sequentian-1.png';
-import sequentian2 from '@/assets/sequentian-2.png';
-import sequentian3 from '@/assets/sequentian-3.png';
-import sequentian4 from '@/assets/sequentian-4.png';
-import sequentian5 from '@/assets/sequentian-5.png';
+const sequentian1 = '/assets/sequentian-1.png';
+const sequentian2 = '/assets/sequentian-2.png';
+const sequentian3 = '/assets/sequentian-3.png';
+const sequentian4 = '/assets/sequentian-4.png';
+const sequentian5 = '/assets/sequentian-5.png';
 
 const variantMap: Record<1 | 2 | 3 | 4 | 5, string> = {
   1: sequentian1,

@@ -1,5 +1,6 @@
+'use client';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { useLocation } from 'react-router-dom';
+import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 interface Section {
@@ -42,15 +43,15 @@ const routeSections: Record<string, Section[]> = {
 };
 
 export const PageScrollTracker = () => {
-  const location = useLocation();
+  const pathname = usePathname();
   const { scrollYProgress } = useScroll();
   const [activeSection, setActiveSection] = useState(0);
-  
-  const basePath = '/' + (location.pathname.split('/')[1] || '');
+
+  const basePath = '/' + (pathname.split('/')[1] || '');
   const sections = routeSections[basePath] || routeSections['/'];
 
   // Don't render on homepage - Manifesto has its own sticky indicator
-  const isHomePage = location.pathname === '/';
+  const isHomePage = pathname === '/';
 
   // Track which section is active
   useEffect(() => {

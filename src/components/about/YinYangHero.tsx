@@ -1,9 +1,11 @@
+'use client';
+
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { memo, lazy, Suspense, useState, useRef } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { BlueprintGrid, NoiseTexture } from '@/components/effects';
 import { useIsMobile } from '@/hooks/use-mobile';
-import aboutHeroVideo from '@/assets/about-hero-video.mp4';
+const aboutHeroVideo = '/assets/about-hero-video.mp4';
 
 const LazyNeuralBackground = lazy(() =>
   import('@/components/NeuralBackground').then((m) => ({ default: m.NeuralBackground }))

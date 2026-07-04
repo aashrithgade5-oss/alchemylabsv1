@@ -1,3 +1,5 @@
+'use client';
+
 import { memo, useEffect, useCallback, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { X, ArrowRight, Clock, Wrench } from 'lucide-react';

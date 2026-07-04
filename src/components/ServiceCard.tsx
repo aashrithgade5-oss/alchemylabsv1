@@ -1,7 +1,8 @@
+'use client';
 import { motion } from 'framer-motion';
 import { ArrowRight, Check } from 'lucide-react';
 import { Service } from '@/data/services';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { useState } from 'react';
 
 interface ServiceCardProps {
@@ -108,8 +109,8 @@ export const ServiceCard = ({ service, index }: ServiceCardProps) => {
           <span className="font-mono text-xs text-alchemy-red">
             {service.meta}
           </span>
-          <Link 
-            to={`/services/${service.slug}`}
+          <Link
+            href={`/services/${service.slug}`}
             className="inline-flex items-center gap-1 text-sm text-porcelain/50 hover:text-alchemy-red transition-colors group/link"
           >
             <span className="font-body">Explore</span>
