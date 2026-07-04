@@ -216,7 +216,7 @@ export const CaseStudies = () => {
                         <p className={`font-body text-porcelain/60 font-light line-clamp-2 mb-3 ${
                           i === 0 ? 'text-sm' : 'text-xs'
                         }`}>
-                          {project.services?.slice(0, 3).join(' · ') || project.category}
+                          {project.services?.slice(0, 3).map(s => s.title).join(' · ') || project.category}
                         </p>
                         <div className="inline-flex items-center gap-2 text-alchemy-red font-body text-sm">
                           <span>Explore</span>
