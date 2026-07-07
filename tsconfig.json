@@ -38,6 +38,7 @@
   "exclude": [
     "node_modules",
     "supabase",
-    "vitest.config.ts"
+    "vitest.config.ts",
+    "vite.config.ts"
   ]
 }
