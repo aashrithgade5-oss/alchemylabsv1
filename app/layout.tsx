@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import { Providers } from '@/components/Providers';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
-import { CustomCursor } from '@/components/CustomCursor';
 import { Preloader } from '@/components/Preloader';
 import { ScrollProgress } from '@/components/ScrollProgress';
 import { FloatingCTA } from '@/components/FloatingCTA';
@@ -43,7 +42,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <Providers>
           <Preloader />
-          <CustomCursor />
           <ScrollProgress />
           <Navigation />
           <FloatingCTA />
