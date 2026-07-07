@@ -2,6 +2,7 @@
 
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef, memo } from 'react';
+import Image from 'next/image';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { usePerformance } from '@/contexts/PerformanceContext';
 
@@ -71,22 +72,25 @@ export const SequentianBackground = memo(({
         />
       )}
 
-      <motion.img
-        src={variantMap[variant]}
-        alt=""
-        loading="lazy"
-        decoding="async"
-        draggable={false}
+      <motion.div
+        className="absolute -inset-4 origin-center"
         style={{
           scale: effectiveParallax && !isMobile ? scale : 1,
           willChange: effectiveParallax && !isMobile ? 'transform' : 'auto',
           filter: effectiveBlur > 0 ? `blur(${effectiveBlur}px)` : undefined,
         }}
-        className="absolute -inset-4 w-[calc(100%+2rem)] h-[calc(100%+2rem)] object-cover origin-center"
         initial={{ opacity: 0 }}
         animate={{ opacity: adjustedOpacity }}
         transition={{ duration: 1.2 }}
-      />
+      >
+        <Image
+          src={variantMap[variant]}
+          alt=""
+          fill
+          draggable={false}
+          className="object-cover object-center"
+        />
+      </motion.div>
 
       {/* Soft top fade — short for minimal dimming */}
       <div className="absolute top-0 inset-x-0 h-16 bg-gradient-to-b from-background/80 to-transparent" />
