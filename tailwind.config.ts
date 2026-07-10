@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import defaultColors from "tailwindcss/colors";
 
 export default {
   darkMode: ["class"],
@@ -14,6 +15,20 @@ export default {
     },
     extend: {
       colors: {
+        // The Furnace — overhaul palette (new routes only)
+        void: "var(--void)",
+        carbon: "var(--carbon)",
+        "carbon-2": "var(--carbon-2)",
+        ember: "var(--ember)",
+        "ember-deep": "var(--ember-deep)",
+        // `amber` keeps the default Tailwind scale (AdminDashboard uses
+        // amber-400/500); bare `amber` resolves to the Furnace token.
+        amber: { ...defaultColors.amber, DEFAULT: "var(--amber)" },
+        halo: "var(--halo)",
+        bone: "var(--bone)",
+        ash: "var(--ash)",
+        line: "var(--line)",
+
         // Core Alchemy Palette
         "alchemy-black": "hsl(var(--alchemy-black))",
         "alchemy-red": "hsl(var(--alchemy-red))",
@@ -86,6 +101,9 @@ export default {
         },
       },
       fontFamily: {
+        syne: ['var(--font-syne)', 'sans-serif'],
+        dmmono: ['var(--font-dm-mono)', 'monospace'],
+        cormorant: ['var(--font-cormorant)', 'Georgia', 'serif'],
         display: ['Playfair Display', 'Georgia', 'serif'],
         body: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
         mono: ['JetBrains Mono', 'SF Mono', 'monospace'],

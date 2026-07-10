@@ -1162,3 +1162,70 @@ html {
   background-size: 200% 100%;
   animation: textShimmer 3s ease-in-out infinite;
 }
+
+/* ═══════════════════════════════════════════════════════════
+   THE FURNACE — overhaul design system (additive layer)
+   Old tokens above stay defined: frozen portfolio + Journal
+   consume them. New routes use only the tokens below.
+   ═══════════════════════════════════════════════════════════ */
+
+:root {
+  --void: #0A0908;
+  --carbon: #161412;
+  --carbon-2: #201C19;
+  --ember: #FF4D1C;
+  --ember-deep: #C93A14;
+  --amber: #FFA028;
+  --halo: rgba(255, 77, 28, 0.10);
+  --bone: #EDE6DD;
+  --ash: #8A8178;
+  --line: rgba(237, 230, 221, 0.08);
+}
+
+/* Molten orb drift — long-period, GPU-only transforms */
+@keyframes furnace-orb-drift {
+  0%   { transform: translate3d(0, 0, 0) scale(1); }
+  25%  { transform: translate3d(4%, -3%, 0) scale(1.06); }
+  50%  { transform: translate3d(-3%, 2%, 0) scale(0.97); }
+  75%  { transform: translate3d(2%, 4%, 0) scale(1.03); }
+  100% { transform: translate3d(0, 0, 0) scale(1); }
+}
+
+@keyframes furnace-orb-breathe {
+  0%, 100% { opacity: 0.85; }
+  50%      { opacity: 1; }
+}
+
+/* Headline variable-weight breathing (Syne is a variable font) */
+@keyframes furnace-weight-breathe {
+  0%, 100% { font-variation-settings: 'wght' 650; }
+  50%      { font-variation-settings: 'wght' 800; }
+}
+
+.furnace-headline-breathe {
+  animation: furnace-weight-breathe 7s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+/* Productized Five marquee */
+@keyframes furnace-marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.furnace-marquee-track {
+  animation: furnace-marquee 42s linear infinite;
+  will-change: transform;
+}
+
+.furnace-marquee:hover .furnace-marquee-track,
+.furnace-marquee:focus-within .furnace-marquee-track {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .furnace-headline-breathe,
+  .furnace-marquee-track,
+  .furnace-orb {
+    animation: none !important;
+  }
+}
