@@ -31,7 +31,7 @@ const getConfig = (capability: string): Config => {
   switch (capability) {
     case 'high':
       return {
-        particleCount: 80,
+        particleCount: 40,
         connectionDistance: 1.6,
         frameSkip: 1,
         glowLayers: 2,
@@ -157,14 +157,6 @@ export const NeuralBackground = memo(({ isMobile = false }: NeuralBackgroundProp
     };
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
 
-    // IntersectionObserver to pause when off-screen
-    let isVisible = true;
-    const io = new IntersectionObserver(
-      ([entry]) => { isVisible = entry.isIntersecting; },
-      { threshold: 0.01 }
-    );
-    io.observe(container);
-
     // FPS self-healing
     const fps = { slowFrames: 0, degraded: false, lastTime: 0 };
 
@@ -172,10 +164,26 @@ export const NeuralBackground = memo(({ isMobile = false }: NeuralBackgroundProp
     let rafId = 0;
     let startTime = performance.now();
 
+    // IntersectionObserver to fully stop the rAF loop when off-screen,
+    // rather than just skipping the draw call on every tick.
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          if (!rafId) {
+            fps.lastTime = 0; // avoid a false "slow frame" from the paused gap
+            rafId = requestAnimationFrame(draw);
+          }
+        } else if (rafId) {
+          cancelAnimationFrame(rafId);
+          rafId = 0;
+        }
+      },
+      { threshold: 0.01 }
+    );
+    io.observe(container);
+
     const draw = (now: number) => {
       rafId = requestAnimationFrame(draw);
-
-      if (!isVisible) return;
 
       frameCount++;
       if (frameCount % config.frameSkip !== 0) return;

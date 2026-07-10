@@ -1,6 +1,7 @@
 'use client';
 
-import { memo, useState, useEffect } from 'react';
+import { memo, useState } from 'react';
+import Image from 'next/image';
 
 type GlowVariant = 'waves' | 'ascii' | 'liquid' | 'random';
 type GlowPosition = 'left' | 'right' | 'center' | 'full';
@@ -13,42 +14,25 @@ interface DynamicGlowBgProps {
 }
 
 const glowImagePaths = {
-  waves: '/glow-bg-1.png',
-  ascii: '/glow-bg-2.png',
-  liquid: '/glow-bg-3.png',
+  waves: '/assets/glow-bg-1.png',
+  ascii: '/assets/glow-bg-2.png',
+  liquid: '/assets/glow-bg-3.png',
 };
 
 /**
  * GPU-optimized dynamic glow background
  * Uses CSS filters with hardware acceleration
  */
-export const DynamicGlowBg = memo(({ 
-  variant = 'liquid', 
+export const DynamicGlowBg = memo(({
+  variant = 'liquid',
   position = 'center',
   opacity = 0.35,
-  className = '' 
+  className = ''
 }: DynamicGlowBgProps) => {
+  const imageSrc = variant === 'random'
+    ? [glowImagePaths.waves, glowImagePaths.ascii, glowImagePaths.liquid][Math.floor(Math.random() * 3)]
+    : glowImagePaths[variant];
   const [isVisible, setIsVisible] = useState(false);
-  const [imageSrc, setImageSrc] = useState<string>('');
-
-  useEffect(() => {
-    // Lazy load image path
-    const src = variant === 'random' 
-      ? [glowImagePaths.waves, glowImagePaths.ascii, glowImagePaths.liquid][Math.floor(Math.random() * 3)]
-      : glowImagePaths[variant];
-    
-    // Import the actual image
-    import(`@/assets/glow-bg-${variant === 'waves' ? '1' : variant === 'ascii' ? '2' : '3'}.png`)
-      .then((module) => {
-        setImageSrc(module.default);
-        // Delay visibility for smooth entrance
-        requestAnimationFrame(() => setIsVisible(true));
-      })
-      .catch(() => {
-        // Fallback
-        setIsVisible(true);
-      });
-  }, [variant]);
 
   const positionStyles: Record<GlowPosition, string> = {
     left: 'left-0 -translate-x-1/4',
@@ -75,19 +59,17 @@ export const DynamicGlowBg = memo(({
           opacity: isVisible ? 1 : 0,
         }}
       >
-        {imageSrc && (
-          <img 
-            src={imageSrc} 
-            alt=""
-            className="w-full h-full object-cover gpu-accelerated"
-            style={{ 
-              opacity, 
-              filter: 'blur(8px)',
-            }}
-            loading="lazy"
-            decoding="async"
-          />
-        )}
+        <Image
+          src={imageSrc}
+          alt=""
+          fill
+          className="object-cover gpu-accelerated"
+          style={{
+            opacity,
+            filter: 'blur(8px)',
+          }}
+          onLoad={() => setIsVisible(true)}
+        />
       </div>
       
       {/* Gradient overlays for blending - pure CSS, no JS */}

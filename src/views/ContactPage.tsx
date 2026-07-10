@@ -2,6 +2,7 @@
 
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
+import Image from 'next/image';
 import { Contact } from '@/components/Contact';
 const heroVideo = '/assets/hero-video.mp4';
 const contactBg = '/assets/contact-bg.png';
@@ -35,7 +36,7 @@ export const ContactPage = () => {
           style={{ scale: videoScale, opacity: videoOpacity, willChange: 'transform' }}
           className="absolute -inset-4 z-0"
         >
-          <video autoPlay muted loop playsInline className="w-full h-full object-cover">
+          <video autoPlay muted loop playsInline preload="metadata" poster="/assets/hero-video-poster.jpg" className="w-full h-full object-cover">
             <source src={heroVideo} type="video/mp4" />
           </video>
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background/90" />
@@ -140,12 +141,11 @@ export const ContactPage = () => {
           className="absolute -inset-[20%] z-0"
           style={{ scale: bgScale, y: bgY, willChange: 'transform' }}
         >
-          <img
+          <Image
             src={contactBg}
             alt=""
-            loading="lazy"
-            decoding="async"
-            className="absolute inset-0 w-full h-full object-cover"
+            fill
+            className="object-cover"
             style={{
               maskImage: 'radial-gradient(ellipse 85% 75% at 50% 50%, black 20%, transparent 75%)',
               WebkitMaskImage: 'radial-gradient(ellipse 85% 75% at 50% 50%, black 20%, transparent 75%)',

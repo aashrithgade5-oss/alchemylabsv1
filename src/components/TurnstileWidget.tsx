@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useCallback, useState } from 'react';
 
 declare global {
   interface Window {
@@ -37,6 +37,27 @@ export const TurnstileWidget = ({ onVerify, onError, onExpire }: TurnstileWidget
   const widgetIdRef = useRef<string | null>(null);
   const isRenderedRef = useRef(false);
   const errorCountRef = useRef(0);
+  const [isNearViewport, setIsNearViewport] = useState(false);
+
+  // Defer Turnstile init until the widget is actually approaching the
+  // viewport, so it never loads/executes (and can't fail) while the
+  // contact form is still off-screen on initial page load.
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsNearViewport(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '200px' }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   const handleError = useCallback(() => {
     // Suppress errors entirely in preview/localhost environments
@@ -71,9 +92,11 @@ export const TurnstileWidget = ({ onVerify, onError, onExpire }: TurnstileWidget
   }, [onVerify, handleError, onExpire]);
 
   useEffect(() => {
+    if (!isNearViewport) return;
+
     // Check if script already exists
     const existingScript = document.querySelector('script[src*="turnstile"]');
-    
+
     if (window.turnstile) {
       renderWidget();
       return;
@@ -102,7 +125,7 @@ export const TurnstileWidget = ({ onVerify, onError, onExpire }: TurnstileWidget
       isRenderedRef.current = false;
       errorCountRef.current = 0;
     };
-  }, [renderWidget]);
+  }, [isNearViewport, renderWidget]);
 
   return (
     <div 

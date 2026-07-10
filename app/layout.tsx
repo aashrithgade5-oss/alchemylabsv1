@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Providers } from '@/components/Providers';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
@@ -50,6 +51,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <BackToTop />
           <CookieConsent />
         </Providers>
+        <SpeedInsights />
       </body>
     </html>
   );

@@ -114,6 +114,7 @@ export const Hero = memo(() => {
         >
           <video
             autoPlay loop muted playsInline preload="metadata"
+            poster="/assets/hero-video-poster.jpg"
             className={`absolute inset-0 w-full h-full object-cover ${prefersReduced ? 'opacity-[0.15]' : ''}`}
           >
             <source src={heroVideo} type="video/mp4" />
