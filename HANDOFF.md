@@ -38,22 +38,41 @@ Global passes (Block 5) must exclude every file above.
 - [x] Block 1 — landing page — commit `6f2434f`
 - [x] Block 2 — services — commit `89232d0`
 - [x] Block 3 — contact — commit `0e4a482` (route over budget BEFORE session; see block log)
-- [ ] Block 4 — Eva portfolio
-- [ ] Block 5 — global (only if time)
+- [x] Block 4 — Eva portfolio — commit `e3c714d`
+- [x] Block 5 — global — this commit (verification only; nothing needed changing)
 
-## Bundle (last `npm run build`, 2026-07-12, at baseline)
-| Route | First Load JS |
-|---|---|
-| / | 132 kB |
-| /services | 130 kB |
-| /contact | 218 kB (pre-existing, Block 3 target) |
-| /about | 154 kB (legacy, out of scope) |
-| /work | 164 kB (legacy, out of scope) |
-| /eva | 177 kB (Block 4 target) |
-| /aashrith | 189 kB (FROZEN) |
-| shared | 87.9 kB |
+## Bundle (final `npm run build`, 2026-07-12, end of session)
+| Route | First Load JS | Status |
+|---|---|---|
+| / | 133 kB | ✅ under 150 |
+| /services | 131 kB | ✅ under 150 |
+| /contact | 220 kB | ⚠ over — was 218 kB BEFORE session (legacy Supabase/icon weight in the form; restyle-only constraint forbade slimming). Pending: dynamic-import the supabase submit path, prune lucide imports. |
+| /eva | 178 kB | legacy weight, pre-existing (was 177) |
+| /aashrith | 189 kB | FROZEN, unchanged |
+| /about, /work, /journal | 154/164/153 kB | legacy, out of scope this session |
+| shared | 87.9 kB | |
+
+## SESSION COMPLETE — state for the next model
+All five blocks + effect system committed on `main` (`78d99eb` → `e3c714d`). Frozen Aashrith paths verified untouched across every commit (`git diff --stat 7c31d8b..HEAD -- <frozen paths>` is empty). Dev server runs on http://localhost:3000. NOTHING DEPLOYED — localhost only, per the absolute rule.
+
+**Single next action for a fresh model**: full in-browser visual pass of `/`, `/services`, `/contact?pillar=ai`, `/eva` with the Chrome window focused (this session's browser extension disconnected partway — everything after Block 1 was verified via SSR HTML probes + build gates, not screenshots). Then, if the user wants: the /contact slimming pass (see budget table).
+
+**Known open items** (beyond OVERHAUL_TODO.md's human decisions):
+- /contact bundle slimming (above).
+- Refraction ring is Chromium-only (`backdrop-filter: url(#glass-refract)` behind `@supports`); Safari/Firefox get base blur — acceptable, by design.
+- GrainOverlay went 3%→4% globally (effect-system block); it also overlays the frozen portfolio routes as it always did — Aashrith's FILES are untouched, but flag if he notices the texture.
+- `public/sequence/forge-*.webp` (71 frames, old ForgeSequence) are committed but unused — delete when convenient.
 
 ## Block log
+### Block 5 — global (final commit)
+Shipped: verification pass. Legacy font vars already point at Geist (`src/index.css:78-80`, done pre-session). Section-level `border-t` sweep across `src/` found only the site footer hairline (`src/components/furnace/Footer.tsx:21`) — deliberate chrome, kept. Grain is root-level and covers all routes. All routes return 200. Frozen-path diff against baseline is empty.
+Resume: nothing pending in this block.
+
+### Block 4 — eva (commit `e3c714d`)
+Shipped: `evaGlass()` pink liquid-glass (local helper in `src/views/EvaPortfolio.tsx`) on client-showcase and career-journey cards; first collaboration card spans the grid (asymmetry); philosophy quote up one size; venture marquee tiles are now deliberate pink gradient tiles captioned `BRAND ALCHEMY · NN` instead of `IMG n`. Content/links/credits preserved verbatim; her authored quote (with its em dash) intentionally untouched. No shared portfolio component modified.
+Build: /eva 178kB (pre-existing legacy weight, +1kB).
+Resume: Block 5.
+
 ### Block 3 — contact (commit `0e4a482`)
 Shipped: `src/views/ContactPage.tsx` rebuilt (centered, `clamp(3.5rem,9vw,9rem)` Geist black h1 "Start the work.", Playfair line "The first conversation is the audit.", liquid-glass trust pills, form in GlassPanel over HomeAtmosphere); `.glass-input` CSS → liquid-glass spec + ember focus ring (`src/index.css:289`); Contact.tsx: option labels em-dash→interpunct, section padding trimmed for the panel, and the previously MISSING `?pillar=` preselect added (`pillarToService` map ai→fast-24h, brand→foundation-brand, advisory→clarity-advisory + mount effect). Turnstile/Supabase/Calendly logic untouched.
 **BUDGET FLAG**: /contact is 220kB First Load (was 218kB before this session — legacy Supabase client + icons in the form bundle). The overage predates this block; fixing it requires code-splitting the form's deps, which the restyle-only constraint forbids. Pending item: dedicated slimming pass (dynamic-import supabase call path, prune lucide imports).
