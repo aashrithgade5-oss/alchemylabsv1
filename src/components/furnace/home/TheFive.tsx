@@ -4,31 +4,52 @@ import { useState } from 'react';
 import { m } from 'framer-motion';
 import { products, type Product } from '@lib/payments';
 import { PaymentSheet } from '../PaymentSheet';
+import { GlassPanel } from '../GlassPanel';
 import { AmbientVideo } from './AmbientVideo';
 
 const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
-function ProductCard({ product, onBuy }: { product: Product; onBuy: (p: Product) => void }) {
+// One distinct visual field per card — elite DTC product shelf, no two alike.
+const cardFields = [
+  'linear-gradient(135deg, rgba(220,68,28,0.45) 0%, rgba(90,14,8,0.7) 100%)',
+  'radial-gradient(20rem 14rem at 80% 0%, rgba(255,100,40,0.4) 0%, rgba(60,10,6,0.7) 70%)',
+  'linear-gradient(200deg, rgba(178,34,20,0.55) 0%, rgba(30,8,5,0.8) 90%)',
+  'radial-gradient(18rem 16rem at 15% 100%, rgba(220,68,28,0.42) 0%, rgba(50,10,6,0.75) 75%)',
+  'linear-gradient(160deg, rgba(255,120,50,0.35) 0%, rgba(80,14,8,0.75) 100%)',
+];
+
+function ProductCard({
+  product,
+  field,
+  onBuy,
+}: {
+  product: Product;
+  field: string;
+  onBuy: (p: Product) => void;
+}) {
   return (
-    <div className="liquid-glass group flex w-[19rem] shrink-0 flex-col justify-between rounded-2xl p-7 transition-colors duration-500 hover:border-ember/40">
-      <div>
-        <p className="font-mono text-[10px] tracking-[0.25em] text-ash">FIXED SCOPE</p>
-        <h3 className="mt-4 font-sans text-xl font-bold leading-snug text-bone">{product.name}</h3>
-        <p className="mt-3 text-sm leading-relaxed text-ash">{product.tagline}</p>
+    <GlassPanel className="flex w-[20rem] shrink-0 snap-center flex-col">
+      <div aria-hidden className="h-28 w-full" style={{ background: field }} />
+      <div className="flex flex-1 flex-col justify-between p-7">
+        <div>
+          <p className="font-mono text-[10px] tracking-[0.25em] text-ash">FIXED SCOPE</p>
+          <h3 className="mt-3 font-sans text-xl font-bold leading-snug text-bone">{product.name}</h3>
+          <p className="mt-3 text-sm leading-relaxed text-ash">{product.tagline}</p>
+        </div>
+        <div className="mt-8">
+          <p className="font-mono text-sm text-bone">
+            ${product.priceUsd}
+            <span className="ml-2 text-[11px] text-ash">₹{product.priceInr.toLocaleString('en-IN')}</span>
+          </p>
+          <button
+            onClick={() => onBuy(product)}
+            className="mt-4 w-full rounded-full bg-ember px-5 py-2.5 font-sans text-sm font-semibold text-void transition-colors duration-300 hover:bg-amber"
+          >
+            Buy now · ${product.priceUsd}
+          </button>
+        </div>
       </div>
-      <div className="mt-8 flex items-center justify-between">
-        <span className="font-mono text-sm text-bone">
-          ${product.priceUsd}
-          <span className="ml-2 text-[11px] text-ash">₹{product.priceInr.toLocaleString('en-IN')}</span>
-        </span>
-        <button
-          onClick={() => onBuy(product)}
-          className="rounded-full border border-ember/50 px-4 py-1.5 font-sans text-xs font-semibold text-ember transition-colors duration-300 hover:bg-ember hover:text-void"
-        >
-          Buy now
-        </button>
-      </div>
-    </div>
+    </GlassPanel>
   );
 }
 
@@ -59,7 +80,7 @@ export function TheFive() {
           whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.9, ease }}
-          className="mt-6 font-sans text-4xl font-bold text-bone md:text-5xl"
+          className="mt-6 font-sans text-4xl font-bold text-bone md:text-6xl"
         >
           Start under $300.
         </m.h2>
@@ -74,17 +95,20 @@ export function TheFive() {
         </m.p>
       </div>
 
-      {/* CSS marquee: track duplicated once, pauses on hover and on focus */}
-      <div className="furnace-marquee relative mt-14 overflow-hidden pb-24 md:pb-32" aria-label="The five fixed-price offers">
-        <div className="furnace-marquee-track flex w-max gap-5 px-6">
-          {[...products, ...products].map((product, i) => (
-            <ProductCard
-              key={`${product.id}-${i}`}
-              product={product}
-              onBuy={setSelected}
-            />
-          ))}
-        </div>
+      {/* snap gallery: drag or scroll sideways, every price and CTA in view */}
+      <div
+        className="furnace-snap relative mt-14 flex snap-x snap-mandatory gap-5 overflow-x-auto px-6 pb-24 md:px-12 md:pb-32 lg:px-16"
+        aria-label="The five fixed-price offers"
+      >
+        {products.map((product, i) => (
+          <ProductCard
+            key={product.id}
+            product={product}
+            field={cardFields[i % cardFields.length]}
+            onBuy={setSelected}
+          />
+        ))}
+        <div aria-hidden className="w-1 shrink-0" />
       </div>
 
       <PaymentSheet product={selected} onClose={() => setSelected(null)} />

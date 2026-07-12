@@ -4,6 +4,20 @@ import { lazy, Suspense } from 'react';
 import { Hero } from '@/components/furnace/home/Hero';
 import { Loader } from '@/components/furnace/home/Loader';
 import { HomeAtmosphere } from '@/components/furnace/home/HomeAtmosphere';
+import { ScrollScrub } from '@/components/furnace/fx/ScrollScrub';
+
+// Kinetic quote beat: eyebrow + the signature per-word scroll reveal, big.
+function ScrubBeat({ eyebrow, text }: { eyebrow: string; text: string }) {
+  return (
+    <section className="relative flex min-h-[70svh] flex-col items-center justify-center px-6">
+      <p className="font-mono text-[10px] tracking-[0.35em] text-ash">{eyebrow}</p>
+      <ScrollScrub
+        text={text}
+        className="mt-8 max-w-5xl text-center font-sans text-5xl font-bold leading-[1.05] tracking-tight text-bone md:text-7xl lg:text-8xl"
+      />
+    </section>
+  );
+}
 
 // Below-fold sections load after first paint; keeps homepage First Load JS
 // under the 150kB budget.
@@ -46,6 +60,7 @@ export default function HomePage() {
         </Intertext>
         <Pillars />
         <StillBreak />
+        <ScrubBeat eyebrow="THE PROOF" text="Every frame here survived the eye." />
         <FeaturedWork />
         <Intertext eyebrow="THE OFFER">
           <span className="block">No estimates.</span>
@@ -53,6 +68,7 @@ export default function HomePage() {
           <span className="block">A price on the wall.</span>
         </Intertext>
         <TheFive />
+        <ScrubBeat eyebrow="THE STANDARD" text="One studio. One bar. No exceptions." />
         <StudioMotion />
         <ClosingBand />
       </Suspense>

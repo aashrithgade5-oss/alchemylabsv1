@@ -30,15 +30,24 @@ export function Intertext({ eyebrow, children }: { eyebrow?: string; children: R
   const filter = useMotionTemplate`blur(${blurPx}px)`;
 
   return (
-    <section ref={ref} className="relative flex min-h-[75svh] items-center justify-center px-6">
+    <section ref={ref} className="relative flex min-h-[70svh] items-center justify-center overflow-hidden px-6">
+      {/* ember vignette bleeding one edge so the moment never sits on flat void */}
+      <div
+        aria-hidden
+        className="absolute inset-y-0 right-0 w-1/2"
+        style={{
+          background:
+            'radial-gradient(46rem 32rem at 100% 50%, rgba(178,34,20,0.12) 0%, transparent 70%)',
+        }}
+      />
       <m.div
         style={reduced ? undefined : { opacity, filter, y }}
-        className="max-w-3xl text-center"
+        className="max-w-4xl text-center"
       >
         {eyebrow && (
           <p className="font-mono text-[10px] tracking-[0.35em] text-ash">{eyebrow}</p>
         )}
-        <p className="mt-6 font-playfair text-3xl italic leading-[1.3] text-bone md:text-5xl">
+        <p className="mt-8 font-playfair text-4xl italic leading-[1.25] text-bone md:text-6xl">
           {children}
         </p>
       </m.div>

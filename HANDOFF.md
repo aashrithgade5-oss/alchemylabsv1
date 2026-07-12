@@ -34,7 +34,7 @@ Global passes (Block 5) must exclude every file above.
 
 ## Block checklist
 - [x] Block 0 — baseline commit `7c31d8b` + this scaffold
-- [ ] Effect system (`GlassPanel` refraction upgrade, `ScrollScrub`, `HomeAtmosphere` v2, `SmoothReveal`)
+- [x] Effect system — commit `598f0d3`
 - [ ] Block 1 — landing page
 - [ ] Block 2 — services
 - [ ] Block 3 — contact
@@ -54,6 +54,12 @@ Global passes (Block 5) must exclude every file above.
 | shared | 87.9 kB |
 
 ## Block log
+### Effect system (commit `598f0d3`)
+Shipped: `.liquid-glass` updated to final spec (bg .05, blur20 sat180 bright1.05, inset+drop shadow); `#glass-refract` SVG filter in `app/layout.tsx`; `.glass-refract-edge` masked ring (`src/index.css`) used by `GlassPanel` (`src/components/furnace/GlassPanel.tsx`) with specular top line + pointer sheen; `src/components/furnace/fx/ScrollScrub.tsx` (per-word scroll-driven blur, offset ['start 0.85','start 0.35'], word i range [i/n, i/n+0.4]); `fx/SmoothReveal.tsx` (spring entrance, clears filter on complete — mix-blend safe); `HomeAtmosphere` v2 (two crossfading warmth layers, scroll drift); grain 3%→4%.
+Pending: none in this block. Note: refraction ring uses `backdrop-filter: url(#glass-refract)` behind `@supports` — Chromium-only; other engines get the base blur.
+Build: / 132kB, /services 130kB — under budget.
+Resume: Block 1 (landing), start at hero type scale in `src/components/furnace/home/Hero.tsx`.
+
 ### Block 0 (commit `7c31d8b`)
 Shipped: baseline commit of two prior sessions' verified work (furnace rebuild of / and /services, Geist type system, liquid glass, bento pillars, background cohesion, media pipeline). HANDOFF.md created.
 Pending: everything below.

@@ -1238,25 +1238,16 @@ html {
   }
 }
 
-/* Productized Five marquee */
-@keyframes furnace-marquee {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
+/* Productized Five snap gallery: scrollbar hidden, wheel/drag still scrolls */
+.furnace-snap {
+  scrollbar-width: none;
 }
-
-.furnace-marquee-track {
-  animation: furnace-marquee 42s linear infinite;
-  will-change: transform;
-}
-
-.furnace-marquee:hover .furnace-marquee-track,
-.furnace-marquee:focus-within .furnace-marquee-track {
-  animation-play-state: paused;
+.furnace-snap::-webkit-scrollbar {
+  display: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .furnace-headline-breathe,
-  .furnace-marquee-track,
   .furnace-orb {
     animation: none !important;
   }

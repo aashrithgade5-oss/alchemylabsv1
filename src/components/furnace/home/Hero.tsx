@@ -76,7 +76,7 @@ export function Hero() {
 
         <KineticHeadline
           text="Taste is the moat."
-          className="furnace-headline-breathe mt-8 font-sans text-[12vw] font-bold leading-[1.02] tracking-tight text-bone sm:text-7xl md:text-8xl lg:text-[7.5rem]"
+          className="mt-8 font-sans text-[clamp(4rem,11vw,12rem)] font-black leading-[0.98] tracking-[-0.04em] text-bone"
           delay={0.35}
         />
 
@@ -84,7 +84,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 18, filter: 'blur(8px)' }}
           animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
           transition={{ duration: 1, delay: 1.1, ease }}
-          className="mt-8 max-w-xl text-base leading-relaxed text-bone/75 md:text-lg"
+          className="mt-8 max-w-xl text-lg leading-relaxed text-bone/75 md:text-xl"
         >
           AI production under exacting human judgment. Brand systems and campaign imagery for
           founders who can tell the difference.
