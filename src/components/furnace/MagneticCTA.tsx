@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState, useCallback } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import Link from 'next/link';
 
 type Variant = 'ember' | 'ghost';
@@ -59,17 +59,17 @@ export function MagneticCTA({
   const handleLeave = useCallback(() => setOffset({ x: 0, y: 0 }), []);
 
   const inner = (
-    <motion.span
+    <m.span
       ref={ref}
       onPointerMove={handleMove}
       onPointerLeave={handleLeave}
       animate={{ x: offset.x, y: offset.y }}
       whileTap={disabled ? undefined : { scale: 0.97 }}
       transition={spring}
-      className={`inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 font-syne text-sm font-semibold tracking-wide transition-colors duration-300 ${variantClasses[variant]} ${disabled ? 'cursor-not-allowed opacity-40' : 'cursor-pointer'} ${className}`}
+      className={`inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 font-sans text-sm font-semibold tracking-wide transition-colors duration-300 ${variantClasses[variant]} ${disabled ? 'cursor-not-allowed opacity-40' : 'cursor-pointer'} ${className}`}
     >
       {children}
-    </motion.span>
+    </m.span>
   );
 
   if (href) {

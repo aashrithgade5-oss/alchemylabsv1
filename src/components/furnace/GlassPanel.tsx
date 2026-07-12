@@ -24,7 +24,7 @@ export function GlassPanel({ children, className = '' }: GlassPanelProps) {
     <div
       ref={ref}
       onPointerMove={handlePointerMove}
-      className={`relative overflow-hidden rounded-2xl border border-line bg-carbon/60 backdrop-blur-xl ${className}`}
+      className={`liquid-glass relative overflow-hidden rounded-2xl ${className}`}
       style={{ ['--gx' as string]: '50%', ['--gy' as string]: '0%' }}
     >
       <div

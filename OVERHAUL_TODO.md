@@ -6,5 +6,5 @@
 - [ ] **Portraits**: About page (Phase 3) uses `Placeholder` with specs `PORTRAIT · ASH · 4:5 · ≥1200px` and the same for Eva. Shoot or select real portraits.
 - [ ] **OG image**: `/og-image.png` predates the Furnace system. Review after Phase 7 ships `app/opengraph-image.tsx`.
 - [ ] **Supabase email template**: `send-contact-email` uses the old `#e10613` accent. Left untouched by decision; restyle when convenient.
-- [ ] **Nav Services link**: points at `/solutions` until Phase 2 creates `/services` (flip in `src/components/furnace/Navigation.tsx` and `Footer.tsx`).
+- [x] **Nav Services link**: flipped to `/services` when Phase 2 shipped.
 - [ ] **Frozen-route assets**: Aashrith-exclusive assets (~12MB) are exempt from the <5MB budget for overhauled routes; revisit only with Aashrith's sign-off.

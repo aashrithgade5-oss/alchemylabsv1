@@ -73,9 +73,11 @@ html {
     --radius: 0.5rem;
     
     /* Typography */
-    --font-display: 'Playfair Display', Georgia, serif;
-    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+    /* next/font renames families (__Playfair_Display_xxx), so reference its
+       variables — bare 'Playfair Display'/'Inter' names never resolve */
+    --font-display: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-body: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: var(--font-geist-mono), 'SF Mono', monospace;
     
     /* Sidebar */
     --sidebar-background: var(--charcoal-ui);
@@ -119,8 +121,11 @@ html {
     text-rendering: optimizeLegibility;
   }
   
-  p, span, a, li, label, input, textarea, select, button {
-    font-family: var(--font-body);
+  /* Form controls don't inherit font-family by default; everything else
+     inherits from body — a direct rule on span/p/a would silently override
+     display fonts set on parent headings (KineticHeadline splits into spans) */
+  input, textarea, select, button {
+    font-family: inherit;
   }
   
   ::selection {
@@ -1196,7 +1201,7 @@ html {
   50%      { opacity: 1; }
 }
 
-/* Headline variable-weight breathing (Syne is a variable font) */
+/* Headline variable-weight breathing (Playfair Display is a variable font) */
 @keyframes furnace-weight-breathe {
   0%, 100% { font-variation-settings: 'wght' 650; }
   50%      { font-variation-settings: 'wght' 800; }
@@ -1204,6 +1209,14 @@ html {
 
 .furnace-headline-breathe {
   animation: furnace-weight-breathe 7s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+/* Liquid glass — the locked spec, verbatim. Card surfaces + nav-on-scroll. */
+.liquid-glass {
+  background: rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 /* Productized Five marquee */

@@ -101,15 +101,15 @@ export default {
         },
       },
       fontFamily: {
-        syne: ['var(--font-syne)', 'sans-serif'],
-        dmmono: ['var(--font-dm-mono)', 'monospace'],
-        cormorant: ['var(--font-cormorant)', 'Georgia', 'serif'],
-        display: ['Playfair Display', 'Georgia', 'serif'],
-        body: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
-        mono: ['JetBrains Mono', 'SF Mono', 'monospace'],
+        sans: ['var(--font-geist-sans)', '-apple-system', 'sans-serif'],
+        mono: ['var(--font-geist-mono)', 'SF Mono', 'monospace'],
+        // editorial pull-quotes only
+        playfair: ['var(--font-playfair)', 'Georgia', 'serif'],
+        display: ['var(--font-geist-sans)', '-apple-system', 'sans-serif'],
+        body: ['var(--font-geist-sans)', '-apple-system', 'sans-serif'],
         alchemy: ['Cinzel', 'Playfair Display', 'Georgia', 'serif'],
-        elegant: ['Playfair Display', 'Georgia', 'serif'],
-        accent: ['JetBrains Mono', 'SF Mono', 'monospace'],
+        elegant: ['var(--font-playfair)', 'Georgia', 'serif'],
+        accent: ['var(--font-geist-mono)', 'SF Mono', 'monospace'],
       },
       borderRadius: {
         lg: "var(--radius)",

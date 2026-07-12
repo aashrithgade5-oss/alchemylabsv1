@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useEffect, useMemo, useState } from 'react';
+import { createPortal } from 'react-dom';
+import { m, AnimatePresence } from 'framer-motion';
 import { renderSVG } from 'uqr';
 import { X } from 'lucide-react';
 import type { Product } from '@lib/payments';
@@ -19,6 +20,11 @@ interface PaymentSheetProps {
 // intent. Card checkout stays disabled until the gateway link lands in
 // lib/payments.ts (OVERHAUL_TODO).
 export function PaymentSheet({ product, onClose }: PaymentSheetProps) {
+  // Portal target: page content sits inside LayoutTransition's transformed
+  // wrapper, which would re-anchor this fixed overlay to the page.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   const upiUri = useMemo(() => (product ? upiPaymentUri(product) : ''), [product]);
   const qrSvg = useMemo(
     () => (upiUri ? renderSVG(upiUri, { blackColor: '#EDE6DD', whiteColor: 'transparent', border: 1 }) : ''),
@@ -40,10 +46,12 @@ export function PaymentSheet({ product, onClose }: PaymentSheetProps) {
     ? encodeURIComponent(`Paid for ${product.name}. Receipt and materials attached.`)
     : '';
 
-  return (
+  if (!mounted) return null;
+
+  return createPortal(
     <AnimatePresence>
       {product && (
-        <motion.div
+        <m.div
           className="fixed inset-0 z-[100] flex justify-end"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -58,7 +66,7 @@ export function PaymentSheet({ product, onClose }: PaymentSheetProps) {
             onClick={onClose}
             className="absolute inset-0 cursor-default bg-void/70 backdrop-blur-sm"
           />
-          <motion.aside
+          <m.aside
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
@@ -73,9 +81,9 @@ export function PaymentSheet({ product, onClose }: PaymentSheetProps) {
               <X className="h-4 w-4" />
             </button>
 
-            <p className="font-dmmono text-[10px] tracking-[0.25em] text-ash">CHECKOUT</p>
-            <h2 className="mt-4 font-syne text-2xl font-bold text-bone">{product.name}</h2>
-            <p className="mt-2 font-dmmono text-sm text-ash">
+            <p className="font-mono text-[10px] tracking-[0.25em] text-ash">CHECKOUT</p>
+            <h2 className="mt-4 font-sans text-2xl font-bold text-bone">{product.name}</h2>
+            <p className="mt-2 font-mono text-sm text-ash">
               ${product.priceUsd} · ₹{product.priceInr.toLocaleString('en-IN')}
             </p>
             <p className="mt-4 text-sm leading-relaxed text-ash">{product.tagline}</p>
@@ -83,7 +91,7 @@ export function PaymentSheet({ product, onClose }: PaymentSheetProps) {
             <div className="mt-8 border-t border-line pt-8">
               {/* Desktop: scan the QR */}
               <div className="hidden md:block">
-                <p className="font-dmmono text-[10px] tracking-[0.25em] text-ash">SCAN WITH ANY UPI APP</p>
+                <p className="font-mono text-[10px] tracking-[0.25em] text-ash">SCAN WITH ANY UPI APP</p>
                 <div
                   className="mx-auto mt-5 w-56 rounded-xl border border-line bg-void p-5 [&_svg]:h-full [&_svg]:w-full"
                   dangerouslySetInnerHTML={{ __html: qrSvg }}
@@ -93,7 +101,7 @@ export function PaymentSheet({ product, onClose }: PaymentSheetProps) {
               <div className="md:hidden">
                 <a
                   href={upiUri}
-                  className="flex w-full items-center justify-center rounded-full bg-ember px-7 py-4 font-syne text-sm font-semibold text-void"
+                  className="flex w-full items-center justify-center rounded-full bg-ember px-7 py-4 font-sans text-sm font-semibold text-void"
                 >
                   Pay ₹{product.priceInr.toLocaleString('en-IN')} by UPI
                 </a>
@@ -102,7 +110,7 @@ export function PaymentSheet({ product, onClose }: PaymentSheetProps) {
               <button
                 disabled={!product.checkoutUrl}
                 onClick={() => product.checkoutUrl && window.open(product.checkoutUrl, '_blank')}
-                className="mt-5 w-full rounded-full border border-line py-3.5 font-syne text-sm text-ash disabled:cursor-not-allowed disabled:opacity-50"
+                className="mt-5 w-full rounded-full border border-line py-3.5 font-sans text-sm text-ash disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {product.checkoutUrl ? 'Pay by card' : 'Card checkout opening soon'}
               </button>
@@ -113,7 +121,7 @@ export function PaymentSheet({ product, onClose }: PaymentSheetProps) {
                 Payment confirms your slot. Send your materials and the receipt to either address
                 below and the work starts this week.
               </p>
-              <div className="mt-5 flex flex-col gap-3 font-dmmono text-xs tracking-wider">
+              <div className="mt-5 flex flex-col gap-3 font-mono text-xs tracking-wider">
                 <a
                   href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(product.name)}&body=${confirmationBody}`}
                   className="text-bone underline decoration-ember/50 underline-offset-4 transition-colors hover:decoration-ember"
@@ -130,9 +138,10 @@ export function PaymentSheet({ product, onClose }: PaymentSheetProps) {
                 </a>
               </div>
             </div>
-          </motion.aside>
-        </motion.div>
+          </m.aside>
+        </m.div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body,
   );
 }

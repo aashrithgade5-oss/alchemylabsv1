@@ -1,2 +1,3 @@
-import Index from '@/views/Index';
-export default Index;
+import HomePage from '@/views/HomePage';
+
+export default HomePage;

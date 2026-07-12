@@ -2,14 +2,14 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 
-// TODO(OVERHAUL_TODO): Services href flips to /services when Phase 2 ships.
 const navItems = [
   { label: 'Work', href: '/work' },
-  { label: 'Services', href: '/solutions' },
+  { label: 'Services', href: '/services' },
   { label: 'About', href: '/about' },
   { label: 'Contact', href: '/contact' },
 ];
@@ -34,19 +34,28 @@ export function FurnaceNavigation() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-[80] flex justify-center px-4 pt-4">
-      <motion.nav
+      <m.nav
         initial={{ y: -24, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.9, ease }}
-        className={`flex w-full max-w-4xl items-center justify-between rounded-full border px-5 py-2.5 transition-all duration-500 ${
+        className={`flex w-full max-w-4xl items-center justify-between rounded-full px-5 py-2.5 transition-all duration-500 ${
           scrolled
-            ? 'border-line bg-void/70 backdrop-blur-xl'
-            : 'border-transparent bg-transparent'
+            ? 'liquid-glass'
+            : 'border border-transparent bg-transparent'
         }`}
       >
-        <Link href="/" className="flex items-baseline gap-1.5" aria-label="Alchemy Labs, home">
-          <span className="font-syne text-base font-bold tracking-tight text-bone">ALCHEMY</span>
-          <span className="font-dmmono text-[9px] tracking-[0.3em] text-ash">LABS</span>
+        <Link href="/" className="flex items-center gap-2.5" aria-label="Alchemy Labs, home">
+          <Image
+            src="/assets/alchemy-minimal-logo.png"
+            alt=""
+            width={26}
+            height={26}
+            priority
+          />
+          <span className="flex items-baseline gap-1.5">
+            <span className="font-sans text-base font-bold tracking-tight text-bone">Alchemy</span>
+            <span className="font-mono text-[9px] tracking-[0.3em] text-ash">LABS</span>
+          </span>
         </Link>
 
         <ul className="hidden items-center gap-7 md:flex">
@@ -54,7 +63,7 @@ export function FurnaceNavigation() {
             <li key={item.href}>
               <Link
                 href={item.href}
-                className={`font-dmmono text-[11px] tracking-[0.2em] transition-colors duration-300 ${
+                className={`font-mono text-[11px] tracking-[0.2em] transition-colors duration-300 ${
                   pathname === item.href ? 'text-bone' : 'text-ash hover:text-bone'
                 }`}
               >
@@ -66,10 +75,10 @@ export function FurnaceNavigation() {
 
         <div className="flex items-center gap-3">
           <Link
-            href="/#the-five"
-            className="hidden rounded-full bg-ember px-5 py-2 font-syne text-xs font-semibold text-void transition-colors duration-300 hover:bg-amber md:inline-block"
+            href="/contact"
+            className="hidden rounded-full bg-ember px-5 py-2 font-sans text-xs font-semibold text-void transition-colors duration-300 hover:bg-amber md:inline-block"
           >
-            Start under $300
+            Begin
           </Link>
           <button
             onClick={() => setOpen((v) => !v)}
@@ -80,11 +89,11 @@ export function FurnaceNavigation() {
             {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
           </button>
         </div>
-      </motion.nav>
+      </m.nav>
 
       <AnimatePresence>
         {open && (
-          <motion.div
+          <m.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -92,7 +101,7 @@ export function FurnaceNavigation() {
             className="fixed inset-0 z-[-1] flex flex-col items-center justify-center gap-2 bg-void/95 backdrop-blur-2xl md:hidden"
           >
             {navItems.map((item, i) => (
-              <motion.div
+              <m.div
                 key={item.href}
                 initial={{ y: 24, opacity: 0, filter: 'blur(8px)' }}
                 animate={{ y: 0, opacity: 1, filter: 'blur(0px)' }}
@@ -102,13 +111,13 @@ export function FurnaceNavigation() {
                 <Link
                   href={item.href}
                   onClick={() => setOpen(false)}
-                  className="block px-8 py-3 font-syne text-3xl font-bold text-bone"
+                  className="block px-8 py-3 font-sans text-3xl font-bold text-bone"
                 >
                   {item.label}
                 </Link>
-              </motion.div>
+              </m.div>
             ))}
-            <motion.div
+            <m.div
               initial={{ y: 24, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -116,14 +125,14 @@ export function FurnaceNavigation() {
               className="mt-6"
             >
               <Link
-                href="/#the-five"
+                href="/contact"
                 onClick={() => setOpen(false)}
-                className="rounded-full bg-ember px-7 py-3.5 font-syne text-sm font-semibold text-void"
+                className="rounded-full bg-ember px-7 py-3.5 font-sans text-sm font-semibold text-void"
               >
-                Start under $300
+                Begin
               </Link>
-            </motion.div>
-          </motion.div>
+            </m.div>
+          </m.div>
         )}
       </AnimatePresence>
     </header>

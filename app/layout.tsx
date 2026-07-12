@@ -1,20 +1,21 @@
 import type { Metadata } from 'next';
-import { Syne, DM_Mono, Cormorant_Garamond } from 'next/font/google';
-import { ViewTransitions } from 'next-view-transitions';
+import { Playfair_Display } from 'next/font/google';
+import { GeistSans } from 'geist/font/sans';
+import { GeistMono } from 'geist/font/mono';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Providers } from '@/components/Providers';
+import { LayoutTransition } from '@/components/LayoutTransition';
 import { SiteChrome } from '@/components/furnace/SiteChrome';
 import { GrainOverlay } from '@/components/furnace/GrainOverlay';
 import { CookieConsent } from '@/components/CookieConsent';
 import '@/index.css';
 
-const syne = Syne({ subsets: ['latin'], variable: '--font-syne' });
-const dmMono = DM_Mono({ subsets: ['latin'], weight: ['300', '400', '500'], variable: '--font-dm-mono' });
-const cormorant = Cormorant_Garamond({
+// Playfair is reserved for editorial pull-quotes only; Geist carries
+// everything else (display, body, mono).
+const playfair = Playfair_Display({
   subsets: ['latin'],
-  weight: '400',
-  style: 'italic',
-  variable: '--font-cormorant',
+  style: ['normal', 'italic'],
+  variable: '--font-playfair',
 });
 
 const description =
@@ -50,17 +51,22 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <ViewTransitions>
-      <html lang="en" className={`${syne.variable} ${dmMono.variable} ${cormorant.variable}`}>
+    // next-view-transitions' <ViewTransitions> wrapper silently blocked every
+    // AnimatePresence exit unmount (stuck invisible overlays); removed, the
+    // framer fade in LayoutTransition is the page transition.
+    <html lang="en" className={`${playfair.variable} ${GeistSans.variable} ${GeistMono.variable}`}>
         <body>
           <Providers>
-            <SiteChrome>{children}</SiteChrome>
+            {/* LayoutTransition's transform wrapper breaks position:fixed for
+                descendants, so the chrome sits outside it */}
+            <SiteChrome>
+              <LayoutTransition>{children}</LayoutTransition>
+            </SiteChrome>
             <CookieConsent />
           </Providers>
           <GrainOverlay />
           <SpeedInsights />
         </body>
       </html>
-    </ViewTransitions>
   );
 }

@@ -1,6 +1,6 @@
 'use client';
 import { memo, useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { usePerformance } from '@/contexts/PerformanceContext';
 import { Cookie, Shield } from 'lucide-react';
 import Link from 'next/link';
@@ -31,7 +31,7 @@ export const CookieConsent = memo(() => {
   return (
     <AnimatePresence>
       {visible && (
-        <motion.div
+        <m.div
           initial={{ y: 40, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 40, opacity: 0 }}
@@ -77,7 +77,7 @@ export const CookieConsent = memo(() => {
               </button>
             </div>
           </div>
-        </motion.div>
+        </m.div>
       )}
     </AnimatePresence>
   );

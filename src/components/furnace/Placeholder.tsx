@@ -13,7 +13,7 @@ export function Placeholder({ label, className = '' }: PlaceholderProps) {
     >
       <span aria-hidden className="absolute left-0 top-0 h-3 w-px bg-ember" />
       <span aria-hidden className="absolute left-0 top-0 h-px w-3 bg-ember" />
-      <span className="px-6 text-center font-dmmono text-[10px] tracking-[0.2em] text-ash">
+      <span className="px-6 text-center font-mono text-[10px] tracking-[0.2em] text-ash">
         {label}
       </span>
     </div>

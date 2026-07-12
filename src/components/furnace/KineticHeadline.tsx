@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, useScroll, useSpring, useTransform, useVelocity } from 'framer-motion';
+import { m, useScroll, useSpring, useTransform, useVelocity } from 'framer-motion';
 import { useMemo } from 'react';
 
 const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
@@ -28,7 +28,7 @@ interface KineticHeadlineProps {
 // The split happens at render from a static string, so SSR output is stable.
 export function KineticHeadline({ text, className = '', as = 'h1', delay = 0 }: KineticHeadlineProps) {
   const words = useMemo(() => text.split(' '), [text]);
-  const Tag = motion[as];
+  const Tag = m[as];
 
   return (
     <Tag
@@ -41,7 +41,7 @@ export function KineticHeadline({ text, className = '', as = 'h1', delay = 0 }: 
     >
       {words.map((word, i) => (
         <span key={i} className="inline-block overflow-visible whitespace-pre" aria-hidden>
-          <motion.span
+          <m.span
             className="inline-block will-change-transform"
             variants={{
               hidden: { y: '55%', opacity: 0, filter: 'blur(14px)' },
@@ -55,7 +55,7 @@ export function KineticHeadline({ text, className = '', as = 'h1', delay = 0 }: 
           >
             {word}
             {i < words.length - 1 ? ' ' : ''}
-          </motion.span>
+          </m.span>
         </span>
       ))}
     </Tag>

@@ -1,6 +1,6 @@
 'use client';
 
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, m } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import { useEffect, memo } from 'react';
 
@@ -29,7 +29,7 @@ export function LayoutTransition({ children }: { children: React.ReactNode }) {
     <>
       <ScrollRestoration />
       <AnimatePresence mode="wait" initial={false}>
-        <motion.div
+        <m.div
           key={pathname}
           variants={pageVariants}
           initial="initial"
@@ -39,7 +39,7 @@ export function LayoutTransition({ children }: { children: React.ReactNode }) {
           className="min-h-screen gpu-accelerated"
         >
           {children}
-        </motion.div>
+        </m.div>
       </AnimatePresence>
     </>
   );

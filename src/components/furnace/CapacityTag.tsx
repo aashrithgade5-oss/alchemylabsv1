@@ -9,7 +9,7 @@ export function CapacityTag({ className = '' }: { className?: string }) {
   const month = MONTHS[new Date().getMonth()];
   return (
     <span
-      className={`inline-flex items-center gap-2.5 font-dmmono text-[10px] tracking-[0.25em] text-ash ${className}`}
+      className={`inline-flex items-center gap-2.5 font-mono text-[10px] tracking-[0.25em] text-ash ${className}`}
     >
       <span className="relative flex h-1.5 w-1.5">
         <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-ember opacity-60" />
