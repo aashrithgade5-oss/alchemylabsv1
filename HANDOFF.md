@@ -36,7 +36,7 @@ Global passes (Block 5) must exclude every file above.
 - [x] Block 0 — baseline commit `7c31d8b` + this scaffold
 - [x] Effect system — commit `598f0d3`
 - [x] Block 1 — landing page — commit `6f2434f`
-- [ ] Block 2 — services
+- [x] Block 2 — services — commit `89232d0`
 - [ ] Block 3 — contact
 - [ ] Block 4 — Eva portfolio
 - [ ] Block 5 — global (only if time)
@@ -54,6 +54,13 @@ Global passes (Block 5) must exclude every file above.
 | shared | 87.9 kB |
 
 ## Block log
+### Block 2 — services (commit `89232d0`)
+Shipped: pillar titles / FiveGrid clause lines / FAQ header on ScrollScrub (ScrollScrub base alignment made caller-controlled — `justify-center` moved to home's ScrubBeat); pillar offers in GlassPanel; kanji 壱/弐/参 at `text-ember/[0.07]` behind each pillar numeral (one motif per section); ServicesHero headline `clamp(3.5rem,9vw,9rem)` font-black; HomeAtmosphere mounted on ServicesPage, `bg-void` dropped from PillarSection/FiveGrid/FAQ. Pricing catalogue untouched and verified in SSR (pillars price-free, Five printed prices).
+**IMPORTANT for Block 3**: `?pillar=` slugs sent by PillarSection are `ai|brand|advisory` (`src/components/furnace/services/pillars.ts:13`) but Contact subject values are `fast-24h|foundation-brand|clarity-advisory` (`src/components/Contact.tsx:13-15`) — preselect cannot match today. Fix by mapping slugs in Contact's param-read effect (ai→fast-24h, brand→foundation-brand, advisory→clarity-advisory).
+Verification: SSR probes (kanji ×3, clause heading, FAQ) — browser extension still disconnected.
+Build: / 133kB, /services 131kB.
+Resume: Block 3 (contact) — read `src/views/ContactPage.tsx` + `src/components/Contact.tsx`, restyle wrappers only, fix the slug mapping above.
+
 ### Block 1 — landing (commit `6f2434f`)
 Shipped: hero headline `clamp(4rem,11vw,12rem)` font-black tracking -0.04em (breathe animation dropped — it fought the weight); subline up a step; TurnSequence copy inside a refracting GlassPanel band (scrim eased to void/25); Intertext 70svh + right-edge ember vignette, Playfair quotes text-4xl/6xl; new `ScrubBeat` (in `src/views/HomePage.tsx`) using ScrollScrub — THE PROOF "Every frame here survived the eye." after StillBreak, THE STANDARD "One studio. One bar. No exceptions." after TheFive; bento cards now GlassPanel with media fills (`red-glass-panels.mp4`, `red-slats-wide.mp4`, gradient field on 03; posters generated); TheFive marquee → `.furnace-snap` scroll-snap gallery, glass cards, per-card gradient strip, filled CTA "Buy now · $price" opening PaymentSheet; marquee CSS removed.
 Verification: SSR HTML probes confirm all new markup (browser extension disconnected mid-session — Chrome closed; no screenshots this block). Full visual pass pending user preview.

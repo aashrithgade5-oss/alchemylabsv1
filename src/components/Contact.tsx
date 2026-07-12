@@ -1,5 +1,5 @@
 'use client';
-import { useState, useCallback, memo } from 'react';
+import { useState, useCallback, useEffect, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send, Calendar, MessageCircle, Instagram, Mail, Loader2, Check, Home, Linkedin, Youtube, Copy } from 'lucide-react';
 import Link from 'next/link';
@@ -10,12 +10,19 @@ import { socialLinks } from './Footer';
 
 const serviceOptions = [
   { value: '', label: 'Select what you need...', disabled: true },
-  { value: 'fast-24h', label: 'Fast — 24h AI Build', group: 'pillars' },
-  { value: 'foundation-brand', label: 'Foundation — Brand System', group: 'pillars' },
-  { value: 'clarity-advisory', label: 'Clarity — Strategy Advisory', group: 'pillars' },
-  { value: 'not-sure', label: 'Not sure yet — Help me figure out', group: 'other' },
-  { value: 'specific-request', label: 'Specific request — Direct to founder', group: 'other' },
+  { value: 'fast-24h', label: 'Fast · 24h AI Build', group: 'pillars' },
+  { value: 'foundation-brand', label: 'Foundation · Brand System', group: 'pillars' },
+  { value: 'clarity-advisory', label: 'Clarity · Strategy Advisory', group: 'pillars' },
+  { value: 'not-sure', label: 'Not sure yet · Help me figure out', group: 'other' },
+  { value: 'specific-request', label: 'Specific request · Direct to founder', group: 'other' },
 ];
+
+// /services pillar slugs → form subject values (?pillar= preselect)
+const pillarToService: Record<string, string> = {
+  ai: 'fast-24h',
+  brand: 'foundation-brand',
+  advisory: 'clarity-advisory',
+};
 
 const CALENDLY_URL = 'https://calendly.com/alchemylabs-work/30min';
 
@@ -37,6 +44,16 @@ export const Contact = memo(() => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+
+  // Honor /contact?pillar=<slug|value>: preselect the subject once on mount.
+  useEffect(() => {
+    const pillar = new URLSearchParams(window.location.search).get('pillar');
+    if (!pillar) return;
+    const value =
+      pillarToService[pillar] ??
+      (serviceOptions.some((o) => o.value === pillar) ? pillar : null);
+    if (value) setFormData((f) => ({ ...f, service: value }));
+  }, []);
 
   const handleTurnstileVerify = useCallback((token: string) => {
     setTurnstileToken(token);
@@ -129,7 +146,7 @@ export const Contact = memo(() => {
   };
 
   return (
-    <section id="contact" className="relative pt-24 md:pt-40 pb-20 md:pb-32 overflow-hidden">
+    <section id="contact" className="relative overflow-hidden px-2 py-12 md:px-6 md:py-16">
       {/* Background atmosphere */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] rounded-full blur-[180px] opacity-40"
