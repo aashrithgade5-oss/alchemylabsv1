@@ -13,7 +13,7 @@ function ScrubBeat({ eyebrow, text }: { eyebrow: string; text: string }) {
       <p className="font-mono text-[10px] tracking-[0.35em] text-ash">{eyebrow}</p>
       <ScrollScrub
         text={text}
-        className="mt-8 max-w-5xl text-center font-sans text-5xl font-bold leading-[1.05] tracking-tight text-bone md:text-7xl lg:text-8xl"
+        className="mt-8 max-w-5xl justify-center text-center font-sans text-5xl font-bold leading-[1.05] tracking-tight text-bone md:text-7xl lg:text-8xl"
       />
     </section>
   );

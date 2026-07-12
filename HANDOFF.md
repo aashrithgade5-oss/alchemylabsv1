@@ -35,7 +35,7 @@ Global passes (Block 5) must exclude every file above.
 ## Block checklist
 - [x] Block 0 — baseline commit `7c31d8b` + this scaffold
 - [x] Effect system — commit `598f0d3`
-- [ ] Block 1 — landing page
+- [x] Block 1 — landing page — commit `6f2434f`
 - [ ] Block 2 — services
 - [ ] Block 3 — contact
 - [ ] Block 4 — Eva portfolio
@@ -54,6 +54,12 @@ Global passes (Block 5) must exclude every file above.
 | shared | 87.9 kB |
 
 ## Block log
+### Block 1 — landing (commit `6f2434f`)
+Shipped: hero headline `clamp(4rem,11vw,12rem)` font-black tracking -0.04em (breathe animation dropped — it fought the weight); subline up a step; TurnSequence copy inside a refracting GlassPanel band (scrim eased to void/25); Intertext 70svh + right-edge ember vignette, Playfair quotes text-4xl/6xl; new `ScrubBeat` (in `src/views/HomePage.tsx`) using ScrollScrub — THE PROOF "Every frame here survived the eye." after StillBreak, THE STANDARD "One studio. One bar. No exceptions." after TheFive; bento cards now GlassPanel with media fills (`red-glass-panels.mp4`, `red-slats-wide.mp4`, gradient field on 03; posters generated); TheFive marquee → `.furnace-snap` scroll-snap gallery, glass cards, per-card gradient strip, filled CTA "Buy now · $price" opening PaymentSheet; marquee CSS removed.
+Verification: SSR HTML probes confirm all new markup (browser extension disconnected mid-session — Chrome closed; no screenshots this block). Full visual pass pending user preview.
+Build: / 133kB, /services 130kB.
+Resume: Block 2 (services) — start at `src/components/furnace/services/PillarSection.tsx` (ScrollScrub headers, GlassPanel deliverables, kanji watermark 壱/弐/参), then FiveGrid/FAQ transparency + HomeAtmosphere on `src/views/ServicesPage.tsx`.
+
 ### Effect system (commit `598f0d3`)
 Shipped: `.liquid-glass` updated to final spec (bg .05, blur20 sat180 bright1.05, inset+drop shadow); `#glass-refract` SVG filter in `app/layout.tsx`; `.glass-refract-edge` masked ring (`src/index.css`) used by `GlassPanel` (`src/components/furnace/GlassPanel.tsx`) with specular top line + pointer sheen; `src/components/furnace/fx/ScrollScrub.tsx` (per-word scroll-driven blur, offset ['start 0.85','start 0.35'], word i range [i/n, i/n+0.4]); `fx/SmoothReveal.tsx` (spring entrance, clears filter on complete — mix-blend safe); `HomeAtmosphere` v2 (two crossfading warmth layers, scroll drift); grain 3%→4%.
 Pending: none in this block. Note: refraction ring uses `backdrop-filter: url(#glass-refract)` behind `@supports` — Chromium-only; other engines get the base blur.

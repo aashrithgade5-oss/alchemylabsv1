@@ -53,7 +53,7 @@ export function ScrollScrub({
   }
 
   return (
-    <Tag ref={ref} className={`flex flex-wrap justify-center gap-x-[0.3em] ${className}`}>
+    <Tag ref={ref} className={`flex flex-wrap gap-x-[0.3em] ${className}`}>
       {words.map((word, i) => (
         <Word
           key={`${word}-${i}`}

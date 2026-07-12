@@ -1,6 +1,7 @@
 'use client';
 
 import { faqs } from './faqs';
+import { ScrollScrub } from '../fx/ScrollScrub';
 
 /**
  * Native details/summary accordion. The FAQPage JSON-LD mirroring these
@@ -8,11 +9,12 @@ import { faqs } from './faqs';
  */
 export function FAQ() {
   return (
-    <section className="relative bg-void">
+    <section className="relative">
       <div className="mx-auto max-w-3xl px-6 py-24 md:px-12 md:py-32">
-        <h2 className="font-sans text-4xl font-bold text-bone md:text-5xl">
-          Asked before you ask.
-        </h2>
+        <ScrollScrub
+          text="Asked before you ask."
+          className="font-sans text-4xl font-bold tracking-tight text-bone md:text-5xl"
+        />
         <div className="mt-12">
           {faqs.map((item) => (
             <details key={item.q} className="group border-t border-line py-6 last:border-b">

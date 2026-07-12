@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { m } from 'framer-motion';
 import { products, type Product } from '@lib/payments';
 import { PaymentSheet } from '../PaymentSheet';
+import { ScrollScrub } from '../fx/ScrollScrub';
 
 const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
@@ -15,19 +16,15 @@ export function FiveGrid() {
   const [selected, setSelected] = useState<Product | null>(null);
 
   return (
-    <section id="the-five" className="relative bg-void">
+    <section id="the-five" className="relative">
       <div className="mx-auto max-w-6xl px-6 py-24 md:px-12 md:py-32 lg:px-16">
-        <m.h2
-          initial={{ opacity: 0, y: 24, filter: 'blur(10px)' }}
-          whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.9, ease }}
-          className="max-w-2xl font-sans text-4xl font-bold text-bone md:text-5xl"
-        >
-          <span className="block">No call.</span>
-          <span className="block">No proposal.</span>
-          <span className="block">Just checkout.</span>
-        </m.h2>
+        {/* clause-per-line rule + per-word scrub, one clause per row */}
+        <h2 className="max-w-2xl font-sans text-4xl font-bold tracking-tight text-bone md:text-5xl">
+          {/* display:flex makes each span block-level: one clause per line */}
+          <ScrollScrub as="span" text="No call." />
+          <ScrollScrub as="span" text="No proposal." />
+          <ScrollScrub as="span" text="Just checkout." />
+        </h2>
         <p className="mt-4 max-w-md text-base leading-relaxed text-ash">
           Five offers with printed prices. Pay now and the work starts this week.
         </p>
