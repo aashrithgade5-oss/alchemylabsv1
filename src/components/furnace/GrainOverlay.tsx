@@ -7,7 +7,7 @@ export function GrainOverlay() {
   return (
     <div
       aria-hidden
-      className="pointer-events-none fixed inset-0 z-[90] opacity-[0.03]"
+      className="pointer-events-none fixed inset-0 z-[90] opacity-[0.04]"
       style={{ backgroundImage: `url("${noiseSvg}")`, backgroundSize: '256px 256px' }}
     />
   );

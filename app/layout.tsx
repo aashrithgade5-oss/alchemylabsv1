@@ -65,6 +65,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <CookieConsent />
           </Providers>
           <GrainOverlay />
+          {/* shared displacement filter for .glass-refract-edge (GlassPanel) */}
+          <svg aria-hidden className="absolute h-0 w-0">
+            <filter id="glass-refract">
+              <feTurbulence type="fractalNoise" baseFrequency="0.008 0.008" numOctaves="2" result="noise" />
+              <feDisplacementMap in="SourceGraphic" in2="noise" scale="10" xChannelSelector="R" yChannelSelector="G" />
+            </filter>
+          </svg>
           <SpeedInsights />
         </body>
       </html>

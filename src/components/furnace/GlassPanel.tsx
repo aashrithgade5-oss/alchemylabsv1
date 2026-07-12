@@ -7,8 +7,12 @@ interface GlassPanelProps {
   className?: string;
 }
 
-// Carbon glass: backdrop blur, hairline border, and a specular highlight
-// that follows the pointer through two CSS variables.
+/**
+ * Liquid glass with refraction: the .liquid-glass base (blur + saturate +
+ * brightness + inset highlight), a displacement-mapped edge ring that bends
+ * the backdrop (.glass-refract-edge, filter defined in app/layout.tsx), a
+ * static specular line on the top edge, and a pointer-tracked highlight.
+ */
 export function GlassPanel({ children, className = '' }: GlassPanelProps) {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -27,6 +31,14 @@ export function GlassPanel({ children, className = '' }: GlassPanelProps) {
       className={`liquid-glass relative overflow-hidden rounded-2xl ${className}`}
       style={{ ['--gx' as string]: '50%', ['--gy' as string]: '0%' }}
     >
+      {/* refraction ring: backdrop bends through the panel edges */}
+      <div aria-hidden className="glass-refract-edge pointer-events-none absolute inset-0 rounded-[inherit]" />
+      {/* specular highlight, top edge */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent"
+      />
+      {/* pointer-tracked sheen */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 opacity-60 transition-opacity duration-500"
