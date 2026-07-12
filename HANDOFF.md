@@ -37,7 +37,7 @@ Global passes (Block 5) must exclude every file above.
 - [x] Effect system — commit `598f0d3`
 - [x] Block 1 — landing page — commit `6f2434f`
 - [x] Block 2 — services — commit `89232d0`
-- [ ] Block 3 — contact
+- [x] Block 3 — contact — commit `0e4a482` (route over budget BEFORE session; see block log)
 - [ ] Block 4 — Eva portfolio
 - [ ] Block 5 — global (only if time)
 
@@ -54,6 +54,13 @@ Global passes (Block 5) must exclude every file above.
 | shared | 87.9 kB |
 
 ## Block log
+### Block 3 — contact (commit `0e4a482`)
+Shipped: `src/views/ContactPage.tsx` rebuilt (centered, `clamp(3.5rem,9vw,9rem)` Geist black h1 "Start the work.", Playfair line "The first conversation is the audit.", liquid-glass trust pills, form in GlassPanel over HomeAtmosphere); `.glass-input` CSS → liquid-glass spec + ember focus ring (`src/index.css:289`); Contact.tsx: option labels em-dash→interpunct, section padding trimmed for the panel, and the previously MISSING `?pillar=` preselect added (`pillarToService` map ai→fast-24h, brand→foundation-brand, advisory→clarity-advisory + mount effect). Turnstile/Supabase/Calendly logic untouched.
+**BUDGET FLAG**: /contact is 220kB First Load (was 218kB before this session — legacy Supabase client + icons in the form bundle). The overage predates this block; fixing it requires code-splitting the form's deps, which the restyle-only constraint forbids. Pending item: dedicated slimming pass (dynamic-import supabase call path, prune lucide imports).
+Verification: SSR probes for header/pills/panel; preselect is client-side — verify in browser with `/contact?pillar=ai` when the extension reconnects.
+Build: / 133kB, /services 131kB, /contact 220kB (flagged).
+Resume: Block 4 (Eva) — `src/views/EvaPortfolio.tsx` ONLY.
+
 ### Block 2 — services (commit `89232d0`)
 Shipped: pillar titles / FiveGrid clause lines / FAQ header on ScrollScrub (ScrollScrub base alignment made caller-controlled — `justify-center` moved to home's ScrubBeat); pillar offers in GlassPanel; kanji 壱/弐/参 at `text-ember/[0.07]` behind each pillar numeral (one motif per section); ServicesHero headline `clamp(3.5rem,9vw,9rem)` font-black; HomeAtmosphere mounted on ServicesPage, `bg-void` dropped from PillarSection/FiveGrid/FAQ. Pricing catalogue untouched and verified in SSR (pillars price-free, Five printed prices).
 **IMPORTANT for Block 3**: `?pillar=` slugs sent by PillarSection are `ai|brand|advisory` (`src/components/furnace/services/pillars.ts:13`) but Contact subject values are `fast-24h|foundation-brand|clarity-advisory` (`src/components/Contact.tsx:13-15`) — preselect cannot match today. Fix by mapping slugs in Contact's param-read effect (ai→fast-24h, brand→foundation-brand, advisory→clarity-advisory).

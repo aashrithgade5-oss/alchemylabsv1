@@ -21,6 +21,23 @@ import { SequentianBackground } from '@/components/SequentianBackground';
 const EASE = [0.22, 1, 0.36, 1] as const;
 const t = (isDark: boolean, dark: string, light: string) => isDark ? dark : light;
 
+// Pink liquid glass, local to Eva's identity (never the ember system).
+const evaGlass = (isDark: boolean): React.CSSProperties => ({
+  background: t(
+    isDark,
+    'linear-gradient(135deg, rgba(236,72,153,0.06) 0%, rgba(255,255,255,0.02) 100%)',
+    'linear-gradient(135deg, rgba(236,72,153,0.07) 0%, rgba(0,0,0,0.01) 100%)',
+  ),
+  border: `1px solid ${t(isDark, 'rgba(236,72,153,0.16)', 'rgba(236,72,153,0.18)')}`,
+  backdropFilter: 'blur(20px) saturate(180%)',
+  WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+  boxShadow: t(
+    isDark,
+    'inset 0 1px 0 rgba(255,255,255,0.08), 0 8px 32px rgba(0,0,0,0.3)',
+    'inset 0 1px 0 rgba(255,255,255,0.6), 0 8px 24px rgba(0,0,0,0.06)',
+  ),
+});
+
 // Social links
 const socialLinks = [
   { icon: Linkedin, href: 'https://www.linkedin.com/in/eva-doshi-0b07b531b/', label: 'LinkedIn' },
@@ -321,7 +338,7 @@ const CreativePhilosophy = memo(({ isDark }: { isDark: boolean }) => (
     <SequentianBackground variant={5} opacity={isDark ? 0.10 : 0.06} glow={false} />
     <div className="relative z-10 max-w-3xl mx-auto text-center">
       <motion.blockquote initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: 0.8, ease: EASE }}>
-        <p className={`font-display text-2xl sm:text-3xl lg:text-4xl italic leading-snug ${t(isDark, 'text-porcelain', 'text-neutral-900')}`}>
+        <p className={`font-display text-3xl sm:text-4xl lg:text-5xl italic leading-snug ${t(isDark, 'text-porcelain', 'text-neutral-900')}`}>
           "Strategy meets <span className="text-pink-500">storytelling</span>.
           <br />
           Execution meets <span className="text-pink-500">elegance</span>."
@@ -368,10 +385,25 @@ CreativePhilosophy.displayName = 'CreativePhilosophy';
 // VENTURE CONTRIBUTIONS — Seq 2
 // ============================================
 const VentureContributions = memo(({ isDark }: { isDark: boolean }) => {
+  // Deliberate gradient tiles until real campaign visuals land — no bare
+  // placeholder boxes.
   const placeholderTiles = Array.from({ length: 8 }, (_, i) => (
-    <div key={i} className="flex-shrink-0 w-48 sm:w-56 rounded-xl overflow-hidden" style={{ aspectRatio: '4/3', border: '1px solid rgba(236,72,153,0.15)', background: `linear-gradient(135deg, rgba(236,72,153,${0.03 + (i % 3) * 0.02}), ${t(isDark, 'rgba(255,255,255,0.02)', 'rgba(0,0,0,0.01)')})` }}>
-      <div className="w-full h-full flex items-center justify-center">
-        <span className={`font-mono text-[10px] ${t(isDark, 'text-porcelain/20', 'text-neutral-300')}`}>IMG {i + 1}</span>
+    <div
+      key={i}
+      className="flex-shrink-0 w-48 sm:w-56 rounded-xl overflow-hidden"
+      style={{
+        aspectRatio: '4/3',
+        border: '1px solid rgba(236,72,153,0.18)',
+        background: `
+          radial-gradient(10rem 8rem at ${20 + (i % 4) * 20}% ${i % 2 ? 15 : 85}%, rgba(236,72,153,${0.16 + (i % 3) * 0.05}) 0%, transparent 70%),
+          linear-gradient(${120 + (i % 3) * 40}deg, rgba(251,113,133,0.08), ${t(isDark, 'rgba(255,255,255,0.02)', 'rgba(0,0,0,0.01)')})
+        `,
+      }}
+    >
+      <div className="flex h-full w-full items-end p-3">
+        <span className={`font-mono text-[9px] tracking-[0.2em] ${t(isDark, 'text-porcelain/30', 'text-neutral-400')}`}>
+          BRAND ALCHEMY · {String(i + 1).padStart(2, '0')}
+        </span>
       </div>
     </div>
   ));
@@ -419,14 +451,17 @@ const ClientShowcase = memo(({ isDark }: { isDark: boolean }) => (
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {evaBrandCollaborations.map((brand, i) => (
-          <motion.div key={brand.name} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ delay: i * 0.08, duration: 0.6, ease: EASE }}>
+          <motion.div
+            key={brand.name}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ delay: i * 0.08, duration: 0.6, ease: EASE }}
+            className={i === 0 ? 'md:col-span-2' : ''}
+          >
             <div
-              className="rounded-2xl p-6 sm:p-8 transition-all duration-300 hover:-translate-y-1"
-              style={{
-                background: t(isDark, 'linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)', 'linear-gradient(135deg, rgba(0,0,0,0.02) 0%, rgba(0,0,0,0.005) 100%)'),
-                border: `1px solid ${t(isDark, 'rgba(255,255,255,0.06)', 'rgba(0,0,0,0.06)')}`,
-                backdropFilter: 'blur(12px)',
-              }}
+              className="h-full rounded-2xl p-6 sm:p-8 transition-all duration-300 hover:-translate-y-1"
+              style={evaGlass(isDark)}
             >
               <h4 className={`font-body font-bold text-lg ${t(isDark, 'text-porcelain', 'text-neutral-900')} mb-1`}>{brand.name}</h4>
               <p className="font-body text-sm text-pink-500/70 mb-2">{brand.role}</p>
@@ -474,11 +509,7 @@ const CareerJourney = memo(({ isDark }: { isDark: boolean }) => {
 
                 <div
                   className="rounded-2xl p-6 sm:p-8 hover:-translate-y-1 transition-all duration-300"
-                  style={{
-                    background: t(isDark, 'linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)', 'linear-gradient(135deg, rgba(0,0,0,0.02) 0%, rgba(0,0,0,0.005) 100%)'),
-                    border: `1px solid ${t(isDark, 'rgba(255,255,255,0.06)', 'rgba(0,0,0,0.06)')}`,
-                    backdropFilter: 'blur(12px)',
-                  }}
+                  style={evaGlass(isDark)}
                 >
                   <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-4">
                     <div>
