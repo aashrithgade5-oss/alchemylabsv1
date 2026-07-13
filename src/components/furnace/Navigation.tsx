@@ -51,7 +51,7 @@ export function FurnaceNavigation() {
             width={38}
             height={38}
             priority
-            className="transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:rotate-[30deg]"
+            className="transition-transform duration-500 hover:rotate-[30deg]"
           />
         </Link>
 

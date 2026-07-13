@@ -2,6 +2,133 @@
 
 The single source of truth for resuming this session. Append a block entry after every commit.
 
+---
+
+# ✅ PERFECTION PASS — EXECUTED 2026-07-13 (commits e142057..HEAD)
+
+Every item in the spec below is DONE and verified in-browser (screenshots of /, /services, /contact?pillar=ai at every section). See "Block log → Perfection pass" at the bottom for what shipped. Additional user asks executed same session: glass-type on ALL display text site-wide, atom logo replaces the nav wordmark, favicon.ico/png regenerated from the alchemy logo (black-bg variant, ffmpeg crop+scale), metadata.icons wired in app/layout.tsx.
+
+Bundle after the pass: / 133kB · /services 132kB · /contact 220kB (pre-existing overage, slimming still pending). The spec is kept below for reference only — do not re-execute.
+
+---
+
+# ⚡ ORIGINAL SPEC (written 2026-07-13, now fully executed)
+
+## 0. Session bootstrap (do these before touching code)
+1. Load skills, in this order: `design-taste-frontend`, `high-end-visual-design`, `frontend-design:frontend-design`. The user explicitly wants these applied to all website work.
+2. **Conflict rule**: where a skill contradicts the user's locked direction, THE USER WINS. Locked user direction that overrides skill defaults: centered hero ("Taste is the moat." stays centered), Playfair Display Italic for editorial pull-quotes (serif discipline does not apply to these four spots), liquid glass everywhere it's already used, ember/void/carbon/bone palette, Geist Sans/Mono. Skill rules that DO apply and align: zero em-dashes, no `window scroll` listeners, transform/opacity-only animation, blur never inside scrolling containers (this one is load-bearing for the fixes below), reduced-motion everywhere, one accent color.
+3. Dev server: `npm run dev` in background; check port 3000 first (`Get-NetTCPConnection -LocalPort 3000`), kill stale PID if needed. Build gate = stop dev, `npm run build`, restart dev (they share `.next`).
+4. Read the "Session rules", "FROZEN", and "Environment facts" sections further down in this file. They all still bind. LOCALHOST ONLY. Commits allowed after each work unit; deploys NEVER.
+
+## 1. USER FEEDBACK BEING FIXED (verbatim intent)
+- "Multiple glitches on the landing page when scrolling."
+- "The refraction box is being added as a box instead of the TEXT itself being a liquid glass refractive element" (TurnSequence micro-copy band).
+- "Taste is the moat. should literally be liquid glass refractive text, like StringTune." Hero font "can be bettered", subline "could be made better".
+- "Way more elements and media on services and contact." Contact needs "a running video like the previous version, or like the people-walking silhouette" (that's `/media/red-slats-tall.mp4`).
+- "Keep perfecting all pages. Seamless and stunning. Do not rebuild."
+
+## 2. ROOT-CAUSE DIAGNOSIS (verified this session — trust it)
+1. **The box**: `TurnSequence.tsx` currently wraps its kinetic lines in `<GlassPanel className="w-full max-w-5xl rounded-3xl …">` (added Block 1). A bordered, shadowed panel over the scrub footage reads as a UI card, not StringTune glass type. It must be REMOVED and replaced with glass-on-the-glyphs (spec §3).
+2. **Scroll glitches**: `GlassPanel` renders a `.glass-refract-edge` (backdrop-filter: url(#glass-refract)) on EVERY instance — 9+ SVG-displacement backdrops, several inside scrolling contexts (the TheFive horizontal snap track, page-scroll bento cards). SVG-filter backdrops repaint on every scroll frame in Chromium → the visible glitching. Fix: refraction becomes opt-in (`refract` prop, default OFF), and cards inside the snap gallery lose backdrop-filter entirely (solid glass look, spec §4).
+3. **KineticHeadline constraint discovered by reading the source** (`src/components/furnace/KineticHeadline.tsx`): the root tag has NO inline filter (safe), but each word `m.span` animates `y` transform + `filter` inline. Two consequences: (a) `background-clip: text` must be applied PER-WORD (on the inner `m.span`s), not on the parent — child transforms/stacking contexts break parent-level bg-clip in Chromium; (b) never rely on a `filter: drop-shadow` class on those spans — framer's inline `filter` overwrites class filters permanently. Same constraint applies to `ScrollScrub.tsx`'s `Word` spans. Depth comes from the halo layer instead (spec §3B).
+
+## 3. THE GLASS-TYPE SYSTEM (the centerpiece — build exactly this)
+
+### 3A. CSS — add to `src/index.css` next to `.liquid-glass`
+```css
+/* Liquid glass TYPE: translucent glyph fill. Apply to the WORD spans
+   (see §2.3), never to a parent whose children carry transforms. */
+.glass-type {
+  color: transparent;
+  background-image: linear-gradient(
+    180deg,
+    rgba(250, 247, 242, 0.96) 0%,
+    rgba(250, 247, 242, 0.62) 52%,
+    rgba(250, 247, 242, 0.85) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* Boxless refractive halo: the backdrop visibly bends and blurs BEHIND the
+   type with zero edges (feathered mask = no panel read). Position absolutely
+   behind a headline, oversized (-inset-x-12 -inset-y-8 or a fixed stage box). */
+.glass-halo {
+  pointer-events: none;
+  -webkit-backdrop-filter: blur(14px) saturate(165%) brightness(1.07);
+  backdrop-filter: blur(14px) saturate(165%) brightness(1.07);
+  -webkit-mask-image: radial-gradient(60% 68% at 50% 50%, black 28%, transparent 76%);
+  mask-image: radial-gradient(60% 68% at 50% 50%, black 28%, transparent 76%);
+}
+@supports (backdrop-filter: url('#glass-refract')) {
+  .glass-halo {
+    -webkit-backdrop-filter: url('#glass-refract') blur(12px) saturate(165%) brightness(1.07);
+    backdrop-filter: url('#glass-refract') blur(12px) saturate(165%) brightness(1.07);
+  }
+}
+
+/* Solid glass for surfaces INSIDE scrolling containers (snap gallery cards):
+   the liquid-glass look with ZERO backdrop-filter, so horizontal scroll stays
+   60fps. Visually near-identical over dark fields. */
+.glass-solid {
+  background: linear-gradient(160deg, rgba(42, 38, 35, 0.92) 0%, rgba(26, 24, 22, 0.96) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+```
+(`#glass-refract` SVG filter already exists in `app/layout.tsx` — reuse, do not duplicate.)
+
+### 3B. Where to apply
+- **Hero (`src/components/furnace/home/Hero.tsx`)**: inside the content block, wrap the `KineticHeadline` in `relative`; insert `<div aria-hidden className="glass-halo absolute -inset-x-10 -inset-y-6 z-0" />` BEFORE it; pass a new `wordClassName="glass-type"` prop into KineticHeadline (add that prop: it appends to the inner `m.span` className — 3-line change in `KineticHeadline.tsx`), and REMOVE `text-bone` from the headline class (transparent fill replaces it). Keep `clamp(4rem,11vw,12rem) font-black tracking-[-0.04em]`.
+- **TurnSequence (`src/components/furnace/home/TurnSequence.tsx`)**: DELETE the `GlassPanel` import + wrapper (restore the plain `absolute inset-0 flex items-center justify-center px-6` line container). Add one halo behind the swap-point: `<div aria-hidden className="glass-halo absolute left-1/2 top-1/2 h-[16rem] w-[min(72rem,92vw)] -translate-x-1/2 -translate-y-1/2" />`. In `KineticLine`, add `glass-type` to each `Word` span's className (in the local `Word` component, same file) and drop `text-bone` from the line h2. Keep the `bg-void/25` scrim.
+- **ScrubBeats (`src/views/HomePage.tsx` local `ScrubBeat`)**: same treatment — halo div behind, `glass-type` added inside `ScrollScrub`: add a `wordClassName` prop to `src/components/furnace/fx/ScrollScrub.tsx` (append to `Word`'s `m.span`), pass `wordClassName="glass-type"` from ScrubBeat. Remove `text-bone` there.
+- **Reduced-motion branches**: give the static fallbacks plain `text-bone` (glass fill without the halo is fine too; do not ship transparent text with no fill anywhere).
+
+### 3C. Hero subline (user: "could be made better")
+Replace the current subline string + classes in `Hero.tsx` with:
+```
+AI throughput under human judgment. Brand systems and campaign film for founders who can tell the difference.
+```
+classes: `mt-8 max-w-xl text-lg md:text-xl font-light leading-relaxed text-bone/70 [text-wrap:balance]`. No em-dashes, short declaratives, "film" not "imagery" (tighter noun).
+
+## 4. GLASSPANEL PERF FIX (kills the scroll glitches)
+`src/components/furnace/GlassPanel.tsx`:
+1. Add prop `refract?: boolean` (default `false`). Render the `.glass-refract-edge` div ONLY when `refract`.
+2. Turn refraction ON solely at: the bento anchor card (Pillars, `i === 0`), the contact form panel (`src/views/ContactPage.tsx`). Everything else keeps base `.liquid-glass` (still has blur, that's fine at page-scroll scale).
+3. `src/components/furnace/home/TheFive.tsx` `ProductCard`: replace `<GlassPanel className="flex w-[20rem] …">` with a plain `<div className="glass-solid group relative flex w-[20rem] shrink-0 snap-center flex-col overflow-hidden rounded-2xl">` — NO backdrop-filter inside the snap track (this is the biggest glitch fix). Keep the gradient strip + filled CTA exactly as they are.
+
+## 5. MEDIA + ELEMENT EXPANSION (user wants "way more")
+
+### 5A. Services (`src/components/furnace/services/*`)
+1. **Pillar media figures** — each `PillarSection` gets a cinematic still on the side opposite its numeral. Add to `pillars.ts`: `still: string` → `01: '/media/cinematic-still-1.png'`, `02: '/media/lone-figure-1.webp'`, `03: '/media/split-frames-3.png'`. In `PillarSection.tsx`, convert the inner wrapper to `md:grid md:grid-cols-[1fr_auto] gap-12` (mirror when `numeralRight`): text column as-is; figure column = `relative aspect-[3/4] w-[20rem] lg:w-[24rem] overflow-hidden rounded-2xl` with `next/image fill object-cover`, a `bg-void/30` scrim, hairline `border border-line`, SmoothReveal entrance (`src/components/furnace/fx/SmoothReveal.tsx` exists, unused so far — use it here). Hide below `md` or render above the offer stack at `w-full aspect-video`.
+2. **Services closing band** — new `ServicesClosing.tsx` in `services/`: `AmbientVideo` with `/media/samurai-silhouette-2.mp4` (the turning samurai; generate poster first: `& "$env:USERPROFILE\compress-video\ffmpeg.exe" -y -i public/media/samurai-silhouette-2.mp4 -vf "select=eq(n\,0)" -frames:v 1 -q:v 4 public/media/samurai-silhouette-2-poster.jpg`), dimmed ~30% + `bg-void/50` scrim + top/bottom feathers (copy the StudioMotion pattern), one line (Playfair italic, e.g. "Scope it in one conversation.") + `MagneticCTA href="/contact" variant="ember"` "Begin". Mount after `<FAQ />` in `src/views/ServicesPage.tsx` (lazy, like FiveGrid).
+
+### 5B. Contact (`src/views/ContactPage.tsx`)
+1. **The walking-silhouettes running video** (explicit user ask): behind the header section, add an absolutely-positioned `AmbientVideo src="/media/red-slats-tall.mp4" poster="/media/red-slats-tall-poster.jpg"` at `opacity-25 object-cover`, inside a container masked `linear-gradient(to bottom, black 30%, transparent 100%)` (copy the TheFive backdrop pattern) so it dissolves before the form. Import `AmbientVideo` from `@/components/furnace/home/AmbientVideo`.
+2. Keep everything else from Block 3 (glass form, preselect). Add `refract` to the form GlassPanel per §4.2.
+
+### 5C. Landing extras (small, after the glass work)
+- Bento anchor card (Pillars `i===0`): turn `refract` on.
+- Verify FeaturedWork/StillBreak/ClosingBand still blend correctly after any wrapper changes (remember the filter-over-mix-blend trap — Environment facts below).
+
+## 6. EXECUTION ORDER + PROTOCOL (per unit: tsc → build gate → commit → append here)
+1. §3A CSS + §4 GlassPanel prop + §3B TurnSequence + Hero + ScrubBeat + §3C subline + KineticHeadline/ScrollScrub `wordClassName` props → commit `overhaul: glass type system, boxless refraction, scroll perf`.
+2. §4.3 TheFive glass-solid card → same commit as 1 if small, else its own.
+3. §5A services media (+poster gen) → commit `overhaul: services media pass`.
+4. §5B contact video → commit `overhaul: contact motion pass`.
+5. Full visual pass in browser (extension may reconnect — if `mcp__claude-in-chrome` fails, verify via SSR curl probes + report honestly, as before). Budgets: / and /services MUST stay <150kB; /contact 220kB pre-existing overage (separate slimming item, not this pass).
+6. Update the block log below + the memory file (`overhaul-handoff` memory points here).
+
+## 7. TASTE BAR FOR EVERY DECISION (from the loaded skills, filtered through the user's locked direction)
+- Type does the talking: oversized Geist black display, tight tracking, Playfair italic ONLY as punctuation. No new fonts.
+- One accent (ember). No new colors, no purple, no glow shadows.
+- Every surface is either media, glass over media, or void with atmosphere — never flat dead black (the user called that out once already: "kill the dead void").
+- Motion is scroll-tied or spring physics; nothing linear; everything honors `useReducedMotion`; nothing animates `filter` on an ancestor of a `mix-blend` element.
+- Zero em-dashes anywhere. Interpuncts (·) for metadata separators only, max one per line.
+- If a section looks like a template, it is wrong. If it looks like a UI card floating on footage, it is wrong (that was this session's core lesson: glass belongs IN the type, not around it).
+
+---
+
 ## Session rules (absolute)
 1. **LOCALHOST ONLY.** Dev server on http://localhost:3000. No deploy, no Vercel, no production. Deploy trigger is only the exact user phrase "yes, upload it to Vercel and make this live."
 2. Commit after each numbered block; append to this file after every block.
@@ -64,6 +191,16 @@ All five blocks + effect system committed on `main` (`78d99eb` → `e3c714d`). F
 - `public/sequence/forge-*.webp` (71 frames, old ForgeSequence) are committed but unused — delete when convenient.
 
 ## Block log
+### Perfection pass (2026-07-13, commits e142057, b51118b, 02e01c8, 3b08d31 + this one)
+Shipped, in order:
+1. **Glass type system** (`e142057`): `.glass-type` (per-word transparent gradient fill via bg-clip:text), `.glass-halo` (boxless feathered backdrop-refraction behind headlines), `.glass-solid` (zero-backdrop-filter card for scroll containers) in `src/index.css`; `GlassPanel` refraction now opt-in via `refract` prop (ON only: Pillars anchor card, contact form); `wordClassName` prop added to KineticHeadline + ScrollScrub; TurnSequence GlassPanel BOX DELETED, halo + glass-type words instead; Hero halo + glass-type + new subline ("AI throughput under human judgment…"); ScrubBeats halo'd; glass-type applied to every display headline (ServicesHero, PillarSection titles, FiveGrid clauses, FAQ, ClosingBand, Contact h1) — parents keep `text-bone` so reduced-motion fallbacks stay filled; TheFive ProductCard → `.glass-solid` div (the big scroll-glitch fix).
+2. **Services media** (`b51118b`): `still` field on pillars (cinematic-still-1 / lone-figure-1 / split-frames-3), PillarSection figure column opposite the numeral (SmoothReveal, aspect-3/4, hidden below md), new `ServicesClosing.tsx` (samurai-silhouette-2 loop + poster + "Scope it in one conversation." + Begin CTA) mounted lazily after FAQ.
+3. **Contact motion** (`02e01c8`): red-slats-tall walking-silhouettes loop behind the header at opacity-25, masked to dissolve before the form; header content lifted into a relative wrapper.
+4. **Brand mark** (`3b08d31`): nav text lockup replaced by the atom logo (38px, hover rotate); favicon.ico + favicon.png regenerated from `logo-black-bg.png` (ffmpeg crop 560² → 64/192); `metadata.icons` added.
+Verified in Chrome (extension worked this session): full scroll of / (hero glass type over video, TurnSequence boxless lines over the turn scrub, bento, both ScrubBeats, glass-solid Five cards, StudioMotion, ClosingBand), /services (stills, closing band), /contact?pillar=ai (video header, preselect = "Fast · 24h AI Build").
+Builds: / 133kB, /services 132kB, /contact 220kB (pre-existing).
+Resume: nothing pending from the perfection-pass spec. Open items remain: /contact bundle slimming, unused forge-*.webp deletion.
+
 ### Block 5 — global (final commit)
 Shipped: verification pass. Legacy font vars already point at Geist (`src/index.css:78-80`, done pre-session). Section-level `border-t` sweep across `src/` found only the site footer hairline (`src/components/furnace/Footer.tsx:21`) — deliberate chrome, kept. Grain is root-level and covers all routes. All routes return 200. Frozen-path diff against baseline is empty.
 Resume: nothing pending in this block.
