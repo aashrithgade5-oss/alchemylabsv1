@@ -16,7 +16,7 @@ function ScrubBeat({ eyebrow, text }: { eyebrow: string; text: string }) {
         <div aria-hidden className="glass-halo absolute -inset-x-12 -inset-y-8 z-0" />
         <ScrollScrub
           text={text}
-          className="relative z-10 max-w-5xl justify-center text-center font-sans text-5xl font-bold leading-[1.05] tracking-tight text-bone md:text-7xl lg:text-8xl"
+          className="relative z-10 max-w-5xl justify-center text-center font-fraunces text-[clamp(2rem,4vw,3.5rem)] font-semibold leading-[1.05] tracking-[-0.01em] text-bone"
           wordClassName="glass-type"
         />
       </div>

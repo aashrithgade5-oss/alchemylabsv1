@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Playfair_Display } from 'next/font/google';
+import { Fraunces } from 'next/font/google';
 import { GeistSans } from 'geist/font/sans';
 import { GeistMono } from 'geist/font/mono';
 import { SpeedInsights } from '@vercel/speed-insights/next';
@@ -10,12 +10,13 @@ import { GrainOverlay } from '@/components/furnace/GrainOverlay';
 import { CookieConsent } from '@/components/CookieConsent';
 import '@/index.css';
 
-// Playfair is reserved for editorial pull-quotes only; Geist carries
-// everything else (display, body, mono).
-const playfair = Playfair_Display({
+// Fraunces variable carries display, headlines, and editorial pull-quotes
+// (see style-guide.md); Geist carries body + mono. Playfair is retired.
+const fraunces = Fraunces({
   subsets: ['latin'],
   style: ['normal', 'italic'],
-  variable: '--font-playfair',
+  variable: '--font-fraunces',
+  axes: ['opsz'],
 });
 
 const description =
@@ -61,7 +62,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     // next-view-transitions' <ViewTransitions> wrapper silently blocked every
     // AnimatePresence exit unmount (stuck invisible overlays); removed, the
     // framer fade in LayoutTransition is the page transition.
-    <html lang="en" className={`${playfair.variable} ${GeistSans.variable} ${GeistMono.variable}`}>
+    <html lang="en" className={`${fraunces.variable} ${GeistSans.variable} ${GeistMono.variable}`}>
         <body>
           <Providers>
             {/* LayoutTransition's transform wrapper breaks position:fixed for

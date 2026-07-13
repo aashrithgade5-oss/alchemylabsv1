@@ -75,11 +75,13 @@ export function Hero() {
         </m.div>
 
         <div className="relative mt-8">
+          {/* text-scoped vignette: contrast floor between footage and glyphs */}
+          <div aria-hidden className="text-vignette absolute -inset-x-20 -inset-y-12 z-0" />
           {/* boxless refractive halo: the video bends behind the glyphs */}
           <div aria-hidden className="glass-halo absolute -inset-x-10 -inset-y-6 z-0" />
           <KineticHeadline
             text="Taste is the moat."
-            className="relative z-10 font-sans text-[clamp(4rem,11vw,12rem)] font-black leading-[0.98] tracking-[-0.04em] text-bone"
+            className="relative z-10 font-fraunces text-[clamp(3rem,7vw,7rem)] font-semibold leading-[1.05] tracking-[-0.02em] text-bone"
             wordClassName="glass-type"
             delay={0.35}
           />

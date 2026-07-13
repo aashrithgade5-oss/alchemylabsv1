@@ -103,12 +103,14 @@ export default {
       fontFamily: {
         sans: ['var(--font-geist-sans)', '-apple-system', 'sans-serif'],
         mono: ['var(--font-geist-mono)', 'SF Mono', 'monospace'],
-        // editorial pull-quotes only
-        playfair: ['var(--font-playfair)', 'Georgia', 'serif'],
+        // Furnace display face (style-guide.md). NEVER repoint `display`:
+        // it is a legacy Geist alias the frozen portfolio depends on.
+        fraunces: ['var(--font-fraunces)', 'Georgia', 'serif'],
         display: ['var(--font-geist-sans)', '-apple-system', 'sans-serif'],
         body: ['var(--font-geist-sans)', '-apple-system', 'sans-serif'],
         alchemy: ['Cinzel', 'Playfair Display', 'Georgia', 'serif'],
-        elegant: ['var(--font-playfair)', 'Georgia', 'serif'],
+        // legacy routes: literal family from the @fontsource imports in index.css
+        elegant: ['Playfair Display', 'Georgia', 'serif'],
         accent: ['var(--font-geist-mono)', 'SF Mono', 'monospace'],
       },
       borderRadius: {

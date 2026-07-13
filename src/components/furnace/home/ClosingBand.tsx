@@ -78,7 +78,7 @@ export function ClosingBand() {
         <KineticHeadline
           as="h2"
           text="Bring us the brand as it stands."
-          className="font-sans text-4xl font-bold leading-tight text-bone md:text-6xl"
+          className="font-fraunces text-[clamp(2rem,4vw,3.5rem)] font-semibold leading-[1.05] tracking-[-0.01em] text-bone"
           wordClassName="glass-type"
         />
         <m.p
@@ -86,7 +86,7 @@ export function ClosingBand() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.5 }}
-          className="mt-6 font-playfair text-xl italic text-bone/70 md:text-2xl"
+          className="mt-6 font-fraunces text-xl italic text-bone/70 md:text-2xl"
         >
           We will tell you what it needs.
         </m.p>

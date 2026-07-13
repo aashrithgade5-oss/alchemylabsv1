@@ -53,7 +53,7 @@ export function PillarSection({ pillar, index }: { pillar: Pillar; index: number
           <p className="font-mono text-[10px] tracking-[0.3em] text-ash">{pillar.tag}</p>
           <ScrollScrub
             text={pillar.title}
-            className="mt-5 font-sans text-4xl font-bold tracking-tight text-bone md:text-6xl"
+            className="mt-5 font-fraunces text-[clamp(2rem,4vw,3.5rem)] font-semibold leading-[1.05] tracking-[-0.01em] text-bone"
             wordClassName="glass-type"
           />
           <p className="mt-5 max-w-md text-base leading-relaxed text-ash">{pillar.description}</p>

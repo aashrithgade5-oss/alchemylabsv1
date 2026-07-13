@@ -68,7 +68,7 @@ function KineticLine({
   return (
     <m.h2
       style={{ opacity, y, filter }}
-      className="absolute flex max-w-5xl flex-wrap justify-center gap-x-4 px-6 text-center font-sans text-5xl font-bold leading-[1.05] tracking-tight text-bone md:text-7xl lg:text-8xl"
+      className="absolute flex max-w-5xl flex-wrap justify-center gap-x-4 px-6 text-center font-fraunces text-[clamp(2.5rem,6vw,5.5rem)] font-semibold leading-[1.05] tracking-[-0.01em] text-bone"
     >
       {words.map((word, i) => {
         const wStart = start + (i / words.length) * inWindow;
@@ -184,6 +184,11 @@ function ScrubSequence() {
         <canvas ref={canvasRef} className="absolute inset-0 h-full w-full will-change-transform" />
         {/* light scrim; the glass halo below carries legibility */}
         <div aria-hidden className="absolute inset-0 bg-void/25" />
+        {/* text-scoped vignette: contrast floor against the bright wings */}
+        <div
+          aria-hidden
+          className="text-vignette absolute left-1/2 top-1/2 h-[24rem] w-[min(80rem,100vw)] -translate-x-1/2 -translate-y-1/2"
+        />
         {/* boxless refractive halo: the footage bends behind the type,
             feathered to nothing so no panel edge ever reads */}
         <div

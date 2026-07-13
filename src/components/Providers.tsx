@@ -7,6 +7,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { Toaster as Sonner } from '@/components/ui/sonner';
 import { PerformanceProvider } from '@/contexts/PerformanceContext';
 import { PageAtmosphereProvider, AtmosphericBackground } from '@/contexts/PageAtmosphereContext';
+import { LenisProvider } from '@/components/LenisProvider';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -26,6 +27,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       <TooltipProvider>
         <PerformanceProvider>
           <PageAtmosphereProvider>
+            <LenisProvider />
             <AtmosphericBackground />
             <Toaster />
             <Sonner />

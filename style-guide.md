@@ -8,7 +8,7 @@ Exempt: frozen Aashrith portfolio (untouchable), Eva portfolio (her own black/pi
 
 | Role | Face | Rules |
 |---|---|---|
-| Display, headlines, pull-quotes | **Fraunces variable** (`--font-fraunces`, Tailwind `font-display`) | High optical size, tracking -0.01em to -0.03em, line-height 1.05. Italic for editorial pull-quotes. |
+| Display, headlines, pull-quotes | **Fraunces variable** (`--font-fraunces`, Tailwind `font-fraunces`) | High optical size, tracking -0.01em to -0.03em, line-height 1.05. Italic for editorial pull-quotes. NOTE: the Tailwind key is `fraunces`, NOT `display` — `font-display` is a legacy Geist alias used by the frozen portfolio and must never be repointed. |
 | Body, subheads | **Geist Sans** (`--font-geist-sans`, `font-sans`) | line-height 1.5. |
 | Eyebrows, labels, technical | **Geist Mono** (`--font-geist-mono`, `font-mono`) | 10-11px, tracking 0.2-0.35em, uppercase. |
 

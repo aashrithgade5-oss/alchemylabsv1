@@ -13,7 +13,7 @@ export function FAQ() {
       <div className="mx-auto max-w-3xl px-6 py-24 md:px-12 md:py-32">
         <ScrollScrub
           text="Asked before you ask."
-          className="font-sans text-4xl font-bold tracking-tight text-bone md:text-5xl"
+          className="font-fraunces text-[clamp(2rem,4vw,3.5rem)] font-semibold leading-[1.05] tracking-[-0.01em] text-bone"
           wordClassName="glass-type"
         />
         <div className="mt-12">

@@ -45,7 +45,7 @@ export const ContactPage = () => {
         <KineticHeadline
           as="h1"
           text="Start the work."
-          className="mx-auto mt-7 justify-center font-sans text-[clamp(3.5rem,9vw,9rem)] font-black leading-[0.98] tracking-[-0.04em] text-bone"
+          className="mx-auto mt-7 justify-center font-fraunces text-[clamp(3rem,7vw,7rem)] font-semibold leading-[1.05] tracking-[-0.02em] text-bone"
           wordClassName="glass-type"
           delay={0.2}
         />
@@ -53,7 +53,7 @@ export const ContactPage = () => {
           initial={{ opacity: 0, y: 16, filter: 'blur(8px)' }}
           animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
           transition={{ duration: 1, delay: 0.7, ease }}
-          className="mx-auto mt-7 max-w-xl font-playfair text-xl italic text-bone/75 md:text-2xl"
+          className="mx-auto mt-7 max-w-xl font-fraunces text-xl italic text-bone/75 md:text-2xl"
         >
           The first conversation is the audit.
         </m.p>
