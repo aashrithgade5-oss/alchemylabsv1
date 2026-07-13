@@ -36,7 +36,7 @@ function Word({
   wEnd: number;
   progress: MotionValue<number>;
 }) {
-  const opacity = useTransform(progress, [wStart, wEnd], [0.15, 1]);
+  const opacity = useTransform(progress, [wStart, wEnd], [0, 1]);
   const blurPx = useTransform(progress, [wStart, wEnd], [10, 0]);
   const filter = useMotionTemplate`blur(${blurPx}px)`;
   return (

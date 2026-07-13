@@ -26,7 +26,7 @@ export function ServicesClosing() {
           initial={{ opacity: 0, y: 24, filter: 'blur(12px)' }}
           whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
           viewport={{ once: true, margin: '-120px' }}
-          transition={{ duration: 1.1, ease }}
+          transition={{ duration: 0.8, ease }}
           className="font-fraunces text-[clamp(2rem,4vw,3.5rem)] italic leading-[1.1] text-bone"
         >
           Scope it in one conversation.

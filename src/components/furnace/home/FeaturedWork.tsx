@@ -32,7 +32,7 @@ export function FeaturedWork() {
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 1, ease }}
+            transition={{ duration: 0.8, ease }}
             className="mt-12 grid gap-10 md:grid-cols-[1.4fr_1fr] md:items-end"
           >
             <Link href="/work" className="group relative block overflow-hidden border border-line">

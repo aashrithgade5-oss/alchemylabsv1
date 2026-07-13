@@ -18,6 +18,16 @@ Shipped:
 Build: / 133kB, /services 132kB, /contact 220kB (pre-existing). Dev server port 3000 had a STALE node process (PID 9728, killed); dev now on 3001.
 Resume: Step 2 (scroll reveals firing on load + easing speed).
 
+### FO3 Step 2 — reveal-at-rest fix + faster easing (this commit)
+Shipped:
+- ScrollScrub + TurnSequence word opacity floor 0.15 → **0** (the "pre-faded-in" bug: faint text was visible before its reveal). Verified in-browser: words at opacity 0 below the fold, 1.0 by mid-viewport.
+- ScrollScrub scrub band tightened: offset `['start 0.9','start 0.5']` (was 0.85/0.35 — reveal now completes by mid-viewport), per-word window 0.4 → 0.3.
+- KineticHeadline: stagger 0.09 → 0.06, word duration 1.1s → 0.8s.
+- whileInView durations trimmed: StudioMotion/StillBreak/ServicesClosing/ClosingBand 1.1 → 0.8s; FeaturedWork 1.0 → 0.8s; ClosingBand delays 0.5/0.7/0.9 → 0.3/0.45/0.6; SmoothReveal spring 80/20 → 120/22.
+- Lenis lerp 0.12 → 0.16 (scroll-scrubbed reveals trailed the wheel).
+Build: / 133kB, /services 132kB.
+Resume: Step 3 (hero rebuild: WE BUILD cycler + mask reveal).
+
 # ✅ PERFECTION PASS — EXECUTED 2026-07-13 (commits e142057..HEAD)
 
 Every item in the spec below is DONE and verified in-browser (screenshots of /, /services, /contact?pillar=ai at every section). See "Block log → Perfection pass" at the bottom for what shipped. Additional user asks executed same session: glass-type on ALL display text site-wide, atom logo replaces the nav wordmark, favicon.ico/png regenerated from the alchemy logo (black-bg variant, ffmpeg crop+scale), metadata.icons wired in app/layout.tsx.

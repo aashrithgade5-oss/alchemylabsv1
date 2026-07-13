@@ -15,7 +15,9 @@ export function LenisProvider() {
 
   useEffect(() => {
     if (reduced) return;
-    const lenis = new Lenis({ autoRaf: false, lerp: 0.12 });
+    // lerp 0.16: smooth but tight — 0.12 made scroll-scrubbed reveals trail
+    // the wheel noticeably (the "lethargic" feel).
+    const lenis = new Lenis({ autoRaf: false, lerp: 0.16 });
     lenisRef.current = lenis;
     return () => {
       lenis.destroy();

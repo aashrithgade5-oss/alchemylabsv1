@@ -45,7 +45,7 @@ export function KineticHeadline({
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: '-60px' }}
-      transition={{ staggerChildren: 0.09, delayChildren: delay }}
+      transition={{ staggerChildren: 0.06, delayChildren: delay }}
       aria-label={text}
     >
       {words.map((word, i) => (
@@ -58,7 +58,7 @@ export function KineticHeadline({
                 y: '0%',
                 opacity: 1,
                 filter: 'blur(0px)',
-                transition: { duration: 1.1, ease },
+                transition: { duration: 0.8, ease },
               },
             }}
           >

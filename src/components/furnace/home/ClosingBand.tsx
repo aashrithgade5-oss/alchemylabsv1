@@ -63,7 +63,7 @@ export function ClosingBand() {
           initial={{ opacity: 0, scale: 0.96 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="mb-12 flex flex-col items-center gap-5"
         >
           <Image src="/assets/alchemy-minimal-logo.png" alt="" width={44} height={44} />
@@ -85,7 +85,7 @@ export function ClosingBand() {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.5 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
           className="mt-6 font-fraunces text-xl italic text-bone/70 md:text-2xl"
         >
           We will tell you what it needs.
@@ -94,7 +94,7 @@ export function ClosingBand() {
           initial={{ opacity: 0, y: 14 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.7 }}
+          transition={{ duration: 0.6, delay: 0.45 }}
           className="mt-12"
         >
           <MagneticCTA href="/contact" variant="ember">
@@ -105,7 +105,7 @@ export function ClosingBand() {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.9 }}
+          transition={{ duration: 0.6, delay: 0.6 }}
           className="mt-14"
         >
           <WordSwitcher />

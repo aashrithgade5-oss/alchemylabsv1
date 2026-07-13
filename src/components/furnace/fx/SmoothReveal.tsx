@@ -25,7 +25,7 @@ export function SmoothReveal({
       initial={{ opacity: 0, y: 24, filter: 'blur(8px)' }}
       whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
       viewport={{ once: true, margin: '-80px' }}
-      transition={{ type: 'spring', stiffness: 80, damping: 20, delay }}
+      transition={{ type: 'spring', stiffness: 120, damping: 22, delay }}
       onAnimationComplete={() => {
         if (ref.current) ref.current.style.filter = '';
       }}

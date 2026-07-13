@@ -26,7 +26,8 @@ function Word({
   progress: MotionValue<number>;
   className?: string;
 }) {
-  const opacity = useTransform(progress, range, [0.15, 1]);
+  // Fully hidden at rest: nothing renders pre-faded-in before its reveal.
+  const opacity = useTransform(progress, range, [0, 1]);
   const blurPx = useTransform(progress, range, [12, 0]);
   const filter = useMotionTemplate`blur(${blurPx}px)`;
   return <m.span className={className} style={{ opacity, filter }}>{word}</m.span>;
@@ -47,9 +48,11 @@ export function ScrollScrub({
 }) {
   const ref = useRef<HTMLElement>(null);
   const reduced = useReducedMotion();
+  // Tight scrub band: reveal completes by mid-viewport so it reads responsive,
+  // not lagging behind the reader's eye.
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ['start 0.85', 'start 0.35'],
+    offset: ['start 0.9', 'start 0.5'],
   });
 
   const words = text.split(' ');
@@ -64,7 +67,7 @@ export function ScrollScrub({
         <Word
           key={`${word}-${i}`}
           word={word}
-          range={[i / words.length, Math.min(i / words.length + 0.4, 1)]}
+          range={[i / words.length, Math.min(i / words.length + 0.3, 1)]}
           progress={scrollYProgress}
           className={wordClassName}
         />
