@@ -14,6 +14,7 @@ export function FAQ() {
         <ScrollScrub
           text="Asked before you ask."
           className="font-sans text-4xl font-bold tracking-tight text-bone md:text-5xl"
+          wordClassName="glass-type"
         />
         <div className="mt-12">
           {faqs.map((item) => (

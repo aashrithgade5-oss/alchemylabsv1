@@ -11,10 +11,15 @@ function ScrubBeat({ eyebrow, text }: { eyebrow: string; text: string }) {
   return (
     <section className="relative flex min-h-[70svh] flex-col items-center justify-center px-6">
       <p className="font-mono text-[10px] tracking-[0.35em] text-ash">{eyebrow}</p>
-      <ScrollScrub
-        text={text}
-        className="mt-8 max-w-5xl justify-center text-center font-sans text-5xl font-bold leading-[1.05] tracking-tight text-bone md:text-7xl lg:text-8xl"
-      />
+      <div className="relative mt-8">
+        {/* boxless refractive halo behind the type */}
+        <div aria-hidden className="glass-halo absolute -inset-x-12 -inset-y-8 z-0" />
+        <ScrollScrub
+          text={text}
+          className="relative z-10 max-w-5xl justify-center text-center font-sans text-5xl font-bold leading-[1.05] tracking-tight text-bone md:text-7xl lg:text-8xl"
+          wordClassName="glass-type"
+        />
+      </div>
     </section>
   );
 }

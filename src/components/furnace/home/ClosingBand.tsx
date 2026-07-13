@@ -79,6 +79,7 @@ export function ClosingBand() {
           as="h2"
           text="Bring us the brand as it stands."
           className="font-sans text-4xl font-bold leading-tight text-bone md:text-6xl"
+          wordClassName="glass-type"
         />
         <m.p
           initial={{ opacity: 0 }}

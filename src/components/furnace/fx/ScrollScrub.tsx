@@ -19,25 +19,31 @@ function Word({
   word,
   range,
   progress,
+  className,
 }: {
   word: string;
   range: [number, number];
   progress: MotionValue<number>;
+  className?: string;
 }) {
   const opacity = useTransform(progress, range, [0.15, 1]);
   const blurPx = useTransform(progress, range, [12, 0]);
   const filter = useMotionTemplate`blur(${blurPx}px)`;
-  return <m.span style={{ opacity, filter }}>{word}</m.span>;
+  return <m.span className={className} style={{ opacity, filter }}>{word}</m.span>;
 }
 
 export function ScrollScrub({
   text,
   className = '',
   as: Tag = 'h2',
+  wordClassName,
 }: {
   text: string;
   className?: string;
   as?: ElementType;
+  /** Extra class per word span (e.g. glass-type); reduced-motion branch
+      renders plain text, so keep the fill color on className too. */
+  wordClassName?: string;
 }) {
   const ref = useRef<HTMLElement>(null);
   const reduced = useReducedMotion();
@@ -60,6 +66,7 @@ export function ScrollScrub({
           word={word}
           range={[i / words.length, Math.min(i / words.length + 0.4, 1)]}
           progress={scrollYProgress}
+          className={wordClassName}
         />
       ))}
     </Tag>

@@ -74,20 +74,25 @@ export function Hero() {
           </m.p>
         </m.div>
 
-        <KineticHeadline
-          text="Taste is the moat."
-          className="mt-8 font-sans text-[clamp(4rem,11vw,12rem)] font-black leading-[0.98] tracking-[-0.04em] text-bone"
-          delay={0.35}
-        />
+        <div className="relative mt-8">
+          {/* boxless refractive halo: the video bends behind the glyphs */}
+          <div aria-hidden className="glass-halo absolute -inset-x-10 -inset-y-6 z-0" />
+          <KineticHeadline
+            text="Taste is the moat."
+            className="relative z-10 font-sans text-[clamp(4rem,11vw,12rem)] font-black leading-[0.98] tracking-[-0.04em] text-bone"
+            wordClassName="glass-type"
+            delay={0.35}
+          />
+        </div>
 
         <m.p
           initial={{ opacity: 0, y: 18, filter: 'blur(8px)' }}
           animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
           transition={{ duration: 1, delay: 1.1, ease }}
-          className="mt-8 max-w-xl text-lg leading-relaxed text-bone/75 md:text-xl"
+          className="mt-8 max-w-xl text-lg font-light leading-relaxed text-bone/70 [text-wrap:balance] md:text-xl"
         >
-          AI production under exacting human judgment. Brand systems and campaign imagery for
-          founders who can tell the difference.
+          AI throughput under human judgment. Brand systems and campaign film for founders who can
+          tell the difference.
         </m.p>
 
         <m.div style={reduced ? undefined : { opacity: chromeOpacity }}>

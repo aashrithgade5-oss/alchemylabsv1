@@ -29,6 +29,7 @@ export const ContactPage = () => {
           as="h1"
           text="Start the work."
           className="mx-auto mt-7 justify-center font-sans text-[clamp(3.5rem,9vw,9rem)] font-black leading-[0.98] tracking-[-0.04em] text-bone"
+          wordClassName="glass-type"
           delay={0.2}
         />
         <m.p
@@ -64,7 +65,7 @@ export const ContactPage = () => {
           transition={{ duration: 1, delay: 1.1, ease }}
           className="mx-auto max-w-5xl"
         >
-          <GlassPanel className="rounded-3xl">
+          <GlassPanel refract className="rounded-3xl">
             <Contact />
           </GlassPanel>
         </m.div>

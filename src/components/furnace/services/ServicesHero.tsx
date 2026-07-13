@@ -33,6 +33,7 @@ export function ServicesHero() {
         <KineticHeadline
           text="Three ways in."
           className="mt-7 max-w-4xl font-sans text-[clamp(3.5rem,9vw,9rem)] font-black leading-[0.98] tracking-[-0.04em] text-bone"
+          wordClassName="glass-type"
           delay={0.15}
         />
         <m.p

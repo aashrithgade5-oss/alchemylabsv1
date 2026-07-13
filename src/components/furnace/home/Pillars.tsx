@@ -48,7 +48,7 @@ export function Pillars() {
               transition={{ duration: 0.9, delay: i * 0.12, ease }}
               className={i === 0 ? 'md:col-span-2 md:row-span-2' : ''}
             >
-              <GlassPanel className={`group h-full ${i === 0 ? 'md:min-h-[28rem]' : ''}`}>
+              <GlassPanel refract={i === 0} className={`group h-full ${i === 0 ? 'md:min-h-[28rem]' : ''}`}>
                 {pillar.media ? (
                   <AmbientVideo
                     src={pillar.media.src}

@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { m } from 'framer-motion';
 import { products, type Product } from '@lib/payments';
 import { PaymentSheet } from '../PaymentSheet';
-import { GlassPanel } from '../GlassPanel';
 import { AmbientVideo } from './AmbientVideo';
 
 const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
@@ -28,7 +27,9 @@ function ProductCard({
   onBuy: (p: Product) => void;
 }) {
   return (
-    <GlassPanel className="flex w-[20rem] shrink-0 snap-center flex-col">
+    // glass-solid, not GlassPanel: backdrop-filter inside the snap track
+    // re-filters every scrolled frame and glitches the horizontal scroll
+    <div className="glass-solid group relative flex w-[20rem] shrink-0 snap-center flex-col overflow-hidden rounded-2xl">
       <div aria-hidden className="h-28 w-full" style={{ background: field }} />
       <div className="flex flex-1 flex-col justify-between p-7">
         <div>
@@ -49,7 +50,7 @@ function ProductCard({
           </button>
         </div>
       </div>
-    </GlassPanel>
+    </div>
   );
 }
 

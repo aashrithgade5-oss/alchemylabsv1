@@ -5,15 +5,19 @@ import { useRef, useCallback } from 'react';
 interface GlassPanelProps {
   children: React.ReactNode;
   className?: string;
+  /** SVG-displacement edge ring. Expensive (re-filters the backdrop every
+      scrolled frame in Chromium), so opt-in: hero surfaces only, never
+      inside scrolling containers. */
+  refract?: boolean;
 }
 
 /**
- * Liquid glass with refraction: the .liquid-glass base (blur + saturate +
- * brightness + inset highlight), a displacement-mapped edge ring that bends
- * the backdrop (.glass-refract-edge, filter defined in app/layout.tsx), a
- * static specular line on the top edge, and a pointer-tracked highlight.
+ * Liquid glass: the .liquid-glass base (blur + saturate + brightness +
+ * inset highlight), a static specular line on the top edge, a
+ * pointer-tracked highlight, and an optional displacement-mapped edge ring
+ * that bends the backdrop (.glass-refract-edge, filter in app/layout.tsx).
  */
-export function GlassPanel({ children, className = '' }: GlassPanelProps) {
+export function GlassPanel({ children, className = '', refract = false }: GlassPanelProps) {
   const ref = useRef<HTMLDivElement>(null);
 
   const handlePointerMove = useCallback((e: React.PointerEvent) => {
@@ -32,7 +36,9 @@ export function GlassPanel({ children, className = '' }: GlassPanelProps) {
       style={{ ['--gx' as string]: '50%', ['--gy' as string]: '0%' }}
     >
       {/* refraction ring: backdrop bends through the panel edges */}
-      <div aria-hidden className="glass-refract-edge pointer-events-none absolute inset-0 rounded-[inherit]" />
+      {refract && (
+        <div aria-hidden className="glass-refract-edge pointer-events-none absolute inset-0 rounded-[inherit]" />
+      )}
       {/* specular highlight, top edge */}
       <div
         aria-hidden

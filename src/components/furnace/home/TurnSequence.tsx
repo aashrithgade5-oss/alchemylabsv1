@@ -11,7 +11,6 @@ import {
   useTransform,
   type MotionValue,
 } from 'framer-motion';
-import { GlassPanel } from '../GlassPanel';
 
 const FRAME_COUNT = 104;
 const frameSrc = (i: number) => `/sequence-turn/turn-${String(i + 1).padStart(3, '0')}.webp`;
@@ -40,7 +39,11 @@ function Word({
   const opacity = useTransform(progress, [wStart, wEnd], [0.15, 1]);
   const blurPx = useTransform(progress, [wStart, wEnd], [10, 0]);
   const filter = useMotionTemplate`blur(${blurPx}px)`;
-  return <m.span style={{ opacity, filter }}>{word}</m.span>;
+  return (
+    <m.span className="glass-type" style={{ opacity, filter }}>
+      {word}
+    </m.span>
+  );
 }
 
 function KineticLine({
@@ -179,17 +182,18 @@ function ScrubSequence() {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={frameSrc(0)} alt="" className="absolute inset-0 h-full w-full object-cover" />
         <canvas ref={canvasRef} className="absolute inset-0 h-full w-full will-change-transform" />
-        {/* light scrim; the glass band below carries legibility */}
+        {/* light scrim; the glass halo below carries legibility */}
         <div aria-hidden className="absolute inset-0 bg-void/25" />
+        {/* boxless refractive halo: the footage bends behind the type,
+            feathered to nothing so no panel edge ever reads */}
+        <div
+          aria-hidden
+          className="glass-halo absolute left-1/2 top-1/2 h-[16rem] w-[min(72rem,92vw)] -translate-x-1/2 -translate-y-1/2"
+        />
         <div className="absolute inset-0 flex items-center justify-center px-6">
-          {/* refracting band: the copy reads against bent red footage */}
-          <GlassPanel className="w-full max-w-5xl rounded-3xl px-8 py-12 md:px-12">
-            <div className="relative flex min-h-[14rem] items-center justify-center">
-              {LINES.map((line) => (
-                <KineticLine key={line.text} text={line.text} range={line.range} progress={scrollYProgress} />
-              ))}
-            </div>
-          </GlassPanel>
+          {LINES.map((line) => (
+            <KineticLine key={line.text} text={line.text} range={line.range} progress={scrollYProgress} />
+          ))}
         </div>
       </div>
     </section>

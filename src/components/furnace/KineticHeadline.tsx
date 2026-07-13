@@ -22,11 +22,20 @@ interface KineticHeadlineProps {
   /** Tag to render — h1 on the hero, h2 elsewhere. */
   as?: 'h1' | 'h2' | 'p';
   delay?: number;
+  /** Extra class per word span (e.g. glass-type: bg-clip must sit on the
+      transformed word, parent-level clip breaks under child transforms). */
+  wordClassName?: string;
 }
 
 // Word-split headline: each word rises out of blur in a tight stagger.
 // The split happens at render from a static string, so SSR output is stable.
-export function KineticHeadline({ text, className = '', as = 'h1', delay = 0 }: KineticHeadlineProps) {
+export function KineticHeadline({
+  text,
+  className = '',
+  as = 'h1',
+  delay = 0,
+  wordClassName = '',
+}: KineticHeadlineProps) {
   const words = useMemo(() => text.split(' '), [text]);
   const Tag = m[as];
 
@@ -42,7 +51,7 @@ export function KineticHeadline({ text, className = '', as = 'h1', delay = 0 }: 
       {words.map((word, i) => (
         <span key={i} className="inline-block overflow-visible whitespace-pre" aria-hidden>
           <m.span
-            className="inline-block will-change-transform"
+            className={`inline-block will-change-transform ${wordClassName}`}
             variants={{
               hidden: { y: '55%', opacity: 0, filter: 'blur(14px)' },
               visible: {

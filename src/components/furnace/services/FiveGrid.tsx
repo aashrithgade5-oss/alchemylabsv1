@@ -21,9 +21,9 @@ export function FiveGrid() {
         {/* clause-per-line rule + per-word scrub, one clause per row */}
         <h2 className="max-w-2xl font-sans text-4xl font-bold tracking-tight text-bone md:text-5xl">
           {/* display:flex makes each span block-level: one clause per line */}
-          <ScrollScrub as="span" text="No call." />
-          <ScrollScrub as="span" text="No proposal." />
-          <ScrollScrub as="span" text="Just checkout." />
+          <ScrollScrub as="span" text="No call." wordClassName="glass-type" />
+          <ScrollScrub as="span" text="No proposal." wordClassName="glass-type" />
+          <ScrollScrub as="span" text="Just checkout." wordClassName="glass-type" />
         </h2>
         <p className="mt-4 max-w-md text-base leading-relaxed text-ash">
           Five offers with printed prices. Pay now and the work starts this week.
