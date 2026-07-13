@@ -3,6 +3,7 @@
 import { m } from 'framer-motion';
 import { Contact } from '@/components/Contact';
 import { HomeAtmosphere } from '@/components/furnace/home/HomeAtmosphere';
+import { AmbientVideo } from '@/components/furnace/home/AmbientVideo';
 import { GlassPanel } from '@/components/furnace/GlassPanel';
 import { KineticHeadline } from '@/components/furnace/KineticHeadline';
 
@@ -17,6 +18,22 @@ export const ContactPage = () => {
 
       {/* Centered header: oversized Geist, one Playfair line */}
       <section className="relative px-6 pb-16 pt-40 text-center md:pt-48">
+        {/* running silhouettes, dissolving into void before the form */}
+        <div
+          aria-hidden
+          className="absolute inset-0 overflow-hidden"
+          style={{
+            WebkitMaskImage: 'linear-gradient(to bottom, black 30%, transparent 100%)',
+            maskImage: 'linear-gradient(to bottom, black 30%, transparent 100%)',
+          }}
+        >
+          <AmbientVideo
+            src="/media/red-slats-tall.mp4"
+            poster="/media/red-slats-tall-poster.jpg"
+            className="h-full w-full object-cover opacity-25"
+          />
+        </div>
+        <div className="relative">
         <m.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -55,6 +72,7 @@ export const ContactPage = () => {
             </span>
           ))}
         </m.div>
+        </div>
       </section>
 
       {/* The form, in glass */}
