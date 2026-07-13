@@ -28,6 +28,15 @@ Shipped:
 Build: / 133kB, /services 132kB.
 Resume: Step 3 (hero rebuild: WE BUILD cycler + mask reveal).
 
+### FO3 Step 3 — hero rebuild (this commit)
+Shipped in `src/components/furnace/home/Hero.tsx`:
+- **Scroll mask reveal**: section is now `h-[180svh]` with a sticky `100svh` stage; the video wrapper carries `clip-path: ellipse(rx% ry% at 50% 55%)` via useMotionTemplate, opening 18/26% → 125% across the first 55% of section scroll. Verified in-browser: slit at rest, full bleed by ~50svh of scroll. Reduced motion: no mask, static min-h-[100svh] section.
+- **WE BUILD cycler** promoted from ClosingBand's tiny WordSwitcher to a LARGE central hero element under the statement: `clamp(1.75rem,4vw,3.75rem) font-black`, cycling STRATEGY / BRAND SYSTEMS / IDENTITY / CAMPAIGNS / FILM every 2.4s, each phrase with its OWN metallic gradient variation (steel/champagne/platinum/ember-kissed/bone — all opaque, legible over darkest+brightest footage points), blur-to-sharp swap, no solid backing (hero text-vignette carries contrast). Reduced motion: static BRAND SYSTEMS. ClosingBand's small mono switcher retained as the closing echo.
+- Statement "Taste is the moat." kept centered in grotesk metallic (step 1). Hero video vignette now lives INSIDE the masked wrapper so the scrim opens with the footage.
+- Subline/eyebrow alpha bone/70 → bone/80 (step 5 pre-work).
+Build: / 134kB (+1), /services 132kB.
+Resume: Step 4 (clause-per-line audit).
+
 # ✅ PERFECTION PASS — EXECUTED 2026-07-13 (commits e142057..HEAD)
 
 Every item in the spec below is DONE and verified in-browser (screenshots of /, /services, /contact?pillar=ai at every section). See "Block log → Perfection pass" at the bottom for what shipped. Additional user asks executed same session: glass-type on ALL display text site-wide, atom logo replaces the nav wordmark, favicon.ico/png regenerated from the alchemy logo (black-bg variant, ffmpeg crop+scale), metadata.icons wired in app/layout.tsx.
