@@ -44,18 +44,15 @@ export function FurnaceNavigation() {
             : 'border border-transparent bg-transparent'
         }`}
       >
-        <Link href="/" className="flex items-center gap-2.5" aria-label="Alchemy Labs, home">
+        <Link href="/" className="flex items-center" aria-label="Alchemy Labs, home">
           <Image
             src="/assets/alchemy-minimal-logo.png"
-            alt=""
-            width={26}
-            height={26}
+            alt="Alchemy Labs"
+            width={38}
+            height={38}
             priority
+            className="transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:rotate-[30deg]"
           />
-          <span className="flex items-baseline gap-1.5">
-            <span className="font-sans text-base font-bold tracking-tight text-bone">Alchemy</span>
-            <span className="font-mono text-[9px] tracking-[0.3em] text-ash">LABS</span>
-          </span>
         </Link>
 
         <ul className="hidden items-center gap-7 md:flex">

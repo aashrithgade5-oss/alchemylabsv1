@@ -43,6 +43,13 @@ export const metadata: Metadata = {
     description,
     images: ['/og-image.png'],
   },
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/favicon.png', type: 'image/png', sizes: '192x192' },
+    ],
+    apple: '/favicon.png',
+  },
   robots: {
     index: true,
     follow: true,
