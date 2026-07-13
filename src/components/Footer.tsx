@@ -70,7 +70,7 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-6 md:px-12 py-16 sm:py-20">
-        {/* Logo - Playfair Display Italic (matching nav) */}
+        {/* Logo - serif italic wordmark (matching nav) */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}

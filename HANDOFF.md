@@ -4,6 +4,20 @@ The single source of truth for resuming this session. Append a block entry after
 
 ---
 
+# FINAL OVERHAUL 3 (2026-07-13, master prompt: CLAUDE.md law + StringTune treatment + steps 1-8)
+
+CLAUDE.md now exists at repo root (commit `1d9ec3d`) — standing law: fonts (Playfair banned), animation, budget, frozen paths, tokens. Re-verify at session end.
+
+### FO3 Step 1 — StringTune metallic glass type (this commit)
+Shipped:
+- `.glass-type` → metallic vertical gradient `#b8b8bd → #f4f2ee 55% → #cfcdc9` (fully opaque stops, brushed-metal read). Verified in-browser over the red-wings TurnSequence frame AND the hero samurai footage — every word crisp.
+- `.text-vignette` → explicit `ellipse 50% 50%` radii (default farthest-corner sizing put the transparent stop past the element bounds — read as a faint dark RECTANGLE over the bright wings frame; now feathers invisibly).
+- StringTune display moments → clean grotesk: Hero "Taste is the moat." now `font-sans font-black clamp(3rem,8vw,8rem) tracking-[-0.04em]`; TurnSequence kinetic lines `font-sans font-black`. Fraunces italic stays for editorial pull-quotes only.
+- **Playfair fully retired**: @fontsource/playfair-display + cinzel uninstalled; index.css imports removed; tailwind `elegant`/`alchemy` aliases deleted (zero uses verified); dead `.font-alchemy` class deleted; legacy Navigation.tsx inline fontFamily → fraunces var (component is dead code, nothing imports it). Grep for playfair/font-serif/cinzel: comments only.
+- **P0 BUG FIX — Loader.tsx StrictMode wedge**: the mount effect stamped SEEN_KEY then scheduled the hide timeout; StrictMode remount cleared the timeout and the re-run early-returned on SEEN_KEY → `show` stuck true → fixed black `z-[90]` overlay covered the whole page in dev. Hide timer moved to its own `[show]`-keyed effect. (Prod was never affected — StrictMode is dev-only — which is why build gates passed while dev looked black.)
+Build: / 133kB, /services 132kB, /contact 220kB (pre-existing). Dev server port 3000 had a STALE node process (PID 9728, killed); dev now on 3001.
+Resume: Step 2 (scroll reveals firing on load + easing speed).
+
 # ✅ PERFECTION PASS — EXECUTED 2026-07-13 (commits e142057..HEAD)
 
 Every item in the spec below is DONE and verified in-browser (screenshots of /, /services, /contact?pillar=ai at every section). See "Block log → Perfection pass" at the bottom for what shipped. Additional user asks executed same session: glass-type on ALL display text site-wide, atom logo replaces the nav wordmark, favicon.ico/png regenerated from the alchemy logo (black-bg variant, ffmpeg crop+scale), metadata.icons wired in app/layout.tsx.

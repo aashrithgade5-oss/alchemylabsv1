@@ -128,7 +128,7 @@ const MobileMenu = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
             style={{
               color: '#FFFFFF',
               fontSize: '18px',
-              fontFamily: 'Playfair Display, Georgia, serif',
+              fontFamily: 'var(--font-fraunces), Georgia, serif',
               fontStyle: 'italic',
               fontWeight: '400',
               letterSpacing: '0.04em',

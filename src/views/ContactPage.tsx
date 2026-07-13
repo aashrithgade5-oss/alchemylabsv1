@@ -16,7 +16,7 @@ export const ContactPage = () => {
     <main className="relative font-sans">
       <HomeAtmosphere />
 
-      {/* Centered header: oversized Geist, one Playfair line */}
+      {/* Centered header: oversized Geist, one Fraunces italic line */}
       <section className="relative px-6 pb-16 pt-40 text-center md:pt-48">
         {/* running silhouettes, dissolving into void before the form */}
         <div

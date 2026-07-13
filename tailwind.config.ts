@@ -108,9 +108,6 @@ export default {
         fraunces: ['var(--font-fraunces)', 'Georgia', 'serif'],
         display: ['var(--font-geist-sans)', '-apple-system', 'sans-serif'],
         body: ['var(--font-geist-sans)', '-apple-system', 'sans-serif'],
-        alchemy: ['Cinzel', 'Playfair Display', 'Georgia', 'serif'],
-        // legacy routes: literal family from the @fontsource imports in index.css
-        elegant: ['Playfair Display', 'Georgia', 'serif'],
         accent: ['var(--font-geist-mono)', 'SF Mono', 'monospace'],
       },
       borderRadius: {

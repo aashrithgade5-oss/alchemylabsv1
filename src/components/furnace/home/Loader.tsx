@@ -24,9 +24,16 @@ export function Loader() {
     if (reduced || sessionStorage.getItem(SEEN_KEY)) return;
     sessionStorage.setItem(SEEN_KEY, '1');
     setShow(true);
+  }, [reduced]);
+
+  // Hide timer lives in its own effect keyed on `show`: the mount effect above
+  // is not re-runnable (it stamps SEEN_KEY), so a StrictMode remount would
+  // clear a timer scheduled there and never reschedule it — overlay wedged.
+  useEffect(() => {
+    if (!show) return;
     const t = setTimeout(() => setShow(false), 2300);
     return () => clearTimeout(t);
-  }, [reduced]);
+  }, [show]);
 
   return (
     <AnimatePresence>
