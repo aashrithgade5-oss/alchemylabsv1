@@ -191,6 +191,13 @@ All five blocks + effect system committed on `main` (`78d99eb` → `e3c714d`). F
 - `public/sequence/forge-*.webp` (71 frames, old ForgeSequence) are committed but unused — delete when convenient.
 
 ## Block log
+
+### OVERHAUL 2 (2026-07-13, master prompt) — plan at C:\Users\aashr\.claude\plans\fluttering-forging-neumann.md
+Steps 0-8: style guide → Fraunces/Lenis/glass-legibility → hero mask reveal → landing → services → contact (Calendly fix) → cohesion → Eva → polish. Session rules: commit per step, build gate per step, 95%-usage stop rule, frozen Aashrith verified at start (FROZEN-CLEAN).
+- [x] Step 0 — style-guide.md at repo root (the locked system: Fraunces display clamp(3rem,7vw,7rem), Geist body/mono, token hexes, 16-20px radii, 8px grid, glass spec, .text-vignette spec, copy standard). Frozen boundaries re-verified.
+- [ ] Step 1 — resume at: npm i lenis → src/components/LenisProvider.tsx → app/layout.tsx Fraunces → index.css .glass-type floor + .text-vignette → font-playfair sweep → type-scale swap.
+- [ ] Steps 2-8 per plan file.
+
 ### Perfection pass (2026-07-13, commits e142057, b51118b, 02e01c8, 3b08d31 + this one)
 Shipped, in order:
 1. **Glass type system** (`e142057`): `.glass-type` (per-word transparent gradient fill via bg-clip:text), `.glass-halo` (boxless feathered backdrop-refraction behind headlines), `.glass-solid` (zero-backdrop-filter card for scroll containers) in `src/index.css`; `GlassPanel` refraction now opt-in via `refract` prop (ON only: Pillars anchor card, contact form); `wordClassName` prop added to KineticHeadline + ScrollScrub; TurnSequence GlassPanel BOX DELETED, halo + glass-type words instead; Hero halo + glass-type + new subline ("AI throughput under human judgment…"); ScrubBeats halo'd; glass-type applied to every display headline (ServicesHero, PillarSection titles, FiveGrid clauses, FAQ, ClosingBand, Contact h1) — parents keep `text-bone` so reduced-motion fallbacks stay filled; TheFive ProductCard → `.glass-solid` div (the big scroll-glitch fix).
