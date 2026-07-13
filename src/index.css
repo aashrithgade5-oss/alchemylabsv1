@@ -1261,8 +1261,10 @@ html {
   pointer-events: none;
   -webkit-backdrop-filter: blur(14px) saturate(165%) brightness(1.07);
   backdrop-filter: blur(14px) saturate(165%) brightness(1.07);
-  -webkit-mask-image: radial-gradient(60% 68% at 50% 50%, black 28%, transparent 76%);
-  mask-image: radial-gradient(60% 68% at 50% 50%, black 28%, transparent 76%);
+  /* transparent stop must land INSIDE the element bounds (radius x stop < 50%)
+     or the box edges read as a rectangle over bright fields */
+  -webkit-mask-image: radial-gradient(55% 60% at 50% 50%, black 22%, transparent 68%);
+  mask-image: radial-gradient(55% 60% at 50% 50%, black 22%, transparent 68%);
 }
 @supports (backdrop-filter: url('#glass-refract')) {
   .glass-halo {
