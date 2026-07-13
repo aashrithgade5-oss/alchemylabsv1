@@ -12,6 +12,11 @@ const FiveGrid = lazy(() =>
 const FAQ = lazy(() =>
   import('@/components/furnace/services/FAQ').then((m) => ({ default: m.FAQ })),
 );
+const ServicesClosing = lazy(() =>
+  import('@/components/furnace/services/ServicesClosing').then((m) => ({
+    default: m.ServicesClosing,
+  })),
+);
 
 export default function ServicesPage() {
   return (
@@ -24,6 +29,7 @@ export default function ServicesPage() {
       <Suspense fallback={null}>
         <FiveGrid />
         <FAQ />
+        <ServicesClosing />
       </Suspense>
     </main>
   );

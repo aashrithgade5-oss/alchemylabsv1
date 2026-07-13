@@ -1,9 +1,11 @@
 'use client';
 
+import Image from 'next/image';
 import { m } from 'framer-motion';
 import { MagneticCTA } from '../MagneticCTA';
 import { GlassPanel } from '../GlassPanel';
 import { ScrollScrub } from '../fx/ScrollScrub';
+import { SmoothReveal } from '../fx/SmoothReveal';
 import type { Pillar } from './pillars';
 
 const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
@@ -40,7 +42,14 @@ export function PillarSection({ pillar, index }: { pillar: Pillar; index: number
           numeralRight ? '' : 'items-end text-left md:pl-40'
         }`}
       >
-        <div className="w-full max-w-2xl">
+        <div
+          className={`grid w-full items-center gap-12 ${
+            numeralRight
+              ? 'md:grid-cols-[auto_minmax(0,1fr)]'
+              : 'md:grid-cols-[minmax(0,1fr)_auto]'
+          }`}
+        >
+        <div className={`w-full max-w-2xl ${numeralRight ? 'md:order-last' : ''}`}>
           <p className="font-mono text-[10px] tracking-[0.3em] text-ash">{pillar.tag}</p>
           <ScrollScrub
             text={pillar.title}
@@ -80,6 +89,19 @@ export function PillarSection({ pillar, index }: { pillar: Pillar; index: number
               Book the sprint
             </MagneticCTA>
           </div>
+        </div>
+
+        {/* cinematic still, opposite the numeral */}
+        <SmoothReveal className="relative hidden aspect-[3/4] w-[20rem] overflow-hidden rounded-2xl border border-line md:block lg:w-[24rem]">
+          <Image
+            src={pillar.still}
+            alt=""
+            fill
+            sizes="(min-width: 1024px) 24rem, 20rem"
+            className="object-cover"
+          />
+          <div aria-hidden className="absolute inset-0 bg-void/30" />
+        </SmoothReveal>
         </div>
       </div>
     </section>
