@@ -19,6 +19,9 @@ const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
 // The cycling centerpiece: each phrase carries its own metallic gradient
 // variation — all in the brushed-metal family, floor luminance high enough
 // to read over the darkest and brightest points of the samurai footage.
+// A traveling ember band (see WORD_SHIMMER below) sweeps through all five —
+// the plan's "moving gradient" ask, layered onto these fills without
+// touching the FO3 stacked-lockup grid that keeps word swaps reflow-free.
 const BUILDS: { word: string; gradient: string }[] = [
   { word: 'STRATEGY', gradient: 'linear-gradient(180deg, #b8b8bd 0%, #f4f2ee 55%, #cfcdc9 100%)' },
   { word: 'BRAND SYSTEMS', gradient: 'linear-gradient(180deg, #c9bfae 0%, #f6efe2 55%, #d8cdbb 100%)' },
@@ -26,6 +29,13 @@ const BUILDS: { word: string; gradient: string }[] = [
   { word: 'CAMPAIGNS', gradient: 'linear-gradient(180deg, #d0a89a 0%, #ffe9de 55%, #d9b3a4 100%)' },
   { word: 'FILM', gradient: 'linear-gradient(180deg, #c8c4bc 0%, #faf7f2 55%, #d4d0c8 100%)' },
 ];
+
+// A diagonal ember highlight band, twice the element's width, swept left to
+// right on a loop. Layered as its own bg-clip:text span directly over the
+// metallic fill so the base gradient (and the grid cell it lives in) never
+// changes — only an ember shimmer passes through it.
+const WORD_SHIMMER =
+  'linear-gradient(115deg, transparent 35%, rgba(255,77,28,0.85) 48%, rgba(255,160,40,0.9) 52%, transparent 65%)';
 
 // The dominant hero element (phase 4): "WE BUILD" over a cycling word, as a
 // stacked lockup. Every word renders into the SAME grid cell so the block
@@ -79,8 +89,44 @@ function WeBuild() {
             {b.word}
           </m.span>
         ))}
+        {!reduced && BUILDS.map((b, idx) => (
+          <WordShimmer key={`${b.word}-shimmer`} word={b.word} active={idx === active} />
+        ))}
       </span>
     </div>
+  );
+}
+
+// Loops the shimmer's background-position while a word is the active one.
+// Stacked in the SAME grid cell as the base word (not absolutely
+// positioned), same text/typography, so its glyphs land exactly over the
+// base fill's glyphs — only the ember band travels through them.
+function WordShimmer({ word, active }: { word: string; active: boolean }) {
+  return (
+    <m.span
+      aria-hidden
+      className="pointer-events-none col-start-1 row-start-1 whitespace-nowrap"
+      style={{
+        backgroundImage: WORD_SHIMMER,
+        backgroundSize: '260% 100%',
+        WebkitBackgroundClip: 'text',
+        backgroundClip: 'text',
+        color: 'transparent',
+      }}
+      initial={false}
+      animate={
+        active
+          ? { opacity: 1, backgroundPositionX: ['0%', '260%'] }
+          : { opacity: 0, backgroundPositionX: '0%' }
+      }
+      transition={
+        active
+          ? { backgroundPositionX: { duration: 2.6, ease: 'linear', repeat: Infinity } }
+          : { duration: 0.3 }
+      }
+    >
+      {word}
+    </m.span>
   );
 }
 
