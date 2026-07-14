@@ -1,13 +1,12 @@
 'use client';
 
-import { m } from 'framer-motion';
 import { AmbientVideo } from './AmbientVideo';
-
-const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
+import { ScrollScrub } from '../fx/ScrollScrub';
 
 /**
  * A single held breath before the close: the red slats loop, dimmed to a
- * glow, under one line of type.
+ * glow, under one line of type. Same scroll-scrubbed reveal as THE STANDARD
+ * (FO4 W3.4) — the per-word blur-in kinetic signature, not a static fade.
  */
 export function StudioMotion() {
   return (
@@ -20,16 +19,13 @@ export function StudioMotion() {
       <div aria-hidden className="absolute inset-0 bg-void/45" />
       <div aria-hidden className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-void to-transparent" />
       <div aria-hidden className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-void to-transparent" />
-      <div className="relative mx-auto flex min-h-[70svh] max-w-4xl items-center justify-center px-6 py-32 text-center">
-        <m.p
-          initial={{ opacity: 0, y: 24, filter: 'blur(12px)' }}
-          whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-          viewport={{ once: true, margin: '-120px' }}
-          transition={{ duration: 0.8, ease }}
-          className="font-fraunces text-[clamp(2rem,4vw,3.5rem)] italic leading-[1.1] text-bone"
-        >
-          The forge never cools.
-        </m.p>
+      <div className="relative mx-auto flex min-h-[70svh] max-w-4xl flex-col items-center justify-center px-6 py-32 text-center">
+        <div aria-hidden className="glass-halo absolute -inset-x-12 -inset-y-8 z-0" />
+        <ScrollScrub
+          text="The forge never cools."
+          className="relative z-10 justify-center font-headline text-[clamp(2rem,4vw,3.5rem)] font-black leading-[1.05] tracking-[-0.03em] text-bone"
+          wordClassName="glass-type"
+        />
       </div>
     </section>
   );
