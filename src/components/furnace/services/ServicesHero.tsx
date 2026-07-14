@@ -30,7 +30,10 @@ export function ServicesHero() {
           }}
         />
       </div>
-      <div className="relative mx-auto max-w-6xl px-6 pb-20 pt-40 md:px-12 md:pb-28 md:pt-48 lg:px-16">
+      {/* pb reduced from pb-20/28: the first PillarSection's own pt-24/32
+          stacked on top of that measured a 240px dead gap before its
+          content (FO4 W3.6 spacing audit) */}
+      <div className="relative mx-auto max-w-6xl px-6 pb-6 pt-40 md:px-12 md:pb-8 md:pt-48 lg:px-16">
         <p className="font-mono text-[10px] tracking-[0.3em] text-bone/70 md:text-[11px]">
           SERVICES · SCOPED PER PROJECT
         </p>

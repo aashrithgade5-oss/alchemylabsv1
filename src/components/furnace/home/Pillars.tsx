@@ -35,7 +35,11 @@ const pillars = [
 export function Pillars() {
   return (
     <section className="relative">
-      <div className="mx-auto max-w-6xl px-6 py-24 md:px-12 md:py-32 lg:px-16">
+      {/* asymmetric: Intertext (previous section) already tapers into empty
+          space below its vertically-centered text — a full pt-32 on top of
+          that stacked to a measured 420px dead gap. Bottom keeps the
+          standard py-32 for the StillBreak boundary, untouched. */}
+      <div className="mx-auto max-w-6xl px-6 pb-24 pt-8 md:px-12 md:pb-32 md:pt-12 lg:px-16">
         <p className="font-mono text-[10px] tracking-[0.3em] text-ash">WHAT WE DO</p>
 
         <div className="mt-12 grid gap-4 md:auto-rows-fr md:grid-cols-3">
