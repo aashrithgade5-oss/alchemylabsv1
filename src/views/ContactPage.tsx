@@ -46,7 +46,7 @@ export const ContactPage = () => {
         <KineticHeadline
           as="h1"
           text="Start the work."
-          className="mx-auto mt-7 justify-center font-sans text-[clamp(3rem,7vw,7rem)] font-black leading-[1.02] tracking-[-0.04em] text-bone"
+          className="mx-auto mt-7 justify-center font-headline text-[clamp(3rem,7vw,7rem)] font-black leading-[1.02] tracking-[-0.04em] text-bone"
           wordClassName="glass-type"
           delay={0.2}
         />

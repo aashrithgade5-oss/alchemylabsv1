@@ -8,7 +8,7 @@ Exempt: frozen Aashrith portfolio (untouchable), Eva portfolio (her own black/pi
 
 | Role | Face | Rules |
 |---|---|---|
-| Display, headlines (H1/H2) | **Geist Sans black** (`font-sans font-black`) | H1: `clamp(3rem,7vw,7rem)` (homepage hero 8vw/8rem is the one sanctioned exception) `leading-[1.02] tracking-[-0.04em]`. H2: `clamp(2rem,4vw,3.5rem)` `leading-[1.05] tracking-[-0.03em]`. `.glass-type` per word. |
+| Display, headlines (H1/H2) | **Inter Tight black** (`font-headline font-black` — FO4 W2.2, replaces Geist Sans black) | H1: `clamp(3rem,7vw,7rem)` (homepage hero 8vw/8rem is the one sanctioned exception) `leading-[1.02] tracking-[-0.04em]`. H2: `clamp(2rem,4vw,3.5rem)` `leading-[1.05] tracking-[-0.03em]`. `.glass-type` per word. `font-headline` is a new Tailwind key, NOT `font-sans` (body stays Geist) or `font-display` (frozen legacy alias). |
 | Editorial pull-quotes + founder note ONLY | **Fraunces italic** (`--font-fraunces`, Tailwind `font-fraunces`) | Always italic. Never on H1/H2 display headings — that was the 2026-07-14 drift, fixed. NOTE: the Tailwind key is `fraunces`, NOT `display` — `font-display` is a legacy Geist alias used by the frozen portfolio and must never be repointed. |
 | Body, subheads | **Geist Sans** (`--font-geist-sans`, `font-sans`) | line-height 1.5. |
 | Eyebrows, labels, technical | **Geist Mono** (`--font-geist-mono`, `font-mono`) | 10-11px, tracking 0.2-0.35em, uppercase. |

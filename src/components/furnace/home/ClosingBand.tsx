@@ -79,7 +79,7 @@ export function ClosingBand() {
         <KineticHeadline
           as="h2"
           text="Bring us the brand as it stands."
-          className="font-sans text-[clamp(2rem,4vw,3.5rem)] font-black leading-[1.05] tracking-[-0.03em] text-bone"
+          className="font-headline text-[clamp(2rem,4vw,3.5rem)] font-black leading-[1.05] tracking-[-0.03em] text-bone"
           wordClassName="glass-type"
         />
         <m.p

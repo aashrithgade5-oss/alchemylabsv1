@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Fraunces } from 'next/font/google';
+import { Fraunces, Inter_Tight } from 'next/font/google';
 import { GeistSans } from 'geist/font/sans';
 import { GeistMono } from 'geist/font/mono';
 import { SpeedInsights } from '@vercel/speed-insights/next';
@@ -11,14 +11,22 @@ import { CookieConsent } from '@/components/CookieConsent';
 import '@/index.css';
 
 // Fraunces variable carries ONLY italic editorial pull-quotes + the founder
-// note (see style-guide.md); Geist black carries all display headings, Geist
-// Sans/Mono carry body + labels. Playfair is retired. next/font/google
-// self-hosts at build time — functionally identical to next/font/local.
+// note (see style-guide.md); Inter Tight carries all display headings
+// (H1/H2 — see FO4 W2.2 font-direction decision, replacing Geist black),
+// Geist Sans/Mono carry body + labels unchanged. Playfair is retired.
+// next/font/google self-hosts at build time — functionally identical to
+// next/font/local.
 const fraunces = Fraunces({
   subsets: ['latin'],
   style: ['normal', 'italic'],
   variable: '--font-fraunces',
   axes: ['opsz'],
+});
+
+const interTight = Inter_Tight({
+  subsets: ['latin'],
+  weight: ['800', '900'],
+  variable: '--font-inter-tight',
 });
 
 const description =
@@ -64,7 +72,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     // next-view-transitions' <ViewTransitions> wrapper silently blocked every
     // AnimatePresence exit unmount (stuck invisible overlays); removed, the
     // framer fade in LayoutTransition is the page transition.
-    <html lang="en" className={`${fraunces.variable} ${GeistSans.variable} ${GeistMono.variable}`}>
+    <html
+      lang="en"
+      className={`${fraunces.variable} ${interTight.variable} ${GeistSans.variable} ${GeistMono.variable}`}
+    >
         <body>
           <Providers>
             {/* LayoutTransition's transform wrapper breaks position:fixed for

@@ -111,6 +111,10 @@ export default {
         // it is a legacy Geist alias the frozen portfolio depends on.
         fraunces: ['var(--font-fraunces)', 'Georgia', 'serif'],
         display: ['var(--font-geist-sans)', '-apple-system', 'sans-serif'],
+        // FO4 W2.2: new H1/H2 display face, replacing Geist black on
+        // headlines (body/eyebrows/mono stay font-sans/font-mono Geist).
+        // Own key, not `display` — that name is the frozen alias above.
+        headline: ['var(--font-inter-tight)', '-apple-system', 'sans-serif'],
         body: ['var(--font-geist-sans)', '-apple-system', 'sans-serif'],
         accent: ['var(--font-geist-mono)', 'SF Mono', 'monospace'],
       },

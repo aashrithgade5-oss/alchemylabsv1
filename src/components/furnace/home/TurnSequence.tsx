@@ -69,7 +69,7 @@ function KineticLine({
   return (
     <m.h2
       style={{ opacity, y, filter }}
-      className="absolute flex max-w-5xl flex-wrap justify-center gap-x-4 px-6 text-center font-sans text-[clamp(2.5rem,6vw,5.5rem)] font-black leading-[1.05] tracking-[-0.03em] text-bone"
+      className="absolute flex max-w-5xl flex-wrap justify-center gap-x-4 px-6 text-center font-headline text-[clamp(2.5rem,6vw,5.5rem)] font-black leading-[1.05] tracking-[-0.03em] text-bone"
     >
       {words.map((word, i) => {
         const wStart = start + (i / words.length) * inWindow;

@@ -65,7 +65,7 @@ function WeBuild() {
   return (
     <div
       aria-label={`We build ${BUILDS.map((b) => b.word.toLowerCase()).join(', ')}`}
-      className="font-sans text-[clamp(2.5rem,8vw,8rem)] font-black leading-[1.04] tracking-[-0.03em]"
+      className="font-headline text-[clamp(2.5rem,8vw,8rem)] font-black leading-[1.04] tracking-[-0.03em]"
     >
       <span aria-hidden className="glass-type block">WE BUILD</span>
       <span aria-hidden className="grid justify-items-center">
@@ -220,7 +220,7 @@ export function Hero() {
             {/* kicker line — the cycler below is the single focal point */}
             <KineticHeadline
               text="Taste is the moat."
-              className="relative z-10 justify-center font-sans text-[clamp(1.5rem,2.5vw,2.25rem)] font-black leading-[1.05] tracking-[-0.02em] text-bone"
+              className="relative z-10 justify-center font-headline text-[clamp(1.5rem,2.5vw,2.25rem)] font-black leading-[1.05] tracking-[-0.02em] text-bone"
               wordClassName="glass-type"
               delay={0.35}
             />

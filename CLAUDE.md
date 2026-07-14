@@ -4,16 +4,19 @@ This file exists because font/token decisions kept reverting across sessions.
 Everything here is NON-NEGOTIABLE and must be re-verified at the END of every session.
 
 ## FONTS (final — Playfair is BANNED as a display face)
-- Display / headlines (H1/H2): **Geist black** (`font-sans font-black`) with `.glass-type`
-  per word — locked 2026-07-14 (StringTune pass). Never a high-contrast serif like Playfair.
+- Display / headlines (H1/H2): **Inter Tight black** (`font-headline font-black`) with
+  `.glass-type` per word — relocked 2026-07-14 (FO4 W2.2 font-direction decision,
+  replacing Geist black; Ash picked Inter Tight over Geist-tighter and Oswald from a
+  3-candidate live comparison). Never a high-contrast serif like Playfair.
 - Editorial pull-quotes + founder note ONLY: **Fraunces italic** (`font-fraunces` + `italic`).
   A non-italic `font-fraunces` on any H1/H2 is a BUG — that was the font drift; fix it.
-- Body / subheads: **Geist Sans** (`font-sans`).
+- Body / subheads: **Geist Sans** (`font-sans`) — unchanged by the display-face swap above.
 - Eyebrows / labels / technical: **Geist Mono** (`font-mono`).
 - Before ending any session: `grep -ri "playfair" src app` and grep `font-serif` —
   zero display usages allowed. Playfair may exist ONLY at explicitly zero uses.
 - FROZEN-ROUTE EXCEPTION: `--font-display` / `elegant` legacy vars serve the frozen
-  Aashrith portfolio — never repoint them (see FROZEN below).
+  Aashrith portfolio — never repoint them (see FROZEN below). `font-headline` is a
+  separate, new Tailwind key for exactly this reason — never reuse `font-display`.
 
 ## ANIMATION
 - Framer Motion + Lenis (feel only). BANNED: GSAP, Three.js, Locomotive. No custom cursor.
