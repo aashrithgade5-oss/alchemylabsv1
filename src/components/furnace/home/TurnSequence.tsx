@@ -177,7 +177,18 @@ function ScrubSequence() {
   });
 
   return (
-    <section ref={containerRef} aria-hidden className="relative h-[400vh] bg-void">
+    // -mt-[50svh]: Hero's sticky stage releases (its own scrub animation
+    // complete) a full 100svh before THIS section's sticky stage can lock
+    // in — that gap is dead scroll (nothing scroll-reactive happens while
+    // Hero's frozen tail slides away), which reads as the delay between
+    // section 1 and 2. Pulling this section's start up halves the gap
+    // without touching either section's internal scrub math (their 0-1
+    // progress spans are relative offsets, unaffected by this shift).
+    <section
+      ref={containerRef}
+      aria-hidden
+      className="relative -mt-[50svh] h-[400vh] bg-void"
+    >
       <div className="sticky top-0 h-[100svh] overflow-hidden">
         {/* first frame as ground so the stage is never blank */}
         {/* eslint-disable-next-line @next/next/no-img-element */}

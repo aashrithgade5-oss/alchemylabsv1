@@ -194,22 +194,23 @@ export function Hero() {
         {/* Scroll-exit fade toward void */}
         <m.div aria-hidden className="absolute inset-0 bg-void" style={{ opacity: reduced ? 0 : exitScrim }} />
 
-        {/* Content, full center */}
+        {/* Content, full center. chromeOpacity fades the WHOLE column (not
+            just eyebrow/CTAs) — it used to leave the headline permanently
+            opaque, which was fine while a full 100svh of trailing scroll
+            separated Hero from TurnSequence, but became a visible overlap
+            with TurnSequence's frame once that gap was compressed below. */}
         <m.div
           className="relative z-10 mx-auto flex w-full max-w-5xl flex-1 flex-col items-center justify-center px-6 pb-20 pt-28 text-center md:px-12"
-          style={reduced ? undefined : { y: headlineY, skewY: skew }}
+          style={reduced ? undefined : { y: headlineY, skewY: skew, opacity: chromeOpacity }}
         >
-          {/* Scroll fade lives on the wrapper so it never fights the entrance animation */}
-          <m.div style={reduced ? undefined : { opacity: chromeOpacity }}>
-            <m.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="font-mono text-[10px] tracking-[0.3em] text-bone/80 md:text-[11px]"
-            >
-              <DecodeText text="ALCHEMY LABS · AI-NATIVE BRAND STUDIO · MUMBAI" delay={300} />
-            </m.p>
-          </m.div>
+          <m.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="font-mono text-[10px] tracking-[0.3em] text-bone/80 md:text-[11px]"
+          >
+            <DecodeText text="ALCHEMY LABS · AI-NATIVE BRAND STUDIO · MUMBAI" delay={300} />
+          </m.p>
 
           <div className="relative mt-8">
             {/* text-scoped vignette: contrast floor between footage and glyphs */}
@@ -243,29 +244,27 @@ export function Hero() {
             can tell the difference.
           </m.p>
 
-          <m.div style={reduced ? undefined : { opacity: chromeOpacity }}>
-            <m.div
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 1.35, ease }}
-              className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center sm:gap-5"
-            >
-              <MagneticCTA href="/work" variant="ember">
-                See the work
-              </MagneticCTA>
-              <MagneticCTA href="/contact" variant="ghost">
-                Begin
-              </MagneticCTA>
-            </m.div>
+          <m.div
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 1.35, ease }}
+            className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center sm:gap-5"
+          >
+            <MagneticCTA href="/work" variant="ember">
+              See the work
+            </MagneticCTA>
+            <MagneticCTA href="/contact" variant="ghost">
+              Begin
+            </MagneticCTA>
+          </m.div>
 
-            <m.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.7, delay: 1.6 }}
-              className="mt-10"
-            >
-              <CapacityTag />
-            </m.div>
+          <m.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.7, delay: 1.6 }}
+            className="mt-10"
+          >
+            <CapacityTag />
           </m.div>
         </m.div>
       </div>
