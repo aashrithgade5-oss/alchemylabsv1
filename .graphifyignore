@@ -1,0 +1,7 @@
+# graphify scope: src + app only (public/assets and src/assets media excluded)
+*
+!src/
+!src/**
+!app/
+!app/**
+src/assets/

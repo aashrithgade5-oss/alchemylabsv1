@@ -29,7 +29,7 @@ function ProductCard({
   return (
     // glass-solid, not GlassPanel: backdrop-filter inside the snap track
     // re-filters every scrolled frame and glitches the horizontal scroll
-    <div className="glass-solid group relative flex w-[20rem] shrink-0 snap-center flex-col overflow-hidden rounded-2xl">
+    <div className="glass-solid group relative flex w-[20rem] shrink-0 snap-center flex-col overflow-hidden rounded-2xl transition-[transform,box-shadow,border-color] duration-500 hover:-translate-y-1.5 hover:border-ember/40 hover:shadow-[0_16px_48px_rgba(255,77,28,0.14)]">
       <div aria-hidden className="h-28 w-full" style={{ background: field }} />
       <div className="flex flex-1 flex-col justify-between p-7">
         <div>

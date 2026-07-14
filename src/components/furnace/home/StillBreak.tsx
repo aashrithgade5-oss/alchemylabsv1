@@ -12,10 +12,13 @@ const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
 export function StillBreak() {
   return (
     <section className="relative h-[85svh] overflow-hidden">
+      {/* source is 1600x896/19KB — under-res for full bleed; replacement
+          >=2560x1440 flagged in HANDOFF. quality can't invent detail here. */}
       <Image
         src="/media/split-frames-1.webp"
         alt=""
         fill
+        quality={90}
         sizes="100vw"
         className="object-cover"
       />

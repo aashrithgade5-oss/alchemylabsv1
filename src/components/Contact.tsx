@@ -3,7 +3,6 @@ import { useState, useCallback, useEffect, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send, Calendar, MessageCircle, Instagram, Mail, Loader2, Check, Home, Linkedin, Youtube, Copy } from 'lucide-react';
 import Link from 'next/link';
-import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { TurnstileWidget } from './TurnstileWidget';
 import { socialLinks } from './Footer';
@@ -44,6 +43,9 @@ export const Contact = memo(() => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  // Calendly: lazy iframe modal — the old window.Calendly popup call was a
+  // silent no-op (the widget script was never loaded anywhere).
+  const [calendlyOpen, setCalendlyOpen] = useState(false);
 
   // Honor /contact?pillar=<slug|value>: preselect the subject once on mount.
   useEffect(() => {
@@ -103,6 +105,9 @@ export const Contact = memo(() => {
     setIsSubmitting(true);
 
     try {
+      // Lazy: supabase-js only downloads when someone actually submits,
+      // keeping it out of /contact First Load JS (220kB overage item).
+      const { supabase } = await import('@/integrations/supabase/client');
       const { error: dbError } = await supabase
         .from('contact_submissions')
         .insert({
@@ -264,6 +269,17 @@ export const Contact = memo(() => {
                     </motion.a>
                   ))}
                 </div>
+              </div>
+
+              {/* Founder note — with pull-quotes, the only sanctioned Fraunces use */}
+              <div className="mt-8 border-t border-porcelain/10 pt-6">
+                <p className="font-fraunces text-lg italic leading-relaxed text-porcelain/75">
+                  &ldquo;Every brief lands on my desk first. If we take your project,
+                  it&rsquo;s because I already know what to do with it.&rdquo;
+                </p>
+                <p className="mt-3 font-mono text-[10px] tracking-[0.25em] uppercase text-porcelain/40">
+                  — Ash, Founder
+                </p>
               </div>
 
               {/* Founder Direct */}
@@ -468,7 +484,7 @@ export const Contact = memo(() => {
                   {/* CTA Button — Opens Calendly popup */}
                   <button
                     type="button"
-                    onClick={() => (window as any).Calendly?.initPopupWidget({ url: CALENDLY_URL })}
+                    onClick={() => setCalendlyOpen(true)}
                     className="gradient-border-glow-btn w-full flex items-center justify-center gap-3 py-4 px-8 rounded-full font-body font-medium text-sm text-porcelain transition-all duration-300 hover:brightness-110 relative overflow-hidden"
                   >
                     <span>Schedule a Meeting</span>
@@ -529,7 +545,7 @@ export const Contact = memo(() => {
                       href=""
                       onClick={(e) => {
                         e.preventDefault();
-                        (window as any).Calendly?.initPopupWidget({ url: CALENDLY_URL });
+                        setCalendlyOpen(true);
                       }}
                       className="gradient-border-glow inline-flex items-center gap-3 px-8 py-4 rounded-full font-body font-medium text-sm text-porcelain transition-all duration-300 hover:brightness-110 cursor-pointer"
                     >
@@ -572,6 +588,51 @@ export const Contact = memo(() => {
           </div>
         </div>
       </div>
+
+      {/* Calendly modal: iframe mounts only while open, so nothing loads
+          until the CTA is clicked */}
+      <AnimatePresence>
+        {calendlyOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Schedule a meeting"
+          >
+            <button
+              aria-label="Close scheduler"
+              onClick={() => setCalendlyOpen(false)}
+              className="absolute inset-0 cursor-default bg-black/80 backdrop-blur-sm"
+            />
+            <motion.div
+              initial={{ opacity: 0, y: 24, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 24, scale: 0.98 }}
+              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+              className="relative h-[85vh] w-full max-w-3xl overflow-hidden rounded-2xl bg-white shadow-2xl"
+            >
+              <button
+                onClick={() => setCalendlyOpen(false)}
+                aria-label="Close"
+                className="absolute right-3 top-3 z-10 rounded-full bg-black/10 p-2 text-black/60 transition-colors hover:bg-black/20"
+              >
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
+                  <path d="M1 1l12 12M13 1L1 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                </svg>
+              </button>
+              <iframe
+                src={`${CALENDLY_URL}?hide_gdpr_banner=1`}
+                title="Schedule a meeting with Alchemy Labs"
+                className="h-full w-full border-0"
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 });

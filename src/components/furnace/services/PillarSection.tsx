@@ -100,6 +100,7 @@ export function PillarSection({ pillar, index }: { pillar: Pillar; index: number
             src={pillar.still}
             alt=""
             fill
+            quality={90}
             sizes="(min-width: 1024px) 24rem, 20rem"
             className="object-cover"
           />

@@ -40,7 +40,7 @@ export function FiveGrid() {
               transition={{ duration: 0.7, delay: (i % 3) * 0.07, ease }}
               className={i === 0 ? 'sm:col-span-2 lg:col-span-2' : ''}
             >
-              <GlassPanel className="group h-full transition-colors duration-500 hover:border-ember/40">
+              <GlassPanel className="group h-full transition-[transform,box-shadow,border-color] duration-500 hover:-translate-y-1.5 hover:border-ember/40 hover:shadow-[0_16px_48px_rgba(255,77,28,0.14)]">
                 <div className="flex h-full flex-col justify-between p-7">
                   <div>
                     <p className="font-mono text-[10px] tracking-[0.25em] text-ash">FIXED SCOPE</p>

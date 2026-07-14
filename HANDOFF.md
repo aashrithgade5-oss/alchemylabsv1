@@ -317,3 +317,21 @@ Resume: build the effect system (`src/components/furnace/fx/`), per plan at `C:\
 
 ## 2026-07-14 — graphify audit: dead-code sweep
 Graph flagged 3 weak "reveal variant" communities + isolated Navigation node. Verified zero importers and deleted: `src/components/Navigation.tsx`, `src/components/WordReveal.tsx`, `src/components/ScrollTextReveal.tsx`, `src/components/ScrollRevealText.tsx` (AashrithPortfolio uses its own local WordRevealQuote — frozen paths untouched). Graph's `WordSwitcher()→t()` INFERRED edge verified spurious. Build clean, homepage 134kB.
+
+## 2026-07-14 — overhaul3 phases 1-7 (StringTune consistency pass)
+**Shipped this session** (commits `f9e1797`..this):
+- P1 type: all H1/H2 → Geist black (H1 clamp(3rem,7vw,7rem) -0.04em; H2 clamp(2rem,4vw,3.5rem) -0.03em); Fraunces = italic pull-quotes + founder note ONLY. Law updated in CLAUDE.md + style-guide.md. Fraunces stays next/font/google (self-hosts at build — functionally identical to next/font/local; deliberate deviation, zero visual delta).
+- P2 glass: FiveGrid cards + PaymentSheet onto GlassPanel/.liquid-glass; contact panel radius 24→16px; GlassPanel inner div h-full (grid-stretch fix). @paper-design/shaders-react PINNED 0.0.77; GlassFluted prototype on services PillarSection ONLY (+1kB first-load, 252kB raw lazy chunk). VERDICT: no further rollout — FlutedGlass cannot sample the real backdrop (WebGL limitation), HomeAtmosphere idea dead by the bundle criterion.
+- P3 scrub: blur floor 12px unified (TurnSequence 10→12 `TurnSequence.tsx:41`, Intertext 14→12 `Intertext.tsx:28`); easing [0.16,1,0.3,1] verified everywhere; sanctioned outliers: Loader curtain eases (one-shot page load), KineticHeadline entrance (heroes have no scroll travel).
+- P4/P5 hero: WE BUILD cycler = dominant stacked lockup clamp(2.5rem,8vw,8rem); all words render into one grid cell → zero reflow mid-swap (root cause of off-center jump was AnimatePresence hole). "Taste is the moat." demoted to kicker (also fixes 1440 mid-phrase wrap).
+- P6 media: quality={90} on pillar stills + StillBreak + ServicesHero. **REPLACEMENTS NEEDED (do not upscale):** `public/media/b2-bomber-3.webp` (1600x896/21KB, full-bleed hero → need ≥2560x1440), `public/media/split-frames-1.webp` (1600x896/19KB, full-bleed StillBreak → need ≥2560x1440). Marginal at DPR2: cinematic-still-1.png (816px tall), lone-figure-1.webp (896px tall) → ideal 1200x1600 portrait re-crops.
+- P7: Calendly FIXED end-to-end (`Contact.tsx` — window.Calendly popup was never loaded; now lazy iframe modal, booking calendar verified in browser). Supabase → dynamic import in submit handler: **/contact 220kB → 171kB**. Founder note (Fraunces italic, "— Ash, Founder") in Contact left column. ?pillar= preselect verified live (ai→Fast·24h). --ash #8A8178→#9A9186 (legibility). Hover lift+ember glow on FiveGrid + TheFive cards.
+- Aceternity (user-directed): ui/3d-card.tsx (**unwired**, demo at src/components/3d-card-demo.tsx — no call site yet), TextHoverEffect "ALCHEMY" in ClosingBand (tokenized, framer-motion, no `motion` dep). Stale bun.lock deleted (was breaking shadcn CLI + last playfair residue).
+
+**Deferred (exact locations):**
+- Eva uplift: `src/views/EvaPortfolio.tsx` (whole file) — black/pink identity pass not started.
+- 380/768px screenshot passes: BLOCKED — Chrome window is maximized/snap-managed and ignores resize_window; DevTools can't be opened via injected keys. Un-maximize Chrome and rerun. Desktop 1440 verified with screenshots in-session.
+- /contact remaining 21kB over 150 budget (was 70 over) — next candidate: framer `motion` full import in legacy Contact.tsx → `m` + LazyMotion.
+- 3d-card integration: user has not named a target section.
+
+**Verification protocol note:** all desktop claims above have in-session screenshots (hero swap x2 frames, services pillars/FiveGrid/PaymentSheet, contact preselect+founder note+Calendly calendar).

@@ -10,11 +10,14 @@ export function ServicesHero() {
     <section className="relative overflow-hidden bg-void">
       {/* dimmed still, fading into void before the pillars */}
       <div aria-hidden className="absolute inset-0">
+        {/* source is 1600x896/21KB — under-res for full bleed; replacement
+            >=2560x1440 flagged in HANDOFF. quality can't invent detail here. */}
         <Image
           src="/media/b2-bomber-3.webp"
           alt=""
           fill
           priority
+          quality={90}
           sizes="100vw"
           className="object-cover object-center opacity-30"
         />

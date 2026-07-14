@@ -1165,7 +1165,8 @@ html {
   --amber: #FFA028;
   --halo: rgba(255, 77, 28, 0.10);
   --bone: #EDE6DD;
-  --ash: #8A8178;
+  /* legibility bump (phase 7): was #8A8178 (~5:1 on void); ~6.3:1 now */
+  --ash: #9A9186;
   --line: rgba(237, 230, 221, 0.08);
 }
 
