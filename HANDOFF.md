@@ -37,6 +37,25 @@ Shipped in `src/components/furnace/home/Hero.tsx`:
 Build: / 134kB (+1), /services 132kB.
 Resume: Step 4 (clause-per-line audit).
 
+### FO3 Step 4 — clause-per-line (this commit) + SESSION HANDOFF (rate limit)
+Shipped:
+- `ScrollScrub` now accepts `text: string | string[]` — array renders one clause per line (full-width rows, `justifyContent: inherit` inline so centered callers stay centered; string callers byte-identical). Reduced-motion branch renders `span.block` per line.
+- THE STANDARD beat → `['One studio.', 'One bar.', 'No exceptions.']` — verified in-browser: three centered lines, scrub intact.
+- Audit result: FiveGrid already clause-per-line; Intertext beats already `span.block`; all other furnace headings are single sentences; legal pages are numbered headings (fine). No other offenders found.
+Build: / 134kB, /services 132kB. Verified in browser before commit.
+
+## ⛔ SESSION ENDED HERE (user hit rate limit) — RESUME INSTRUCTIONS FOR NEXT MODEL
+**Done this session (all committed, all build-gated, all browser-verified):**
+- CLAUDE.md law (`1d9ec3d`) · Step 1 metallic glass type + Playfair retired + Loader StrictMode fix (`38df6a5`) · Step 2 reveals hidden at rest + faster easing (`3f1d8e1`) · Step 3 hero mask reveal + WE BUILD cycler (`17d9cbb`) · Step 4 clause-per-line (this commit).
+
+**NEXT: work these in order (spec = the FINAL OVERHAUL master prompt, restated per step in the FO3 blocks above):**
+1. **Step 5 — small-text legibility**: raise sublines/eyebrows/microcopy contrast site-wide (bone at higher alpha, subtle text-shadow or backing over media). Hero eyebrow/subline already bone/80.
+2. **Step 6 — services image quality (URGENT per user)**: /services renders images extremely low-res. Diagnose source assets in /public/assets + /public/media vs next/image sizes/quality props in `PillarSection.tsx` (stills: cinematic-still-1.png, lone-figure-1.webp, split-frames-3.png) and StillBreak. Fix: quality={90}+, correct `sizes`, priority above fold; flag genuinely low-res sources in HANDOFF instead of upscaling.
+3. **Step 7 — pending items**: service-block hover lift + specular + ember edge-glow; PaymentSheet aside → liquid-glass + QR on frosted panel (spec in "OVERHAUL 2 → Step 3"); Calendly inline embed on /contact (BROKEN: Contact.tsx ~line 471 calls window.Calendly with no script loaded — replace with lazy iframe `https://calendly.com/alchemylabs-work/30min?hide_gdpr_banner=1&background_color=0a0908&text_color=ede6dd&primary_color=ff4d1c`, verify end-to-end); Ash founder note (font-fraunces italic, signed "Ash") beside Contact form; `?pillar=` preselect re-verify; Eva uplift (src/views/EvaPortfolio.tsx ONLY, black/pink); /contact 220kB slimming attempt (dynamic-import supabase path).
+4. **Step 8 — cohesion + copy** + FINAL GATES: grep playfair/font-serif = zero display uses (only comments remain, plus dead `src/components/Navigation.tsx` inline var(--font-fraunces) reference); `npm run build` all routes <150kB except /contact 220kB + /eva 178kB + /aashrith 189kB (documented legacy); frozen diff empty (`git diff --stat 7c31d8b..HEAD -- app/aashrith/page.tsx app/AashrithGadePortfolio/page.tsx src/views/AashrithPortfolio.tsx src/components/portfolio src/components/SequentianBackground.tsx src/components/SEOHead.tsx src/data/foundersData.ts src/data/portfolioProjects.ts`); final HANDOFF table.
+
+**Environment for resume:** dev server: `npm run dev` (check port 3000 for stale PID first: `Get-NetTCPConnection -LocalPort 3000`). Loader wedge in dev = fixed. Chrome extension tab IDs go stale — call tabs_context_mcp fresh. The "1 error" Next dev overlay badge = Chrome-extension false positive. Build gate = stop dev first (shared .next). Skills to load: design-taste-frontend, high-end-visual-design, frontend-design (user directive; user's locked direction wins conflicts — Fraunces allowed for pull-quotes, centered hero stays).
+
 # ✅ PERFECTION PASS — EXECUTED 2026-07-13 (commits e142057..HEAD)
 
 Every item in the spec below is DONE and verified in-browser (screenshots of /, /services, /contact?pillar=ai at every section). See "Block log → Perfection pass" at the bottom for what shipped. Additional user asks executed same session: glass-type on ALL display text site-wide, atom logo replaces the nav wordmark, favicon.ico/png regenerated from the alchemy logo (black-bg variant, ffmpeg crop+scale), metadata.icons wired in app/layout.tsx.

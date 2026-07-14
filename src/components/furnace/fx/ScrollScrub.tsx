@@ -39,7 +39,9 @@ export function ScrollScrub({
   as: Tag = 'h2',
   wordClassName,
 }: {
-  text: string;
+  /** Pass an array for clause-per-line: each item renders as its own line
+      (the clause-per-line rule), with the word scrub running across all. */
+  text: string | string[];
   className?: string;
   as?: ElementType;
   /** Extra class per word span (e.g. glass-type); reduced-motion branch
@@ -55,23 +57,53 @@ export function ScrollScrub({
     offset: ['start 0.9', 'start 0.5'],
   });
 
-  const words = text.split(' ');
+  const lines = Array.isArray(text) ? text : [text];
+  const total = lines.reduce((n, line) => n + line.split(' ').length, 0);
 
   if (reduced) {
-    return <Tag className={className}>{text}</Tag>;
+    return (
+      <Tag className={className}>
+        {lines.map((line) => (
+          <span key={line} className="block">
+            {line}
+          </span>
+        ))}
+      </Tag>
+    );
   }
 
+  // Root classes are unchanged for string callers; array lines each render as
+  // a full-width row (clause-per-line) inheriting the root's justification.
+  let offset = 0;
   return (
     <Tag ref={ref} className={`flex flex-wrap gap-x-[0.3em] ${className}`}>
-      {words.map((word, i) => (
-        <Word
-          key={`${word}-${i}`}
-          word={word}
-          range={[i / words.length, Math.min(i / words.length + 0.3, 1)]}
-          progress={scrollYProgress}
-          className={wordClassName}
-        />
-      ))}
+      {lines.map((line) => {
+        const words = line.split(' ');
+        const start = offset;
+        offset += words.length;
+        const wordSpans = words.map((word, i) => {
+          const n = start + i;
+          return (
+            <Word
+              key={`${word}-${n}`}
+              word={word}
+              range={[n / total, Math.min(n / total + 0.3, 1)]}
+              progress={scrollYProgress}
+              className={wordClassName}
+            />
+          );
+        });
+        if (!Array.isArray(text)) return wordSpans;
+        return (
+          <span
+            key={line}
+            style={{ justifyContent: 'inherit' }}
+            className="flex w-full flex-wrap gap-x-[0.3em]"
+          >
+            {wordSpans}
+          </span>
+        );
+      })}
     </Tag>
   );
 }

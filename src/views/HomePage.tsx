@@ -7,7 +7,7 @@ import { HomeAtmosphere } from '@/components/furnace/home/HomeAtmosphere';
 import { ScrollScrub } from '@/components/furnace/fx/ScrollScrub';
 
 // Kinetic quote beat: eyebrow + the signature per-word scroll reveal, big.
-function ScrubBeat({ eyebrow, text }: { eyebrow: string; text: string }) {
+function ScrubBeat({ eyebrow, text }: { eyebrow: string; text: string | string[] }) {
   return (
     <section className="relative flex min-h-[70svh] flex-col items-center justify-center px-6">
       <p className="font-mono text-[10px] tracking-[0.35em] text-ash">{eyebrow}</p>
@@ -73,7 +73,7 @@ export default function HomePage() {
           <span className="block">A price on the wall.</span>
         </Intertext>
         <TheFive />
-        <ScrubBeat eyebrow="THE STANDARD" text="One studio. One bar. No exceptions." />
+        <ScrubBeat eyebrow="THE STANDARD" text={['One studio.', 'One bar.', 'No exceptions.']} />
         <StudioMotion />
         <ClosingBand />
       </Suspense>
