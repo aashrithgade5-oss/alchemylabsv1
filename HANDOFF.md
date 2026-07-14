@@ -4,6 +4,26 @@ The single source of truth for resuming this session. Append a block entry after
 
 ---
 
+# FO4 — Wave 1 (2026-07-14, plan: C:\Users\aashr\.claude\plans\you-are-executing-a-foamy-meteor.md)
+
+All 7 Wave 1 items shipped, each its own commit, build-gated (`npm run build`) and browser-verified via real mouse-wheel scroll (not programmatic `scrollTo`, which gives misleading readings against Lenis's smoothing — learned the hard way mid-session). Commits `5aa8e7d`..`e119c71`.
+
+1. **Loader** (`5aa8e7d`): rebuilt as the atom mark filling via lazy `@paper-design/shaders-react` LiquidMetal (bottom-up clip reveal + 0-100 counter), portaled to `document.body` — `LayoutTransition`'s `.gpu-accelerated` wrapper carries a permanent transform, which turns fixed descendants page-relative; without the portal the overlay rendered thousands of px down the page. Fill timing uses wall-clock elapsed via `useAnimationFrame`, not framer's standalone `animate()` (bigger bundle) or accumulated frame deltas (stretches on throttled tabs).
+2. **Hero shader** (`69db45f`): new `HeroMeshField` (lazy MeshGradient, ember/void palette, screen-blended low in the video's ellipse mask) replaces the flat CSS-gradient read the hero oval used to have. Opaque decorative surface, no backdrop sampling — doesn't hit the wall GlassFluted hit on GlassPanel. `/` bundle unchanged (shader chunk lazy-loads).
+3. **Cycler shimmer** (`616e976`): traveling ember highlight band layered onto the WE BUILD cycler's existing per-word metallic gradients (same grid cell, same text — the FO3 zero-reflow fix is untouched). Descoped from a literal TextHoverEffect port: that component's SVG viewBox scales per-word, which would size "FILM" and "BRAND SYSTEMS" differently in the fixed-width stacked-lockup cell.
+4. **Dead FloatingCTA deleted** (`52fff4c`): the "clipped Book a Sprint pill" was `FloatingCTA.tsx` — zero importers anywhere, already pulled from `layout.tsx` in an earlier session but the file itself never deleted. Also carried the banned old palette and a raw `window.addEventListener('scroll')`. Root-cause fix is deleting the dead render path, not patching padding on code nothing mounts.
+5. **Scroll dead-zone fix** (`caca0c6`): Hero's sticky stage (h-100svh in an h-180svh parent) unsticks at ~80svh but the section doesn't end for another full 100svh — one dead viewport-height of scroll through Hero's already-resolved, frozen tail before TurnSequence even starts. That trailing distance is mathematically fixed at `sticky_height` regardless of runway, so it can only be compressed by starting the next section earlier: TurnSequence now sits `-mt-[50svh]`. Surfaced a real second bug this uncovered — Hero's headline/cycler had no scroll-tied opacity fade (only eyebrow/CTAs did), so it stayed opaque through the compressed gap and visibly collided with TurnSequence's frame; fixed by moving `chromeOpacity` onto the single outer content wrapper so the whole column fades together.
+6. **Ember text + vignette** (`89f849c`): TurnSequence's kinetic lines get `.glass-type-ember` / `.text-vignette-ember` (new CSS siblings, same opaque bg-clip:text / boxless-feathered mechanism as the base classes, just ember-toned) instead of the base steel gradient + flat neutral-black vignette, which read as a mismatched patch over the red-wings footage. Base `.glass-type`/`.text-vignette` untouched — still the sitewide default.
+7. **Copy pass** (`e119c71`): "Generation is cheap. Judgment is not." (restated the immediately-preceding TurnSequence beat in blander words, also a stock AI-studio trope) → "Machines draft. / We decide what survives." "Start under $300." (restated its own subline, generic round-number threshold) → "The price is the pitch." (builds on the preceding OFFER beat instead).
+
+**Known environment limitation, unresolved**: 380/768px screenshot passes still BLOCKED — Chrome window is maximized/snap-managed, `resize_window` reports success but `innerWidth`/`innerHeight` don't change (tried `super+Down` first, no effect). Matches the exact blocker logged in the 2026-07-14 overhaul3 entry below. All verification this session is desktop (2560x1440 device, ~1450-1568 CSS px depending on tab).
+
+Budget: `/` 136kB, `/services` 133kB, `/contact` 171kB — all within the documented budgets (`/contact`'s 171kB is the pre-existing, documented legacy overage). Frozen-path diff (`git diff --stat 7c31d8b..HEAD -- <frozen paths>`) empty.
+
+Resume: Wave 2 (font direction decision, footer/bottom-CTA rebuild — needs git-history check first, contact bleed background, StringTune reference file, sitewide font consistency pass). See the plan file for full Wave 2/3 specs.
+
+---
+
 # FINAL OVERHAUL 3 (2026-07-13, master prompt: CLAUDE.md law + StringTune treatment + steps 1-8)
 
 CLAUDE.md now exists at repo root (commit `1d9ec3d`) — standing law: fonts (Playfair banned), animation, budget, frozen paths, tokens. Re-verify at session end.
