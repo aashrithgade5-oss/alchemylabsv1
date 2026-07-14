@@ -1236,6 +1236,32 @@ html {
   );
 }
 
+/* Same shape as .text-vignette, ember-toned instead of neutral black — for
+   text sitting over the red-wings TurnSequence footage, a flat black vignette
+   read as a mismatched patch dropped onto a warm scene. This deepens the
+   scene's own red toward the text instead of contradicting it. */
+.text-vignette-ember {
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 50% 50% at center,
+    rgba(30, 11, 6, 0.78) 0%,
+    rgba(30, 11, 6, 0.52) 45%,
+    transparent 78%
+  );
+}
+
+/* Ember-family sibling of .glass-type (same opaque bg-clip:text mechanism,
+   never a transparent glyph) for display text over warm/red media, where the
+   base steel gradient reads as a beige mismatch. Bright cream peak carries
+   the contrast floor; amber/ember at the caps keep it legible on the exact
+   footage .glass-type was calibrated against. */
+.glass-type-ember {
+  color: transparent;
+  background-image: linear-gradient(180deg, #f2c9a0 0%, #fff1e2 52%, #ff8a42 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
 /* Boxless refractive halo: the backdrop visibly bends and blurs BEHIND the
    type with zero edges (feathered mask = no panel read). Position absolutely
    behind a headline, oversized. */

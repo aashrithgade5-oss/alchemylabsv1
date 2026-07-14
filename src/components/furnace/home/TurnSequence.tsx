@@ -41,7 +41,7 @@ function Word({
   const blurPx = useTransform(progress, [wStart, wEnd], [12, 0]);
   const filter = useMotionTemplate`blur(${blurPx}px)`;
   return (
-    <m.span className="glass-type" style={{ opacity, filter }}>
+    <m.span className="glass-type-ember" style={{ opacity, filter }}>
       {word}
     </m.span>
   );
@@ -196,10 +196,12 @@ function ScrubSequence() {
         <canvas ref={canvasRef} className="absolute inset-0 h-full w-full will-change-transform" />
         {/* light scrim; the glass halo below carries legibility */}
         <div aria-hidden className="absolute inset-0 bg-void/25" />
-        {/* text-scoped vignette: contrast floor against the bright wings */}
+        {/* text-scoped vignette: ember-toned so it deepens the red-wings
+            scene toward the text instead of reading as a mismatched black
+            patch dropped over warm footage */}
         <div
           aria-hidden
-          className="text-vignette absolute left-1/2 top-1/2 h-[24rem] w-[min(80rem,100vw)] -translate-x-1/2 -translate-y-1/2"
+          className="text-vignette-ember absolute left-1/2 top-1/2 h-[24rem] w-[min(80rem,100vw)] -translate-x-1/2 -translate-y-1/2"
         />
         {/* boxless refractive halo: the footage bends behind the type,
             feathered to nothing so no panel edge ever reads */}
