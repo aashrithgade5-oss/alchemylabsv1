@@ -5,52 +5,65 @@ import { m } from 'framer-motion';
 import { products, type Product } from '@lib/payments';
 import { PaymentSheet } from '../PaymentSheet';
 import { AmbientVideo } from './AmbientVideo';
+import { CardContainer, CardBody, CardItem } from '@/components/ui/3d-card';
 
 const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
-// One distinct visual field per card — elite DTC product shelf, no two alike.
-const cardFields = [
-  'linear-gradient(135deg, rgba(220,68,28,0.45) 0%, rgba(90,14,8,0.7) 100%)',
-  'radial-gradient(20rem 14rem at 80% 0%, rgba(255,100,40,0.4) 0%, rgba(60,10,6,0.7) 70%)',
-  'linear-gradient(200deg, rgba(178,34,20,0.55) 0%, rgba(30,8,5,0.8) 90%)',
-  'radial-gradient(18rem 16rem at 15% 100%, rgba(220,68,28,0.42) 0%, rgba(50,10,6,0.75) 75%)',
-  'linear-gradient(160deg, rgba(255,120,50,0.35) 0%, rgba(80,14,8,0.75) 100%)',
+// One full-bleed video per card, cycling through footage already used
+// elsewhere on the page — small muted thumbnails at this scale, so reuse
+// reads as cohesive rather than repetitive. No new assets needed.
+const cardMedia = [
+  { src: '/media/red-cloak-water.mp4', poster: '/media/red-cloak-water-poster.jpg' },
+  { src: '/media/red-glass-panels.mp4', poster: '/media/red-glass-panels-poster.jpg' },
+  { src: '/media/red-gradient-stripes.mp4', poster: '/media/red-gradient-stripes-poster.jpg' },
+  { src: '/media/red-slats-tall.mp4', poster: '/media/red-slats-tall-poster.jpg' },
+  { src: '/media/red-slats-wide.mp4', poster: '/media/red-slats-wide-poster.jpg' },
 ];
 
 function ProductCard({
   product,
-  field,
+  media,
   onBuy,
 }: {
   product: Product;
-  field: string;
+  media: (typeof cardMedia)[number];
   onBuy: (p: Product) => void;
 }) {
   return (
-    // glass-solid, not GlassPanel: backdrop-filter inside the snap track
-    // re-filters every scrolled frame and glitches the horizontal scroll
-    <div className="glass-solid group relative flex w-[20rem] shrink-0 snap-center flex-col overflow-hidden rounded-2xl transition-[transform,box-shadow,border-color] duration-500 hover:-translate-y-1.5 hover:border-ember/40 hover:shadow-[0_16px_48px_rgba(255,77,28,0.14)]">
-      <div aria-hidden className="h-28 w-full" style={{ background: field }} />
-      <div className="flex flex-1 flex-col justify-between p-7">
-        <div>
-          <p className="font-mono text-[10px] tracking-[0.25em] text-ash">FIXED SCOPE</p>
-          <h3 className="mt-3 font-sans text-xl font-bold leading-snug text-bone">{product.name}</h3>
-          <p className="mt-3 text-sm leading-relaxed text-ash">{product.tagline}</p>
+    // CardContainer/Body/Item: pure CSS-transform 3D tilt (perspective +
+    // rotateX/Y), no Three.js, no framer-motion dependency — safe inside a
+    // snap-scroll track. glass-solid stays (not GlassPanel): backdrop-filter
+    // inside this track re-filters every scrolled frame and glitches the
+    // horizontal scroll, confirmed in an earlier session.
+    <CardContainer containerClassName="!py-0 w-[20rem] shrink-0 snap-center" className="!w-full">
+      <CardBody className="glass-solid group relative flex h-[26rem] w-full flex-col overflow-hidden rounded-2xl !transform-none transition-[box-shadow,border-color] duration-500 hover:border-ember/40 hover:shadow-[0_16px_48px_rgba(255,77,28,0.14)]">
+        <AmbientVideo
+          src={media.src}
+          poster={media.poster}
+          className="absolute inset-0 h-full w-full object-cover opacity-30"
+        />
+        <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-carbon via-carbon/70 to-transparent" />
+        <div className="relative flex h-full flex-col justify-between p-7">
+          <CardItem translateZ={30}>
+            <p className="font-mono text-[10px] tracking-[0.25em] text-ash">FIXED SCOPE</p>
+            <h3 className="mt-3 font-sans text-xl font-bold leading-snug text-bone">{product.name}</h3>
+            <p className="mt-3 text-sm leading-relaxed text-ash">{product.tagline}</p>
+          </CardItem>
+          <CardItem translateZ={50} className="mt-8 w-full">
+            <p className="font-mono text-sm text-bone">
+              ${product.priceUsd}
+              <span className="ml-2 text-[11px] text-ash">₹{product.priceInr.toLocaleString('en-IN')}</span>
+            </p>
+            <button
+              onClick={() => onBuy(product)}
+              className="mt-4 w-full rounded-full bg-ember px-5 py-2.5 font-sans text-sm font-semibold text-void transition-colors duration-300 hover:bg-amber"
+            >
+              Buy now · ${product.priceUsd}
+            </button>
+          </CardItem>
         </div>
-        <div className="mt-8">
-          <p className="font-mono text-sm text-bone">
-            ${product.priceUsd}
-            <span className="ml-2 text-[11px] text-ash">₹{product.priceInr.toLocaleString('en-IN')}</span>
-          </p>
-          <button
-            onClick={() => onBuy(product)}
-            className="mt-4 w-full rounded-full bg-ember px-5 py-2.5 font-sans text-sm font-semibold text-void transition-colors duration-300 hover:bg-amber"
-          >
-            Buy now · ${product.priceUsd}
-          </button>
-        </div>
-      </div>
-    </div>
+      </CardBody>
+    </CardContainer>
   );
 }
 
@@ -105,7 +118,7 @@ export function TheFive() {
           <ProductCard
             key={product.id}
             product={product}
-            field={cardFields[i % cardFields.length]}
+            media={cardMedia[i % cardMedia.length]}
             onBuy={setSelected}
           />
         ))}
