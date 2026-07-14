@@ -60,8 +60,8 @@ export default function HomePage() {
       <Suspense fallback={null}>
         <TurnSequence />
         <Intertext eyebrow="THE PRACTICE">
-          <span className="block">Generation is cheap.</span>
-          <span className="block">Judgment is not.</span>
+          <span className="block">Machines draft.</span>
+          <span className="block">We decide what survives.</span>
         </Intertext>
         <Pillars />
         <StillBreak />

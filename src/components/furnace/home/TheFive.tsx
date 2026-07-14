@@ -83,7 +83,7 @@ export function TheFive() {
           transition={{ duration: 0.9, ease }}
           className="mt-6 font-sans text-[clamp(2rem,4vw,3.5rem)] font-black leading-[1.05] tracking-[-0.03em] text-bone"
         >
-          Start under $300.
+          The price is the pitch.
         </m.h2>
         <m.p
           initial={{ opacity: 0 }}
