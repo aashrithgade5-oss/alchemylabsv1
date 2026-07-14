@@ -12,6 +12,7 @@ import { DecodeText } from '../DecodeText';
 import { KineticHeadline, useScrollVelocitySkew } from '../KineticHeadline';
 import { MagneticCTA } from '../MagneticCTA';
 import { CapacityTag } from '../CapacityTag';
+import { HeroMeshField } from './HeroMeshField';
 
 const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
@@ -130,6 +131,7 @@ export function Hero() {
           >
             <source src="/media/samurai-silhouette-1.mp4" type="video/mp4" />
           </video>
+          {!reduced && <HeroMeshField />}
           {/* Quiet vignette: the red field recedes, the centered text wins */}
           <div
             aria-hidden
