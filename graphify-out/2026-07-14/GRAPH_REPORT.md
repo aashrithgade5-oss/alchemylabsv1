@@ -1,18 +1,13 @@
-# Graph Report - alchemylabsv1  (2026-07-14)
+# Graph Report - .  (2026-07-14)
 
 ## Corpus Check
-- 196 files · ~74,292 words
+- 196 files · ~75,892 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 857 nodes · 1214 edges · 84 communities (63 shown, 21 thin omitted)
+- 883 nodes · 1228 edges · 87 communities (67 shown, 20 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 4 edges (avg confidence: 0.73)
 - Token cost: 0 input · 0 output
-
-## Graph Freshness
-- Built from commit: `cc771ec3`
-- Run `git rev-parse HEAD` and compare to check if the graph is stale.
-- Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - Founders Circle Section
@@ -69,12 +64,15 @@
 - Animated Counter & Metric Card
 - Glow Background Variant
 - Glass Card Component
+- Section Shell Wrapper
 - Alert UI Component
 - OTP Input UI
 - Client Marquee
 - FAQ Section Component
 - Featured Work Section
 - Page Scroll Tracker
+- Marquee Row Component
+- Avatar UI Component
 - Badge UI Component
 - Tabs UI Component
 - 404 Not Found Page
@@ -94,7 +92,7 @@
 - Scroll Progress Bar
 
 ## God Nodes (most connected - your core abstractions)
-1. `cn()` - 85 edges
+1. `cn()` - 81 edges
 2. `ScrollReveal()` - 10 edges
 3. `SequentianBackground` - 9 edges
 4. `BlueprintGrid` - 7 edges
@@ -103,7 +101,7 @@
 7. `NoiseTexture` - 6 edges
 8. `buttonVariants` - 6 edges
 9. `SEOHead()` - 5 edges
-10. `GlassPanel()` - 5 edges
+10. `KineticHeadline()` - 5 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `WordSwitcher()` --indirect_call--> `t()`  [INFERRED]
@@ -120,15 +118,15 @@
 ## Import Cycles
 - None detected.
 
-## Communities (84 total, 21 thin omitted)
+## Communities (87 total, 20 thin omitted)
 
 ### Community 0 - "Founders Circle Section"
-Cohesion: 0.07
-Nodes (21): FoundersCTA, principles, PrinciplesSection, AboutProcessSection, processSteps, WhoWeServe, MagneticCTA, MagneticCTAProps (+13 more)
+Cohesion: 0.05
+Nodes (30): CINEMATIC_EASE, FounderPanel, founders, FoundersCTA, principles, PrinciplesSection, AboutProcessSection, processSteps (+22 more)
 
 ### Community 1 - "Contact Page & Footer"
-Cohesion: 0.10
-Nodes (16): MagneticButton(), MagneticButtonProps, useSoundEffects(), supabase, CompositeTypes, Constants, Database, DatabaseWithoutInternals (+8 more)
+Cohesion: 0.05
+Nodes (28): Contact, pillarToService, serviceOptions, Footer, footerLinks, socialLinks, MagneticButton(), MagneticButtonProps (+20 more)
 
 ### Community 2 - "UI: Input/Separator/Sheet"
 Cohesion: 0.05
@@ -143,48 +141,48 @@ Cohesion: 0.12
 Nodes (24): Toast, ToastAction, ToastActionElement, ToastClose, ToastDescription, ToastProps, ToastTitle, toastVariants (+16 more)
 
 ### Community 5 - "Aashrith Portfolio Page"
-Cohesion: 0.06
-Nodes (27): accentMap, CaseStudyData, CaseStudyOverlay, CaseStudyOverlayProps, fallbackAccent, brandAlchemyPosts, CareerTimeline, caseStudyData (+19 more)
+Cohesion: 0.07
+Nodes (22): brandAlchemyPosts, CareerTimeline, caseStudyData, connectFooterLinks, creativeProjects, CreativeProjectsSection, creativePursuits, EASE (+14 more)
 
 ### Community 6 - "Particle BG & Accordion UI"
 Cohesion: 0.09
-Nodes (16): Particle, ParticleBackground, Avatar, AvatarFallback, AvatarImage, Checkbox, HoverCardContent, PopoverContent (+8 more)
+Nodes (16): Particle, ParticleBackground, AccordionContent, AccordionItem, AccordionTrigger, PopoverContent, Progress, RadioGroup (+8 more)
 
 ### Community 7 - "Eva Portfolio Page"
 Cohesion: 0.09
 Nodes (19): PortfolioFooter, PortfolioFooterProps, CareerJourney, ClientShowcase, connectFooterLinks, CreativePhilosophy, EASE, evaGlass() (+11 more)
 
 ### Community 8 - "Background Scene & Glass FX"
-Cohesion: 0.06
-Nodes (35): BackgroundScene, BackgroundSceneProps, sceneConfigs, SceneMode, colorClasses, EyebrowLabel, EyebrowLabelProps, GlassCard (+27 more)
+Cohesion: 0.12
+Nodes (16): BackgroundScene, BackgroundSceneProps, sceneConfigs, SceneMode, HyperLiquidGlass, HyperLiquidGlassProps, ParticleField, ThoughtLeadershipCard (+8 more)
 
 ### Community 9 - "Hero Section Effects"
-Cohesion: 0.22
-Nodes (10): CapacityTag(), MONTHS, BUILDS, ease, Hero(), ease, KineticHeadline(), KineticHeadlineProps (+2 more)
+Cohesion: 0.14
+Nodes (15): CapacityTag(), MONTHS, DecodeText(), DecodeTextProps, BUILDS, ease, Hero(), WeBuild() (+7 more)
 
 ### Community 10 - "Home Atmosphere & Glass Panel"
-Cohesion: 0.13
-Nodes (11): GlassPanel(), GlassPanelProps, AmbientVideo(), ease, pillars, ease, cardFields, ease (+3 more)
+Cohesion: 0.16
+Nodes (10): GlassPanel(), GlassPanelProps, AmbientVideo(), HomeAtmosphere(), ease, pillars, ease, ContactPage() (+2 more)
 
 ### Community 11 - "Command Palette UI"
 Cohesion: 0.12
 Nodes (15): Command, CommandDialogProps, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator (+7 more)
 
 ### Community 12 - "UI: Checkbox/HoverCard/Pagination"
-Cohesion: 0.18
-Nodes (16): Button, ButtonProps, buttonVariants, Calendar(), CalendarProps, Pagination(), PaginationContent, PaginationEllipsis() (+8 more)
+Cohesion: 0.17
+Nodes (13): Checkbox, HoverCardContent, Pagination(), PaginationContent, PaginationEllipsis(), PaginationItem, PaginationLink(), PaginationLinkProps (+5 more)
 
 ### Community 13 - "Lazy Section Loader"
-Cohesion: 0.12
-Nodes (14): CINEMATIC_EASE, LazyNeuralBackground, YinYangHero, DefaultSkeleton, LazySection, LazySectionProps, SectionSkeleton, About (+6 more)
+Cohesion: 0.14
+Nodes (13): FounderCircles, YinYangHero, DefaultSkeleton, LazySection, LazySectionProps, SectionSkeleton, About, AboutProcessSection (+5 more)
 
 ### Community 14 - "Alert Dialog UI"
-Cohesion: 0.22
-Nodes (8): AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter(), AlertDialogHeader(), AlertDialogOverlay, AlertDialogTitle
+Cohesion: 0.15
+Nodes (13): AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter(), AlertDialogHeader(), AlertDialogOverlay, AlertDialogTitle (+5 more)
 
 ### Community 15 - "Pillars Section & Reveal"
-Cohesion: 0.14
-Nodes (13): SmoothReveal(), FlutedGlass, GlassFluted(), NOTE: FlutedGlass flutes its own color field, not the live backdrop —, Offer, Pillar, pillars, ease (+5 more)
+Cohesion: 0.18
+Nodes (10): SmoothReveal(), Offer, Pillar, pillars, ease, kanji, PillarSection(), FAQ (+2 more)
 
 ### Community 16 - "Form UI Component"
 Cohesion: 0.14
@@ -192,35 +190,35 @@ Nodes (11): FormControl, FormDescription, FormFieldContext, FormFieldContextValu
 
 ### Community 17 - "Device Performance Context"
 Cohesion: 0.20
-Nodes (9): CookieConsent, EASE_CINEMATIC, CalibrationState, defaults, PerformanceContext, PerformanceContextType, tierConfig, usePerformance() (+1 more)
+Nodes (12): CalibrationState, defaults, PerformanceContext, PerformanceContextType, tierConfig, classifyTier(), detectGPU(), DeviceProfile (+4 more)
 
 ### Community 18 - "Scroll Text Reveal"
-Cohesion: 0.18
-Nodes (9): Contact, pillarToService, serviceOptions, Footer, footerLinks, socialLinks, TurnstileWidget(), TurnstileWidgetProps (+1 more)
+Cohesion: 0.14
+Nodes (5): CharacterRevealProps, LineRevealProps, MaskRevealProps, ParagraphRevealProps, ScrollTextRevealProps
 
 ### Community 19 - "Carousel UI Component"
 Cohesion: 0.14
 Nodes (12): Carousel, CarouselApi, CarouselContent, CarouselContext, CarouselContextProps, CarouselItem, CarouselNext, CarouselOptions (+4 more)
 
 ### Community 20 - "Root Layout & Cookie Consent"
-Cohesion: 0.24
-Nodes (6): fraunces, metadata, GrainOverlay(), LayoutTransition(), pageVariants, ScrollRestoration
+Cohesion: 0.19
+Nodes (8): fraunces, metadata, CookieConsent, EASE_CINEMATIC, GrainOverlay(), LayoutTransition(), pageVariants, ScrollRestoration
 
 ### Community 21 - "Closing Band & Magnetic CTA"
-Cohesion: 0.17
-Nodes (9): WORDS, WordSwitcher(), MagneticCTA(), MagneticCTAProps, spring, Variant, variantClasses, ease (+1 more)
+Cohesion: 0.19
+Nodes (8): WORDS, WordSwitcher(), MagneticCTA(), MagneticCTAProps, spring, Variant, variantClasses, ease
 
 ### Community 22 - "Home Page Composition"
-Cohesion: 0.12
-Nodes (14): DecodeText(), DecodeTextProps, WeBuild(), Loader(), t(), ClosingBand, FeaturedWork, HomePage() (+6 more)
+Cohesion: 0.18
+Nodes (9): ClosingBand, FeaturedWork, HomePage(), Intertext, Pillars, StillBreak, StudioMotion, TheFive (+1 more)
 
 ### Community 23 - "Philosophy & Capabilities Sections"
 Cohesion: 0.23
 Nodes (7): PhilosophySection, AnimatedCapabilities, capabilities, BlueprintGrid, BlueprintGridProps, NoiseTexture, NoiseTextureProps
 
 ### Community 24 - "Eyebrow Label & Lightbox"
-Cohesion: 0.22
-Nodes (8): CINEMATIC_EASE, FounderCircles, FounderPanel, founders, Particle, ParticleField, ParticleFieldProps, useIsMobile()
+Cohesion: 0.20
+Nodes (9): colorClasses, EyebrowLabel, EyebrowLabelProps, LightboxItem, LightboxModal, LightboxModalProps, portfolioProjects, thoughtLeadershipEntries (+1 more)
 
 ### Community 25 - "Menubar UI Component"
 Cohesion: 0.17
@@ -235,20 +233,20 @@ Cohesion: 0.22
 Nodes (8): FurnaceFooter(), nav, socials, ease, FurnaceNavigation(), navItems, portfolioRoutes, SiteChrome()
 
 ### Community 28 - "Product Cards & Payment Sheet"
-Cohesion: 0.39
-Nodes (5): CardBody(), CardContainer(), CardItem(), MouseEnterContext, useMouseEnter()
+Cohesion: 0.22
+Nodes (5): cardFields, ease, PaymentSheet(), PaymentSheetProps, ease
 
 ### Community 29 - "Scroll Reveal Text Variants"
-Cohesion: 0.38
-Nodes (4): HomeAtmosphere(), ContactPage(), ease, trust
+Cohesion: 0.18
+Nodes (5): CharacterRevealProps, CharRevealProps, ScrollRevealTextProps, WordByWordRevealProps, WordRevealProps
 
 ### Community 30 - "Chart UI Component"
 Cohesion: 0.18
 Nodes (7): ChartConfig, ChartContainer, ChartContext, ChartContextProps, ChartLegendContent, ChartTooltipContent, THEMES
 
 ### Community 31 - "App Providers & Lenis"
-Cohesion: 0.28
-Nodes (6): LenisProvider(), Providers(), queryClient, Toaster(), ToasterProps, PerformanceProvider
+Cohesion: 0.24
+Nodes (7): LenisProvider(), Providers(), queryClient, Toaster(), ToasterProps, PageAtmosphereProvider(), PerformanceProvider
 
 ### Community 32 - "Context Menu UI"
 Cohesion: 0.20
@@ -287,12 +285,12 @@ Cohesion: 0.25
 Nodes (7): SelectContent, SelectItem, SelectLabel, SelectScrollDownButton, SelectScrollUpButton, SelectSeparator, SelectTrigger
 
 ### Community 41 - "Word Reveal & Stagger"
-Cohesion: 0.43
-Nodes (6): classifyTier(), detectGPU(), DeviceProfile, getConnectionType(), isDedicatedGPU(), profileDevice()
+Cohesion: 0.25
+Nodes (3): CharacterRevealProps, StaggerContainerProps, WordRevealProps
 
 ### Community 42 - "Page Atmosphere Context"
-Cohesion: 0.22
-Nodes (7): AtmosphereConfig, atmosphereConfigs, AtmosphericBackground, PageAtmosphereContext, PageAtmosphereContextType, PageAtmosphereProvider(), PageAtmosphereProviderProps
+Cohesion: 0.25
+Nodes (6): AtmosphereConfig, atmosphereConfigs, AtmosphericBackground, PageAtmosphereContext, PageAtmosphereContextType, PageAtmosphereProviderProps
 
 ### Community 43 - "Founders Data"
 Cohesion: 0.25
@@ -319,12 +317,20 @@ Cohesion: 0.33
 Nodes (5): DynamicGlowBg, DynamicGlowBgProps, glowImagePaths, GlowPosition, GlowVariant
 
 ### Community 49 - "Case Study Overlay"
-Cohesion: 0.50
-Nodes (3): AccordionContent, AccordionItem, AccordionTrigger
+Cohesion: 0.33
+Nodes (5): accentMap, CaseStudyData, CaseStudyOverlay, CaseStudyOverlayProps, fallbackAccent
 
 ### Community 52 - "Glow Background Variant"
 Cohesion: 0.40
 Nodes (4): GlowBackground, GlowBackgroundProps, GlowVariant, variantStyles
+
+### Community 53 - "Glass Card Component"
+Cohesion: 0.40
+Nodes (4): GlassCard, GlassCardProps, paddingClasses, variantStyles
+
+### Community 54 - "Section Shell Wrapper"
+Cohesion: 0.40
+Nodes (4): maxWidthClasses, paddingClasses, SectionShell, SectionShellProps
 
 ### Community 55 - "Alert UI Component"
 Cohesion: 0.40
@@ -338,6 +344,14 @@ Nodes (4): InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot
 Cohesion: 0.50
 Nodes (3): FAQCard, faqs, FAQSection
 
+### Community 61 - "Marquee Row Component"
+Cohesion: 0.50
+Nodes (3): MarqueeRow, MarqueeRowProps, speedDurations
+
+### Community 62 - "Avatar UI Component"
+Cohesion: 0.50
+Nodes (3): Avatar, AvatarFallback, AvatarImage
+
 ### Community 63 - "Badge UI Component"
 Cohesion: 0.67
 Nodes (3): Badge(), BadgeProps, badgeVariants
@@ -347,24 +361,24 @@ Cohesion: 0.50
 Nodes (3): TabsContent, TabsList, TabsTrigger
 
 ## Knowledge Gaps
-- **429 isolated node(s):** `fraunces`, `metadata`, `metadata`, `faqJsonLd`, `AnimatedCounterProps` (+424 more)
+- **443 isolated node(s):** `fraunces`, `metadata`, `metadata`, `faqJsonLd`, `AnimatedCounterProps` (+438 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **21 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **20 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `cn()` connect `UI: Checkbox/HoverCard/Pagination` to `Founders Circle Section`, `UI: Input/Separator/Sheet`, `Toast UI Component`, `Particle BG & Accordion UI`, `Background Scene & Glass FX`, `Command Palette UI`, `Alert Dialog UI`, `Form UI Component`, `Carousel UI Component`, `Eyebrow Label & Lightbox`, `Menubar UI Component`, `Product Cards & Payment Sheet`, `Chart UI Component`, `Context Menu UI`, `Dropdown Menu UI`, `Table UI Component`, `Breadcrumb UI Component`, `Drawer UI Component`, `Navigation Menu UI`, `Select UI Component`, `Card UI Component`, `Toggle UI Component`, `Case Study Overlay`, `Glass Card Component`, `Alert UI Component`, `OTP Input UI`, `Badge UI Component`, `Tabs UI Component`, `NavLink Wrapper`, `Textarea UI Component`?**
-  _High betweenness centrality (0.239) - this node is a cross-community bridge._
-- **Why does `t()` connect `Home Page Composition` to `Closing Band & Magnetic CTA`, `Eva Portfolio Page`?**
-  _High betweenness centrality (0.206) - this node is a cross-community bridge._
+- **Why does `cn()` connect `UI: Checkbox/HoverCard/Pagination` to `Founders Circle Section`, `UI: Input/Separator/Sheet`, `Toast UI Component`, `Particle BG & Accordion UI`, `Background Scene & Glass FX`, `Command Palette UI`, `Alert Dialog UI`, `Form UI Component`, `Carousel UI Component`, `Eyebrow Label & Lightbox`, `Menubar UI Component`, `Chart UI Component`, `Context Menu UI`, `Dropdown Menu UI`, `Table UI Component`, `Breadcrumb UI Component`, `Drawer UI Component`, `Navigation Menu UI`, `Select UI Component`, `Card UI Component`, `Toggle UI Component`, `Glass Card Component`, `Section Shell Wrapper`, `Alert UI Component`, `OTP Input UI`, `Marquee Row Component`, `Avatar UI Component`, `Badge UI Component`, `Tabs UI Component`, `NavLink Wrapper`, `Textarea UI Component`?**
+  _High betweenness centrality (0.213) - this node is a cross-community bridge._
+- **Why does `t()` connect `Hero Section Effects` to `Closing Band & Magnetic CTA`, `Eva Portfolio Page`?**
+  _High betweenness centrality (0.143) - this node is a cross-community bridge._
+- **Why does `Loader()` connect `Hero Section Effects` to `Home Page Composition`?**
+  _High betweenness centrality (0.065) - this node is a cross-community bridge._
 - **What connects `fraunces`, `metadata`, `metadata` to the rest of the system?**
-  _429 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _443 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Founders Circle Section` be split into smaller, more focused modules?**
-  _Cohesion score 0.07422402159244265 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.05370101596516691 - nodes in this community are weakly interconnected._
 - **Should `Contact Page & Footer` be split into smaller, more focused modules?**
-  _Cohesion score 0.09538461538461539 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.05314009661835749 - nodes in this community are weakly interconnected._
 - **Should `UI: Input/Separator/Sheet` be split into smaller, more focused modules?**
   _Cohesion score 0.05179704016913319 - nodes in this community are weakly interconnected._
-- **Should `Breadcrumbs & Horizontal Scroll` be split into smaller, more focused modules?**
-  _Cohesion score 0.08708708708708708 - nodes in this community are weakly interconnected._
