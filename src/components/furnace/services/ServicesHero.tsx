@@ -8,12 +8,13 @@ import { CapacityTag } from '../CapacityTag';
 export function ServicesHero() {
   return (
     <section className="relative overflow-hidden bg-void">
-      {/* dimmed still, fading into void before the pillars */}
+      {/* dimmed still, fading into void before the pillars — b2-bomber-2.png
+          (2912x1632) replaces the under-res b2-bomber-3.webp (1600x896/21KB)
+          flagged in HANDOFF; same subject, native resolution was already
+          sitting unused in public/media, no new asset needed */}
       <div aria-hidden className="absolute inset-0">
-        {/* source is 1600x896/21KB — under-res for full bleed; replacement
-            >=2560x1440 flagged in HANDOFF. quality can't invent detail here. */}
         <Image
-          src="/media/b2-bomber-3.webp"
+          src="/media/b2-bomber-2.png"
           alt=""
           fill
           priority
