@@ -10,8 +10,10 @@ import { GrainOverlay } from '@/components/furnace/GrainOverlay';
 import { CookieConsent } from '@/components/CookieConsent';
 import '@/index.css';
 
-// Fraunces variable carries display, headlines, and editorial pull-quotes
-// (see style-guide.md); Geist carries body + mono. Playfair is retired.
+// Fraunces variable carries ONLY italic editorial pull-quotes + the founder
+// note (see style-guide.md); Geist black carries all display headings, Geist
+// Sans/Mono carry body + labels. Playfair is retired. next/font/google
+// self-hosts at build time — functionally identical to next/font/local.
 const fraunces = Fraunces({
   subsets: ['latin'],
   style: ['normal', 'italic'],

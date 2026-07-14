@@ -81,7 +81,7 @@ export function TheFive() {
           whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.9, ease }}
-          className="mt-6 font-fraunces text-[clamp(2rem,4vw,3.5rem)] font-semibold leading-[1.05] tracking-[-0.01em] text-bone"
+          className="mt-6 font-sans text-[clamp(2rem,4vw,3.5rem)] font-black leading-[1.05] tracking-[-0.03em] text-bone"
         >
           Start under $300.
         </m.h2>

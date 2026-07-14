@@ -4,9 +4,10 @@ This file exists because font/token decisions kept reverting across sessions.
 Everything here is NON-NEGOTIABLE and must be re-verified at the END of every session.
 
 ## FONTS (final — Playfair is BANNED as a display face)
-- Display / headlines / pull-quotes: **Fraunces variable** (`font-fraunces`) OR the existing
-  **Geist** grotesk — a CLEAN GROTESK or Fraunces, never a high-contrast serif like Playfair.
-  If any component renders a headline in Playfair, that is a BUG — fix it.
+- Display / headlines (H1/H2): **Geist black** (`font-sans font-black`) with `.glass-type`
+  per word — locked 2026-07-14 (StringTune pass). Never a high-contrast serif like Playfair.
+- Editorial pull-quotes + founder note ONLY: **Fraunces italic** (`font-fraunces` + `italic`).
+  A non-italic `font-fraunces` on any H1/H2 is a BUG — that was the font drift; fix it.
 - Body / subheads: **Geist Sans** (`font-sans`).
 - Eyebrows / labels / technical: **Geist Mono** (`font-mono`).
 - Before ending any session: `grep -ri "playfair" src app` and grep `font-serif` —
