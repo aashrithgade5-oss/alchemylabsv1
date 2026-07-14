@@ -1,6 +1,7 @@
 'use client';
 
 import { m } from 'framer-motion';
+import Image from 'next/image';
 import { Contact } from '@/components/Contact';
 import { HomeAtmosphere } from '@/components/furnace/home/HomeAtmosphere';
 import { AmbientVideo } from '@/components/furnace/home/AmbientVideo';
@@ -75,8 +76,25 @@ export const ContactPage = () => {
         </div>
       </section>
 
-      {/* The form, in glass */}
+      {/* The form, in glass — bleed background restored from the last
+          pre-Next.js ContactPage.tsx (commit 8599310): contact-bg.png,
+          radial-masked so it fades before the edges rather than hard-cutting */}
       <section className="relative px-4 pb-28 md:px-6 md:pb-40">
+        <div
+          aria-hidden
+          className="absolute inset-0 overflow-hidden"
+          style={{
+            WebkitMaskImage: 'radial-gradient(ellipse 85% 75% at 50% 40%, black 20%, transparent 75%)',
+            maskImage: 'radial-gradient(ellipse 85% 75% at 50% 40%, black 20%, transparent 75%)',
+          }}
+        >
+          <Image
+            src="/assets/contact-bg.png"
+            alt=""
+            fill
+            className="scale-110 object-cover opacity-40"
+          />
+        </div>
         <m.div
           initial={{ opacity: 0, y: 32 }}
           animate={{ opacity: 1, y: 0 }}
