@@ -1157,16 +1157,21 @@ html {
    ═══════════════════════════════════════════════════════════ */
 
 :root {
-  --void: #0A0908;
-  --carbon: #161412;
-  --carbon-2: #201C19;
-  --ember: #FF4D1C;
-  --ember-deep: #C93A14;
-  --amber: #FFA028;
+  /* RGB triplets (not hex): tailwind.config.ts wraps these in
+     rgb(var(--x) / <alpha-value>) so text-bone/70 etc. actually generate an
+     opacity variant — a bare hex var() silently drops the opacity modifier
+     (Tailwind can't compute alpha against one). --halo/--line stay rgba()
+     literals; they're fixed-alpha tokens used bare, never with a modifier. */
+  --void: 10 9 8;
+  --carbon: 22 20 18;
+  --carbon-2: 32 28 25;
+  --ember: 255 77 28;
+  --ember-deep: 201 58 20;
+  --amber: 255 160 40;
   --halo: rgba(255, 77, 28, 0.10);
-  --bone: #EDE6DD;
+  --bone: 237 230 221;
   /* legibility bump (phase 7): was #8A8178 (~5:1 on void); ~6.3:1 now */
-  --ash: #9A9186;
+  --ash: 154 145 134;
   --line: rgba(237, 230, 221, 0.08);
 }
 

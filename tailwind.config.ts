@@ -15,18 +15,22 @@ export default {
     },
     extend: {
       colors: {
-        // The Furnace — overhaul palette (new routes only)
-        void: "var(--void)",
-        carbon: "var(--carbon)",
-        "carbon-2": "var(--carbon-2)",
-        ember: "var(--ember)",
-        "ember-deep": "var(--ember-deep)",
+        // The Furnace — overhaul palette (new routes only). RGB-triplet
+        // vars wrapped in rgb(... / <alpha-value>) so text-bone/70 etc.
+        // actually generate an opacity variant (a bare var(--bone) hex
+        // reference can't have a modifier applied to it — Tailwind was
+        // silently dropping every /NN opacity class on these six tokens).
+        void: "rgb(var(--void) / <alpha-value>)",
+        carbon: "rgb(var(--carbon) / <alpha-value>)",
+        "carbon-2": "rgb(var(--carbon-2) / <alpha-value>)",
+        ember: "rgb(var(--ember) / <alpha-value>)",
+        "ember-deep": "rgb(var(--ember-deep) / <alpha-value>)",
         // `amber` keeps the default Tailwind scale (AdminDashboard uses
         // amber-400/500); bare `amber` resolves to the Furnace token.
-        amber: { ...defaultColors.amber, DEFAULT: "var(--amber)" },
+        amber: { ...defaultColors.amber, DEFAULT: "rgb(var(--amber) / <alpha-value>)" },
         halo: "var(--halo)",
-        bone: "var(--bone)",
-        ash: "var(--ash)",
+        bone: "rgb(var(--bone) / <alpha-value>)",
+        ash: "rgb(var(--ash) / <alpha-value>)",
         line: "var(--line)",
 
         // Core Alchemy Palette
