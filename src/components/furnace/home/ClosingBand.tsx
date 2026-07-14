@@ -6,6 +6,7 @@ import { AnimatePresence, m, useReducedMotion } from 'framer-motion';
 import { AmbientVideo } from './AmbientVideo';
 import { KineticHeadline } from '../KineticHeadline';
 import { MagneticCTA } from '../MagneticCTA';
+import { TextHoverEffect } from '@/components/ui/text-hover-effect';
 
 const WORDS = ['IDENTITY', 'CAMPAIGNS', 'FILM', 'STRATEGY'];
 
@@ -78,7 +79,7 @@ export function ClosingBand() {
         <KineticHeadline
           as="h2"
           text="Bring us the brand as it stands."
-          className="font-fraunces text-[clamp(2rem,4vw,3.5rem)] font-semibold leading-[1.05] tracking-[-0.01em] text-bone"
+          className="font-sans text-[clamp(2rem,4vw,3.5rem)] font-black leading-[1.05] tracking-[-0.03em] text-bone"
           wordClassName="glass-type"
         />
         <m.p
@@ -109,6 +110,16 @@ export function ClosingBand() {
           className="mt-14"
         >
           <WordSwitcher />
+        </m.div>
+        {/* terminal wordmark: cursor reveals the ember gradient through the strokes */}
+        <m.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.75 }}
+          className="mt-10 h-32 w-full max-w-3xl md:h-44"
+        >
+          <TextHoverEffect text="ALCHEMY" />
         </m.div>
       </div>
     </section>
