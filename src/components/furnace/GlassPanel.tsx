@@ -53,7 +53,7 @@ export function GlassPanel({ children, className = '', refract = false }: GlassP
             'radial-gradient(32rem circle at var(--gx) var(--gy), rgba(237,230,221,0.05), transparent 55%)',
         }}
       />
-      <div className="relative">{children}</div>
+      <div className="relative h-full">{children}</div>
     </div>
   );
 }

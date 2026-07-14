@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { m } from 'framer-motion';
 import { MagneticCTA } from '../MagneticCTA';
 import { GlassPanel } from '../GlassPanel';
+import { GlassFluted } from '../GlassFluted';
 import { ScrollScrub } from '../fx/ScrollScrub';
 import { SmoothReveal } from '../fx/SmoothReveal';
 import type { Pillar } from './pillars';
@@ -53,7 +54,7 @@ export function PillarSection({ pillar, index }: { pillar: Pillar; index: number
           <p className="font-mono text-[10px] tracking-[0.3em] text-ash">{pillar.tag}</p>
           <ScrollScrub
             text={pillar.title}
-            className="mt-5 font-fraunces text-[clamp(2rem,4vw,3.5rem)] font-semibold leading-[1.05] tracking-[-0.01em] text-bone"
+            className="mt-5 font-sans text-[clamp(2rem,4vw,3.5rem)] font-black leading-[1.05] tracking-[-0.03em] text-bone"
             wordClassName="glass-type"
           />
           <p className="mt-5 max-w-md text-base leading-relaxed text-ash">{pillar.description}</p>
@@ -65,7 +66,9 @@ export function PillarSection({ pillar, index }: { pillar: Pillar; index: number
             transition={{ duration: 0.9, ease }}
             className="mt-12"
           >
+            {/* GlassFluted: Phase-2 Paper Shaders prototype, this call site only */}
             <GlassPanel className="px-7 py-2 md:px-9">
+              <GlassFluted />
               <ul className="flex flex-col">
                 {pillar.offers.map((offer) => (
                   <li key={offer.name} className="group border-t border-line py-7 first:border-t-0">

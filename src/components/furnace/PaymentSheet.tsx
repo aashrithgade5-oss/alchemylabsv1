@@ -71,7 +71,7 @@ export function PaymentSheet({ product, onClose }: PaymentSheetProps) {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', stiffness: 260, damping: 32 }}
-            className="relative flex h-full w-full max-w-md flex-col overflow-y-auto border-l border-line bg-carbon/95 px-8 py-10 backdrop-blur-2xl"
+            className="liquid-glass relative flex h-full w-full max-w-md flex-col overflow-y-auto px-8 py-10"
           >
             <button
               onClick={onClose}
