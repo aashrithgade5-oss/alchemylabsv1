@@ -314,3 +314,6 @@ Resume: Block 1 (landing), start at hero type scale in `src/components/furnace/h
 Shipped: baseline commit of two prior sessions' verified work (furnace rebuild of / and /services, Geist type system, liquid glass, bento pillars, background cohesion, media pipeline). HANDOFF.md created.
 Pending: everything below.
 Resume: build the effect system (`src/components/furnace/fx/`), per plan at `C:\Users\aashr\.claude\plans\wiggly-baking-boot.md`.
+
+## 2026-07-14 — graphify audit: dead-code sweep
+Graph flagged 3 weak "reveal variant" communities + isolated Navigation node. Verified zero importers and deleted: `src/components/Navigation.tsx`, `src/components/WordReveal.tsx`, `src/components/ScrollTextReveal.tsx`, `src/components/ScrollRevealText.tsx` (AashrithPortfolio uses its own local WordRevealQuote — frozen paths untouched). Graph's `WordSwitcher()→t()` INFERRED edge verified spurious. Build clean, homepage 134kB.
