@@ -36,8 +36,9 @@ function Word({
   wEnd: number;
   progress: MotionValue<number>;
 }) {
+  // blur floor 12: the one scrub signature (matches fx/ScrollScrub)
   const opacity = useTransform(progress, [wStart, wEnd], [0, 1]);
-  const blurPx = useTransform(progress, [wStart, wEnd], [10, 0]);
+  const blurPx = useTransform(progress, [wStart, wEnd], [12, 0]);
   const filter = useMotionTemplate`blur(${blurPx}px)`;
   return (
     <m.span className="glass-type" style={{ opacity, filter }}>

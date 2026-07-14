@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from 'react';
 import {
-  AnimatePresence,
   m,
   useMotionTemplate,
   useReducedMotion,
@@ -27,8 +26,12 @@ const BUILDS: { word: string; gradient: string }[] = [
   { word: 'FILM', gradient: 'linear-gradient(180deg, #c8c4bc 0%, #faf7f2 55%, #d4d0c8 100%)' },
 ];
 
-// Large central "WE BUILD ___" switcher. Text sits directly over the scene —
-// no solid backing; the hero's text-vignette carries the contrast floor.
+// The dominant hero element (phase 4): "WE BUILD" over a cycling word, as a
+// stacked lockup. Every word renders into the SAME grid cell so the block
+// width never changes mid-swap — the old AnimatePresence swap left an
+// invisible-word hole that read as the whole line jumping off-center.
+// Text sits directly over the scene — no solid backing; the hero's
+// text-vignette carries the contrast floor.
 function WeBuild() {
   const reduced = useReducedMotion();
   const [i, setI] = useState(0);
@@ -46,31 +49,36 @@ function WeBuild() {
     color: 'transparent',
   });
 
+  const active = reduced ? 1 : i;
+
   return (
     <div
       aria-label={`We build ${BUILDS.map((b) => b.word.toLowerCase()).join(', ')}`}
-      className="flex flex-wrap items-baseline justify-center gap-x-[0.45em] font-sans text-[clamp(1.75rem,4vw,3.75rem)] font-black leading-none tracking-[-0.02em]"
+      className="font-sans text-[clamp(2.5rem,8vw,8rem)] font-black leading-[1.04] tracking-[-0.03em]"
     >
-      <span aria-hidden className="glass-type">WE BUILD</span>
-      {reduced ? (
-        <span aria-hidden style={clipStyle(BUILDS[1].gradient)}>{BUILDS[1].word}</span>
-      ) : (
-        <span aria-hidden className="relative inline-flex whitespace-nowrap">
-          <AnimatePresence mode="wait">
-            <m.span
-              key={BUILDS[i].word}
-              initial={{ opacity: 0, y: '35%', filter: 'blur(12px)' }}
-              animate={{ opacity: 1, y: '0%', filter: 'blur(0px)' }}
-              exit={{ opacity: 0, y: '-30%', filter: 'blur(10px)' }}
-              transition={{ duration: 0.5, ease }}
-              style={clipStyle(BUILDS[i].gradient)}
-              className="inline-block will-change-transform"
-            >
-              {BUILDS[i].word}
-            </m.span>
-          </AnimatePresence>
-        </span>
-      )}
+      <span aria-hidden className="glass-type block">WE BUILD</span>
+      <span aria-hidden className="grid justify-items-center">
+        {BUILDS.map((b, idx) => (
+          <m.span
+            key={b.word}
+            className="col-start-1 row-start-1 whitespace-nowrap will-change-transform"
+            style={clipStyle(b.gradient)}
+            initial={false}
+            animate={
+              reduced
+                ? { opacity: idx === active ? 1 : 0 }
+                : {
+                    opacity: idx === active ? 1 : 0,
+                    y: idx === active ? '0%' : '18%',
+                    filter: idx === active ? 'blur(0px)' : 'blur(10px)',
+                  }
+            }
+            transition={{ duration: 0.5, ease }}
+          >
+            {b.word}
+          </m.span>
+        ))}
+      </span>
     </div>
   );
 }
@@ -160,9 +168,10 @@ export function Hero() {
             <div aria-hidden className="text-vignette absolute -inset-x-20 -inset-y-14 z-0" />
             {/* boxless refractive halo: the video bends behind the glyphs */}
             <div aria-hidden className="glass-halo absolute -inset-x-10 -inset-y-6 z-0" />
+            {/* kicker line — the cycler below is the single focal point */}
             <KineticHeadline
               text="Taste is the moat."
-              className="relative z-10 font-sans text-[clamp(3rem,8vw,8rem)] font-black leading-[1.02] tracking-[-0.04em] text-bone"
+              className="relative z-10 justify-center font-sans text-[clamp(1.5rem,2.5vw,2.25rem)] font-black leading-[1.05] tracking-[-0.02em] text-bone"
               wordClassName="glass-type"
               delay={0.35}
             />
@@ -170,7 +179,7 @@ export function Hero() {
               initial={{ opacity: 0, y: 20, filter: 'blur(10px)' }}
               animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
               transition={{ duration: 0.8, delay: 0.9, ease }}
-              className="relative z-10 mt-6"
+              className="relative z-10 mt-5"
             >
               <WeBuild />
             </m.div>
