@@ -4,6 +4,37 @@ The single source of truth for resuming this session. Append a block entry after
 
 ---
 
+# FO4 — Wave 3 (2026-07-15, same plan file)
+
+All 6 Wave 3 items resolved (one skipped by decision, five shipped). Commits `27d5263`..`8e1e4a9` (plus the two-commit fix for a staging mistake on the Work rebuild, `27d5263`/`410c130`).
+
+- **W3.1 (skipped)**: "non-rendering walking video + two founders photo overlay" didn't match anything in the current codebase — both videos in the homepage's "What We Do" section already render correctly, and no founders-photo overlay exists anywhere. Confirmed by thorough search, not assumed; Ash confirmed skip.
+- **W3.2 — Work rebuilt as a bento grid** (`27d5263`, `410c130`): replaced the legacy Work.tsx (fabricated metrics, filter bar) with a 4-cell asymmetric bento driven by `lib/portfolio.ts` (built in an earlier phase but never wired to this route until now). Deleted 7 now-orphaned files (Breadcrumbs, Lightbox, HorizontalScroll, ClientMarquee, work/MediaCarousel, work/WorkProjectCard, data/projects.ts) after confirming zero other importers. `/work`: 164kB -> 122kB.
+- **W3.3 — Pricing cards** (`c33ffd9`): full-bleed video per card (5 clips cycled from existing footage) + 3D hover via the previously-unwired `ui/3d-card.tsx` (pure CSS transforms, no Three.js). Two conflicts surfaced and resolved with Ash before building: kept `.glass-solid` over real liquid-glass (backdrop-filter glitches this exact scroll-snap track, fixed in an earlier session) and kept user-driven scroll over a literal auto-scroll marquee (fights a clickable Buy-now button).
+- **W3.4 — Forge headline typography** (`77e6b1f`): "The forge never cools." converted from a static Fraunces-italic fade to the same ScrollScrub + glass-type + font-headline treatment as THE STANDARD beat. Ash declined further rollout to Contact/ClosingBand/ServicesClosing — Forge stays the one-off.
+- **W3.5 — Services hero media** (`7bb656f`): swapped the under-res b2-bomber-3.webp (1600x896/21KB, flagged in an earlier HANDOFF entry) for b2-bomber-2.png (2912x1632) — same subject, native resolution, already sitting unused in public/media.
+- **W3.6 — Spacing audit** (`8e1e4a9`): measured (not eyeballed) real gaps via getBoundingClientRect. Services hero->Pillar1: 240px -> 160px. Homepage Intertext->Pillars ("What We Do"): 420px -> 340px (didn't fully close — Intertext's `min-h-[70svh]` drives its scroll-linked reveal timing, so its height wasn't touched). Audit surfaced this double-padding pattern as systemic across every section boundary on both pages, not just the two named spots; scoped to those two by explicit decision, sitewide rewrite deferred.
+
+Font-direction rollout from Wave 2 (Inter Tight as `font-headline`) is now used consistently on the Work page's fallback titles and stays untouched elsewhere. Final gates re-run: zero real Playfair usage (one retired-language comment only), zero `font-serif`, frozen-path diff empty, all budgets within documented limits (`/work` improved, nothing regressed).
+
+Known unresolved: 380/768px screenshot verification still blocked (documented Chrome-window-maximized limitation, unrelated to this wave's work) — all verification was desktop-width.
+
+---
+
+# FO4 — Wave 2 (2026-07-14/15, same plan file)
+
+Commits `5e1214e`..`108285a`, plus the font rollout `0072d0f` (which also covers part of W3's later work).
+
+- **W2.0 (unplanned, discovered mid-wave)**: found and fixed a sitewide Tailwind bug — `void`/`carbon`/`ember`/`amber`/`bone`/`ash` were bare `var(--x)` references in `tailwind.config.ts`, so `text-bone/70`-style opacity modifiers silently compiled to no rule at all (confirmed via the actual generated stylesheet, not assumed). 36 occurrences across 20 files had been rendering at full opacity or inherited color this whole rebuild. Fixed at the root: the 6 vars now hold RGB triplets, wrapped in `rgb(var(--x) / <alpha-value>)` — no call sites changed.
+- **W2.1 — Git-history investigation**: found real precedent for both the footer/CTA rebuild (commit `f00fef1`, last Vite-era Footer.tsx) and the contact bleed background (commit `8599310`). No precedent existed for the "enlarged wordmark + bottom magnetic CTA" idea — confirmed as new design work, not a restoration, before building it.
+- **W2.3 — Site-wide bottom CTA + newsletter**: new `BottomCTA` component, mounted in `SiteChrome` on every route except `/` (ClosingBand already closes the homepage) and `/contact` (already the CTA destination). Newsletter restored cosmetically only, per Ash's decision — it was never wired to a real backend before either.
+- **W2.4 — Contact bleed background**: restored `contact-bg.png` behind the form only, radial-masked, from the real historical commit.
+- **W2.2/W2.6 — Font direction + rollout**: rendered 3 candidates live via temporary DOM injection (zero source changes) for Ash to pick from — Geist tighter, Inter Tight, Oswald. Ash chose **Inter Tight**, reversing the CLAUDE.md-locked Geist-black decision. Rolled out to all 12 true H1/H2 prose headlines (new `font-headline` Tailwind key, never `font-display` — that's the frozen Aashrith alias) across 10 files. Deliberately did NOT touch the ALCHEMY wordmark/logo treatments or the giant decorative pillar numerals (brand-mark and numeral treatments, not prose headlines) or the About page (explicit exclusion).
+- **Letter-spacing/line-height audit**: confirmed (not blindly re-tuned) the existing tracking values hold up with Inter Tight's tighter natural proportions at all 5 type-scale tiers — no collisions found under zoom inspection.
+- **W2.5 (blocked)**: StringTune reference images — `public/media/reference/` doesn't exist on disk and no StringTune-named file exists anywhere in the repo, despite Ash's expectation that it was already populated. Waiting on Ash to actually place the files; I cannot manifest binary images that don't exist somewhere accessible to me (browser screenshot `save_to_disk` only attaches to chat, doesn't expose a filesystem path — confirmed after one failed attempt to route around this via a native OS screenshot, which captured the real desktop instead of the browser tab and was deleted immediately).
+
+---
+
 # FO4 — Wave 1 (2026-07-14, plan: C:\Users\aashr\.claude\plans\you-are-executing-a-foamy-meteor.md)
 
 All 7 Wave 1 items shipped, each its own commit, build-gated (`npm run build`) and browser-verified via real mouse-wheel scroll (not programmatic `scrollTo`, which gives misleading readings against Lenis's smoothing — learned the hard way mid-session). Commits `5aa8e7d`..`e119c71`.
