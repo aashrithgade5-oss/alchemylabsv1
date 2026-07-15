@@ -176,7 +176,25 @@ still 136kB), frozen diff empty, zero console errors, visually verified in Chrom
 tiles now show distinct real media (previously two were identical/repeated and one was blank).
 Dev server kept live throughout per Ash's request (stop→build→restart cycle, not left down).
 
-## Remaining phases (6-10) + final gate: Phase 7 now unblocked (real assets found), continuing
+## Phase 6 — DONE (this commit)
+`StillBreak.tsx`: font was ALREADY `font-playfair italic` (Phase 0's global Fraunces->Playfair
+swap already covered this file) — the only genuinely open items were single-line + background
+resolution. Single-line: `whitespace-nowrap` + `clamp(0.85rem,4vw,3.5rem)` (replacing
+`max-w-4xl` + `clamp(2rem,4vw,3.5rem)`) — sized by hand-calculating worst-case width for the
+43-character line against Playfair italic's ~0.46em average advance at the smallest common
+mobile viewport (320-375px), verified comfortably safe with margin at both ends of the clamp.
+Background: `split-frames-1.webp` (1600x896/19KB, flagged low-res since FO4 P6) swapped for
+`split-frames-2.png` — native 2912x1632, same visual family, was sitting completely unused in
+`public/media` (its sibling `split-frames-3.png` is already spoken for by
+`services/pillars.ts`). Real replacement, not an upscale. Verified in Chrome at desktop width:
+dramatically sharper (individual keyboard keys/fingers now resolve crisply), single line
+confirmed. **380/768px verification BLOCKED**: `resize_window` reports success but the actual
+viewport stays at the Chrome-window's real size — same documented limitation logged in FO3/FO4
+(window is maximized/snap-managed). Did not force it; the clamp math is the substitute
+verification, same tradeoff prior sessions made under this exact constraint. Build clean,
+frozen diff empty, zero console errors.
+
+## Remaining phases (7-10) + final gate: Phase 7 now unblocked (real assets found), continuing
 Full per-phase spec lives in the FO5 prompt (task list descriptions capture it). Known
 blockers going in: Phase 5 needs Porsche/IKEA video + Rituals/Dior photo (flag for Ash, do not
 fabricate); Phase 7 needs Genesis/Oakley Showcase/Dior case-study assets+copy (check

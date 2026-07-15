@@ -12,10 +12,14 @@ const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
 export function StillBreak() {
   return (
     <section className="relative h-[85svh] overflow-hidden">
-      {/* source is 1600x896/19KB — under-res for full bleed; replacement
-          >=2560x1440 flagged in HANDOFF. quality can't invent detail here. */}
+      {/* Phase 6 (Landing_Page_Patches.pdf): split-frames-1.webp was
+          1600x896/19KB, flagged under-res for full bleed since FO4 P6.
+          split-frames-2.png (2912x1632, same visual family, native res) was
+          sitting completely unused in public/media — real replacement, not
+          an upscale. split-frames-3.png is the OTHER native-res sibling,
+          already spoken for by services/pillars.ts. */}
       <Image
-        src="/media/split-frames-1.webp"
+        src="/media/split-frames-2.png"
         alt=""
         fill
         quality={90}
@@ -32,7 +36,7 @@ export function StillBreak() {
           whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
           viewport={{ once: true, margin: '-120px' }}
           transition={{ duration: 0.8, ease }}
-          className="max-w-4xl text-center font-playfair text-[clamp(2rem,4vw,3.5rem)] italic leading-[1.15] text-bone"
+          className="whitespace-nowrap text-center font-playfair text-[clamp(0.85rem,4vw,3.5rem)] italic leading-[1.15] text-bone"
         >
           For founders who can tell the difference.
         </m.h2>
