@@ -1,9 +1,10 @@
 'use client';
 
+import { useState } from 'react';
 import { m } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ArrowUpRight } from 'lucide-react';
 import { featuredEntries } from '@lib/portfolio';
 
 const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
@@ -13,28 +14,62 @@ const textMarks: Record<string, string> = {
   'aether-rituals': '/media/aether-rituals-text.png',
   genesis: '/media/genesis-text.png',
   'oakley-concept': '/media/oakley-text.png',
+  'dior-campaign': '/media/dior-text.png',
 };
 
-// Renders nothing until an entry in lib/portfolio.ts carries featured: true.
+// Phase 7 (Landing_Page_Patches.pdf): "rather than it being a selectable
+// carousel that can be moved from Aether Rituals to then Next, having
+// Genesis, then Next, having Oakley Showcase, and then Dior" — real,
+// honest entries (lib/portfolio.ts, all featured:true, no placeholders).
 export function FeaturedWork() {
+  const [index, setIndex] = useState(0);
+  const [direction, setDirection] = useState(1);
   if (featuredEntries.length === 0) return null;
+
+  const entry = featuredEntries[index];
+  const go = (delta: number) => {
+    setDirection(delta);
+    setIndex((v) => (v + delta + featuredEntries.length) % featuredEntries.length);
+  };
 
   return (
     <section className="relative bg-gradient-to-b from-transparent via-carbon to-transparent">
-      <div className="mx-auto max-w-6xl px-6 py-24 md:px-12 md:py-32 lg:px-16">
-        <p className="font-mono text-[10px] tracking-[0.3em] text-ash">SELECTED WORK</p>
+      <div className="mx-auto max-w-6xl px-6 py-16 md:px-12 md:py-20 lg:px-16">
+        <div className="flex items-center justify-between">
+          <p className="font-mono text-[10px] tracking-[0.3em] text-ash">SELECTED WORK</p>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => go(-1)}
+              aria-label="Previous work"
+              className="rounded-full border border-line p-2 text-bone/70 transition-colors duration-300 hover:border-ember/60 hover:text-bone"
+            >
+              <ArrowLeft className="h-3.5 w-3.5" />
+            </button>
+            <button
+              type="button"
+              onClick={() => go(1)}
+              aria-label="Next work"
+              className="rounded-full border border-line p-2 text-bone/70 transition-colors duration-300 hover:border-ember/60 hover:text-bone"
+            >
+              <ArrowRight className="h-3.5 w-3.5" />
+            </button>
+          </div>
+        </div>
 
-        {featuredEntries.map((entry) => (
-          <m.div
-            key={entry.id}
-            // no filter here: a leftover blur(0px) isolates the stacking
-            // context and kills the text mark's mix-blend-screen
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 0.8, ease }}
-            className="mt-12 grid gap-10 md:grid-cols-[1.4fr_1fr] md:items-end"
-          >
+        {/* No AnimatePresence/exit animation: mode="wait" (exit-before-enter)
+            risks the next entry never rendering if the exit animation stalls
+            (backgrounded/automated-tab rAF suspension — the exact quirk
+            logged in HANDOFF's prior sessions). Keying a plain m.div instead
+            — React remounts on key change, so the entrance animation always
+            replays independent of any previous element's fade-out. */}
+        <m.div
+          key={entry.id}
+          initial={{ opacity: 0, x: direction > 0 ? 32 : -32 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, ease }}
+          className="mt-10 grid gap-10 md:grid-cols-[1.4fr_1fr] md:items-end"
+        >
             <Link href="/work" className="group relative block overflow-hidden border border-line">
               <Image
                 src={entry.visuals[0] ?? entry.image}
@@ -78,7 +113,23 @@ export function FeaturedWork() {
               </Link>
             </div>
           </m.div>
-        ))}
+
+        <div className="mt-8 flex items-center gap-2">
+          {featuredEntries.map((e, i) => (
+            <button
+              key={e.id}
+              type="button"
+              onClick={() => {
+                setDirection(i > index ? 1 : -1);
+                setIndex(i);
+              }}
+              aria-label={`Show ${e.title}`}
+              className={`h-1.5 rounded-full transition-all duration-300 ${
+                i === index ? 'w-6 bg-ember' : 'w-1.5 bg-bone/20 hover:bg-bone/40'
+              }`}
+            />
+          ))}
+        </div>
       </div>
     </section>
   );

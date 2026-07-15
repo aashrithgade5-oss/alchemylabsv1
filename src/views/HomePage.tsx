@@ -7,9 +7,21 @@ import { HomeAtmosphere } from '@/components/furnace/home/HomeAtmosphere';
 import { ScrollScrub } from '@/components/furnace/fx/ScrollScrub';
 
 // Kinetic quote beat: eyebrow + the signature per-word scroll reveal, big.
-function ScrubBeat({ eyebrow, text }: { eyebrow: string; text: string | string[] }) {
+function ScrubBeat({
+  eyebrow,
+  text,
+  compact = false,
+}: {
+  eyebrow: string;
+  text: string | string[];
+  /** Phase 7 (Landing_Page_Patches.pdf): "extremely large spacing" —
+      THE PROOF feeds directly into the Work carousel right after. */
+  compact?: boolean;
+}) {
   return (
-    <section className="relative flex min-h-[70svh] flex-col items-center justify-center px-6">
+    <section
+      className={`relative flex flex-col items-center justify-center px-6 ${compact ? 'min-h-[42svh]' : 'min-h-[70svh]'}`}
+    >
       <p className="font-mono text-[10px] tracking-[0.35em] text-ash">{eyebrow}</p>
       <div className="relative mt-8">
         {/* boxless refractive halo behind the type */}
@@ -65,7 +77,7 @@ export default function HomePage() {
         </Intertext>
         <Pillars />
         <StillBreak />
-        <ScrubBeat eyebrow="THE PROOF" text="Every frame here survived the eye." />
+        <ScrubBeat eyebrow="THE PROOF" text="Every frame here survived the eye." compact />
         <FeaturedWork />
         <Intertext eyebrow="THE OFFER">
           <span className="block">No estimates.</span>

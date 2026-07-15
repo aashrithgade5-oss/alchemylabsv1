@@ -43,6 +43,7 @@ export const portfolio: PortfolioEntry[] = [
       'A framework study for hybrid engagements: generative production and brand architecture priced and delivered as one offer.',
     image: '/assets/genesis-bento.png',
     visuals: ['/assets/genesis-bento.png'],
+    featured: true,
   },
   {
     id: 'oakley-concept',
@@ -53,6 +54,18 @@ export const portfolio: PortfolioEntry[] = [
       'An unsolicited campaign exploration for Oakley: performance eyewear rendered through generative visual narratives.',
     image: '/assets/oakley-bento.png',
     visuals: ['/assets/oakley-bento.png'],
+    featured: true,
+  },
+  {
+    id: 'dior-campaign',
+    title: 'Dior',
+    label: 'CONCEPT',
+    discipline: 'AI CAMPAIGN',
+    summary:
+      "Two parallel luxury fragrance campaigns for J'adore and Poison, architected as one duality: gold-and-amber light against purple-and-shadow, unified under a single creative direction.",
+    image: '/assets/dior-bento.png',
+    visuals: ['/assets/dior-bento.png'],
+    featured: true,
   },
   {
     id: 'ai-media-gen',

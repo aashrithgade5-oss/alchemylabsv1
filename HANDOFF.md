@@ -194,7 +194,39 @@ viewport stays at the Chrome-window's real size — same documented limitation l
 verification, same tradeoff prior sessions made under this exact constraint. Build clean,
 frozen diff empty, zero console errors.
 
-## Remaining phases (7-10) + final gate: Phase 7 now unblocked (real assets found), continuing
+## Phase 7 — DONE (this commit)
+`lib/portfolio.ts`: added `dior-campaign` (real copy — the J'adore/Poison duality — reusing the
+`dior-bento.png`/`dior-text.png` asset PATHS the FROZEN `AashrithPortfolio.tsx` also references;
+copying a path string doesn't touch that file), marked `genesis` and `oakley-concept` as
+`featured: true` alongside the existing `aether-rituals`. Array order gives the exact sequence
+asked for: Aether Rituals -> Genesis -> Oakley -> Dior. `FeaturedWork.tsx` rebuilt from a
+single-item static block into a real carousel: `useState` index + Prev/Next buttons + dot
+indicators, entry text/image driven by `featuredEntries[index]`.
+
+**Bug found and fixed during verification**: the first carousel implementation used
+`AnimatePresence mode="wait"` (exit-before-enter). In this automated Chrome session the exit
+animation's rAF never ticks reliably (the exact "background-tab rAF suspension" quirk logged in
+FO3/FO4's HANDOFF entries), so `mode="wait"` held the OUTGOING entry frozen indefinitely,
+looking like the dots and content had desynced (dots updated instantly — plain conditional
+className, not animation-dependent — while the AnimatePresence child stayed stuck showing the
+previous entry). Confirmed via `getComputedStyle().opacity` sitting at ~0.66 indefinitely
+instead of settling to 1. Root-caused via direct JS inspection rather than guessing from
+screenshots. Fix: dropped `AnimatePresence`/exit animation entirely — a plain `m.div
+key={entry.id}` remounts (and replays its enter animation) on every index change, with no
+dependency on a previous element's exit ever completing. More robust for real users too, not
+just a workaround for this environment. Verified via a scripted 5-click JS test: `opacity` held
+at `1` and the active dot tracked the content correctly through all 4 entries with wraparound
+every time (Genesis -> Oakley -> Dior -> Aether Rituals -> Genesis).
+
+Condensed spacing: local `ScrubBeat` in `HomePage.tsx` gained the same `compact` pattern as
+`Intertext` (`min-h-[42svh]` vs `70svh`), applied to THE PROOF instance only; `FeaturedWork`'s
+own section padding trimmed (`py-24/32` -> `py-16/20`). Playfair italic: not applicable here —
+re-read the ambiguous PDF wording and confirmed it refers back to the Intertext quote instances
+(Phase 0), not ScrubBeat's bold sans treatment, which stays unchanged.
+Build clean (`/work` 122->122.5kB, `/` unchanged), frozen diff empty, zero console errors,
+verified live in Chrome with dev server kept running throughout per Ash's request.
+
+## Remaining phases (8-10) + final gate
 Full per-phase spec lives in the FO5 prompt (task list descriptions capture it). Known
 blockers going in: Phase 5 needs Porsche/IKEA video + Rituals/Dior photo (flag for Ash, do not
 fabricate); Phase 7 needs Genesis/Oakley Showcase/Dior case-study assets+copy (check
