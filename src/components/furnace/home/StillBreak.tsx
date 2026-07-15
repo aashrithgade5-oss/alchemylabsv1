@@ -32,7 +32,7 @@ export function StillBreak() {
           whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
           viewport={{ once: true, margin: '-120px' }}
           transition={{ duration: 0.8, ease }}
-          className="max-w-4xl text-center font-fraunces text-[clamp(2rem,4vw,3.5rem)] italic leading-[1.15] text-bone"
+          className="max-w-4xl text-center font-playfair text-[clamp(2rem,4vw,3.5rem)] italic leading-[1.15] text-bone"
         >
           For founders who can tell the difference.
         </m.h2>

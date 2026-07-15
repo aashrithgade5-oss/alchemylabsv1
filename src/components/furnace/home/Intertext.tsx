@@ -48,7 +48,7 @@ export function Intertext({ eyebrow, children }: { eyebrow?: string; children: R
         {eyebrow && (
           <p className="font-mono text-[10px] tracking-[0.35em] text-ash">{eyebrow}</p>
         )}
-        <p className="mt-8 font-fraunces text-[clamp(2rem,4vw,3.5rem)] italic leading-[1.25] text-bone">
+        <p className="mt-8 font-playfair text-[clamp(2rem,4vw,3.5rem)] italic leading-[1.25] text-bone">
           {children}
         </p>
       </m.div>

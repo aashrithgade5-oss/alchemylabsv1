@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Fraunces, Inter_Tight } from 'next/font/google';
+import { Inter, Playfair_Display } from 'next/font/google';
 import { GeistSans } from 'geist/font/sans';
 import { GeistMono } from 'geist/font/mono';
 import { SpeedInsights } from '@vercel/speed-insights/next';
@@ -10,23 +10,23 @@ import { GrainOverlay } from '@/components/furnace/GrainOverlay';
 import { CookieConsent } from '@/components/CookieConsent';
 import '@/index.css';
 
-// Fraunces variable carries ONLY italic editorial pull-quotes + the founder
-// note (see style-guide.md); Inter Tight carries all display headings
-// (H1/H2 — see FO4 W2.2 font-direction decision, replacing Geist black),
-// Geist Sans/Mono carry body + labels unchanged. Playfair is retired.
-// next/font/google self-hosts at build time — functionally identical to
-// next/font/local.
-const fraunces = Fraunces({
+// Phase 0 type law (supersedes the Geist/Fraunces lock, see CLAUDE.md):
+// Inter (variable weight, Thin..Black) carries all display + body text on
+// Furnace routes; Playfair Display Bold Italic is the ONLY italic anywhere
+// on the site (pull-quotes, founder note, work-carousel proof line, "down
+// the below" subtext); Geist Mono is untouched (eyebrows/technical labels).
+// GeistSans is kept ONLY to feed the frozen `--font-display` alias the
+// Aashrith portfolio depends on — never repoint that alias.
+const inter = Inter({
   subsets: ['latin'],
-  style: ['normal', 'italic'],
-  variable: '--font-fraunces',
-  axes: ['opsz'],
+  variable: '--font-inter',
 });
 
-const interTight = Inter_Tight({
+const playfair = Playfair_Display({
   subsets: ['latin'],
-  weight: ['800', '900'],
-  variable: '--font-inter-tight',
+  weight: ['700'],
+  style: ['italic'],
+  variable: '--font-playfair',
 });
 
 const description =
@@ -74,7 +74,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     // framer fade in LayoutTransition is the page transition.
     <html
       lang="en"
-      className={`${fraunces.variable} ${interTight.variable} ${GeistSans.variable} ${GeistMono.variable}`}
+      className={`${inter.variable} ${playfair.variable} ${GeistSans.variable} ${GeistMono.variable}`}
     >
         <body>
           <Providers>

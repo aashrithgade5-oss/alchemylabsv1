@@ -73,7 +73,7 @@ export default function Work() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="mt-5 font-fraunces text-xl italic text-bone/75 md:text-2xl"
+            className="mt-5 font-playfair text-xl italic text-bone/75 md:text-2xl"
           >
             The work speaks in befores and afters.
           </m.p>

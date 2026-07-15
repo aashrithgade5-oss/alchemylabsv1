@@ -3,20 +3,23 @@
 This file exists because font/token decisions kept reverting across sessions.
 Everything here is NON-NEGOTIABLE and must be re-verified at the END of every session.
 
-## FONTS (final — Playfair is BANNED as a display face)
-- Display / headlines (H1/H2): **Inter Tight black** (`font-headline font-black`) with
-  `.glass-type` per word — relocked 2026-07-14 (FO4 W2.2 font-direction decision,
-  replacing Geist black; Ash picked Inter Tight over Geist-tighter and Oswald from a
-  3-candidate live comparison). Never a high-contrast serif like Playfair.
-- Editorial pull-quotes + founder note ONLY: **Fraunces italic** (`font-fraunces` + `italic`).
-  A non-italic `font-fraunces` on any H1/H2 is a BUG — that was the font drift; fix it.
-- Body / subheads: **Geist Sans** (`font-sans`) — unchanged by the display-face swap above.
-- Eyebrows / labels / technical: **Geist Mono** (`font-mono`).
-- Before ending any session: `grep -ri "playfair" src app` and grep `font-serif` —
-  zero display usages allowed. Playfair may exist ONLY at explicitly zero uses.
+## FONTS (relocked 2026-07-15 — Phase 0 type law, supersedes the Geist/Fraunces lock)
+- Display / body (H1/H2 and all prose): **Inter, variable weight** (`font-sans` /
+  `font-headline`, both point to `--font-inter`) — Thin for delicate treatments
+  (e.g. "Taste is the moat."), Black for the campaign headline. `.glass-type` per
+  word on display headings.
+- Italic / quote / tagline accent — the ONLY italic anywhere on the site: **Playfair
+  Display Bold Italic** (`font-playfair` + `italic`). Pull-quotes, founder note,
+  work-carousel proof line, "down the below" subtext. Never on any H1/H2.
+- Eyebrows / labels / technical: **Geist Mono** (`font-mono`) — untouched by this pass.
+- Geist Sans is retired as a body/display face. It is kept installed ONLY to feed the
+  frozen `--font-display` alias below — never assign `font-sans`/`font-headline`
+  content to Geist again.
+- Before ending any session: `grep -ri "fraunces" src app` and grep `font-serif` —
+  zero live usages allowed (comments referencing the retired fonts are fine).
 - FROZEN-ROUTE EXCEPTION: `--font-display` / `elegant` legacy vars serve the frozen
   Aashrith portfolio — never repoint them (see FROZEN below). `font-headline` is a
-  separate, new Tailwind key for exactly this reason — never reuse `font-display`.
+  separate Tailwind key for exactly this reason — never reuse `font-display`.
 
 ## ANIMATION
 - Framer Motion + Lenis (feel only). BANNED: GSAP, Three.js, Locomotive. No custom cursor.

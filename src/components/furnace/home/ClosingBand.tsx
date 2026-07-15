@@ -87,7 +87,7 @@ export function ClosingBand() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="mt-6 font-fraunces text-xl italic text-bone/70 md:text-2xl"
+          className="mt-6 font-playfair text-xl italic text-bone/70 md:text-2xl"
         >
           We will tell you what it needs.
         </m.p>

@@ -105,17 +105,18 @@ export default {
         },
       },
       fontFamily: {
-        sans: ['var(--font-geist-sans)', '-apple-system', 'sans-serif'],
+        // Phase 0 type law (CLAUDE.md): Inter is the primary display+body
+        // face (variable weight, Thin..Black). Playfair Display Bold Italic
+        // is the ONLY italic anywhere. Geist Mono untouched.
+        sans: ['var(--font-inter)', '-apple-system', 'sans-serif'],
         mono: ['var(--font-geist-mono)', 'SF Mono', 'monospace'],
-        // Furnace display face (style-guide.md). NEVER repoint `display`:
-        // it is a legacy Geist alias the frozen portfolio depends on.
-        fraunces: ['var(--font-fraunces)', 'Georgia', 'serif'],
+        // NEVER repoint `display`: it is a legacy Geist alias the frozen
+        // Aashrith portfolio depends on.
         display: ['var(--font-geist-sans)', '-apple-system', 'sans-serif'],
-        // FO4 W2.2: new H1/H2 display face, replacing Geist black on
-        // headlines (body/eyebrows/mono stay font-sans/font-mono Geist).
         // Own key, not `display` — that name is the frozen alias above.
-        headline: ['var(--font-inter-tight)', '-apple-system', 'sans-serif'],
-        body: ['var(--font-geist-sans)', '-apple-system', 'sans-serif'],
+        headline: ['var(--font-inter)', '-apple-system', 'sans-serif'],
+        playfair: ['var(--font-playfair)', 'Georgia', 'serif'],
+        body: ['var(--font-inter)', '-apple-system', 'sans-serif'],
         accent: ['var(--font-geist-mono)', 'SF Mono', 'monospace'],
       },
       borderRadius: {

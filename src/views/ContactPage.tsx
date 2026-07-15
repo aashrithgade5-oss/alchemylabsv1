@@ -17,7 +17,7 @@ export const ContactPage = () => {
     <main className="relative font-sans">
       <HomeAtmosphere />
 
-      {/* Centered header: oversized Geist, one Fraunces italic line */}
+      {/* Centered header: oversized Inter, one Playfair italic line */}
       <section className="relative px-6 pb-16 pt-40 text-center md:pt-48">
         {/* running silhouettes, dissolving into void before the form */}
         <div
@@ -54,7 +54,7 @@ export const ContactPage = () => {
           initial={{ opacity: 0, y: 16, filter: 'blur(8px)' }}
           animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
           transition={{ duration: 1, delay: 0.7, ease }}
-          className="mx-auto mt-7 max-w-xl font-fraunces text-xl italic text-bone/75 md:text-2xl"
+          className="mx-auto mt-7 max-w-xl font-playfair text-xl italic text-bone/75 md:text-2xl"
         >
           The first conversation is the audit.
         </m.p>

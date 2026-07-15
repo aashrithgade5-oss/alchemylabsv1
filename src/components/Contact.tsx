@@ -271,9 +271,9 @@ export const Contact = memo(() => {
                 </div>
               </div>
 
-              {/* Founder note — with pull-quotes, the only sanctioned Fraunces use */}
+              {/* Founder note — with pull-quotes, the only sanctioned Playfair italic use */}
               <div className="mt-8 border-t border-porcelain/10 pt-6">
-                <p className="font-fraunces text-lg italic leading-relaxed text-porcelain/75">
+                <p className="font-playfair text-lg italic leading-relaxed text-porcelain/75">
                   &ldquo;Every brief lands on my desk first. If we take your project,
                   it&rsquo;s because I already know what to do with it.&rdquo;
                 </p>
