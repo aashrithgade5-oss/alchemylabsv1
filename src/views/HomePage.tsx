@@ -79,7 +79,7 @@ export default function HomePage() {
         <StillBreak />
         <ScrubBeat eyebrow="THE PROOF" text="Every frame here survived the eye." compact />
         <FeaturedWork />
-        <Intertext eyebrow="THE OFFER">
+        <Intertext eyebrow="THE OFFER" compact>
           <span className="block">No estimates.</span>
           <span className="block">No discovery calls.</span>
           <span className="block">A price on the wall.</span>

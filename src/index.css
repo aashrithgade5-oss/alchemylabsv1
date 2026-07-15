@@ -1344,6 +1344,22 @@ html {
    .glass-solid (below) — no backdrop dependency, safe everywhere,
    used for bento tiles / pricing pods that just need to look like glass. */
 
+/* Phase 8 (Landing_Page_Patches.pdf): marquee infinite loop for the
+   productized five. Track holds the card list duplicated once; animating
+   to -50% loops seamlessly back to an identical frame. Paused via
+   animation-play-state (hover/hold), never via re-mounting — a
+   transform-only CSS animation, GPU-cheap, no scroll-linked JS. */
+@keyframes furnace-marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.furnace-marquee-track {
+  animation: furnace-marquee 42s linear infinite;
+}
+.furnace-marquee-track[data-paused='true'] {
+  animation-play-state: paused;
+}
+
 /* Productized Five snap gallery: scrollbar hidden, wheel/drag still scrolls */
 .furnace-snap {
   scrollbar-width: none;
@@ -1355,6 +1371,9 @@ html {
 @media (prefers-reduced-motion: reduce) {
   .furnace-headline-breathe,
   .furnace-orb {
+    animation: none !important;
+  }
+  .furnace-marquee-track {
     animation: none !important;
   }
 }

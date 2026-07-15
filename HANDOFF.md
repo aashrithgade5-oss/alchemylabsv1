@@ -226,7 +226,52 @@ re-read the ambiguous PDF wording and confirmed it refers back to the Intertext 
 Build clean (`/work` 122->122.5kB, `/` unchanged), frozen diff empty, zero console errors,
 verified live in Chrome with dev server kept running throughout per Ash's request.
 
-## Remaining phases (8-10) + final gate
+## Phase 8 — DONE (this commit)
+Section name: "The price is the pitch." -> "Priced to ship." (Ash's choice between two offered
+directions). Kept "No estimates. No discovery calls. A price on the wall." verbatim, only
+condensed its `Intertext` instance via the same `compact` prop pattern (now used on all 3 of
+this page's Intertext/ScrubBeat instances that the patches doc singled out for spacing).
+
+Media (per Ash's asset-search direction, same as Phase 5): all 5 cards now share ONE reel —
+`red-glass-panels.mp4`, the `website-teardown` product's own footage — instead of 5 different
+clips, per the brief's literal ask ("only have the video that we have currently going on for
+your website teardown across all of them... each of them with a different tinted liquid glass
+finish"). 5 tint gradients added, all inside the locked ember/void/carbon/amber palette (no new
+hues — style-guide's "one accent" rule) so cards read as distinct without breaking the token
+system. "MOST SELLING SPRINTS" badge on the 3 cards tied at the lowest price ($199).
+
+Marquee: `furnace-marquee-track` (new CSS `@keyframes` in `index.css`, transform-only,
+GPU-cheap) replaces the old scroll-snap gallery — track holds the 5 cards duplicated once,
+animating to -50% for a seamless loop. Paused via `data-paused` + `animation-play-state` on
+real hover/mouse-leave (React state, not CSS-only `:hover`, so it also covers focus-outside
+edge cases cleanly). This directly resolves FO4 W3.3's stated reason for NOT building a literal
+marquee earlier ("fights a clickable Buy-now button") — the brief's own follow-up text asks for
+exactly this pause-on-hover mitigation, so building it now doesn't contradict that earlier
+decision, it satisfies the condition that would have made it safe. `prefers-reduced-motion`:
+animation disabled globally + the track renders the single real set (not the duplicate) so
+reduced-motion users never see a static double-listing.
+**Not built**: literally adding "three more services" — inventing new priced service SKUs with
+real dollar amounts is a business decision, not something to fabricate; the 5 real products loop
+continuously instead, which is what an infinite marquee reads as regardless of set size.
+Click-through: kept "click opens PaymentSheet checkout" (unchanged) rather than navigating to a
+separate service page — the brief's own later line ("they can actually click on it and complete
+the transaction") matches the existing in-page checkout flow more directly than a page nav would.
+**Component research**: closest MagicUI match for the infinite-loop ask is its `Marquee`
+component; closest Aceternity match for "abstract striped-photo, liquid-glass finish" is
+`Glare Card` (moving glass-glare over an image). Neither was added as a dependency — the loop
+is a ~15-line CSS keyframe (ponytail: ladder rung 6, ambient loops don't need a component
+library), and the glass-glare read comes from the existing Phase 1 primitive + new tints.
+Build clean (`/` unchanged), frozen diff empty, zero console errors. Verified live in Chrome:
+marquee animates continuously (CSS-driven, unaffected by this session's Framer/rAF-stall quirk
+since it's not JS-driven), tints/badges/full-bleed background all confirmed by screenshot.
+**Hover-pause not visually confirmed**: a coordinate-space mismatch in this automation session
+(`getBoundingClientRect()` returning values inconsistent with the screenshot's pixel space)
+prevented precisely targeting the hover automation; verified the underlying
+`onMouseEnter`/`onMouseLeave` -> `data-paused` -> `animation-play-state` wiring by reading the
+code instead — it's a plain, directly-bound React state toggle, not a class of bug the other
+verified issues in this session were.
+
+## Remaining phases (9-10) + final gate
 Full per-phase spec lives in the FO5 prompt (task list descriptions capture it). Known
 blockers going in: Phase 5 needs Porsche/IKEA video + Rituals/Dior photo (flag for Ash, do not
 fabricate); Phase 7 needs Genesis/Oakley Showcase/Dior case-study assets+copy (check
