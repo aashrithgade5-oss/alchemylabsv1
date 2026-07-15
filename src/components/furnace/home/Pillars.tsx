@@ -1,6 +1,8 @@
 'use client';
 
-import { m } from 'framer-motion';
+import { useRef, useCallback } from 'react';
+import { m, useMotionValue, useTransform } from 'framer-motion';
+import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 import { GlassPanel } from '../GlassPanel';
@@ -8,83 +10,168 @@ import { AmbientVideo } from './AmbientVideo';
 
 const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
+// Phase 5 (Landing_Page_Patches.pdf): the brief asked for Porsche/IKEA
+// video and a Rituals/Dior photo — neither Porsche nor IKEA footage exists
+// anywhere in this repo or its git history (searched exhaustively). Ash
+// confirmed the real, honest media already sits in the repo from the
+// portfolio case studies: Aether Rituals (concept AI campaign, genuinely
+// unused video) for the studio tile, and the Dior concept campaign still
+// (used elsewhere only inside the FROZEN Aashrith file — reusing the asset
+// PATH here doesn't touch that file) for the brand-systems tile.
 const pillars = [
   {
     index: '01',
     tag: 'AI CREATIVE STUDIO',
     line: 'Campaign film and imagery from an AI pipeline, directed by hand.',
-    media: { src: '/media/red-glass-panels.mp4', poster: '/media/red-glass-panels-poster.jpg' },
+    media: {
+      type: 'video' as const,
+      src: '/assets/aether-rituals-preview.mp4',
+      poster: '/assets/aether-rituals-preview-poster.jpg',
+    },
   },
   {
     index: '02',
     tag: 'BRAND SYSTEMS',
     line: 'Identity built to survive contact with the market.',
-    media: { src: '/media/red-slats-wide.mp4', poster: '/media/red-slats-wide-poster.jpg' },
+    media: { type: 'image' as const, src: '/assets/dior-bento.png' },
   },
   {
     index: '03',
     tag: 'ADVISORY',
     line: 'Straight answers on where your brand goes next.',
-    media: null,
+    media: {
+      type: 'video' as const,
+      src: '/assets/hero-video.mp4',
+      poster: '/assets/hero-video-poster.jpg',
+    },
   },
 ];
 
+// Subtle cursor-tracked 3D tilt (Phase 5: "can also be made 3D") — a plain
+// pointer-move transform on the existing card, not a rebuild onto the
+// unrelated ui/3d-card.tsx primitive (that one owns its own perspective
+// wrapper + grid, which would fight this section's asymmetric bento spans).
+function useTilt() {
+  const rotateX = useMotionValue(0);
+  const rotateY = useMotionValue(0);
+  const springX = useTransform(rotateX, (v) => `${v}deg`);
+  const springY = useTransform(rotateY, (v) => `${v}deg`);
+
+  const onMove = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const px = (e.clientX - rect.left) / rect.width - 0.5;
+      const py = (e.clientY - rect.top) / rect.height - 0.5;
+      rotateY.set(px * 6);
+      rotateX.set(py * -6);
+    },
+    [rotateX, rotateY],
+  );
+  const onLeave = useCallback(() => {
+    rotateX.set(0);
+    rotateY.set(0);
+  }, [rotateX, rotateY]);
+
+  return { onMove, onLeave, rotateX: springX, rotateY: springY };
+}
+
+function PillarCard({ pillar, i }: { pillar: (typeof pillars)[number]; i: number }) {
+  const tilt = useTilt();
+  return (
+    <m.div
+      initial={{ opacity: 0, y: 32 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-80px' }}
+      transition={{ duration: 0.9, delay: i * 0.12, ease }}
+      className={i === 0 ? 'md:col-span-2 md:row-span-2' : ''}
+      style={{ perspective: 1200 }}
+    >
+      <m.div
+        onPointerMove={tilt.onMove}
+        onPointerLeave={tilt.onLeave}
+        style={{ rotateX: tilt.rotateX, rotateY: tilt.rotateY, transformStyle: 'preserve-3d' }}
+      >
+        {/* refract stays anchor-card-only (FO3 P2 decision, unchanged) —
+            the new red-glow hover is additive, not a replacement for it */}
+        <GlassPanel
+          refract={i === 0}
+          className={`group h-full transition-shadow duration-500 hover:shadow-[0_0_60px_rgba(255,77,28,0.22)] ${i === 0 ? 'md:min-h-[26rem]' : ''}`}
+        >
+          {pillar.media.type === 'video' ? (
+            <AmbientVideo
+              src={pillar.media.src}
+              poster={pillar.media.poster}
+              className="absolute inset-0 h-full w-full object-cover opacity-25"
+            />
+          ) : (
+            <Image
+              src={pillar.media.src}
+              alt=""
+              fill
+              quality={90}
+              sizes="(max-width: 768px) 100vw, 33vw"
+              className="absolute inset-0 object-cover opacity-25"
+            />
+          )}
+          <div className="relative flex h-full flex-col justify-between p-7 md:p-9">
+            <span
+              aria-hidden
+              className={`font-sans font-black leading-none tracking-tight text-bone/15 transition-colors duration-500 group-hover:text-ember/30 ${
+                i === 0 ? 'text-8xl md:text-9xl' : 'text-6xl md:text-7xl'
+              }`}
+            >
+              {pillar.index}
+            </span>
+            <div className="mt-8 max-w-xl">
+              <h3 className="font-mono text-xs tracking-[0.25em] text-bone">{pillar.tag}</h3>
+              <p className="mt-3 text-base leading-relaxed text-ash md:text-lg">{pillar.line}</p>
+            </div>
+          </div>
+        </GlassPanel>
+      </m.div>
+    </m.div>
+  );
+}
+
 // Asymmetric bento: the studio pillar anchors a 2x2 cell, the other two
-// stack beside it. Every card carries media or a gradient field — no empty
-// boxes — under refracting glass.
+// stack beside it. Every card carries real media — no empty boxes — under
+// glass with a cursor-tilt + ember-glow hover.
 export function Pillars() {
   return (
-    <section className="relative">
-      {/* asymmetric: Intertext (previous section) already tapers into empty
-          space below its vertically-centered text — a full pt-32 on top of
-          that stacked to a measured 420px dead gap. Bottom keeps the
-          standard py-32 for the StillBreak boundary, untouched. */}
-      <div className="mx-auto max-w-6xl px-6 pb-24 pt-8 md:px-12 md:pb-32 md:pt-12 lg:px-16">
+    <section className="relative overflow-hidden">
+      {/* Phase 5 (Landing_Page_Patches.pdf): "pitch black in the background
+          with no bleeding image" — full-bleed ambient loop behind the whole
+          section instead of flat void. Genuinely unused asset (verified no
+          other reference in the repo), dimmed + feathered top/bottom so it
+          never fights the card media or the eyebrow label above it. */}
+      <div aria-hidden className="absolute inset-0">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="none"
+          className="absolute inset-0 h-full w-full object-cover opacity-[0.12]"
+        >
+          <source src="/assets/about-hero-red-curves.mp4" type="video/mp4" />
+        </video>
+        <div
+          aria-hidden
+          className="absolute inset-0"
+          style={{
+            background:
+              'linear-gradient(to bottom, rgba(10,9,8,0.75) 0%, rgba(10,9,8,0.4) 20%, rgba(10,9,8,0.4) 80%, rgba(10,9,8,0.85) 100%)',
+          }}
+        />
+      </div>
+      {/* condensed from pt-8/pb-24 md:pt-12/pb-32 — Phase 5: "spacing of
+          this entire section is so atrociously done" */}
+      <div className="relative mx-auto max-w-6xl px-6 pb-16 pt-4 md:px-12 md:pb-20 md:pt-6 lg:px-16">
         <p className="font-mono text-[10px] tracking-[0.3em] text-ash">WHAT WE DO</p>
 
-        <div className="mt-12 grid gap-4 md:auto-rows-fr md:grid-cols-3">
+        <div className="mt-10 grid gap-4 md:auto-rows-fr md:grid-cols-3">
           {pillars.map((pillar, i) => (
-            <m.div
-              key={pillar.index}
-              initial={{ opacity: 0, y: 32 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-80px' }}
-              transition={{ duration: 0.9, delay: i * 0.12, ease }}
-              className={i === 0 ? 'md:col-span-2 md:row-span-2' : ''}
-            >
-              <GlassPanel refract={i === 0} className={`group h-full ${i === 0 ? 'md:min-h-[28rem]' : ''}`}>
-                {pillar.media ? (
-                  <AmbientVideo
-                    src={pillar.media.src}
-                    poster={pillar.media.poster}
-                    className="absolute inset-0 h-full w-full object-cover opacity-25"
-                  />
-                ) : (
-                  <div
-                    aria-hidden
-                    className="absolute inset-0"
-                    style={{
-                      background:
-                        'radial-gradient(30rem 22rem at 85% 15%, rgba(220,68,28,0.22) 0%, transparent 65%), radial-gradient(24rem 18rem at 10% 90%, rgba(178,34,20,0.16) 0%, transparent 60%)',
-                    }}
-                  />
-                )}
-                <div className="relative flex h-full flex-col justify-between p-8 md:p-10">
-                  <span
-                    aria-hidden
-                    className={`font-sans font-black leading-none tracking-tight text-bone/15 transition-colors duration-500 group-hover:text-ember/30 ${
-                      i === 0 ? 'text-8xl md:text-9xl' : 'text-6xl md:text-7xl'
-                    }`}
-                  >
-                    {pillar.index}
-                  </span>
-                  <div className="mt-10 max-w-xl">
-                    <h3 className="font-mono text-xs tracking-[0.25em] text-bone">{pillar.tag}</h3>
-                    <p className="mt-3 text-base leading-relaxed text-ash md:text-lg">{pillar.line}</p>
-                  </div>
-                </div>
-              </GlassPanel>
-            </m.div>
+            <PillarCard key={pillar.index} pillar={pillar} i={i} />
           ))}
         </div>
 
@@ -93,7 +180,7 @@ export function Pillars() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.3 }}
-          className="mt-12"
+          className="mt-10"
         >
           <Link
             href="/services"

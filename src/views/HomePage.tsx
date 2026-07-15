@@ -59,9 +59,9 @@ export default function HomePage() {
       <Hero />
       <Suspense fallback={null}>
         <TurnSequence />
-        <Intertext eyebrow="THE PRACTICE">
-          <span className="block">Machines draft.</span>
-          <span className="block">We decide what survives.</span>
+        <Intertext eyebrow="THE PRACTICE" compact>
+          <span className="block">A thousand drafts.</span>
+          <span className="block">One that ships.</span>
         </Intertext>
         <Pillars />
         <StillBreak />

@@ -15,7 +15,18 @@ import {
  * arrives. Linked to scroll position (not a one-shot), so it tracks
  * scrubbing in both directions.
  */
-export function Intertext({ eyebrow, children }: { eyebrow?: string; children: ReactNode }) {
+export function Intertext({
+  eyebrow,
+  children,
+  compact = false,
+}: {
+  eyebrow?: string;
+  children: ReactNode;
+  /** Phase 5 (Landing_Page_Patches.pdf): "so much blank space" — this
+      instance feeds directly into Pillars right after, so it gets the
+      shorter stage instead of the standard 70svh breathing room. */
+  compact?: boolean;
+}) {
   const ref = useRef<HTMLElement>(null);
   const reduced = useReducedMotion();
 
@@ -31,7 +42,10 @@ export function Intertext({ eyebrow, children }: { eyebrow?: string; children: R
   const filter = useMotionTemplate`blur(${blurPx}px)`;
 
   return (
-    <section ref={ref} className="relative flex min-h-[70svh] items-center justify-center overflow-hidden px-6">
+    <section
+      ref={ref}
+      className={`relative flex items-center justify-center overflow-hidden px-6 ${compact ? 'min-h-[38svh]' : 'min-h-[70svh]'}`}
+    >
       {/* ember vignette bleeding one edge so the moment never sits on flat void */}
       <div
         aria-hidden

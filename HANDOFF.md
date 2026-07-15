@@ -148,7 +148,35 @@ gives misleading readings against Lenis per the documented lesson). Zero real co
 (one Chrome-extension React#299 false positive, the documented quirk). Build clean, frozen
 diff empty.
 
-## Remaining phases (5-10) + final gate: Phase 7 now unblocked (real assets found), continuing
+## Phase 5 — DONE (this commit)
+Copy: "Machines draft. / We decide what survives." → "A thousand drafts. / One that ships." (Ash's
+choice between two offered directions). `Intertext` gained a `compact` prop (`min-h-[38svh]` vs
+`70svh`) used ONLY on this THE PRACTICE instance — the OFFER instance (Phase 8 territory) is
+untouched. `Pillars.tsx`: full-bleed ambient background video
+(`/assets/about-hero-red-curves.mp4`, confirmed genuinely unused anywhere else in the repo,
+opacity 0.12 + top/bottom feather) replaces flat `bg-void`, fixing "pitch black... solid block
+of nothing." Section padding condensed (`pt-8/pb-24 md:pt-12/pb-32` → `pt-4/pb-16 md:pt-6/pb-20`).
+Media, per Ash's asset-search direction (Porsche/IKEA confirmed absent from repo + git history
+after exhaustive search — see "Asset investigation" above): tile 01 (AI Creative Studio) →
+`aether-rituals-preview.mp4` (real, previously-unused case-study video; poster generated via
+ffmpeg this session); tile 02 (Brand Systems) → `dior-bento.png` as a static image (new `image`
+media type alongside `video` in the pillar data shape, since the brief specifically asked for a
+PHOTO here); tile 03 (Advisory) → `hero-video.mp4` (unused, poster already existed), replacing
+the blank gradient-only placeholder. New `useTilt` hook: lightweight cursor-tracked 3D
+rotateX/rotateY (±6deg) via `onPointerMove`, applied as a plain `m.div` wrapper rather than
+retrofitting `ui/3d-card.tsx`'s `CardContainer`/`CardItem` primitive (that component owns its
+own perspective/flex wrapper, which would fight the section's asymmetric `md:col-span-2
+md:row-span-2` bento spans). Added an ember box-shadow bloom on hover (`hover:shadow-[0_0_60px_
+rgba(255,77,28,0.22)]`) as the "red-coloured glow lighting" ask — additive to, not a
+replacement for, the anchor card's existing `refract` glass (FO3 P2 decision, kept unchanged).
+Left the existing `whileInView` opacity/y entrance animation untouched — that's what reads as
+the "scroll-to-light" effect the brief said was "working," so no changes there. Services
+sub-page routing on the tiles: explicitly deferred per the brief, not built. Build clean (`/`
+still 136kB), frozen diff empty, zero console errors, visually verified in Chrome — all three
+tiles now show distinct real media (previously two were identical/repeated and one was blank).
+Dev server kept live throughout per Ash's request (stop→build→restart cycle, not left down).
+
+## Remaining phases (6-10) + final gate: Phase 7 now unblocked (real assets found), continuing
 Full per-phase spec lives in the FO5 prompt (task list descriptions capture it). Known
 blockers going in: Phase 5 needs Porsche/IKEA video + Rituals/Dior photo (flag for Ash, do not
 fabricate); Phase 7 needs Genesis/Oakley Showcase/Dior case-study assets+copy (check
