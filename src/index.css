@@ -1267,6 +1267,27 @@ html {
   background-clip: text;
 }
 
+/* Phase 4 (Landing_Page_Patches.pdf "cheap gradient" fix): a true animated
+   backdrop-filter text-mask (video literally visible through the glyphs)
+   needs an SVG <mask> with a <text> element kept pixel-synced to each
+   independently-animated word span — fragile for a per-word blur/opacity
+   scrub like TurnSequence's, so descoped. This is the next-best thing: a
+   multi-hue spectrum gradient (still fully opaque, alpha floor intact) that
+   reads as refraction/light-through-glass instead of a flat 2-stop fade. */
+.glass-type-spectrum-ember {
+  color: transparent;
+  background-image: linear-gradient(
+    170deg,
+    #f2c9a0 0%,
+    #fff1e2 30%,
+    #d8e4f2 48%,
+    #fff1e2 66%,
+    #ff8a42 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
 /* Boxless refractive halo: the backdrop visibly bends and blurs BEHIND the
    type with zero edges (feathered mask = no panel read). Position absolutely
    behind a headline, oversized. */

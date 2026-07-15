@@ -41,7 +41,7 @@ function Word({
   const blurPx = useTransform(progress, [wStart, wEnd], [12, 0]);
   const filter = useMotionTemplate`blur(${blurPx}px)`;
   return (
-    <m.span className="glass-type-ember" style={{ opacity, filter }}>
+    <m.span className="glass-type-spectrum-ember" style={{ opacity, filter }}>
       {word}
     </m.span>
   );
@@ -176,6 +176,14 @@ function ScrubSequence() {
     }
   });
 
+  // Phase 4 (Landing_Page_Patches.pdf "black blur flash" fix): the halo and
+  // vignette used to render at full strength the instant this section
+  // mounted — well before the first frame image has necessarily painted, so
+  // a backdrop-blur over bare bg-void read as a flat black smear. Fading
+  // both in over the same window the first line starts arriving ties their
+  // appearance to real content instead of component mount.
+  const overlayOpacity = useTransform(scrollYProgress, [0, LINES[0].range[0]], [0, 1]);
+
   return (
     // -mt-[50svh]: Hero's sticky stage releases (its own scrub animation
     // complete) a full 100svh before THIS section's sticky stage can lock
@@ -199,14 +207,16 @@ function ScrubSequence() {
         {/* text-scoped vignette: ember-toned so it deepens the red-wings
             scene toward the text instead of reading as a mismatched black
             patch dropped over warm footage */}
-        <div
+        <m.div
           aria-hidden
+          style={{ opacity: overlayOpacity }}
           className="text-vignette-ember absolute left-1/2 top-1/2 h-[24rem] w-[min(80rem,100vw)] -translate-x-1/2 -translate-y-1/2"
         />
         {/* boxless refractive halo: the footage bends behind the type,
             feathered to nothing so no panel edge ever reads */}
-        <div
+        <m.div
           aria-hidden
+          style={{ opacity: overlayOpacity }}
           className="glass-halo absolute left-1/2 top-1/2 h-[16rem] w-[min(72rem,92vw)] -translate-x-1/2 -translate-y-1/2"
         />
         <div className="absolute inset-0 flex items-center justify-center px-6">

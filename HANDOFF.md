@@ -125,7 +125,30 @@ scroll-driven parallax (`useScroll`+`useTransform` on `scale`/`y`, ported from t
 `TextureBg` pattern) — verified in Chrome, texture visible top-right, no console errors. Build
 clean (`/services` still 133kB), frozen diff empty.
 
-## Remaining phases (4-10) + final gate: Phase 7 now unblocked (real assets found), continuing
+## Phase 4 — DONE (this commit)
+`TurnSequence.tsx`: **root-caused the "black background blur"**: `.glass-halo`/`.text-vignette-ember`
+rendered at full opacity from the instant the section mounted (well before the user has
+scrolled to where the first line's words start arriving) — a backdrop-blur over bare `bg-void`
+with nothing meaningful behind it reads as a flat black smear. Wrapped both in `m.div` with
+`opacity` tied to `useTransform(scrollYProgress, [0, LINES[0].range[0]], [0, 1])` so they fade
+in with real content instead of at mount. "Cheap linear-gradient" text fill: added
+`.glass-type-spectrum-ember` (multi-hue gradient stops — warm/cool/warm — replacing the old
+2-stop ember fade), applied to `Word`. **Descoped, documented**: a TRUE backdrop-filter
+text-mask (video literally visible through the glyphs) needs an SVG `<mask>` with a `<text>`
+element kept pixel-synced to each independently blur/opacity-animated word span — assessed as
+fragile for this component's per-word scrub and not attempted; the spectrum gradient + the
+already-upgraded (Phase 1) chromatic `.glass-halo` sitting behind the text is the pragmatic
+substitute. "Route through ScrollScrub's easing signature" was already true going in — this
+component's own code comment says so, and it's a bespoke canvas scrubber, never a native
+`<video>` — no native-video-scrubbing existed to replace. Verified in Chrome: no black flash
+scrolling into the section (confirmed at the entry frame — landing precisely on an active
+text-word frame via wheel-tick scroll against Lenis's smoothing proved unreliable, a known
+limitation logged in prior sessions too; did not force it via programmatic `scrollTo`, which
+gives misleading readings against Lenis per the documented lesson). Zero real console errors
+(one Chrome-extension React#299 false positive, the documented quirk). Build clean, frozen
+diff empty.
+
+## Remaining phases (5-10) + final gate: Phase 7 now unblocked (real assets found), continuing
 Full per-phase spec lives in the FO5 prompt (task list descriptions capture it). Known
 blockers going in: Phase 5 needs Porsche/IKEA video + Rituals/Dior photo (flag for Ash, do not
 fabricate); Phase 7 needs Genesis/Oakley Showcase/Dior case-study assets+copy (check
