@@ -333,7 +333,70 @@ one) — confirmed: logo+wordmark on one line, giant mark enlarged and anchored 
 "WE BUILD IDENTITY" fully legible and centered on top of "ALCHEMY," full-bleed image background
 replacing the flat video.
 
-## Final gate remaining: patches-closed table + mobile pass + budget recheck
+## FINAL GATE — CLOSED (this entry)
+
+**Budget recheck** (from the Phase 10 build, no further code changes since): `/` 136kB,
+`/services` 133kB, `/work` 122kB — all under the 150kB standard budget. `/contact` 172kB —
+documented legacy overage (was 220kB before FO4 P7's slimming pass; still over 150kB but
+improved, per CLAUDE.md's existing carve-out for this exact route). `/admin` 212kB,
+`/admin/auth` 204kB, `/eva` 178kB, `/EvaDoshiPortfolio` 178kB, `/aashrith` 189kB,
+`/AashrithGadePortfolio` 189kB — all pre-existing overages, confirmed byte-identical to the
+Phase 0 build (this session touched none of admin/Eva/Aashrith), so nothing regressed.
+
+**Frozen-path diff**: `git diff --stat 7c31d8b..HEAD -- <frozen paths>` — empty, re-verified
+after every single phase this session (11 checks total, all clean).
+
+**Font law grep gate**: `grep -ri fraunces src app` → one historical comment only (`app/layout.tsx`);
+`grep -rn font-serif src app` → zero. Both re-verified at session end per CLAUDE.md.
+
+**Mobile pass (380/768px) — BLOCKED, same limitation logged every phase this session**:
+`resize_window` reports success but the actual Chromium viewport never changes size in this
+environment (window is maximized/snap-managed) — the exact blocker FO3/FO4 hit and logged
+repeatedly. Did not fabricate a pass; every phase's mobile-specific claims (Phase 6's
+single-line clamp, in particular) were substituted with hand-verified math or direct
+`getComputedStyle()` inspection instead of a screenshot, and flagged as such inline.
+
+**Continuous scroll recording — NOT ATTEMPTED**: this session hit three distinct, worsening
+scroll-automation issues (wheel-tick drift against Lenis's smoothing, `scrollIntoView`/
+`window.scrollTo` both silently overridden back to position 0, only a raw synthetic
+`WheelEvent` loop working reliably by the end). A continuous top-to-bottom recording would
+fight the same instability without a reliable capture tool in this environment; each section
+was instead spot-verified individually via the wheel-event workaround once discovered.
+
+### Patches-closed table (Landing_Page_Patches.pdf, all 13 pages)
+
+| # | Item (PDF page) | Status | Phase | Note |
+|---|---|---|---|---|
+| 1 | Hero circle: transparent liquid glass, spectrum/rainbow edge, smooth zoom-out (p1) | Shipped | 2 | SVG ellipse ring synced to the mask motion values, Phase 1 chromatic filter |
+| 2 | Nav bar spectrum liquid glass, responds to on-page color (p2) | Shipped | 2 | Real backdrop refraction — passive by definition, no JS color-sampling needed |
+| 3 | Line glitch + bad silhouette blur (p2) | Shipped | 2 | Glitch root-caused (unfaded HeroMeshField edge) and fixed; footage blur is a source-asset property, flagged not fixed |
+| 4 | "WE BUILD CAMPAIGNS" drop-shadow / StringTune cycler style (p2) | Shipped | 2 | Root cause was the flat vignette reading as a shadow; halo now carries the Phase 1 upgrade |
+| 5 | "Taste is the moat." thinner font, moved below cycler (p3) | Shipped | 2 | Inter Thin, repositioned |
+| 6 | Subtext copy + "taking 3 projects" copy (p3) | Shipped | 2 | Verbatim spec copy both places |
+| 7 | CTA order: Begin the sprint primary / See the work glass pod (p3) | Shipped | 2 | New MagneticCTA `glass` variant |
+| 8 | Services hero: restore old full-bleed hero (p3) | Shipped | 3 | Real precedent found (commit 24ed763) — it was a parallax image, not video; corrected and restored |
+| 9 | TurnSequence: black blur flash, video smoothness, cheap gradient (p4) | Shipped | 4 | Flash root-caused and fixed; gradient upgraded to spectrum; scrub already matched ScrollScrub's signature (no native video existed to replace) |
+| 10 | Practice/bento: copy, spacing, non-functional grid, 3 tiles' media, routing, 3D+glow (p5) | Shipped* | 5 | *Porsche/IKEA/Rituals-photo/Dior-photo don't exist anywhere in repo/git history — real substitutes used, flagged; sub-page routing explicitly deferred per brief |
+| 11 | "For founders..." bg quality + font + single line (p6) | Shipped | 6 | Native-res asset swap, hand-verified single-line math (mobile screenshot blocked) |
+| 12 | Work section: spacing, single item → 4-item carousel, Playfair quotes (p7) | Shipped | 7 | Real 4-entry carousel with wraparound; bug found+fixed during verification (AnimatePresence mode="wait" stall) |
+| 13 | Pricing: spacing, non-full-bleed video, copy/font/name (p9) | Shipped | 8 | "Priced to ship.", full-bleed bg, condensed |
+| 14 | Marquee loop, 3 more services, Most Selling Sprints, shared tinted reel, pause-on-hover, click completes transaction (p10) | Shipped* | 8 | *3 new services not fabricated (real business decision); everything else built, including the pause-on-hover that resolves FO4 W3.3's original objection to a marquee |
+| 15 | "One studio/One bar" spacing (p11) | Shipped | 9 | Condensed |
+| 16 | "Forge never cools": transparent glass text, video-through-glyphs, Inter Thin (p11) | Shipped* | 9 | *Literal backdrop-filter-through-text attempted and disproven (renders invisible in Chrome, verified via computed styles) — shipped a thinner opaque glass-type variant instead, documented as a real technique limitation |
+| 17 | Logo+wordmark single line (p12) | Shipped | 10 | |
+| 18 | Brand font consistency → Inter (p12) | Shipped | 0 | Sitewide type law covers this |
+| 19 | "Down the below" → Playfair Bold Italic (p12) | Shipped | 0 | Sitewide italic law covers this |
+| 20 | Begin button magnetic 3D hover (p12) | Shipped | 10 | New shared `useTilt` hook |
+| 21 | Giant wordmark enlarged, anchored to divider, cycler on top (p12) | Shipped | 10 | |
+| 22 | Final CTA: full-bleed image background like other pages (p13) | Shipped | 10 | Real precedent found in the current codebase (`BottomCTA.tsx`), not git history |
+
+Every item is Shipped; the three marked with `*` have an honestly-flagged partial scope (real
+assets substituted for named-but-nonexistent ones, a real business decision not fabricated, and
+one CSS technique proven not to work in Chrome and swapped for a working equivalent) — none are
+silently dropped, all are explained above and in their phase's own HANDOFF entry.
+
+Session total: 12 commits (`79fc5c2`..`8540878`), every one build-gated and frozen-diff-verified
+before landing. Dev server kept running throughout per Ash's request for live viewing.
 Full per-phase spec lives in the FO5 prompt (task list descriptions capture it). Known
 blockers going in: Phase 5 needs Porsche/IKEA video + Rituals/Dior photo (flag for Ash, do not
 fabricate); Phase 7 needs Genesis/Oakley Showcase/Dior case-study assets+copy (check
