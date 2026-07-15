@@ -1267,6 +1267,29 @@ html {
   background-clip: text;
 }
 
+/* Phase 9 (Landing_Page_Patches.pdf): "the forge never cools" asked for a
+   TRUE backdrop-filter-through-the-glyphs effect. Tried it directly:
+   color:transparent + background-clip:text + backdrop-filter:url(#glass-
+   refract) on the word spans. Verified via computed styles that every
+   property applied exactly as intended (opacity:1, backdropFilter set,
+   backgroundClip:'text') — but the text rendered fully invisible in Chrome.
+   background-clip:text reliably clips a background-image; whether it also
+   clips a backdrop-filter's composited output is not standardized behavior,
+   and empirically it did not here. Style-guide's alpha-floor rule ("NEVER a
+   low-alpha transparent glyph") makes shipping an unverifiable-possibly-
+   invisible treatment the wrong call — same conclusion as Phase 4's
+   TurnSequence descope, for the same underlying reason (this technique is
+   too fragile to ship without visual confirmation it isn't just blank). */
+.glass-type-thin {
+  color: transparent;
+  /* higher-key, thinner-weight sibling of .glass-type: same opaque bg-clip
+     mechanism (proven throughout this session), lighter overall value so it
+     reads as "more transparent" without ever risking true invisibility. */
+  background-image: linear-gradient(180deg, #eae6df 0%, #fdfcfa 50%, #d8d2c8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
 /* Phase 4 (Landing_Page_Patches.pdf "cheap gradient" fix): a true animated
    backdrop-filter text-mask (video literally visible through the glyphs)
    needs an SVG <mask> with a <text> element kept pixel-synced to each

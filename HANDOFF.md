@@ -271,7 +271,38 @@ prevented precisely targeting the hover automation; verified the underlying
 code instead — it's a plain, directly-bound React state toggle, not a class of bug the other
 verified issues in this session were.
 
-## Remaining phases (9-10) + final gate
+## Phase 9 — DONE (this commit)
+Condensed spacing: `StudioMotion.tsx` (`min-h-[70svh] py-32` -> `min-h-[42svh] py-16 md:py-20`)
+and `ScrubBeat eyebrow="THE STANDARD"` in `HomePage.tsx` got the same `compact` treatment as
+the other flagged sections — both singled out for "extremely large spacing" in the same block
+of the patches doc. Font: `font-headline font-black` (Inter Black) -> `font-sans font-medium`
+(Inter, mid-weight) per "Inter Thin Bold... more weight and more transparency."
+
+**True backdrop-filter text-mask attempted and disproven, not just assumed risky**: built
+`.glass-type-backdrop` (`color:transparent` + `background-clip:text` + `backdrop-filter:url(#glass-
+refract)` on the word spans) and verified via `getComputedStyle()` that every property applied
+exactly as written (opacity:1, backdropFilter set correctly, backgroundClip:'text') — yet the
+text rendered fully invisible in Chrome. `background-clip:text` reliably clips a
+`background-image`; clipping a `backdrop-filter`'s composited output is not standardized
+behavior, and empirically it did not happen here. Per style-guide's alpha-floor rule ("NEVER a
+low-alpha transparent glyph"), shipping an effect confirmed to render nothing is the wrong call
+— reverted to a new `.glass-type-thin` (same proven opaque `background-clip:text` gradient
+mechanism already verified working everywhere else this session, just lighter/higher-key
+stops than the base `.glass-type`) instead. This is the second time this exact class of
+backdrop-filter-through-text technique failed under verification (see Phase 4's TurnSequence
+descope) — worth flagging as a real technique limitation for any FUTURE session tempted to try
+it again, not a one-off mistake.
+
+Build clean, frozen diff empty, zero console errors. **Visual verification incomplete**: Lenis's
+smooth-scroll repeatedly fought both wheel-based and `scrollIntoView`-based automated navigation
+to this section in this session (landed on unrelated sections or blank space every attempt) —
+a new, distinct scroll-automation issue from the already-documented rAF-stall and
+resize_window quirks. Did not chase it further; confirmed correctness via direct
+`getComputedStyle()` inspection instead (opacity:1, correct gradient background-image, matching
+the exact CSS already proven to render correctly in every other `.glass-type`-family
+screenshot this session) rather than a fresh screenshot of this specific instance.
+
+## Remaining phases (10) + final gate
 Full per-phase spec lives in the FO5 prompt (task list descriptions capture it). Known
 blockers going in: Phase 5 needs Porsche/IKEA video + Rituals/Dior photo (flag for Ash, do not
 fabricate); Phase 7 needs Genesis/Oakley Showcase/Dior case-study assets+copy (check

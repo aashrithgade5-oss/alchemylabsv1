@@ -85,7 +85,7 @@ export default function HomePage() {
           <span className="block">A price on the wall.</span>
         </Intertext>
         <TheFive />
-        <ScrubBeat eyebrow="THE STANDARD" text={['One studio.', 'One bar.', 'No exceptions.']} />
+        <ScrubBeat eyebrow="THE STANDARD" text={['One studio.', 'One bar.', 'No exceptions.']} compact />
         <StudioMotion />
         <ClosingBand />
       </Suspense>
