@@ -86,11 +86,34 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <CookieConsent />
           </Providers>
           <GrainOverlay />
-          {/* shared displacement filter for .glass-refract-edge (GlassPanel) */}
+          {/* Phase 1 — shared liquid-glass filter primitive: SINGLE SOURCE for
+              every backdrop-mode glass surface (nav edge, hero circle,
+              forge-never-cools text-mask). feGaussianBlur softens the
+              displacement source; feDisplacementMap bends the backdrop;
+              feColorMatrix isolates R/G/B and feOffset splits them apart,
+              feBlend(screen) recombines for the edge chromatic-aberration
+              ("spectrum liquid glass") read. Chrome-only (backdrop-filter:
+              url() has no Safari/Firefox support) — @supports gates every
+              consumer back to a static blur, see .glass-refract-edge/.glass-halo. */}
           <svg aria-hidden className="absolute h-0 w-0">
-            <filter id="glass-refract">
+            <filter id="glass-refract" x="-20%" y="-20%" width="140%" height="140%">
               <feTurbulence type="fractalNoise" baseFrequency="0.008 0.008" numOctaves="2" result="noise" />
-              <feDisplacementMap in="SourceGraphic" in2="noise" scale="10" xChannelSelector="R" yChannelSelector="G" />
+              <feGaussianBlur in="SourceGraphic" stdDeviation="0.6" result="softSource" />
+              <feDisplacementMap in="softSource" in2="noise" scale="10" xChannelSelector="R" yChannelSelector="G" result="displaced" />
+
+              <feColorMatrix in="displaced" type="matrix"
+                values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="redChan" />
+              <feOffset in="redChan" dx="1.1" dy="0.4" result="redOffset" />
+
+              <feColorMatrix in="displaced" type="matrix"
+                values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="greenChan" />
+
+              <feColorMatrix in="displaced" type="matrix"
+                values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="blueChan" />
+              <feOffset in="blueChan" dx="-1.1" dy="-0.4" result="blueOffset" />
+
+              <feBlend in="redOffset" in2="greenChan" mode="screen" result="rg" />
+              <feBlend in="rg" in2="blueOffset" mode="screen" />
             </filter>
           </svg>
           <SpeedInsights />

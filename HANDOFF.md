@@ -4,6 +4,69 @@ The single source of truth for resuming this session. Append a block entry after
 
 ---
 
+# FO5 (2026-07-15) — Landing_Page_Patches.pdf, 10 phases + final gate
+
+Source: `~/Downloads/Landing Page Patches.pdf` (13 pages, 1:1 with the phase prompt). Read via
+Read tool this session — content is quoted/paraphrased per-phase below as work lands, not
+re-attached. Task list (12 items, Phase 0 → Final gate) tracked in this session's TaskCreate list.
+
+## Phase 0 — DONE (commit `79fc5c2`)
+Type law superseded: Inter (variable weight, next/font/google, `--font-inter`) is now the
+primary display+body face — `font-sans` AND `font-headline` Tailwind keys both point to it
+(previously Geist Sans / Inter Tight respectively). Playfair Display Bold Italic
+(`--font-playfair`, weight 700 italic only, next/font/google) is the ONLY italic anywhere —
+replaces Fraunces at all 7 call sites (Contact.tsx, ContactPage.tsx, Work.tsx, ClosingBand,
+ServicesClosing, StillBreak, Intertext). Geist Mono untouched. GeistSans import kept in
+`app/layout.tsx` SOLELY to feed the frozen `--font-display` CSS var (Aashrith portfolio) —
+never repointed. `--font-body` in `src/index.css` also left pointed at Geist deliberately: it's
+the legacy/global default for old routes (About, Journal, Admin, Eva) that don't set an
+explicit Tailwind font class, and the prompt says About stays untouched this pass. Grep gate:
+`grep -ri fraunces src app` → one comment only; `font-serif` → zero. Frozen Aashrith diff empty.
+Build clean: / 136kB, /services 133kB, /contact 172kB (documented legacy), /work 122kB.
+
+## Phase 3 — precedent found (not yet built)
+Git archaeology for the "Three Pillars." full-bleed video hero: real precedent is commit
+`24ed763` (`src/pages/SolutionsHub.tsx`, pre-Next.js Vite era), copy verbatim match ("Three
+Pillars." / "Every brand challenge demands a different instrument. We've engineered three —
+each built to compound."). **Correction to the user's framing**: the background is NOT a video
+file — it's a static image (`solutions-bg-texture.png`, the swirling red-curve texture) with
+scroll-driven parallax (`scale`/`y` via `useScroll`+`useTransform`), which reads as "animated."
+Asset already sits at `public/assets/solutions-bg-texture.png` in the current repo — no asset
+gap. Phase 3 is therefore buildable now (port layout + parallax treatment into current
+`ServicesHero.tsx`), not blocked — will build in a later work unit this session/next.
+
+## Phase 1 — DONE (this commit)
+Extended the EXISTING `#glass-refract` SVG filter (`app/layout.tsx`) rather than building a
+parallel system — ponytail call, the single-source/two-mode architecture the prompt asked for
+already existed from FO3/FO4 (`.liquid-glass`+`.glass-refract-edge`/`.glass-halo` = backdrop
+mode, `.glass-solid` = opaque mode, both consumed via `GlassPanel`'s `refract` prop). Added to
+the filter chain: `feGaussianBlur` (softens the displacement source) and a chromatic-aberration
+stage (`feColorMatrix` isolates R/G/B, `feOffset` splits R/B in opposite directions,
+`feBlend(screen)` recombines) — this is the "spectrum/rainbow edge" the PDF's bubble reference
+asked for. Added `contain: strict; will-change: transform;` to `.glass-halo` and
+`.glass-refract-edge` (the two actual backdrop-filter:url() consumers — left `.liquid-glass`
+alone since it's the cheap blur-only base used broadly). `@supports` Safari/Firefox fallback
+was already in place, unchanged. Verified in Chrome: scrolled the current live page past the
+Pillars anchor card (`refract` on) — edge renders clean, no artifacting, subtle specular line
+intact, zero console errors. **Deferred, honestly**: true Chrome DevTools Performance-panel
+before/after numbers — no current page stress-tests the refract filter during active scroll yet
+(the Pillars card is scroll-into-view, not scroll-driven), so a profile right now wouldn't be
+meaningful. Will capture real numbers in Phase 2 once the primitive is wired onto the
+scroll-driven nav bar + hero circle, which is the actual perf-risk surface per the prompt.
+Build clean, unchanged bundle sizes (CSS/SVG only, no JS added).
+
+## Remaining phases (2, 4-10) + final gate: not started this turn
+Full per-phase spec lives in the FO5 prompt (task list descriptions capture it). Known
+blockers going in: Phase 5 needs Porsche/IKEA video + Rituals/Dior photo (flag for Ash, do not
+fabricate); Phase 7 needs Genesis/Oakley Showcase/Dior case-study assets+copy (check
+Drive/Notion before building placeholder cards); Phase 8/5 have "Ash picks one" copy choices
+(section name, practice-copy) not yet decided; Phase 10 needs the same git-archaeology
+treatment as Phase 3 (full-line logo+wordmark, full-bleed CTA — note W2.3's `BottomCTA.tsx`
+already IS a full-bleed CTA component live on other routes, may satisfy this without git dig).
+Resume: Phase 1 (liquid glass SVG-filter primitive) — several later phases depend on it.
+
+---
+
 # FO4 — Wave 3 (2026-07-15, same plan file)
 
 All 6 Wave 3 items resolved (one skipped by decision, five shipped). Commits `27d5263`..`8e1e4a9` (plus the two-commit fix for a staging mistake on the Work rebuild, `27d5263`/`410c130`).

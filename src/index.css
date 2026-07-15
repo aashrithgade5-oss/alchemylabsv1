@@ -1272,6 +1272,8 @@ html {
    behind a headline, oversized. */
 .glass-halo {
   pointer-events: none;
+  contain: strict;
+  will-change: transform;
   -webkit-backdrop-filter: blur(14px) saturate(165%) brightness(1.07);
   backdrop-filter: blur(14px) saturate(165%) brightness(1.07);
   /* transparent stop must land INSIDE the element bounds (radius x stop < 50%)
@@ -1299,6 +1301,10 @@ html {
    once in app/layout.tsx, masked to the outer ~14px so the glass visibly bends
    what's behind its edges. Degrades to nothing where url() backdrop-filters
    are unsupported (base blur still carries the panel). */
+.glass-refract-edge {
+  contain: strict;
+  will-change: transform;
+}
 @supports (backdrop-filter: url('#glass-refract')) {
   .glass-refract-edge {
     padding: 14px;
@@ -1310,6 +1316,12 @@ html {
     mask-composite: exclude;
   }
 }
+
+/* Phase 1 naming alias (Landing_Page_Patches.pdf): "backdrop mode" = the
+   .liquid-glass + .glass-refract-edge / .glass-halo pair above (real
+   refraction, Chrome-only, @supports-gated fallback). "opaque mode" =
+   .glass-solid (below) — no backdrop dependency, safe everywhere,
+   used for bento tiles / pricing pods that just need to look like glass. */
 
 /* Productized Five snap gallery: scrollbar hidden, wheel/drag still scrolls */
 .furnace-snap {
