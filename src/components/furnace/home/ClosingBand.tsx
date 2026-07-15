@@ -3,10 +3,10 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { AnimatePresence, m, useReducedMotion } from 'framer-motion';
-import { AmbientVideo } from './AmbientVideo';
 import { KineticHeadline } from '../KineticHeadline';
 import { MagneticCTA } from '../MagneticCTA';
 import { TextHoverEffect } from '@/components/ui/text-hover-effect';
+import { useTilt } from '@/hooks/useTilt';
 
 const WORDS = ['IDENTITY', 'CAMPAIGNS', 'FILM', 'STRATEGY'];
 
@@ -49,31 +49,61 @@ function WordSwitcher() {
   );
 }
 
+// Phase 10 (Landing_Page_Patches.pdf): "Begin button should be a magnetic
+// 3D button" — layers a cursor-tilt (useTilt, shared with Pillars) on top
+// of MagneticCTA's own 2D magnetic pull, no GSAP.
+function TiltCTA({ children }: { children: React.ReactNode }) {
+  const tilt = useTilt(10);
+  return (
+    <div style={{ perspective: 800 }}>
+      <m.div
+        onPointerMove={tilt.onMove}
+        onPointerLeave={tilt.onLeave}
+        style={{ rotateX: tilt.rotateX, rotateY: tilt.rotateY, transformStyle: 'preserve-3d' }}
+      >
+        {children}
+      </m.div>
+    </div>
+  );
+}
+
 export function ClosingBand() {
   return (
-    <section className="relative overflow-hidden">
-      <AmbientVideo
-        src="/media/red-cloak-water.mp4"
-        poster="/media/red-cloak-water-poster.jpg"
-        className="absolute inset-0 h-full w-full object-cover opacity-25"
-      />
-      <div aria-hidden className="absolute inset-0 bg-void/55" />
-      <div className="relative mx-auto flex max-w-4xl flex-col items-center px-6 py-28 text-center md:py-40">
-        {/* wordmark lockup: white-on-black mark, screened over the film */}
+    <section className="relative overflow-hidden border-t border-line bg-void">
+      {/* Phase 10: "the CTA needs to be exactly the same as the one on
+          other pages, where it's a full-bleed background CTA with the
+          perfect background that is an image" — other pages get this
+          treatment from BottomCTA.tsx (footer-bg.png, blurred/scaled full
+          bleed + gradient + radial ember glow); ClosingBand's own video
+          background read as "lacklustre/solid black" by comparison. Same
+          recipe here for consistency, ClosingBand keeps its own richer
+          content (wordmark, headline, cycler, ALCHEMY mark). */}
+      <div aria-hidden className="absolute inset-0">
+        <Image
+          src="/assets/footer-bg.png"
+          alt=""
+          fill
+          className="scale-110 object-cover opacity-60 blur-[8px] saturate-[1.2]"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-void via-void/70 to-void/40" />
+        <div className="absolute bottom-0 left-1/2 h-[60%] w-[120%] -translate-x-1/2 bg-[radial-gradient(ellipse_at_center,rgba(255,77,28,0.14)_0%,transparent_70%)]" />
+      </div>
+      <div className="relative mx-auto flex max-w-4xl flex-col items-center px-6 py-24 text-center md:py-32">
+        {/* Phase 10: logo beside the wordmark, one line (was stacked) */}
         <m.div
           initial={{ opacity: 0, scale: 0.96 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-12 flex flex-col items-center gap-5"
+          className="mb-12 flex flex-row items-center gap-3"
         >
-          <Image src="/assets/alchemy-minimal-logo.png" alt="" width={44} height={44} />
+          <Image src="/assets/alchemy-minimal-logo.png" alt="" width={36} height={36} />
           <Image
             src="/media/wordmark-crop.png"
             alt="Alchemy Labs"
             width={252}
             height={52}
-            className="h-auto w-40 mix-blend-screen md:w-48"
+            className="h-auto w-32 mix-blend-screen md:w-40"
           />
         </m.div>
         <KineticHeadline
@@ -98,28 +128,31 @@ export function ClosingBand() {
           transition={{ duration: 0.6, delay: 0.45 }}
           className="mt-12"
         >
-          <MagneticCTA href="/contact" variant="ember">
-            Begin
-          </MagneticCTA>
+          <TiltCTA>
+            <MagneticCTA href="/contact" variant="ember">
+              Begin
+            </MagneticCTA>
+          </TiltCTA>
         </m.div>
+
+        {/* Phase 10: divider line between the CTA and the giant wordmark
+            block, which now anchors directly against it (was mt-14 gap +
+            a separate small WordSwitcher line above a smaller mark). */}
+        <div aria-hidden className="mt-14 h-px w-24 bg-line" />
+
+        {/* Phase 10: giant ALCHEMY wordmark enlarged further, WordSwitcher
+            centered ON TOP of it instead of sitting as its own line above. */}
         <m.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-          className="mt-14"
-        >
-          <WordSwitcher />
-        </m.div>
-        {/* terminal wordmark: cursor reveals the ember gradient through the strokes */}
-        <m.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.75 }}
-          className="mt-10 h-32 w-full max-w-3xl md:h-44"
+          transition={{ duration: 0.8, delay: 0.6 }}
+          className="relative mt-2 h-44 w-full max-w-4xl md:h-72"
         >
           <TextHoverEffect text="ALCHEMY" />
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+            <WordSwitcher />
+          </div>
         </m.div>
       </div>
     </section>

@@ -302,7 +302,38 @@ resize_window quirks. Did not chase it further; confirmed correctness via direct
 the exact CSS already proven to render correctly in every other `.glass-type`-family
 screenshot this session) rather than a fresh screenshot of this specific instance.
 
-## Remaining phases (10) + final gate
+## Phase 10 — DONE (this commit), precedent found without new git archaeology
+The "same git-archaeology check as Phase 3" turned out unnecessary: the real precedent for
+"the CTA on other pages, full-bleed background that is an image" is `BottomCTA.tsx` — already
+in the CURRENT codebase (not git history), mounted in `SiteChrome` on every route except `/`
+and `/contact` (FO4 W2.3). It uses `/assets/footer-bg.png` (blurred/scaled full-bleed image +
+gradient + radial ember glow) — a fundamentally different, more photographic treatment than
+`ClosingBand`'s dimmed video background, which is exactly why the homepage's own closing CTA
+read as "lacklustre... a very solid black CTA" by comparison to what every OTHER page shows.
+Ported that same background recipe into `ClosingBand.tsx`, keeping its own richer content
+(wordmark, headline, cycler, `TextHoverEffect`) rather than replacing it with `BottomCTA`'s
+simpler version.
+
+- Logo + wordmark: `flex-col` -> `flex-row items-center gap-3`, one line (was stacked).
+- "We will tell you what it needs.": already `font-playfair italic` — Phase 0 already covered
+  this file, no change needed here.
+- Begin button: new shared `src/hooks/useTilt.ts` (extracted from Phase 5's `Pillars.tsx` local
+  copy now that there are 2 real call sites — ponytail: duplication was fine at 1, not at 2) —
+  layers cursor-tracked 3D rotateX/Y on top of `MagneticCTA`'s existing 2D pull, no GSAP.
+- Giant ALCHEMY wordmark: `h-32 md:h-44` -> `h-44 md:h-72`, now sits directly against a new
+  divider hairline (`h-px w-24 bg-line`) between it and the CTA above — "anchor touching the
+  divider line." `WordSwitcher` ("WE BUILD [cycler]") moved from its own line above the mark to
+  an absolutely-positioned overlay CENTERED on top of it, per "needs to be on top of that,
+  centrally aligned to that big Alchemy wordmark."
+Build clean (`/` unchanged), frozen diff empty, zero console errors. Verified live in Chrome —
+found the section via a scripted synthetic-wheel-event loop (Lenis intercepts real wheel
+events; plain `window.scrollTo`/`scrollIntoView` were both silently overridden back to scroll
+position 0 in this session, a new Lenis-automation quirk distinct from the earlier rAF-stall
+one) — confirmed: logo+wordmark on one line, giant mark enlarged and anchored to the divider,
+"WE BUILD IDENTITY" fully legible and centered on top of "ALCHEMY," full-bleed image background
+replacing the flat video.
+
+## Final gate remaining: patches-closed table + mobile pass + budget recheck
 Full per-phase spec lives in the FO5 prompt (task list descriptions capture it). Known
 blockers going in: Phase 5 needs Porsche/IKEA video + Rituals/Dior photo (flag for Ash, do not
 fabricate); Phase 7 needs Genesis/Oakley Showcase/Dior case-study assets+copy (check

@@ -1,12 +1,12 @@
 'use client';
 
-import { useRef, useCallback } from 'react';
-import { m, useMotionValue, useTransform } from 'framer-motion';
+import { m } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 import { GlassPanel } from '../GlassPanel';
 import { AmbientVideo } from './AmbientVideo';
+import { useTilt } from '@/hooks/useTilt';
 
 const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
@@ -46,34 +46,6 @@ const pillars = [
     },
   },
 ];
-
-// Subtle cursor-tracked 3D tilt (Phase 5: "can also be made 3D") — a plain
-// pointer-move transform on the existing card, not a rebuild onto the
-// unrelated ui/3d-card.tsx primitive (that one owns its own perspective
-// wrapper + grid, which would fight this section's asymmetric bento spans).
-function useTilt() {
-  const rotateX = useMotionValue(0);
-  const rotateY = useMotionValue(0);
-  const springX = useTransform(rotateX, (v) => `${v}deg`);
-  const springY = useTransform(rotateY, (v) => `${v}deg`);
-
-  const onMove = useCallback(
-    (e: React.PointerEvent<HTMLDivElement>) => {
-      const rect = e.currentTarget.getBoundingClientRect();
-      const px = (e.clientX - rect.left) / rect.width - 0.5;
-      const py = (e.clientY - rect.top) / rect.height - 0.5;
-      rotateY.set(px * 6);
-      rotateX.set(py * -6);
-    },
-    [rotateX, rotateY],
-  );
-  const onLeave = useCallback(() => {
-    rotateX.set(0);
-    rotateY.set(0);
-  }, [rotateX, rotateY]);
-
-  return { onMove, onLeave, rotateX: springX, rotateY: springY };
-}
 
 function PillarCard({ pillar, i }: { pillar: (typeof pillars)[number]; i: number }) {
   const tilt = useTilt();
