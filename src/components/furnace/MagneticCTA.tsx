@@ -4,7 +4,7 @@ import { useRef, useState, useCallback } from 'react';
 import { m } from 'framer-motion';
 import Link from 'next/link';
 
-type Variant = 'ember' | 'ghost';
+type Variant = 'ember' | 'ghost' | 'glass';
 
 interface MagneticCTAProps {
   children: React.ReactNode;
@@ -23,6 +23,9 @@ const variantClasses: Record<Variant, string> = {
   ghost:
     'border border-line text-bone hover:border-ember/60 hover:text-bone ' +
     'bg-transparent',
+  // Phase 1 opaque-mode glass pod: same liquid-glass base as GlassPanel,
+  // no backdrop-filter:url() edge (small floating CTA, not a hero surface).
+  glass: 'liquid-glass text-bone hover:border-ember/40',
 };
 
 const spring = { type: 'spring' as const, stiffness: 320, damping: 18, mass: 0.5 };

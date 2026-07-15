@@ -38,13 +38,21 @@ export function FurnaceNavigation() {
         initial={{ y: -24, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.9, ease }}
-        className={`flex w-full max-w-4xl items-center justify-between rounded-full px-5 py-2.5 transition-all duration-500 ${
+        className={`relative flex w-full max-w-4xl items-center justify-between overflow-hidden rounded-full px-5 py-2.5 transition-all duration-500 ${
           scrolled
             ? 'liquid-glass'
             : 'border border-transparent bg-transparent'
         }`}
       >
-        <Link href="/" className="flex items-center" aria-label="Alchemy Labs, home">
+        {/* Phase 2 backdrop-mode glass edge: real refraction shows whatever
+            color is scrolled behind the nav (red hero vs void sections) —
+            that passive behavior IS the "responds to on-page color" ask,
+            no color-sampling JS needed. Chrome-only, degrades to the base
+            liquid-glass blur elsewhere via @supports. */}
+        {scrolled && (
+          <div aria-hidden className="glass-refract-edge pointer-events-none absolute inset-0 rounded-[inherit]" />
+        )}
+        <Link href="/" className="relative flex items-center" aria-label="Alchemy Labs, home">
           <Image
             src="/assets/alchemy-minimal-logo.png"
             alt="Alchemy Labs"

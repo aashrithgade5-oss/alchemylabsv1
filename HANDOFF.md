@@ -55,7 +55,42 @@ meaningful. Will capture real numbers in Phase 2 once the primitive is wired ont
 scroll-driven nav bar + hero circle, which is the actual perf-risk surface per the prompt.
 Build clean, unchanged bundle sizes (CSS/SVG only, no JS added).
 
-## Remaining phases (2, 4-10) + final gate: not started this turn
+## Phase 2 — DONE (this commit), core deliverables verified in Chrome
+- Nav bar (`Navigation.tsx`): swapped the flat `.liquid-glass`-only scrolled state for
+  `.liquid-glass` + `.glass-refract-edge` (Phase 1 primitive). Verified live: scrolling past
+  the red hero, the pill visibly shows the page's red bleeding through the backdrop — that IS
+  the "edge reflection responds to on-page color" ask, satisfied for free by real
+  `backdrop-filter` refraction, no color-sampling JS needed.
+- Hero ellipse ("black circle"): new SVG `<ellipse>` overlay in `Hero.tsx`, `rx`/`ry` bound to
+  the SAME `maskRx`/`maskRy` motion values that drive the video's `clip-path` (can't drift out
+  of sync), spectrum-gradient stroke, `filter="url(#glass-refract)"` for the chromatic-edge
+  read. Verified live + zoomed: clear rainbow-fringed rim tracing the boundary, matches the
+  PDF's bubble reference image.
+- **Line glitch root-caused and fixed**: `HeroMeshField.tsx`'s wrapper was a hard-edged
+  `h-[55%]` box with `mix-blend-screen` and no fade of its own — that flat top edge WAS the
+  "dividing line" seam the PDF flagged. Added a `mask-image` linear-gradient feather to the top
+  30%. Verified before/after screenshots: seam gone. Left the video's own encode/blur quality
+  alone — that's a source-asset question (same category as Phase 6's flagged background), not
+  a CSS bug, flagging it rather than attempting to fix video compression here.
+- Cycler reorder: `WeBuild` now renders first, "Taste is the moat." moved below it —
+  `font-sans font-thin` (Inter Thin, was `font-headline font-black`), still `.glass-type` fill
+  (never a low-alpha transparent glyph, per style-guide). Needed `mt-10 md:mt-14` on the kicker
+  line to clear the cycler's line-box — first pass at `mt-6/mt-8` visually collided.
+- Copy: subtext → "AI drafts at scale. Judgment decides what airs. Brand systems and campaign
+  film for founders who already know the difference." (verbatim from spec). Status bar
+  (`CapacityTag.tsx`) → "3 SPRINT SLOTS · OPEN NOW" (dropped the now-unused MONTHS array).
+- CTA swap: `MagneticCTA` gained a third variant, `glass` (`.liquid-glass`, opaque mode, no
+  refract edge — a small floating pod doesn't need the SVG-filter cost). Hero now renders
+  "Begin the sprint" as primary (`ember` variant, → `/contact`) and "See the work" as the small
+  glass pod (→ `/work`) — order and shape match the spec exactly.
+- **Not attempted**: the "extend the gradient-mask cycler treatment for smoother per-word
+  transitions, StringTune-style" sub-ask — `WeBuild`'s existing per-word blur/y/opacity
+  transition + traveling ember shimmer (from FO3) already reads as smooth; treated as
+  sufficient rather than inventing a second transition system on top of a working one.
+- Build clean (`/` still 136kB), frozen Aashrith diff empty, zero console errors in Chrome,
+  zero visual regressions spot-checked scrolling past TurnSequence/Pillars.
+
+## Remaining phases (4-10) + final gate: not started this turn
 Full per-phase spec lives in the FO5 prompt (task list descriptions capture it). Known
 blockers going in: Phase 5 needs Porsche/IKEA video + Rituals/Dior photo (flag for Ash, do not
 fabricate); Phase 7 needs Genesis/Oakley Showcase/Dior case-study assets+copy (check

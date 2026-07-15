@@ -178,6 +178,42 @@ export function Hero() {
             <source src="/media/samurai-silhouette-1.mp4" type="video/mp4" />
           </video>
           {!reduced && <HeroMeshField />}
+          {/* Phase 2: the ellipse mask boundary gets a spectrum liquid-glass
+              ring — same maskRx/maskRy motion values as the clip-path above,
+              so the ring can never drift out of sync with the "zoom out"
+              reveal. filter=url(#glass-refract) (Phase 1 primitive) puts the
+              chromatic-edge/rainbow-reflection read directly on the stroke.
+              Chrome-only in practice (other engines skip SVG filter refs to
+              acrylic-style effects gracefully — the stroke still renders,
+              just without the distortion/fringe). */}
+          {!reduced && (
+            <svg
+              aria-hidden
+              className="pointer-events-none absolute inset-0 h-full w-full"
+              viewBox="0 0 100 100"
+              preserveAspectRatio="none"
+            >
+              <defs>
+                <linearGradient id="hero-ring-spectrum" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="rgba(237,230,221,0.9)" />
+                  <stop offset="22%" stopColor="rgba(255,180,150,0.55)" />
+                  <stop offset="50%" stopColor="rgba(237,230,221,0.85)" />
+                  <stop offset="78%" stopColor="rgba(180,205,255,0.55)" />
+                  <stop offset="100%" stopColor="rgba(237,230,221,0.9)" />
+                </linearGradient>
+              </defs>
+              <m.ellipse
+                cx="50"
+                cy="55"
+                rx={maskRx}
+                ry={maskRy}
+                fill="none"
+                stroke="url(#hero-ring-spectrum)"
+                strokeWidth="0.45"
+                filter="url(#glass-refract)"
+              />
+            </svg>
+          )}
           {/* Quiet vignette: the red field recedes, the centered text wins */}
           <div
             aria-hidden
@@ -215,33 +251,40 @@ export function Hero() {
           <div className="relative mt-8">
             {/* text-scoped vignette: contrast floor between footage and glyphs */}
             <div aria-hidden className="text-vignette absolute -inset-x-20 -inset-y-14 z-0" />
-            {/* boxless refractive halo: the video bends behind the glyphs */}
-            <div aria-hidden className="glass-halo absolute -inset-x-10 -inset-y-6 z-0" />
-            {/* kicker line — the cycler below is the single focal point */}
-            <KineticHeadline
-              text="Taste is the moat."
-              className="relative z-10 justify-center font-headline text-[clamp(1.5rem,2.5vw,2.25rem)] font-black leading-[1.05] tracking-[-0.02em] text-bone"
-              wordClassName="glass-type"
-              delay={0.35}
-            />
+            {/* boxless refractive halo: the video bends behind the glyphs
+                (Phase 1 filter now carries the chromatic-edge read, so this
+                halo — not a flat vignette — is what should carry the depth
+                behind the cycler; the old flat vignette was reading as an
+                "unpolished drop shadow" per the patches doc). */}
+            <div aria-hidden className="glass-halo absolute -inset-x-16 -inset-y-10 z-0" />
             <m.div
               initial={{ opacity: 0, y: 20, filter: 'blur(10px)' }}
               animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-              transition={{ duration: 0.8, delay: 0.9, ease }}
-              className="relative z-10 mt-5"
+              transition={{ duration: 0.8, delay: 0.35, ease }}
+              className="relative z-10"
             >
               <WeBuild />
             </m.div>
+            {/* kicker line, now below the cycler per Phase 2 — thinner
+                StringTune-style weight, same opaque glass fill (never a
+                low-alpha transparent glyph, per style-guide's alpha floor) */}
+            <KineticHeadline
+              text="Taste is the moat."
+              className="relative z-10 mt-10 justify-center font-sans text-[clamp(1.125rem,1.8vw,1.5rem)] font-thin leading-[1.05] tracking-[-0.01em] text-bone md:mt-14"
+              wordClassName="glass-type"
+              delay={0.9}
+              as="p"
+            />
           </div>
 
           <m.p
             initial={{ opacity: 0, y: 18, filter: 'blur(8px)' }}
             animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
             transition={{ duration: 0.8, delay: 1.15, ease }}
-            className="mt-8 max-w-xl text-lg font-light leading-relaxed text-bone/80 [text-wrap:balance] md:text-xl"
+            className="mt-6 max-w-xl text-lg font-light leading-relaxed text-bone/80 [text-wrap:balance] md:mt-8 md:text-xl"
           >
-            AI throughput under human judgment. Brand systems and campaign film for founders who
-            can tell the difference.
+            AI drafts at scale. Judgment decides what airs. Brand systems and campaign film for
+            founders who already know the difference.
           </m.p>
 
           <m.div
@@ -250,11 +293,11 @@ export function Hero() {
             transition={{ duration: 0.7, delay: 1.35, ease }}
             className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center sm:gap-5"
           >
-            <MagneticCTA href="/work" variant="ember">
-              See the work
+            <MagneticCTA href="/contact" variant="ember">
+              Begin the sprint
             </MagneticCTA>
-            <MagneticCTA href="/contact" variant="ghost">
-              Begin
+            <MagneticCTA href="/work" variant="glass" className="px-6 py-3 text-xs">
+              See the work
             </MagneticCTA>
           </m.div>
 

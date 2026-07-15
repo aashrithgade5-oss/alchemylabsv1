@@ -1,12 +1,7 @@
-// Build-time capacity line. The month is stamped when the site builds,
-// which is honest enough for a static deploy that ships every few weeks.
-const MONTHS = [
-  'JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE',
-  'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER',
-];
-
+// Phase 2 (Landing_Page_Patches.pdf): "3 SPRINT SLOTS · OPEN NOW" replaces
+// the "taking N projects" framing — less disclosed, reads as scarcity/status
+// rather than a literal headcount that needs updating every sprint.
 export function CapacityTag({ className = '' }: { className?: string }) {
-  const month = MONTHS[new Date().getMonth()];
   return (
     <span
       className={`inline-flex items-center gap-2.5 font-mono text-[10px] tracking-[0.25em] text-ash ${className}`}
@@ -15,7 +10,7 @@ export function CapacityTag({ className = '' }: { className?: string }) {
         <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-ember opacity-60" />
         <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-ember" />
       </span>
-      TAKING 3 PROJECTS · {month}
+      3 SPRINT SLOTS · OPEN NOW
     </span>
   );
 }
