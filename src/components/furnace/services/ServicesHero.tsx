@@ -1,27 +1,38 @@
 'use client';
 
+import { useRef } from 'react';
 import Image from 'next/image';
-import { m } from 'framer-motion';
+import { m, useScroll, useTransform } from 'framer-motion';
 import { KineticHeadline } from '../KineticHeadline';
 import { CapacityTag } from '../CapacityTag';
 
+// Phase 3 (Landing_Page_Patches.pdf): real precedent for the full-bleed
+// "animated" services hero is commit 24ed763 (pre-Next.js SolutionsHub.tsx)
+// — copy verbatim match ("Three Pillars." / "Every brand challenge demands
+// a different instrument..."). Correction to the brief: that background was
+// never a video file, it's this static texture with scroll-driven parallax
+// (scale + y), which is what reads as "animated". Asset was already sitting
+// unused at this exact path — no new asset needed.
 export function ServicesHero() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start start', 'end end'] });
+  const bgScale = useTransform(scrollYProgress, [0, 1], [1, 1.1]);
+  const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '8%']);
+
   return (
-    <section className="relative overflow-hidden bg-void">
-      {/* dimmed still, fading into void before the pillars — b2-bomber-2.png
-          (2912x1632) replaces the under-res b2-bomber-3.webp (1600x896/21KB)
-          flagged in HANDOFF; same subject, native resolution was already
-          sitting unused in public/media, no new asset needed */}
+    <section ref={sectionRef} className="relative overflow-hidden bg-void">
       <div aria-hidden className="absolute inset-0">
-        <Image
-          src="/media/b2-bomber-2.png"
-          alt=""
-          fill
-          priority
-          quality={90}
-          sizes="100vw"
-          className="object-cover object-center opacity-30"
-        />
+        <m.div className="absolute inset-0" style={{ scale: bgScale, y: bgY }}>
+          <Image
+            src="/assets/solutions-bg-texture.png"
+            alt=""
+            fill
+            priority
+            quality={90}
+            sizes="100vw"
+            className="object-cover object-center opacity-[0.28]"
+          />
+        </m.div>
         <div
           className="absolute inset-0"
           style={{
@@ -38,7 +49,7 @@ export function ServicesHero() {
           SERVICES · SCOPED PER PROJECT
         </p>
         <KineticHeadline
-          text="Three ways in."
+          text="Three Pillars."
           className="mt-7 max-w-4xl font-headline text-[clamp(3rem,7vw,7rem)] font-black leading-[1.02] tracking-[-0.04em] text-bone"
           wordClassName="glass-type"
           delay={0.15}
@@ -46,8 +57,17 @@ export function ServicesHero() {
         <m.p
           initial={{ opacity: 0, y: 16, filter: 'blur(8px)' }}
           animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-          transition={{ duration: 1, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-7 max-w-xl text-base leading-relaxed text-bone/75 md:text-lg"
+          transition={{ duration: 1, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          className="mt-6 max-w-2xl text-base leading-relaxed text-bone/75 md:text-lg"
+        >
+          Every brand challenge demands a different instrument. We&rsquo;ve engineered three —
+          each built to compound.
+        </m.p>
+        <m.p
+          initial={{ opacity: 0, y: 16, filter: 'blur(8px)' }}
+          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+          transition={{ duration: 1, delay: 0.75, ease: [0.16, 1, 0.3, 1] }}
+          className="mt-3 max-w-xl text-sm leading-relaxed text-bone/60 md:text-base"
         >
           Every engagement is scoped per project and held to one standard. Printed prices live on
           the five fixed offers below.

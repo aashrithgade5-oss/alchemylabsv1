@@ -90,7 +90,42 @@ Build clean, unchanged bundle sizes (CSS/SVG only, no JS added).
 - Build clean (`/` still 136kB), frozen Aashrith diff empty, zero console errors in Chrome,
   zero visual regressions spot-checked scrolling past TurnSequence/Pillars.
 
-## Remaining phases (4-10) + final gate: not started this turn
+## Asset investigation (Ash-directed, this turn) — Porsche/IKEA NOT found, real substitutes found
+Ash pointed at "media already in git, used in AashrithGadePortfolio and the previous site
+version" for Phase 5/7's blocked tiles. Searched exhaustively: current repo (`grep -rli` across
+all `.ts`/`.tsx`, `find` across `public/`) AND full git history (`git log --all --diff-filter=A
+--name-only`) for `porsche`/`ikea` in any casing — **zero hits, anywhere, ever committed.**
+Not blocking this on a further search; treating as confirmed absent rather than re-checking.
+
+What DOES exist and is real, honest, reusable media (`lib/portfolio.ts`, the single data source
+for the rebuilt Work page per FO4 W3.2):
+- `aether-rituals` (CONCEPT, AI+BRAND SYSTEM): `/assets/aether-rituals-1..5.png` +
+  `/assets/aether-rituals-preview.mp4` + `/media/aether-rituals-text.png`
+- `genesis` (CONCEPT, AI+BRAND SYSTEM): `/assets/genesis-bento.png` + `/media/genesis-text.png`
+- `oakley-concept` (CONCEPT, AI CAMPAIGN): `/assets/oakley-bento.png` + `/media/oakley-text.png`
+- Dior is NOT in `lib/portfolio.ts` but exists as `dior-campaign` inside the FROZEN
+  `src/views/AashrithPortfolio.tsx` ("Dior: Dual Fragrance Campaign", self-initiated concept,
+  real copy) — `/assets/dior-bento.png` + `/media/dior-text.png`. Reusing the ASSET PATHS + copy
+  in a new file is fine (doesn't touch the frozen file); copying the frozen file's JSX would not
+  be.
+Plan: Phase 7's carousel uses these four real entries (Aether Rituals → Genesis → Oakley →
+Dior) verbatim — this is exactly the 4-item set the prompt asked for, no placeholders needed.
+Phase 5's AI Creative Studio / Brand Systems tiles get the Aether Rituals video and Dior/Rituals
+imagery respectively as the best real substitute for the named-but-nonexistent Porsche/IKEA/
+Rituals-photo/Dior-photo assets — flagged honestly as a substitution, not presented as the
+literal asset the prompt named.
+
+## Phase 3 — DONE (this commit)
+`ServicesHero.tsx`: headline "Three ways in." → "Three Pillars." (verbatim precedent copy),
+subtext swapped to the precedent's verbatim line ("Every brand challenge demands a different
+instrument..."), original scoping/pricing line kept as a smaller second paragraph underneath
+(real info, not in the precedent, no reason to delete it). Background swapped from the dimmed
+`b2-bomber-2.png` still to `/assets/solutions-bg-texture.png` (the real precedent asset) with
+scroll-driven parallax (`useScroll`+`useTransform` on `scale`/`y`, ported from the precedent's
+`TextureBg` pattern) — verified in Chrome, texture visible top-right, no console errors. Build
+clean (`/services` still 133kB), frozen diff empty.
+
+## Remaining phases (4-10) + final gate: Phase 7 now unblocked (real assets found), continuing
 Full per-phase spec lives in the FO5 prompt (task list descriptions capture it). Known
 blockers going in: Phase 5 needs Porsche/IKEA video + Rituals/Dior photo (flag for Ash, do not
 fabricate); Phase 7 needs Genesis/Oakley Showcase/Dior case-study assets+copy (check
