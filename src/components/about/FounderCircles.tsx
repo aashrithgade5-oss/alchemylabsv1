@@ -144,7 +144,7 @@ const FounderPanel = memo(({ founder, index }: { founder: typeof founders[0]; in
           style={{ opacity: isHovered ? 0.06 : 0.04 }}
         >
           <span
-            className="font-body font-black text-[12rem] sm:text-[16rem] lg:text-[20rem] uppercase leading-none tracking-[-0.05em] transition-opacity duration-500"
+            className="font-sans font-black text-[12rem] sm:text-[16rem] lg:text-[20rem] uppercase leading-none tracking-[-0.05em] transition-opacity duration-500"
             style={{ color: founder.monogramColor }}
           >
             {founder.monogram}
@@ -159,7 +159,7 @@ const FounderPanel = memo(({ founder, index }: { founder: typeof founders[0]; in
 
         {/* Content */}
         <div className="relative z-10 flex flex-col items-center justify-end text-center h-full px-6 sm:px-10 py-10 sm:py-14 lg:py-12">
-          <h3 className="font-body text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black uppercase tracking-[0.1em] text-porcelain mb-3">
+          <h3 className="font-sans text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black uppercase tracking-[0.1em] text-porcelain mb-3">
             {founder.fullName}
           </h3>
 
@@ -167,13 +167,13 @@ const FounderPanel = memo(({ founder, index }: { founder: typeof founders[0]; in
             {founder.title}
           </p>
 
-          <p className="font-body text-xs sm:text-sm text-porcelain/40 mb-8 max-w-xs leading-relaxed">
+          <p className="font-sans text-xs sm:text-sm text-porcelain/40 mb-8 max-w-xs leading-relaxed">
             {founder.specialty}
           </p>
 
           <Link
             href={founder.slug}
-            className="inline-flex items-center gap-2.5 px-7 py-3 rounded-full text-xs sm:text-sm font-body font-medium transition-all duration-300 group/btn no-glow"
+            className="inline-flex items-center gap-2.5 px-7 py-3 rounded-full text-xs sm:text-sm font-sans font-medium transition-all duration-300 group/btn no-glow"
             style={{
               background: (founder as any).isPink ? 'rgba(236,72,153,0.15)' : 'rgba(220,38,38,0.15)',
               border: `1px solid ${(founder as any).isPink ? 'rgba(236,72,153,0.4)' : 'rgba(220,38,38,0.4)'}`,

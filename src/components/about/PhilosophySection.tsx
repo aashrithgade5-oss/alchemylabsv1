@@ -60,7 +60,7 @@ export const PhilosophySection = memo(() => {
 
                 {/* Decorative quote mark */}
                 <motion.span
-                  className="absolute -left-4 sm:-left-6 -top-6 text-alchemy-red/60 text-7xl sm:text-8xl font-display leading-none select-none"
+                  className="absolute -left-4 sm:-left-6 -top-6 text-alchemy-red/60 text-7xl sm:text-8xl font-headline leading-none select-none"
                   initial={{ opacity: 0, x: -20 }}
                   whileInView={{ opacity: 0.6, x: 0 }}
                   viewport={{ once: true }}
@@ -68,7 +68,7 @@ export const PhilosophySection = memo(() => {
                 >
                   "
                 </motion.span>
-                <blockquote className="font-display text-2xl sm:text-3xl md:text-4xl italic text-alchemy-black leading-[1.3] pl-6 sm:pl-8">
+                <blockquote className="font-playfair text-2xl sm:text-3xl md:text-4xl italic text-alchemy-black leading-[1.3] pl-6 sm:pl-8">
                   We don't chase{' '}
                   <motion.span
                     className="inline-block bg-gradient-to-r from-alchemy-red via-alchemy-pink to-alchemy-red bg-clip-text text-transparent bg-[length:200%_100%]"
@@ -95,14 +95,14 @@ export const PhilosophySection = memo(() => {
           {/* Right — Body copy + stats */}
           <div className="space-y-5 sm:space-y-6">
             <ScrollReveal delay={0.1}>
-              <p className="font-body text-base sm:text-lg text-alchemy-black/70 leading-[1.7]">
+              <p className="font-sans text-base sm:text-lg text-alchemy-black/70 leading-[1.7]">
                 Alchemy Labs was built on a simple belief: brands don't fail because of lack of creativity—they fail because they lack{' '}
                 <strong className="text-alchemy-black/85">structure, taste, and long-term thinking.</strong>
               </p>
             </ScrollReveal>
 
             <ScrollReveal delay={0.2}>
-              <p className="font-body text-base sm:text-lg text-alchemy-black/70 leading-[1.7]">
+              <p className="font-sans text-base sm:text-lg text-alchemy-black/70 leading-[1.7]">
                 We operate at the intersection of brand architecture, culture, and AI-native execution—designing systems that hold attention, scale with intelligence, and age with relevance.
               </p>
             </ScrollReveal>
@@ -111,7 +111,7 @@ export const PhilosophySection = memo(() => {
             <ScrollReveal delay={0.3}>
               <div className="flex items-center gap-8 pt-6 border-t border-alchemy-black/10">
                 <div>
-                  <span className="font-display text-3xl sm:text-4xl italic text-alchemy-red block">
+                  <span className="font-playfair text-3xl sm:text-4xl italic text-alchemy-red block">
                     8+
                   </span>
                   <span className="font-mono text-[10px] sm:text-xs text-alchemy-black/40 tracking-[0.15em] uppercase">
@@ -120,7 +120,7 @@ export const PhilosophySection = memo(() => {
                 </div>
                 <div className="w-px h-10 bg-alchemy-black/10" />
                 <div>
-                  <span className="font-display text-3xl sm:text-4xl italic text-alchemy-red block">
+                  <span className="font-playfair text-3xl sm:text-4xl italic text-alchemy-red block">
                     50+
                   </span>
                   <span className="font-mono text-[10px] sm:text-xs text-alchemy-black/40 tracking-[0.15em] uppercase">

@@ -17,7 +17,7 @@ export const WhoWeServe = memo(() => {
           <div className="w-20 h-px mx-auto mb-10 bg-gradient-to-r from-transparent via-alchemy-red/40 to-transparent" />
 
           <motion.p
-            className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl italic leading-[1.3] tracking-tight text-balance"
+            className="font-playfair text-2xl sm:text-3xl md:text-4xl lg:text-5xl italic leading-[1.3] tracking-tight text-balance"
             initial={{ scale: 0.96, opacity: 0 }}
             whileInView={{ scale: 1, opacity: 1 }}
             viewport={{ once: true, margin: '-80px' }}

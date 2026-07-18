@@ -19,7 +19,7 @@ export const FoundersCTA = memo(() => {
 
       <div className="relative z-10 max-w-3xl mx-auto px-5 sm:px-6 md:px-12 text-center">
         <ScrollReveal>
-          <blockquote className="font-display text-2xl sm:text-3xl md:text-4xl italic text-porcelain leading-[1.35] mb-8 tracking-tight">
+          <blockquote className="font-playfair text-2xl sm:text-3xl md:text-4xl italic text-porcelain leading-[1.35] mb-8 tracking-tight">
             "Alchemy Labs is{' '}
             <span className="text-alchemy-red">not for everyone.</span>
             <br />
@@ -27,7 +27,7 @@ export const FoundersCTA = memo(() => {
             <span className="text-alchemy-red">something that lasts."</span>
           </blockquote>
 
-          <p className="font-body text-base sm:text-lg text-porcelain/45 font-light mb-10">
+          <p className="font-sans text-base sm:text-lg text-porcelain/45 font-light mb-10">
             Ready to build something that matters? Let's talk about your brand.
           </p>
 

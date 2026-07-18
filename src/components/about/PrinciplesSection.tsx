@@ -65,7 +65,7 @@ export const PrinciplesSection = memo(() => {
                 />
 
                 {/* Giant serif numeral background */}
-                <span className="absolute right-6 sm:right-10 top-1/2 -translate-y-1/2 font-display text-[8rem] sm:text-[10rem] md:text-[12rem] italic text-porcelain/[0.025] leading-none pointer-events-none select-none">
+                <span className="absolute right-6 sm:right-10 top-1/2 -translate-y-1/2 font-playfair text-[8rem] sm:text-[10rem] md:text-[12rem] italic text-porcelain/[0.025] leading-none pointer-events-none select-none">
                   0{principle.index}
                 </span>
 
@@ -76,7 +76,7 @@ export const PrinciplesSection = memo(() => {
                   </span>
 
                   {/* Principle text */}
-                  <p className="font-display text-xl sm:text-2xl md:text-4xl lg:text-5xl italic text-porcelain">
+                  <p className="font-playfair text-xl sm:text-2xl md:text-4xl lg:text-5xl italic text-porcelain">
                     {principle.text}
                   </p>
                 </div>

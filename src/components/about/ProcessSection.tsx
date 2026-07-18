@@ -50,14 +50,14 @@ export const AboutProcessSection = memo(() => {
               The Process
             </span>
             <h2 className="tracking-tight mb-4">
-              <span className="font-body text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light text-porcelain/60 block">
+              <span className="font-sans text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light text-porcelain/60 block">
                 A sprint,
               </span>
-              <span className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl italic text-porcelain">
+              <span className="font-playfair text-3xl sm:text-4xl md:text-5xl lg:text-6xl italic text-porcelain">
                 not a saga.
               </span>
             </h2>
-            <p className="font-body text-base sm:text-lg text-porcelain/40 font-light">
+            <p className="font-sans text-base sm:text-lg text-porcelain/40 font-light">
               Three steps. Clear deliverables. No bloated decks.
             </p>
           </div>
@@ -87,7 +87,7 @@ export const AboutProcessSection = memo(() => {
                 />
 
                 {/* Large background number */}
-                <span className="absolute top-4 right-4 font-display text-7xl sm:text-8xl italic text-porcelain/[0.03] leading-none pointer-events-none select-none">
+                <span className="absolute top-4 right-4 font-playfair text-7xl sm:text-8xl italic text-porcelain/[0.03] leading-none pointer-events-none select-none">
                   {step.number}
                 </span>
 
@@ -110,12 +110,12 @@ export const AboutProcessSection = memo(() => {
                 </span>
 
                 {/* Title */}
-                <h4 className="relative z-10 font-display text-xl sm:text-2xl md:text-3xl italic text-alchemy-red mb-3">
+                <h4 className="relative z-10 font-playfair text-xl sm:text-2xl md:text-3xl italic text-alchemy-red mb-3">
                   {step.title}
                 </h4>
 
                 {/* Description */}
-                <p className="relative z-10 font-body text-sm text-porcelain/45 font-light">
+                <p className="relative z-10 font-sans text-sm text-porcelain/45 font-light">
                   {step.description}
                 </p>
               </motion.div>
@@ -126,7 +126,7 @@ export const AboutProcessSection = memo(() => {
         {/* Closing */}
         <ScrollReveal delay={0.5}>
           <div className="text-center pt-8 border-t border-porcelain/5">
-            <p className="font-body text-base sm:text-lg text-porcelain/35 font-light">
+            <p className="font-sans text-base sm:text-lg text-porcelain/35 font-light">
               No bloated decks. No performative strategy.
               <br />
               <span className="text-porcelain/55">Only work that compounds.</span>

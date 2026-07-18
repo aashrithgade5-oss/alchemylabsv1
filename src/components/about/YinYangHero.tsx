@@ -34,9 +34,9 @@ export const YinYangHero = memo(() => {
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start start', 'end start'] });
   const videoScale = useTransform(scrollYProgress, [0, 1], [1, 1.25]);
-  // C-P19: raised from 0.18/0.2→0.03 — the footage read as a dark smear;
-  // it should be present. Layout/scroll logic untouched.
-  const videoOpacity = useTransform(scrollYProgress, [0, 0.5], [isMobile ? 0.38 : 0.35, 0.08]);
+  // C-P19 revert (user: About must keep its pre-continuation essence) —
+  // original dim treatment restored exactly.
+  const videoOpacity = useTransform(scrollYProgress, [0, 0.5], [isMobile ? 0.2 : 0.18, 0.03]);
   const textY = useTransform(scrollYProgress, [0, 1], [0, -70]);
   const overlayOpacity = useTransform(scrollYProgress, [0, 0.8], [0, 0.5]);
 
@@ -124,19 +124,19 @@ export const YinYangHero = memo(() => {
         {/* Title — staggered 3D reveal */}
         <div className="mb-5">
           <ClipReveal delay={0.4}>
-            <span className="font-body text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light text-porcelain/80 block mb-1">
+            <span className="font-sans text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light text-porcelain/80 block mb-1">
               Architects of
             </span>
           </ClipReveal>
           <ClipReveal delay={0.55}>
-            <span className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl italic bg-gradient-to-r from-alchemy-red via-red-400 to-alchemy-red bg-clip-text text-transparent block"
+            <span className="font-playfair text-3xl sm:text-4xl md:text-5xl lg:text-6xl italic bg-gradient-to-r from-alchemy-red via-red-400 to-alchemy-red bg-clip-text text-transparent block"
               style={{ filter: 'drop-shadow(0 0 30px rgba(220,38,38,0.4))' }}
             >
               meaning, systems,
             </span>
           </ClipReveal>
           <ClipReveal delay={0.7}>
-            <span className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl italic text-porcelain block">
+            <span className="font-playfair text-3xl sm:text-4xl md:text-5xl lg:text-6xl italic text-porcelain block">
               and inevitability
             </span>
           </ClipReveal>
@@ -147,7 +147,7 @@ export const YinYangHero = memo(() => {
           initial={{ opacity: 0, y: 15, filter: 'blur(6px)' }}
           animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
           transition={{ duration: 0.7, delay: 0.9, ease: CINEMATIC_EASE }}
-          className="font-body text-base sm:text-lg md:text-xl text-porcelain/45 max-w-2xl leading-relaxed"
+          className="font-sans text-base sm:text-lg md:text-xl text-porcelain/45 max-w-2xl leading-relaxed"
         >
           Two founders. One conviction. Discipline in the system. AI in the execution.
         </motion.p>
