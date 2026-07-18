@@ -1,13 +1,17 @@
 'use client';
 
-import { useRef } from 'react';
+import { lazy, Suspense, useRef } from 'react';
 import { m, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { portfolio } from '@lib/portfolio';
 import { GlassPanel } from '@/components/furnace/GlassPanel';
 import { KineticHeadline } from '@/components/furnace/KineticHeadline';
-import { ClosingBand } from '@/components/furnace/home/ClosingBand';
+// Lazy like the homepage: ClosingBand drags TextHoverEffect + the marquee
+// into First Load otherwise (/work 134→159kB when imported statically).
+const ClosingBand = lazy(() =>
+  import('@/components/furnace/home/ClosingBand').then((mod) => ({ default: mod.ClosingBand })),
+);
 import { AmbientVideo } from '@/components/furnace/home/AmbientVideo';
 
 const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
@@ -203,7 +207,9 @@ export default function Work() {
       </section>
 
       {/* C-P17: identical full-bleed marquee CTA block as the homepage close */}
-      <ClosingBand />
+      <Suspense fallback={null}>
+        <ClosingBand />
+      </Suspense>
     </main>
   );
 }
