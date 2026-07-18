@@ -12,14 +12,13 @@ const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
 export function StillBreak() {
   return (
     <section className="relative h-[85svh] overflow-hidden">
-      {/* Phase 6 (Landing_Page_Patches.pdf): split-frames-1.webp was
-          1600x896/19KB, flagged under-res for full bleed since FO4 P6.
-          split-frames-2.png (2912x1632, same visual family, native res) was
-          sitting completely unused in public/media — real replacement, not
-          an upscale. split-frames-3.png is the OTHER native-res sibling,
-          already spoken for by services/pillars.ts. */}
+      {/* C-P15: the split-frames composition's hard center seam read as a
+          glitch/artifact behind the line (user report). Replaced with
+          b2-bomber-2 (2912x1632 native → 2560w webp, no upscale) — unique
+          on the site, and the stealth-precision tone matches "founders who
+          can tell the difference". */}
       <Image
-        src="/media/split-frames-2.png"
+        src="/media/b2-bomber-2.webp"
         alt=""
         fill
         quality={90}
