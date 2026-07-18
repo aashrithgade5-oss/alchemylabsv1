@@ -24,3 +24,6 @@ dist-ssr
 *.sw?
 .vercel
 .next
+
+# raw source footage stays out of git (compressed derivatives are committed)
+public/media/*.mov
