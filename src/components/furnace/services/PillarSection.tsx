@@ -56,6 +56,16 @@ export function PillarSection({ pillar, index }: { pillar: Pillar; index: number
 
   return (
     <section className="relative overflow-hidden">
+      {/* C-P24: the Japanese red was reading too faint — a directional ember
+          wash bleeds from the numeral side so every pillar sits in red air */}
+      <div
+        aria-hidden
+        className="absolute inset-y-0 w-2/3"
+        style={{
+          [numeralRight ? 'right' : 'left']: 0,
+          background: `radial-gradient(48rem 36rem at ${numeralRight ? '100%' : '0%'} 40%, rgba(255,77,28,0.13) 0%, rgba(178,34,20,0.06) 45%, transparent 72%)`,
+        }}
+      />
       <span
         aria-hidden
         className={`pointer-events-none absolute top-6 select-none font-sans text-[10rem] leading-none text-ember/[0.15] md:top-2 md:text-[18rem] ${edge}`}
@@ -95,7 +105,7 @@ export function PillarSection({ pillar, index }: { pillar: Pillar; index: number
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-80px' }}
             transition={{ duration: 0.9, ease }}
-            className="mt-12"
+            className="relative z-10 mt-12"
           >
             {/* GlassFluted: Phase-2 Paper Shaders prototype, this call site only */}
             <GlassPanel className="px-7 py-2 md:px-9">
@@ -126,8 +136,17 @@ export function PillarSection({ pillar, index }: { pillar: Pillar; index: number
         </div>
 
         {/* cinematic still, opposite the numeral — C-P20: cursor 3D-tilt
-            (same treatment as the landing service boxes) + category glow */}
-        <SmoothReveal className="hidden md:block">
+            (same treatment as the landing service boxes) + category glow.
+            C-P24 overlapping bento: the still rides INTO the offer stack's
+            column (negative margin, higher z, slight counter-rotation) so
+            the two read as one overlapped composition, not two columns. */}
+        <SmoothReveal
+          className={`relative z-20 hidden md:block ${
+            numeralRight
+              ? 'md:-mr-16 md:rotate-[1.5deg] lg:-mr-24'
+              : 'md:-ml-16 md:rotate-[-1.5deg] lg:-ml-24'
+          }`}
+        >
           <TiltStill accent={accents[index % accents.length]}>
             <Image
               src={pillar.still}

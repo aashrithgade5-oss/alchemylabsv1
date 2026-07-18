@@ -22,6 +22,11 @@ const ServicesClosing = lazy(() =>
     default: m.ServicesClosing,
   })),
 );
+// C-P24: the page's editorial soul beat — same scroll-bound pull-quote
+// primitive (with meteors) the homepage uses.
+const Intertext = lazy(() =>
+  import('@/components/furnace/home/Intertext').then((m) => ({ default: m.Intertext })),
+);
 
 export default function ServicesPage() {
   return (
@@ -35,6 +40,10 @@ export default function ServicesPage() {
         <PillarSection key={pillar.slug} pillar={pillar} index={i} />
       ))}
       <Suspense fallback={null}>
+        <Intertext eyebrow="THE STANDARD" compact>
+          <span className="block">Three instruments.</span>
+          <span className="block">One hand behind them.</span>
+        </Intertext>
         <FiveGrid />
         <FAQ />
         <ServicesClosing />

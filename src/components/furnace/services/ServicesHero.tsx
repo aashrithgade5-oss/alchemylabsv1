@@ -42,6 +42,15 @@ export function ServicesHero() {
               'linear-gradient(to bottom, rgba(10,9,8,0.35) 0%, rgba(10,9,8,0.55) 55%, rgba(10,9,8,1) 100%)',
           }}
         />
+        {/* C-P24: the Japanese red, present from the first frame */}
+        <div
+          aria-hidden
+          className="absolute inset-0"
+          style={{
+            background:
+              'radial-gradient(60% 55% at 82% 18%, rgba(255,77,28,0.17) 0%, rgba(178,34,20,0.07) 45%, transparent 72%)',
+          }}
+        />
       </div>
       {/* pb reduced from pb-20/28: the first PillarSection's own pt-24/32
           stacked on top of that measured a 240px dead gap before its
