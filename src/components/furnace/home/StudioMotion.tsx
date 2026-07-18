@@ -29,9 +29,12 @@ export function StudioMotion() {
             render fully invisible in Chrome — see index.css for the
             verification notes — so this uses the proven opaque glass-type
             mechanism at a lighter, higher-key value instead. */}
+        {/* C-P16 descender fix: bg-clip:text renders glyph parts OUTSIDE the
+            span's box as transparent — at leading-[1.05] the "g" descender
+            fell below the line box and read as clipped. 1.25 contains it. */}
         <ScrollScrub
           text="The forge never cools."
-          className="relative z-10 justify-center font-sans text-[clamp(2rem,4vw,3.5rem)] font-medium leading-[1.05] tracking-[-0.03em] text-bone"
+          className="relative z-10 justify-center font-sans text-[clamp(2rem,4vw,3.5rem)] font-medium leading-[1.25] tracking-[-0.03em] text-bone"
           wordClassName="glass-type-thin"
         />
       </div>

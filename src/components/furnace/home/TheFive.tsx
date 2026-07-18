@@ -49,7 +49,19 @@ function ProductCard({
     // the scroll, confirmed in an earlier session (same reasoning as the
     // old snap-track, still applies to a translating marquee track).
     <CardContainer containerClassName="!py-0 w-[20rem] shrink-0" className="!w-full">
-      <CardBody className="glass-solid group relative flex h-[26rem] w-full flex-col overflow-hidden rounded-2xl !transform-none transition-[box-shadow,border-color] duration-500 hover:border-ember/40 hover:shadow-[0_16px_48px_rgba(255,77,28,0.14)]">
+      {/* C-P16: hover glow is color-coded per service via the palette-drawn
+          product.accent. CardBody takes no style prop — the vars ride a
+          display:contents wrapper (custom properties inherit through it). */}
+      <div
+        className="contents"
+        style={
+          {
+            '--svc-edge': `${product.accent}66`,
+            '--svc-glow': `0 16px 48px ${product.accent}29`,
+          } as React.CSSProperties
+        }
+      >
+      <CardBody className="glass-solid group relative flex h-[26rem] w-full flex-col overflow-hidden rounded-2xl !transform-none transition-[box-shadow,border-color] duration-500 hover:border-[color:var(--svc-edge)] hover:shadow-[var(--svc-glow)]">
         <AmbientVideo
           src={TEARDOWN_REEL.src}
           poster={TEARDOWN_REEL.poster}
@@ -88,6 +100,7 @@ function ProductCard({
           </CardItem>
         </div>
       </CardBody>
+      </div>
     </CardContainer>
   );
 }
@@ -98,8 +111,8 @@ export function TheFive() {
   const reduced = useReducedMotion();
   // reduced motion: the CSS animation is disabled globally (index.css), so
   // the duplicated set would otherwise just sit there as a static double
-  // listing — render the single real set instead.
-  const trackItems = reduced ? products : [...products, ...products];
+  // listing — render the single half instead.
+  const halves = reduced ? [0] : [0, 1];
 
   return (
     <section id="the-five" className="relative overflow-hidden">
@@ -149,17 +162,23 @@ export function TheFive() {
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
       >
-        <div
-          className="furnace-marquee-track flex w-max gap-5 px-6 md:px-12 lg:px-16"
-          data-paused={paused}
-        >
-          {trackItems.map((product, i) => (
-            <ProductCard
-              key={`${product.id}-${i}`}
-              product={product}
-              tint={cardTints[i % cardTints.length]}
-              onBuy={setSelected}
-            />
+        {/* C-P16 seam fix: the old single flex track carried a leading px-6
+            pad + a dangling gap, so translateX(-50%) never landed on an
+            identical frame — the visible jump read as reverse playback.
+            Two IDENTICAL half groups (each pr-5 so the boundary gap matches
+            the internal gap-5) make -50% loop with no seam. */}
+        <div className="furnace-marquee-track flex w-max" data-paused={paused}>
+          {halves.map((half) => (
+            <div key={half} aria-hidden={half === 1} className="flex shrink-0 gap-5 pr-5">
+              {products.map((product, i) => (
+                <ProductCard
+                  key={`${half}-${product.id}`}
+                  product={product}
+                  tint={cardTints[i % cardTints.length]}
+                  onBuy={setSelected}
+                />
+              ))}
+            </div>
           ))}
         </div>
       </div>
