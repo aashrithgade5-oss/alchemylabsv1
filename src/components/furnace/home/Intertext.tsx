@@ -8,6 +8,7 @@ import {
   useScroll,
   useTransform,
 } from 'framer-motion';
+import { Meteors } from '../Meteors';
 
 /**
  * Scroll-bound editorial interlude: the line sharpens out of a blur as it
@@ -55,6 +56,8 @@ export function Intertext({
             'radial-gradient(46rem 32rem at 100% 50%, rgba(178,34,20,0.12) 0%, transparent 70%)',
         }}
       />
+      {/* R-7b: meteors live on pull-quote moments only (never heroes/CTAs) */}
+      <Meteors />
       <m.div
         style={reduced ? undefined : { opacity, filter, y }}
         className="max-w-4xl text-center"
