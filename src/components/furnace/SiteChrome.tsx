@@ -20,10 +20,10 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
 
   // /contact IS the CTA destination this band points to — showing it there
   // would just loop the visitor back onto the page they're already on.
-  // Homepage already ends in ClosingBand, its own dedicated closer with the
-  // same "bring the brand, Begin" beat — stacking this one right after it
-  // would read as the same CTA said twice.
-  const skipBottomCTA = pathname === '/contact' || pathname === '/';
+  // Homepage and (since C-P17) Work both end in ClosingBand, their own
+  // dedicated closer with the same "bring the brand, Begin" beat —
+  // stacking this one right after it would read as the same CTA twice.
+  const skipBottomCTA = pathname === '/contact' || pathname === '/' || pathname === '/work';
 
   return (
     <>

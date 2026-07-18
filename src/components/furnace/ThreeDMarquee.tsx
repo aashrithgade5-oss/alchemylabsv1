@@ -1,22 +1,27 @@
 import Image from 'next/image';
 
-// R-7e: contained 3D marquee band (Landing + Work bottoms only — never full
-// viewport). Pure CSS perspective/transform (.marquee3d-col, index.css) — no
-// WebGL, no Aceternity install, no new dependency. Populated with real
-// Work-page imagery, not placeholders. Server-renderable: no hooks, no
-// randomness; reduced motion stops the columns via the CSS media query.
+// R-7e / C-P17: 3D marquee — contained band OR full-bleed CTA background
+// (`background` prop). Pure CSS perspective/transform (.marquee3d-col,
+// index.css) — no WebGL, no new dependency. C-P17: 12 UNIQUE assets, no
+// repeats across columns, all on the consolidated /media root.
+// Server-renderable: no hooks, no randomness; reduced motion stops the
+// columns via the CSS media query.
 const COLUMNS: string[][] = [
-  ['/assets/aether-bento.png', '/media/cinematic-still-1.png', '/assets/oakley-bento.png'],
-  ['/assets/genesis-bento.png', '/media/cinematic-still-2.png', '/assets/sequentian-5.png'],
-  ['/assets/dior-bento.png', '/media/cinematic-still-3.png', '/assets/aether-bento.png'],
-  ['/assets/oakley-bento.png', '/assets/thought-leadership-1.png', '/assets/genesis-bento.png'],
+  ['/media/aether-bento.png', '/media/cinematic-still-1.png', '/media/b2-bomber-1.png'],
+  ['/media/genesis-bento.png', '/media/cinematic-still-2.png', '/media/sequentian-5.png'],
+  ['/media/dior-bento.png', '/media/cinematic-still-3.png', '/media/lone-figure-2.png'],
+  ['/media/oakley-bento.png', '/media/thought-leadership-1.png', '/media/porsche-showreel-poster.jpg'],
 ];
 
-export function ThreeDMarquee() {
+export function ThreeDMarquee({ background = false }: { background?: boolean }) {
   return (
     <section
       aria-hidden
-      className="relative h-[320px] overflow-hidden border-y border-line bg-void md:h-[400px]"
+      className={
+        background
+          ? 'absolute inset-0 overflow-hidden'
+          : 'relative h-[320px] overflow-hidden border-y border-line bg-void md:h-[400px]'
+      }
     >
       <div className="absolute inset-0 overflow-hidden">
         {/* Orthographic (no perspective): with a 900px perspective the huge

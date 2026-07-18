@@ -6,6 +6,7 @@ import { AnimatePresence, m, useReducedMotion } from 'framer-motion';
 import { KineticHeadline } from '../KineticHeadline';
 import { MagneticCTA } from '../MagneticCTA';
 import { TextHoverEffect } from '@/components/ui/text-hover-effect';
+import { ThreeDMarquee } from '../ThreeDMarquee';
 import { useTilt } from '@/hooks/useTilt';
 
 const WORDS = ['IDENTITY', 'CAMPAIGNS', 'FILM', 'STRATEGY'];
@@ -70,25 +71,19 @@ function TiltCTA({ children }: { children: React.ReactNode }) {
 export function ClosingBand() {
   return (
     <section className="relative overflow-hidden border-t border-line bg-void">
-      {/* Phase 10: "the CTA needs to be exactly the same as the one on
-          other pages, where it's a full-bleed background CTA with the
-          perfect background that is an image" — other pages get this
-          treatment from BottomCTA.tsx (footer-bg.png, blurred/scaled full
-          bleed + gradient + radial ember glow); ClosingBand's own video
-          background read as "lacklustre/solid black" by comparison. Same
-          recipe here for consistency, ClosingBand keeps its own richer
-          content (wordmark, headline, cycler, ALCHEMY mark). */}
+      {/* C-P17: full-bleed closing CTA with the infinite 3D marquee as the
+          visual background layer (replaces the blurred footer-bg photo).
+          Dim + gradient + ember radial keep the centered text sovereign.
+          This same block now closes the Work page too. */}
       <div aria-hidden className="absolute inset-0">
-        <Image
-          src="/assets/footer-bg.png"
-          alt=""
-          fill
-          className="scale-110 object-cover opacity-60 blur-[8px] saturate-[1.2]"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-void via-void/70 to-void/40" />
+        <div className="absolute inset-0 opacity-50">
+          <ThreeDMarquee background />
+        </div>
+        <div className="absolute inset-0 bg-void/55" />
+        <div className="absolute inset-0 bg-gradient-to-t from-void via-void/50 to-void/70" />
         <div className="absolute bottom-0 left-1/2 h-[60%] w-[120%] -translate-x-1/2 bg-[radial-gradient(ellipse_at_center,rgba(255,77,28,0.14)_0%,transparent_70%)]" />
       </div>
-      <div className="relative mx-auto flex max-w-4xl flex-col items-center px-6 py-24 text-center md:py-32">
+      <div className="relative mx-auto flex min-h-[92svh] max-w-5xl flex-col items-center justify-center px-6 py-24 text-center md:py-32">
         {/* Phase 10: logo beside the wordmark, one line (was stacked) */}
         <m.div
           initial={{ opacity: 0, scale: 0.96 }}
@@ -147,7 +142,7 @@ export function ClosingBand() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className="relative mt-2 h-44 w-full max-w-4xl md:h-72"
+          className="relative mt-2 h-52 w-full max-w-5xl md:h-80"
         >
           <TextHoverEffect text="ALCHEMY" />
           <div className="pointer-events-none absolute inset-0 flex items-center justify-center">

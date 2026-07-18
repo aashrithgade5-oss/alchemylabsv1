@@ -62,9 +62,6 @@ const StudioMotion = lazy(() =>
 const ClosingBand = lazy(() =>
   import('@/components/furnace/home/ClosingBand').then((m) => ({ default: m.ClosingBand })),
 );
-const ThreeDMarquee = lazy(() =>
-  import('@/components/furnace/ThreeDMarquee').then((m) => ({ default: m.ThreeDMarquee })),
-);
 
 export default function HomePage() {
   return (
@@ -90,7 +87,6 @@ export default function HomePage() {
         <TheFive />
         <ScrubBeat eyebrow="THE STANDARD" text={['One studio.', 'One bar.', 'No exceptions.']} compact />
         <StudioMotion />
-        <ThreeDMarquee />
         <ClosingBand />
       </Suspense>
     </main>

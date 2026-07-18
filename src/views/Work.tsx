@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { portfolio } from '@lib/portfolio';
 import { GlassPanel } from '@/components/furnace/GlassPanel';
 import { KineticHeadline } from '@/components/furnace/KineticHeadline';
-import { ThreeDMarquee } from '@/components/furnace/ThreeDMarquee';
+import { ClosingBand } from '@/components/furnace/home/ClosingBand';
 import { AmbientVideo } from '@/components/furnace/home/AmbientVideo';
 
 const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
@@ -158,23 +158,8 @@ export default function Work() {
         </m.div>
       </section>
 
-      <ThreeDMarquee />
-
-      <section className="relative px-6 pb-28 pt-20 text-center md:px-12">
-        <m.div
-          initial={{ opacity: 0, y: 32 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.9, ease }}
-        >
-          <Link
-            href="/contact"
-            className="font-mono text-xs tracking-[0.2em] text-bone/70 transition-colors duration-300 hover:text-bone"
-          >
-            START A PROJECT →
-          </Link>
-        </m.div>
-      </section>
+      {/* C-P17: identical full-bleed marquee CTA block as the homepage close */}
+      <ClosingBand />
     </main>
   );
 }
