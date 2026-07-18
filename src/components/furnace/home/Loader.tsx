@@ -16,7 +16,8 @@ import {
 import { DecodeText } from '../DecodeText';
 
 const SEEN_KEY = 'furnace-loader-seen';
-const FILL_SECONDS = 2.2;
+// R-P8: 2.2 → 2.8s — slower, more cinematic fill (still hard-capped).
+const FILL_SECONDS = 2.8;
 
 // Lazy WebGL chunk (same pattern as GlassFluted) so the shader lib never
 // lands in homepage First Load JS; the static logo below is the fallback.
@@ -78,7 +79,9 @@ export function Loader() {
           transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
           className="fixed inset-0 z-[90] flex flex-col items-center justify-center bg-void"
         >
-          <div className="relative h-[min(56vw,17rem)] w-[min(56vw,17rem)]">
+          {/* R-P8: mark scaled up to ~50vh on desktop (was 17rem ≈ 25vh) —
+              the opening statement, not a corner spinner */}
+          <div className="relative h-[min(60vw,30rem)] w-[min(60vw,30rem)]">
             {/* unfilled state: the mark as a faint outline */}
             {/* scale matches the shader's scale={0.6} so outline and metal register */}
             <Image
@@ -93,15 +96,18 @@ export function Loader() {
               <LiquidMetal
                 image="/assets/alchemy-minimal-logo.png"
                 colorBack="#00000000"
-                colorTint="#ffffff"
+                // R-P8 recolor: cream tint + warm-shifted fringe (red up,
+                // blue down) puts the metal in the bone/ember family instead
+                // of cold white; speed eased for a slower, cinematic read.
+                colorTint="#EDE6DD"
                 repetition={2}
                 softness={0.1}
-                shiftRed={0.3}
-                shiftBlue={0.3}
+                shiftRed={0.5}
+                shiftBlue={0.15}
                 distortion={0.07}
                 contour={0.4}
                 angle={70}
-                speed={1}
+                speed={0.75}
                 scale={0.6}
                 fit="contain"
                 style={{ width: '100%', height: '100%' }}
