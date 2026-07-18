@@ -5,24 +5,15 @@ import { motion } from 'framer-motion';
 import { SEOHead } from '@/components/SEOHead';
 import { YinYangHero } from '@/components/about/YinYangHero';
 import { FounderCircles } from '@/components/about/FounderCircles';
-import { PhilosophySection } from '@/components/about/PhilosophySection';
 import { LazySection, SectionSkeleton } from '@/components/LazySection';
 
-const AboutProcessSection = lazy(async () => {
-  const module = await import('@/components/about/ProcessSection');
-  return { default: module.AboutProcessSection };
-});
-const PrinciplesSection = lazy(async () => {
-  const module = await import('@/components/about/PrinciplesSection');
-  return { default: module.PrinciplesSection };
-});
-const WhoWeServe = lazy(async () => {
-  const module = await import('@/components/about/WhoWeServe');
-  return { default: module.WhoWeServe };
-});
-const FoundersCTA = lazy(async () => {
-  const module = await import('@/components/about/FoundersCTA');
-  return { default: module.FoundersCTA };
+// C-P24 About overhaul: everything below FounderCircles is the new furnace
+// story (AboutStory) — Philosophy/Process/Principles/WhoWeServe/FoundersCTA
+// are retired (files kept on disk, no longer imported). BottomCTA closes
+// the page site-wide.
+const AboutStory = lazy(async () => {
+  const module = await import('@/components/about/AboutStory');
+  return { default: module.AboutStory };
 });
 
 const RevealSection = memo(({ children, direction = 'up', delay = 0 }: { children: React.ReactNode; direction?: 'up' | 'left' | 'right'; delay?: number }) => {
@@ -87,45 +78,9 @@ const About = memo(() => {
 
       <SectionDivider />
 
-      <RevealSection direction="left" delay={0.05}>
-        <PhilosophySection />
-      </RevealSection>
-
-      <SectionDivider />
-
-      <LazySection minHeight="500px" skeleton={<SectionSkeleton variant="default" />}>
+      <LazySection minHeight="900px" skeleton={<SectionSkeleton variant="default" />}>
         <Suspense fallback={<SectionSkeleton variant="default" />}>
-          <RevealSection direction="right" delay={0.05}>
-            <AboutProcessSection />
-          </RevealSection>
-        </Suspense>
-      </LazySection>
-
-      <SectionDivider />
-
-      <LazySection minHeight="350px" skeleton={<SectionSkeleton variant="grid" />}>
-        <Suspense fallback={<SectionSkeleton variant="grid" />}>
-          <RevealSection direction="up">
-            <PrinciplesSection />
-          </RevealSection>
-        </Suspense>
-      </LazySection>
-
-      <SectionDivider />
-
-      <LazySection minHeight="300px" skeleton={<SectionSkeleton variant="text" />}>
-        <Suspense fallback={<SectionSkeleton variant="text" />}>
-          <RevealSection direction="left">
-            <WhoWeServe />
-          </RevealSection>
-        </Suspense>
-      </LazySection>
-
-      <LazySection minHeight="350px" skeleton={<SectionSkeleton variant="default" />}>
-        <Suspense fallback={<SectionSkeleton variant="default" />}>
-          <RevealSection direction="up" delay={0.05}>
-            <FoundersCTA />
-          </RevealSection>
+          <AboutStory />
         </Suspense>
       </LazySection>
     </div>
