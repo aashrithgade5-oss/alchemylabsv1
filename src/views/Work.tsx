@@ -1,10 +1,13 @@
 'use client';
 
-import { m } from 'framer-motion';
+import { useRef } from 'react';
+import { m, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { portfolio } from '@lib/portfolio';
 import { GlassPanel } from '@/components/furnace/GlassPanel';
+import { KineticHeadline } from '@/components/furnace/KineticHeadline';
+import { AmbientVideo } from '@/components/furnace/home/AmbientVideo';
 import { evaBrandCollaborations } from '@/data/foundersData';
 
 const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
@@ -55,25 +58,49 @@ function WorkTile({ entry, large }: { entry: (typeof portfolio)[number]; large: 
 
 export default function Work() {
   const [featured, ...rest] = portfolio;
+  const heroRef = useRef<HTMLElement>(null);
+  // Same parallax recipe as ServicesHero — that page is the reference
+  // pattern for full-bleed heroes; only the asset differs (unused
+  // compressed loop red-slats-wide.mp4, 3.9MB + poster).
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end end'] });
+  const bgScale = useTransform(scrollYProgress, [0, 1], [1, 1.1]);
+  const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '8%']);
 
   return (
     <main className="relative font-sans">
-      <section className="relative px-6 pb-16 pt-40 md:px-12 md:pt-48">
-        <div className="mx-auto max-w-4xl text-center">
-          <p className="font-mono text-[10px] tracking-[0.3em] text-ash">SELECTED WORK</p>
-          <m.h1
-            initial={{ opacity: 0, y: 24, filter: 'blur(10px)' }}
-            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-            transition={{ duration: 0.9, ease }}
-            className="mx-auto mt-6 font-headline text-[clamp(2.5rem,6vw,5rem)] font-black leading-[1.05] tracking-[-0.03em] text-bone"
-          >
-            Proof over polish.
-          </m.h1>
+      <section ref={heroRef} className="relative min-h-[70vh] overflow-hidden bg-void">
+        <div aria-hidden className="absolute inset-0">
+          <m.div className="absolute inset-0" style={{ scale: bgScale, y: bgY }}>
+            <AmbientVideo
+              src="/media/red-slats-wide.mp4"
+              poster="/media/red-slats-wide-poster.jpg"
+              className="h-full w-full object-cover object-center opacity-[0.28]"
+            />
+          </m.div>
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                'linear-gradient(to bottom, rgba(10,9,8,0.35) 0%, rgba(10,9,8,0.55) 55%, rgba(10,9,8,1) 100%)',
+            }}
+          />
+        </div>
+        <div className="relative mx-auto max-w-6xl px-6 pb-16 pt-40 md:px-12 md:pb-20 md:pt-48 lg:px-16">
+          <p className="font-mono text-[10px] tracking-[0.3em] text-bone/70 md:text-[11px]">
+            SELECTED WORK
+          </p>
+          <KineticHeadline
+            as="h1"
+            text="Proof over polish."
+            className="mt-7 max-w-4xl font-headline text-[clamp(3rem,7vw,7rem)] font-black leading-[1.02] tracking-[-0.04em] text-bone"
+            wordClassName="glass-type"
+            delay={0.15}
+          />
           <m.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="mt-5 font-playfair text-xl italic text-bone/75 md:text-2xl"
+            initial={{ opacity: 0, y: 16, filter: 'blur(8px)' }}
+            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+            transition={{ duration: 1, delay: 0.5, ease }}
+            className="mt-6 max-w-xl font-playfair text-xl italic text-bone/75 md:text-2xl"
           >
             The work speaks in befores and afters.
           </m.p>

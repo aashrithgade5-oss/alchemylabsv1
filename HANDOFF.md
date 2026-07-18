@@ -799,3 +799,4 @@ Stale-prompt reconciliation: user confirmed Inter stays primary; Playfair Displa
 
 - R-P1 typography: Playfair weight 700→variable/regular in `app/layout.tsx` (weight key removed, style italic only); nav wordmark added in `Navigation.tsx` ("Alchemy" Playfair italic + "LABS" Geist Mono small-caps, hidden <sm); CLAUDE.md fonts law relocked 2026-07-18. Inter untouched (it is the law, not a regression).
 - R-P2 about: YinYangHero subhead swapped to "Two founders. One conviction. Discipline in the system. AI in the execution." Headline + bg video + scroll indicator untouched.
+- R-P3 work hero: semi-banner replaced with full-bleed hero mirroring ServicesHero 1:1 (parallax scale/y wrapper, gradient-to-void scrim, mono eyebrow, glass-type KineticHeadline "Proof over polish.", Playfair line). Asset: previously-unused red-slats-wide.mp4 (3.9MB compressed + poster) via AmbientVideo (preload=none, inView-gated). H1 also gains glass-type, closing a law gap.
