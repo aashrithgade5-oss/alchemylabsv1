@@ -12,9 +12,10 @@ import '@/index.css';
 
 // Phase 0 type law (supersedes the Geist/Fraunces lock, see CLAUDE.md):
 // Inter (variable weight, Thin..Black) carries all display + body text on
-// Furnace routes; Playfair Display Bold Italic is the ONLY italic anywhere
-// on the site (pull-quotes, founder note, work-carousel proof line, "down
-// the below" subtext); Geist Mono is untouched (eyebrows/technical labels).
+// Furnace routes; Playfair Display Italic (regular weight, variable axis —
+// NOT bold, relocked 2026-07-18) is the ONLY italic anywhere on the site
+// (pull-quotes, founder note, nav wordmark, work-carousel proof line);
+// Geist Mono is untouched (eyebrows/technical labels).
 // GeistSans is kept ONLY to feed the frozen `--font-display` alias the
 // Aashrith portfolio depends on — never repoint that alias.
 const inter = Inter({
@@ -24,7 +25,6 @@ const inter = Inter({
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
-  weight: ['700'],
   style: ['italic'],
   variable: '--font-playfair',
 });

@@ -3,14 +3,16 @@
 This file exists because font/token decisions kept reverting across sessions.
 Everything here is NON-NEGOTIABLE and must be re-verified at the END of every session.
 
-## FONTS (relocked 2026-07-15 — Phase 0 type law, supersedes the Geist/Fraunces lock)
+## FONTS (relocked 2026-07-18 — Playfair weight change; otherwise the 2026-07-15 Phase 0 type law)
 - Display / body (H1/H2 and all prose): **Inter, variable weight** (`font-sans` /
   `font-headline`, both point to `--font-inter`) — Thin for delicate treatments
   (e.g. "Taste is the moat."), Black for the campaign headline. `.glass-type` per
   word on display headings.
 - Italic / quote / tagline accent — the ONLY italic anywhere on the site: **Playfair
-  Display Bold Italic** (`font-playfair` + `italic`). Pull-quotes, founder note,
-  work-carousel proof line, "down the below" subtext. Never on any H1/H2.
+  Display Italic, REGULAR weight (variable axis, NOT bold — user relock 2026-07-18)**
+  (`font-playfair` + `italic`). Pull-quotes, founder note, nav wordmark ("Alchemy" +
+  LABS in Geist Mono small-caps), work-carousel proof line, "down the below" subtext.
+  Never on any H1/H2.
 - Eyebrows / labels / technical: **Geist Mono** (`font-mono`) — untouched by this pass.
 - Geist Sans is retired as a body/display face. It is kept installed ONLY to feed the
   frozen `--font-display` alias below — never assign `font-sans`/`font-headline`

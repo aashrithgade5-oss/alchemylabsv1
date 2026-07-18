@@ -790,3 +790,11 @@ Graph flagged 3 weak "reveal variant" communities + isolated Navigation node. Ve
 - 3d-card integration: user has not named a target section.
 
 **Verification protocol note:** all desktop claims above have in-session screenshots (hero swap x2 frames, services pillars/FiveGrid/PaymentSheet, contact preselect+founder note+Calendly calendar).
+
+---
+
+## SESSION 2026-07-18 — July-13 remediation prompt, reconciled against FO5 law
+
+Stale-prompt reconciliation: user confirmed Inter stays primary; Playfair Display Italic demoted to REGULAR weight (not Bold) as the sole italic accent. Executing the nine phases "sensibly" against current code.
+
+- R-P1 typography: Playfair weight 700→variable/regular in `app/layout.tsx` (weight key removed, style italic only); nav wordmark added in `Navigation.tsx` ("Alchemy" Playfair italic + "LABS" Geist Mono small-caps, hidden <sm); CLAUDE.md fonts law relocked 2026-07-18. Inter untouched (it is the law, not a regression).

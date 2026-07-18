@@ -52,15 +52,20 @@ export function FurnaceNavigation() {
         {scrolled && (
           <div aria-hidden className="glass-refract-edge pointer-events-none absolute inset-0 rounded-[inherit]" />
         )}
-        <Link href="/" className="relative flex items-center" aria-label="Alchemy Labs, home">
+        <Link href="/" className="relative flex items-center gap-2.5" aria-label="Alchemy Labs, home">
           <Image
             src="/assets/alchemy-minimal-logo.png"
-            alt="Alchemy Labs"
+            alt=""
             width={38}
             height={38}
             priority
             className="transition-transform duration-500 hover:rotate-[30deg]"
           />
+          {/* Wordmark: Playfair Italic accent + LABS in mono small-caps (type law) */}
+          <span className="hidden items-baseline gap-1.5 sm:flex">
+            <span className="font-playfair text-lg italic leading-none text-bone">Alchemy</span>
+            <span className="font-mono text-[10px] tracking-[0.3em] text-bone/70">LABS</span>
+          </span>
         </Link>
 
         <ul className="hidden items-center gap-7 md:flex">
