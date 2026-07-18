@@ -18,6 +18,10 @@ const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
 // unused video) for the studio tile, and the Dior concept campaign still
 // (used elsewhere only inside the FROZEN Aashrith file — reusing the asset
 // PATH here doesn't touch that file) for the brand-systems tile.
+// C-P13/P15 media de-dup (all paths on the consolidated /media root):
+// 01 keeps Aether Rituals (correct fit), 02 swaps Dior→Genesis (Dior was a
+// repeat of the proof carousel), 03 drops the landing hero-video reuse for
+// the previously-unused red-cloak-water loop.
 const pillars = [
   {
     index: '01',
@@ -25,15 +29,15 @@ const pillars = [
     line: 'Campaign film and imagery from an AI pipeline, directed by hand.',
     media: {
       type: 'video' as const,
-      src: '/assets/aether-rituals-preview.mp4',
-      poster: '/assets/aether-rituals-preview-poster.jpg',
+      src: '/media/aether-rituals-preview.mp4',
+      poster: '/media/aether-rituals-preview-poster.jpg',
     },
   },
   {
     index: '02',
     tag: 'BRAND SYSTEMS',
     line: 'Identity built to survive contact with the market.',
-    media: { type: 'image' as const, src: '/assets/dior-bento.png' },
+    media: { type: 'image' as const, src: '/media/genesis-bento.png' },
   },
   {
     index: '03',
@@ -41,8 +45,8 @@ const pillars = [
     line: 'Straight answers on where your brand goes next.',
     media: {
       type: 'video' as const,
-      src: '/assets/hero-video.mp4',
-      poster: '/assets/hero-video-poster.jpg',
+      src: '/media/red-cloak-water.mp4',
+      poster: '/media/red-cloak-water-poster.jpg',
     },
   },
 ];
@@ -67,7 +71,7 @@ function PillarCard({ pillar, i }: { pillar: (typeof pillars)[number]; i: number
             the new red-glow hover is additive, not a replacement for it */}
         <GlassPanel
           refract={i === 0}
-          className={`group h-full transition-shadow duration-500 hover:shadow-[0_0_60px_rgba(255,77,28,0.22)] ${i === 0 ? 'md:min-h-[26rem]' : ''}`}
+          className="group h-full transition-shadow duration-500 hover:shadow-[0_0_60px_rgba(255,77,28,0.22)]"
         >
           {pillar.media.type === 'video' ? (
             <AmbientVideo
@@ -117,16 +121,15 @@ export function Pillars() {
           other reference in the repo), dimmed + feathered top/bottom so it
           never fights the card media or the eyebrow label above it. */}
       <div aria-hidden className="absolute inset-0">
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="none"
+        {/* C-P13 playback fix: the raw autoPlay+preload="none" video never
+            started (no play() call, autoplay ignored on deferred loads).
+            AmbientVideo's in-view play()/pause() gating is the working
+            pattern — poster generated for it this session. */}
+        <AmbientVideo
+          src="/media/about-hero-red-curves.mp4"
+          poster="/media/about-hero-red-curves-poster.jpg"
           className="absolute inset-0 h-full w-full object-cover opacity-[0.12]"
-        >
-          <source src="/assets/about-hero-red-curves.mp4" type="video/mp4" />
-        </video>
+        />
         <div
           aria-hidden
           className="absolute inset-0"
@@ -141,7 +144,10 @@ export function Pillars() {
       <div className="relative mx-auto max-w-6xl px-6 pb-16 pt-4 md:px-12 md:pb-20 md:pt-6 lg:px-16">
         <p className="font-mono text-[10px] tracking-[0.3em] text-ash">WHAT WE DO</p>
 
-        <div className="mt-10 grid gap-4 md:auto-rows-fr md:grid-cols-3">
+        {/* C-P13 rebalance: fixed equal row tracks replace auto-rows-fr (the
+            anchor's min-h fought the fr rows and read lopsided) — anchor =
+            2 rows + gap, side cards exactly one row each. */}
+        <div className="mt-10 grid gap-4 md:auto-rows-[13.5rem] md:grid-cols-3">
           {pillars.map((pillar, i) => (
             <PillarCard key={pillar.index} pillar={pillar} i={i} />
           ))}
