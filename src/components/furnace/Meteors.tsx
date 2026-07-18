@@ -2,10 +2,11 @@
 // Server-renderable — fixed configs, no randomness (hydration-safe), CSS
 // animation (.meteor, index.css) with warm bone/ember trails per tokens.
 const METEORS = [
-  { left: '14%', delay: 0, duration: 6.5 },
-  { left: '38%', delay: 2.6, duration: 7.5 },
-  { left: '63%', delay: 1.2, duration: 6 },
-  { left: '86%', delay: 3.8, duration: 8 },
+  { left: '14%', delay: 0, duration: 5 },
+  { left: '38%', delay: 2.2, duration: 6 },
+  { left: '63%', delay: 1, duration: 4.5 },
+  { left: '86%', delay: 3, duration: 6.5 },
+  { left: '52%', delay: 4, duration: 5.5 },
 ];
 
 export function Meteors() {

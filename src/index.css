@@ -1435,24 +1435,25 @@ html {
 .meteor {
   position: absolute;
   top: -12%;
-  width: 1px;
-  height: 4.5rem;
+  width: 2px;
+  height: 7rem;
   border-radius: 9999px;
   background: linear-gradient(
     to bottom,
-    rgba(237, 230, 221, 0.55),
-    rgba(255, 160, 90, 0.22),
+    rgba(255, 244, 232, 0.95),
+    rgba(255, 150, 80, 0.5),
     transparent
   );
+  box-shadow: 0 0 8px rgba(255, 130, 60, 0.4);
   transform: rotate(26deg);
   opacity: 0;
   animation: meteor-fall linear infinite;
 }
 @keyframes meteor-fall {
   0%   { transform: translate3d(0, 0, 0) rotate(26deg); opacity: 0; }
-  6%   { opacity: 0.55; }
-  42%  { transform: translate3d(-11rem, 22rem, 0) rotate(26deg); opacity: 0; }
-  100% { transform: translate3d(-11rem, 22rem, 0) rotate(26deg); opacity: 0; }
+  6%   { opacity: 0.9; }
+  55%  { transform: translate3d(-14rem, 28rem, 0) rotate(26deg); opacity: 0; }
+  100% { transform: translate3d(-14rem, 28rem, 0) rotate(26deg); opacity: 0; }
 }
 
 /* R-7e: contained 3D marquee band (Landing + Work footers). Pure CSS
