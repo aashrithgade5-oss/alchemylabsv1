@@ -147,7 +147,7 @@ export const YinYangHero = memo(() => {
           transition={{ duration: 0.7, delay: 0.9, ease: CINEMATIC_EASE }}
           className="font-body text-base sm:text-lg md:text-xl text-porcelain/45 max-w-2xl leading-relaxed"
         >
-          Two founders. One vision. Building brands with discipline, structure, and AI-native execution.
+          Two founders. One conviction. Discipline in the system. AI in the execution.
         </motion.p>
       </motion.div>
 
