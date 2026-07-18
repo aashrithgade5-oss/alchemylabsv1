@@ -17,10 +17,14 @@ import { m, useMotionTemplate, useReducedMotion, useScroll, useTransform } from 
  */
 export function PageBlurOverlay() {
   const reduced = useReducedMotion();
-  const { scrollYProgress } = useScroll();
-  const blur = useTransform(scrollYProgress, [0, 1], [6, 0]);
+  const { scrollY } = useScroll();
+  // Pixel mapping, not scrollYProgress: progress-based blur left 3-5px of fog
+  // over 90% of a long page (browser-verified) and kept backdrop-filter alive
+  // for the whole scroll. 6px at top → gone across the first ~900px, so the
+  // veil lifts as the hero unfolds and later sections render sharp and free.
+  const blur = useTransform(scrollY, [0, 900], [6, 0]);
   const backdropFilter = useMotionTemplate`blur(${blur}px)`;
-  const tint = useTransform(scrollYProgress, [0, 1], [0.15, 0]);
+  const tint = useTransform(scrollY, [0, 900], [0.15, 0]);
   const background = useMotionTemplate`rgba(10, 9, 8, ${tint})`;
   const display = useTransform(blur, (v) => (v < 0.3 ? 'none' : 'block'));
 

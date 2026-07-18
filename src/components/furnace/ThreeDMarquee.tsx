@@ -18,13 +18,14 @@ export function ThreeDMarquee() {
       aria-hidden
       className="relative h-[320px] overflow-hidden border-y border-line bg-void md:h-[400px]"
     >
-      <div
-        className="absolute inset-0 flex items-center justify-center"
-        style={{ perspective: '900px' }}
-      >
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Orthographic (no perspective): with a 900px perspective the huge
+            plane projected thousands of px off-canvas (browser-verified empty
+            band). Plain rotateX/rotateZ on an absolute-centered oversized
+            plane is affine — it always covers the band. */}
         <div
-          className="grid w-[160%] shrink-0 grid-cols-4 gap-4"
-          style={{ transform: 'rotateX(52deg) rotateZ(-12deg)', transformStyle: 'preserve-3d' }}
+          className="absolute left-1/2 top-1/2 grid w-[2800px] grid-cols-4 gap-4"
+          style={{ transform: 'translate(-50%, -50%) rotateX(55deg) rotateZ(-30deg)' }}
         >
           {COLUMNS.map((column, i) => (
             <div
@@ -41,7 +42,7 @@ export function ThreeDMarquee() {
                   alt=""
                   width={640}
                   height={427}
-                  className="w-full rounded-2xl border border-white/10 object-cover"
+                  className="aspect-[3/2] w-full rounded-2xl border border-white/10 object-cover"
                 />
               ))}
             </div>
