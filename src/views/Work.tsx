@@ -9,7 +9,6 @@ import { GlassPanel } from '@/components/furnace/GlassPanel';
 import { KineticHeadline } from '@/components/furnace/KineticHeadline';
 import { ThreeDMarquee } from '@/components/furnace/ThreeDMarquee';
 import { AmbientVideo } from '@/components/furnace/home/AmbientVideo';
-import { evaBrandCollaborations } from '@/data/foundersData';
 
 const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
@@ -138,8 +137,8 @@ export default function Work() {
         </div>
       </section>
 
-      {/* Prior-craft strip: real collaborations from before the studio,
-          not studio client work — labeled as such, not blended in above. */}
+      {/* C-P12: the orphaned client-logo strip is replaced with the work
+          pedagogy, in copy voice. */}
       <section className="relative border-t border-line px-6 py-20 md:px-12">
         <m.div
           initial={{ opacity: 0, y: 32 }}
@@ -148,14 +147,14 @@ export default function Work() {
           transition={{ duration: 0.9, ease }}
           className="mx-auto max-w-6xl"
         >
-          <p className="font-mono text-[10px] tracking-[0.3em] text-ash">Craft before the company.</p>
-          <div className="mt-6 flex flex-wrap gap-x-10 gap-y-3">
-            {evaBrandCollaborations.map((c) => (
-              <span key={c.name} className="font-mono text-sm tracking-[0.1em] text-bone/60">
-                {c.name}
-              </span>
-            ))}
-          </div>
+          <p className="font-mono text-[10px] tracking-[0.3em] text-ash">THE PEDAGOGY</p>
+          <p className="mt-6 max-w-3xl text-lg font-light leading-relaxed text-bone/75 md:text-xl">
+            Most studios sell hours. We sell judgment. Every engagement here runs through the same
+            discipline: generate wide, cut without mercy, keep the one frame that carries the
+            brand. We build systems, not one-offs, so each identity, campaign, and film compounds
+            instead of expiring. The work above survived that cut. If it looks restrained, that is
+            the point. Restraint is what volume can never buy.
+          </p>
         </m.div>
       </section>
 

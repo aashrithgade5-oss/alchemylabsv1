@@ -16,11 +16,13 @@ const FRAME_COUNT = 104;
 const frameSrc = (i: number) => `/sequence-turn/turn-${String(i + 1).padStart(3, '0')}.webp`;
 
 // Micro-copy bands, timed to the footage: the winged figure holds, turns,
-// and finally faces the reader.
+// and finally faces the reader. C-P12 copy; `accent` names the ONE word per
+// line that carries the aurora + Playfair italic treatment (the page's one
+// persistent aurora instance — the hero cycler's is transition-only now).
 const LINES = [
-  { text: 'THE MACHINE MAKES A THOUSAND', range: [0.05, 0.3] },
-  { text: 'JUDGMENT KEEPS ONE', range: [0.38, 0.62] },
-  { text: 'THAT ONE IS YOURS', range: [0.7, 0.94] },
+  { text: 'THE MACHINE DRAFTS BY THE THOUSAND', range: [0.05, 0.3], accent: '' },
+  { text: 'JUDGMENT KEEPS ONE', range: [0.38, 0.62], accent: 'JUDGMENT' },
+  { text: 'THAT ONE IS YOURS', range: [0.7, 0.94], accent: '' },
 ] as const;
 
 // One word of a kinetic line, sharpening into focus across its own slice
@@ -30,18 +32,23 @@ function Word({
   wStart,
   wEnd,
   progress,
+  accent = false,
 }: {
   word: string;
   wStart: number;
   wEnd: number;
   progress: MotionValue<number>;
+  accent?: boolean;
 }) {
   // blur floor 12: the one scrub signature (matches fx/ScrollScrub)
   const opacity = useTransform(progress, [wStart, wEnd], [0, 1]);
   const blurPx = useTransform(progress, [wStart, wEnd], [12, 0]);
   const filter = useMotionTemplate`blur(${blurPx}px)`;
   return (
-    <m.span className="glass-type-spectrum-ember" style={{ opacity, filter }}>
+    <m.span
+      className={accent ? 'aurora-word font-playfair italic' : 'glass-type-spectrum-ember'}
+      style={{ opacity, filter }}
+    >
       {word}
     </m.span>
   );
@@ -51,10 +58,12 @@ function KineticLine({
   text,
   range,
   progress,
+  accent,
 }: {
   text: string;
   range: readonly [number, number];
   progress: MotionValue<number>;
+  accent?: string;
 }) {
   const [start, end] = range;
   const words = text.split(' ');
@@ -80,6 +89,7 @@ function KineticLine({
             wStart={wStart}
             wEnd={wStart + inWindow * 0.4}
             progress={progress}
+            accent={!!accent && word === accent}
           />
         );
       })}
@@ -221,7 +231,13 @@ function ScrubSequence() {
         />
         <div className="absolute inset-0 flex items-center justify-center px-6">
           {LINES.map((line) => (
-            <KineticLine key={line.text} text={line.text} range={line.range} progress={scrollYProgress} />
+            <KineticLine
+              key={line.text}
+              text={line.text}
+              range={line.range}
+              progress={scrollYProgress}
+              accent={line.accent || undefined}
+            />
           ))}
         </div>
       </div>

@@ -22,17 +22,23 @@ const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
 // A traveling ember band (see WORD_SHIMMER below) sweeps through all five —
 // the plan's "moving gradient" ask, layered onto these fills without
 // touching the FO3 stacked-lockup grid that keeps word swaps reflow-free.
-// R-7d: exactly ONE emphasis word in the cycle carries the token-palette
-// aurora fill (.aurora-word, index.css) instead of its static metallic
-// gradient — CAMPAIGNS, the warm-family word. Its shimmer pass is skipped;
-// the aurora already animates.
-const BUILDS: { word: string; gradient: string; aurora?: boolean }[] = [
+// C-P11: the static aurora word is retired (aurora is now the per-swap
+// TRANSITION treatment below; the page's one persistent aurora instance
+// moved to "Judgment" in TurnSequence). All five words carry their metallic
+// gradients again.
+const BUILDS: { word: string; gradient: string }[] = [
   { word: 'STRATEGY', gradient: 'linear-gradient(180deg, #b8b8bd 0%, #f4f2ee 55%, #cfcdc9 100%)' },
   { word: 'BRAND SYSTEMS', gradient: 'linear-gradient(180deg, #c9bfae 0%, #f6efe2 55%, #d8cdbb 100%)' },
   { word: 'IDENTITY', gradient: 'linear-gradient(180deg, #b3b9c4 0%, #eef2f7 55%, #c5ccd8 100%)' },
-  { word: 'CAMPAIGNS', gradient: '', aurora: true },
+  { word: 'CAMPAIGNS', gradient: 'linear-gradient(180deg, #d0a89a 0%, #ffe9de 55%, #d9b3a4 100%)' },
   { word: 'FILM', gradient: 'linear-gradient(180deg, #c8c4bc 0%, #faf7f2 55%, #d4d0c8 100%)' },
 ];
+
+// C-P11 swap flourish: a one-shot aurora band swept through the incoming
+// word + a single-frame RGB channel split (textShadow copies behind the
+// transparent glyphs), ~260ms. Remounted per activation via key={active}.
+const AURORA_SWEEP =
+  'linear-gradient(115deg, transparent 30%, rgba(255,77,28,0.9) 44%, rgba(255,180,40,0.95) 50%, rgba(237,230,221,0.9) 56%, transparent 70%)';
 
 // A diagonal ember highlight band, twice the element's width, swept left to
 // right on a loop. Layered as its own bg-clip:text span directly over the
@@ -76,8 +82,8 @@ function WeBuild() {
         {BUILDS.map((b, idx) => (
           <m.span
             key={b.word}
-            className={`col-start-1 row-start-1 whitespace-nowrap will-change-transform${b.aurora ? ' aurora-word' : ''}`}
-            style={b.aurora ? undefined : clipStyle(b.gradient)}
+            className="col-start-1 row-start-1 whitespace-nowrap will-change-transform"
+            style={clipStyle(b.gradient)}
             initial={false}
             animate={
               reduced
@@ -93,10 +99,44 @@ function WeBuild() {
             {b.word}
           </m.span>
         ))}
-        {!reduced && BUILDS.map((b, idx) =>
-          b.aurora ? null : (
-            <WordShimmer key={`${b.word}-shimmer`} word={b.word} active={idx === active} />
-          ),
+        {!reduced && BUILDS.map((b, idx) => (
+          <WordShimmer key={`${b.word}-shimmer`} word={b.word} active={idx === active} />
+        ))}
+        {/* C-P11: transition flourish — remounts on every word change so the
+            keyframes replay; same grid cell, so zero layout shift */}
+        {!reduced && (
+          <m.span
+            key={`sweep-${active}`}
+            aria-hidden
+            className="pointer-events-none col-start-1 row-start-1 whitespace-nowrap"
+            style={{
+              backgroundImage: AURORA_SWEEP,
+              backgroundSize: '260% 100%',
+              WebkitBackgroundClip: 'text',
+              backgroundClip: 'text',
+              color: 'transparent',
+            }}
+            initial={{
+              opacity: 0.95,
+              backgroundPositionX: '0%',
+              x: 3,
+              textShadow: '-3px 0 rgba(255,60,40,0.5), 3px 0 rgba(90,170,255,0.5)',
+            }}
+            animate={{
+              opacity: 0,
+              backgroundPositionX: '260%',
+              x: 0,
+              textShadow: '0 0 rgba(0,0,0,0)',
+            }}
+            transition={{
+              duration: 0.26,
+              ease: 'easeOut',
+              textShadow: { duration: 0.1 },
+              x: { duration: 0.1 },
+            }}
+          >
+            {BUILDS[active].word}
+          </m.span>
         )}
       </span>
     </div>
