@@ -39,20 +39,37 @@ export function FurnaceNavigation() {
         initial={{ y: -24, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.9, ease }}
-        className={`relative flex w-full max-w-4xl items-center justify-between overflow-hidden rounded-full px-5 py-2.5 transition-all duration-500 ${
-          scrolled
-            ? 'liquid-glass'
-            : 'border border-transparent bg-transparent'
-        }`}
+        className="group relative flex w-full max-w-4xl items-center justify-between overflow-hidden rounded-full border border-transparent px-5 py-2.5"
       >
+        {/* C-P14 flash fix: backdrop-filter cannot transition, so toggling
+            the liquid-glass CLASS popped the blur in while the white bg
+            faded (the reported white flash). The glass now lives on a
+            permanently-mounted inner layer whose OPACITY fades — one
+            consistent treatment, no pop. */}
+        <div
+          aria-hidden
+          className={`liquid-glass pointer-events-none absolute inset-0 rounded-[inherit] transition-opacity duration-500 ${
+            scrolled ? 'opacity-100' : 'opacity-0'
+          }`}
+        />
         {/* Phase 2 backdrop-mode glass edge: real refraction shows whatever
-            color is scrolled behind the nav (red hero vs void sections) —
-            that passive behavior IS the "responds to on-page color" ask,
-            no color-sampling JS needed. Chrome-only, degrades to the base
-            liquid-glass blur elsewhere via @supports. */}
-        {scrolled && (
-          <div aria-hidden className="glass-refract-edge pointer-events-none absolute inset-0 rounded-[inherit]" />
-        )}
+            color is scrolled behind the nav (red hero vs void sections).
+            Chrome-only, degrades via @supports. Opacity-faded with the same
+            curve as the glass layer. */}
+        <div
+          aria-hidden
+          className={`glass-refract-edge pointer-events-none absolute inset-0 rounded-[inherit] transition-opacity duration-500 ${
+            scrolled ? 'opacity-100' : 'opacity-0'
+          }`}
+        />
+        {/* C-P14 chromatic hairline: 1px RGB-split ring, visible on scroll,
+            full strength on hover — CSS only */}
+        <div
+          aria-hidden
+          className={`nav-chroma-edge pointer-events-none absolute inset-0 rounded-[inherit] transition-opacity duration-500 group-hover:opacity-100 ${
+            scrolled ? 'opacity-60' : 'opacity-0'
+          }`}
+        />
         <Link href="/" className="relative flex items-center gap-2.5" aria-label="Alchemy Labs, home">
           <Image
             src="/assets/alchemy-minimal-logo.png"
@@ -69,7 +86,7 @@ export function FurnaceNavigation() {
           </span>
         </Link>
 
-        <ul className="hidden items-center gap-7 md:flex">
+        <ul className="relative hidden items-center gap-7 md:flex">
           {navItems.map((item) => (
             <li key={item.href}>
               <Link
@@ -84,7 +101,7 @@ export function FurnaceNavigation() {
           ))}
         </ul>
 
-        <div className="flex items-center gap-3">
+        <div className="relative flex items-center gap-3">
           {/* R-7c Tier 1: Begin is the booking-intent nav CTA (the general
               Contact nav link above is deliberately excluded) */}
           <Link
