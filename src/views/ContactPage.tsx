@@ -1,6 +1,7 @@
 'use client';
 
-import { m } from 'framer-motion';
+import { useRef } from 'react';
+import { m, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
 import { Contact } from '@/components/Contact';
 import { HomeAtmosphere } from '@/components/furnace/home/HomeAtmosphere';
@@ -13,6 +14,15 @@ const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
 const trust = ['24H RESPONSE', 'NDA AVAILABLE', 'FREE FIRST CALL'];
 
 export const ContactPage = () => {
+  // R-P5: scroll-driven scale on the form-section backdrop image — the old
+  // static scale-110 becomes 1.1→1.22 as the section traverses the viewport.
+  const formSectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: formSectionRef,
+    offset: ['start end', 'end start'],
+  });
+  const bgScale = useTransform(scrollYProgress, [0, 1], [1.1, 1.22]);
+
   return (
     <main className="relative font-sans">
       <HomeAtmosphere />
@@ -79,7 +89,7 @@ export const ContactPage = () => {
       {/* The form, in glass — bleed background restored from the last
           pre-Next.js ContactPage.tsx (commit 8599310): contact-bg.png,
           radial-masked so it fades before the edges rather than hard-cutting */}
-      <section className="relative px-4 pb-28 md:px-6 md:pb-40">
+      <section ref={formSectionRef} className="relative px-4 pb-28 md:px-6 md:pb-40">
         <div
           aria-hidden
           className="absolute inset-0 overflow-hidden"
@@ -88,17 +98,15 @@ export const ContactPage = () => {
             maskImage: 'radial-gradient(ellipse 85% 75% at 50% 40%, black 20%, transparent 75%)',
           }}
         >
-          <Image
-            src="/assets/contact-bg.png"
-            alt=""
-            fill
-            className="scale-110 object-cover opacity-40"
-          />
+          <m.div className="absolute inset-0" style={{ scale: bgScale }}>
+            <Image src="/assets/contact-bg.png" alt="" fill className="object-cover opacity-40" />
+          </m.div>
         </div>
         <m.div
           initial={{ opacity: 0, y: 32 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 1.1, ease }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 1, ease }}
           className="mx-auto max-w-5xl"
         >
           <GlassPanel refract>

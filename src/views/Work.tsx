@@ -140,7 +140,13 @@ export default function Work() {
       {/* Prior-craft strip: real collaborations from before the studio,
           not studio client work — labeled as such, not blended in above. */}
       <section className="relative border-t border-line px-6 py-20 md:px-12">
-        <div className="mx-auto max-w-6xl">
+        <m.div
+          initial={{ opacity: 0, y: 32 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.9, ease }}
+          className="mx-auto max-w-6xl"
+        >
           <p className="font-mono text-[10px] tracking-[0.3em] text-ash">Craft before the company.</p>
           <div className="mt-6 flex flex-wrap gap-x-10 gap-y-3">
             {evaBrandCollaborations.map((c) => (
@@ -149,16 +155,23 @@ export default function Work() {
               </span>
             ))}
           </div>
-        </div>
+        </m.div>
       </section>
 
       <section className="relative px-6 pb-28 text-center md:px-12">
-        <Link
-          href="/contact"
-          className="font-mono text-xs tracking-[0.2em] text-bone/70 transition-colors duration-300 hover:text-bone"
+        <m.div
+          initial={{ opacity: 0, y: 32 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.9, ease }}
         >
-          START A PROJECT →
-        </Link>
+          <Link
+            href="/contact"
+            className="font-mono text-xs tracking-[0.2em] text-bone/70 transition-colors duration-300 hover:text-bone"
+          >
+            START A PROJECT →
+          </Link>
+        </m.div>
       </section>
     </main>
   );
