@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { portfolio } from '@lib/portfolio';
 import { GlassPanel } from '@/components/furnace/GlassPanel';
 import { KineticHeadline } from '@/components/furnace/KineticHeadline';
+import { ThreeDMarquee } from '@/components/furnace/ThreeDMarquee';
 import { AmbientVideo } from '@/components/furnace/home/AmbientVideo';
 import { evaBrandCollaborations } from '@/data/foundersData';
 
@@ -158,7 +159,9 @@ export default function Work() {
         </m.div>
       </section>
 
-      <section className="relative px-6 pb-28 text-center md:px-12">
+      <ThreeDMarquee />
+
+      <section className="relative px-6 pb-28 pt-20 text-center md:px-12">
         <m.div
           initial={{ opacity: 0, y: 32 }}
           whileInView={{ opacity: 1, y: 0 }}
