@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { toast } from 'sonner';
 import { TurnstileWidget } from './TurnstileWidget';
 import { socialLinks } from './Footer';
+import { confettiBurst, confettiCelebrate } from '@/lib/confetti';
 
 const serviceOptions = [
   { value: '', label: 'Select what you need...', disabled: true },
@@ -46,6 +47,40 @@ export const Contact = memo(() => {
   // Calendly: lazy iframe modal — the old window.Calendly popup call was a
   // silent no-op (the widget script was never loaded anywhere).
   const [calendlyOpen, setCalendlyOpen] = useState(false);
+  // R-7c Tier 1 (intent) / Tier 2 (confirmed booking via Calendly postMessage)
+  const [intentFired, setIntentFired] = useState(false);
+  const [booked, setBooked] = useState(false);
+
+  const openCalendly = useCallback(() => {
+    setCalendlyOpen(true);
+    setIntentFired(true);
+    confettiBurst();
+  }, []);
+
+  // Tier 2 trigger: Calendly's real event_scheduled postMessage from the
+  // iframe — the click never counts as a booking.
+  useEffect(() => {
+    if (!calendlyOpen) return;
+    const onMessage = (e: MessageEvent) => {
+      const fromCalendly =
+        e.origin === 'https://calendly.com' || e.origin.endsWith('.calendly.com');
+      if (!fromCalendly) return;
+      if ((e.data as { event?: string })?.event === 'calendly.event_scheduled') {
+        setCalendlyOpen(false);
+        setBooked(true);
+        confettiCelebrate();
+      }
+    };
+    window.addEventListener('message', onMessage);
+    return () => window.removeEventListener('message', onMessage);
+  }, [calendlyOpen]);
+
+  // Booked overlay auto-dismisses at 3.5s (or on click, see JSX).
+  useEffect(() => {
+    if (!booked) return;
+    const t = setTimeout(() => setBooked(false), 3500);
+    return () => clearTimeout(t);
+  }, [booked]);
 
   // Honor /contact?pillar=<slug|value>: preselect the subject once on mount.
   useEffect(() => {
@@ -484,16 +519,25 @@ export const Contact = memo(() => {
                   {/* CTA Button — Opens Calendly popup */}
                   <button
                     type="button"
-                    onClick={() => setCalendlyOpen(true)}
+                    onClick={openCalendly}
                     className="gradient-border-glow-btn w-full flex items-center justify-center gap-3 py-4 px-8 rounded-full font-body font-medium text-sm text-porcelain transition-all duration-300 hover:brightness-110 relative overflow-hidden"
                   >
                     <span>Schedule a Meeting</span>
                     <Calendar className="w-4 h-4" />
                   </button>
 
-                  <p className="font-mono text-[10px] text-center text-porcelain/35 mt-4">
-                    Opens our Calendly page to book your 15-min Strategy Sprint.
-                  </p>
+                  {/* R-7c Tier 1 inline copy: fades in once intent is signaled */}
+                  <motion.p
+                    key={intentFired ? 'intent' : 'idle'}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.6 }}
+                    className="font-mono text-[10px] text-center text-porcelain/35 mt-4"
+                  >
+                    {intentFired
+                      ? 'One click closer to elevating your brand.'
+                      : 'Opens our Calendly page to book your 15-min Strategy Sprint.'}
+                  </motion.p>
                 </motion.form>
               ) : (
                 <motion.div
@@ -545,7 +589,7 @@ export const Contact = memo(() => {
                       href=""
                       onClick={(e) => {
                         e.preventDefault();
-                        setCalendlyOpen(true);
+                        openCalendly();
                       }}
                       className="gradient-border-glow inline-flex items-center gap-3 px-8 py-4 rounded-full font-body font-medium text-sm text-porcelain transition-all duration-300 hover:brightness-110 cursor-pointer"
                     >
@@ -630,6 +674,34 @@ export const Contact = memo(() => {
                 className="h-full w-full border-0"
               />
             </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* R-7c Tier 2: confirmed-booking celebration — full backdrop blur
+          (static 14px, one-shot overlay, not the scroll-driven veil),
+          auto-dismiss 3.5s or on click */}
+      <AnimatePresence>
+        {booked && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4 }}
+            role="status"
+            onClick={() => setBooked(false)}
+            className="fixed inset-0 z-[110] flex items-center justify-center bg-void/60 px-6"
+            style={{ backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)' }}
+          >
+            <motion.p
+              initial={{ opacity: 0, y: 18, filter: 'blur(8px)' }}
+              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+              transition={{ duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+              className="max-w-2xl text-center font-headline text-3xl font-black leading-tight text-bone md:text-5xl"
+            >
+              Your discovery session is booked.{' '}
+              <span className="font-playfair font-normal italic">Elevation starts now.</span>
+            </motion.p>
           </motion.div>
         )}
       </AnimatePresence>

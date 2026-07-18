@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { m, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
+import { confettiBurst } from '@/lib/confetti';
 
 const navItems = [
   { label: 'Work', href: '/work' },
@@ -84,8 +85,11 @@ export function FurnaceNavigation() {
         </ul>
 
         <div className="flex items-center gap-3">
+          {/* R-7c Tier 1: Begin is the booking-intent nav CTA (the general
+              Contact nav link above is deliberately excluded) */}
           <Link
             href="/contact"
+            onClick={() => confettiBurst()}
             className="hidden rounded-full bg-ember px-5 py-2 font-sans text-xs font-semibold text-void transition-colors duration-300 hover:bg-amber md:inline-block"
           >
             Begin
@@ -136,7 +140,10 @@ export function FurnaceNavigation() {
             >
               <Link
                 href="/contact"
-                onClick={() => setOpen(false)}
+                onClick={() => {
+                  setOpen(false);
+                  confettiBurst();
+                }}
                 className="rounded-full bg-ember px-7 py-3.5 font-sans text-sm font-semibold text-void"
               >
                 Begin
