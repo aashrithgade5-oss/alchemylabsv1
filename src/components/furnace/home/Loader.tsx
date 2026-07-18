@@ -79,9 +79,9 @@ export function Loader() {
           transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
           className="fixed inset-0 z-[90] flex flex-col items-center justify-center bg-void"
         >
-          {/* R-P8: mark scaled up to ~50vh on desktop (was 17rem ≈ 25vh) —
-              the opening statement, not a corner spinner */}
-          <div className="relative h-[min(60vw,30rem)] w-[min(60vw,30rem)]">
+          {/* C-P22: near-full-viewport dominance (was ~50vh) — the opening
+              statement at its final scale */}
+          <div className="relative h-[min(85vw,44rem)] w-[min(85vw,44rem)]">
             {/* unfilled state: the mark as a faint outline */}
             {/* scale matches the shader's scale={0.6} so outline and metal register */}
             <Image
@@ -99,15 +99,17 @@ export function Loader() {
                 // R-P8 recolor: cream tint + warm-shifted fringe (red up,
                 // blue down) puts the metal in the bone/ember family instead
                 // of cold white; speed eased for a slower, cinematic read.
+                // C-P22: livelier metal — more repetition bands, deeper
+                // distortion, speed back up; still cream/warm on pitch void.
                 colorTint="#EDE6DD"
-                repetition={2}
+                repetition={3}
                 softness={0.1}
                 shiftRed={0.5}
                 shiftBlue={0.15}
-                distortion={0.07}
-                contour={0.4}
+                distortion={0.12}
+                contour={0.5}
                 angle={70}
-                speed={0.75}
+                speed={0.9}
                 scale={0.6}
                 fit="contain"
                 style={{ width: '100%', height: '100%' }}

@@ -22,14 +22,19 @@ export function BottomCTA() {
 
   return (
     <section className="relative overflow-hidden border-t border-line bg-void">
+      {/* C-P21: flat-black/blurred band → full-bleed PHOTO background
+          (unique /media asset, crisp not smeared), same gradient + ember
+          radial contrast floor as the rest of the rebuilt pages. */}
       <div aria-hidden className="absolute inset-0">
         <Image
-          src="/assets/footer-bg.png"
+          src="/media/dodge-challenger.webp"
           alt=""
           fill
-          className="scale-110 object-cover opacity-60 blur-[8px] saturate-[1.2]"
+          quality={90}
+          sizes="100vw"
+          className="object-cover object-center opacity-45"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-void via-void/75 to-void/40" />
+        <div className="absolute inset-0 bg-gradient-to-t from-void via-void/70 to-void/55" />
         <div className="absolute bottom-0 left-1/2 h-[60%] w-[120%] -translate-x-1/2 bg-[radial-gradient(ellipse_at_center,rgba(255,77,28,0.14)_0%,transparent_70%)]" />
       </div>
 
