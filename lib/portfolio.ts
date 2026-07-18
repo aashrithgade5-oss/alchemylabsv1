@@ -14,6 +14,9 @@ export interface PortfolioEntry {
   image: string;
   visuals: string[];
   featured?: boolean;
+  /** C-P18: motion entries carry their compressed loop; tiles render it via
+      AmbientVideo instead of the still. */
+  video?: { src: string; poster: string };
 }
 
 export const portfolio: PortfolioEntry[] = [
@@ -76,6 +79,19 @@ export const portfolio: PortfolioEntry[] = [
       'Studio reels and stills from our production pipeline, graded and finished by hand.',
     image: '/assets/case-study-2.jpg',
     visuals: ['/assets/case-study-2.jpg', '/assets/case-study-1.jpg'],
+  },
+  {
+    // C-P18: sixth entry — genuinely distinct project from the 12:21 AM
+    // media drop, compressed this session (73MB .mov → 4.1MB web mp4).
+    id: 'porsche-showreel',
+    title: 'Porsche AI Showreel',
+    label: 'CONCEPT',
+    discipline: 'AI FILM',
+    summary:
+      'A performance-car showreel cut entirely from AI-generated footage: one marque, one grade, sixty seconds of controlled speed.',
+    image: '/media/porsche-showreel-poster.jpg',
+    visuals: ['/media/porsche-showreel-poster.jpg'],
+    video: { src: '/media/porsche-showreel.mp4', poster: '/media/porsche-showreel-poster.jpg' },
   },
 ];
 

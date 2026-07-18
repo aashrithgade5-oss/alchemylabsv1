@@ -23,12 +23,20 @@ const textMarks: Record<string, string> = {
 function WorkTile({ entry, large }: { entry: (typeof portfolio)[number]; large: boolean }) {
   return (
     <GlassPanel className={`group h-full ${large ? 'md:min-h-[28rem]' : ''}`}>
-      <Image
-        src={entry.visuals[0] ?? entry.image}
-        alt=""
-        fill
-        className="object-cover opacity-40 transition-opacity duration-500 group-hover:opacity-55"
-      />
+      {entry.video ? (
+        <AmbientVideo
+          src={entry.video.src}
+          poster={entry.video.poster}
+          className="absolute inset-0 h-full w-full object-cover opacity-40 transition-opacity duration-500 group-hover:opacity-55"
+        />
+      ) : (
+        <Image
+          src={entry.visuals[0] ?? entry.image}
+          alt=""
+          fill
+          className="object-cover opacity-40 transition-opacity duration-500 group-hover:opacity-55"
+        />
+      )}
       <div className="relative flex h-full flex-col justify-end p-8 md:p-10">
         <p className="font-mono text-[10px] tracking-[0.25em] text-ember">
           {entry.label} · {entry.discipline}
@@ -59,11 +67,12 @@ function WorkTile({ entry, large }: { entry: (typeof portfolio)[number]; large: 
 export default function Work() {
   const [featured, ...rest] = portfolio;
   const heroRef = useRef<HTMLElement>(null);
-  // Same parallax recipe as ServicesHero — that page is the reference
-  // pattern for full-bleed heroes; only the asset differs (unused
-  // compressed loop red-slats-wide.mp4, 3.9MB + poster).
+  // C-P18: hero video replaced with the Solutions-page "moving lights"
+  // treatment — scroll parallax (scale + y) over a static glow texture,
+  // plus a slow drifting glow layer. Unique asset (red-glow-box.webp);
+  // red-slats-wide.mp4 moves down to the bento backdrop.
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end end'] });
-  const bgScale = useTransform(scrollYProgress, [0, 1], [1, 1.1]);
+  const bgScale = useTransform(scrollYProgress, [0, 1], [1, 1.12]);
   const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '8%']);
 
   return (
@@ -71,10 +80,30 @@ export default function Work() {
       <section ref={heroRef} className="relative min-h-[70vh] overflow-hidden bg-void">
         <div aria-hidden className="absolute inset-0">
           <m.div className="absolute inset-0" style={{ scale: bgScale, y: bgY }}>
-            <AmbientVideo
-              src="/media/red-slats-wide.mp4"
-              poster="/media/red-slats-wide-poster.jpg"
-              className="h-full w-full object-cover object-center opacity-[0.28]"
+            <Image
+              src="/media/red-glow-box.webp"
+              alt=""
+              fill
+              priority
+              quality={90}
+              sizes="100vw"
+              className="object-cover object-center opacity-[0.3]"
+            />
+          </m.div>
+          {/* the "lights moving" pass: an oversized copy drifting slowly
+              sideways under the parallax layer's blend */}
+          <m.div
+            className="absolute -inset-x-[20%] inset-y-0 mix-blend-screen"
+            animate={{ x: ['-4%', '4%'] }}
+            transition={{ duration: 22, ease: 'easeInOut', repeat: Infinity, repeatType: 'mirror' }}
+          >
+            <Image
+              src="/media/red-glow-box.webp"
+              alt=""
+              fill
+              quality={75}
+              sizes="140vw"
+              className="object-cover object-center opacity-[0.14] blur-[2px]"
             />
           </m.div>
           <div
@@ -107,11 +136,26 @@ export default function Work() {
         </div>
       </section>
 
-      {/* Bento: 4 entries, 4 cells — no filler tiles. Aether Rituals (the
-          only featured entry) anchors a 2x2 cell, same asymmetric pattern
-          as the homepage's Pillars section. */}
-      <section className="relative px-6 pb-24 md:px-12 md:pb-32">
-        <div className="mx-auto grid max-w-6xl gap-4 md:auto-rows-fr md:grid-cols-3">
+      {/* C-P18 bento: 6 entries (Porsche showreel added as the 6th) —
+          featured 2x2 anchor + five singles fill a clean 3x3. The flat void
+          behind the grid gains the red-slats loop, dimmed and feathered,
+          matching the depth treatment elsewhere on the rebuilt pages. */}
+      <section className="relative overflow-hidden px-6 pb-24 md:px-12 md:pb-32">
+        <div aria-hidden className="absolute inset-0">
+          <AmbientVideo
+            src="/media/red-slats-wide.mp4"
+            poster="/media/red-slats-wide-poster.jpg"
+            className="h-full w-full object-cover opacity-[0.08]"
+          />
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                'linear-gradient(to bottom, rgba(10,9,8,0.95) 0%, rgba(10,9,8,0.55) 25%, rgba(10,9,8,0.55) 75%, rgba(10,9,8,0.95) 100%)',
+            }}
+          />
+        </div>
+        <div className="relative mx-auto grid max-w-6xl gap-4 md:auto-rows-fr md:grid-cols-3">
           {featured && (
             <m.div
               initial={{ opacity: 0, y: 32 }}
