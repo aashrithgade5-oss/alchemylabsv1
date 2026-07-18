@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation';
 import { FurnaceNavigation } from './Navigation';
 import { FurnaceFooter } from './Footer';
 import { BottomCTA } from './BottomCTA';
+import { PageBlurOverlay } from './PageBlurOverlay';
 
 // The founder portfolios render their own inline nav and footer; the global
 // chrome previously stacked on top of them. This gate keeps their files
@@ -28,6 +29,7 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
   return (
     <>
       <FurnaceNavigation />
+      <PageBlurOverlay />
       {children}
       {!skipBottomCTA && <BottomCTA />}
       <FurnaceFooter />

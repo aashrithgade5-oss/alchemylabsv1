@@ -1400,3 +1400,80 @@ html {
     animation: none !important;
   }
 }
+
+/* R-7d (July-13 remediation, respec'd to tokens): aurora fill for the ONE
+   designated cycler word in the hero. Same opaque bg-clip:text mechanism as
+   .glass-type — floor luminance stays high; the "contrast dip" stop is deep
+   ember, NOT void (a near-black stop over dark footage would break the
+   style-guide luminance floor). */
+.aurora-word {
+  color: transparent;
+  background-image: linear-gradient(
+    115deg,
+    #ede6dd 0%,
+    #ff4d1c 18%,
+    #ffb428 34%,
+    #ffffff 50%,
+    #b33a16 64%,
+    #ffe9de 80%,
+    #ede6dd 100%
+  );
+  background-size: 280% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: aurora-pan 7s ease-in-out infinite alternate;
+}
+@keyframes aurora-pan {
+  from { background-position-x: 0%; }
+  to   { background-position-x: 100%; }
+}
+
+/* R-7b: meteor streaks for quote blocks ONLY (Intertext, ServicesClosing).
+   Warm bone/ember trail per tokens (not stock white-blue), ~40% dimmer than
+   the MagicUI default. Transform-only animation; line tilts 26deg to align
+   with its down-left travel vector. */
+.meteor {
+  position: absolute;
+  top: -12%;
+  width: 1px;
+  height: 4.5rem;
+  border-radius: 9999px;
+  background: linear-gradient(
+    to bottom,
+    rgba(237, 230, 221, 0.55),
+    rgba(255, 160, 90, 0.22),
+    transparent
+  );
+  transform: rotate(26deg);
+  opacity: 0;
+  animation: meteor-fall linear infinite;
+}
+@keyframes meteor-fall {
+  0%   { transform: translate3d(0, 0, 0) rotate(26deg); opacity: 0; }
+  6%   { opacity: 0.55; }
+  42%  { transform: translate3d(-11rem, 22rem, 0) rotate(26deg); opacity: 0; }
+  100% { transform: translate3d(-11rem, 22rem, 0) rotate(26deg); opacity: 0; }
+}
+
+/* R-7e: contained 3D marquee band (Landing + Work footers). Pure CSS
+   perspective + transform columns — no WebGL, no new dependency. Column
+   holds its image list duplicated once; -50% translate loops seamlessly. */
+@keyframes marquee3d-up {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-50%); }
+}
+.marquee3d-col {
+  animation: marquee3d-up linear infinite;
+}
+.marquee3d-col[data-dir='down'] {
+  animation-direction: reverse;
+}
+@media (prefers-reduced-motion: reduce) {
+  .aurora-word,
+  .marquee3d-col {
+    animation: none !important;
+  }
+  .meteor {
+    display: none;
+  }
+}
