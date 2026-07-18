@@ -254,15 +254,14 @@ export function Hero() {
             <DecodeText text="ALCHEMY LABS · AI-NATIVE BRAND STUDIO · MUMBAI" delay={300} />
           </m.p>
 
-          <div className="relative mt-8">
+          {/* R-P10: the vignette/halo pair now wraps the FULL text block
+              (lockup → kicker → paragraph → CTAs → capacity tag) so nothing
+              bleeds past the oval's visible edge; margins tightened so the
+              column stays compact inside the ellipse at 1440 and 375. */}
+          <div className="relative mt-8 flex flex-col items-center">
             {/* text-scoped vignette: contrast floor between footage and glyphs */}
-            <div aria-hidden className="text-vignette absolute -inset-x-20 -inset-y-14 z-0" />
-            {/* boxless refractive halo: the video bends behind the glyphs
-                (Phase 1 filter now carries the chromatic-edge read, so this
-                halo — not a flat vignette — is what should carry the depth
-                behind the cycler; the old flat vignette was reading as an
-                "unpolished drop shadow" per the patches doc). */}
-            <div aria-hidden className="glass-halo absolute -inset-x-16 -inset-y-10 z-0" />
+            <div aria-hidden className="text-vignette absolute -inset-x-24 -inset-y-20 z-0" />
+            <div aria-hidden className="glass-halo absolute -inset-x-20 -inset-y-16 z-0" />
             <m.div
               initial={{ opacity: 0, y: 20, filter: 'blur(10px)' }}
               animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
@@ -271,50 +270,51 @@ export function Hero() {
             >
               <WeBuild />
             </m.div>
-            {/* kicker line, now below the cycler per Phase 2 — thinner
-                StringTune-style weight, same opaque glass fill (never a
-                low-alpha transparent glyph, per style-guide's alpha floor) */}
+            {/* kicker — R-P10 contrast raise: thin→light weight plus a soft
+                drop-shadow scrim tucked behind the glyphs (static filter, no
+                mix-blend descendants; not a solid backing block) */}
             <KineticHeadline
               text="Taste is the moat."
-              className="relative z-10 mt-10 justify-center font-sans text-[clamp(1.125rem,1.8vw,1.5rem)] font-thin leading-[1.05] tracking-[-0.01em] text-bone md:mt-14"
+              className="relative z-10 mt-8 justify-center font-sans text-[clamp(1.125rem,1.8vw,1.5rem)] font-light leading-[1.05] tracking-[-0.01em] text-bone [filter:drop-shadow(0_2px_12px_rgba(10,9,8,0.95))_drop-shadow(0_0_3px_rgba(10,9,8,0.7))] md:mt-10"
               wordClassName="glass-type"
               delay={0.9}
               as="p"
             />
+
+            <m.p
+              initial={{ opacity: 0, y: 18, filter: 'blur(8px)' }}
+              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+              transition={{ duration: 0.8, delay: 1.15, ease }}
+              className="relative z-10 mt-5 max-w-xl text-lg font-light leading-relaxed text-bone/80 [text-wrap:balance] md:mt-6 md:text-xl"
+            >
+              AI drafts at scale. Judgment decides what airs. Brand systems and campaign film for
+              founders who already know the{' '}
+              <span className="font-playfair italic">difference</span>.
+            </m.p>
+
+            <m.div
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 1.35, ease }}
+              className="relative z-10 mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center sm:gap-5"
+            >
+              <MagneticCTA href="/contact" variant="ember">
+                Begin the sprint
+              </MagneticCTA>
+              <MagneticCTA href="/work" variant="glass" className="px-6 py-3 text-xs">
+                See the work
+              </MagneticCTA>
+            </m.div>
+
+            <m.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.7, delay: 1.6 }}
+              className="relative z-10 mt-8"
+            >
+              <CapacityTag />
+            </m.div>
           </div>
-
-          <m.p
-            initial={{ opacity: 0, y: 18, filter: 'blur(8px)' }}
-            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-            transition={{ duration: 0.8, delay: 1.15, ease }}
-            className="mt-6 max-w-xl text-lg font-light leading-relaxed text-bone/80 [text-wrap:balance] md:mt-8 md:text-xl"
-          >
-            AI drafts at scale. Judgment decides what airs. Brand systems and campaign film for
-            founders who already know the difference.
-          </m.p>
-
-          <m.div
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 1.35, ease }}
-            className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center sm:gap-5"
-          >
-            <MagneticCTA href="/contact" variant="ember">
-              Begin the sprint
-            </MagneticCTA>
-            <MagneticCTA href="/work" variant="glass" className="px-6 py-3 text-xs">
-              See the work
-            </MagneticCTA>
-          </m.div>
-
-          <m.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.7, delay: 1.6 }}
-            className="mt-10"
-          >
-            <CapacityTag />
-          </m.div>
         </m.div>
       </div>
     </section>
