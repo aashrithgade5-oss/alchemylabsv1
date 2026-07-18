@@ -7,12 +7,43 @@ import { GlassPanel } from '../GlassPanel';
 import { GlassFluted } from '../GlassFluted';
 import { ScrollScrub } from '../fx/ScrollScrub';
 import { SmoothReveal } from '../fx/SmoothReveal';
+import { useTilt } from '@/hooks/useTilt';
 import type { Pillar } from './pillars';
 
 const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
 // One kanji numeral per pillar — the section's single Japanese motif.
+// C-P20: watermark opacity raised 0.07→0.15 (was near-invisible; should
+// read as a deliberate texture layer).
 const kanji = ['壱', '弐', '参'];
+
+// C-P20: per-pillar accent for the still's hover glow (palette only).
+const accents = ['#FF4D1C', '#FFA028', '#EDE6DD'];
+
+// C-P20: cursor 3D-tilt wrapper for the pillar still, same recipe as the
+// landing bento cards (useTilt + perspective), with a per-category glow.
+function TiltStill({ accent, children }: { accent: string; children: React.ReactNode }) {
+  const tilt = useTilt();
+  return (
+    <div style={{ perspective: 1200 }}>
+      <m.div
+        onPointerMove={tilt.onMove}
+        onPointerLeave={tilt.onLeave}
+        style={
+          {
+            rotateX: tilt.rotateX,
+            rotateY: tilt.rotateY,
+            transformStyle: 'preserve-3d',
+            '--pillar-glow': `0 0 60px ${accent}38`,
+          } as React.ComponentProps<typeof m.div>['style']
+        }
+        className="relative aspect-[3/4] w-[20rem] overflow-hidden rounded-2xl border border-line transition-shadow duration-500 hover:shadow-[var(--pillar-glow)] lg:w-[24rem]"
+      >
+        {children}
+      </m.div>
+    </div>
+  );
+}
 
 /**
  * One pillar: an oversized numeral cropped by the section edge over its
@@ -27,7 +58,7 @@ export function PillarSection({ pillar, index }: { pillar: Pillar; index: number
     <section className="relative overflow-hidden">
       <span
         aria-hidden
-        className={`pointer-events-none absolute top-6 select-none font-sans text-[10rem] leading-none text-ember/[0.07] md:top-2 md:text-[18rem] ${edge}`}
+        className={`pointer-events-none absolute top-6 select-none font-sans text-[10rem] leading-none text-ember/[0.15] md:top-2 md:text-[18rem] ${edge}`}
       >
         {kanji[index % kanji.length]}
       </span>
@@ -94,17 +125,20 @@ export function PillarSection({ pillar, index }: { pillar: Pillar; index: number
           </div>
         </div>
 
-        {/* cinematic still, opposite the numeral */}
-        <SmoothReveal className="relative hidden aspect-[3/4] w-[20rem] overflow-hidden rounded-2xl border border-line md:block lg:w-[24rem]">
-          <Image
-            src={pillar.still}
-            alt=""
-            fill
-            quality={90}
-            sizes="(min-width: 1024px) 24rem, 20rem"
-            className="object-cover"
-          />
-          <div aria-hidden className="absolute inset-0 bg-void/30" />
+        {/* cinematic still, opposite the numeral — C-P20: cursor 3D-tilt
+            (same treatment as the landing service boxes) + category glow */}
+        <SmoothReveal className="hidden md:block">
+          <TiltStill accent={accents[index % accents.length]}>
+            <Image
+              src={pillar.still}
+              alt=""
+              fill
+              quality={90}
+              sizes="(min-width: 1024px) 24rem, 20rem"
+              className="object-cover"
+            />
+            <div aria-hidden className="absolute inset-0 bg-void/30" />
+          </TiltStill>
         </SmoothReveal>
         </div>
       </div>

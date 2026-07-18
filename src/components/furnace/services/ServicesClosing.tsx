@@ -13,9 +13,11 @@ const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
 export function ServicesClosing() {
   return (
     <section className="relative overflow-hidden">
+      {/* C-P20: unique studio-reel footage (compressed this session from
+          ai-media-gen-2.mov) replaces the samurai loop */}
       <AmbientVideo
-        src="/media/samurai-silhouette-2.mp4"
-        poster="/media/samurai-silhouette-2-poster.jpg"
+        src="/media/ai-media-gen-2.mp4"
+        poster="/media/ai-media-gen-2-poster.jpg"
         className="absolute inset-0 h-full w-full object-cover opacity-30"
       />
       <div aria-hidden className="absolute inset-0 bg-void/50" />

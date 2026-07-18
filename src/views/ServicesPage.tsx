@@ -9,6 +9,11 @@ import { HomeAtmosphere } from '@/components/furnace/home/HomeAtmosphere';
 const FiveGrid = lazy(() =>
   import('@/components/furnace/services/FiveGrid').then((m) => ({ default: m.FiveGrid })),
 );
+// C-P20: the same infinite offer marquee used on the landing page, placed
+// directly after the hero so the first scroll lands on the offering list.
+const TheFive = lazy(() =>
+  import('@/components/furnace/home/TheFive').then((m) => ({ default: m.TheFive })),
+);
 const FAQ = lazy(() =>
   import('@/components/furnace/services/FAQ').then((m) => ({ default: m.FAQ })),
 );
@@ -23,6 +28,9 @@ export default function ServicesPage() {
     <main className="relative font-sans">
       <HomeAtmosphere />
       <ServicesHero />
+      <Suspense fallback={null}>
+        <TheFive />
+      </Suspense>
       {pillars.map((pillar, i) => (
         <PillarSection key={pillar.slug} pillar={pillar} index={i} />
       ))}

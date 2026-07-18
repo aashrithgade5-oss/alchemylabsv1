@@ -23,8 +23,10 @@ export function ServicesHero() {
     <section ref={sectionRef} className="relative overflow-hidden bg-void">
       <div aria-hidden className="absolute inset-0">
         <m.div className="absolute inset-0" style={{ scale: bgScale, y: bgY }}>
+          {/* C-P20 imagery pass: precision-engineering read replaces the old
+              texture (none of the prior services imagery was approved) */}
           <Image
-            src="/assets/solutions-bg-texture.png"
+            src="/media/space-shuttle.png"
             alt=""
             fill
             priority
