@@ -34,7 +34,9 @@ export const YinYangHero = memo(() => {
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start start', 'end start'] });
   const videoScale = useTransform(scrollYProgress, [0, 1], [1, 1.25]);
-  const videoOpacity = useTransform(scrollYProgress, [0, 0.5], [isMobile ? 0.2 : 0.18, 0.03]);
+  // C-P19: raised from 0.18/0.2→0.03 — the footage read as a dark smear;
+  // it should be present. Layout/scroll logic untouched.
+  const videoOpacity = useTransform(scrollYProgress, [0, 0.5], [isMobile ? 0.38 : 0.35, 0.08]);
   const textY = useTransform(scrollYProgress, [0, 1], [0, -70]);
   const overlayOpacity = useTransform(scrollYProgress, [0, 0.8], [0, 0.5]);
 
