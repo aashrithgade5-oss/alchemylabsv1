@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { m } from 'framer-motion';
 import { products, type Product } from '@lib/payments';
 import { PaymentSheet } from '../PaymentSheet';
@@ -44,8 +45,14 @@ export function FiveGrid() {
                 <div className="flex h-full flex-col justify-between p-7">
                   <div>
                     <p className="font-mono text-[10px] tracking-[0.25em] text-ash">FIXED SCOPE</p>
+                    {/* C-P20: the name is the doorway to the offer's own page */}
                     <h3 className="mt-4 font-sans text-xl font-bold leading-snug text-bone">
-                      {product.name}
+                      <Link
+                        href={`/services/${product.id}`}
+                        className="transition-colors duration-300 hover:text-ember"
+                      >
+                        {product.name}
+                      </Link>
                     </h3>
                     <p className="mt-3 max-w-md text-sm leading-relaxed text-ash">{product.tagline}</p>
                   </div>
