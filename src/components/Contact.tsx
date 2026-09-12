@@ -5,7 +5,7 @@ import { Send, Calendar, MessageCircle, Instagram, Mail, Loader2, Check, Home, L
 import Link from 'next/link';
 import { toast } from 'sonner';
 import { TurnstileWidget } from './TurnstileWidget';
-import { socialLinks } from './Footer';
+import { socialLinks } from '@/data/socialLinks';
 import { confettiBurst, confettiCelebrate } from '@/lib/confetti';
 
 const serviceOptions = [
@@ -223,10 +223,10 @@ export const Contact = memo(() => {
                   Get Started
                 </span>
               </span>
-              <h2 className="font-display text-3xl sm:text-4xl md:text-5xl leading-[1.1] tracking-[-0.02em] text-porcelain mb-4">
+              <h2 className="font-headline text-3xl sm:text-4xl md:text-5xl leading-[1.1] tracking-[-0.02em] text-porcelain mb-4">
                 Let's build something
                 <br />
-                <span className="italic text-alchemy-red">inevitable.</span>
+                <span className="text-alchemy-red">inevitable.</span>
               </h2>
               <p className="font-body text-base text-porcelain/50 mb-8 font-light">
                 Brief us in under 3 minutes. We reply within 24 hours.
@@ -393,7 +393,7 @@ export const Contact = memo(() => {
                     <p className="font-mono text-[11px] tracking-[0.25em] uppercase text-porcelain/50 mb-2">
                       15 MIN STRATEGY CALL
                     </p>
-                    <h3 className="font-display text-2xl md:text-3xl italic text-alchemy-red">
+                    <h3 className="font-headline text-2xl md:text-3xl text-alchemy-red">
                       First one for free.
                     </h3>
                   </div>
@@ -565,7 +565,7 @@ export const Contact = memo(() => {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 }}
-                    className="font-display text-3xl md:text-4xl italic text-porcelain mb-3"
+                    className="font-headline text-3xl md:text-4xl text-porcelain mb-3"
                   >
                     Done! We'll get back to you.
                   </motion.h3>

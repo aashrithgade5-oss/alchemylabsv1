@@ -84,10 +84,10 @@ export const JournalPage = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1 }}
-            className="font-display text-5xl sm:text-6xl md:text-7xl leading-display tracking-display text-porcelain mb-8"
+            className="font-headline text-5xl sm:text-6xl md:text-7xl leading-display tracking-display text-porcelain mb-8"
           >
             The{' '}
-            <span className="italic text-alchemy-red">Journal</span>
+            <span className="text-alchemy-red">Journal</span>
           </motion.h1>
           
           <motion.p
@@ -128,7 +128,7 @@ export const JournalPage = () => {
                   </span>
                 </div>
                 
-                <h3 className="font-display text-xl md:text-2xl italic text-porcelain mb-4 group-hover:text-alchemy-red transition-colors duration-300">
+                <h3 className="font-headline text-xl md:text-2xl text-porcelain mb-4 group-hover:text-alchemy-red transition-colors duration-300">
                   {post.title}
                 </h3>
                 
@@ -162,7 +162,7 @@ export const JournalPage = () => {
             transition={{ duration: 0.8 }}
             className="glass-deep rounded-3xl p-10 md:p-12 text-center"
           >
-            <h2 className="font-display text-3xl md:text-4xl italic text-porcelain mb-4">
+            <h2 className="font-headline text-3xl md:text-4xl text-porcelain mb-4">
               Stay in the Loop
             </h2>
             <p className="font-body text-base text-porcelain/50 font-light mb-8">

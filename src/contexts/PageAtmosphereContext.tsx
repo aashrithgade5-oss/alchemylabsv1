@@ -1,7 +1,10 @@
 'use client';
 import React, { createContext, useContext, useEffect, useState, ReactNode, useMemo, memo } from 'react';
 import { usePathname } from 'next/navigation';
-import { motion } from 'framer-motion';
+// `m`, never `motion`: this provider mounts on EVERY route, so a full
+// framer-motion import here lands the entire renderer in the shared chunk and
+// silently defeats the LazyMotion split in Providers.tsx.
+import { m } from 'framer-motion';
 
 interface AtmosphereConfig {
   gradientPrimary: string;
@@ -108,7 +111,7 @@ export const AtmosphericBackground = memo(() => {
   return (
     <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
       {/* Primary gradient layer - CSS transition instead of Framer Motion */}
-      <motion.div
+      <m.div
         key={atmosphere.vibe}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

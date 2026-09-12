@@ -399,8 +399,8 @@ const AdminDashboard = () => {
           <Link href="/" className="flex items-center gap-3 group">
             <img src={alchemyLogo} alt="Alchemy Labs" className="w-10 h-10 group-hover:scale-105 transition-transform" />
             <div>
-              <h1 className="font-display text-lg text-porcelain">
-                <span className="italic text-alchemy-red">Admin</span>
+              <h1 className="font-headline text-lg text-porcelain">
+                <span className="text-alchemy-red">Admin</span>
               </h1>
               <p className="font-mono text-[9px] text-porcelain/40 uppercase tracking-wider">Dashboard</p>
             </div>
@@ -489,8 +489,8 @@ const AdminDashboard = () => {
             <Link href="/" className="flex items-center gap-2">
               <img src={alchemyLogo} alt="Alchemy Labs" className="w-8 h-8" />
             </Link>
-            <h1 className="font-display text-lg text-porcelain">
-              Admin <span className="italic text-alchemy-red">Panel</span>
+            <h1 className="font-headline text-lg text-porcelain">
+              Admin <span className="text-alchemy-red">Panel</span>
             </h1>
           </div>
           <div className="flex items-center gap-2">
@@ -548,8 +548,8 @@ const AdminDashboard = () => {
               {/* Header */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                  <h2 className="font-display text-2xl sm:text-3xl text-porcelain mb-1">
-                    Welcome back, <span className="italic text-alchemy-red">Admin</span>
+                  <h2 className="font-headline text-2xl sm:text-3xl text-porcelain mb-1">
+                    Welcome back, <span className="text-alchemy-red">Admin</span>
                   </h2>
                   <p className="font-body text-sm text-porcelain/50">
                     Here's your real-time site activity overview
@@ -574,7 +574,7 @@ const AdminDashboard = () => {
                         <MessageSquare className="w-5 h-5 text-alchemy-red" />
                       </div>
                     </div>
-                    <p className="font-display text-3xl sm:text-4xl text-porcelain mb-1">{analytics.total}</p>
+                    <p className="font-headline text-3xl sm:text-4xl text-porcelain mb-1">{analytics.total}</p>
                     <p className="font-mono text-[10px] text-porcelain/40 uppercase tracking-wider">Total Inquiries</p>
                   </div>
                 </div>
@@ -592,7 +592,7 @@ const AdminDashboard = () => {
                         </span>
                       )}
                     </div>
-                    <p className="font-display text-3xl sm:text-4xl text-porcelain mb-1">{analytics.today}</p>
+                    <p className="font-headline text-3xl sm:text-4xl text-porcelain mb-1">{analytics.today}</p>
                     <p className="font-mono text-[10px] text-porcelain/40 uppercase tracking-wider">Today</p>
                   </div>
                 </div>
@@ -615,7 +615,7 @@ const AdminDashboard = () => {
                         </div>
                       )}
                     </div>
-                    <p className="font-display text-3xl sm:text-4xl text-porcelain mb-1">{analytics.thisWeek}</p>
+                    <p className="font-headline text-3xl sm:text-4xl text-porcelain mb-1">{analytics.thisWeek}</p>
                     <p className="font-mono text-[10px] text-porcelain/40 uppercase tracking-wider">This Week</p>
                   </div>
                 </div>
@@ -628,7 +628,7 @@ const AdminDashboard = () => {
                         <Calendar className="w-5 h-5 text-blue-500" />
                       </div>
                     </div>
-                    <p className="font-display text-3xl sm:text-4xl text-porcelain mb-1">{analytics.thisMonth}</p>
+                    <p className="font-headline text-3xl sm:text-4xl text-porcelain mb-1">{analytics.thisMonth}</p>
                     <p className="font-mono text-[10px] text-porcelain/40 uppercase tracking-wider">This Month</p>
                   </div>
                 </div>
@@ -641,7 +641,7 @@ const AdminDashboard = () => {
                     <BarChart3 className="w-4 h-4 text-purple-400" />
                   </div>
                   <div>
-                    <p className="font-display text-lg text-porcelain">{analytics.avgPerWeek}</p>
+                    <p className="font-headline text-lg text-porcelain">{analytics.avgPerWeek}</p>
                     <p className="font-mono text-[9px] text-porcelain/40 uppercase">Avg/Week</p>
                   </div>
                 </div>
@@ -650,7 +650,7 @@ const AdminDashboard = () => {
                     <Clock className="w-4 h-4 text-cyan-400" />
                   </div>
                   <div>
-                    <p className="font-display text-lg text-porcelain">{analytics.avgResponseTime}</p>
+                    <p className="font-headline text-lg text-porcelain">{analytics.avgResponseTime}</p>
                     <p className="font-mono text-[9px] text-porcelain/40 uppercase">Avg Response</p>
                   </div>
                 </div>
@@ -659,7 +659,7 @@ const AdminDashboard = () => {
                     <Target className="w-4 h-4 text-pink-400" />
                   </div>
                   <div>
-                    <p className="font-display text-lg text-porcelain">{analytics.uniqueServices}</p>
+                    <p className="font-headline text-lg text-porcelain">{analytics.uniqueServices}</p>
                     <p className="font-mono text-[9px] text-porcelain/40 uppercase">Services</p>
                   </div>
                 </div>
@@ -668,7 +668,7 @@ const AdminDashboard = () => {
                     <Activity className="w-4 h-4 text-orange-400" />
                   </div>
                   <div>
-                    <p className="font-display text-lg text-porcelain">{analytics.peakHour}</p>
+                    <p className="font-headline text-lg text-porcelain">{analytics.peakHour}</p>
                     <p className="font-mono text-[9px] text-porcelain/40 uppercase">Peak Hour</p>
                   </div>
                 </div>
@@ -679,7 +679,7 @@ const AdminDashboard = () => {
                 {/* Recent Submissions */}
                 <div className="glass-deep rounded-2xl p-6">
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="font-display text-lg text-porcelain">Recent Inquiries</h3>
+                    <h3 className="font-headline text-lg text-porcelain">Recent Inquiries</h3>
                     <button
                       onClick={() => setActiveTab('submissions')}
                       className="font-body text-xs text-alchemy-red hover:underline"
@@ -740,7 +740,7 @@ const AdminDashboard = () => {
                 {/* Weekly Activity Chart */}
                 <div className="glass-deep rounded-2xl p-6">
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="font-display text-lg text-porcelain">Weekly Activity</h3>
+                    <h3 className="font-headline text-lg text-porcelain">Weekly Activity</h3>
                     <span className="font-mono text-[10px] text-porcelain/40">Last 7 days</span>
                   </div>
                   <div className="flex items-end justify-between gap-2 h-36">
@@ -775,7 +775,7 @@ const AdminDashboard = () => {
 
               {/* Service Breakdown */}
               <div className="glass-deep rounded-2xl p-6">
-                <h3 className="font-display text-lg text-porcelain mb-4">Inquiries by Service</h3>
+                <h3 className="font-headline text-lg text-porcelain mb-4">Inquiries by Service</h3>
                 {Object.keys(analytics.serviceBreakdown).length === 0 ? (
                   <p className="text-center py-8 font-body text-porcelain/50">No data yet</p>
                 ) : (
@@ -821,7 +821,7 @@ const AdminDashboard = () => {
             >
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h2 className="font-display text-2xl text-porcelain mb-1">All Submissions</h2>
+                  <h2 className="font-headline text-2xl text-porcelain mb-1">All Submissions</h2>
                   <p className="font-body text-sm text-porcelain/50">
                     {filteredSubmissions.length} of {submissions.length} shown
                   </p>
@@ -1018,7 +1018,7 @@ const AdminDashboard = () => {
               className="space-y-6"
             >
               <div>
-                <h2 className="font-display text-2xl text-porcelain mb-1">Analytics Overview</h2>
+                <h2 className="font-headline text-2xl text-porcelain mb-1">Analytics Overview</h2>
                 <p className="font-body text-sm text-porcelain/50">
                   Insights and trends from your inquiry data
                 </p>
@@ -1037,7 +1037,7 @@ const AdminDashboard = () => {
                       <Activity className="w-4 h-4 text-porcelain/40" />
                     )}
                   </div>
-                  <p className={`font-display text-2xl ${
+                  <p className={`font-headline text-2xl ${
                     analytics.weekChange > 0 ? 'text-green-400' : analytics.weekChange < 0 ? 'text-red-400' : 'text-porcelain'
                   }`}>
                     {analytics.weekChange > 0 ? '+' : ''}{analytics.weekChange}%
@@ -1050,7 +1050,7 @@ const AdminDashboard = () => {
                     <span className="font-mono text-[10px] text-porcelain/50 uppercase">Avg Response</span>
                     <Clock className="w-4 h-4 text-cyan-400" />
                   </div>
-                  <p className="font-display text-2xl text-porcelain">{analytics.avgResponseTime}</p>
+                  <p className="font-headline text-2xl text-porcelain">{analytics.avgResponseTime}</p>
                   <p className="font-mono text-[9px] text-porcelain/40 mt-1">target: &lt; 24h</p>
                 </div>
 
@@ -1059,7 +1059,7 @@ const AdminDashboard = () => {
                     <span className="font-mono text-[10px] text-porcelain/50 uppercase">Peak Activity</span>
                     <Zap className="w-4 h-4 text-amber-400" />
                   </div>
-                  <p className="font-display text-2xl text-porcelain">{analytics.peakHour}</p>
+                  <p className="font-headline text-2xl text-porcelain">{analytics.peakHour}</p>
                   <p className="font-mono text-[9px] text-porcelain/40 mt-1">most active hour</p>
                 </div>
 
@@ -1068,7 +1068,7 @@ const AdminDashboard = () => {
                     <span className="font-mono text-[10px] text-porcelain/50 uppercase">Services</span>
                     <Target className="w-4 h-4 text-purple-400" />
                   </div>
-                  <p className="font-display text-2xl text-porcelain">{analytics.uniqueServices}</p>
+                  <p className="font-headline text-2xl text-porcelain">{analytics.uniqueServices}</p>
                   <p className="font-mono text-[9px] text-porcelain/40 mt-1">active categories</p>
                 </div>
               </div>
@@ -1211,7 +1211,7 @@ const AdminDashboard = () => {
               className="space-y-6"
             >
               <div>
-                <h2 className="font-display text-2xl text-porcelain mb-1">Quick Links</h2>
+                <h2 className="font-headline text-2xl text-porcelain mb-1">Quick Links</h2>
                 <p className="font-body text-sm text-porcelain/50">
                   Fast access to all site pages and external links
                 </p>

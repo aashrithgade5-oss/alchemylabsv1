@@ -3,6 +3,7 @@
 import { AnimatePresence, m } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import { useEffect, memo } from 'react';
+import { resetScroll } from '@/components/LenisProvider';
 
 const pageVariants = {
   initial: { opacity: 0 },
@@ -14,7 +15,9 @@ const ScrollRestoration = memo(() => {
   const pathname = usePathname();
 
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    // NOT window.scrollTo — Lenis owns the scroll position and would keep its
+    // stale offset, snapping the new page back down on the first wheel tick.
+    resetScroll();
   }, [pathname]);
 
   return null;

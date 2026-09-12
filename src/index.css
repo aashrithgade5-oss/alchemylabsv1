@@ -1,5 +1,8 @@
-/* Font Imports - must come first */
-@import '@fontsource/jetbrains-mono/400.css';
+/* No @font-face imports here: all four faces (Inter, Playfair Display Italic,
+   Geist Sans, Geist Mono) are loaded and self-hosted by next/font in
+   app/layout.tsx. A @fontsource/jetbrains-mono import used to sit at the top
+   of this file declaring a face nothing ever referenced — the mono face is
+   Geist Mono per the type law. */
 
 @tailwind base;
 @tailwind components;
@@ -63,8 +66,14 @@ html {
     /* Typography */
     /* next/font renames families, so reference its variables — bare family
        names never resolve */
+    /* FROZEN alias — Geist Sans, kept ONLY for the Aashrith portfolio, which
+       reaches it through explicit `.font-display` classes. Never repoint. */
     --font-display: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, sans-serif;
-    --font-body: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, sans-serif;
+    /* Inter, matching the Tailwind `font-body` key. These two disagreed (var =
+       Geist, utility = Inter); the utility layer always won, so the only thing
+       the Geist value still did was leak the retired face into the `body` base
+       rule below — i.e. every element that set no font of its own. */
+    --font-body: var(--font-inter), -apple-system, BlinkMacSystemFont, sans-serif;
     --font-mono: var(--font-geist-mono), 'SF Mono', monospace;
     
     /* Sidebar */
@@ -103,7 +112,11 @@ html {
   }
   
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-display);
+    /* Inter, NOT --font-display: the type law retired Geist as a display face.
+       The frozen portfolio is unaffected — it sets Geist via explicit
+       `.font-display` classes (28 elements); only two "·" separators ever
+       reached this base rule. */
+    font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, sans-serif;
     font-weight: 400;
     /* Smooth text rendering */
     text-rendering: optimizeLegibility;
@@ -619,18 +632,6 @@ html {
   
   .shimmer-effect:hover::before {
     transform: translateX(100%);
-  }
-  
-  /* Large opacity numbers for sections */
-  .section-number {
-    font-family: var(--font-display);
-    font-size: clamp(150px, 25vw, 400px);
-    font-weight: 400;
-    font-style: italic;
-    color: rgba(225, 6, 19, 0.04);
-    line-height: 0.8;
-    user-select: none;
-    pointer-events: none;
   }
   
   /* Cream section styling */

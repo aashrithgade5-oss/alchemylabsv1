@@ -106,8 +106,9 @@ export default {
       },
       fontFamily: {
         // Phase 0 type law (CLAUDE.md): Inter is the primary display+body
-        // face (variable weight, Thin..Black). Playfair Display Bold Italic
-        // is the ONLY italic anywhere. Geist Mono untouched.
+        // face (variable weight, Thin..Black). Playfair Display Italic at
+        // REGULAR weight (relocked 2026-07-18 — NOT bold) is the ONLY italic
+        // anywhere, and never on an H1/H2. Geist Mono untouched.
         sans: ['var(--font-inter)', '-apple-system', 'sans-serif'],
         mono: ['var(--font-geist-mono)', 'SF Mono', 'monospace'],
         // NEVER repoint `display`: it is a legacy Geist alias the frozen

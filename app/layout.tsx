@@ -23,9 +23,14 @@ const inter = Inter({
   variable: '--font-inter',
 });
 
+// weight pinned to 400: the relock is "REGULAR, NOT bold" and this enforces it
+// structurally — with only the 400 italic instance in the file, an inherited
+// font-bold can never quietly render Playfair at 700 again. Also drops the
+// unused 500..900 axis from the download.
 const playfair = Playfair_Display({
   subsets: ['latin'],
   style: ['italic'],
+  weight: '400',
   variable: '--font-playfair',
 });
 

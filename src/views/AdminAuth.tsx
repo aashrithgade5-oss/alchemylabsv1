@@ -176,8 +176,8 @@ const AdminAuth = () => {
               alt="Alchemy Labs"
               className="w-16 h-16 mx-auto mb-4"
             />
-            <h1 className="font-display text-2xl text-porcelain">
-              Admin <span className="italic text-alchemy-red">Portal</span>
+            <h1 className="font-headline text-2xl text-porcelain">
+              Admin <span className="text-alchemy-red">Portal</span>
             </h1>
             <p className="font-body text-sm text-porcelain/50 mt-2">
               {isForgotPassword 
@@ -195,7 +195,7 @@ const AdminAuth = () => {
                 <Mail className="w-8 h-8 text-green-500" />
               </div>
               <div>
-                <h2 className="font-display text-xl text-porcelain mb-2">Check your email</h2>
+                <h2 className="font-headline text-xl text-porcelain mb-2">Check your email</h2>
                 <p className="font-body text-sm text-porcelain/50">
                   We've sent a password reset link to <span className="text-porcelain">{email}</span>
                 </p>

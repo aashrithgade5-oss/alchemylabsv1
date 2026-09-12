@@ -842,3 +842,42 @@ Resume command: read HANDOFF.md tail + `git log --oneline -15`, then start with 
 ## SESSION 2026-07-19 later — C-P24 (user brief: overlap bento, samurai trio, red presence, About overhaul)
 - C-P24 services: pillar stills → the red/black silhouette trio (VIEWED before choosing: ai→cinematic-still-1 figure-on-red-beam, brand→lone-figure-1 red-city, advisory→lone-figure-2 red-street; user asked Advisory changed + samurai-aesthetic images); OVERLAPPING bento (still rides into the offer column: -mr/-ml 16/24, z-20 over the z-10 glass, ±1.5deg rotation); ember washes: directional radial per pillar section (numeral side) + hero red field over space-shuttle; Intertext "Three instruments. / One hand behind them." beat before FiveGrid. tsc clean.
 - C-P24b About overhaul: YinYangHero + FounderCircles UNTOUCHED (user directive); everything below rebuilt as `src/components/about/AboutStory.tsx` in furnace language — THE PREMISE (Intertext+meteors, "Machines multiplied creation. / They could not multiply care."), THE STORY over samurai-silhouette-2.mp4 ("Born in the flood." + furnace Playfair line), THE DISCIPLINE (読 DECODE / 型 ARCHITECT / 刃 EXECUTE kanji glass rows, ember watermarks), THE NAME ("Alchemy was never about gold." + transmutation copy + "The rest is heat and judgment."). Philosophy/Process/Principles/WhoWeServe/FoundersCTA retired (files on disk, unimported); BottomCTA closes the page. /about 154→153kB. Browser-verified: premise quote, story over samurai, kanji rows all render; founder cards intact.
+
+---
+
+## C-P25 — Ship audit: type-law enforcement, Lenis fix, dynamic-route SEO
+
+Full-site audit before going live. See `ERROR_LOG.md` for the itemised findings
+(E-01 … E-10), verification table, and the accepted-not-fixed list.
+
+Headline fixes:
+- **E-02 (root cause of the reported font inconsistency)** — `src/index.css` base
+  layer had `--font-body` and `h1–h6` both resolving to the RETIRED Geist Sans,
+  so every element without an explicit font class rendered in it. Repointed both
+  to Inter. `--font-display` left untouched (frozen alias).
+  Measured first: the frozen portfolio reaches Geist via 28 explicit
+  `.font-display` elements and only 2 "·" separators used the base rule — count
+  is still exactly 28 after the change, so the freeze is intact.
+- **E-03** — 25 synthesized italics (Geist has no true italic) removed. Rule now
+  uniform sitewide: headings = Inter, taglines/pull-quotes/inline emphasis =
+  real Playfair italic. Never Playfair on H1/H2, per CLAUDE.md.
+- **E-04** — Playfair pinned to `weight: '400'` so the 2026-07-18 regular-weight
+  relock can no longer silently revert to bold.
+- **E-01** — Lenis never learned about the router's `window.scrollTo(0)`, so the
+  first wheel tick after a route change snapped the page back to the previous
+  offset. `LenisProvider` now exports `resetScroll()`.
+- **E-05** — `/services/[slug]` and `/journal/[slug]` had no metadata and were
+  server-rendered on demand. A bare `export default ClientComponent` was making
+  Next skip `generateStaticParams`; wrapping in a real server component fixed it.
+  Static pages 17 → 28.
+- 27 dead components + the dead `@fontsource/jetbrains-mono` dependency removed.
+
+Verified against the PRODUCTION build in Chrome, all 9 public routes: 0 Geist
+leaks, 0 synthesized italics, 0 site-origin console errors, frozen diff empty.
+
+`scripts/reach.js` (new) reports files unreachable from `app/` — rerun it before
+future cleanups.
+
+**BLOCKER for deploy:** `metadataBase` in `app/layout.tsx` is still the Lovable
+preview domain. It must be the real production domain before Vercel, or every
+canonical + OG image URL points at the wrong host.

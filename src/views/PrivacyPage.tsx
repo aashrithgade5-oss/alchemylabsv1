@@ -13,8 +13,8 @@ const PrivacyPage = () => {
               <span className="font-mono text-xs text-alchemy-red tracking-[0.2em] uppercase mb-4 block">
                 Legal
               </span>
-              <h1 className="font-display text-4xl md:text-5xl lg:text-6xl text-porcelain mb-6">
-                Privacy <span className="italic text-alchemy-red">Policy</span>
+              <h1 className="font-headline text-4xl md:text-5xl lg:text-6xl text-porcelain mb-6">
+                Privacy <span className="text-alchemy-red">Policy</span>
               </h1>
               <p className="font-mono text-xs text-porcelain/40">
                 Last updated: January 2026
@@ -25,7 +25,7 @@ const PrivacyPage = () => {
           <div className="space-y-8 font-body text-porcelain/70 leading-relaxed">
             <ScrollReveal delay={0.1}>
               <section>
-                <h2 className="font-display text-2xl text-porcelain mb-4">1. Information We Collect</h2>
+                <h2 className="font-headline text-2xl text-porcelain mb-4">1. Information We Collect</h2>
                 <p className="mb-4">
                   At Alchemy Labs, we collect information you provide directly to us, including:
                 </p>
@@ -40,7 +40,7 @@ const PrivacyPage = () => {
 
             <ScrollReveal delay={0.15}>
               <section>
-                <h2 className="font-display text-2xl text-porcelain mb-4">2. How We Use Your Information</h2>
+                <h2 className="font-headline text-2xl text-porcelain mb-4">2. How We Use Your Information</h2>
                 <p className="mb-4">
                   We use the information we collect to:
                 </p>
@@ -55,7 +55,7 @@ const PrivacyPage = () => {
 
             <ScrollReveal delay={0.2}>
               <section>
-                <h2 className="font-display text-2xl text-porcelain mb-4">3. Data Security</h2>
+                <h2 className="font-headline text-2xl text-porcelain mb-4">3. Data Security</h2>
                 <p>
                   We implement appropriate technical and organizational measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction. Your data is encrypted in transit and at rest.
                 </p>
@@ -64,7 +64,7 @@ const PrivacyPage = () => {
 
             <ScrollReveal delay={0.25}>
               <section>
-                <h2 className="font-display text-2xl text-porcelain mb-4">4. Third-Party Services</h2>
+                <h2 className="font-headline text-2xl text-porcelain mb-4">4. Third-Party Services</h2>
                 <p>
                   We may use third-party services for analytics, email delivery, and security verification. These services have their own privacy policies, and we encourage you to review them. We do not sell your personal information to third parties.
                 </p>
@@ -73,7 +73,7 @@ const PrivacyPage = () => {
 
             <ScrollReveal delay={0.3}>
               <section>
-                <h2 className="font-display text-2xl text-porcelain mb-4">5. Your Rights</h2>
+                <h2 className="font-headline text-2xl text-porcelain mb-4">5. Your Rights</h2>
                 <p className="mb-4">
                   You have the right to:
                 </p>
@@ -88,7 +88,7 @@ const PrivacyPage = () => {
 
             <ScrollReveal delay={0.35}>
               <section>
-                <h2 className="font-display text-2xl text-porcelain mb-4">6. Contact Us</h2>
+                <h2 className="font-headline text-2xl text-porcelain mb-4">6. Contact Us</h2>
                 <p>
                   If you have any questions about this Privacy Policy or our data practices, please contact us at{' '}
                   <a href="mailto:alchemylabs.work@gmail.com?subject=Privacy Inquiry – Alchemy Labs" className="text-alchemy-red hover:underline">
