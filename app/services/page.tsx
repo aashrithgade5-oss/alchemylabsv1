@@ -8,7 +8,8 @@ const description =
 export const metadata: Metadata = {
   title: 'Services',
   description,
-  openGraph: { title: 'Services · Alchemy Labs', description },
+  alternates: { canonical: '/services' },
+  openGraph: { title: 'Services · Alchemy Labs', description, url: '/services' },
 };
 
 const faqJsonLd = {

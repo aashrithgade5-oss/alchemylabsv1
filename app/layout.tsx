@@ -43,8 +43,14 @@ export const metadata: Metadata = {
     template: '%s · Alchemy Labs',
   },
   description,
-  // TODO(OVERHAUL_TODO): swap for the real domain once it exists.
-  metadataBase: new URL('https://alchemylabsv1.lovable.app'),
+  // DEPLOY BLOCKER: every canonical + OG/Twitter image URL resolves against
+  // this. Shipping to Vercel without swapping it points the live site's social
+  // cards and canonicals at the old Lovable preview host. Set
+  // NEXT_PUBLIC_SITE_URL in the Vercel project to the production domain.
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ?? 'https://alchemylabsv1.lovable.app',
+  ),
+  alternates: { canonical: '/' },
   openGraph: {
     title: 'Alchemy Labs · AI-Native Brand Studio',
     description,

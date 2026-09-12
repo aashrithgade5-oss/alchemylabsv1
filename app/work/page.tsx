@@ -7,7 +7,8 @@ const description =
 export const metadata: Metadata = {
   title: 'Work',
   description,
-  openGraph: { title: 'Work · Alchemy Labs', description },
+  alternates: { canonical: '/work' },
+  openGraph: { title: 'Work · Alchemy Labs', description, url: '/work' },
 };
 
 export default Work;

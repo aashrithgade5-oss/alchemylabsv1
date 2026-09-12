@@ -881,3 +881,12 @@ future cleanups.
 **BLOCKER for deploy:** `metadataBase` in `app/layout.tsx` is still the Lovable
 preview domain. It must be the real production domain before Vercel, or every
 canonical + OG image URL points at the wrong host.
+
+### C-P25b — route metadata completion
+`/about`, `/contact`, `/journal`, `/privacy`, `/terms` had no `metadata` export
+and rendered the generic site title everywhere (tabs, search, shared links).
+Added, following the `app/work/page.tsx` pattern, plus `alternates.canonical` on
+every route. All 10 routes verified to return a unique title + canonical.
+
+`metadataBase` now reads `NEXT_PUBLIC_SITE_URL` with the old Lovable host as
+fallback — set that env var in Vercel before the first deploy (see ERROR_LOG.md).

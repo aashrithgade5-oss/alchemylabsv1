@@ -102,6 +102,17 @@ extracted to `src/data/journalPosts.ts` so the server route can read titles.
 **Verified** — real per-page titles/descriptions in the server HTML; static pages
 **17 → 28**, both routes now `●` (SSG) with every slug prerendered.
 
+### E-11 · Five static routes had no page title
+`/about`, `/contact`, `/journal`, `/privacy`, `/terms` exported no `metadata`, so
+each rendered the generic site title in the browser tab, in search results, and
+on every shared link. Only `/work` and `/services` had it.
+
+**Fix** — `metadata` added to all five, following the existing `app/work/page.tsx`
+pattern, plus `alternates.canonical` on every route including the two that
+already had titles.
+**Verified** — all 10 checked routes now return a unique `<title>` and a
+canonical URL.
+
 ---
 
 ## S3 — Weight & hygiene
@@ -182,18 +193,29 @@ These are deliberate calls, not oversights.
 
 ---
 
-## BLOCKER before going live on Vercel
+## Required action before going live on Vercel
 
-`app/layout.tsx` still sets:
+### 1. Set `NEXT_PUBLIC_SITE_URL` — one setting, do not skip
+
+Every canonical URL and both OG/Twitter image URLs resolve against
+`metadataBase`. It used to be a hardcoded Lovable preview domain; it is now:
 
 ```ts
-metadataBase: new URL('https://alchemylabsv1.lovable.app')
+metadataBase: new URL(
+  process.env.NEXT_PUBLIC_SITE_URL ?? 'https://alchemylabsv1.lovable.app',
+)
 ```
 
-Every canonical URL and both OG/Twitter image URLs resolve against this. Shipping
-as-is points the real site's social cards and canonicals at the old Lovable
-preview domain. **This must be the production domain before deploy** — it is the
-one remaining correctness issue that a build cannot catch.
+Add `NEXT_PUBLIC_SITE_URL=https://<production-domain>` to the Vercel project's
+environment variables **before** the first deploy. Without it the live site's
+canonicals and social cards still point at the old preview host — a build cannot
+catch this.
 
-Also pending, lower stakes: `upiVpa` in `lib/payments.ts` is still the placeholder
-`alchemylabs@upi`, and `checkoutUrl` is `null` for all five products.
+### 2. Lower stakes, still placeholders
+- `upiVpa` in `lib/payments.ts` is still `alchemylabs@upi`.
+- `checkoutUrl` is `null` for all five products, so checkout is not live.
+
+### 3. Deploy is not authorised
+Per CLAUDE.md this repo is localhost-only. Deployment happens solely on the exact
+phrase *"yes, upload it to Vercel and make this live."* Nothing in this audit
+touched Vercel.
