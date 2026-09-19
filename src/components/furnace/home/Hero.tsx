@@ -4,198 +4,97 @@ import { useEffect, useRef, useState } from 'react';
 import {
   m,
   useMotionTemplate,
+  useMotionValue,
   useReducedMotion,
   useScroll,
+  useSpring,
   useTransform,
 } from 'framer-motion';
-import { DecodeText } from '../DecodeText';
-import { KineticHeadline, useScrollVelocitySkew } from '../KineticHeadline';
 import { MagneticCTA } from '../MagneticCTA';
 import { CapacityTag } from '../CapacityTag';
-import { HeroMeshField } from './HeroMeshField';
 
 const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
+const BUILDS = ['strategy', 'brand systems', 'identity', 'campaigns', 'film'];
 
-// The cycling centerpiece: each phrase carries its own metallic gradient
-// variation — all in the brushed-metal family, floor luminance high enough
-// to read over the darkest and brightest points of the samurai footage.
-// A traveling ember band (see WORD_SHIMMER below) sweeps through all five —
-// the plan's "moving gradient" ask, layered onto these fills without
-// touching the FO3 stacked-lockup grid that keeps word swaps reflow-free.
-// C-P11: the static aurora word is retired (aurora is now the per-swap
-// TRANSITION treatment below; the page's one persistent aurora instance
-// moved to "Judgment" in TurnSequence). All five words carry their metallic
-// gradients again.
-const BUILDS: { word: string; gradient: string }[] = [
-  { word: 'STRATEGY', gradient: 'linear-gradient(180deg, #b8b8bd 0%, #f4f2ee 55%, #cfcdc9 100%)' },
-  { word: 'BRAND SYSTEMS', gradient: 'linear-gradient(180deg, #c9bfae 0%, #f6efe2 55%, #d8cdbb 100%)' },
-  { word: 'IDENTITY', gradient: 'linear-gradient(180deg, #b3b9c4 0%, #eef2f7 55%, #c5ccd8 100%)' },
-  { word: 'CAMPAIGNS', gradient: 'linear-gradient(180deg, #d0a89a 0%, #ffe9de 55%, #d9b3a4 100%)' },
-  { word: 'FILM', gradient: 'linear-gradient(180deg, #c8c4bc 0%, #faf7f2 55%, #d4d0c8 100%)' },
-];
-
-// C-P11 swap flourish: a one-shot aurora band swept through the incoming
-// word + a single-frame RGB channel split (textShadow copies behind the
-// transparent glyphs), ~260ms. Remounted per activation via key={active}.
-const AURORA_SWEEP =
-  'linear-gradient(115deg, transparent 30%, rgba(255,77,28,0.9) 44%, rgba(255,180,40,0.95) 50%, rgba(237,230,221,0.9) 56%, transparent 70%)';
-
-// A diagonal ember highlight band, twice the element's width, swept left to
-// right on a loop. Layered as its own bg-clip:text span directly over the
-// metallic fill so the base gradient (and the grid cell it lives in) never
-// changes — only an ember shimmer passes through it.
-const WORD_SHIMMER =
-  'linear-gradient(115deg, transparent 35%, rgba(255,77,28,0.85) 48%, rgba(255,160,40,0.9) 52%, transparent 65%)';
-
-// The dominant hero element (phase 4): "WE BUILD" over a cycling word, as a
-// stacked lockup. Every word renders into the SAME grid cell so the block
-// width never changes mid-swap — the old AnimatePresence swap left an
-// invisible-word hole that read as the whole line jumping off-center.
-// Text sits directly over the scene — no solid backing; the hero's
-// text-vignette carries the contrast floor.
-function WeBuild() {
+// Cycling word in the transition face (Playfair italic, regular). Outgoing
+// lifts out of a masked line, incoming rises in; one grid cell, no reflow.
+function Cycler() {
   const reduced = useReducedMotion();
   const [i, setI] = useState(0);
 
   useEffect(() => {
     if (reduced) return;
-    const t = setInterval(() => setI((v) => (v + 1) % BUILDS.length), 2400);
+    const t = setInterval(() => setI((v) => (v + 1) % BUILDS.length), 2800);
     return () => clearInterval(t);
   }, [reduced]);
 
-  const clipStyle = (gradient: string) => ({
-    backgroundImage: gradient,
-    WebkitBackgroundClip: 'text' as const,
-    backgroundClip: 'text' as const,
-    color: 'transparent',
-  });
-
-  const active = reduced ? 1 : i;
-
   return (
-    <div
-      aria-label={`We build ${BUILDS.map((b) => b.word.toLowerCase()).join(', ')}`}
-      className="font-headline text-[clamp(2.5rem,8vw,8rem)] font-black leading-[1.04] tracking-[-0.03em]"
-    >
-      <span aria-hidden className="glass-type block">WE BUILD</span>
-      <span aria-hidden className="grid justify-items-center">
-        {BUILDS.map((b, idx) => (
+    <span aria-hidden className="grid justify-items-center overflow-hidden px-[0.12em] pb-[0.16em]">
+      {BUILDS.map((word, idx) => {
+        const prev = (i - 1 + BUILDS.length) % BUILDS.length;
+        const state = idx === i ? 'on' : idx === prev ? 'out' : 'wait';
+        return (
           <m.span
-            key={b.word}
-            className="col-start-1 row-start-1 whitespace-nowrap will-change-transform"
-            style={clipStyle(b.gradient)}
+            key={word}
+            className="type-scroll glass-type col-start-1 row-start-1 whitespace-nowrap italic"
             initial={false}
             animate={
               reduced
-                ? { opacity: idx === active ? 1 : 0 }
+                ? { opacity: state === 'on' ? 1 : 0 }
                 : {
-                    opacity: idx === active ? 1 : 0,
-                    y: idx === active ? '0%' : '18%',
-                    filter: idx === active ? 'blur(0px)' : 'blur(10px)',
+                    opacity: state === 'on' ? 1 : 0,
+                    y: state === 'on' ? '0%' : state === 'out' ? '-80%' : '80%',
                   }
             }
-            transition={{ duration: 0.5, ease }}
+            transition={{ duration: state === 'wait' ? 0 : 0.9, ease }}
           >
-            {b.word}
+            {word}
           </m.span>
-        ))}
-        {!reduced && BUILDS.map((b, idx) => (
-          <WordShimmer key={`${b.word}-shimmer`} word={b.word} active={idx === active} />
-        ))}
-        {/* C-P11: transition flourish — remounts on every word change so the
-            keyframes replay; same grid cell, so zero layout shift */}
-        {!reduced && (
-          <m.span
-            key={`sweep-${active}`}
-            aria-hidden
-            className="pointer-events-none col-start-1 row-start-1 whitespace-nowrap"
-            style={{
-              backgroundImage: AURORA_SWEEP,
-              backgroundSize: '260% 100%',
-              WebkitBackgroundClip: 'text',
-              backgroundClip: 'text',
-              color: 'transparent',
-            }}
-            initial={{
-              opacity: 0.95,
-              backgroundPositionX: '0%',
-              x: 3,
-              textShadow: '-3px 0 rgba(255,60,40,0.5), 3px 0 rgba(90,170,255,0.5)',
-            }}
-            animate={{
-              opacity: 0,
-              backgroundPositionX: '260%',
-              x: 0,
-              textShadow: '0 0 rgba(0,0,0,0)',
-            }}
-            transition={{
-              duration: 0.26,
-              ease: 'easeOut',
-              textShadow: { duration: 0.1 },
-              x: { duration: 0.1 },
-            }}
-          >
-            {BUILDS[active].word}
-          </m.span>
-        )}
-      </span>
-    </div>
+        );
+      })}
+    </span>
   );
 }
 
-// Loops the shimmer's background-position while a word is the active one.
-// Stacked in the SAME grid cell as the base word (not absolutely
-// positioned), same text/typography, so its glyphs land exactly over the
-// base fill's glyphs — only the ember band travels through them.
-function WordShimmer({ word, active }: { word: string; active: boolean }) {
-  return (
-    <m.span
-      aria-hidden
-      className="pointer-events-none col-start-1 row-start-1 whitespace-nowrap"
-      style={{
-        backgroundImage: WORD_SHIMMER,
-        backgroundSize: '260% 100%',
-        WebkitBackgroundClip: 'text',
-        backgroundClip: 'text',
-        color: 'transparent',
-      }}
-      initial={false}
-      animate={
-        active
-          ? { opacity: 1, backgroundPositionX: ['0%', '260%'] }
-          : { opacity: 0, backgroundPositionX: '0%' }
-      }
-      transition={
-        active
-          ? { backgroundPositionX: { duration: 2.6, ease: 'linear', repeat: Infinity } }
-          : { duration: 0.3 }
-      }
-    >
-      {word}
-    </m.span>
-  );
+// Fine-pointer drift so the frame breathes with the hand; off on touch.
+function usePointerDrift() {
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const sx = useSpring(x, { stiffness: 50, damping: 20 });
+  const sy = useSpring(y, { stiffness: 50, damping: 20 });
+  useEffect(() => {
+    if (!window.matchMedia('(pointer: fine)').matches) return;
+    const onMove = (e: PointerEvent) => {
+      x.set(e.clientX / window.innerWidth - 0.5);
+      y.set(e.clientY / window.innerHeight - 0.5);
+    };
+    window.addEventListener('pointermove', onMove, { passive: true });
+    return () => window.removeEventListener('pointermove', onMove);
+  }, [x, y]);
+  return { sx, sy };
 }
 
 export function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const reduced = useReducedMotion();
-  const skew = useScrollVelocitySkew(0.6);
+  const { sx, sy } = usePointerDrift();
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ['start start', 'end end'],
   });
 
-  // Cinematic mask reveal: the footage opens from a narrow ellipse slit to
-  // full bleed across the first ~55% of the section's scroll travel.
-  const maskRx = useTransform(scrollYProgress, [0, 0.55], [18, 125]);
-  const maskRy = useTransform(scrollYProgress, [0, 0.55], [26, 125]);
-  const clipPath = useMotionTemplate`ellipse(${maskRx}% ${maskRy}% at 50% 55%)`;
-
-  const videoScale = useTransform(scrollYProgress, [0, 1], [1.06, 1.12]);
-  const exitScrim = useTransform(scrollYProgress, [0.72, 0.96], [0, 1]);
-  const headlineY = useTransform(scrollYProgress, [0, 1], [0, -70]);
-  const chromeOpacity = useTransform(scrollYProgress, [0.55, 0.8], [1, 0]);
+  // Depth: footage drifts slow and softens (temporal blur), type outruns it.
+  const mediaY = useTransform(scrollYProgress, [0, 1], ['0%', '10%']);
+  const mediaScale = useTransform(scrollYProgress, [0, 1], [1.06, 1.2]);
+  const mediaBlur = useTransform(scrollYProgress, [0.2, 0.8], [0, 14]);
+  const mediaFilter = useMotionTemplate`blur(${mediaBlur}px)`;
+  const typeY = useTransform(scrollYProgress, [0, 1], [0, -180]);
+  const typeOpacity = useTransform(scrollYProgress, [0.25, 0.55], [1, 0]);
+  const exitScrim = useTransform(scrollYProgress, [0.55, 0.95], [0, 1]);
+  const driftX = useTransform(sx, (v) => v * -18);
+  const driftY = useTransform(sy, (v) => v * -12);
+  const typeDriftX = useTransform(sx, (v) => v * 10);
 
   return (
     <section
@@ -207,154 +106,126 @@ export function Hero() {
           reduced ? 'relative min-h-[100svh]' : 'sticky top-0 h-[100svh]'
         }`}
       >
-        {/* Video behind the slit: emerges on scroll, never sits flat from load */}
         <m.div
-          className="absolute inset-0"
-          style={reduced ? undefined : { clipPath, scale: videoScale }}
+          aria-hidden
+          className="absolute inset-[-3%]"
+          style={reduced ? undefined : { y: mediaY, scale: mediaScale, filter: mediaFilter }}
         >
-          <video
-            autoPlay={!reduced}
-            loop
-            muted
-            playsInline
-            preload="metadata"
-            poster="/media/samurai-silhouette-1-poster.jpg"
-            className="absolute inset-0 h-full w-full object-cover"
-          >
-            <source src="/media/samurai-silhouette-1.mp4" type="video/mp4" />
-          </video>
-          {!reduced && <HeroMeshField />}
-          {/* Phase 2: the ellipse mask boundary gets a spectrum liquid-glass
-              ring — same maskRx/maskRy motion values as the clip-path above,
-              so the ring can never drift out of sync with the "zoom out"
-              reveal. filter=url(#glass-refract) (Phase 1 primitive) puts the
-              chromatic-edge/rainbow-reflection read directly on the stroke.
-              Chrome-only in practice (other engines skip SVG filter refs to
-              acrylic-style effects gracefully — the stroke still renders,
-              just without the distortion/fringe). */}
-          {!reduced && (
-            <svg
-              aria-hidden
-              className="pointer-events-none absolute inset-0 h-full w-full"
-              viewBox="0 0 100 100"
-              preserveAspectRatio="none"
+          <m.div className="absolute inset-0" style={reduced ? undefined : { x: driftX, y: driftY }}>
+            <video
+              autoPlay={!reduced}
+              loop
+              muted
+              playsInline
+              preload="auto"
+              poster="/media/samurai-silhouette-2-poster.jpg"
+              className="absolute inset-0 h-full w-full object-cover object-[52%_50%]"
             >
-              <defs>
-                <linearGradient id="hero-ring-spectrum" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="rgba(237,230,221,0.9)" />
-                  <stop offset="22%" stopColor="rgba(255,180,150,0.55)" />
-                  <stop offset="50%" stopColor="rgba(237,230,221,0.85)" />
-                  <stop offset="78%" stopColor="rgba(180,205,255,0.55)" />
-                  <stop offset="100%" stopColor="rgba(237,230,221,0.9)" />
-                </linearGradient>
-              </defs>
-              <m.ellipse
-                cx="50"
-                cy="55"
-                rx={maskRx}
-                ry={maskRy}
-                fill="none"
-                stroke="url(#hero-ring-spectrum)"
-                strokeWidth="0.45"
-                filter="url(#glass-refract)"
-              />
-            </svg>
-          )}
-          {/* Quiet vignette: the red field recedes, the centered text wins */}
-          <div
-            aria-hidden
-            className="absolute inset-0"
-            style={{
-              background: `
-                radial-gradient(ellipse 120% 90% at 50% 50%, rgba(10,9,8,0.34) 0%, rgba(10,9,8,0.6) 78%, rgba(10,9,8,0.78) 100%),
-                linear-gradient(to top, rgba(10,9,8,0.5) 0%, transparent 30%)
-              `,
-            }}
-          />
+              <source src="/media/samurai-silhouette-2.mp4" type="video/mp4" />
+            </video>
+          </m.div>
         </m.div>
 
-        {/* Scroll-exit fade toward void */}
+        {/* Grade: crimson held in the centre, edges fall to void */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background: `
+              radial-gradient(ellipse 42% 30% at 50% 40%, rgba(10,9,8,0.5) 0%, rgba(10,9,8,0) 100%),
+              radial-gradient(ellipse 70% 60% at 50% 46%, rgba(10,9,8,0.3) 0%, rgba(10,9,8,0.64) 70%, rgba(10,9,8,0.92) 100%),
+              linear-gradient(to top, #0A0908 0%, rgba(10,9,8,0) 30%),
+              linear-gradient(to bottom, rgba(10,9,8,0.7) 0%, rgba(10,9,8,0) 22%)
+            `,
+          }}
+        />
+
+        {/* Depth of field: progressive blur toward the frame edges */}
+        <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-[22%]">
+          <div className="absolute inset-0 backdrop-blur-[3px] [mask-image:linear-gradient(to_bottom,black,transparent)]" />
+          <div className="absolute inset-0 backdrop-blur-[10px] [mask-image:linear-gradient(to_bottom,black,transparent_55%)]" />
+        </div>
+        <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-[28%]">
+          <div className="absolute inset-0 backdrop-blur-[3px] [mask-image:linear-gradient(to_top,black,transparent)]" />
+          <div className="absolute inset-0 backdrop-blur-[12px] [mask-image:linear-gradient(to_top,black,transparent_55%)]" />
+        </div>
+
         <m.div aria-hidden className="absolute inset-0 bg-void" style={{ opacity: reduced ? 0 : exitScrim }} />
 
-        {/* Content, full center. chromeOpacity fades the WHOLE column (not
-            just eyebrow/CTAs) — it used to leave the headline permanently
-            opaque, which was fine while a full 100svh of trailing scroll
-            separated Hero from TurnSequence, but became a visible overlap
-            with TurnSequence's frame once that gap was compressed below. */}
         <m.div
-          className="relative z-10 mx-auto flex w-full max-w-5xl flex-1 flex-col items-center justify-center px-6 pb-20 pt-28 text-center md:px-12"
-          style={reduced ? undefined : { y: headlineY, skewY: skew, opacity: chromeOpacity }}
+          className="relative z-10 mx-auto flex w-full max-w-5xl flex-1 flex-col items-center justify-center px-6 pb-16 text-center md:px-12"
+          style={reduced ? undefined : { y: typeY, x: typeDriftX, opacity: typeOpacity }}
         >
           <m.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="font-mono text-[10px] tracking-[0.3em] text-bone/80 md:text-[11px]"
+            initial={{ opacity: 0, letterSpacing: '0.6em' }}
+            animate={{ opacity: 1, letterSpacing: '0.34em' }}
+            transition={{ duration: 1.4, delay: 0.2, ease }}
+            className="font-mono text-[10px] text-bone/60 md:text-[11px]"
           >
-            <DecodeText text="ALCHEMY LABS · AI-NATIVE BRAND STUDIO · MUMBAI" delay={300} />
+            AI-NATIVE BRAND STUDIO · MUMBAI
           </m.p>
 
-          {/* R-P10: the vignette/halo pair now wraps the FULL text block
-              (lockup → kicker → paragraph → CTAs → capacity tag) so nothing
-              bleeds past the oval's visible edge; margins tightened so the
-              column stays compact inside the ellipse at 1440 and 375. */}
-          <div className="relative mt-8 flex flex-col items-center">
-            {/* text-scoped vignette: contrast floor between footage and glyphs */}
-            <div aria-hidden className="text-vignette absolute -inset-x-24 -inset-y-20 z-0" />
-            <div aria-hidden className="glass-halo absolute -inset-x-20 -inset-y-16 z-0" />
-            <m.div
-              initial={{ opacity: 0, y: 20, filter: 'blur(10px)' }}
-              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-              transition={{ duration: 0.8, delay: 0.35, ease }}
-              className="relative z-10"
+          <m.h1
+            initial={{ opacity: 0, y: 28 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.2, delay: 0.35, ease }}
+            aria-label={`We build ${BUILDS.join(', ')}`}
+            className="mt-7 flex flex-col items-center leading-[0.96]"
+          >
+            <span
+              aria-hidden
+              className="glass-type font-headline text-[clamp(2.75rem,7.5vw,7.25rem)] font-black tracking-[-0.045em]"
             >
-              <WeBuild />
-            </m.div>
-            {/* kicker — R-P10 contrast raise: thin→light weight plus a soft
-                drop-shadow scrim tucked behind the glyphs (static filter, no
-                mix-blend descendants; not a solid backing block) */}
-            <KineticHeadline
-              text="Taste is the moat."
-              className="relative z-10 mt-8 justify-center font-sans text-[clamp(1.125rem,1.8vw,1.5rem)] font-light leading-[1.05] tracking-[-0.01em] text-bone [filter:drop-shadow(0_2px_12px_rgba(10,9,8,0.95))_drop-shadow(0_0_3px_rgba(10,9,8,0.7))] md:mt-10"
-              wordClassName="glass-type"
-              delay={0.9}
-              as="p"
-            />
+              WE BUILD
+            </span>
+            <span className="-mt-[0.04em] text-[clamp(2.9rem,7.6vw,7.5rem)]">
+              <Cycler />
+            </span>
+          </m.h1>
 
-            <m.p
-              initial={{ opacity: 0, y: 18, filter: 'blur(8px)' }}
-              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-              transition={{ duration: 0.8, delay: 1.15, ease }}
-              className="relative z-10 mt-5 max-w-xl text-lg font-light leading-relaxed text-bone/80 [text-wrap:balance] md:mt-6 md:text-xl"
-            >
-              AI drafts at scale. Judgment decides what airs. Brand systems and campaign film for
-              founders who already know the{' '}
-              <span className="font-playfair italic">difference</span>.
-            </m.p>
+          <m.p
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.9, ease }}
+            className="mt-6 max-w-[34ch] text-[15px] font-light leading-relaxed text-bone/70 [text-wrap:balance] md:mt-8 md:text-[17px]"
+          >
+            Taste is the moat. AI drafts at scale; judgment decides what airs — for founders who
+            already know the <span className="font-playfair italic text-bone">difference</span>.
+          </m.p>
 
-            <m.div
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 1.35, ease }}
-              className="relative z-10 mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center sm:gap-5"
-            >
-              <MagneticCTA href="/contact" variant="ember">
-                Begin the sprint
-              </MagneticCTA>
-              <MagneticCTA href="/work" variant="glass" className="px-6 py-3 text-xs">
-                See the work
-              </MagneticCTA>
-            </m.div>
+          <m.div
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: 1.1, ease }}
+            className="mt-9 flex items-center justify-center gap-3 sm:gap-4"
+          >
+            <MagneticCTA href="/contact" variant="ember">
+              Begin the sprint
+            </MagneticCTA>
+            <MagneticCTA href="/work" variant="glass" className="px-6 py-3 text-xs">
+              See the work
+            </MagneticCTA>
+          </m.div>
+        </m.div>
 
-            <m.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.7, delay: 1.6 }}
-              className="relative z-10 mt-8"
-            >
-              <CapacityTag />
-            </m.div>
-          </div>
+        <m.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 1.5 }}
+          style={reduced ? undefined : { opacity: typeOpacity }}
+          className="absolute inset-x-0 bottom-6 z-10 mx-auto flex max-w-6xl items-center justify-between px-6 md:bottom-8 md:px-12"
+        >
+          <CapacityTag />
+          <span className="flex items-center gap-3 font-mono text-[10px] tracking-[0.3em] text-bone/45">
+            SCROLL
+            <span className="relative block h-8 w-px overflow-hidden bg-bone/15">
+              <m.span
+                className="absolute inset-x-0 top-0 h-1/2 bg-ember"
+                animate={reduced ? undefined : { y: ['-100%', '200%'] }}
+                transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
+              />
+            </span>
+          </span>
         </m.div>
       </div>
     </section>

@@ -13,6 +13,11 @@ Everything here is NON-NEGOTIABLE and must be re-verified at the END of every se
   (`font-playfair` + `italic`). Pull-quotes, founder note, nav wordmark ("Alchemy" +
   LABS in Geist Mono small-caps), work-carousel proof line, "down the below" subtext.
   Never on any H1/H2.
+- SCROLL-TEXT RELOCK (2026-09-19, user): all scroll-driven kinetic/transition text
+  (TurnSequence lines, ScrollScrub statements, hero word cycler) uses **Playfair
+  Display, REGULAR weight, upright + italic accent word** — never bold. Unrevealed
+  words sit as a faint outline, sharpen into `.glass-type` on reveal. Inter stays
+  on the static hero "WE BUILD" line and page H1/H2s.
 - Eyebrows / labels / technical: **Geist Mono** (`font-mono`) — untouched by this pass.
 - Geist Sans is retired as a body/display face. It is kept installed ONLY to feed the
   frozen `--font-display` alias below — never assign `font-sans`/`font-headline`

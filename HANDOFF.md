@@ -890,3 +890,10 @@ every route. All 10 routes verified to return a unique title + canonical.
 
 `metadataBase` now reads `NEXT_PUBLIC_SITE_URL` with the old Lovable host as
 fallback â€” set that env var in Vercel before the first deploy (see ERROR_LOG.md).
+
+## 2026-09-19 — O-1 hero + scroll type
+- Hero: owned samurai-silhouette-2 footage full-bleed, scroll depth + temporal blur, edge DOF blur, pointer drift, Playfair italic cycler. Ring/blob mask + HeroMeshField removed.
+- Scroll text (TurnSequence, ScrubBeat): Playfair regular upright, italic accent, ghost-outline reveal (ScrubWord). Playfair now loads normal+italic.
+- Hero?Turn seam fixed (section bg removed + feathered entry mask).
+- Plan: docs/OVERHAUL_PLAN.md.
+

@@ -15,7 +15,7 @@ import {
  * Each word sharpens (opacity 0.15→1, blur 12→0) across its own slice of the
  * element's pass through the viewport — linear, scroll IS the easing.
  */
-function Word({
+export function ScrubWord({
   word,
   range,
   progress,
@@ -26,12 +26,22 @@ function Word({
   progress: MotionValue<number>;
   className?: string;
 }) {
-  // Fully hidden at rest: nothing renders pre-faded-in before its reveal.
+  // Ghost outline holds the word's place; the filled word sharpens over it.
   const opacity = useTransform(progress, range, [0, 1]);
   const blurPx = useTransform(progress, range, [12, 0]);
+  const y = useTransform(progress, range, ['0.12em', '0em']);
   const filter = useMotionTemplate`blur(${blurPx}px)`;
-  return <m.span className={className} style={{ opacity, filter }}>{word}</m.span>;
+  return (
+    <span className="relative inline-block">
+      <span aria-hidden className="ghost-stroke">{word}</span>
+      <m.span className={`absolute inset-0 ${className ?? ''}`} style={{ opacity, filter, y }}>
+        {word}
+      </m.span>
+    </span>
+  );
 }
+
+const Word = ScrubWord;
 
 export function ScrollScrub({
   text,

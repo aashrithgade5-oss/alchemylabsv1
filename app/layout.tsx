@@ -29,7 +29,7 @@ const inter = Inter({
 // unused 500..900 axis from the download.
 const playfair = Playfair_Display({
   subsets: ['latin'],
-  style: ['italic'],
+  style: ['normal', 'italic'],
   weight: '400',
   variable: '--font-playfair',
 });

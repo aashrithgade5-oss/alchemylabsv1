@@ -28,7 +28,7 @@ function ScrubBeat({
         <div aria-hidden className="glass-halo absolute -inset-x-12 -inset-y-8 z-0" />
         <ScrollScrub
           text={text}
-          className="relative z-10 max-w-5xl justify-center text-center font-headline text-[clamp(2rem,4vw,3.5rem)] font-black leading-[1.05] tracking-[-0.03em] text-bone"
+          className="relative z-10 max-w-5xl justify-center text-center type-scroll text-[clamp(2.25rem,4.6vw,4rem)] text-bone"
           wordClassName="glass-type"
         />
       </div>

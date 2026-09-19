@@ -1227,6 +1227,18 @@ html {
   background-clip: text;
 }
 
+/* Scroll/transition text: Playfair regular, never bold (CLAUDE.md relock). */
+.type-scroll {
+  font-family: var(--font-playfair), Georgia, serif;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+}
+.ghost-stroke {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(237, 230, 221, 0.2);
+}
+
 /* Text-scoped elliptical vignette: sits between media and text so headlines
    stay legible while the imagery still bleeds at the frame edges. Size it to
    the text block with oversized absolute insets. */
