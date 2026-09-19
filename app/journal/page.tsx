@@ -7,6 +7,8 @@ export const metadata: Metadata = {
   title: 'Journal',
   description,
   alternates: { canonical: '/journal' },
+  // unpublished: kept out of search until the journal launches
+  robots: { index: false, follow: false },
   openGraph: { title: 'Journal · Alchemy Labs', description, url: '/journal' },
 };
 

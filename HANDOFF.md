@@ -940,3 +940,9 @@ fallback — set that env var in Vercel before the first deploy (see ERROR_LOG.m
 - Higgsfield: 20 GPT Image 2 (high, 2K) service visuals -> public/media/svc/*.webp; Seedance 2.5 pillar loops pending.
 - Resumes: public/resumes/*.pdf; Aashrith CV download added (portfolio otherwise untouched).
 - NEEDS OWNER: Aashrith CV has '[dates]/[metric]' placeholders; Eva PDF has DOB; migration 20260919130000_page_views.sql to deploy.
+
+## 2026-09-19 - O-8 master push part 2
+- Seedance 2.5 pillar loops (1080p->1600w h264, ~0.5MB each): public/media/svc/pillar-{ai,brand,advisory}.mp4.
+- Eva hero media provided at /media/eva/hero.* (fixes 404 + hydration error from fallback swap).
+- Journal hidden (footer link removed, noindex) per owner.
+- QA: all routes 200 (unknown offer 404), no horizontal overflow at 375 on home/services/offer/contact/eva, checkout sheet: aria-modal, focus trap, scroll lock, Esc closes. X-Frame-Options DENY verified. Build passes.
