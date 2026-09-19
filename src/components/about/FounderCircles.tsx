@@ -159,15 +159,15 @@ const FounderPanel = memo(({ founder, index }: { founder: typeof founders[0]; in
 
         {/* Content */}
         <div className="relative z-10 flex flex-col items-center justify-end text-center h-full px-6 sm:px-10 py-10 sm:py-14 lg:py-12">
-          <h3 className="font-sans text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black uppercase tracking-[0.1em] text-porcelain mb-3">
+          <h3 className="type-scroll text-4xl md:text-5xl text-bone mb-3">
             {founder.fullName}
           </h3>
 
-          <p className="font-mono text-[10px] sm:text-xs text-alchemy-red/80 tracking-[0.15em] uppercase mb-3">
+          <p className="font-mono text-[10px] sm:text-xs text-ember/80 tracking-[0.15em] uppercase mb-3">
             {founder.title}
           </p>
 
-          <p className="font-sans text-xs sm:text-sm text-porcelain/40 mb-8 max-w-xs leading-relaxed">
+          <p className="font-sans text-xs sm:text-sm text-bone/40 mb-8 max-w-xs leading-relaxed">
             {founder.specialty}
           </p>
 
@@ -182,10 +182,10 @@ const FounderPanel = memo(({ founder, index }: { founder: typeof founders[0]; in
                 : `0 0 20px ${(founder as any).isPink ? 'rgba(236,72,153,0.1)' : 'rgba(220,38,38,0.1)'}`,
             }}
           >
-            <span className="text-porcelain group-hover/btn:text-alchemy-red transition-colors">
+            <span className="text-bone group-hover/btn:text-ember transition-colors">
               Discover Portfolio
             </span>
-            <ArrowRight className="w-3.5 h-3.5 text-alchemy-red group-hover/btn:translate-x-1 transition-transform" />
+            <ArrowRight className="w-3.5 h-3.5 text-ember group-hover/btn:translate-x-1 transition-transform" />
           </Link>
         </div>
       </motion.div>
@@ -214,7 +214,7 @@ export const FounderCircles = memo(() => {
           {!isMobile && (
             <div className="relative flex items-center justify-center w-px mx-4">
               <motion.div
-                className="w-px bg-gradient-to-b from-transparent via-alchemy-red/60 to-transparent"
+                className="w-px bg-gradient-to-b from-transparent via-ember/60 to-transparent"
                 initial={{ height: '0%' }}
                 whileInView={{ height: '100%' }}
                 viewport={{ once: true, margin: '-100px' }}

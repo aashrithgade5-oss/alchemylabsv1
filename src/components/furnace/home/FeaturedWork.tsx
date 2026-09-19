@@ -24,7 +24,7 @@ function SlideInner({ entry }: { entry: (typeof featuredEntries)[number] }) {
           alt={entry.title}
           fill
           sizes="(min-width: 768px) 60vw, 100vw"
-          className="object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.04]"
+          className="object-cover transition-transform duration-1000 ease-out group-hover:scale-[1.04]"
         />
         <span
           aria-hidden

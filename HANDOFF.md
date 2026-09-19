@@ -891,14 +891,14 @@ every route. All 10 routes verified to return a unique title + canonical.
 `metadataBase` now reads `NEXT_PUBLIC_SITE_URL` with the old Lovable host as
 fallback â€” set that env var in Vercel before the first deploy (see ERROR_LOG.md).
 
-## 2026-09-19 — O-1 hero + scroll type
+## 2026-09-19 - O-1 hero + scroll type
 - Hero: owned samurai-silhouette-2 footage full-bleed, scroll depth + temporal blur, edge DOF blur, pointer drift, Playfair italic cycler. Ring/blob mask + HeroMeshField removed.
 - Scroll text (TurnSequence, ScrubBeat): Playfair regular upright, italic accent, ghost-outline reveal (ScrubWord). Playfair now loads normal+italic.
 - Hero?Turn seam fixed (section bg removed + feathered entry mask).
 - Plan: docs/OVERHAUL_PLAN.md.
 
 
-## 2026-09-19 — O-2 homepage sections
+## 2026-09-19 - O-2 homepage sections
 - Pillars ? editorial index (hairline rows, Playfair titles, clip-path hover reveal), rows deep-link /services#pillar-N.
 - The Five: removed fabricated "MOST SELLING" badge + 5 looping card videos; carbon cards on Higgsfield obsidian-fold-1; edge-fade marquee; 44px buttons.
 - Selected work: Playfair titles (condensed text-mark PNGs dropped), 16:10 media, 44px arrows.
@@ -906,10 +906,16 @@ fallback â€” set that env var in Vercel before the first deploy (see ERROR_LOG.m
 - Footer: visible Playfair wordmark. Intertext meteors removed. TurnSequence exit fade.
 - New assets (Higgsfield gpt_image_2_5): public/media/obsidian-fold-1.webp, obsidian-fold-2.webp.
 
-## 2026-09-19 — O-3 forms, security, Work/Contact, one closer
+## 2026-09-19 - O-3 forms, security, Work/Contact, one closer
 - SECURITY: browser no longer inserts into contact_submissions. Edge function now: Zod (unicode names) ? honeypot ? Turnstile ? per-email rate limit (3/h, read from table) ? service-role insert ? best-effort emails. Generic errors only. New migration drops anon insert policy. NEEDS DEPLOY of function + migration together (human, Supabase CLI).
 - Contact form rewritten: it had NO submit button (only a Calendly type=button). Labels, aria-invalid, adjacent errors, honeypot, Turnstile reset, success state, direct lines. validate() covered by src/components/contact-validate.test.ts.
 - Security headers in next.config.js (nosniff, DENY, referrer, permissions). CSP deferred to preview testing.
 - BottomCTA (fake newsletter) deleted; ClosingBand is the single closer site-wide via SiteChrome.
 - Work page rebuilt editorial; type-display (Inter 300) on all page H1/H2; services giant numeral removed.
 - vitest.config: removed uninstalled Vite plugin (tests were not runnable).
+
+## 2026-09-19 - O-4 About, build, docs
+- About: new AboutHero (owned footage, type-display), client SEOHead removed (title was doubling), founder names in Playfair, ember palette.
+- Build passes. /contact First Load 220kB -> 113kB (legacy form removed). /journal 154kB still over budget (pre-existing, next item).
+- Frozen-route diff empty; no Fraunces/font-serif usages. Tests 4/4.
+- docs/DEPLOYMENT.md (human actions, deploy order), docs/ASSET_LEDGER.md.

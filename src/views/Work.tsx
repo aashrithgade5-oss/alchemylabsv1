@@ -20,7 +20,7 @@ function WorkTile({ entry, large }: { entry: (typeof portfolio)[number]; large: 
           <AmbientVideo
             src={entry.video.src}
             poster={entry.video.poster}
-            className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.03]"
+            className="absolute inset-0 h-full w-full object-cover transition-transform duration-1000 ease-out group-hover:scale-[1.03]"
           />
         ) : (
           <Image
@@ -28,7 +28,7 @@ function WorkTile({ entry, large }: { entry: (typeof portfolio)[number]; large: 
             alt={`${entry.title} — ${entry.label.toLowerCase()} work`}
             fill
             sizes={large ? '(min-width: 1024px) 1100px, 100vw' : '(min-width: 768px) 50vw, 100vw'}
-            className="object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.03]"
+            className="object-cover transition-transform duration-1000 ease-out group-hover:scale-[1.03]"
           />
         )}
       </div>
