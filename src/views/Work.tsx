@@ -85,13 +85,13 @@ export default function Work() {
         <div aria-hidden className="absolute inset-0">
           <m.div className="absolute inset-0" style={{ scale: bgScale, y: bgY }}>
             <Image
-              src="/media/red-glow-box.webp"
+              src="/media/mb-samurai-glass-walk.webp"
               alt=""
               fill
               priority
               quality={90}
               sizes="100vw"
-              className="object-cover object-center opacity-[0.3]"
+              className="object-cover object-[70%_50%] opacity-[0.55]"
             />
           </m.div>
           {/* the "lights moving" pass: an oversized copy drifting slowly
@@ -102,7 +102,7 @@ export default function Work() {
             transition={{ duration: 22, ease: 'easeInOut', repeat: Infinity, repeatType: 'mirror' }}
           >
             <Image
-              src="/media/red-glow-box.webp"
+              src="/media/mb-samurai-glass-walk.webp"
               alt=""
               fill
               quality={75}
@@ -187,13 +187,25 @@ export default function Work() {
 
       {/* C-P12: the orphaned client-logo strip is replaced with the work
           pedagogy, in copy voice. */}
-      <section className="relative border-t border-line px-6 py-20 md:px-12">
+      <section className="relative overflow-hidden border-t border-line px-6 py-28 md:px-12 md:py-36">
+        {/* "keep the one frame": one still figure in a blurred crowd */}
+        <div aria-hidden className="absolute inset-0">
+          <Image
+            src="/media/mb-the-one-who-stays.webp"
+            alt=""
+            fill
+            sizes="100vw"
+            className="object-cover object-center opacity-40"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-void via-void/55 to-void" />
+          <div className="absolute inset-0 bg-gradient-to-r from-void/80 via-transparent to-transparent" />
+        </div>
         <m.div
           initial={{ opacity: 0, y: 32 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.9, ease }}
-          className="mx-auto max-w-6xl"
+          className="relative mx-auto max-w-6xl"
         >
           <p className="font-mono text-[10px] tracking-[0.3em] text-ash">THE PEDAGOGY</p>
           <p className="mt-6 max-w-3xl text-lg font-light leading-relaxed text-bone/75 md:text-xl">

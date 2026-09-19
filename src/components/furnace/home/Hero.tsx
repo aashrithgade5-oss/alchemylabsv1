@@ -75,14 +75,14 @@ function WeBuild() {
   return (
     <div
       aria-label={`We build ${BUILDS.map((b) => b.word.toLowerCase()).join(', ')}`}
-      className="font-headline text-[clamp(2.5rem,8vw,8rem)] font-black leading-[1.04] tracking-[-0.03em]"
+      className="font-headline text-[clamp(2.05rem,8vw,8rem)] font-black leading-[1.04] tracking-[-0.03em]"
     >
       <span aria-hidden className="glass-type block">WE BUILD</span>
-      <span aria-hidden className="grid justify-items-center">
+      <span aria-hidden className="grid justify-items-center pb-[0.12em]">
         {BUILDS.map((b, idx) => (
           <m.span
             key={b.word}
-            className="col-start-1 row-start-1 whitespace-nowrap will-change-transform"
+            className="clip-pad col-start-1 row-start-1 whitespace-nowrap will-change-transform"
             style={clipStyle(b.gradient)}
             initial={false}
             animate={
@@ -108,7 +108,7 @@ function WeBuild() {
           <m.span
             key={`sweep-${active}`}
             aria-hidden
-            className="pointer-events-none col-start-1 row-start-1 whitespace-nowrap"
+            className="clip-pad pointer-events-none col-start-1 row-start-1 whitespace-nowrap"
             style={{
               backgroundImage: AURORA_SWEEP,
               backgroundSize: '260% 100%',
@@ -151,7 +151,7 @@ function WordShimmer({ word, active }: { word: string; active: boolean }) {
   return (
     <m.span
       aria-hidden
-      className="pointer-events-none col-start-1 row-start-1 whitespace-nowrap"
+      className="clip-pad pointer-events-none col-start-1 row-start-1 whitespace-nowrap"
       style={{
         backgroundImage: WORD_SHIMMER,
         backgroundSize: '260% 100%',
@@ -300,7 +300,7 @@ export function Hero() {
             separated Hero from TurnSequence, but became a visible overlap
             with TurnSequence's frame once that gap was compressed below. */}
         <m.div
-          className="relative z-10 mx-auto flex w-full max-w-5xl flex-1 flex-col items-center justify-center px-6 pb-20 pt-28 text-center md:px-12"
+          className="relative z-10 mx-auto flex w-full max-w-5xl flex-1 flex-col items-center justify-center px-6 pb-12 pt-24 text-center md:px-12 md:pb-20 md:pt-28"
           style={reduced ? undefined : { y: headlineY, skewY: skew, opacity: chromeOpacity }}
         >
           <m.p

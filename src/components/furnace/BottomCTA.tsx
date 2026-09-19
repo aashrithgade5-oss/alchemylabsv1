@@ -27,12 +27,12 @@ export function BottomCTA() {
           radial contrast floor as the rest of the rebuilt pages. */}
       <div aria-hidden className="absolute inset-0">
         <Image
-          src="/media/dodge-challenger.webp"
+          src="/media/mb-rider-fog.webp"
           alt=""
           fill
           quality={90}
           sizes="100vw"
-          className="object-cover object-center opacity-45"
+          className="object-cover object-[75%_60%] opacity-70"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-void via-void/70 to-void/55" />
         <div className="absolute bottom-0 left-1/2 h-[60%] w-[120%] -translate-x-1/2 bg-[radial-gradient(ellipse_at_center,rgba(255,77,28,0.14)_0%,transparent_70%)]" />

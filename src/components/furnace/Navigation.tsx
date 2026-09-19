@@ -115,7 +115,7 @@ export function FurnaceNavigation() {
             onClick={() => setOpen((v) => !v)}
             aria-label={open ? 'Close menu' : 'Open menu'}
             aria-expanded={open}
-            className="rounded-full border border-line p-2 text-bone md:hidden"
+            className="grid h-11 w-11 place-items-center rounded-full border border-line text-bone md:hidden"
           >
             {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
           </button>

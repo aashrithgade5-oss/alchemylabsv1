@@ -30,15 +30,15 @@ export function StillBreak() {
       <div aria-hidden className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-void to-transparent" />
       <div aria-hidden className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-void to-transparent" />
       <div className="absolute inset-0 flex items-center justify-center px-6">
-        <m.h2
+        <m.p
           initial={{ opacity: 0, y: 28, filter: 'blur(12px)' }}
           whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
           viewport={{ once: true, margin: '-120px' }}
           transition={{ duration: 0.8, ease }}
-          className="whitespace-nowrap text-center font-playfair text-[clamp(0.85rem,4vw,3.5rem)] italic leading-[1.15] text-bone"
+          className="text-center font-playfair text-[clamp(1.75rem,4vw,3.5rem)] italic leading-[1.15] text-bone [text-wrap:balance] sm:whitespace-nowrap"
         >
           For founders who can tell the difference.
-        </m.h2>
+        </m.p>
       </div>
     </section>
   );

@@ -180,9 +180,9 @@ export const Contact = memo(() => {
       {/* Background atmosphere */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] rounded-full blur-[180px] opacity-40"
-          style={{ background: 'radial-gradient(ellipse, rgba(220,38,38,0.08), transparent 70%)' }} />
+          style={{ background: 'radial-gradient(ellipse, rgba(255,77,28,0.08), transparent 70%)' }} />
         <div className="absolute bottom-0 right-0 w-[500px] h-[500px] rounded-full blur-[150px] opacity-30"
-          style={{ background: 'radial-gradient(ellipse, rgba(220,38,38,0.06), transparent 70%)' }} />
+          style={{ background: 'radial-gradient(ellipse, rgba(255,77,28,0.06), transparent 70%)' }} />
       </div>
       <div className="relative z-10 max-w-6xl mx-auto px-6 md:px-12">
         <div className="grid lg:grid-cols-5 gap-12 lg:gap-16">
@@ -205,20 +205,20 @@ export const Contact = memo(() => {
             >
               <span className="inline-block px-4 py-2 rounded-full backdrop-blur-md mb-6"
                 style={{
-                  background: 'linear-gradient(135deg, rgba(220, 38, 38, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%)',
-                  border: '1px solid rgba(220, 38, 38, 0.3)',
+                  background: 'linear-gradient(135deg, rgba(255, 77, 28, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%)',
+                  border: '1px solid rgba(255, 77, 28, 0.3)',
                 }}
               >
-                <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-porcelain/80">
+                <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-bone/80">
                   Get Started
                 </span>
               </span>
-              <h2 className="font-headline text-3xl sm:text-4xl md:text-5xl leading-[1.1] tracking-[-0.02em] text-porcelain mb-4">
+              <h2 className="font-headline text-3xl sm:text-4xl md:text-5xl leading-[1.1] tracking-[-0.02em] text-bone mb-4">
                 Let's build something
                 <br />
-                <span className="text-alchemy-red">inevitable.</span>
+                <span className="text-ember">inevitable.</span>
               </h2>
-              <p className="font-body text-base text-porcelain/50 mb-8 font-light">
+              <p className="font-body text-base text-bone/50 mb-8 font-light">
                 Brief us in under 3 minutes. We reply within 24 hours.
               </p>
 
@@ -237,9 +237,9 @@ export const Contact = memo(() => {
                   transition={{ type: 'spring', stiffness: 400, damping: 25 }}
                 >
                   <div className="w-10 h-10 rounded-lg bg-green-500/10 flex items-center justify-center group-hover:shadow-[0_0_15px_rgba(34,197,94,0.25)] transition-shadow">
-                    <MessageCircle className="w-5 h-5 text-green-500" />
+                    <MessageCircle className="w-5 h-5 text-ember" />
                   </div>
-                  <p className="font-body text-sm text-porcelain">WhatsApp</p>
+                  <p className="font-body text-sm text-bone">WhatsApp</p>
                 </motion.a>
 
                 <div>
@@ -250,17 +250,17 @@ export const Contact = memo(() => {
                       background: 'rgba(255, 255, 255, 0.03)',
                       border: '1px solid rgba(255, 255, 255, 0.06)',
                     }}
-                    whileHover={{ x: 4, scale: 1.02, borderColor: 'rgba(220, 38, 38, 0.3)' }}
+                    whileHover={{ x: 4, scale: 1.02, borderColor: 'rgba(255, 77, 28, 0.3)' }}
                     transition={{ type: 'spring', stiffness: 400, damping: 25 }}
                   >
-                    <div className="w-10 h-10 rounded-lg bg-alchemy-red/10 flex items-center justify-center group-hover:shadow-[0_0_15px_rgba(220,38,38,0.25)] transition-shadow">
-                      <Mail className="w-5 h-5 text-alchemy-red" />
+                    <div className="w-10 h-10 rounded-lg bg-ember/10 flex items-center justify-center group-hover:shadow-[0_0_15px_rgba(255,77,28,0.25)] transition-shadow">
+                      <Mail className="w-5 h-5 text-ember" />
                     </div>
-                    <p className="font-body text-sm text-porcelain">Email</p>
+                    <p className="font-body text-sm text-bone">Email</p>
                   </motion.a>
                   <button
                     onClick={() => copyToClipboard('alchemylabs.work@gmail.com')}
-                    className="flex items-center gap-1.5 mt-1.5 ml-14 font-mono text-[10px] text-porcelain/35 hover:text-porcelain/60 transition-colors"
+                    className="flex items-center gap-1.5 mt-1.5 ml-14 font-mono text-[10px] text-bone/35 hover:text-bone/60 transition-colors"
                   >
                     <Copy className="w-3 h-3" />
                     alchemylabs.work@gmail.com
@@ -270,7 +270,7 @@ export const Contact = memo(() => {
 
               {/* Social Links */}
               <div className="pt-6 border-t border-porcelain/10">
-                <p className="font-mono text-[10px] text-porcelain/40 tracking-wider uppercase mb-4">Follow Us</p>
+                <p className="font-mono text-[10px] text-bone/40 tracking-wider uppercase mb-4">Follow Us</p>
                 <div className="flex gap-3">
                   {[
                     { href: socialLinks.instagram, Icon: Instagram, hoverColor: 'hover:text-pink-500' },
@@ -290,7 +290,7 @@ export const Contact = memo(() => {
                       whileHover={{ scale: 1.1, rotate: 5 }}
                       transition={{ type: 'spring', stiffness: 400, damping: 20 }}
                     >
-                      <Icon className={`w-4 h-4 text-porcelain/60 ${hoverColor} transition-colors`} />
+                      <Icon className={`w-4 h-4 text-bone/60 ${hoverColor} transition-colors`} />
                     </motion.a>
                   ))}
                 </div>
@@ -298,29 +298,29 @@ export const Contact = memo(() => {
 
               {/* Founder note — with pull-quotes, the only sanctioned Playfair italic use */}
               <div className="mt-8 border-t border-porcelain/10 pt-6">
-                <p className="font-playfair text-lg italic leading-relaxed text-porcelain/75">
+                <p className="font-playfair text-lg italic leading-relaxed text-bone/75">
                   &ldquo;Every brief lands on my desk first. If we take your project,
                   it&rsquo;s because I already know what to do with it.&rdquo;
                 </p>
-                <p className="mt-3 font-mono text-[10px] tracking-[0.25em] uppercase text-porcelain/40">
+                <p className="mt-3 font-mono text-[10px] tracking-[0.25em] uppercase text-bone/40">
                   — Ash, Founder
                 </p>
               </div>
 
               {/* Founder Direct */}
               <div className="mt-8 p-4 rounded-xl" style={{
-                background: 'linear-gradient(135deg, rgba(220, 38, 38, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%)',
-                border: '1px solid rgba(220, 38, 38, 0.15)',
+                background: 'linear-gradient(135deg, rgba(255, 77, 28, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%)',
+                border: '1px solid rgba(255, 77, 28, 0.15)',
               }}>
-                <p className="font-body text-xs text-porcelain/60 mb-3">
+                <p className="font-body text-xs text-bone/60 mb-3">
                   Need to speak directly with the founders?
                 </p>
                 <div className="flex gap-3">
                   <div>
                     <motion.a 
                       href="mailto:aashrithgade5@gmail.com?subject=Direct Inquiry – Alchemy Labs"
-                      className="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-mono text-xs text-alchemy-red hover:bg-alchemy-red/10 transition-colors"
-                      style={{ border: '1px solid rgba(220, 38, 38, 0.25)' }}
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-mono text-xs text-ember hover:bg-ember/10 transition-colors"
+                      style={{ border: '1px solid rgba(255, 77, 28, 0.25)' }}
                       whileHover={{ scale: 1.02 }}
                     >
                       <Mail className="w-3.5 h-3.5" />
@@ -328,7 +328,7 @@ export const Contact = memo(() => {
                     </motion.a>
                     <button
                       onClick={() => copyToClipboard('aashrithgade5@gmail.com')}
-                      className="flex items-center gap-1 mt-1 ml-1 font-mono text-[9px] text-porcelain/30 hover:text-porcelain/50 transition-colors"
+                      className="flex items-center gap-1 mt-1 ml-1 font-mono text-[9px] text-bone/30 hover:text-bone/50 transition-colors"
                     >
                       <Copy className="w-2.5 h-2.5" />
                       copy email
@@ -337,8 +337,8 @@ export const Contact = memo(() => {
                   <div>
                     <motion.a 
                       href="mailto:evadoshi05@gmail.com?subject=Direct Inquiry – Alchemy Labs"
-                      className="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-mono text-xs text-alchemy-red hover:bg-alchemy-red/10 transition-colors"
-                      style={{ border: '1px solid rgba(220, 38, 38, 0.25)' }}
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-mono text-xs text-ember hover:bg-ember/10 transition-colors"
+                      style={{ border: '1px solid rgba(255, 77, 28, 0.25)' }}
                       whileHover={{ scale: 1.02 }}
                     >
                       <Mail className="w-3.5 h-3.5" />
@@ -346,7 +346,7 @@ export const Contact = memo(() => {
                     </motion.a>
                     <button
                       onClick={() => copyToClipboard('evadoshi05@gmail.com')}
-                      className="flex items-center gap-1 mt-1 ml-1 font-mono text-[9px] text-porcelain/30 hover:text-porcelain/50 transition-colors"
+                      className="flex items-center gap-1 mt-1 ml-1 font-mono text-[9px] text-bone/30 hover:text-bone/50 transition-colors"
                     >
                       <Copy className="w-2.5 h-2.5" />
                       copy email
@@ -380,65 +380,65 @@ export const Contact = memo(() => {
                 >
                   {/* Strategy Call Heading — Editorial Split */}
                   <div className="mb-10 text-center">
-                    <p className="font-mono text-[11px] tracking-[0.25em] uppercase text-porcelain/50 mb-2">
+                    <p className="font-mono text-[11px] tracking-[0.25em] uppercase text-bone/50 mb-2">
                       15 MIN STRATEGY CALL
                     </p>
-                    <h3 className="font-headline text-2xl md:text-3xl text-alchemy-red">
+                    <h3 className="font-headline text-2xl md:text-3xl text-ember">
                       First one for free.
                     </h3>
                   </div>
 
                   <div className="grid md:grid-cols-2 gap-5 mb-5">
                     <div className="space-y-2">
-                      <label className="font-mono text-[10px] text-porcelain/50 tracking-[0.15em] uppercase">
+                      <label htmlFor="c-name" className="font-mono text-[10px] text-bone/50 tracking-[0.15em] uppercase">
                         Your Name *
                       </label>
                       <input
                         type="text"
-                        value={formData.name}
+                        id="c-name" value={formData.name}
                         onChange={(e) => {
                           setFormData({ ...formData, name: e.target.value });
                           validateField('name', e.target.value);
                         }}
                         placeholder="Alex Rivera"
-                        className={`glass-input glass-input-elevated ${fieldErrors.name ? 'border-alchemy-red/50' : ''}`}
+                        className={`glass-input glass-input-elevated ${fieldErrors.name ? 'border-ember/50' : ''}`}
                         required
                         disabled={isSubmitting}
                       />
                       {fieldErrors.name && (
-                        <p className="font-mono text-[10px] text-alchemy-red">{fieldErrors.name}</p>
+                        <p className="font-mono text-[10px] text-ember">{fieldErrors.name}</p>
                       )}
                     </div>
 
                     <div className="space-y-2">
-                      <label className="font-mono text-[10px] text-porcelain/50 tracking-[0.15em] uppercase">
+                      <label htmlFor="c-email" className="font-mono text-[10px] text-bone/50 tracking-[0.15em] uppercase">
                         Email *
                       </label>
                       <input
                         type="email"
-                        value={formData.email}
+                        id="c-email" value={formData.email}
                         onChange={(e) => {
                           setFormData({ ...formData, email: e.target.value });
                           validateField('email', e.target.value);
                         }}
                         placeholder="alex@company.com"
-                        className={`glass-input glass-input-elevated ${fieldErrors.email ? 'border-alchemy-red/50' : ''}`}
+                        className={`glass-input glass-input-elevated ${fieldErrors.email ? 'border-ember/50' : ''}`}
                         required
                         disabled={isSubmitting}
                       />
                       {fieldErrors.email && (
-                        <p className="font-mono text-[10px] text-alchemy-red">{fieldErrors.email}</p>
+                        <p className="font-mono text-[10px] text-ember">{fieldErrors.email}</p>
                       )}
                     </div>
                   </div>
 
                   <div className="space-y-2 mb-5">
-                    <label className="font-mono text-[10px] text-porcelain/50 tracking-[0.15em] uppercase">
+                    <label htmlFor="c-company" className="font-mono text-[10px] text-bone/50 tracking-[0.15em] uppercase">
                       Company
                     </label>
                     <input
                       type="text"
-                      value={formData.company}
+                      id="c-company" value={formData.company}
                       onChange={(e) => setFormData({ ...formData, company: e.target.value })}
                       placeholder="Your Company Name"
                       className="glass-input glass-input-elevated"
@@ -447,13 +447,13 @@ export const Contact = memo(() => {
                   </div>
 
                   <div className="space-y-2 mb-5">
-                    <label className="font-mono text-[10px] text-porcelain/50 tracking-[0.15em] uppercase">
+                    <label htmlFor="c-service" className="font-mono text-[10px] text-bone/50 tracking-[0.15em] uppercase">
                       What do you need?
                     </label>
                     <select
-                      value={formData.service}
+                      id="c-service" value={formData.service}
                       onChange={(e) => handleServiceChange(e.target.value)}
-                      className="glass-input glass-input-elevated cursor-pointer text-porcelain"
+                      className="glass-input glass-input-elevated cursor-pointer text-bone"
                       disabled={isSubmitting}
                       style={{ backgroundColor: 'rgba(20, 20, 22, 0.95)' }}
                     >
@@ -472,17 +472,17 @@ export const Contact = memo(() => {
                         </option>
                       ))}
                     </select>
-                    <p className="font-mono text-[9px] text-porcelain/30">
+                    <p className="font-mono text-[9px] text-bone/30">
                       "Specific request" opens your email client
                     </p>
                   </div>
 
                   <div className="space-y-2 mb-6">
-                    <label className="font-mono text-[10px] text-porcelain/50 tracking-[0.15em] uppercase">
+                    <label htmlFor="c-message" className="font-mono text-[10px] text-bone/50 tracking-[0.15em] uppercase">
                       What are we building? *
                     </label>
                     <textarea
-                      value={formData.message}
+                      id="c-message" value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                       placeholder="Tell us about your vision, timeline, and any specific goals..."
                       rows={4}
@@ -499,11 +499,11 @@ export const Contact = memo(() => {
                   />
 
                   <div className="flex items-center justify-center gap-3 mb-4">
-                    <span className="font-mono text-[9px] text-porcelain/40 tracking-wider">Reply within 24h</span>
-                    <span className="text-porcelain/20">·</span>
-                    <span className="font-mono text-[9px] text-porcelain/40 tracking-wider">NDA available</span>
-                    <span className="text-porcelain/20">·</span>
-                    <span className="font-mono text-[9px] text-porcelain/40 tracking-wider">Free first call</span>
+                    <span className="font-mono text-[9px] text-bone/40 tracking-wider">Reply within 24h</span>
+                    <span className="text-bone/20">·</span>
+                    <span className="font-mono text-[9px] text-bone/40 tracking-wider">NDA available</span>
+                    <span className="text-bone/20">·</span>
+                    <span className="font-mono text-[9px] text-bone/40 tracking-wider">Free first call</span>
                   </div>
 
                   {/* honeypot — off-screen, skipped by keyboard + screen readers */}
@@ -525,7 +525,7 @@ export const Contact = memo(() => {
                   <button
                     type="button"
                     onClick={openCalendly}
-                    className="gradient-border-glow-btn w-full flex items-center justify-center gap-3 py-4 px-8 rounded-full font-body font-medium text-sm text-porcelain transition-all duration-300 hover:brightness-110 relative overflow-hidden"
+                    className="gradient-border-glow-btn w-full flex items-center justify-center gap-3 py-4 px-8 rounded-full font-body font-medium text-sm text-bone transition-all duration-300 hover:brightness-110 relative overflow-hidden"
                   >
                     <span>Schedule a Meeting</span>
                     <Calendar className="w-4 h-4" />
@@ -537,7 +537,7 @@ export const Contact = memo(() => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.6 }}
-                    className="font-mono text-[10px] text-center text-porcelain/35 mt-4"
+                    className="font-mono text-[10px] text-center text-bone/35 mt-4"
                   >
                     {intentFired
                       ? 'One click closer to elevating your brand.'
@@ -563,14 +563,14 @@ export const Contact = memo(() => {
                       border: '1px solid rgba(34, 197, 94, 0.3)',
                     }}
                   >
-                    <Check className="w-8 h-8 text-green-500" />
+                    <Check className="w-8 h-8 text-ember" />
                   </motion.div>
                   
                   <motion.h3
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 }}
-                    className="font-headline text-3xl md:text-4xl text-porcelain mb-3"
+                    className="font-headline text-3xl md:text-4xl text-bone mb-3"
                   >
                     Done! We'll get back to you.
                   </motion.h3>
@@ -578,7 +578,7 @@ export const Contact = memo(() => {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 }}
-                    className="font-body text-base text-porcelain/60 font-light mb-10"
+                    className="font-body text-base text-bone/60 font-light mb-10"
                   >
                     Your brief is in our hands. Book your free strategy call below.
                   </motion.p>
@@ -590,22 +590,19 @@ export const Contact = memo(() => {
                     className="flex flex-col items-center gap-4"
                   >
                     {/* Primary Calendly CTA — uses official popup widget */}
-                    <a
-                      href=""
-                      onClick={(e) => {
-                        e.preventDefault();
-                        openCalendly();
-                      }}
-                      className="gradient-border-glow inline-flex items-center gap-3 px-8 py-4 rounded-full font-body font-medium text-sm text-porcelain transition-all duration-300 hover:brightness-110 cursor-pointer"
+                    <button
+                      type="button"
+                      onClick={openCalendly}
+                      className="gradient-border-glow inline-flex items-center gap-3 px-8 py-4 rounded-full font-body font-medium text-sm text-bone transition-all duration-300 hover:brightness-110 cursor-pointer"
                     >
-                      <Calendar className="w-5 h-5 text-alchemy-red" />
+                      <Calendar className="w-5 h-5 text-ember" />
                       <span>Book Your Call</span>
-                    </a>
+                    </button>
 
                     <div className="flex flex-wrap justify-center gap-3 mt-2">
                       <Link
                         href="/"
-                        className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-body text-sm text-porcelain/60 hover:text-porcelain transition-colors"
+                        className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-body text-sm text-bone/60 hover:text-bone transition-colors"
                         style={{
                           background: 'rgba(255, 255, 255, 0.04)',
                           border: '1px solid rgba(255, 255, 255, 0.08)',
@@ -626,8 +623,8 @@ export const Contact = memo(() => {
                           border: '1px solid rgba(34, 197, 94, 0.4)',
                         }}
                       >
-                        <MessageCircle className="w-4 h-4 text-green-500" />
-                        <span className="text-porcelain">WhatsApp Us</span>
+                        <MessageCircle className="w-4 h-4 text-ember" />
+                        <span className="text-bone">WhatsApp Us</span>
                       </a>
                     </div>
                   </motion.div>

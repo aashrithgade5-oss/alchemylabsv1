@@ -924,3 +924,9 @@ fallback — set that env var in Vercel before the first deploy (see ERROR_LOG.m
 - All visual components restored to 6b90aba (Hero, TurnSequence, TheFive colour-line/video/liquid-glass, Pillars bento, ClosingBand, BottomCTA, Work, About, Contact, services, Footer, ScrollScrub, Intertext, StudioMotion). CLAUDE.md type law restored (Inter + glass effects; Playfair italic = emphasis words only).
 - Kept real fixes only: edge-function security + migration, Contact: server-only submit + honeypot + a real submit button (old form had none), security headers, vitest config, About doubled title (SEOHead usage removed; frozen file untouched).
 - Upgrades re-applied in place: Hero ring moved outside the clip (was half-clipped = 'unclear circle'), crisp non-scaling hairline + ember halo; TurnSequence seam feather + exit fade.
+
+## 2026-09-19 - O-6 Higgsfield mood board + audit fixes (in place)
+- Mood board: docs/moodboard.html, 8 frames (Nano Banana 2K, conditioned on samurai-silhouette-2 + red-slats posters). public/media/mb-*.webp.
+- Integrated as background swaps only: Work hero (mb-samurai-glass-walk), Work pedagogy (mb-the-one-who-stays), site closer BottomCTA (mb-rider-fog, was Dodge car), Contact backdrop (mb-slat-corridor). Held for approval: liquid-glass slab (journal), katana (404/OG), fluted duo (about), vertical rider (mobile poster).
+- Audit fixes: global bg-clip:text descender/italic clip fix (.glass-type*, .aurora-word, .clip-pad); hero cycler crop + 375 fit (BRAND SYSTEMS overflowed); hero mobile padding; StillBreak line no longer shrinks to 14px; Contact labels htmlFor, Calendly href='' -> button, legacy red/porcelain -> ember/bone; cookie banner Decline + 44px targets; nav menu button 44px. Unused O-1 CSS removed.
+- Open claims for owner: 'MOST SELLING SPRINTS', '24h reply', '3 SPRINT SLOTS'.

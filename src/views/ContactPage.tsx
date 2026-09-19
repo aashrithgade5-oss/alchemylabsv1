@@ -99,7 +99,7 @@ export const ContactPage = () => {
           }}
         >
           <m.div className="absolute inset-0" style={{ scale: bgScale }}>
-            <Image src="/assets/contact-bg.png" alt="" fill className="object-cover opacity-40" />
+            <Image src="/media/mb-slat-corridor.webp" alt="" fill sizes="100vw" className="object-cover object-right opacity-50" />
           </m.div>
         </div>
         <m.div

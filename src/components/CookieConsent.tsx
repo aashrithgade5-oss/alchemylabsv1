@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const EASE_CINEMATIC = [0.22, 1, 0.36, 1] as const;
+const DECLINED_KEY = 'alchemy-cookies-declined';
 
 export const CookieConsent = memo(() => {
   const { hasConsented, acceptCookies } = usePerformance();
@@ -17,9 +18,15 @@ export const CookieConsent = memo(() => {
 
   useEffect(() => {
     if (hasConsented || !isHomepage) return;
+    try { if (localStorage.getItem(DECLINED_KEY)) return; } catch { /* storage blocked */ }
     const timer = setTimeout(() => setVisible(true), 1200);
     return () => clearTimeout(timer);
   }, [hasConsented, isHomepage]);
+
+  const handleDecline = () => {
+    try { localStorage.setItem(DECLINED_KEY, '1'); } catch { /* storage blocked */ }
+    setVisible(false);
+  };
 
   const handleAccept = () => {
     acceptCookies();
@@ -58,7 +65,7 @@ export const CookieConsent = memo(() => {
               <div className="flex-1 min-w-0">
                 <p className="text-sm text-white/70 leading-relaxed">
                   We use cookies to optimize your experience.{' '}
-                  <Link href="/privacy" className="inline-flex items-center gap-1 text-white/40 hover:text-white/60 transition-colors">
+                  <Link href="/privacy" className="inline-flex min-h-11 items-center gap-1 text-white/40 hover:text-white/60 transition-colors">
                     <Shield className="w-3 h-3" />
                     Privacy
                   </Link>
@@ -66,11 +73,17 @@ export const CookieConsent = memo(() => {
               </div>
 
               <button
+                onClick={handleDecline}
+                className="shrink-0 min-h-11 px-3 text-sm text-white/55 transition-colors hover:text-white"
+              >
+                Decline
+              </button>
+              <button
                 onClick={handleAccept}
-                className="shrink-0 px-4 py-2 rounded-xl text-sm font-medium text-white tracking-wide transition-all duration-300"
+                className="shrink-0 min-h-11 px-4 py-2 rounded-xl text-sm font-medium text-white tracking-wide transition-all duration-300"
                 style={{
-                  background: 'linear-gradient(135deg, rgba(220,38,38,0.7) 0%, rgba(185,28,28,0.85) 100%)',
-                  boxShadow: '0 2px 12px rgba(220,38,38,0.2)',
+                  background: 'linear-gradient(135deg, rgba(255,77,28,0.7) 0%, rgba(185,28,28,0.85) 100%)',
+                  boxShadow: '0 2px 12px rgba(255,77,28,0.2)',
                 }}
               >
                 Allow

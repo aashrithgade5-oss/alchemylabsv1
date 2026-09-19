@@ -1227,24 +1227,14 @@ html {
   background-clip: text;
 }
 
-/* Scroll/transition text: Playfair regular, never bold (CLAUDE.md relock). */
-.type-scroll {
-  font-family: var(--font-playfair), Georgia, serif;
-  font-weight: 400;
-  letter-spacing: -0.02em;
-  line-height: 1.08;
-}
-/* Page H1/H2 display: Inter light, tight — restraint over weight. */
-.type-display {
-  font-family: var(--font-inter), -apple-system, sans-serif;
-  font-weight: 300;
-  letter-spacing: -0.045em;
-  line-height: 1;
-  padding-bottom: 0.08em;
-}
-.ghost-stroke {
-  color: transparent;
-  -webkit-text-stroke: 1px rgba(237, 230, 221, 0.2);
+/* bg-clip:text only paints inside the box: at display leading (1.02-1.05)
+   descenders and italic overhangs fell outside it and read as cropped.
+   Grow the painted box, cancel the growth in layout. */
+[class*='glass-type'],
+.aurora-word,
+.clip-pad {
+  padding: 0 0.08em 0.16em;
+  margin: 0 -0.08em -0.16em;
 }
 
 /* Text-scoped elliptical vignette: sits between media and text so headlines
