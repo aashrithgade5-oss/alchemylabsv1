@@ -9,6 +9,14 @@ import { featuredEntries } from '@lib/portfolio';
 
 const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
+// Project text marks (white on black), screened over the carbon field.
+const textMarks: Record<string, string> = {
+  'aether-rituals': '/media/aether-rituals-text.png',
+  genesis: '/media/genesis-text.png',
+  'oakley-concept': '/media/oakley-text.png',
+  'dior-campaign': '/media/dior-text.png',
+};
+
 // Phase 7 (Landing_Page_Patches.pdf): "rather than it being a selectable
 // carousel that can be moved from Aether Rituals to then Next, having
 // Genesis, then Next, having Oakley Showcase, and then Dior" — real,
@@ -18,13 +26,13 @@ const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
 function SlideInner({ entry }: { entry: (typeof featuredEntries)[number] }) {
   return (
     <>
-      <Link href="/work" className="group relative block aspect-[16/10] overflow-hidden rounded-2xl border border-bone/[0.08]">
+      <Link href="/work" className="group relative block overflow-hidden border border-line">
         <Image
           src={entry.visuals[0] ?? entry.image}
           alt={entry.title}
-          fill
-          sizes="(min-width: 768px) 60vw, 100vw"
-          className="object-cover transition-transform duration-1000 ease-out group-hover:scale-[1.04]"
+          width={1200}
+          height={800}
+          className="h-auto w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
         />
         <span
           aria-hidden
@@ -36,7 +44,21 @@ function SlideInner({ entry }: { entry: (typeof featuredEntries)[number] }) {
         <p className="font-mono text-[10px] tracking-[0.25em] text-ember">
           {entry.label} · {entry.discipline}
         </p>
-        <h3 className="type-scroll mt-5 text-[clamp(2.25rem,4vw,3.5rem)] text-bone">{entry.title}</h3>
+        {textMarks[entry.id] ? (
+          <h3 className="mt-5">
+            <Image
+              src={textMarks[entry.id]}
+              alt={entry.title}
+              width={800}
+              height={200}
+              className="h-auto w-64 mix-blend-screen md:w-80"
+            />
+          </h3>
+        ) : (
+          <h3 className="mt-4 font-sans text-3xl font-bold text-bone md:text-4xl">
+            {entry.title}
+          </h3>
+        )}
         <p className="mt-4 max-w-md text-base leading-relaxed text-ash">{entry.summary}</p>
         <Link
           href="/work"
@@ -73,7 +95,7 @@ export function FeaturedWork() {
               type="button"
               onClick={() => go(-1)}
               aria-label="Previous work"
-              className="grid h-11 w-11 place-items-center rounded-full border border-line text-bone/70 transition-colors duration-300 hover:border-ember/60 hover:text-bone"
+              className="rounded-full border border-line p-2 text-bone/70 transition-colors duration-300 hover:border-ember/60 hover:text-bone"
             >
               <ArrowLeft className="h-3.5 w-3.5" />
             </button>
@@ -81,7 +103,7 @@ export function FeaturedWork() {
               type="button"
               onClick={() => go(1)}
               aria-label="Next work"
-              className="grid h-11 w-11 place-items-center rounded-full border border-line text-bone/70 transition-colors duration-300 hover:border-ember/60 hover:text-bone"
+              className="rounded-full border border-line p-2 text-bone/70 transition-colors duration-300 hover:border-ember/60 hover:text-bone"
             >
               <ArrowRight className="h-3.5 w-3.5" />
             </button>
@@ -102,7 +124,7 @@ export function FeaturedWork() {
           {prevIndex !== null && prevIndex !== index && (
             <div
               aria-hidden
-              className="pointer-events-none absolute inset-0 grid gap-10 md:grid-cols-[1.7fr_1fr] md:items-end md:gap-14"
+              className="pointer-events-none absolute inset-0 grid gap-10 md:grid-cols-[1.4fr_1fr] md:items-end"
             >
               <SlideInner entry={featuredEntries[prevIndex]} />
             </div>
@@ -112,7 +134,7 @@ export function FeaturedWork() {
             initial={{ opacity: 0, x: direction > 0 ? 32 : -32 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, ease }}
-            className="relative grid gap-10 md:grid-cols-[1.7fr_1fr] md:items-end md:gap-14"
+            className="relative grid gap-10 md:grid-cols-[1.4fr_1fr] md:items-end"
           >
             <SlideInner entry={entry} />
           </m.div>

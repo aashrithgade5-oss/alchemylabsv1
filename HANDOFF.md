@@ -919,3 +919,8 @@ fallback — set that env var in Vercel before the first deploy (see ERROR_LOG.m
 - Build passes. /contact First Load 220kB -> 113kB (legacy form removed). /journal 154kB still over budget (pre-existing, next item).
 - Frozen-route diff empty; no Fraunces/font-serif usages. Tests 4/4.
 - docs/DEPLOYMENT.md (human actions, deploy order), docs/ASSET_LEDGER.md.
+
+## 2026-09-19 - O-5 RESTORE (user: 'integrate, don't rewrite')
+- All visual components restored to 6b90aba (Hero, TurnSequence, TheFive colour-line/video/liquid-glass, Pillars bento, ClosingBand, BottomCTA, Work, About, Contact, services, Footer, ScrollScrub, Intertext, StudioMotion). CLAUDE.md type law restored (Inter + glass effects; Playfair italic = emphasis words only).
+- Kept real fixes only: edge-function security + migration, Contact: server-only submit + honeypot + a real submit button (old form had none), security headers, vitest config, About doubled title (SEOHead usage removed; frozen file untouched).
+- Upgrades re-applied in place: Hero ring moved outside the clip (was half-clipped = 'unclear circle'), crisp non-scaling hairline + ember halo; TurnSequence seam feather + exit fade.

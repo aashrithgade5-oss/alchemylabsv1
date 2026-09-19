@@ -35,7 +35,7 @@ export default function ServiceProductPage() {
     return (
       <main className="relative flex min-h-[70svh] flex-col items-center justify-center px-6 text-center font-sans">
         <p className="font-mono text-[10px] tracking-[0.3em] text-ash">NOT FOUND</p>
-        <h1 className="mt-6 type-display text-3xl text-bone">
+        <h1 className="mt-6 font-headline text-3xl font-black text-bone">
           That offer does not exist.
         </h1>
         <Link
@@ -73,7 +73,7 @@ export default function ServiceProductPage() {
           <KineticHeadline
             as="h1"
             text={product.name}
-            className="mx-auto mt-7 justify-center type-display text-[clamp(2.5rem,6vw,5.5rem)] text-bone"
+            className="mx-auto mt-7 justify-center font-headline text-[clamp(2.5rem,6vw,5.5rem)] font-black leading-[1.05] tracking-[-0.04em] text-bone"
             wordClassName="glass-type"
             delay={0.2}
           />

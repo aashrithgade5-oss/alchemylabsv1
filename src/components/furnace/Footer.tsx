@@ -23,7 +23,7 @@ export function FurnaceFooter() {
         <div className="flex flex-col gap-12 md:flex-row md:items-start md:justify-between">
           <div>
             <Link href="/" className="flex items-baseline gap-1.5">
-              <span className="font-playfair text-xl italic text-bone">Alchemy</span>
+              <span className="font-sans text-lg font-bold tracking-tight text-bone">Alchemy</span>
               <span className="font-mono text-[10px] tracking-[0.3em] text-ash">LABS</span>
             </Link>
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-ash">
@@ -78,14 +78,7 @@ export function FurnaceFooter() {
           </div>
         </div>
 
-        <p
-          aria-hidden
-          className="type-scroll glass-type mt-20 select-none whitespace-nowrap text-center text-[clamp(4rem,17vw,15rem)] italic leading-[0.9] opacity-80 [mask-image:linear-gradient(to_bottom,black_30%,transparent_100%)]"
-        >
-          Alchemy
-        </p>
-
-        <div className="flex flex-col gap-3 border-t border-line pt-8 md:flex-row md:items-center md:justify-between">
+        <div className="mt-16 flex flex-col gap-3 border-t border-line pt-8 md:flex-row md:items-center md:justify-between">
           <p className="font-mono text-[10px] tracking-[0.2em] text-ash">
             MUMBAI · WORKING GLOBALLY
           </p>

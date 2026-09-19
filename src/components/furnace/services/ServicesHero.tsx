@@ -61,7 +61,7 @@ export function ServicesHero() {
         </p>
         <KineticHeadline
           text="Three Pillars."
-          className="mt-7 max-w-4xl type-display text-[clamp(3rem,7vw,7rem)] text-bone"
+          className="mt-7 max-w-4xl font-headline text-[clamp(3rem,7vw,7rem)] font-black leading-[1.02] tracking-[-0.04em] text-bone"
           wordClassName="glass-type"
           delay={0.15}
         />

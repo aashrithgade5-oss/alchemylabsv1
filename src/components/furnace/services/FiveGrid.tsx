@@ -21,7 +21,7 @@ export function FiveGrid() {
     <section id="the-five" className="relative">
       <div className="mx-auto max-w-6xl px-6 py-24 md:px-12 md:py-32 lg:px-16">
         {/* clause-per-line rule + per-word scrub, one clause per row */}
-        <h2 className="max-w-2xl type-display text-[clamp(2rem,4vw,3.5rem)] text-bone">
+        <h2 className="max-w-2xl font-headline text-[clamp(2rem,4vw,3.5rem)] font-black leading-[1.05] tracking-[-0.03em] text-bone">
           {/* display:flex makes each span block-level: one clause per line */}
           <ScrollScrub as="span" text="No call." wordClassName="glass-type" />
           <ScrollScrub as="span" text="No proposal." wordClassName="glass-type" />

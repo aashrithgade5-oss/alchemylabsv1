@@ -3,7 +3,7 @@
 import { usePathname } from 'next/navigation';
 import { FurnaceNavigation } from './Navigation';
 import { FurnaceFooter } from './Footer';
-import { ClosingBand } from './home/ClosingBand';
+import { BottomCTA } from './BottomCTA';
 
 // The founder portfolios render their own inline nav and footer; the global
 // chrome previously stacked on top of them. This gate keeps their files
@@ -23,13 +23,13 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
   // Homepage and (since C-P17) Work both end in ClosingBand, their own
   // dedicated closer with the same "bring the brand, Begin" beat —
   // stacking this one right after it would read as the same CTA twice.
-  const skipBottomCTA = pathname === '/contact';
+  const skipBottomCTA = pathname === '/contact' || pathname === '/' || pathname === '/work';
 
   return (
     <>
       <FurnaceNavigation />
       {children}
-      {!skipBottomCTA && <ClosingBand />}
+      {!skipBottomCTA && <BottomCTA />}
       <FurnaceFooter />
     </>
   );

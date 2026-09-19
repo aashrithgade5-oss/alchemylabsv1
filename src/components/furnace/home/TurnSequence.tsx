@@ -11,7 +11,6 @@ import {
   useTransform,
   type MotionValue,
 } from 'framer-motion';
-import { ScrubWord } from '../fx/ScrollScrub';
 
 const FRAME_COUNT = 104;
 const frameSrc = (i: number) => `/sequence-turn/turn-${String(i + 1).padStart(3, '0')}.webp`;
@@ -21,10 +20,39 @@ const frameSrc = (i: number) => `/sequence-turn/turn-${String(i + 1).padStart(3,
 // line that carries the aurora + Playfair italic treatment (the page's one
 // persistent aurora instance — the hero cycler's is transition-only now).
 const LINES = [
-  { text: 'The machine drafts by the thousand.', range: [0.05, 0.3], accent: 'thousand.' },
-  { text: 'Judgment keeps one.', range: [0.38, 0.62], accent: 'Judgment' },
-  { text: 'That one is yours.', range: [0.7, 0.94], accent: 'yours.' },
+  { text: 'THE MACHINE DRAFTS BY THE THOUSAND', range: [0.05, 0.3], accent: '' },
+  { text: 'JUDGMENT KEEPS ONE', range: [0.38, 0.62], accent: 'JUDGMENT' },
+  { text: 'THAT ONE IS YOURS', range: [0.7, 0.94], accent: '' },
 ] as const;
+
+// One word of a kinetic line, sharpening into focus across its own slice
+// of the line's scroll range (the "concentrate" mechanism).
+function Word({
+  word,
+  wStart,
+  wEnd,
+  progress,
+  accent = false,
+}: {
+  word: string;
+  wStart: number;
+  wEnd: number;
+  progress: MotionValue<number>;
+  accent?: boolean;
+}) {
+  // blur floor 12: the one scrub signature (matches fx/ScrollScrub)
+  const opacity = useTransform(progress, [wStart, wEnd], [0, 1]);
+  const blurPx = useTransform(progress, [wStart, wEnd], [12, 0]);
+  const filter = useMotionTemplate`blur(${blurPx}px)`;
+  return (
+    <m.span
+      className={accent ? 'aurora-word font-playfair italic' : 'glass-type-spectrum-ember'}
+      style={{ opacity, filter }}
+    >
+      {word}
+    </m.span>
+  );
+}
 
 function KineticLine({
   text,
@@ -42,7 +70,7 @@ function KineticLine({
   // words stagger in across the first 45% of the band; the whole line
   // dissolves together at the end of it
   const inWindow = (end - start) * 0.45;
-  const opacity = useTransform(progress, [start - 0.04, start, end - 0.05, end], [0, 1, 1, 0]);
+  const opacity = useTransform(progress, [end - 0.05, end], [1, 0]);
   const blurPx = useTransform(progress, [end - 0.05, end], [0, 10]);
   const filter = useMotionTemplate`blur(${blurPx}px)`;
   const y = useTransform(progress, [start, end], [30, -30]);
@@ -50,17 +78,18 @@ function KineticLine({
   return (
     <m.h2
       style={{ opacity, y, filter }}
-      className="type-scroll absolute flex max-w-5xl flex-wrap justify-center gap-x-[0.28em] px-6 text-center text-[clamp(2.5rem,6.4vw,6rem)] text-bone"
+      className="absolute flex max-w-5xl flex-wrap justify-center gap-x-4 px-6 text-center font-headline text-[clamp(2.5rem,6vw,5.5rem)] font-black leading-[1.05] tracking-[-0.03em] text-bone"
     >
       {words.map((word, i) => {
         const wStart = start + (i / words.length) * inWindow;
         return (
-          <ScrubWord
+          <Word
             key={`${word}-${i}`}
             word={word}
-            range={[wStart, wStart + inWindow * 0.4]}
+            wStart={wStart}
+            wEnd={wStart + inWindow * 0.4}
             progress={progress}
-            className={accent === word ? 'glass-type italic' : 'glass-type'}
+            accent={!!accent && word === accent}
           />
         );
       })}
@@ -166,11 +195,9 @@ function ScrubSequence() {
   const overlayOpacity = useTransform(scrollYProgress, [0, LINES[0].range[0]], [0, 1]);
 
   // The stage slides up over the hero's pinned tail (-mt-[50svh]); feather its
-  // top edge while entering so the two never meet on a hard line.
-  const { scrollYProgress: entry } = useScroll({
-    target: containerRef,
-    offset: ['start end', 'start start'],
-  });
+  // top edge while entering so the two never meet on a hard line, and fade to
+  // void on exit so the next section never starts on a hard red edge.
+  const { scrollYProgress: entry } = useScroll({ target: containerRef, offset: ['start end', 'start start'] });
   const featherEnd = useTransform(entry, [0, 1], [60, 0]);
   const stageMask = useMotionTemplate`linear-gradient(to bottom, transparent 0%, black ${featherEnd}%)`;
   const exitScrim = useTransform(scrollYProgress, [0.94, 1], [0, 1]);

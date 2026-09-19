@@ -62,7 +62,7 @@ export function AboutStory() {
           <p className="font-mono text-[10px] tracking-[0.3em] text-ash">THE STORY</p>
           <ScrollScrub
             text="Born in the flood."
-            className="mt-5 type-display text-[clamp(2.5rem,5vw,4.5rem)] text-bone"
+            className="mt-5 font-headline text-[clamp(2.5rem,5vw,4.5rem)] font-black leading-[1.05] tracking-[-0.03em] text-bone"
             wordClassName="glass-type"
           />
           <m.p
@@ -106,7 +106,7 @@ export function AboutStory() {
           <p className="font-mono text-[10px] tracking-[0.3em] text-ash">THE DISCIPLINE</p>
           <ScrollScrub
             text="Three moves. Every time."
-            className="mt-5 type-display text-[clamp(2rem,4vw,3.5rem)] text-bone"
+            className="mt-5 font-headline text-[clamp(2rem,4vw,3.5rem)] font-black leading-[1.1] tracking-[-0.03em] text-bone"
             wordClassName="glass-type"
           />
           <div className="mt-14 flex flex-col gap-5">
@@ -127,7 +127,7 @@ export function AboutStory() {
                     <span className="font-mono text-xs tracking-[0.3em] text-ember">
                       {move.numeral}
                     </span>
-                    <h3 className="type-display text-2xl text-bone md:w-56 md:text-3xl">
+                    <h3 className="font-headline text-2xl font-black tracking-tight text-bone md:w-56 md:text-3xl">
                       {move.name}
                     </h3>
                     <p className="max-w-xl text-sm leading-relaxed text-ash md:text-base">
@@ -155,7 +155,7 @@ export function AboutStory() {
           <p className="font-mono text-[10px] tracking-[0.3em] text-ash">THE NAME</p>
           <ScrollScrub
             text="Alchemy was never about gold."
-            className="mt-5 justify-center type-display text-[clamp(2rem,4.5vw,4rem)] text-bone"
+            className="mt-5 justify-center font-headline text-[clamp(2rem,4.5vw,4rem)] font-black leading-[1.1] tracking-[-0.03em] text-bone"
             wordClassName="glass-type"
           />
           <m.p
