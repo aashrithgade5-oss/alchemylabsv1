@@ -39,6 +39,9 @@ Everything here is NON-NEGOTIABLE and must be re-verified at the END of every se
   with a pending slimming item — do not make it worse).
 - `npm run build` after every item. Dev server and build share `.next` — stop dev first.
 
+## UNFROZEN 2026-09-19 by owner for the portfolio overhaul (AashrithPortfolio.tsx,
+## src/components/portfolio/*). Preserve its identity: light/dark toggle, section order,
+## voice, ventures. The --font-display alias rule still stands.
 ## FROZEN — Aashrith Gade portfolio (diff must always be empty)
 `app/aashrith/page.tsx`, `app/AashrithGadePortfolio/page.tsx`, `src/views/AashrithPortfolio.tsx`,
 `src/components/portfolio/*`, `src/components/effects*`, `src/components/SequentianBackground.tsx`,

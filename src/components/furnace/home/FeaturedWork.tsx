@@ -86,7 +86,7 @@ export function FeaturedWork() {
   };
 
   return (
-    <section className="relative bg-gradient-to-b from-transparent via-carbon to-transparent">
+    <section className="relative">
       <div className="mx-auto max-w-6xl px-6 py-16 md:px-12 md:py-20 lg:px-16">
         <div className="flex items-center justify-between">
           <p className="font-mono text-[10px] tracking-[0.3em] text-ash">SELECTED WORK</p>

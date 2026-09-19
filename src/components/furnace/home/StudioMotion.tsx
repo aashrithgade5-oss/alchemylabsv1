@@ -10,7 +10,7 @@ import { ScrollScrub } from '../fx/ScrollScrub';
  */
 export function StudioMotion() {
   return (
-    <section className="relative overflow-hidden">
+    <section className="section-feather relative overflow-hidden">
       <AmbientVideo
         src="/media/red-slats-tall.mp4"
         poster="/media/red-slats-tall-poster.jpg"

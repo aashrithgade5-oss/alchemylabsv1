@@ -120,7 +120,7 @@ export function Pillars() {
           section instead of flat void. Genuinely unused asset (verified no
           other reference in the repo), dimmed + feathered top/bottom so it
           never fights the card media or the eyebrow label above it. */}
-      <div aria-hidden className="absolute inset-0">
+      <div aria-hidden className="section-feather absolute inset-0">
         {/* C-P13 playback fix: the raw autoPlay+preload="none" video never
             started (no play() call, autoplay ignored on deferred loads).
             AmbientVideo's in-view play()/pause() gating is the working

@@ -1227,6 +1227,13 @@ html {
   background-clip: text;
 }
 
+/* Page flow: every section's media melts into the one shared void at its top
+   and bottom edges, so the homepage reads as a single continuous surface. */
+.section-feather {
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 14%, #000 86%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 14%, #000 86%, transparent 100%);
+}
+
 /* CTA hover: one soft light sheen sweeps across the pill, once per hover. */
 .cta-sheen::after {
   content: '';

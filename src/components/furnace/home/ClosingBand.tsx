@@ -70,12 +70,12 @@ function TiltCTA({ children }: { children: React.ReactNode }) {
 
 export function ClosingBand() {
   return (
-    <section className="relative overflow-hidden border-t border-line bg-void">
+    <section className="relative overflow-hidden">
       {/* C-P17: full-bleed closing CTA with the infinite 3D marquee as the
           visual background layer (replaces the blurred footer-bg photo).
           Dim + gradient + ember radial keep the centered text sovereign.
           This same block now closes the Work page too. */}
-      <div aria-hidden className="absolute inset-0">
+      <div aria-hidden className="section-feather absolute inset-0">
         <div className="absolute inset-0 opacity-50">
           <ThreeDMarquee background />
         </div>

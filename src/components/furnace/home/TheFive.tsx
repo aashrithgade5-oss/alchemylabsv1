@@ -119,7 +119,7 @@ export function TheFive() {
       {/* Phase 8: full-bleed seamless background across the WHOLE section
           (was masked out after 26rem, leaving the card track on flat void —
           "not a dark box" per the brief). */}
-      <div aria-hidden className="absolute inset-0 overflow-hidden">
+      <div aria-hidden className="section-feather absolute inset-0 overflow-hidden">
         <AmbientVideo
           src="/media/red-gradient-stripes.mp4"
           poster="/media/red-gradient-stripes-poster.jpg"

@@ -11,7 +11,7 @@ const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
  */
 export function StillBreak() {
   return (
-    <section className="relative h-[85svh] overflow-hidden">
+    <section className="section-feather relative h-[85svh] overflow-hidden">
       {/* C-P15: the split-frames composition's hard center seam read as a
           glitch/artifact behind the line (user report). Replaced with
           b2-bomber-2 (2912x1632 native → 2560w webp, no upscale) — unique
