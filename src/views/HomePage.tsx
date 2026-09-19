@@ -28,8 +28,8 @@ function ScrubBeat({
         <div aria-hidden className="glass-halo absolute -inset-x-12 -inset-y-8 z-0" />
         <ScrollScrub
           text={text}
-          className="relative z-10 max-w-5xl justify-center text-center font-headline text-[clamp(2rem,4vw,3.5rem)] font-black leading-[1.05] tracking-[-0.03em] text-bone"
-          wordClassName="glass-type"
+          className="relative z-10 max-w-5xl justify-center text-center font-headline text-[clamp(2rem,4.4vw,3.75rem)] font-bold leading-[1.1] tracking-[-0.035em] text-bone"
+          wordClassName="glass-flow"
         />
       </div>
     </section>
@@ -72,17 +72,17 @@ export default function HomePage() {
       <Suspense fallback={null}>
         <TurnSequence />
         <Intertext eyebrow="THE PRACTICE" compact>
-          <span className="block">A thousand drafts.</span>
-          <span className="block">One that ships.</span>
+          <span className="block">A <em>thousand</em> drafts.</span>
+          <span className="block">One that <em>ships.</em></span>
         </Intertext>
         <Pillars />
         <StillBreak />
         <ScrubBeat eyebrow="THE PROOF" text="Every frame here survived the eye." compact />
         <FeaturedWork />
         <Intertext eyebrow="THE OFFER" compact>
-          <span className="block">No estimates.</span>
-          <span className="block">No discovery calls.</span>
-          <span className="block">A price on the wall.</span>
+          <span className="block">No <em>estimates.</em></span>
+          <span className="block">No discovery <em>calls.</em></span>
+          <span className="block">A price on the <em>wall.</em></span>
         </Intertext>
         <TheFive />
         <ScrubBeat eyebrow="THE STANDARD" text={['One studio.', 'One bar.', 'No exceptions.']} compact />

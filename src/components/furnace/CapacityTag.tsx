@@ -1,4 +1,4 @@
-// Phase 2 (Landing_Page_Patches.pdf): "3 SPRINT SLOTS · OPEN NOW" replaces
+// Phase 2 (Landing_Page_Patches.pdf): "FIXED SCOPE · FIXED PRICE" replaces
 // the "taking N projects" framing — less disclosed, reads as scarcity/status
 // rather than a literal headcount that needs updating every sprint.
 export function CapacityTag({ className = '' }: { className?: string }) {
@@ -10,7 +10,7 @@ export function CapacityTag({ className = '' }: { className?: string }) {
         <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-ember opacity-60" />
         <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-ember" />
       </span>
-      3 SPRINT SLOTS · OPEN NOW
+      FIXED SCOPE · FIXED PRICE
     </span>
   );
 }

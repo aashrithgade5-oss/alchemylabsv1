@@ -4,7 +4,6 @@ import { useRef } from 'react';
 import Image from 'next/image';
 import { m, useScroll, useTransform } from 'framer-motion';
 import { KineticHeadline } from '../KineticHeadline';
-import { CapacityTag } from '../CapacityTag';
 
 // Phase 3 (Landing_Page_Patches.pdf): real precedent for the full-bleed
 // "animated" services hero is commit 24ed763 (pre-Next.js SolutionsHub.tsx)
@@ -60,8 +59,8 @@ export function ServicesHero() {
           SERVICES · SCOPED PER PROJECT
         </p>
         <KineticHeadline
-          text="Three Pillars."
-          className="mt-7 max-w-4xl font-headline text-[clamp(3rem,7vw,7rem)] font-black leading-[1.02] tracking-[-0.04em] text-bone"
+          text="Three pillars."
+          className="mt-7 max-w-4xl font-headline text-[clamp(2.75rem,7vw,7rem)] font-bold leading-[1.02] tracking-[-0.04em] text-bone"
           wordClassName="glass-type"
           delay={0.15}
         />
@@ -83,14 +82,6 @@ export function ServicesHero() {
           Every engagement is scoped per project and held to one standard. Printed prices live on
           the five fixed offers below.
         </m.p>
-        <m.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 1.2 }}
-          className="mt-10"
-        >
-          <CapacityTag />
-        </m.div>
       </div>
     </section>
   );

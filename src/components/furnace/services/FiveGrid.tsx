@@ -19,7 +19,7 @@ export function FiveGrid() {
 
   return (
     <section id="the-five" className="relative">
-      <div className="mx-auto max-w-6xl px-6 py-24 md:px-12 md:py-32 lg:px-16">
+      <div className="mx-auto max-w-6xl px-6 py-16 md:px-12 md:py-24 lg:px-16">
         {/* clause-per-line rule + per-word scrub, one clause per row */}
         <h2 className="max-w-2xl font-headline text-[clamp(2rem,4vw,3.5rem)] font-black leading-[1.05] tracking-[-0.03em] text-bone">
           {/* display:flex makes each span block-level: one clause per line */}
@@ -28,10 +28,10 @@ export function FiveGrid() {
           <ScrollScrub as="span" text="Just checkout." wordClassName="glass-type" />
         </h2>
         <p className="mt-4 max-w-md text-base leading-relaxed text-ash">
-          Five offers with printed prices. Pay now and the work starts this week.
+          Five offers with printed prices. Fixed scope, fixed price. Start dates are confirmed in writing after payment.
         </p>
 
-        <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {products.map((product, i) => (
             <m.div
               key={product.id}
@@ -65,7 +65,8 @@ export function FiveGrid() {
                     </span>
                     <button
                       onClick={() => setSelected(product)}
-                      className="rounded-full border border-ember/50 px-4 py-1.5 font-sans text-xs font-semibold text-ember transition-colors duration-300 hover:bg-ember hover:text-void"
+                      className="inline-flex min-h-[44px] items-center rounded-full border border-ember/50 px-5 font-sans text-xs font-semibold text-ember transition-colors duration-300 hover:bg-ember hover:text-void focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ember focus-visible:ring-offset-2 focus-visible:ring-offset-void"
+                      aria-label={`Buy ${product.name}`}
                     >
                       Buy now
                     </button>

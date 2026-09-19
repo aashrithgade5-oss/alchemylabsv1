@@ -8,6 +8,7 @@ import { GlassPanel } from '@/components/furnace/GlassPanel';
 import { KineticHeadline } from '@/components/furnace/KineticHeadline';
 import { CheckoutPanel } from '@/components/furnace/PaymentSheet';
 import { HomeAtmosphere } from '@/components/furnace/home/HomeAtmosphere';
+import { SvcImage } from '@/components/furnace/services/SvcMedia';
 
 const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
@@ -52,7 +53,7 @@ export default function ServiceProductPage() {
     <main className="relative font-sans">
       <HomeAtmosphere />
 
-      <section className="relative overflow-hidden px-6 pb-10 pt-40 md:px-12 md:pt-48">
+      <section className="relative overflow-hidden px-6 pb-10 pt-32 md:px-12 md:pt-44">
         {/* category-glow field behind the hero, colored by the product accent */}
         <div
           aria-hidden
@@ -94,11 +95,27 @@ export default function ServiceProductPage() {
             {DESCRIPTIONS[product.id]}
           </m.p>
         </div>
+        <m.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.5, ease }}
+          className="relative mx-auto mt-12 aspect-[16/10] w-full max-w-3xl overflow-hidden rounded-2xl border border-line"
+        >
+          <SvcImage
+            src={`/media/svc/${product.id}.webp`}
+            alt={`${product.name}: example of the deliverable's visual direction`}
+            fill
+            priority
+            sizes="(min-width: 768px) 48rem, 100vw"
+            className="object-cover"
+          />
+          <div aria-hidden className="absolute inset-0 bg-void/15" />
+        </m.div>
       </section>
 
       {/* the existing UPI checkout flow, housed in liquid glass — reused
           from PaymentSheet, not rebuilt */}
-      <section className="relative px-4 pb-28 md:px-6 md:pb-36">
+      <section className="relative px-4 pb-20 md:px-6 md:pb-28">
         <m.div
           initial={{ opacity: 0, y: 32 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -106,14 +123,14 @@ export default function ServiceProductPage() {
           transition={{ duration: 1, ease }}
           className="mx-auto max-w-md"
         >
-          <GlassPanel refract className="px-8 py-10">
+          <GlassPanel refract className="px-6 py-8 md:px-8 md:py-10">
             <CheckoutPanel product={product} />
           </GlassPanel>
         </m.div>
         <div className="mt-12 text-center">
           <Link
             href="/services#the-five"
-            className="font-mono text-xs tracking-[0.2em] text-bone/70 transition-colors duration-300 hover:text-bone"
+            className="inline-flex min-h-[44px] items-center font-mono text-xs tracking-[0.2em] text-bone/70 transition-colors duration-300 hover:text-bone"
           >
             ← ALL FIVE OFFERS
           </Link>

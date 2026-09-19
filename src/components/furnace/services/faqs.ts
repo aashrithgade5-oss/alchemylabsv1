@@ -12,7 +12,7 @@ export const faqs = [
   },
   {
     q: 'How does payment work for the fixed offers?',
-    a: 'Checkout opens a payment sheet: scan the UPI QR on desktop or tap the payment link on mobile. Payment confirms your slot. Send the receipt and your materials by mail or WhatsApp and the work starts this week.',
+    a: 'Checkout opens a payment sheet: scan the UPI QR on desktop or tap the payment link on mobile. Card checkout through Shopify opens soon. After paying, send the receipt and your materials by mail or WhatsApp and we confirm the start date in writing.',
   },
   {
     q: 'Do you work with companies outside India?',

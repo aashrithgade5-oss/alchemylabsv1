@@ -10,7 +10,7 @@ import { ScrollScrub } from '../fx/ScrollScrub';
 export function FAQ() {
   return (
     <section className="relative">
-      <div className="mx-auto max-w-3xl px-6 py-24 md:px-12 md:py-32">
+      <div className="mx-auto max-w-3xl px-6 py-16 md:px-12 md:py-24">
         <ScrollScrub
           text="Asked before you ask."
           className="font-headline text-[clamp(2rem,4vw,3.5rem)] font-black leading-[1.05] tracking-[-0.03em] text-bone"

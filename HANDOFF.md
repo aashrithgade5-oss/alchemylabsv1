@@ -930,3 +930,13 @@ fallback — set that env var in Vercel before the first deploy (see ERROR_LOG.m
 - Integrated as background swaps only: Work hero (mb-samurai-glass-walk), Work pedagogy (mb-the-one-who-stays), site closer BottomCTA (mb-rider-fog, was Dodge car), Contact backdrop (mb-slat-corridor). Held for approval: liquid-glass slab (journal), katana (404/OG), fluted duo (about), vertical rider (mobile poster).
 - Audit fixes: global bg-clip:text descender/italic clip fix (.glass-type*, .aurora-word, .clip-pad); hero cycler crop + 375 fit (BRAND SYSTEMS overflowed); hero mobile padding; StillBreak line no longer shrinks to 14px; Contact labels htmlFor, Calendly href='' -> button, legacy red/porcelain -> ember/bone; cookie banner Decline + 44px targets; nav menu button 44px. Unused O-1 CSS removed.
 - Open claims for owner: 'MOST SELLING SPRINTS', '24h reply', '3 SPRINT SLOTS'.
+
+## 2026-09-19 - O-7 master push part 1
+- Hero->Turn: one continuous shot. Hero z-10 over Turn (-mt-100svh, z-0, locks at hero release); hero final frame dissolves into turn-001; hero steps aside at release (releaseFade). Hero exit scrim removed; vignette/halo fade out as slit opens; ring on spring-smoothed progress + fades once past frame.
+- CTA: magnetic wiggle removed -> 1px lift + single sheen (.cta-sheen), calm press.
+- Type: TurnSequence + Intertext + ScrubBeat = Inter Bold sentence case, one lowercase Playfair-italic emphasis word; .glass-flow = slow viewport-anchored continuous gradient. CLAUDE.md emphasis relock + no-claims rule.
+- Claims removed: CapacityTag slots, MOST SELLING -> ENTRY OFFER, 24h reply (contact + Aashrith), 24h build label.
+- Subagents: services (12 offer pages /services/studio/[offer], responsive pillars, PaymentSheet UPI+Shopify placeholder, focus trap), Eva portfolio rebuild (evaData.ts, BA posts marquee + text marquee, resume download), admin Statistics tab + page_views table/beacon (consent-gated).
+- Higgsfield: 20 GPT Image 2 (high, 2K) service visuals -> public/media/svc/*.webp; Seedance 2.5 pillar loops pending.
+- Resumes: public/resumes/*.pdf; Aashrith CV download added (portfolio otherwise untouched).
+- NEEDS OWNER: Aashrith CV has '[dates]/[metric]' placeholders; Eva PDF has DOB; migration 20260919130000_page_views.sql to deploy.

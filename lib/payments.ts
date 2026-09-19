@@ -12,8 +12,8 @@ export interface Product {
   tagline: string;
   priceUsd: number;
   priceInr: number;
-  /** Card checkout link. null until the gateway exists (OVERHAUL_TODO). */
-  checkoutUrl: string | null;
+  /** Shopify card checkout URL (product or cart permalink). null = "opening soon". */
+  shopifyCheckoutUrl: string | null;
   /** C-P16: category accent hex, drawn from the locked palette (ember /
       ember-deep / amber / bone / ash) — drives the per-service hover glow
       on the marquee and the services pages. Not arbitrary colors. */
@@ -28,7 +28,7 @@ export const products: Product[] = [
     tagline: "A direct read on your brand's current state, with fixes ranked by impact.",
     priceUsd: 199,
     priceInr: 9000,
-    checkoutUrl: null,
+    shopifyCheckoutUrl: null,
   },
   {
     id: 'website-teardown',
@@ -37,7 +37,7 @@ export const products: Product[] = [
     tagline: 'Your site reviewed screen by screen, with a plain list of what to change.',
     priceUsd: 199,
     priceInr: 9000,
-    checkoutUrl: null,
+    shopifyCheckoutUrl: null,
   },
   {
     id: 'sample-reel',
@@ -46,7 +46,7 @@ export const products: Product[] = [
     tagline: "One finished AI film in your brand's voice, before you commit to more.",
     priceUsd: 299,
     priceInr: 14000,
-    checkoutUrl: null,
+    shopifyCheckoutUrl: null,
   },
   {
     id: 'logo-rescue',
@@ -55,7 +55,7 @@ export const products: Product[] = [
     tagline: 'Your existing mark corrected and set to standard.',
     priceUsd: 249,
     priceInr: 12000,
-    checkoutUrl: null,
+    shopifyCheckoutUrl: null,
   },
   {
     id: 'instagram-aesthetic-audit',
@@ -64,7 +64,7 @@ export const products: Product[] = [
     tagline: 'Your grid held against the brands you admire, with a plan to close the gap.',
     priceUsd: 199,
     priceInr: 9000,
-    checkoutUrl: null,
+    shopifyCheckoutUrl: null,
   },
 ];
 

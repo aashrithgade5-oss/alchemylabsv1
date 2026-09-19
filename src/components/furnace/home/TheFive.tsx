@@ -73,7 +73,7 @@ function ProductCard({
         <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-carbon via-carbon/70 to-transparent" />
         {MOST_SELLING.has(product.id) && (
           <span className="absolute right-4 top-4 z-10 rounded-full border border-ember/40 bg-void/60 px-3 py-1 font-mono text-[9px] tracking-[0.15em] text-ember">
-            MOST SELLING SPRINTS
+            ENTRY OFFER
           </span>
         )}
         <div className="relative flex h-full flex-col justify-between p-7">

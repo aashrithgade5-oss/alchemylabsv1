@@ -1,6 +1,5 @@
 'use client';
 
-import { useRef, useState, useCallback } from 'react';
 import { m } from 'framer-motion';
 import Link from 'next/link';
 
@@ -28,10 +27,11 @@ const variantClasses: Record<Variant, string> = {
   glass: 'liquid-glass text-bone hover:border-ember/40',
 };
 
-const spring = { type: 'spring' as const, stiffness: 320, damping: 18, mass: 0.5 };
+// Calm, critically-damped press — no overshoot. The old magnetic pull
+// (springy follow-the-cursor) read as a wiggle; hover is now a 1px lift and
+// one light sheen passing across the pill (.cta-sheen in index.css).
+const press = { type: 'spring' as const, stiffness: 500, damping: 40 };
 
-// Magnetic pull capped at 12px; press compresses to 0.97. Adapted from
-// src/components/MagneticButton.tsx without the sound layer.
 export function MagneticCTA({
   children,
   href,
@@ -41,35 +41,11 @@ export function MagneticCTA({
   className = '',
   disabled = false,
 }: MagneticCTAProps) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const [offset, setOffset] = useState({ x: 0, y: 0 });
-
-  const handleMove = useCallback(
-    (e: React.PointerEvent) => {
-      if (disabled || !ref.current) return;
-      const rect = ref.current.getBoundingClientRect();
-      const x = e.clientX - rect.left - rect.width / 2;
-      const y = e.clientY - rect.top - rect.height / 2;
-      const cap = 12;
-      setOffset({
-        x: Math.max(-cap, Math.min(cap, x * 0.18)),
-        y: Math.max(-cap, Math.min(cap, y * 0.18)),
-      });
-    },
-    [disabled],
-  );
-
-  const handleLeave = useCallback(() => setOffset({ x: 0, y: 0 }), []);
-
   const inner = (
     <m.span
-      ref={ref}
-      onPointerMove={handleMove}
-      onPointerLeave={handleLeave}
-      animate={{ x: offset.x, y: offset.y }}
-      whileTap={disabled ? undefined : { scale: 0.97 }}
-      transition={spring}
-      className={`inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 font-sans text-sm font-semibold tracking-wide transition-colors duration-300 ${variantClasses[variant]} ${disabled ? 'cursor-not-allowed opacity-40' : 'cursor-pointer'} ${className}`}
+      whileTap={disabled ? undefined : { scale: 0.98 }}
+      transition={press}
+      className={`cta-sheen relative inline-flex min-h-11 items-center justify-center gap-2 overflow-hidden rounded-full px-7 py-3.5 font-sans text-sm font-semibold tracking-wide transition-[transform,background-color,border-color,box-shadow] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${disabled ? '' : 'hover:-translate-y-px'} ${variantClasses[variant]} ${disabled ? 'cursor-not-allowed opacity-40' : 'cursor-pointer'} ${className}`}
     >
       {children}
     </m.span>

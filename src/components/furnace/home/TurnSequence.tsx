@@ -19,10 +19,12 @@ const frameSrc = (i: number) => `/sequence-turn/turn-${String(i + 1).padStart(3,
 // and finally faces the reader. C-P12 copy; `accent` names the ONE word per
 // line that carries the aurora + Playfair italic treatment (the page's one
 // persistent aurora instance — the hero cycler's is transition-only now).
+// Inter Bold sentence case; ONE lowercase Playfair-italic emphasis word per
+// line (CLAUDE.md emphasis relock).
 const LINES = [
-  { text: 'THE MACHINE DRAFTS BY THE THOUSAND', range: [0.05, 0.3], accent: '' },
-  { text: 'JUDGMENT KEEPS ONE', range: [0.38, 0.62], accent: 'JUDGMENT' },
-  { text: 'THAT ONE IS YOURS', range: [0.7, 0.94], accent: '' },
+  { text: 'The machine drafts by the thousand.', range: [0.05, 0.3], accent: 'thousand.' },
+  { text: 'Only judgment keeps one.', range: [0.38, 0.62], accent: 'judgment' },
+  { text: 'That one is yours.', range: [0.7, 0.94], accent: 'yours.' },
 ] as const;
 
 // One word of a kinetic line, sharpening into focus across its own slice
@@ -46,7 +48,7 @@ function Word({
   const filter = useMotionTemplate`blur(${blurPx}px)`;
   return (
     <m.span
-      className={accent ? 'aurora-word font-playfair italic' : 'glass-type-spectrum-ember'}
+      className={accent ? 'glass-flow font-playfair font-normal italic tracking-normal' : 'glass-flow'}
       style={{ opacity, filter }}
     >
       {word}
@@ -78,7 +80,7 @@ function KineticLine({
   return (
     <m.h2
       style={{ opacity, y, filter }}
-      className="absolute flex max-w-5xl flex-wrap justify-center gap-x-4 px-6 text-center font-headline text-[clamp(2.5rem,6vw,5.5rem)] font-black leading-[1.05] tracking-[-0.03em] text-bone"
+      className="absolute flex max-w-5xl flex-wrap justify-center gap-x-4 px-6 text-center font-headline text-[clamp(2.25rem,5.6vw,5rem)] font-bold leading-[1.08] tracking-[-0.035em] text-bone [text-wrap:balance]"
     >
       {words.map((word, i) => {
         const wStart = start + (i / words.length) * inWindow;
@@ -194,30 +196,21 @@ function ScrubSequence() {
   // appearance to real content instead of component mount.
   const overlayOpacity = useTransform(scrollYProgress, [0, LINES[0].range[0]], [0, 1]);
 
-  // The stage slides up over the hero's pinned tail (-mt-[50svh]); feather its
-  // top edge while entering so the two never meet on a hard line, and fade to
-  // void on exit so the next section never starts on a hard red edge.
-  const { scrollYProgress: entry } = useScroll({ target: containerRef, offset: ['start end', 'start start'] });
-  const featherEnd = useTransform(entry, [0, 1], [60, 0]);
-  const stageMask = useMotionTemplate`linear-gradient(to bottom, transparent 0%, black ${featherEnd}%)`;
+  // Fade to void on exit so the next section never starts on a hard red edge.
   const exitScrim = useTransform(scrollYProgress, [0.94, 1], [0, 1]);
 
   return (
-    // -mt-[50svh]: Hero's sticky stage releases (its own scrub animation
-    // complete) a full 100svh before THIS section's sticky stage can lock
-    // in — that gap is dead scroll (nothing scroll-reactive happens while
-    // Hero's frozen tail slides away), which reads as the delay between
-    // section 1 and 2. Pulling this section's start up halves the gap
-    // without touching either section's internal scrub math (their 0-1
-    // progress spans are relative offsets, unaffected by this shift).
+    // -mt-[100svh] + z-0 under the hero (z-10): this stage locks at the exact
+    // scroll position the hero releases, hidden beneath it. The hero's last
+    // frame IS turn frame 001 (handoff layer in Hero.tsx), so the hero slides
+    // off revealing an identical image — no gap, no black, no double image.
     <section
       ref={containerRef}
       aria-hidden
-      className="relative -mt-[50svh] h-[400vh]"
+      className="relative z-0 -mt-[100svh] h-[400vh]"
     >
       <m.div
         className="sticky top-0 h-[100svh] overflow-hidden"
-        style={{ maskImage: stageMask, WebkitMaskImage: stageMask }}
       >
         {/* first frame as ground so the stage is never blank */}
         {/* eslint-disable-next-line @next/next/no-img-element */}

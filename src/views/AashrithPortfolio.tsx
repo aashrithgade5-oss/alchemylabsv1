@@ -69,6 +69,7 @@ const ventureFooterLinks = [
 ];
 const connectFooterLinks = [
   { label: 'LinkedIn', href: 'https://www.linkedin.com/in/aashrithgade', external: true },
+  { label: 'CV (PDF)', href: '/resumes/aashrith-gade-cv.pdf', external: true },
   { label: 'Instagram (@aashrithzz)', href: 'https://www.instagram.com/aashrithzz/', external: true },
   { label: 'AshArchives (@asharchiveszz)', href: 'https://www.instagram.com/asharchiveszz/', external: true },
   { label: 'YouTube', href: 'https://www.youtube.com/@aashrithxd8587', external: true },
@@ -1406,6 +1407,14 @@ const PhilosophyCTA = memo(({ isDark }: { isDark: boolean }) => (
           Let's Create Something Extraordinary
         </MagneticCTA>
 
+        <a
+          href="/resumes/aashrith-gade-cv.pdf"
+          download
+          className={`mt-4 inline-flex min-h-11 items-center gap-2 rounded-full border px-6 font-mono text-[11px] uppercase tracking-[0.2em] transition-colors ${t(isDark, 'border-porcelain/15 text-porcelain/70 hover:border-porcelain/40 hover:text-porcelain', 'border-neutral-300 text-neutral-600 hover:text-neutral-900')}`}
+        >
+          Download CV (PDF)
+        </a>
+
         <motion.p
           className={`font-mono text-[10px] tracking-wider mt-2 ${t(isDark, 'text-porcelain/25', 'text-neutral-400')}`}
           initial={{ opacity: 0 }}
@@ -1420,7 +1429,7 @@ const PhilosophyCTA = memo(({ isDark }: { isDark: boolean }) => (
       <motion.div className={`flex justify-center gap-4 sm:gap-6 font-mono text-[10px] sm:text-xs uppercase tracking-wider mt-10 ${t(isDark, 'text-porcelain/30', 'text-neutral-400')}`} initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: 0.7 }}>
         <span className="flex items-center gap-1.5"><Shield className="w-3 h-3" />NDA Available</span>
         <span>·</span>
-        <span className="flex items-center gap-1.5"><Clock className="w-3 h-3" />24h Reply</span>
+        <span className="flex items-center gap-1.5"><Clock className="w-3 h-3" />Founder-read</span>
         <span>·</span>
         <span className="flex items-center gap-1.5"><Phone className="w-3 h-3" />Free First Call</span>
       </motion.div>

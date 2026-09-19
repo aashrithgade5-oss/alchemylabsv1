@@ -65,7 +65,9 @@ export function Intertext({
         {eyebrow && (
           <p className="font-mono text-[10px] tracking-[0.35em] text-ash">{eyebrow}</p>
         )}
-        <p className="mt-8 font-playfair text-[clamp(2rem,4vw,3.5rem)] italic leading-[1.25] text-bone">
+        {/* Inter Bold lines; the ONE emphasis word per line is an <em> —
+            styled here as lowercase Playfair italic regular (emphasis law) */}
+        <p className="mt-8 font-headline text-[clamp(2rem,4.4vw,3.75rem)] font-bold leading-[1.12] tracking-[-0.035em] text-bone [&_em]:font-playfair [&_em]:font-normal [&_em]:italic [&_em]:tracking-normal">
           {children}
         </p>
       </m.div>

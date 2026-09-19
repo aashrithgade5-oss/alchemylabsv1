@@ -112,3 +112,7 @@ export const pillars: Pillar[] = [
     ],
   },
 ];
+
+/** Detail-page slug: kebab-case of the offer name ("Branding 360" -> "branding-360"). */
+export const offerSlug = (name: string) =>
+  name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');

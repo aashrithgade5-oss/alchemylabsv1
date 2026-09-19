@@ -1227,10 +1227,45 @@ html {
   background-clip: text;
 }
 
+/* CTA hover: one soft light sheen sweeps across the pill, once per hover. */
+.cta-sheen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.28) 50%, transparent 65%);
+  transform: translateX(-120%);
+  pointer-events: none;
+}
+.cta-sheen:hover::after {
+  transform: translateX(120%);
+  transition: transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Slow, continuous metallic flow for kinetic display lines — never flashes. */
+.glass-flow {
+  color: transparent;
+  background-image: linear-gradient(100deg, #cfcac3 0%, #f6f1ea 22%, #ffb59c 38%, #f6f1ea 54%, #c9c4bd 76%, #f6f1ea 100%);
+  /* viewport-anchored: every word of a line shares ONE gradient band, so the
+     flow travels through the sentence instead of restarting per word */
+  background-size: 200vw 100vh;
+  background-attachment: fixed;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: glass-flow 16s linear infinite;
+}
+@keyframes glass-flow {
+  to { background-position: 200vw 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .glass-flow { animation: none; }
+  .cta-sheen:hover::after { transition: none; }
+}
+
 /* bg-clip:text only paints inside the box: at display leading (1.02-1.05)
    descenders and italic overhangs fell outside it and read as cropped.
    Grow the painted box, cancel the growth in layout. */
 [class*='glass-type'],
+.glass-flow,
 .aurora-word,
 .clip-pad {
   padding: 0 0.08em 0.16em;

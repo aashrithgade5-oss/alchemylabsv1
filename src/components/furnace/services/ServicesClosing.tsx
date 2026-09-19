@@ -29,9 +29,11 @@ export function ServicesClosing() {
           whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
           viewport={{ once: true, margin: '-120px' }}
           transition={{ duration: 0.8, ease }}
-          className="font-playfair text-[clamp(2rem,4vw,3.5rem)] italic leading-[1.1] text-bone"
+          className="font-headline text-[clamp(2rem,4vw,3.5rem)] font-bold leading-[1.1] tracking-[-0.03em] text-bone"
         >
-          Scope it in one conversation.
+          <span className="glass-type">Scope it in one </span>
+          <span className="font-playfair font-normal italic">conversation</span>
+          <span className="glass-type">.</span>
         </m.p>
         <m.div
           initial={{ opacity: 0, y: 14 }}

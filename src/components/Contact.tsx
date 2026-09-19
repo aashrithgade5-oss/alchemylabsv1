@@ -10,7 +10,7 @@ import { confettiBurst, confettiCelebrate } from '@/lib/confetti';
 
 const serviceOptions = [
   { value: '', label: 'Select what you need...', disabled: true },
-  { value: 'fast-24h', label: 'Fast · 24h AI Build', group: 'pillars' },
+  { value: 'fast-24h', label: 'AI Creative Studio · Campaign & film', group: 'pillars' },
   { value: 'foundation-brand', label: 'Foundation · Brand System', group: 'pillars' },
   { value: 'clarity-advisory', label: 'Clarity · Strategy Advisory', group: 'pillars' },
   { value: 'not-sure', label: 'Not sure yet · Help me figure out', group: 'other' },
@@ -219,7 +219,7 @@ export const Contact = memo(() => {
                 <span className="text-ember">inevitable.</span>
               </h2>
               <p className="font-body text-base text-bone/50 mb-8 font-light">
-                Brief us in under 3 minutes. We reply within 24 hours.
+                Brief us in under 3 minutes. A founder reads every one.
               </p>
 
               {/* Contact Methods */}
@@ -499,7 +499,7 @@ export const Contact = memo(() => {
                   />
 
                   <div className="flex items-center justify-center gap-3 mb-4">
-                    <span className="font-mono text-[9px] text-bone/40 tracking-wider">Reply within 24h</span>
+                    <span className="font-mono text-[9px] text-bone/40 tracking-wider">Founder-read</span>
                     <span className="text-bone/20">·</span>
                     <span className="font-mono text-[9px] text-bone/40 tracking-wider">NDA available</span>
                     <span className="text-bone/20">·</span>

@@ -6,6 +6,7 @@ import {
   useMotionTemplate,
   useReducedMotion,
   useScroll,
+  useSpring,
   useTransform,
 } from 'framer-motion';
 import { DecodeText } from '../DecodeText';
@@ -188,19 +189,31 @@ export function Hero() {
 
   // Cinematic mask reveal: the footage opens from a narrow ellipse slit to
   // full bleed across the first ~55% of the section's scroll travel.
-  const maskRx = useTransform(scrollYProgress, [0, 0.55], [18, 125]);
-  const maskRy = useTransform(scrollYProgress, [0, 0.55], [26, 125]);
+  // Smoothed progress: wheel ticks arrive in steps; the spring turns them into
+  // one continuous glide so the ring/slit never stutters.
+  const smooth = useSpring(scrollYProgress, { stiffness: 120, damping: 30, mass: 0.4 });
+  const maskRx = useTransform(smooth, [0, 0.55], [18, 125]);
+  const maskRy = useTransform(smooth, [0, 0.55], [26, 125]);
   const clipPath = useMotionTemplate`ellipse(${maskRx}% ${maskRy}% at 50% 55%)`;
+  // ring dissolves as the slit opens past the frame — it should never be
+  // left hanging as a huge line across the footage
+  const ringOpacity = useTransform(smooth, [0, 0.35, 0.5], [1, 0.7, 0]);
 
-  const videoScale = useTransform(scrollYProgress, [0, 1], [1.06, 1.12]);
-  const exitScrim = useTransform(scrollYProgress, [0.72, 0.96], [0, 1]);
+  const videoScale = useTransform(smooth, [0, 1], [1.06, 1.12]);
+  // contrast vignette only needed while text sits over the closed slit
+  const vignetteOpacity = useTransform(smooth, [0, 0.3], [1, 0]);
+  const handoff = useTransform(scrollYProgress, [0.62, 0.96], [0, 1]);
+  // at release the pinned frame (== turn frame 001) steps aside; the locked
+  // Turn stage beneath shows the identical image, so nothing visibly changes
+  const releaseFade = useTransform(scrollYProgress, [0.985, 1], [1, 0]);
   const headlineY = useTransform(scrollYProgress, [0, 1], [0, -70]);
   const chromeOpacity = useTransform(scrollYProgress, [0.55, 0.8], [1, 0]);
 
   return (
-    <section
+    <m.section
       ref={sectionRef}
-      className={`relative bg-void ${reduced ? 'min-h-[100svh]' : 'h-[180svh]'}`}
+      style={reduced ? undefined : { opacity: releaseFade }}
+      className={`relative z-10 bg-void ${reduced ? 'min-h-[100svh]' : 'h-[180svh]'}`}
     >
       <div
         className={`flex flex-col overflow-hidden ${
@@ -248,7 +261,7 @@ export function Hero() {
 
         {/* ring lives OUTSIDE the clip so its stroke + halo are never cut in half */}
         {!reduced && (
-          <m.div aria-hidden className="pointer-events-none absolute inset-0" style={{ scale: videoScale }}>
+          <m.div aria-hidden className="pointer-events-none absolute inset-0" style={{ scale: videoScale, opacity: ringOpacity }}>
               <svg
                 aria-hidden
                 className="pointer-events-none absolute inset-0 h-full w-full"
@@ -291,8 +304,12 @@ export function Hero() {
           </m.div>
         )}
 
-        {/* Scroll-exit fade toward void */}
-        <m.div aria-hidden className="absolute inset-0 bg-void" style={{ opacity: reduced ? 0 : exitScrim }} />
+        {/* Handoff: the pinned frame dissolves into Turn frame 001, which sits
+            beneath this section and locks as it releases — seamless cut. */}
+        {!reduced && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <m.img aria-hidden src="/sequence-turn/turn-001.webp" alt="" className="absolute inset-0 h-full w-full object-cover" style={{ opacity: handoff }} />
+        )}
 
         {/* Content, full center. chromeOpacity fades the WHOLE column (not
             just eyebrow/CTAs) — it used to leave the headline permanently
@@ -318,8 +335,10 @@ export function Hero() {
               column stays compact inside the ellipse at 1440 and 375. */}
           <div className="relative mt-8 flex flex-col items-center">
             {/* text-scoped vignette: contrast floor between footage and glyphs */}
-            <div aria-hidden className="text-vignette absolute -inset-x-24 -inset-y-20 z-0" />
-            <div aria-hidden className="glass-halo absolute -inset-x-20 -inset-y-16 z-0" />
+            <m.div aria-hidden className="absolute inset-0 z-0" style={reduced ? undefined : { opacity: vignetteOpacity }}>
+              <div className="text-vignette absolute -inset-x-24 -inset-y-20" />
+              <div className="glass-halo absolute -inset-x-20 -inset-y-16" />
+            </m.div>
             <m.div
               initial={{ opacity: 0, y: 20, filter: 'blur(10px)' }}
               animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
@@ -375,6 +394,6 @@ export function Hero() {
           </div>
         </m.div>
       </div>
-    </section>
+    </m.section>
   );
 }

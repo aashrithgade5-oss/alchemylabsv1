@@ -13,6 +13,11 @@ Everything here is NON-NEGOTIABLE and must be re-verified at the END of every se
   (`font-playfair` + `italic`). Pull-quotes, founder note, nav wordmark ("Alchemy" +
   LABS in Geist Mono small-caps), work-carousel proof line, "down the below" subtext.
   Never on any H1/H2.
+- EMPHASIS RELOCK (2026-09-19, user): every display/scroll/interlude line is Inter
+  BOLD (sentence case, not ALL CAPS) with `.glass-type`; ONE emphasis word per line in
+  Playfair italic regular, lowercase (e.g. "judgment", "one"). Never whole sentences in
+  Playfair. Gradients on type must flow slowly and continuously, never flash.
+- NO UNVERIFIABLE CLAIMS: no "most selling", scarcity counters, or guaranteed reply times.
 - Eyebrows / labels / technical: **Geist Mono** (`font-mono`) — untouched by this pass.
 - Geist Sans is retired as a body/display face. It is kept installed ONLY to feed the
   frozen `--font-display` alias below — never assign `font-sans`/`font-headline`
