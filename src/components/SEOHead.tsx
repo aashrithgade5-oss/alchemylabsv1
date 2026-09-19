@@ -19,7 +19,7 @@ interface SEOHeadProps {
 const defaultMeta = {
   title: 'Alchemy Labs — AI-Augmented Brand Architecture',
   description: 'Strategic brand systems engineered for the AI era. We architect identity, culture, and execution that scales through precision.',
-  image: 'https://alchemylabsv1.lovable.app/og-image.png',
+  image: 'https://alchemylabs.in/og-image.png',
 };
 
 export const SEOHead = ({
@@ -112,8 +112,8 @@ export const generateOrganizationSchema = () => ({
   '@type': 'Organization',
   name: 'Alchemy Labs',
   description: 'AI-Augmented Brand Architecture Agency',
-  url: 'https://alchemylabsv1.lovable.app',
-  logo: 'https://alchemylabsv1.lovable.app/favicon.png',
+  url: 'https://alchemylabs.in',
+  logo: 'https://alchemylabs.in/favicon.png',
   sameAs: [
     'https://instagram.com/alchemylabs',
     'https://twitter.com/AlchemyLabs',

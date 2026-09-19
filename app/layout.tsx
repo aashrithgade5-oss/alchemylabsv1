@@ -49,13 +49,13 @@ export const metadata: Metadata = {
   // cards and canonicals at the old Lovable preview host. Set
   // NEXT_PUBLIC_SITE_URL in the Vercel project to the production domain.
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ?? 'https://alchemylabsv1.lovable.app',
+    process.env.NEXT_PUBLIC_SITE_URL ?? 'https://alchemylabs.in',
   ),
   alternates: { canonical: '/' },
   openGraph: {
     title: 'Alchemy Labs · AI-Native Brand Studio',
     description,
-    url: 'https://alchemylabsv1.lovable.app',
+    url: 'https://alchemylabs.in',
     siteName: 'Alchemy Labs',
     images: [{ url: '/og-image.png', width: 1200, height: 630 }],
     type: 'website',

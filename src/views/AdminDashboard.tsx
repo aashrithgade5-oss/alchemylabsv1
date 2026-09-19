@@ -369,7 +369,7 @@ const AdminDashboard = () => {
   ];
 
   const externalLinks = [
-    { label: 'Live Site', url: 'https://alchemylabsv1.lovable.app', icon: Globe },
+    { label: 'Live Site', url: 'https://alchemylabs.in', icon: Globe },
     { label: 'Instagram', url: 'https://www.instagram.com/brandalchemy._', icon: ExternalLink },
     { label: 'LinkedIn', url: 'https://www.linkedin.com/company/brandalchemylabs/', icon: ExternalLink },
     { label: 'YouTube', url: 'https://www.youtube.com/@brandalchemy-in', icon: ExternalLink },

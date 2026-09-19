@@ -953,3 +953,9 @@ fallback — set that env var in Vercel before the first deploy (see ERROR_LOG.m
 - Privacy + Terms rewritten truthfully (processors, consent-gated page_views, DPDP/GDPR, 20 Sep 2026). Owner to confirm 3 added terms.
 - Aashrith portfolio (unfrozen): Arc of Intent rebuilt as scroll-drawn ember line + travelling pulse, role text sharpens/sweeps as pulse arrives; tasteful CV data (1 proof point per role); Ashzz.ai marquee filled with 10 Higgsfield tiles; editorial footer; CV download in hero + footer; MotionConfig reducedMotion=user; legacy red -> ember.
 - Shared PortfolioFooter now also restyles Eva's footer.
+
+## 2026-09-20 - O-12 GO LIVE
+- Owner authorized production deploy to alchemylabs.in (already attached + verified on Vercel project alchemylabsv1; git-integration deploys main).
+- Merged 21 remote web-upload asset commits (no force push).
+- SEO: app/sitemap.ts + app/robots.ts on alchemylabs.in (static lovable ones removed); metadataBase/OG/SEOHead/admin links -> alchemylabs.in; journal + admin disallowed. Favicon = atom mark.
+- Prod-build QC: all routes 200, 404 for unknown, canonical correct, mobile/desktop visual pass, Arc of Intent verified.
