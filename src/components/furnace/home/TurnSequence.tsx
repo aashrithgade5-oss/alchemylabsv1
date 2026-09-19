@@ -173,6 +173,7 @@ function ScrubSequence() {
   });
   const featherEnd = useTransform(entry, [0, 1], [60, 0]);
   const stageMask = useMotionTemplate`linear-gradient(to bottom, transparent 0%, black ${featherEnd}%)`;
+  const exitScrim = useTransform(scrollYProgress, [0.94, 1], [0, 1]);
 
   return (
     // -mt-[50svh]: Hero's sticky stage releases (its own scrub animation
@@ -223,6 +224,7 @@ function ScrubSequence() {
             />
           ))}
         </div>
+        <m.div aria-hidden className="absolute inset-0 bg-void" style={{ opacity: exitScrim }} />
       </m.div>
     </section>
   );

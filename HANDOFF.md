@@ -897,3 +897,11 @@ fallback â€” set that env var in Vercel before the first deploy (see ERROR_LOG.m
 - Hero?Turn seam fixed (section bg removed + feathered entry mask).
 - Plan: docs/OVERHAUL_PLAN.md.
 
+
+## 2026-09-19 — O-2 homepage sections
+- Pillars ? editorial index (hairline rows, Playfair titles, clip-path hover reveal), rows deep-link /services#pillar-N.
+- The Five: removed fabricated "MOST SELLING" badge + 5 looping card videos; carbon cards on Higgsfield obsidian-fold-1; edge-fade marquee; 44px buttons.
+- Selected work: Playfair titles (condensed text-mark PNGs dropped), 16:10 media, 44px arrows.
+- ClosingBand: obsidian-fold-2, ScrollScrub headline; 3D brand marquee, invisible ALCHEMY outline, third cycler removed.
+- Footer: visible Playfair wordmark. Intertext meteors removed. TurnSequence exit fade.
+- New assets (Higgsfield gpt_image_2_5): public/media/obsidian-fold-1.webp, obsidian-fold-2.webp.

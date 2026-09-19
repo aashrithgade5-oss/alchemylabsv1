@@ -55,7 +55,7 @@ export function PillarSection({ pillar, index }: { pillar: Pillar; index: number
   const edge = numeralRight ? '-right-6 md:-right-10' : '-left-6 md:-left-10';
 
   return (
-    <section className="relative overflow-hidden">
+    <section id={`pillar-${index + 1}`} className="relative scroll-mt-24 overflow-hidden">
       {/* C-P24: the Japanese red was reading too faint — a directional ember
           wash bleeds from the numeral side so every pillar sits in red air */}
       <div

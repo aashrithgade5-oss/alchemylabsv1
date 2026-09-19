@@ -8,7 +8,6 @@ import {
   useScroll,
   useTransform,
 } from 'framer-motion';
-import { Meteors } from '../Meteors';
 
 /**
  * Scroll-bound editorial interlude: the line sharpens out of a blur as it
@@ -37,8 +36,8 @@ export function Intertext({
   });
 
   // blur floor 12: the one scrub signature (matches fx/ScrollScrub)
-  const opacity = useTransform(scrollYProgress, [0.12, 0.38, 0.62, 0.88], [0, 1, 1, 0]);
-  const blurPx = useTransform(scrollYProgress, [0.12, 0.38, 0.62, 0.88], [12, 0, 0, 12]);
+  const opacity = useTransform(scrollYProgress, [0.08, 0.3, 0.7, 0.92], [0, 1, 1, 0]);
+  const blurPx = useTransform(scrollYProgress, [0.08, 0.3, 0.7, 0.92], [12, 0, 0, 12]);
   const y = useTransform(scrollYProgress, [0, 1], [56, -56]);
   const filter = useMotionTemplate`blur(${blurPx}px)`;
 
@@ -56,8 +55,6 @@ export function Intertext({
             'radial-gradient(46rem 32rem at 100% 50%, rgba(178,34,20,0.12) 0%, transparent 70%)',
         }}
       />
-      {/* R-7b: meteors live on pull-quote moments only (never heroes/CTAs) */}
-      <Meteors />
       <m.div
         style={reduced ? undefined : { opacity, filter, y }}
         className="max-w-4xl text-center"
@@ -65,7 +62,7 @@ export function Intertext({
         {eyebrow && (
           <p className="font-mono text-[10px] tracking-[0.35em] text-ash">{eyebrow}</p>
         )}
-        <p className="mt-8 font-playfair text-[clamp(2rem,4vw,3.5rem)] italic leading-[1.25] text-bone">
+        <p className="type-scroll mt-8 text-[clamp(2.25rem,4.6vw,4rem)] italic leading-[1.15] text-bone">
           {children}
         </p>
       </m.div>
