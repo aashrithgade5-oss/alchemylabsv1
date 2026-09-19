@@ -1,20 +1,20 @@
 'use client';
-import { useState, useCallback, useEffect, memo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Send, Calendar, MessageCircle, Instagram, Mail, Loader2, Check, Home, Linkedin, Youtube, Copy } from 'lucide-react';
+import { useState, useCallback, useEffect, useRef, memo, type ReactNode } from 'react';
+import { m, AnimatePresence, useReducedMotion } from 'framer-motion';
+import { ArrowRight, Calendar, MessageCircle, Instagram, Mail, Loader2, Check, Linkedin, Youtube, Copy, ArrowUpRight } from 'lucide-react';
 import Link from 'next/link';
 import { toast } from 'sonner';
 import { TurnstileWidget } from './TurnstileWidget';
 import { socialLinks } from '@/data/socialLinks';
-import { confettiBurst, confettiCelebrate } from '@/lib/confetti';
+import { CalendlyDialog } from './contact/CalendlyDialog';
+import { validateBrief, type Brief, type BriefErrors } from './contact/validate';
 
 const serviceOptions = [
-  { value: '', label: 'Select what you need...', disabled: true },
-  { value: 'fast-24h', label: 'AI Creative Studio · Campaign & film', group: 'pillars' },
-  { value: 'foundation-brand', label: 'Foundation · Brand System', group: 'pillars' },
-  { value: 'clarity-advisory', label: 'Clarity · Strategy Advisory', group: 'pillars' },
-  { value: 'not-sure', label: 'Not sure yet · Help me figure out', group: 'other' },
-  { value: 'specific-request', label: 'Specific request · Direct to founder', group: 'other' },
+  { value: 'fast-24h', label: 'AI Creative Studio · Campaign & film' },
+  { value: 'foundation-brand', label: 'Foundation · Brand system' },
+  { value: 'clarity-advisory', label: 'Clarity · Strategy advisory' },
+  { value: 'not-sure', label: 'Not sure yet · Help me figure it out' },
+  { value: 'specific-request', label: 'Specific request · Email a founder' },
 ];
 
 // /services pillar slugs → form subject values (?pillar= preselect)
@@ -24,79 +24,111 @@ const pillarToService: Record<string, string> = {
   advisory: 'clarity-advisory',
 };
 
-const CALENDLY_URL = 'https://calendly.com/alchemylabs-work/30min';
+const STUDIO_EMAIL = 'alchemylabs.work@gmail.com';
+const WHATSAPP = 'https://wa.me/917794912315';
+const founders = [
+  { name: 'Aashrith', email: 'aashrithgade5@gmail.com' },
+  { name: 'Eva', email: 'evadoshi05@gmail.com' },
+];
 
-const copyToClipboard = (text: string) => {
-  navigator.clipboard.writeText(text).then(() => {
-    toast.success('Copied to clipboard');
-  });
-};
+const empty: Brief = { name: '', email: '', company: '', service: '', message: '' };
+const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
+
+const copy = (text: string) =>
+  navigator.clipboard?.writeText(text).then(
+    () => toast.success('Copied to clipboard'),
+    () => toast.error('Couldn’t copy — select it manually.'),
+  );
+
+const label = 'block font-mono text-[10px] uppercase tracking-[0.2em] text-bone/55';
+const field =
+  'mt-2 block min-h-[48px] w-full rounded-2xl border bg-bone/[0.03] px-4 py-3 font-body text-[15px] text-bone placeholder:text-bone/25 outline-none transition-[border-color,background-color,box-shadow] duration-300 hover:border-bone/20 focus:bg-bone/[0.05] focus:border-ember/60 focus:shadow-[0_0_0_4px_rgba(255,77,28,0.12)] disabled:opacity-50';
+const fieldBorder = (err?: string) => (err ? 'border-ember/70' : 'border-bone/10');
+
+function Field({ id, text, error, hint, children }: { id: string; text: string; error?: string; hint?: string; children: ReactNode }) {
+  return (
+    <div>
+      <label htmlFor={id} className={label}>{text}</label>
+      {children}
+      <AnimatePresence initial={false}>
+        {error && (
+          <m.p
+            id={`${id}-error`}
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.2 }}
+            className="overflow-hidden pt-2 font-body text-xs text-ember"
+          >
+            {error}
+          </m.p>
+        )}
+      </AnimatePresence>
+      {hint && !error && <p id={`${id}-hint`} className="pt-2 font-mono text-[10px] text-bone/35">{hint}</p>}
+    </div>
+  );
+}
+
+function Line({ href, icon, title, detail, external, onCopy }: { href: string; icon: ReactNode; title: string; detail: string; external?: boolean; onCopy?: () => void }) {
+  return (
+    <li className="group flex items-center gap-2 border-t border-bone/10 first:border-t-0">
+      <a
+        href={href}
+        {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+        className="flex min-h-[64px] min-w-0 flex-1 items-center gap-4 rounded-xl py-3 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
+      >
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-bone/10 text-ember transition-colors group-hover:border-ember/40">
+          {icon}
+        </span>
+        <span className="min-w-0">
+          <span className="block font-body text-sm font-semibold text-bone">{title}</span>
+          <span className="block truncate font-mono text-[11px] text-bone/45">{detail}</span>
+        </span>
+        <ArrowUpRight aria-hidden className="ml-auto h-4 w-4 shrink-0 text-bone/30 transition-[color,transform] duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-ember" />
+      </a>
+      {onCopy && (
+        <button
+          type="button"
+          onClick={onCopy}
+          aria-label={`Copy ${detail}`}
+          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-bone/40 transition-colors hover:bg-bone/5 hover:text-bone focus-visible:outline focus-visible:outline-2 focus-visible:outline-ember"
+        >
+          <Copy className="h-3.5 w-3.5" aria-hidden />
+        </button>
+      )}
+    </li>
+  );
+}
 
 export const Contact = memo(() => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    company: '',
-    service: '',
-    message: '',
-  });
+  const [form, setForm] = useState<Brief>(empty);
+  const [errors, setErrors] = useState<BriefErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const [honeypot, setHoneypot] = useState('');
-  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
-  // Calendly: lazy iframe modal — the old window.Calendly popup call was a
-  // silent no-op (the widget script was never loaded anywhere).
   const [calendlyOpen, setCalendlyOpen] = useState(false);
-  // R-7c Tier 1 (intent) / Tier 2 (confirmed booking via Calendly postMessage)
-  const [intentFired, setIntentFired] = useState(false);
   const [booked, setBooked] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
+  const reduce = useReducedMotion();
 
-  const openCalendly = useCallback(() => {
-    setCalendlyOpen(true);
-    setIntentFired(true);
-    confettiBurst();
+  const closeCalendly = useCallback(() => setCalendlyOpen(false), []);
+  // Only fires on Calendly's own event_scheduled postMessage (origin-checked in the dialog).
+  const onBooked = useCallback(() => {
+    setCalendlyOpen(false);
+    setBooked(true);
   }, []);
-
-  // Tier 2 trigger: Calendly's real event_scheduled postMessage from the
-  // iframe — the click never counts as a booking.
-  useEffect(() => {
-    if (!calendlyOpen) return;
-    const onMessage = (e: MessageEvent) => {
-      const fromCalendly =
-        e.origin === 'https://calendly.com' || e.origin.endsWith('.calendly.com');
-      if (!fromCalendly) return;
-      if ((e.data as { event?: string })?.event === 'calendly.event_scheduled') {
-        setCalendlyOpen(false);
-        setBooked(true);
-        confettiCelebrate();
-      }
-    };
-    window.addEventListener('message', onMessage);
-    return () => window.removeEventListener('message', onMessage);
-  }, [calendlyOpen]);
-
-  // Booked overlay auto-dismisses at 3.5s (or on click, see JSX).
-  useEffect(() => {
-    if (!booked) return;
-    const t = setTimeout(() => setBooked(false), 3500);
-    return () => clearTimeout(t);
-  }, [booked]);
 
   // Honor /contact?pillar=<slug|value>: preselect the subject once on mount.
   useEffect(() => {
     const pillar = new URLSearchParams(window.location.search).get('pillar');
     if (!pillar) return;
-    const value =
-      pillarToService[pillar] ??
-      (serviceOptions.some((o) => o.value === pillar) ? pillar : null);
-    if (value) setFormData((f) => ({ ...f, service: value }));
+    const value = pillarToService[pillar] ?? (serviceOptions.some((o) => o.value === pillar) ? pillar : null);
+    if (value && value !== 'specific-request') setForm((f) => ({ ...f, service: value }));
   }, []);
 
-  const handleTurnstileVerify = useCallback((token: string) => {
-    setTurnstileToken(token);
-  }, []);
-
+  const handleTurnstileVerify = useCallback((token: string) => setTurnstileToken(token), []);
+  const handleTurnstileExpire = useCallback(() => setTurnstileToken(null), []);
   const handleTurnstileError = useCallback(() => {
     setTurnstileToken(null);
     // Suppress error toast on preview/localhost — Turnstile always fails there
@@ -105,35 +137,33 @@ export const Contact = memo(() => {
     toast.error('Security verification failed. Please refresh and try again.');
   }, []);
 
-  const handleTurnstileExpire = useCallback(() => {
-    setTurnstileToken(null);
-  }, []);
-
-  const validateField = (name: string, value: string) => {
-    const errors: Record<string, string> = { ...fieldErrors };
-    if (name === 'email' && value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-      errors.email = 'Please enter a valid email';
-    } else if (name === 'email') {
-      delete errors.email;
-    }
-    if (name === 'name' && value && value.length < 2) {
-      errors.name = 'Name is too short';
-    } else if (name === 'name') {
-      delete errors.name;
-    }
-    setFieldErrors(errors);
+  const set = (k: keyof Brief) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const next = { ...form, [k]: e.target.value };
+    setForm(next);
+    // Re-validate live only once a field already shows an error — no nagging while typing.
+    if (errors[k]) setErrors((prev) => ({ ...prev, [k]: validateBrief(next)[k] }));
+  };
+  const blur = (k: keyof Brief) => () => {
+    if (form[k]) setErrors((prev) => ({ ...prev, [k]: validateBrief(form)[k] }));
   };
 
-  const handleServiceChange = (value: string) => {
-    if (value === 'specific-request') {
+  const handleService = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    if (e.target.value === 'specific-request') {
       window.location.href = `mailto:${socialLinks.founderEmail}?subject=Specific Request - Alchemy Labs`;
       return;
     }
-    setFormData({ ...formData, service: value });
+    set('service')(e);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const found = validateBrief(form);
+    setErrors(found);
+    const firstBad = (['name', 'email', 'message'] as const).find((k) => found[k]);
+    if (firstBad) {
+      formRef.current?.querySelector<HTMLElement>(`#c-${firstBad}`)?.focus();
+      return;
+    }
     if (!turnstileToken) {
       toast.error('Please complete the security verification.');
       return;
@@ -141,572 +171,244 @@ export const Contact = memo(() => {
     setIsSubmitting(true);
 
     try {
-      // Lazy: supabase-js only downloads when someone actually submits,
-      // keeping it out of /contact First Load JS (220kB overage item).
+      // Lazy: supabase-js only downloads when someone actually submits.
       const { supabase } = await import('@/integrations/supabase/client');
       // The edge function verifies Turnstile + rate limit, then persists and
       // emails; the browser has no direct insert rights on the table.
       const { error } = await supabase.functions.invoke('send-contact-email', {
         body: {
-          name: formData.name,
-          email: formData.email,
-          company: formData.company,
-          service: formData.service,
-          message: formData.message,
+          name: form.name,
+          email: form.email,
+          company: form.company,
+          service: form.service,
+          message: form.message,
           turnstileToken,
           website: honeypot,
         },
       });
-
       if (error) throw error;
-
       setIsSubmitted(true);
       setTurnstileToken(null);
     } catch (error) {
       console.error('Error submitting form:', error);
-      toast.error('Something went wrong. Please try again.');
+      toast.error('Something went wrong. Please try again, or email us directly.');
+    } finally {
       setIsSubmitting(false);
     }
   };
 
-  const resetForm = () => {
-    setFormData({ name: '', email: '', company: '', service: '', message: '' });
-    setIsSubmitted(false);
-    setIsSubmitting(false);
-  };
+  const reveal = (i: number) =>
+    reduce
+      ? {}
+      : {
+          initial: { opacity: 0, y: 14 },
+          whileInView: { opacity: 1, y: 0 },
+          viewport: { once: true, margin: '-40px' },
+          transition: { duration: 0.6, delay: 0.05 * i, ease },
+        };
+
+  const bookButton = (text: string, primary = false) => (
+    <button
+      type="button"
+      onClick={() => setCalendlyOpen(true)}
+      className={`cta-sheen inline-flex min-h-[48px] w-full items-center justify-center gap-3 rounded-full px-7 font-body text-sm font-semibold transition-[transform,background-color,border-color] duration-300 hover:-translate-y-px active:translate-y-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember sm:w-auto ${
+        primary ? 'bg-bone text-void hover:bg-white' : 'border border-bone/15 text-bone hover:border-ember/50'
+      }`}
+    >
+      <Calendar className="h-4 w-4" aria-hidden />
+      {text}
+    </button>
+  );
 
   return (
-    <section id="contact" className="relative overflow-hidden px-2 py-12 md:px-6 md:py-16">
-      {/* Background atmosphere */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] rounded-full blur-[180px] opacity-40"
-          style={{ background: 'radial-gradient(ellipse, rgba(255,77,28,0.08), transparent 70%)' }} />
-        <div className="absolute bottom-0 right-0 w-[500px] h-[500px] rounded-full blur-[150px] opacity-30"
-          style={{ background: 'radial-gradient(ellipse, rgba(255,77,28,0.06), transparent 70%)' }} />
-      </div>
-      <div className="relative z-10 max-w-6xl mx-auto px-6 md:px-12">
-        <div className="grid lg:grid-cols-5 gap-12 lg:gap-16">
-          
-          {/* Left Column - Info & Socials */}
-          <div className="lg:col-span-2">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-100px' }}
-              transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-              className="rounded-3xl p-8"
-              style={{
-                background: 'rgba(10, 10, 11, 0.5)',
-                backdropFilter: 'blur(20px) saturate(120%)',
-                WebkitBackdropFilter: 'blur(20px) saturate(120%)',
-                border: '1px solid rgba(255, 255, 255, 0.08)',
-                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)',
-              }}
-            >
-              <span className="inline-block px-4 py-2 rounded-full backdrop-blur-md mb-6"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(255, 77, 28, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%)',
-                  border: '1px solid rgba(255, 77, 28, 0.3)',
-                }}
+    <section id="contact" className="relative px-5 py-10 sm:px-8 md:px-12 md:py-14">
+      <div className="grid gap-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16">
+        {/* Left — direct lines */}
+        <aside className="min-w-0">
+          <m.p {...reveal(0)} className="font-mono text-[10px] uppercase tracking-[0.3em] text-bone/50">Direct lines</m.p>
+          <m.h2 {...reveal(1)} className="glass-type mt-4 font-headline text-[clamp(2rem,4vw,3rem)] font-bold leading-[1.05] tracking-[-0.03em] text-bone">
+            Let&rsquo;s build something <span className="font-playfair font-normal italic text-ember">inevitable</span>.
+          </m.h2>
+          <m.p {...reveal(2)} className="mt-4 max-w-sm font-body text-[15px] leading-relaxed text-bone/60">
+            Brief us in a few minutes, or book a call if you&rsquo;d rather talk.
+          </m.p>
+
+          <m.ul {...reveal(3)} className="mt-8">
+            <Line href={`mailto:${STUDIO_EMAIL}?subject=Inquiry – Alchemy Labs`} icon={<Mail className="h-4 w-4" aria-hidden />} title="Email the studio" detail={STUDIO_EMAIL} onCopy={() => copy(STUDIO_EMAIL)} />
+            <Line href={WHATSAPP} external icon={<MessageCircle className="h-4 w-4" aria-hidden />} title="WhatsApp" detail="+91 77949 12315" />
+          </m.ul>
+
+          <m.div {...reveal(4)} className="mt-8 border-t border-bone/10 pt-6">
+            <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-bone/40">Speak to a founder</p>
+            <ul className="mt-2">
+              {founders.map((f) => (
+                <Line key={f.email} href={`mailto:${f.email}?subject=Direct Inquiry – Alchemy Labs`} icon={<Mail className="h-4 w-4" aria-hidden />} title={f.name} detail={f.email} onCopy={() => copy(f.email)} />
+              ))}
+            </ul>
+          </m.div>
+
+          <m.div {...reveal(6)} className="mt-8 flex gap-2">
+            {[
+              { href: socialLinks.instagram, Icon: Instagram, name: 'Instagram' },
+              { href: socialLinks.linkedin, Icon: Linkedin, name: 'LinkedIn' },
+              { href: socialLinks.youtube, Icon: Youtube, name: 'YouTube' },
+            ].map(({ href, Icon, name }) => (
+              <a
+                key={name}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Alchemy Labs on ${name}`}
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-bone/10 text-bone/55 transition-colors hover:border-ember/40 hover:text-bone focus-visible:outline focus-visible:outline-2 focus-visible:outline-ember"
               >
-                <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-bone/80">
-                  Get Started
-                </span>
-              </span>
-              <h2 className="font-headline text-3xl sm:text-4xl md:text-5xl leading-[1.1] tracking-[-0.02em] text-bone mb-4">
-                Let's build something
-                <br />
-                <span className="text-ember">inevitable.</span>
-              </h2>
-              <p className="font-body text-base text-bone/50 mb-8 font-light">
-                Brief us in under 3 minutes. A founder reads every one.
-              </p>
+                <Icon className="h-4 w-4" aria-hidden />
+              </a>
+            ))}
+          </m.div>
+        </aside>
 
-              {/* Contact Methods */}
-              <div className="space-y-4 mb-8">
-                <motion.a
-                  href="https://wa.me/917794912315"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-4 p-4 rounded-xl transition-all duration-300 group"
-                  style={{
-                    background: 'rgba(255, 255, 255, 0.03)',
-                    border: '1px solid rgba(255, 255, 255, 0.06)',
-                  }}
-                  whileHover={{ x: 4, scale: 1.02, borderColor: 'rgba(34, 197, 94, 0.3)' }}
-                  transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-                >
-                  <div className="w-10 h-10 rounded-lg bg-green-500/10 flex items-center justify-center group-hover:shadow-[0_0_15px_rgba(34,197,94,0.25)] transition-shadow">
-                    <MessageCircle className="w-5 h-5 text-ember" />
-                  </div>
-                  <p className="font-body text-sm text-bone">WhatsApp</p>
-                </motion.a>
-
-                <div>
-                  <motion.a
-                    href="mailto:alchemylabs.work@gmail.com?subject=Inquiry – Alchemy Labs"
-                    className="flex items-center gap-4 p-4 rounded-xl transition-all duration-300 group"
-                    style={{
-                      background: 'rgba(255, 255, 255, 0.03)',
-                      border: '1px solid rgba(255, 255, 255, 0.06)',
-                    }}
-                    whileHover={{ x: 4, scale: 1.02, borderColor: 'rgba(255, 77, 28, 0.3)' }}
-                    transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-                  >
-                    <div className="w-10 h-10 rounded-lg bg-ember/10 flex items-center justify-center group-hover:shadow-[0_0_15px_rgba(255,77,28,0.25)] transition-shadow">
-                      <Mail className="w-5 h-5 text-ember" />
-                    </div>
-                    <p className="font-body text-sm text-bone">Email</p>
-                  </motion.a>
-                  <button
-                    onClick={() => copyToClipboard('alchemylabs.work@gmail.com')}
-                    className="flex items-center gap-1.5 mt-1.5 ml-14 font-mono text-[10px] text-bone/35 hover:text-bone/60 transition-colors"
-                  >
-                    <Copy className="w-3 h-3" />
-                    alchemylabs.work@gmail.com
-                  </button>
-                </div>
-              </div>
-
-              {/* Social Links */}
-              <div className="pt-6 border-t border-porcelain/10">
-                <p className="font-mono text-[10px] text-bone/40 tracking-wider uppercase mb-4">Follow Us</p>
-                <div className="flex gap-3">
-                  {[
-                    { href: socialLinks.instagram, Icon: Instagram, hoverColor: 'hover:text-pink-500' },
-                    { href: socialLinks.linkedin, Icon: Linkedin, hoverColor: 'hover:text-blue-500' },
-                    { href: socialLinks.youtube, Icon: Youtube, hoverColor: 'hover:text-red-500' },
-                  ].map(({ href, Icon, hoverColor }) => (
-                    <motion.a
-                      key={href}
-                      href={href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-300"
-                      style={{
-                        background: 'rgba(255, 255, 255, 0.04)',
-                        border: '1px solid rgba(255, 255, 255, 0.08)',
-                      }}
-                      whileHover={{ scale: 1.1, rotate: 5 }}
-                      transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-                    >
-                      <Icon className={`w-4 h-4 text-bone/60 ${hoverColor} transition-colors`} />
-                    </motion.a>
-                  ))}
-                </div>
-              </div>
-
-              {/* Founder note — with pull-quotes, the only sanctioned Playfair italic use */}
-              <div className="mt-8 border-t border-porcelain/10 pt-6">
-                <p className="font-playfair text-lg italic leading-relaxed text-bone/75">
-                  &ldquo;Every brief lands on my desk first. If we take your project,
-                  it&rsquo;s because I already know what to do with it.&rdquo;
+        {/* Right — book or brief */}
+        <div className="min-w-0">
+          <AnimatePresence>
+            {booked && (
+              <m.div
+                role="status"
+                initial={reduce ? false : { opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                className="mb-6 flex items-start gap-3 rounded-2xl border border-ember/30 bg-ember/[0.06] p-4"
+              >
+                <Check className="mt-0.5 h-4 w-4 shrink-0 text-ember" aria-hidden />
+                <p className="font-body text-sm text-bone/85">
+                  Your call is booked. Calendly will email the invite — see you there.
                 </p>
-                <p className="mt-3 font-mono text-[10px] tracking-[0.25em] uppercase text-bone/40">
-                  — Ash, Founder
-                </p>
-              </div>
+              </m.div>
+            )}
+          </AnimatePresence>
 
-              {/* Founder Direct */}
-              <div className="mt-8 p-4 rounded-xl" style={{
-                background: 'linear-gradient(135deg, rgba(255, 77, 28, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%)',
-                border: '1px solid rgba(255, 77, 28, 0.15)',
-              }}>
-                <p className="font-body text-xs text-bone/60 mb-3">
-                  Need to speak directly with the founders?
-                </p>
-                <div className="flex gap-3">
-                  <div>
-                    <motion.a 
-                      href="mailto:aashrithgade5@gmail.com?subject=Direct Inquiry – Alchemy Labs"
-                      className="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-mono text-xs text-ember hover:bg-ember/10 transition-colors"
-                      style={{ border: '1px solid rgba(255, 77, 28, 0.25)' }}
-                      whileHover={{ scale: 1.02 }}
-                    >
-                      <Mail className="w-3.5 h-3.5" />
-                      Aashrith
-                    </motion.a>
-                    <button
-                      onClick={() => copyToClipboard('aashrithgade5@gmail.com')}
-                      className="flex items-center gap-1 mt-1 ml-1 font-mono text-[9px] text-bone/30 hover:text-bone/50 transition-colors"
-                    >
-                      <Copy className="w-2.5 h-2.5" />
-                      copy email
-                    </button>
+          <AnimatePresence mode="wait" initial={false}>
+            {!isSubmitted ? (
+              <m.div key="form" exit={reduce ? undefined : { opacity: 0, y: -12 }} transition={{ duration: 0.3 }}>
+                {/* Primary alternative: book a call */}
+                <m.div {...reveal(1)} className="rounded-[20px] border border-bone/10 bg-bone/[0.03] p-5 sm:p-6">
+                  <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                      <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-bone/45">Strategy call · 30 min</p>
+                      <p className="mt-2 font-headline text-xl font-bold text-bone">
+                        Rather <span className="font-playfair font-normal italic">talk</span> it through?
+                      </p>
+                    </div>
+                    {bookButton('Book a call', true)}
                   </div>
-                  <div>
-                    <motion.a 
-                      href="mailto:evadoshi05@gmail.com?subject=Direct Inquiry – Alchemy Labs"
-                      className="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-mono text-xs text-ember hover:bg-ember/10 transition-colors"
-                      style={{ border: '1px solid rgba(255, 77, 28, 0.25)' }}
-                      whileHover={{ scale: 1.02 }}
-                    >
-                      <Mail className="w-3.5 h-3.5" />
-                      Eva
-                    </motion.a>
-                    <button
-                      onClick={() => copyToClipboard('evadoshi05@gmail.com')}
-                      className="flex items-center gap-1 mt-1 ml-1 font-mono text-[9px] text-bone/30 hover:text-bone/50 transition-colors"
-                    >
-                      <Copy className="w-2.5 h-2.5" />
-                      copy email
-                    </button>
-                  </div>
+                </m.div>
+
+                <div className="my-8 flex items-center gap-4" aria-hidden>
+                  <span className="h-px flex-1 bg-bone/10" />
+                  <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-bone/35">or send a brief</span>
+                  <span className="h-px flex-1 bg-bone/10" />
                 </div>
-              </div>
-            </motion.div>
-          </div>
 
-          {/* Right Column - Form */}
-          <div className="lg:col-span-3">
-            <AnimatePresence mode="wait">
-              {!isSubmitted ? (
-                <motion.form
-                  key="form"
-                  initial={{ opacity: 0, y: 40 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-                  onSubmit={handleSubmit}
-                  className="rounded-2xl p-6 md:p-8"
-                  style={{
-                    background: 'rgba(10, 10, 11, 0.55)',
-                    backdropFilter: 'blur(24px) saturate(120%)',
-                    WebkitBackdropFilter: 'blur(24px) saturate(120%)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    boxShadow: '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.06)',
-                  }}
-                >
-                  {/* Strategy Call Heading — Editorial Split */}
-                  <div className="mb-10 text-center">
-                    <p className="font-mono text-[11px] tracking-[0.25em] uppercase text-bone/50 mb-2">
-                      15 MIN STRATEGY CALL
-                    </p>
-                    <h3 className="font-headline text-2xl md:text-3xl text-ember">
-                      First one for free.
-                    </h3>
-                  </div>
+                <form ref={formRef} onSubmit={handleSubmit} noValidate aria-label="Project brief" className="relative space-y-6">
+                  <m.div {...reveal(2)} className="grid gap-6 sm:grid-cols-2">
+                    <Field id="c-name" text="Your name *" error={errors.name}>
+                      <input id="c-name" type="text" autoComplete="name" required value={form.name} onChange={set('name')} onBlur={blur('name')} placeholder="Alex Rivera" disabled={isSubmitting} aria-invalid={!!errors.name} aria-describedby={errors.name ? 'c-name-error' : undefined} className={`${field} ${fieldBorder(errors.name)}`} />
+                    </Field>
+                    <Field id="c-email" text="Email *" error={errors.email}>
+                      <input id="c-email" type="email" inputMode="email" autoComplete="email" required value={form.email} onChange={set('email')} onBlur={blur('email')} placeholder="alex@company.com" disabled={isSubmitting} aria-invalid={!!errors.email} aria-describedby={errors.email ? 'c-email-error' : undefined} className={`${field} ${fieldBorder(errors.email)}`} />
+                    </Field>
+                  </m.div>
 
-                  <div className="grid md:grid-cols-2 gap-5 mb-5">
-                    <div className="space-y-2">
-                      <label htmlFor="c-name" className="font-mono text-[10px] text-bone/50 tracking-[0.15em] uppercase">
-                        Your Name *
-                      </label>
-                      <input
-                        type="text"
-                        id="c-name" value={formData.name}
-                        onChange={(e) => {
-                          setFormData({ ...formData, name: e.target.value });
-                          validateField('name', e.target.value);
-                        }}
-                        placeholder="Alex Rivera"
-                        className={`glass-input glass-input-elevated ${fieldErrors.name ? 'border-ember/50' : ''}`}
-                        required
-                        disabled={isSubmitting}
-                      />
-                      {fieldErrors.name && (
-                        <p className="font-mono text-[10px] text-ember">{fieldErrors.name}</p>
-                      )}
-                    </div>
+                  <m.div {...reveal(3)} className="grid gap-6 sm:grid-cols-2">
+                    <Field id="c-company" text="Company">
+                      <input id="c-company" type="text" autoComplete="organization" value={form.company} onChange={set('company')} placeholder="Optional" disabled={isSubmitting} className={`${field} ${fieldBorder()}`} />
+                    </Field>
+                    <Field id="c-service" text="What do you need?" hint="“Specific request” opens your email app">
+                      <select id="c-service" value={form.service} onChange={handleService} disabled={isSubmitting} aria-describedby="c-service-hint" className={`${field} ${fieldBorder()} cursor-pointer appearance-none bg-carbon pr-10 [background-image:linear-gradient(45deg,transparent_50%,rgba(237,230,221,0.5)_50%),linear-gradient(135deg,rgba(237,230,221,0.5)_50%,transparent_50%)] [background-position:calc(100%-20px)_50%,calc(100%-15px)_50%] [background-repeat:no-repeat] [background-size:5px_5px]`}>
+                        <option value="" disabled className="bg-carbon text-bone/40">Choose one</option>
+                        {serviceOptions.map((o) => (
+                          <option key={o.value} value={o.value} className="bg-carbon text-bone">{o.label}</option>
+                        ))}
+                      </select>
+                    </Field>
+                  </m.div>
 
-                    <div className="space-y-2">
-                      <label htmlFor="c-email" className="font-mono text-[10px] text-bone/50 tracking-[0.15em] uppercase">
-                        Email *
-                      </label>
-                      <input
-                        type="email"
-                        id="c-email" value={formData.email}
-                        onChange={(e) => {
-                          setFormData({ ...formData, email: e.target.value });
-                          validateField('email', e.target.value);
-                        }}
-                        placeholder="alex@company.com"
-                        className={`glass-input glass-input-elevated ${fieldErrors.email ? 'border-ember/50' : ''}`}
-                        required
-                        disabled={isSubmitting}
-                      />
-                      {fieldErrors.email && (
-                        <p className="font-mono text-[10px] text-ember">{fieldErrors.email}</p>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="space-y-2 mb-5">
-                    <label htmlFor="c-company" className="font-mono text-[10px] text-bone/50 tracking-[0.15em] uppercase">
-                      Company
-                    </label>
-                    <input
-                      type="text"
-                      id="c-company" value={formData.company}
-                      onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                      placeholder="Your Company Name"
-                      className="glass-input glass-input-elevated"
-                      disabled={isSubmitting}
-                    />
-                  </div>
-
-                  <div className="space-y-2 mb-5">
-                    <label htmlFor="c-service" className="font-mono text-[10px] text-bone/50 tracking-[0.15em] uppercase">
-                      What do you need?
-                    </label>
-                    <select
-                      id="c-service" value={formData.service}
-                      onChange={(e) => handleServiceChange(e.target.value)}
-                      className="glass-input glass-input-elevated cursor-pointer text-bone"
-                      disabled={isSubmitting}
-                      style={{ backgroundColor: 'rgba(20, 20, 22, 0.95)' }}
-                    >
-                      {serviceOptions.map((option) => (
-                        <option 
-                          key={option.value} 
-                          value={option.value} 
-                          disabled={option.disabled}
-                          style={{
-                            backgroundColor: '#14141A',
-                            color: option.disabled ? 'rgba(250, 249, 247, 0.4)' : '#FAF9F7',
-                            padding: '12px',
-                          }}
-                        >
-                          {option.label}
-                        </option>
-                      ))}
-                    </select>
-                    <p className="font-mono text-[9px] text-bone/30">
-                      "Specific request" opens your email client
-                    </p>
-                  </div>
-
-                  <div className="space-y-2 mb-6">
-                    <label htmlFor="c-message" className="font-mono text-[10px] text-bone/50 tracking-[0.15em] uppercase">
-                      What are we building? *
-                    </label>
-                    <textarea
-                      id="c-message" value={formData.message}
-                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      placeholder="Tell us about your vision, timeline, and any specific goals..."
-                      rows={4}
-                      className="glass-input glass-input-elevated resize-none"
-                      required
-                      disabled={isSubmitting}
-                    />
-                  </div>
-
-                  <TurnstileWidget 
-                    onVerify={handleTurnstileVerify}
-                    onError={handleTurnstileError}
-                    onExpire={handleTurnstileExpire}
-                  />
-
-                  <div className="flex items-center justify-center gap-3 mb-4">
-                    <span className="font-mono text-[9px] text-bone/40 tracking-wider">Founder-read</span>
-                    <span className="text-bone/20">·</span>
-                    <span className="font-mono text-[9px] text-bone/40 tracking-wider">NDA available</span>
-                    <span className="text-bone/20">·</span>
-                    <span className="font-mono text-[9px] text-bone/40 tracking-wider">Free first call</span>
-                  </div>
+                  <m.div {...reveal(4)}>
+                    <Field id="c-message" text="What are we building? *" error={errors.message}>
+                      <textarea id="c-message" required rows={5} value={form.message} onChange={set('message')} onBlur={blur('message')} placeholder="The vision, the timeline, what good looks like." disabled={isSubmitting} aria-invalid={!!errors.message} aria-describedby={errors.message ? 'c-message-error' : undefined} className={`${field} ${fieldBorder(errors.message)} resize-y`} />
+                    </Field>
+                  </m.div>
 
                   {/* honeypot — off-screen, skipped by keyboard + screen readers */}
                   <div aria-hidden className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
-                    <input tabIndex={-1} autoComplete="off" value={honeypot} onChange={(e) => setHoneypot(e.target.value)} />
+                    <label htmlFor="c-website">Website</label>
+                    <input id="c-website" name="website" tabIndex={-1} autoComplete="off" value={honeypot} onChange={(e) => setHoneypot(e.target.value)} />
                   </div>
 
-                  {/* The form's own submit — previously there was none, so briefs never sent */}
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="mb-3 w-full flex items-center justify-center gap-3 py-4 px-8 rounded-full bg-ember font-body font-medium text-sm text-void transition-colors duration-300 hover:bg-amber disabled:opacity-60"
-                  >
-                    {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
-                    <span>{isSubmitting ? 'Sending' : 'Send the brief'}</span>
-                  </button>
+                  <TurnstileWidget onVerify={handleTurnstileVerify} onError={handleTurnstileError} onExpire={handleTurnstileExpire} />
 
-                  {/* CTA Button — Opens Calendly popup */}
-                  <button
-                    type="button"
-                    onClick={openCalendly}
-                    className="gradient-border-glow-btn w-full flex items-center justify-center gap-3 py-4 px-8 rounded-full font-body font-medium text-sm text-bone transition-all duration-300 hover:brightness-110 relative overflow-hidden"
-                  >
-                    <span>Schedule a Meeting</span>
-                    <Calendar className="w-4 h-4" />
-                  </button>
-
-                  {/* R-7c Tier 1 inline copy: fades in once intent is signaled */}
-                  <motion.p
-                    key={intentFired ? 'intent' : 'idle'}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.6 }}
-                    className="font-mono text-[10px] text-center text-bone/35 mt-4"
-                  >
-                    {intentFired
-                      ? 'One click closer to elevating your brand.'
-                      : 'Opens our Calendly page to book your 15-min Strategy Sprint.'}
-                  </motion.p>
-                </motion.form>
-              ) : (
-                <motion.div
-                  key="success"
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-                  className="glass-deep rounded-2xl p-10 md:p-16 text-center"
-                >
-                  <motion.div 
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ type: 'spring', stiffness: 200, damping: 15, delay: 0.2 }}
-                    className="w-16 h-16 rounded-full mx-auto mb-6 flex items-center justify-center"
-                    style={{
-                      background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.2) 0%, rgba(34, 197, 94, 0.05) 100%)',
-                      border: '1px solid rgba(34, 197, 94, 0.3)',
-                    }}
-                  >
-                    <Check className="w-8 h-8 text-ember" />
-                  </motion.div>
-                  
-                  <motion.h3
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 }}
-                    className="font-headline text-3xl md:text-4xl text-bone mb-3"
-                  >
-                    Done! We'll get back to you.
-                  </motion.h3>
-                  <motion.p
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4 }}
-                    className="font-body text-base text-bone/60 font-light mb-10"
-                  >
-                    Your brief is in our hands. Book your free strategy call below.
-                  </motion.p>
-                  
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.5 }}
-                    className="flex flex-col items-center gap-4"
-                  >
-                    {/* Primary Calendly CTA — uses official popup widget */}
+                  <div className="flex flex-col-reverse gap-4 sm:flex-row sm:items-center sm:justify-between">
+                    <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-bone/40">NDA available on request</p>
                     <button
-                      type="button"
-                      onClick={openCalendly}
-                      className="gradient-border-glow inline-flex items-center gap-3 px-8 py-4 rounded-full font-body font-medium text-sm text-bone transition-all duration-300 hover:brightness-110 cursor-pointer"
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="cta-sheen inline-flex min-h-[52px] w-full items-center justify-center gap-3 rounded-full bg-ember px-8 font-body text-sm font-semibold text-void transition-[transform,background-color,opacity] duration-300 hover:-translate-y-px hover:bg-amber active:translate-y-0 disabled:translate-y-0 disabled:opacity-60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bone sm:w-auto"
                     >
-                      <Calendar className="w-5 h-5 text-ember" />
-                      <span>Book Your Call</span>
+                      {isSubmitting ? <Loader2 className="h-4 w-4 motion-safe:animate-spin" aria-hidden /> : null}
+                      <span>{isSubmitting ? 'Sending' : 'Send the brief'}</span>
+                      {!isSubmitting && <ArrowRight className="h-4 w-4" aria-hidden />}
                     </button>
-
-                    <div className="flex flex-wrap justify-center gap-3 mt-2">
-                      <Link
-                        href="/"
-                        className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-body text-sm text-bone/60 hover:text-bone transition-colors"
-                        style={{
-                          background: 'rgba(255, 255, 255, 0.04)',
-                          border: '1px solid rgba(255, 255, 255, 0.08)',
-                        }}
-                        onClick={resetForm}
-                      >
-                        <Home className="w-4 h-4" />
-                        <span>Back to Home</span>
-                      </Link>
-                      
-                      <a
-                        href="https://wa.me/917794912315"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-body text-sm transition-all duration-300"
-                        style={{
-                          background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.2) 0%, rgba(34, 197, 94, 0.08) 100%)',
-                          border: '1px solid rgba(34, 197, 94, 0.4)',
-                        }}
-                      >
-                        <MessageCircle className="w-4 h-4 text-ember" />
-                        <span className="text-bone">WhatsApp Us</span>
-                      </a>
-                    </div>
-                  </motion.div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
+                  </div>
+                </form>
+              </m.div>
+            ) : (
+              <m.div
+                key="success"
+                role="status"
+                initial={reduce ? false : { opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, ease }}
+                className="rounded-[20px] border border-bone/10 bg-bone/[0.03] p-8 sm:p-12"
+              >
+                <span className="flex h-12 w-12 items-center justify-center rounded-full border border-ember/40 text-ember">
+                  <Check className="h-5 w-5" aria-hidden />
+                </span>
+                <h3 className="mt-6 font-headline text-[clamp(1.75rem,3.5vw,2.5rem)] font-bold leading-tight tracking-[-0.02em] text-bone">
+                  Brief <span className="font-playfair font-normal italic">received</span>.
+                </h3>
+                <p className="mt-3 max-w-md font-body text-[15px] leading-relaxed text-bone/60">
+                  Thanks for the detail. Want to skip the back-and-forth? Pick a time for a call.
+                </p>
+                <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                  {bookButton('Book the call', true)}
+                  <a
+                    href={WHATSAPP}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-full border border-bone/15 px-6 font-body text-sm text-bone transition-colors hover:border-ember/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-ember"
+                  >
+                    <MessageCircle className="h-4 w-4" aria-hidden /> WhatsApp
+                  </a>
+                  <Link
+                    href="/"
+                    className="inline-flex min-h-[48px] items-center justify-center rounded-full px-6 font-body text-sm text-bone/60 transition-colors hover:text-bone focus-visible:outline focus-visible:outline-2 focus-visible:outline-ember"
+                  >
+                    Back to home
+                  </Link>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => { setForm(empty); setErrors({}); setIsSubmitted(false); }}
+                  className="mt-6 min-h-[44px] font-mono text-[10px] uppercase tracking-[0.2em] text-bone/40 underline-offset-4 hover:text-bone/70 hover:underline"
+                >
+                  Send another brief
+                </button>
+              </m.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
 
-      {/* Calendly modal: iframe mounts only while open, so nothing loads
-          until the CTA is clicked */}
-      <AnimatePresence>
-        {calendlyOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4"
-            role="dialog"
-            aria-modal="true"
-            aria-label="Schedule a meeting"
-          >
-            <button
-              aria-label="Close scheduler"
-              onClick={() => setCalendlyOpen(false)}
-              className="absolute inset-0 cursor-default bg-black/80 backdrop-blur-sm"
-            />
-            <motion.div
-              initial={{ opacity: 0, y: 24, scale: 0.98 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 24, scale: 0.98 }}
-              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-              className="relative h-[85vh] w-full max-w-3xl overflow-hidden rounded-2xl bg-white shadow-2xl"
-            >
-              <button
-                onClick={() => setCalendlyOpen(false)}
-                aria-label="Close"
-                className="absolute right-3 top-3 z-10 rounded-full bg-black/10 p-2 text-black/60 transition-colors hover:bg-black/20"
-              >
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
-                  <path d="M1 1l12 12M13 1L1 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                </svg>
-              </button>
-              <iframe
-                src={`${CALENDLY_URL}?hide_gdpr_banner=1`}
-                title="Schedule a meeting with Alchemy Labs"
-                className="h-full w-full border-0"
-              />
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* R-7c Tier 2: confirmed-booking celebration — full backdrop blur
-          (static 14px, one-shot overlay, not the scroll-driven veil),
-          auto-dismiss 3.5s or on click */}
-      <AnimatePresence>
-        {booked && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.4 }}
-            role="status"
-            onClick={() => setBooked(false)}
-            className="fixed inset-0 z-[110] flex items-center justify-center bg-void/60 px-6"
-            style={{ backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)' }}
-          >
-            <motion.p
-              initial={{ opacity: 0, y: 18, filter: 'blur(8px)' }}
-              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-              transition={{ duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-              className="max-w-2xl text-center font-headline text-3xl font-black leading-tight text-bone md:text-5xl"
-            >
-              Your discovery session is booked.{' '}
-              <span className="font-playfair font-normal italic">Elevation starts now.</span>
-            </motion.p>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <CalendlyDialog open={calendlyOpen} onClose={closeCalendly} onBooked={onBooked} />
     </section>
   );
 });

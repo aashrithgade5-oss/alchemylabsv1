@@ -11,7 +11,7 @@ import { KineticHeadline } from '@/components/furnace/KineticHeadline';
 
 const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
-const trust = ['24H RESPONSE', 'NDA AVAILABLE', 'FREE FIRST CALL'];
+const trust = ['NDA AVAILABLE', '30-MIN STRATEGY CALL', 'EMAIL OR WHATSAPP'];
 
 export const ContactPage = () => {
   // R-P5: scroll-driven scale on the form-section backdrop image — the old
