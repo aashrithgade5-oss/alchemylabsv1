@@ -1234,6 +1234,14 @@ html {
   letter-spacing: -0.02em;
   line-height: 1.08;
 }
+/* Page H1/H2 display: Inter light, tight — restraint over weight. */
+.type-display {
+  font-family: var(--font-inter), -apple-system, sans-serif;
+  font-weight: 300;
+  letter-spacing: -0.045em;
+  line-height: 1;
+  padding-bottom: 0.08em;
+}
 .ghost-stroke {
   color: transparent;
   -webkit-text-stroke: 1px rgba(237, 230, 221, 0.2);

@@ -72,12 +72,6 @@ export function PillarSection({ pillar, index }: { pillar: Pillar; index: number
       >
         {kanji[index % kanji.length]}
       </span>
-      <span
-        aria-hidden
-        className={`pointer-events-none absolute -top-10 select-none font-sans text-[16rem] font-black leading-none text-carbon-2 md:-top-16 md:text-[26rem] ${edge}`}
-      >
-        {pillar.numeral}
-      </span>
 
       <div
         className={`relative mx-auto flex max-w-6xl flex-col px-6 py-24 md:px-12 md:py-32 lg:px-16 ${
@@ -95,7 +89,7 @@ export function PillarSection({ pillar, index }: { pillar: Pillar; index: number
           <p className="font-mono text-[10px] tracking-[0.3em] text-ash">{pillar.tag}</p>
           <ScrollScrub
             text={pillar.title}
-            className="mt-5 font-headline text-[clamp(2rem,4vw,3.5rem)] font-black leading-[1.05] tracking-[-0.03em] text-bone"
+            className="mt-5 type-display text-[clamp(2rem,4vw,3.5rem)] text-bone"
             wordClassName="glass-type"
           />
           <p className="mt-5 max-w-md text-base leading-relaxed text-ash">{pillar.description}</p>
@@ -114,7 +108,7 @@ export function PillarSection({ pillar, index }: { pillar: Pillar; index: number
                 {pillar.offers.map((offer) => (
                   <li key={offer.name} className="group border-t border-line py-7 first:border-t-0">
                     <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
-                      <h3 className="font-sans text-xl font-bold text-bone transition-colors duration-300 group-hover:text-ember md:text-2xl">
+                      <h3 className="type-scroll text-2xl text-bone transition-colors duration-300 group-hover:text-ember md:text-[1.75rem]">
                         {offer.name}
                       </h3>
                       <span className="font-mono text-[10px] tracking-[0.25em] text-ash">

@@ -3,6 +3,11 @@ import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 const TURNSTILE_SECRET_KEY = Deno.env.get("TURNSTILE_SECRET_KEY");
+const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
+const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+const FROM_EMAIL = Deno.env.get("RESEND_FROM_EMAIL") ?? "Alchemy Labs <onboarding@resend.dev>";
+const RECIPIENTS = (Deno.env.get("CONTACT_RECIPIENTS") ?? "brandalchemie@gmail.com").split(",").map((s) => s.trim());
+const RATE_LIMIT_PER_HOUR = 3;
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -16,7 +21,7 @@ const contactEmailSchema = z.object({
     .trim()
     .min(1, "Name is required")
     .max(100, "Name must be less than 100 characters")
-    .regex(/^[a-zA-Z\s\-'.]+$/, "Name contains invalid characters"),
+    .regex(/^[\p{L}\p{M}\s\-'.]+$/u, "Name contains invalid characters"),
   email: z.string()
     .trim()
     .email("Invalid email address")
@@ -40,6 +45,8 @@ const contactEmailSchema = z.object({
     .nullable()
     .transform(val => val || ""),
   turnstileToken: z.string().min(1, "Security verification token is required"),
+  // honeypot: real users never see or fill this field
+  website: z.string().max(0).optional(),
 });
 
 type ContactEmailRequest = z.infer<typeof contactEmailSchema>;
@@ -91,7 +98,7 @@ async function sendEmail(to: string[], subject: string, html: string) {
       Authorization: `Bearer ${RESEND_API_KEY}`,
     },
     body: JSON.stringify({
-      from: "Alchemy Labs <onboarding@resend.dev>",
+      from: FROM_EMAIL,
       to,
       subject,
       html,
@@ -147,7 +154,31 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    console.log("CAPTCHA verification passed");
+    // Durable per-email rate limit, read from the table itself.
+    const since = new Date(Date.now() - 3600_000).toISOString();
+    const recent = await fetch(
+      `${SUPABASE_URL}/rest/v1/contact_submissions?select=id&email=eq.${encodeURIComponent(email)}&created_at=gte.${since}`,
+      { headers: { apikey: SERVICE_ROLE_KEY!, Authorization: `Bearer ${SERVICE_ROLE_KEY}` } },
+    );
+    if (recent.ok && (await recent.json()).length >= RATE_LIMIT_PER_HOUR) {
+      return new Response(JSON.stringify({ error: "Too many submissions. Please try again later." }), {
+        status: 429,
+        headers: { "Content-Type": "application/json", ...corsHeaders },
+      });
+    }
+
+    // Persist only after verification; the browser has no insert rights.
+    const insert = await fetch(`${SUPABASE_URL}/rest/v1/contact_submissions`, {
+      method: "POST",
+      headers: {
+        apikey: SERVICE_ROLE_KEY!,
+        Authorization: `Bearer ${SERVICE_ROLE_KEY}`,
+        "Content-Type": "application/json",
+        Prefer: "return=minimal",
+      },
+      body: JSON.stringify({ name, email, company: company ?? null, service: service ?? null, message }),
+    });
+    if (!insert.ok) throw new Error(`insert failed: ${insert.status}`);
 
     // Escape all user inputs for safe HTML insertion
     const safeName = escapeHtml(name);
@@ -157,8 +188,8 @@ const handler = async (req: Request): Promise<Response> => {
     const safeMessage = message ? escapeHtml(message).replace(/\n/g, '<br>') : '';
 
     // Send notification email to admin
-    const adminEmailResponse = await sendEmail(
-      ["brandalchemie@gmail.com"],
+    await sendEmail(
+      RECIPIENTS,
       `New Contact Form Submission from ${safeName}`,
       `
         <!DOCTYPE html>
@@ -221,12 +252,10 @@ const handler = async (req: Request): Promise<Response> => {
         </body>
         </html>
       `
-    );
-
-    console.log("Admin notification email sent:", adminEmailResponse);
+    ).catch((e) => console.error("admin email failed:", e.message));
 
     // Send confirmation email to the user
-    const userEmailResponse = await sendEmail(
+    await sendEmail(
       [email],
       "We received your brief — Alchemy Labs",
       `
@@ -270,25 +299,19 @@ const handler = async (req: Request): Promise<Response> => {
         </body>
         </html>
       `
-    );
-
-    console.log("User confirmation email sent:", userEmailResponse);
+    ).catch((e) => console.error("confirmation email failed:", e.message));
 
     return new Response(
-      JSON.stringify({ 
-        success: true, 
-        adminEmail: adminEmailResponse, 
-        userEmail: userEmailResponse 
-      }),
+      JSON.stringify({ success: true }),
       {
         status: 200,
         headers: { "Content-Type": "application/json", ...corsHeaders },
       }
     );
   } catch (error: any) {
-    console.error("Error in send-contact-email function:", error);
+    console.error("send-contact-email failed:", error?.message);
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error: "Something went wrong. Please email us directly." }),
       {
         status: 500,
         headers: { "Content-Type": "application/json", ...corsHeaders },

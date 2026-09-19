@@ -1,172 +1,104 @@
 'use client';
 
-import { lazy, Suspense, useRef } from 'react';
-import { m, useScroll, useTransform } from 'framer-motion';
+import { m } from 'framer-motion';
 import Image from 'next/image';
-import Link from 'next/link';
 import { portfolio } from '@lib/portfolio';
-import { GlassPanel } from '@/components/furnace/GlassPanel';
-import { KineticHeadline } from '@/components/furnace/KineticHeadline';
-// Lazy like the homepage: ClosingBand drags TextHoverEffect + the marquee
-// into First Load otherwise (/work 134→159kB when imported statically).
-const ClosingBand = lazy(() =>
-  import('@/components/furnace/home/ClosingBand').then((mod) => ({ default: mod.ClosingBand })),
-);
 import { AmbientVideo } from '@/components/furnace/home/AmbientVideo';
+import { ScrollScrub } from '@/components/furnace/fx/ScrollScrub';
 
 const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
-// White-on-black text marks (mix-blend-screen), same set FeaturedWork uses.
-// AI Media Gen has no mark yet — falls back to the plain h3 below.
-const textMarks: Record<string, string> = {
-  'aether-rituals': '/media/aether-rituals-text.png',
-  genesis: '/media/genesis-text.png',
-  'oakley-concept': '/media/oakley-text.png',
-};
-
 function WorkTile({ entry, large }: { entry: (typeof portfolio)[number]; large: boolean }) {
   return (
-    <GlassPanel className={`group h-full ${large ? 'md:min-h-[28rem]' : ''}`}>
-      {entry.video ? (
-        <AmbientVideo
-          src={entry.video.src}
-          poster={entry.video.poster}
-          className="absolute inset-0 h-full w-full object-cover opacity-40 transition-opacity duration-500 group-hover:opacity-55"
-        />
-      ) : (
-        <Image
-          src={entry.visuals[0] ?? entry.image}
-          alt=""
-          fill
-          className="object-cover opacity-40 transition-opacity duration-500 group-hover:opacity-55"
-        />
-      )}
-      <div className="relative flex h-full flex-col justify-end p-8 md:p-10">
-        <p className="font-mono text-[10px] tracking-[0.25em] text-ember">
-          {entry.label} · {entry.discipline}
-        </p>
-        {textMarks[entry.id] ? (
-          <Image
-            src={textMarks[entry.id]}
-            alt={entry.title}
-            width={800}
-            height={200}
-            className={`mt-4 h-auto mix-blend-screen ${large ? 'w-64 md:w-80' : 'w-44 md:w-52'}`}
+    <article className="group">
+      <div
+        className={`relative overflow-hidden rounded-2xl border border-bone/[0.08] bg-carbon ${
+          large ? 'aspect-[16/9]' : 'aspect-[4/3]'
+        }`}
+      >
+        {entry.video ? (
+          <AmbientVideo
+            src={entry.video.src}
+            poster={entry.video.poster}
+            className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.03]"
           />
         ) : (
-          <h3
-            className={`mt-4 font-headline font-black text-bone ${large ? 'text-3xl md:text-4xl' : 'text-xl md:text-2xl'}`}
-          >
-            {entry.title}
-          </h3>
+          <Image
+            src={entry.visuals[0] ?? entry.image}
+            alt={`${entry.title} — ${entry.label.toLowerCase()} work`}
+            fill
+            sizes={large ? '(min-width: 1024px) 1100px, 100vw' : '(min-width: 768px) 50vw, 100vw'}
+            className="object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.03]"
+          />
         )}
-        <p className={`mt-3 max-w-md leading-relaxed text-ash ${large ? 'text-base md:text-lg' : 'text-sm'}`}>
-          {entry.summary}
+      </div>
+      <div className="mt-5 flex flex-col gap-2 md:flex-row md:items-baseline md:justify-between md:gap-8">
+        <h2 className={`type-scroll text-bone ${large ? 'text-[clamp(2rem,3.6vw,3rem)]' : 'text-[1.75rem]'}`}>
+          {entry.title}
+        </h2>
+        <p className="shrink-0 font-mono text-[10px] tracking-[0.25em] text-ember">
+          {entry.label} · {entry.discipline}
         </p>
       </div>
-    </GlassPanel>
+      <p className="mt-2 max-w-xl text-sm leading-relaxed text-ash md:text-[15px]">{entry.summary}</p>
+    </article>
   );
 }
 
 export default function Work() {
   const [featured, ...rest] = portfolio;
-  const heroRef = useRef<HTMLElement>(null);
-  // C-P18: hero video replaced with the Solutions-page "moving lights"
-  // treatment — scroll parallax (scale + y) over a static glow texture,
-  // plus a slow drifting glow layer. Unique asset (red-glow-box.webp);
-  // red-slats-wide.mp4 moves down to the bento backdrop.
-  const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end end'] });
-  const bgScale = useTransform(scrollYProgress, [0, 1], [1, 1.12]);
-  const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '8%']);
 
   return (
     <main className="relative font-sans">
-      <section ref={heroRef} className="relative min-h-[70vh] overflow-hidden bg-void">
+      <section className="relative overflow-hidden bg-void">
         <div aria-hidden className="absolute inset-0">
-          <m.div className="absolute inset-0" style={{ scale: bgScale, y: bgY }}>
-            <Image
-              src="/media/red-glow-box.webp"
-              alt=""
-              fill
-              priority
-              quality={90}
-              sizes="100vw"
-              className="object-cover object-center opacity-[0.3]"
-            />
-          </m.div>
-          {/* the "lights moving" pass: an oversized copy drifting slowly
-              sideways under the parallax layer's blend */}
-          <m.div
-            className="absolute -inset-x-[20%] inset-y-0 mix-blend-screen"
-            animate={{ x: ['-4%', '4%'] }}
-            transition={{ duration: 22, ease: 'easeInOut', repeat: Infinity, repeatType: 'mirror' }}
-          >
-            <Image
-              src="/media/red-glow-box.webp"
-              alt=""
-              fill
-              quality={75}
-              sizes="140vw"
-              className="object-cover object-center opacity-[0.14] blur-[2px]"
-            />
-          </m.div>
-          <div
-            className="absolute inset-0"
-            style={{
-              background:
-                'linear-gradient(to bottom, rgba(10,9,8,0.35) 0%, rgba(10,9,8,0.55) 55%, rgba(10,9,8,1) 100%)',
-            }}
+          <Image
+            src="/media/red-glow-box.webp"
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-center opacity-30"
           />
+          <div className="absolute inset-0 bg-gradient-to-b from-void/40 via-void/60 to-void" />
         </div>
-        <div className="relative mx-auto max-w-6xl px-6 pb-16 pt-40 md:px-12 md:pb-20 md:pt-48 lg:px-16">
-          <p className="font-mono text-[10px] tracking-[0.3em] text-bone/70 md:text-[11px]">
-            SELECTED WORK
-          </p>
-          <KineticHeadline
-            as="h1"
-            text="Proof over polish."
-            className="mt-7 max-w-4xl font-headline text-[clamp(3rem,7vw,7rem)] font-black leading-[1.02] tracking-[-0.04em] text-bone"
-            wordClassName="glass-type"
-            delay={0.15}
-          />
+        <div className="relative mx-auto max-w-6xl px-6 pb-20 pt-40 md:px-12 md:pb-24 md:pt-52 lg:px-16">
           <m.p
-            initial={{ opacity: 0, y: 16, filter: 'blur(8px)' }}
-            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-            transition={{ duration: 1, delay: 0.5, ease }}
-            className="mt-6 max-w-xl font-playfair text-xl italic text-bone/75 md:text-2xl"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 0.1 }}
+            className="font-mono text-[10px] tracking-[0.3em] text-bone/60 md:text-[11px]"
           >
-            The work speaks in befores and afters.
+            SELECTED WORK · CONCEPTS &amp; SELF-INITIATED
+          </m.p>
+          <m.h1
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.1, delay: 0.2, ease }}
+            className="type-display glass-type mt-7 max-w-4xl text-[clamp(3rem,7vw,6.5rem)]"
+          >
+            Proof over polish.
+          </m.h1>
+          <m.p
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.45, ease }}
+            className="mt-6 max-w-xl font-playfair text-xl italic text-bone/70 md:text-2xl"
+          >
+            Concept work, built end to end, to show the standard before you commit to it.
           </m.p>
         </div>
       </section>
 
-      {/* C-P18 bento: 6 entries (Porsche showreel added as the 6th) —
-          featured 2x2 anchor + five singles fill a clean 3x3. The flat void
-          behind the grid gains the red-slats loop, dimmed and feathered,
-          matching the depth treatment elsewhere on the rebuilt pages. */}
-      <section className="relative overflow-hidden px-6 pb-24 md:px-12 md:pb-32">
-        <div aria-hidden className="absolute inset-0">
-          <AmbientVideo
-            src="/media/red-slats-wide.mp4"
-            poster="/media/red-slats-wide-poster.jpg"
-            className="h-full w-full object-cover opacity-[0.08]"
-          />
-          <div
-            className="absolute inset-0"
-            style={{
-              background:
-                'linear-gradient(to bottom, rgba(10,9,8,0.95) 0%, rgba(10,9,8,0.55) 25%, rgba(10,9,8,0.55) 75%, rgba(10,9,8,0.95) 100%)',
-            }}
-          />
-        </div>
-        <div className="relative mx-auto grid max-w-6xl gap-4 md:auto-rows-fr md:grid-cols-3">
+      <section className="relative px-6 pb-28 md:px-12 md:pb-36 lg:px-16">
+        <div className="mx-auto grid max-w-6xl gap-x-8 gap-y-16 md:grid-cols-2 md:gap-y-20">
           {featured && (
             <m.div
               initial={{ opacity: 0, y: 32 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-80px' }}
-              transition={{ duration: 0.9, ease }}
-              className="md:col-span-2 md:row-span-2"
+              transition={{ duration: 1, ease }}
+              className="md:col-span-2"
             >
               <WorkTile entry={featured} large />
             </m.div>
@@ -177,7 +109,7 @@ export default function Work() {
               initial={{ opacity: 0, y: 32 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-80px' }}
-              transition={{ duration: 0.9, delay: i * 0.1, ease }}
+              transition={{ duration: 1, delay: (i % 2) * 0.1, ease }}
             >
               <WorkTile entry={entry} large={false} />
             </m.div>
@@ -185,31 +117,22 @@ export default function Work() {
         </div>
       </section>
 
-      {/* C-P12: the orphaned client-logo strip is replaced with the work
-          pedagogy, in copy voice. */}
-      <section className="relative border-t border-line px-6 py-20 md:px-12">
-        <m.div
-          initial={{ opacity: 0, y: 32 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.9, ease }}
-          className="mx-auto max-w-6xl"
-        >
+      <section className="relative border-t border-line px-6 py-24 md:px-12 md:py-32 lg:px-16">
+        <div className="mx-auto max-w-6xl">
           <p className="font-mono text-[10px] tracking-[0.3em] text-ash">THE PEDAGOGY</p>
-          <p className="mt-6 max-w-3xl text-lg font-light leading-relaxed text-bone/75 md:text-xl">
-            Most studios sell hours. We sell judgment. Every engagement here runs through the same
-            discipline: generate wide, cut without mercy, keep the one frame that carries the
-            brand. We build systems, not one-offs, so each identity, campaign, and film compounds
-            instead of expiring. The work above survived that cut. If it looks restrained, that is
-            the point. Restraint is what volume can never buy.
+          <ScrollScrub
+            text="Most studios sell hours. We sell judgment."
+            className="type-scroll mt-8 max-w-4xl text-[clamp(2rem,4.2vw,3.5rem)] text-bone"
+            wordClassName="glass-type"
+          />
+          <p className="mt-8 max-w-2xl text-base font-light leading-relaxed text-bone/65 md:text-lg">
+            Every engagement runs through the same discipline: generate wide, cut without mercy,
+            keep the one frame that carries the brand. We build systems, not one-offs, so each
+            identity, campaign, and film compounds instead of expiring. If it looks restrained,
+            that is the point.
           </p>
-        </m.div>
+        </div>
       </section>
-
-      {/* C-P17: identical full-bleed marquee CTA block as the homepage close */}
-      <Suspense fallback={null}>
-        <ClosingBand />
-      </Suspense>
     </main>
   );
 }

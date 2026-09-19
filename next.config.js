@@ -10,6 +10,21 @@ const nextConfig = {
   async rewrites() {
     return [{ source: '/assets/:path*', destination: '/media/:path*' }];
   },
+  // CSP left out on purpose until tested against Turnstile/Supabase/Calendly/
+  // Vercel insights in a preview deploy (see docs/DEPLOYMENT.md).
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'X-Frame-Options', value: 'DENY' },
+          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+          { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(), payment=()' },
+        ],
+      },
+    ];
+  },
   async redirects() {
     return [
       { source: '/solutions', destination: '/services', permanent: true },

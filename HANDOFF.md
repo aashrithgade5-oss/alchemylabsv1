@@ -905,3 +905,11 @@ fallback â€” set that env var in Vercel before the first deploy (see ERROR_LOG.m
 - ClosingBand: obsidian-fold-2, ScrollScrub headline; 3D brand marquee, invisible ALCHEMY outline, third cycler removed.
 - Footer: visible Playfair wordmark. Intertext meteors removed. TurnSequence exit fade.
 - New assets (Higgsfield gpt_image_2_5): public/media/obsidian-fold-1.webp, obsidian-fold-2.webp.
+
+## 2026-09-19 — O-3 forms, security, Work/Contact, one closer
+- SECURITY: browser no longer inserts into contact_submissions. Edge function now: Zod (unicode names) ? honeypot ? Turnstile ? per-email rate limit (3/h, read from table) ? service-role insert ? best-effort emails. Generic errors only. New migration drops anon insert policy. NEEDS DEPLOY of function + migration together (human, Supabase CLI).
+- Contact form rewritten: it had NO submit button (only a Calendly type=button). Labels, aria-invalid, adjacent errors, honeypot, Turnstile reset, success state, direct lines. validate() covered by src/components/contact-validate.test.ts.
+- Security headers in next.config.js (nosniff, DENY, referrer, permissions). CSP deferred to preview testing.
+- BottomCTA (fake newsletter) deleted; ClosingBand is the single closer site-wide via SiteChrome.
+- Work page rebuilt editorial; type-display (Inter 300) on all page H1/H2; services giant numeral removed.
+- vitest.config: removed uninstalled Vite plugin (tests were not runnable).
