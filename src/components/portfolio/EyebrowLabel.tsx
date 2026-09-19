@@ -8,7 +8,7 @@ interface EyebrowLabelProps {
 }
 
 const colorClasses = {
-  red: 'text-alchemy-red',
+  red: 'text-ember',
   white: 'text-porcelain',
   muted: 'text-porcelain/50',
 };

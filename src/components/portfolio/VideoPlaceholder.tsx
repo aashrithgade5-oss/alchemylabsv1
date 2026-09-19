@@ -14,7 +14,7 @@ export const VideoPlaceholder = memo(({
   gradient,
   className,
 }: VideoPlaceholderProps) => {
-  const bg = gradient || 'radial-gradient(ellipse at center, rgba(220,38,38,0.15) 0%, rgba(220,38,38,0.02) 60%, transparent 80%)';
+  const bg = gradient || 'radial-gradient(ellipse at center, rgba(255,77,28,0.15) 0%, rgba(255,77,28,0.02) 60%, transparent 80%)';
 
   return (
     <div

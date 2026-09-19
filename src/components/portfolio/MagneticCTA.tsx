@@ -19,9 +19,9 @@ interface MagneticCTAProps {
 
 const variantStyles = {
   primary: {
-    base: 'bg-gradient-to-r from-alchemy-red/20 to-alchemy-red/10 border-alchemy-red/40 text-porcelain',
-    hover: 'hover:from-alchemy-red/30 hover:to-alchemy-red/15 hover:border-alchemy-red/60',
-    glow: '0 0 30px rgba(220,38,38,0.25), 0 0 60px rgba(220,38,38,0.1)',
+    base: 'bg-gradient-to-r from-ember/20 to-ember/10 border-ember/40 text-porcelain',
+    hover: 'hover:from-ember/30 hover:to-ember/15 hover:border-ember/60',
+    glow: '0 0 30px rgba(255,77,28,0.25), 0 0 60px rgba(255,77,28,0.1)',
   },
   secondary: {
     base: 'bg-white/5 border-white/10 text-porcelain/80',
@@ -30,7 +30,7 @@ const variantStyles = {
   },
   ghost: {
     base: 'bg-transparent border-transparent text-porcelain/60',
-    hover: 'hover:text-alchemy-red',
+    hover: 'hover:text-ember',
     glow: 'none',
   },
 };

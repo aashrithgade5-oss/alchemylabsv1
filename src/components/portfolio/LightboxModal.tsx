@@ -123,7 +123,7 @@ export const LightboxModal = memo(({
                 {item.tags.slice(0, 3).map((tag) => (
                   <span
                     key={tag}
-                    className="px-3 py-1 rounded-full text-xs font-mono text-alchemy-red/80 bg-alchemy-red/10 border border-alchemy-red/20"
+                    className="px-3 py-1 rounded-full text-xs font-mono text-ember/80 bg-ember/10 border border-ember/20"
                   >
                     {tag}
                   </span>

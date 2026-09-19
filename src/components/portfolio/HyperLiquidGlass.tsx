@@ -28,8 +28,8 @@ export const HyperLiquidGlass = memo(({
         border: '1px solid rgba(255,255,255,0.12)',
       }}
       whileHover={variant === 'hover-glow' ? {
-        borderColor: 'rgba(220,38,38,0.4)',
-        boxShadow: '0 0 40px rgba(220,38,38,0.15), inset 0 0 40px rgba(220,38,38,0.03)',
+        borderColor: 'rgba(255,77,28,0.4)',
+        boxShadow: '0 0 40px rgba(255,77,28,0.15), inset 0 0 40px rgba(255,77,28,0.03)',
       } : undefined}
       transition={{ duration: 0.3 }}
       {...motionProps}
@@ -43,9 +43,9 @@ export const HyperLiquidGlass = memo(({
           }}
           animate={{
             boxShadow: [
-              'inset 0 0 20px rgba(220,38,38,0), 0 0 15px rgba(220,38,38,0)',
-              'inset 0 0 20px rgba(220,38,38,0.05), 0 0 15px rgba(220,38,38,0.08)',
-              'inset 0 0 20px rgba(220,38,38,0), 0 0 15px rgba(220,38,38,0)',
+              'inset 0 0 20px rgba(255,77,28,0), 0 0 15px rgba(255,77,28,0)',
+              'inset 0 0 20px rgba(255,77,28,0.05), 0 0 15px rgba(255,77,28,0.08)',
+              'inset 0 0 20px rgba(255,77,28,0), 0 0 15px rgba(255,77,28,0)',
             ],
           }}
           transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}

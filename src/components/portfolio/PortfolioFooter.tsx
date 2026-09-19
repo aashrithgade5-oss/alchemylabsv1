@@ -3,7 +3,9 @@ import { memo } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ExternalLink } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
+
+type FooterLink = { label: string; href: string; external?: boolean; download?: boolean };
 
 interface PortfolioFooterProps {
   isDark: boolean;
@@ -11,12 +13,50 @@ interface PortfolioFooterProps {
   monogram: string;
   copyright: string;
   signoff?: string;
-  portfolioLinks?: { label: string; href: string }[];
-  ventureLinks?: { label: string; href: string; external?: boolean }[];
-  connectLinks?: { label: string; href: string; external?: boolean }[];
+  portfolioLinks?: FooterLink[];
+  ventureLinks?: FooterLink[];
+  connectLinks?: FooterLink[];
 }
 
 const t = (isDark: boolean, dark: string, light: string) => isDark ? dark : light;
+const EASE = [0.22, 1, 0.36, 1] as const;
+
+const linkCls = 'group inline-flex min-h-11 items-center gap-1.5 font-body text-sm text-porcelain/65 hover:text-porcelain transition-colors duration-300';
+
+const FooterLinkItem = ({ link }: { link: FooterLink }) => {
+  const ext = link.external && !link.download;
+  return (
+    <a
+      href={link.href}
+      {...(link.download ? { download: true } : {})}
+      {...(ext ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+      className={linkCls}
+    >
+      <span className="relative">
+        {link.label}
+        <span className="absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 bg-ember transition-transform duration-500 ease-out group-hover:scale-x-100" />
+      </span>
+      {ext && <ArrowUpRight className="w-3 h-3 opacity-40" />}
+    </a>
+  );
+};
+
+const Column = ({ title, links, delay }: { title: string; links: FooterLink[]; delay: number }) => (
+  <motion.nav
+    aria-label={title}
+    initial={{ opacity: 0, y: 12 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true }}
+    transition={{ delay, duration: 0.6, ease: EASE }}
+  >
+    <h3 className="font-mono text-[10px] text-porcelain/45 tracking-[0.3em] uppercase mb-4">{title}</h3>
+    <ul>
+      {links.map((link) => (
+        <li key={link.label}><FooterLinkItem link={link} /></li>
+      ))}
+    </ul>
+  </motion.nav>
+);
 
 export const PortfolioFooter = memo(({
   isDark,
@@ -28,103 +68,66 @@ export const PortfolioFooter = memo(({
   ventureLinks = [],
   connectLinks = [],
 }: PortfolioFooterProps) => {
+  const cv = connectLinks.find((l) => l.download);
   return (
     <footer className={`relative overflow-hidden ${t(isDark, 'bg-alchemy-black', 'bg-neutral-950')}`}>
-      {/* Background */}
-      <div className="absolute inset-0 z-0">
-        <Image src="/assets/footer-bg.png" alt="" fill className="object-cover opacity-60 scale-110" style={{ filter: 'blur(8px) saturate(1.2)' }} />
-        <div className="absolute inset-0 bg-gradient-to-t from-alchemy-black via-alchemy-black/70 to-transparent" />
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[120%] h-[60%] bg-gradient-radial from-alchemy-red/15 via-transparent to-transparent opacity-60" />
-        <div className="absolute inset-0 bg-gradient-to-b from-alchemy-black via-transparent to-transparent h-32" />
-        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.65\' numOctaves=\'3\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\'/%3E%3C/svg%3E")' }} />
+      <div className="absolute inset-0 z-0" aria-hidden>
+        <Image src="/assets/footer-bg.png" alt="" fill sizes="100vw" className="object-cover opacity-40 scale-110" style={{ filter: 'blur(10px) saturate(1.1)' }} />
+        <div className="absolute inset-0 bg-gradient-to-t from-alchemy-black via-alchemy-black/80 to-alchemy-black" />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-6 md:px-12 py-16 sm:py-20">
-        {/* Personal sign-off */}
-        {signoff && (
-          <motion.p
-            className="font-display text-lg sm:text-xl italic text-porcelain/40 mb-10"
+      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-28 pb-10">
+        {/* Masthead */}
+        <div className="grid gap-12 lg:grid-cols-12 lg:gap-8 pb-16 sm:pb-20 border-b border-porcelain/10">
+          <motion.div
+            className="lg:col-span-5"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.8, ease: EASE }}
           >
-            {signoff}
-          </motion.p>
-        )}
-
-        {/* Logo area */}
-        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="mb-12 sm:mb-16">
-          <div className="inline-flex items-center gap-4">
-            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center font-mono text-sm font-bold text-porcelain" style={{ background: 'linear-gradient(135deg, rgba(220,38,38,0.2) 0%, rgba(220,38,38,0.05) 100%)', border: '1px solid rgba(220,38,38,0.3)' }}>
-              {monogram}
+            <div className="flex items-center gap-4">
+              <span className="w-11 h-11 rounded-full flex items-center justify-center font-mono text-xs font-bold text-porcelain border border-ember/40">
+                {monogram}
+              </span>
+              <span className="font-body text-xl sm:text-2xl font-bold tracking-[-0.01em] text-porcelain">{founderName}</span>
             </div>
-            <span className="font-body text-xl sm:text-2xl font-bold text-porcelain">{founderName}</span>
+            {signoff && (
+              <p className="font-display italic text-lg sm:text-xl text-porcelain/45 mt-6 max-w-sm [text-wrap:balance]">{signoff}</p>
+            )}
+            {cv && (
+              <a
+                href={cv.href}
+                download
+                className="mt-8 inline-flex min-h-11 items-center gap-2 rounded-full border border-porcelain/20 px-6 font-mono text-[11px] uppercase tracking-[0.2em] text-porcelain/80 hover:border-ember hover:text-porcelain transition-colors duration-300"
+              >
+                {cv.label}
+              </a>
+            )}
+          </motion.div>
+
+          <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-10">
+            <Column title="Portfolio" links={portfolioLinks} delay={0.05} />
+            <Column title="Ventures" links={ventureLinks} delay={0.1} />
+            <div className="col-span-2 sm:col-span-1">
+              <Column title="Connect" links={connectLinks.filter((l) => !l.download)} delay={0.15} />
+            </div>
           </div>
-        </motion.div>
-
-        {/* Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-8 sm:gap-12 mb-12 sm:mb-16">
-          {/* Portfolio */}
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}>
-            <h3 className="font-mono text-[10px] sm:text-xs text-porcelain/60 tracking-[0.15em] uppercase mb-4 sm:mb-6">Portfolio</h3>
-            <ul className="space-y-3 sm:space-y-4">
-              {portfolioLinks.map((link) => (
-                <li key={link.label}>
-                  <a href={link.href} className="font-body text-sm text-porcelain/70 hover:text-porcelain transition-colors duration-300">{link.label}</a>
-                </li>
-              ))}
-            </ul>
-          </motion.div>
-
-          {/* Ventures */}
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }}>
-            <h3 className="font-mono text-[10px] sm:text-xs text-porcelain/60 tracking-[0.15em] uppercase mb-4 sm:mb-6">Ventures</h3>
-            <ul className="space-y-3 sm:space-y-4">
-              {ventureLinks.map((link) => (
-                <li key={link.label}>
-                  {link.external ? (
-                    <a href={link.href} target="_blank" rel="noopener noreferrer" className="font-body text-sm text-porcelain/70 hover:text-porcelain transition-colors duration-300 inline-flex items-center gap-1">
-                      {link.label} <ExternalLink className="w-3 h-3 opacity-40" />
-                    </a>
-                  ) : (
-                    <a href={link.href} className="font-body text-sm text-porcelain/70 hover:text-porcelain transition-colors duration-300">{link.label}</a>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </motion.div>
-
-          {/* Connect */}
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.3 }}>
-            <h3 className="font-mono text-[10px] sm:text-xs text-porcelain/60 tracking-[0.15em] uppercase mb-4 sm:mb-6">Connect</h3>
-            <ul className="space-y-3 sm:space-y-4">
-              {connectLinks.map((link) => (
-                <li key={link.label}>
-                  <a href={link.href} target="_blank" rel="noopener noreferrer" className="font-body text-sm text-porcelain/70 hover:text-porcelain transition-colors duration-300">{link.label}</a>
-                </li>
-              ))}
-            </ul>
-          </motion.div>
         </div>
 
-        {/* Bottom Bar */}
-        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: 0.5 }} className="pt-6 sm:pt-8 border-t border-porcelain/10 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p className="font-mono text-[10px] sm:text-xs text-porcelain/50">
-            © <span className="text-glow-red">2026</span> {copyright}. All rights reserved.
+        {/* Colophon */}
+        <div className="pt-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+          <p className="font-mono text-[10px] sm:text-[11px] tracking-[0.08em] text-porcelain/40">
+            © 2026 {copyright}.
           </p>
-          <div className="flex gap-6 sm:gap-8">
-            <Link href="/about" className="font-body text-xs sm:text-sm text-porcelain/50 hover:text-porcelain transition-colors">
-              Alchemy Labs
-            </Link>
-            <Link href="/privacy" className="font-body text-xs sm:text-sm text-porcelain/50 hover:text-porcelain transition-colors">
-              Privacy
-            </Link>
-            <Link href="/terms" className="font-body text-xs sm:text-sm text-porcelain/50 hover:text-porcelain transition-colors">
-              Terms
-            </Link>
+          <div className="flex gap-6">
+            {[['Alchemy Labs', '/about'], ['Privacy', '/privacy'], ['Terms', '/terms']].map(([label, href]) => (
+              <Link key={href} href={href} className="inline-flex min-h-11 items-center font-mono text-[10px] sm:text-[11px] uppercase tracking-[0.18em] text-porcelain/40 hover:text-porcelain transition-colors duration-300">
+                {label}
+              </Link>
+            ))}
           </div>
-        </motion.div>
+        </div>
       </div>
     </footer>
   );

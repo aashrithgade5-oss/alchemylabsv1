@@ -38,16 +38,16 @@ const TimelineCard = memo(({ entry, index }: { entry: TimelineEntry; index: numb
       transition={{ duration: 0.3 }}
     >
       {/* Timeline line */}
-      <div className="absolute left-0 top-0 bottom-0 w-px bg-gradient-to-b from-alchemy-red/50 via-alchemy-red/20 to-transparent" />
+      <div className="absolute left-0 top-0 bottom-0 w-px bg-gradient-to-b from-ember/50 via-ember/20 to-transparent" />
 
       {/* Timeline dot with pulse */}
       <div className="absolute left-0 top-2 -translate-x-1/2">
         <motion.div
-          className="w-3 h-3 rounded-full bg-alchemy-red"
+          className="w-3 h-3 rounded-full bg-ember"
           animate={{
             boxShadow: [
-              '0 0 0 0 rgba(220,38,38,0.4)',
-              '0 0 0 8px rgba(220,38,38,0)',
+              '0 0 0 0 rgba(255,77,28,0.4)',
+              '0 0 0 8px rgba(255,77,28,0)',
             ],
           }}
           transition={{
@@ -66,7 +66,7 @@ const TimelineCard = memo(({ entry, index }: { entry: TimelineEntry; index: numb
         <h4 className="font-body font-semibold text-lg sm:text-xl text-porcelain">
           {entry.title}
         </h4>
-        <p className="font-body text-sm text-alchemy-red/80">
+        <p className="font-body text-sm text-ember/80">
           {entry.company}
         </p>
         {entry.revenueSignal && (
@@ -77,7 +77,7 @@ const TimelineCard = memo(({ entry, index }: { entry: TimelineEntry; index: numb
         <ul className="space-y-1 mt-3">
           {entry.highlights.map((highlight, i) => (
             <li key={i} className="flex items-start gap-2 text-sm text-porcelain/60">
-              <span className="text-alchemy-red/60 mt-1.5">•</span>
+              <span className="text-ember/60 mt-1.5">•</span>
               <span>{highlight}</span>
             </li>
           ))}
@@ -90,12 +90,12 @@ const TimelineCard = memo(({ entry, index }: { entry: TimelineEntry; index: numb
                 key={i}
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full font-mono text-[10px] tracking-wide"
                 style={{
-                  background: 'linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(220,38,38,0.06) 100%)',
-                  border: '1px solid rgba(220,38,38,0.15)',
+                  background: 'linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,77,28,0.06) 100%)',
+                  border: '1px solid rgba(255,77,28,0.15)',
                 }}
               >
                 <span className="text-porcelain/40">{m.label}:</span>
-                <span className="text-alchemy-red/80 font-semibold">{m.value}</span>
+                <span className="text-ember/80 font-semibold">{m.value}</span>
               </span>
             ))}
           </div>

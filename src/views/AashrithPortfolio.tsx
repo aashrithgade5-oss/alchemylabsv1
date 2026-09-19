@@ -1,11 +1,11 @@
 'use client';
 
 import { memo, useState, useEffect, useRef, useCallback } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform, useSpring, useMotionValue } from 'framer-motion';
+import { motion, MotionConfig, AnimatePresence, useScroll, useTransform, useSpring, useMotionValue, useMotionValueEvent, useReducedMotion } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowLeft, Sun, Moon, Menu, X, Linkedin, Instagram, Youtube, ExternalLink, Film, Music, Sparkles, Users, Shield, Clock, Phone, ArrowRight, Eye } from 'lucide-react';
 import { SEOHead } from '@/components/SEOHead';
-import { aashrithData } from '@/data/foundersData';
 import { thoughtLeadershipEntries } from '@/data/portfolioProjects';
 import {
   SectionShell,
@@ -69,7 +69,7 @@ const ventureFooterLinks = [
 ];
 const connectFooterLinks = [
   { label: 'LinkedIn', href: 'https://www.linkedin.com/in/aashrithgade', external: true },
-  { label: 'CV (PDF)', href: '/resumes/aashrith-gade-cv.pdf', external: true },
+  { label: 'Download CV (PDF)', href: '/resumes/aashrith-gade-cv.pdf', download: true },
   { label: 'Instagram (@aashrithzz)', href: 'https://www.instagram.com/aashrithzz/', external: true },
   { label: 'AshArchives (@asharchiveszz)', href: 'https://www.instagram.com/asharchiveszz/', external: true },
   { label: 'YouTube', href: 'https://www.youtube.com/@aashrithxd8587', external: true },
@@ -353,7 +353,7 @@ const PortfolioNav = memo(({ isDark }: { isDark: boolean }) => {
               : t(isDark, 'rgba(10,10,10,0.3)', 'rgba(250,250,249,0.3)'),
             backdropFilter: `blur(${scrolled ? 40 : 16}px) saturate(200%)`,
             border: `1px solid ${scrolled ? t(isDark, 'rgba(255,255,255,0.1)', 'rgba(0,0,0,0.08)') : t(isDark, 'rgba(255,255,255,0.05)', 'rgba(0,0,0,0.03)')}`,
-            boxShadow: scrolled ? '0 8px 40px rgba(0,0,0,0.4), 0 0 80px rgba(220,38,38,0.04)' : 'none',
+            boxShadow: scrolled ? '0 8px 40px rgba(0,0,0,0.4), 0 0 80px rgba(255,77,28,0.04)' : 'none',
           }}
           layout
         >
@@ -361,16 +361,16 @@ const PortfolioNav = memo(({ isDark }: { isDark: boolean }) => {
           <motion.div
             className="w-9 h-9 rounded-full flex items-center justify-center font-mono text-xs font-bold flex-shrink-0 relative overflow-hidden"
             style={{
-              background: 'linear-gradient(135deg, rgba(220,38,38,0.2) 0%, rgba(220,38,38,0.05) 100%)',
-              border: '1px solid rgba(220,38,38,0.3)',
+              background: 'linear-gradient(135deg, rgba(255,77,28,0.2) 0%, rgba(255,77,28,0.05) 100%)',
+              border: '1px solid rgba(255,77,28,0.3)',
               color: t(isDark, '#f5f5f4', '#1a1a1a'),
             }}
-            whileHover={{ scale: 1.1, borderColor: 'rgba(220,38,38,0.6)' }}
+            whileHover={{ scale: 1.1, borderColor: 'rgba(255,77,28,0.6)' }}
           >
             AG
             <motion.div
               className="absolute inset-0 rounded-full"
-              style={{ background: 'radial-gradient(circle, rgba(220,38,38,0.15) 0%, transparent 70%)' }}
+              style={{ background: 'radial-gradient(circle, rgba(255,77,28,0.15) 0%, transparent 70%)' }}
               animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0, 0.5] }}
               transition={{ duration: 3, repeat: Infinity }}
             />
@@ -381,10 +381,10 @@ const PortfolioNav = memo(({ isDark }: { isDark: boolean }) => {
             {navLinks.map((link) => (
               <a key={link.label} href={link.href} className={`font-body text-sm ${t(isDark, 'text-porcelain/60 hover:text-porcelain', 'text-neutral-600 hover:text-neutral-900')} transition-all relative group`}>
                 {link.label}
-                <span className={`absolute -bottom-0.5 left-0 h-px bg-alchemy-red transition-all duration-300 ${activeSection === link.id ? 'w-full' : 'w-0 group-hover:w-full'}`} />
+                <span className={`absolute -bottom-0.5 left-0 h-px bg-ember transition-all duration-300 ${activeSection === link.id ? 'w-full' : 'w-0 group-hover:w-full'}`} />
                 {activeSection === link.id && (
                   <motion.span
-                    className="absolute -bottom-2 left-1/2 w-1 h-1 rounded-full bg-alchemy-red"
+                    className="absolute -bottom-2 left-1/2 w-1 h-1 rounded-full bg-ember"
                     layoutId="navDot"
                     style={{ x: '-50%' }}
                     transition={{ type: 'spring', stiffness: 300, damping: 30 }}
@@ -436,8 +436,8 @@ const PortfolioNav = memo(({ isDark }: { isDark: boolean }) => {
               transition={{ duration: 0.5, ease: EASE }}
               style={{
                 background: t(isDark,
-                  'radial-gradient(ellipse 120% 80% at 50% 30%, rgba(220,38,38,0.12) 0%, rgba(10,10,10,0.98) 60%)',
-                  'radial-gradient(ellipse 120% 80% at 50% 30%, rgba(220,38,38,0.08) 0%, rgba(250,250,249,0.98) 60%)'
+                  'radial-gradient(ellipse 120% 80% at 50% 30%, rgba(255,77,28,0.12) 0%, rgba(10,10,10,0.98) 60%)',
+                  'radial-gradient(ellipse 120% 80% at 50% 30%, rgba(255,77,28,0.08) 0%, rgba(250,250,249,0.98) 60%)'
                 ),
                 backdropFilter: 'blur(60px) saturate(200%)',
               }}
@@ -458,7 +458,7 @@ const PortfolioNav = memo(({ isDark }: { isDark: boolean }) => {
             {/* Red atmospheric orb */}
             <motion.div
               className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[400px] h-[400px] rounded-full pointer-events-none"
-              style={{ background: 'radial-gradient(circle, rgba(220,38,38,0.08) 0%, transparent 60%)' }}
+              style={{ background: 'radial-gradient(circle, rgba(255,77,28,0.08) 0%, transparent 60%)' }}
               animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0.8, 0.5] }}
               transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
             />
@@ -467,8 +467,8 @@ const PortfolioNav = memo(({ isDark }: { isDark: boolean }) => {
               <motion.button
                 onClick={() => setIsOpen(false)}
                 className="absolute top-6 right-6 p-3 rounded-full"
-                style={{ background: 'rgba(220,38,38,0.08)', border: '1px solid rgba(220,38,38,0.2)' }}
-                whileHover={{ scale: 1.1, background: 'rgba(220,38,38,0.15)' }}
+                style={{ background: 'rgba(255,77,28,0.08)', border: '1px solid rgba(255,77,28,0.2)' }}
+                whileHover={{ scale: 1.1, background: 'rgba(255,77,28,0.15)' }}
                 whileTap={{ scale: 0.9 }}
                 initial={{ opacity: 0, rotate: -90 }}
                 animate={{ opacity: 1, rotate: 0 }}
@@ -483,18 +483,18 @@ const PortfolioNav = memo(({ isDark }: { isDark: boolean }) => {
                     key={link.label}
                     href={link.href}
                     onClick={() => setIsOpen(false)}
-                    className={`font-body text-4xl sm:text-5xl font-black ${t(isDark, 'text-porcelain', 'text-neutral-900')} hover:text-alchemy-red transition-colors relative overflow-hidden group`}
+                    className={`font-body text-4xl sm:text-5xl font-black ${t(isDark, 'text-porcelain', 'text-neutral-900')} hover:text-ember transition-colors relative overflow-hidden group`}
                     initial={{ opacity: 0, x: -60, filter: 'blur(10px)' }}
                     animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
                     exit={{ opacity: 0, x: 60, filter: 'blur(10px)' }}
                     transition={{ delay: i * 0.08, duration: 0.5, ease: EASE }}
                   >
                     <span className="relative z-10 flex items-center gap-4">
-                      <span className="font-mono text-xs text-alchemy-red/50 w-6">0{i + 1}</span>
+                      <span className="font-mono text-xs text-ember/50 w-6">0{i + 1}</span>
                       {link.label}
                     </span>
                     <motion.div
-                      className="absolute bottom-0 left-0 h-px bg-gradient-to-r from-alchemy-red/50 to-transparent"
+                      className="absolute bottom-0 left-0 h-px bg-gradient-to-r from-ember/50 to-transparent"
                       initial={{ width: 0 }}
                       animate={{ width: '100%' }}
                       transition={{ delay: 0.3 + i * 0.08, duration: 0.6 }}
@@ -503,7 +503,7 @@ const PortfolioNav = memo(({ isDark }: { isDark: boolean }) => {
                 ))}
 
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, duration: 0.4, ease: EASE }}>
-                  <Link href="/about" onClick={() => setIsOpen(false)} className={`inline-flex items-center gap-2 font-mono text-sm ${t(isDark, 'text-porcelain/50', 'text-neutral-500')} hover:text-alchemy-red transition-colors mt-8`}>
+                  <Link href="/about" onClick={() => setIsOpen(false)} className={`inline-flex items-center gap-2 font-mono text-sm ${t(isDark, 'text-porcelain/50', 'text-neutral-500')} hover:text-ember transition-colors mt-8`}>
                     <ArrowLeft className="w-4 h-4" />
                     Alchemy Labs
                   </Link>
@@ -527,8 +527,8 @@ const PortfolioNav = memo(({ isDark }: { isDark: boolean }) => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.7 + i * 0.05 }}
                   >
-                    <s.icon className={`w-5 h-5 ${t(isDark, 'text-porcelain/40', 'text-neutral-400')} group-hover:text-alchemy-red transition-colors`} />
-                    <span className={`font-mono text-xs ${t(isDark, 'text-porcelain/30', 'text-neutral-400')} group-hover:text-alchemy-red transition-colors`}>{s.label}</span>
+                    <s.icon className={`w-5 h-5 ${t(isDark, 'text-porcelain/40', 'text-neutral-400')} group-hover:text-ember transition-colors`} />
+                    <span className={`font-mono text-xs ${t(isDark, 'text-porcelain/30', 'text-neutral-400')} group-hover:text-ember transition-colors`}>{s.label}</span>
                   </motion.a>
                 ))}
               </motion.div>
@@ -567,19 +567,19 @@ const HeroSection = memo(({ isDark }: { isDark: boolean }) => {
 
       {!isDark && <div className="absolute inset-0" style={{ background: 'rgba(0,0,0,0.05)' }} />}
       <div className="absolute inset-0" style={{ background: t(isDark, 'radial-gradient(ellipse 70% 60% at 50% 50%, transparent 30%, rgba(10,10,10,0.7) 100%)', 'radial-gradient(ellipse 70% 60% at 50% 50%, transparent 30%, rgba(250,250,249,0.85) 100%)') }} />
-      <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 50% 50% at 50% 70%, rgba(220,38,38,0.06) 0%, transparent 70%)' }} />
+      <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 50% 50% at 50% 70%, rgba(255,77,28,0.06) 0%, transparent 70%)' }} />
       <div className="absolute inset-0 pointer-events-none" style={{ background: t(isDark, 'radial-gradient(ellipse 40% 30% at 50% 45%, rgba(10,10,10,0.5) 0%, transparent 70%)', 'radial-gradient(ellipse 40% 30% at 50% 45%, rgba(250,250,249,0.4) 0%, transparent 70%)') }} />
 
       <SequentianBackground variant={1} opacity={isDark ? 0.15 : 0.08} blur={0} glow={false} />
       <BlueprintGrid opacity={0.02} />
       <NoiseTexture opacity={0.03} />
-      <ParticleField count={35} color="rgba(220,38,38,0.3)" opacity={0.4} />
+      <ParticleField count={35} color="rgba(255,77,28,0.3)" opacity={0.4} />
 
       <div className={`absolute top-0 inset-x-0 h-32 bg-gradient-to-b ${t(isDark, 'from-alchemy-black', 'from-[#fafaf9]')} to-transparent z-[1]`} />
 
       <motion.div className="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 text-center" style={{ opacity: heroOpacity, y: heroY }}>
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }}>
-          <span className={`font-mono text-[10px] sm:text-xs uppercase tracking-[0.4em] ${t(isDark, 'text-alchemy-red/70', 'text-alchemy-red/60')}`}>
+          <span className={`font-mono text-[10px] sm:text-xs uppercase tracking-[0.4em] ${t(isDark, 'text-ember/70', 'text-ember/60')}`}>
             FOUNDER · BRAND ARCHITECT · SYSTEMS THINKER
           </span>
         </motion.div>
@@ -604,7 +604,7 @@ const HeroSection = memo(({ isDark }: { isDark: boolean }) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.7 }}
         >
-          I don't design brands. I architect the systems that make them <span className="text-alchemy-red italic font-display">inevitable.</span>
+          I don't design brands. I architect the systems that make them <span className="text-ember italic font-display">inevitable.</span>
         </motion.p>
 
         <motion.div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-8" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.9 }}>
@@ -612,8 +612,8 @@ const HeroSection = memo(({ isDark }: { isDark: boolean }) => {
           {['Brand Alchemy', 'Ashzz.ai', 'Ash Archives'].map((name, i) => (
             <span key={name} className="flex items-center gap-2 sm:gap-3">
               <motion.span
-                className="font-body font-bold text-xs sm:text-sm bg-gradient-to-r from-alchemy-red to-alchemy-pink bg-clip-text text-transparent"
-                style={{ filter: 'drop-shadow(0 0 6px rgba(220,38,38,0.3))' }}
+                className="font-body font-bold text-xs sm:text-sm bg-gradient-to-r from-ember to-ember-deep bg-clip-text text-transparent"
+                style={{ filter: 'drop-shadow(0 0 6px rgba(255,77,28,0.3))' }}
                 whileHover={{ scale: 1.05 }}
               >
                 {name}
@@ -626,6 +626,16 @@ const HeroSection = memo(({ isDark }: { isDark: boolean }) => {
         <motion.div className={`flex justify-center gap-6 font-mono text-[10px] sm:text-xs ${t(isDark, 'text-porcelain/30', 'text-neutral-400')} mt-5`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.1 }}>
           <span>Mumbai, IN</span><span>·</span><span>NMIMS '26</span><span>·</span><span>Founder-led practice</span>
         </motion.div>
+
+        <motion.div className="mt-8 flex justify-center" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.3 }}>
+          <a
+            href="/resumes/aashrith-gade-cv.pdf"
+            download
+            className={`inline-flex min-h-11 items-center gap-2 rounded-full border px-6 font-mono text-[11px] uppercase tracking-[0.2em] transition-colors duration-300 ${t(isDark, 'border-porcelain/20 text-porcelain/80 hover:border-ember hover:text-porcelain', 'border-neutral-300 text-neutral-700 hover:border-ember hover:text-neutral-900')}`}
+          >
+            Download CV (PDF) <ArrowRight className="w-3.5 h-3.5 rotate-90" />
+          </a>
+        </motion.div>
       </motion.div>
 
       {/* Scroll indicator */}
@@ -633,16 +643,16 @@ const HeroSection = memo(({ isDark }: { isDark: boolean }) => {
         <motion.div
           className="flex items-center gap-2 px-4 py-2 rounded-full font-mono text-[9px] uppercase tracking-widest"
           style={{
-            background: t(isDark, 'rgba(220,38,38,0.08)', 'rgba(220,38,38,0.06)'),
-            border: '1px solid rgba(220,38,38,0.2)',
-            color: t(isDark, 'rgba(220,38,38,0.8)', 'rgba(220,38,38,0.7)'),
+            background: t(isDark, 'rgba(255,77,28,0.08)', 'rgba(255,77,28,0.06)'),
+            border: '1px solid rgba(255,77,28,0.2)',
+            color: t(isDark, 'rgba(255,77,28,0.8)', 'rgba(255,77,28,0.7)'),
           }}
           animate={{
-            boxShadow: ['0 0 12px rgba(220,38,38,0.15)', '0 0 24px rgba(220,38,38,0.3)', '0 0 12px rgba(220,38,38,0.15)'],
+            boxShadow: ['0 0 12px rgba(255,77,28,0.15)', '0 0 24px rgba(255,77,28,0.3)', '0 0 12px rgba(255,77,28,0.15)'],
           }}
           transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
         >
-          <motion.div className="w-px h-3 bg-alchemy-red/60" animate={{ y: [0, 4, 0] }} transition={{ duration: 2, repeat: Infinity }} />
+          <motion.div className="w-px h-3 bg-ember/60" animate={{ y: [0, 4, 0] }} transition={{ duration: 2, repeat: Infinity }} />
           Scroll to explore
         </motion.div>
       </motion.div>
@@ -728,9 +738,9 @@ const PostTile = memo(({ post, index, accent, isHovered, onHover, onLeave }: {
           <motion.div
             className="flex items-center gap-2 px-5 py-2.5 rounded-full font-mono text-[10px] tracking-wider text-white uppercase"
             style={{
-              background: 'rgba(220,38,38,0.2)',
+              background: 'rgba(255,77,28,0.2)',
               backdropFilter: 'blur(20px)',
-              border: '1px solid rgba(220,38,38,0.4)',
+              border: '1px solid rgba(255,77,28,0.4)',
             }}
             initial={{ scale: 0.8, y: 10 }}
             animate={{ scale: 1, y: 0 }}
@@ -769,6 +779,8 @@ PostTile.displayName = 'PostTile';
 // ============================================
 // VENTURE ECOSYSTEM — "The System"
 // ============================================
+const azCaptions = ['Signal', 'Spark', 'Vision', 'Prompt', 'Orbit', 'Hand-off', 'Flow', 'Selection', 'Dissolve', 'Constellation'];
+
 const VentureEcosystem = memo(({ isDark }: { isDark: boolean }) => {
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start end', 'end start'] });
@@ -781,7 +793,7 @@ const VentureEcosystem = memo(({ isDark }: { isDark: boolean }) => {
       name: 'Brand Alchemy',
       tagline: 'Where strategy becomes scripture.',
       description: 'A research-driven thought leadership platform decoding how brands are truly built — through culture, systems, narrative, and design. Not a blog. A body of work.',
-      accent: 'rgba(220,38,38,0.5)',
+      accent: 'rgba(255,77,28,0.5)',
       monogram: 'BA',
       speed: 'slow' as const,
       direction: 'left' as const,
@@ -829,11 +841,11 @@ const VentureEcosystem = memo(({ isDark }: { isDark: boolean }) => {
       ));
     }
 
-    // Ashzz.ai — abstract glass tiles
-    return Array.from({ length: 10 }, (_, i) => (
+    // Ashzz.ai — glass emoticons (1–6) + generative art (7–10)
+    return azCaptions.map((caption, i) => (
       <motion.div
-        key={i}
-        className="flex-shrink-0 w-48 sm:w-56 rounded-2xl overflow-hidden relative group cursor-pointer"
+        key={caption}
+        className="flex-shrink-0 w-48 sm:w-56 rounded-2xl overflow-hidden relative group"
         style={{
           aspectRatio: '4/3',
           background: t(isDark,
@@ -844,23 +856,23 @@ const VentureEcosystem = memo(({ isDark }: { isDark: boolean }) => {
           border: `1px solid ${t(isDark, 'rgba(255,255,255,0.06)', 'rgba(0,0,0,0.05)')}`,
         }}
         whileHover={{
-          scale: 1.06,
+          y: -4,
           borderColor: venture.accent,
           boxShadow: `0 8px 40px ${venture.accent.replace('0.4', '0.12')}`,
         }}
-        transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+        transition={{ duration: 0.4, ease: EASE }}
       >
-        <div className="absolute top-0 left-0 right-0 h-px overflow-hidden">
-          <motion.div
-            className="h-full w-1/3"
-            style={{ background: `linear-gradient(90deg, transparent, ${venture.accent}, transparent)` }}
-            animate={{ x: ['-100%', '400%'] }}
-            transition={{ duration: 3.5, repeat: Infinity, ease: 'linear', delay: i * 0.3 }}
-          />
-        </div>
-        <div className="w-full h-full flex items-center justify-center">
-          <span className={`font-mono text-xl font-bold ${t(isDark, 'text-porcelain/8', 'text-neutral-200/40')}`}>{venture.monogram}</span>
-        </div>
+        <Image
+          src={`/media/aashrith/az-${i + 1}.webp`}
+          alt={`Ashzz.ai — ${caption}`}
+          fill
+          sizes="224px"
+          className={`transition-transform duration-700 ease-out group-hover:scale-[1.04] ${i < 6 ? 'object-contain p-6' : 'object-cover'}`}
+        />
+        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
+        <span className="absolute left-3 bottom-2.5 font-mono text-[10px] uppercase tracking-[0.22em] text-white/80">
+          {String(i + 1).padStart(2, '0')} · {caption}
+        </span>
       </motion.div>
     ));
   };
@@ -870,8 +882,8 @@ const VentureEcosystem = memo(({ isDark }: { isDark: boolean }) => {
       <motion.div className="absolute inset-0" style={{ scale: bgScale }}>
         <SequentianBackground variant={2} opacity={isDark ? 0.16 : 0.09} glow={false} />
       </motion.div>
-      <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 60% 50% at 50% 50%, rgba(220,38,38,0.05) 0%, transparent 70%)' }} />
-      <ParticleField count={12} color="rgba(220,38,38,0.2)" opacity={0.15} />
+      <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 60% 50% at 50% 50%, rgba(255,77,28,0.05) 0%, transparent 70%)' }} />
+      <ParticleField count={12} color="rgba(255,77,28,0.2)" opacity={0.15} />
 
       <div className={`absolute top-0 inset-x-0 h-24 bg-gradient-to-b ${t(isDark, 'from-alchemy-black', 'from-[#fafaf9]')} to-transparent z-[2] pointer-events-none`} />
 
@@ -887,7 +899,7 @@ const VentureEcosystem = memo(({ isDark }: { isDark: boolean }) => {
             <motion.span
               className="inline-block font-mono text-[10px] sm:text-xs uppercase tracking-[0.5em] mb-6"
               style={{
-                background: 'linear-gradient(90deg, rgba(220,38,38,0.8), rgba(220,38,38,0.4))',
+                background: 'linear-gradient(90deg, rgba(255,77,28,0.8), rgba(255,77,28,0.4))',
                 backgroundClip: 'text',
                 WebkitBackgroundClip: 'text',
                 color: 'transparent',
@@ -900,7 +912,7 @@ const VentureEcosystem = memo(({ isDark }: { isDark: boolean }) => {
               VENTURE ARCHITECTURE
             </motion.span>
 
-            <h2 className={`font-display text-4xl sm:text-5xl lg:text-7xl leading-[0.9] ${t(isDark, 'text-porcelain', 'text-neutral-900')} mb-5`}>
+            <h2 className={`[text-wrap:balance] tracking-[-0.02em] font-display text-4xl sm:text-5xl lg:text-7xl leading-[0.9] ${t(isDark, 'text-porcelain', 'text-neutral-900')} mb-5`}>
               Three ventures.{' '}
               <span className="hero-fluid-text bg-clip-text text-transparent font-display italic">
                 One operating system.
@@ -1021,7 +1033,7 @@ const ImmersiveProject = memo(({ project, index, isDark, isMobile, onDiscover }:
 
       {/* Ghost number */}
       <div className="absolute top-8 right-8 sm:top-12 sm:right-16 pointer-events-none select-none">
-        <span className="font-mono text-[15vw] sm:text-[20vw] font-black leading-none block bg-gradient-to-b from-alchemy-red/[0.1] to-alchemy-red/[0.03] bg-clip-text text-transparent">
+        <span className="font-mono text-[15vw] sm:text-[20vw] font-black leading-none block bg-gradient-to-b from-ember/[0.1] to-ember/[0.03] bg-clip-text text-transparent">
           {project.num}
         </span>
       </div>
@@ -1077,7 +1089,7 @@ const ImmersiveProject = memo(({ project, index, isDark, isMobile, onDiscover }:
               <span
                 key={tag}
                 className="font-mono text-[10px] px-3 py-1.5 rounded-full text-white/60"
-                style={{ background: 'rgba(220,38,38,0.12)', border: '1px solid rgba(220,38,38,0.2)' }}
+                style={{ background: 'rgba(255,77,28,0.12)', border: '1px solid rgba(255,77,28,0.2)' }}
               >
                 {tag}
               </span>
@@ -1095,8 +1107,8 @@ const ImmersiveProject = memo(({ project, index, isDark, isMobile, onDiscover }:
               }}
               whileHover={{
                 scale: 1.05,
-                borderColor: 'rgba(220,38,38,0.4)',
-                boxShadow: '0 0 30px rgba(220,38,38,0.2)',
+                borderColor: 'rgba(255,77,28,0.4)',
+                boxShadow: '0 0 30px rgba(255,77,28,0.2)',
               }}
               whileTap={{ scale: 0.97 }}
             >
@@ -1129,7 +1141,7 @@ const CreativeProjectsSection = memo(({ isDark, onDiscover }: { isDark: boolean;
             <motion.span
               className="inline-block font-mono text-[10px] sm:text-xs uppercase tracking-[0.5em] mb-6"
               style={{
-                background: 'linear-gradient(90deg, rgba(220,38,38,0.8), rgba(220,38,38,0.4))',
+                background: 'linear-gradient(90deg, rgba(255,77,28,0.8), rgba(255,77,28,0.4))',
                 backgroundClip: 'text',
                 WebkitBackgroundClip: 'text',
                 color: 'transparent',
@@ -1137,7 +1149,7 @@ const CreativeProjectsSection = memo(({ isDark, onDiscover }: { isDark: boolean;
             >
               SELECTED CREATIVE WORK
             </motion.span>
-            <h2 className={`font-display text-4xl sm:text-5xl lg:text-7xl leading-[0.9] ${t(isDark, 'text-porcelain', 'text-neutral-900')} mb-5`}>
+            <h2 className={`[text-wrap:balance] tracking-[-0.02em] font-display text-4xl sm:text-5xl lg:text-7xl leading-[0.9] ${t(isDark, 'text-porcelain', 'text-neutral-900')} mb-5`}>
               Every system leaves{' '}
               <span className="italic hero-fluid-text bg-clip-text text-transparent">fingerprints.</span>
             </h2>
@@ -1166,154 +1178,157 @@ const CreativeProjectsSection = memo(({ isDark, onDiscover }: { isDark: boolean;
 CreativeProjectsSection.displayName = 'CreativeProjectsSection';
 
 // ============================================
-// CAREER TIMELINE — "The Arc"
+// CAREER TIMELINE — "The Arc of Intent"
 // ============================================
-const TimelineCard = memo(({ exp, i, isDark }: { exp: typeof aashrithData.experience[0]; i: number; isDark: boolean }) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'center center'] });
-  const opacity = useTransform(scrollYProgress, [0, 1], [0.35, 1]);
-  const scale = useTransform(scrollYProgress, [0, 1], [0.97, 1]);
+const arcRoles = [
+  { org: 'Studio186', parent: 'Bennett, Coleman & Co. (The Times of India Group), Mumbai', role: 'Social & Growth Lead, four premium brand verticals', dates: 'Jul 2026 — Present', proof: "Rebuilt Deorhi's editorial model around restraint-coded luxury; monthly reach 8K → 700K in six weeks." },
+  { org: 'Alchemy Labs', parent: '', role: 'Founder & Brand Strategist', dates: 'Jul 2025 — Present', proof: 'Brand strategy & identity, generative-AI production and custom web for fashion, skincare and niche luxury.' },
+  { org: 'Cipla Ltd.', parent: 'Delhi NCR', role: 'Marketing Strategy Intern', dates: 'May — Jul 2023', proof: 'Campaigns across 6+ markets reaching 12.8M consumers.' },
+  { org: 'Velocity Gaming', parent: '', role: 'Branding & Social Media Manager', dates: 'Mar — May 2022', proof: 'Instagram 5K → 40K in 10 weeks; Corsair and Red Bull sponsorships.' },
+  { org: 'S8UL Esports', parent: '', role: 'Content Strategy & Growth Manager', dates: 'Apr 2020 — May 2021', proof: 'Creative pipeline for a 13M+ combined creator audience.' },
+];
 
+const arcCoda = [
+  { label: 'Education', items: ['NMIMS Mumbai — B.B.A. Branding & Advertising, 2023–2026', 'HEC Paris — Luxury Management Summer School, Jun 2026'] },
+  { label: 'Leadership', items: ['Head of Marketing, NMIMS College Film Festival 2025 — 200K–300K organic views', 'National 2nd Best Speaker, ISC National Debate Championship 2023'] },
+  { label: 'Credentials', items: ['Wharton Business Foundations · LVMH Insider · Google AI Leader'] },
+];
+
+const ArcRole = memo(({ role, active, isDark, reduced }: { role: typeof arcRoles[0]; active: boolean; isDark: boolean; reduced: boolean }) => {
+  const on = active || reduced;
+  const ink = t(isDark, '#f5f5f4', '#171717');
+  const dim = t(isDark, 'rgba(245,245,244,0.35)', 'rgba(23,23,23,0.35)');
   return (
-    <motion.div ref={ref} className="relative pl-12 sm:pl-16" style={{ opacity, scale }}>
-      <div className="absolute left-[11px] sm:left-[19px] top-6">
-        <div className="w-2.5 h-2.5 rounded-full bg-alchemy-red/60 border-2 z-10 relative" style={{ borderColor: t(isDark, '#0a0a0a', '#fafaf9') }} />
-        <motion.div
-          className="absolute inset-0 w-2.5 h-2.5 rounded-full bg-alchemy-red/30"
-          animate={{ scale: [1, 2, 1], opacity: [0.6, 0, 0.6] }}
-          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut', delay: i * 0.3 }}
-        />
+    <motion.article
+      className="relative pl-10 sm:pl-16 lg:pl-0 lg:grid lg:grid-cols-[180px_1fr] lg:gap-16"
+      initial={false}
+      animate={{ opacity: on ? 1 : 0.3, filter: on ? 'blur(0px)' : 'blur(2px)' }}
+      transition={{ duration: reduced ? 0 : 0.6, ease: EASE }}
+    >
+      <span className={`block font-mono text-[10px] sm:text-[11px] uppercase tracking-[0.22em] mb-3 lg:mb-0 lg:pt-3 lg:text-right ${t(isDark, 'text-porcelain/45', 'text-neutral-500')}`}>{role.dates}</span>
+      <div className="lg:pl-16">
+        <h3
+          className="font-body font-bold text-2xl sm:text-3xl lg:text-[2.5rem] leading-[1.08] tracking-[-0.02em] [text-wrap:balance]"
+          style={{
+            backgroundImage: `linear-gradient(90deg, ${ink} 0%, ${ink} 45%, #FF4D1C 50%, ${dim} 55%, ${dim} 100%)`,
+            backgroundSize: '220% 100%',
+            backgroundPosition: on ? '0% 0' : '100% 0',
+            WebkitBackgroundClip: 'text',
+            backgroundClip: 'text',
+            color: 'transparent',
+            transition: reduced ? 'none' : 'background-position 1.1s cubic-bezier(0.22,1,0.36,1)',
+          }}
+        >
+          {role.org}
+        </h3>
+        {role.parent && <p className={`font-body text-xs sm:text-sm mt-1.5 ${t(isDark, 'text-porcelain/40', 'text-neutral-500')}`}>{role.parent}</p>}
+        <p className="font-mono text-[11px] sm:text-xs uppercase tracking-[0.16em] text-ember mt-3">{role.role}</p>
+        <p className={`font-body text-sm sm:text-base leading-relaxed max-w-[52ch] mt-4 [text-wrap:pretty] ${t(isDark, 'text-porcelain/65', 'text-neutral-600')}`}>{role.proof}</p>
       </div>
-
-      <div
-        className="rounded-2xl p-5 sm:p-6 mb-2 group"
-        style={{
-          background: t(isDark, 'linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)', 'linear-gradient(135deg, rgba(0,0,0,0.02) 0%, rgba(0,0,0,0.005) 100%)'),
-          border: `1px solid ${t(isDark, 'rgba(255,255,255,0.06)', 'rgba(0,0,0,0.06)')}`,
-          backdropFilter: 'blur(12px)',
-        }}
-      >
-        <div className="flex items-start justify-between gap-4 mb-3">
-          <div>
-            <h3 className={`font-body font-bold text-base sm:text-lg ${t(isDark, 'text-porcelain', 'text-neutral-900')}`}>{exp.company}</h3>
-            <p className="font-mono text-xs text-alchemy-red/70 tracking-wider mt-0.5">{exp.role}</p>
-          </div>
-          <span className={`font-mono text-[10px] sm:text-xs ${t(isDark, 'text-porcelain/30', 'text-neutral-400')} whitespace-nowrap`}>{exp.dates}</span>
-        </div>
-
-        <ul className="space-y-1.5 mb-4">
-          {exp.achievements.map((a, j) => (
-            <li key={j} className={`font-body text-xs sm:text-sm ${t(isDark, 'text-porcelain/50', 'text-neutral-500')} flex items-start gap-2`}>
-              <span className="text-alchemy-red/40 mt-1.5 text-[6px]">●</span>
-              {a}
-            </li>
-          ))}
-        </ul>
-
-        {exp.revenueSignal && (
-          <p className={`font-mono text-[10px] ${t(isDark, 'text-alchemy-red/50', 'text-alchemy-red/60')} mb-3`}>{exp.revenueSignal}</p>
-        )}
-
-        {exp.metrics && (
-          <div className="flex flex-wrap gap-2">
-            {exp.metrics.map((m) => (
-              <div
-                key={m.label}
-                className="px-3 py-1.5 rounded-full font-mono text-[10px] relative overflow-hidden group/pill"
-                style={{
-                  background: t(isDark, 'rgba(220,38,38,0.08)', 'rgba(220,38,38,0.06)'),
-                  border: `1px solid ${t(isDark, 'rgba(220,38,38,0.15)', 'rgba(220,38,38,0.12)')}`,
-                  color: t(isDark, 'rgba(220,38,38,0.7)', 'rgba(220,38,38,0.8)'),
-                }}
-              >
-                <div
-                  className="absolute inset-0 -translate-x-full group-hover/pill:translate-x-full transition-transform duration-700"
-                  style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent)' }}
-                />
-                <span className="relative z-10">
-                  <span className="opacity-60">{m.label}:</span> {m.value}
-                </span>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-    </motion.div>
+    </motion.article>
   );
 });
-TimelineCard.displayName = 'TimelineCard';
+ArcRole.displayName = 'ArcRole';
 
 const CareerTimeline = memo(({ isDark }: { isDark: boolean }) => {
-  const entries = aashrithData.experience;
-  const timelineRef = useRef<HTMLDivElement>(null);
-  const sectionRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: timelineRef, offset: ['start end', 'end start'] });
-  const { scrollYProgress: sectionScrollProgress } = useScroll({ target: sectionRef, offset: ['start end', 'end start'] });
-  const bgScale = useTransform(sectionScrollProgress, [0, 1], [1, 1.08]);
+  const reduced = !!useReducedMotion();
+  const trackRef = useRef<HTMLDivElement>(null);
+  const nodeRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const offsets = useRef<number[]>([]);
+  const [active, setActive] = useState(-1);
+  const { scrollYProgress } = useScroll({ target: trackRef, offset: ['start 65%', 'end 55%'] });
+  const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 30, mass: 0.4 });
+  const pulseTop = useTransform(progress, (v) => `${Math.min(Math.max(v, 0), 1) * 100}%`);
+
+  useEffect(() => {
+    const measure = () => {
+      const h = trackRef.current?.offsetHeight || 1;
+      offsets.current = nodeRefs.current.map((n) => (n ? n.offsetTop / h : 1));
+    };
+    measure();
+    window.addEventListener('resize', measure);
+    return () => window.removeEventListener('resize', measure);
+  }, []);
+
+  useMotionValueEvent(progress, 'change', (v) => {
+    let idx = -1;
+    offsets.current.forEach((o, i) => { if (v >= o - 0.02) idx = i; });
+    setActive((prev) => (prev === idx ? prev : idx));
+  });
+
+  // Line x-position: left rail on phones/tablets, between date column and copy on desktop.
+  const lineX = 'left-[7px] sm:left-[15px] lg:left-[244px]';
 
   return (
-    <section ref={sectionRef} id="journey" className={`relative overflow-hidden ${t(isDark, 'bg-alchemy-black', 'bg-[#fafaf9]')}`}>
-      <motion.div className="absolute inset-0" style={{ scale: bgScale }}>
-        <SequentianBackground variant={5} opacity={isDark ? 0.22 : 0.14} glow={false} />
-      </motion.div>
+    <section id="journey" className={`relative overflow-hidden ${t(isDark, 'bg-alchemy-black', 'bg-[#fafaf9]')}`}>
+      <SequentianBackground variant={5} opacity={isDark ? 0.14 : 0.08} glow={false} />
 
-      <motion.div
-        className="absolute inset-0 pointer-events-none"
-        animate={{ opacity: [0.6, 1, 0.6] }}
-        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-      >
-        <div style={{ 
-          position: 'absolute', inset: 0,
-          background: isDark 
-            ? 'radial-gradient(ellipse 60% 40% at 50% 30%, rgba(220,38,38,0.08) 0%, transparent 70%)'
-            : 'radial-gradient(ellipse 60% 40% at 50% 30%, rgba(220,38,38,0.05) 0%, transparent 70%)',
-        }} />
-      </motion.div>
-
-      <div className="relative z-10 py-24 sm:py-40 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: 0.6, ease: EASE }} className="mb-16">
-          <motion.span
-            className="inline-block font-mono text-[10px] sm:text-xs uppercase tracking-[0.5em] mb-6"
-            style={{
-              background: 'linear-gradient(90deg, rgba(220,38,38,0.8), rgba(220,38,38,0.4))',
-              backgroundClip: 'text',
-              WebkitBackgroundClip: 'text',
-              color: 'transparent',
-            }}
-          >
-            THE ARC OF INTENT
-          </motion.span>
-          <h2 className={`font-display text-4xl sm:text-5xl lg:text-7xl leading-[0.9] ${t(isDark, 'text-porcelain', 'text-neutral-900')} mb-5`}>
+      <div className="relative z-10 py-24 sm:py-36 lg:py-44 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <motion.header initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: 0.8, ease: EASE }} className="mb-20 sm:mb-28 max-w-3xl">
+          <span className="inline-block font-mono text-[10px] sm:text-xs uppercase tracking-[0.4em] text-ember mb-6">THE ARC OF INTENT</span>
+          <h2 className={`[text-wrap:balance] tracking-[-0.02em] font-display text-4xl sm:text-5xl lg:text-7xl leading-[0.95] ${t(isDark, 'text-porcelain', 'text-neutral-900')} mb-6`}>
             Every role was a{' '}
             <span className="italic hero-fluid-text bg-clip-text text-transparent">rehearsal.</span>
           </h2>
-          <p className={`font-body text-sm sm:text-base max-w-xl ${t(isDark, 'text-porcelain/45', 'text-neutral-500')}`}>
+          <p className={`font-body text-sm sm:text-base max-w-xl leading-relaxed [text-wrap:pretty] ${t(isDark, 'text-porcelain/50', 'text-neutral-500')}`}>
             From execution to architecture. Each chapter sharpened the instinct for systems-level thinking.
           </p>
-        </motion.div>
+        </motion.header>
 
-        <div className="relative max-w-3xl mx-auto" ref={timelineRef}>
-          <div className="absolute left-4 sm:left-6 top-0 bottom-0 w-px overflow-hidden">
-            <motion.div
-              className="w-full h-[200%]"
-              style={{
-                background: 'linear-gradient(180deg, rgba(220,38,38,0.5) 0%, rgba(220,38,38,0.1) 30%, rgba(220,38,38,0.4) 50%, rgba(220,38,38,0.05) 100%)',
-                y: useTransform(scrollYProgress, [0, 1], ['0%', '-50%']),
-              }}
+        <div ref={trackRef} className="relative">
+          <svg className={`absolute top-0 ${lineX} w-[2px] h-full overflow-visible pointer-events-none`} viewBox="0 0 2 100" preserveAspectRatio="none" aria-hidden>
+            <line x1="1" y1="0" x2="1" y2="100" stroke={t(isDark, 'rgba(255,255,255,0.08)', 'rgba(0,0,0,0.08)')} strokeWidth="1" vectorEffect="non-scaling-stroke" />
+            <motion.line
+              x1="1" y1="0" x2="1" y2="100"
+              stroke="#FF4D1C" strokeWidth="1.5" vectorEffect="non-scaling-stroke"
+              style={{ pathLength: reduced ? 1 : progress, filter: 'drop-shadow(0 0 4px rgba(255,77,28,0.7))' }}
             />
-          </div>
+          </svg>
 
-          <div className="space-y-8">
-            {entries.map((exp, i) => (
-              <TimelineCard key={`${exp.company}-${i}`} exp={exp} i={i} isDark={isDark} />
-            ))}
+          {!reduced && (
+            <motion.div className={`absolute ${lineX} ml-px -translate-x-1/2 -translate-y-1/2 pointer-events-none`} style={{ top: pulseTop }} aria-hidden>
+              <div className="w-2.5 h-2.5 rounded-full bg-[#FFD9C7]" style={{ boxShadow: '0 0 0 3px rgba(255,77,28,0.35), 0 0 18px 6px rgba(255,77,28,0.55), 0 0 48px 12px rgba(255,77,28,0.25)' }} />
+            </motion.div>
+          )}
+
+          <div className="space-y-20 sm:space-y-28">
+            {arcRoles.map((role, i) => {
+              const on = reduced || i <= active;
+              return (
+                <div key={role.org} ref={(el) => { nodeRefs.current[i] = el; }} className="relative">
+                  <span
+                    className={`absolute top-2 ${lineX} ml-px -translate-x-1/2 w-[9px] h-[9px] rounded-full border transition-colors duration-500`}
+                    style={{
+                      background: on ? '#FF4D1C' : t(isDark, '#0a0a0a', '#fafaf9'),
+                      borderColor: on ? '#FF4D1C' : t(isDark, 'rgba(255,255,255,0.25)', 'rgba(0,0,0,0.2)'),
+                    }}
+                    aria-hidden
+                  />
+                  <ArcRole role={role} active={i === active} isDark={isDark} reduced={reduced} />
+                </div>
+              );
+            })}
           </div>
+        </div>
+
+        <div className={`mt-24 sm:mt-32 pt-10 border-t grid gap-10 sm:grid-cols-3 ${t(isDark, 'border-porcelain/10', 'border-neutral-200')}`}>
+          {arcCoda.map((c) => (
+            <div key={c.label}>
+              <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-ember mb-4">{c.label}</p>
+              <ul className="space-y-3">
+                {c.items.map((it) => (
+                  <li key={it} className={`font-body text-sm leading-relaxed [text-wrap:pretty] ${t(isDark, 'text-porcelain/60', 'text-neutral-600')}`}>{it}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
       </div>
     </section>
   );
 });
 CareerTimeline.displayName = 'CareerTimeline';
+
 
 // ============================================
 // PHILOSOPHY + CTA — "The Invitation"
@@ -1342,8 +1357,8 @@ const WordRevealQuote = memo(({ isDark }: { isDark: boolean }) => {
         return (
           <motion.span
             key={i}
-            className={isHighlight ? 'text-alchemy-red' : ''}
-            style={isHighlight ? { textShadow: '0 0 20px rgba(220,38,38,0.4)' } : {}}
+            className={isHighlight ? 'text-ember' : ''}
+            style={isHighlight ? { textShadow: '0 0 20px rgba(255,77,28,0.4)' } : {}}
             variants={{
               hidden: { opacity: 0, y: 8 },
               visible: { opacity: 1, y: 0 },
@@ -1388,7 +1403,7 @@ const PhilosophyCTA = memo(({ isDark }: { isDark: boolean }) => (
               color: t(isDark, 'rgba(245,245,244,0.5)', 'rgba(64,64,64,0.6)'),
             }}
           >
-            <item.icon className="w-3 h-3 text-alchemy-red/50" />
+            <item.icon className="w-3 h-3 text-ember/50" />
             <span>{item.title}</span>
           </div>
         ))}
@@ -1400,7 +1415,7 @@ const PhilosophyCTA = memo(({ isDark }: { isDark: boolean }) => (
           animate={{ opacity: [0.3, 0.6, 0.3] }}
           transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
         >
-          <div className="w-64 h-32 rounded-full" style={{ background: 'radial-gradient(ellipse, rgba(220,38,38,0.15) 0%, transparent 70%)' }} />
+          <div className="w-64 h-32 rounded-full" style={{ background: 'radial-gradient(ellipse, rgba(255,77,28,0.15) 0%, transparent 70%)' }} />
         </motion.div>
 
         <MagneticCTA href="/contact" variant="primary" size="lg">
@@ -1410,7 +1425,7 @@ const PhilosophyCTA = memo(({ isDark }: { isDark: boolean }) => (
         <a
           href="/resumes/aashrith-gade-cv.pdf"
           download
-          className={`mt-4 inline-flex min-h-11 items-center gap-2 rounded-full border px-6 font-mono text-[11px] uppercase tracking-[0.2em] transition-colors ${t(isDark, 'border-porcelain/15 text-porcelain/70 hover:border-porcelain/40 hover:text-porcelain', 'border-neutral-300 text-neutral-600 hover:text-neutral-900')}`}
+          className={`mt-4 inline-flex min-h-11 items-center gap-2 rounded-full border px-7 font-mono text-[11px] uppercase tracking-[0.2em] transition-colors duration-300 ${t(isDark, 'border-porcelain/25 text-porcelain/85 hover:border-ember hover:text-porcelain', 'border-neutral-300 text-neutral-600 hover:text-neutral-900')}`}
         >
           Download CV (PDF)
         </a>
@@ -1426,7 +1441,7 @@ const PhilosophyCTA = memo(({ isDark }: { isDark: boolean }) => (
         </motion.p>
       </motion.div>
 
-      <motion.div className={`flex justify-center gap-4 sm:gap-6 font-mono text-[10px] sm:text-xs uppercase tracking-wider mt-10 ${t(isDark, 'text-porcelain/30', 'text-neutral-400')}`} initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: 0.7 }}>
+      <motion.div className={`flex flex-wrap justify-center gap-x-4 gap-y-2 sm:gap-x-6 font-mono text-[10px] sm:text-xs uppercase tracking-[0.18em] mt-12 ${t(isDark, 'text-porcelain/30', 'text-neutral-400')}`} initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: 0.7 }}>
         <span className="flex items-center gap-1.5"><Shield className="w-3 h-3" />NDA Available</span>
         <span>·</span>
         <span className="flex items-center gap-1.5"><Clock className="w-3 h-3" />Founder-read</span>
@@ -1487,8 +1502,8 @@ const ScrollProgressBar = memo(() => {
         className="h-full"
         style={{
           width: `${progress * 100}%`,
-          background: 'linear-gradient(90deg, rgba(220,38,38,0.8), rgba(220,38,38,1), rgba(251,146,60,0.8))',
-          boxShadow: '0 0 12px rgba(220,38,38,0.6), 0 0 24px rgba(220,38,38,0.3)',
+          background: 'linear-gradient(90deg, rgba(255,77,28,0.8), rgba(255,77,28,1), rgba(251,146,60,0.8))',
+          boxShadow: '0 0 12px rgba(255,77,28,0.6), 0 0 24px rgba(255,77,28,0.3)',
           transition: 'width 0.1s linear',
         }}
       />
@@ -1519,6 +1534,7 @@ const AashrithPortfolio = () => {
   };
 
   return (
+    <MotionConfig reducedMotion="user">
     <div className={`min-h-screen ${isDark ? 'bg-alchemy-black text-porcelain' : 'bg-[#fafaf9] text-neutral-900'} transition-colors duration-500`}>
       <SEOHead title="Aashrith Gade — Founder, Brand Architect" description="Portfolio of Aashrith Gade: founder of Brand Alchemy, Ashzz.ai & Alchemy Labs. AI-native brand architecture with luxury-grade taste." />
       <BackgroundScene mode="hero" />
@@ -1549,6 +1565,7 @@ const AashrithPortfolio = () => {
         caseStudy={activeCaseStudy ? caseStudyData[activeCaseStudy] || null : null}
       />
     </div>
+    </MotionConfig>
   );
 };
 

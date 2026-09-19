@@ -38,8 +38,8 @@ export const ThoughtLeadershipCard = memo(({
       }}
       whileHover={{
         y: -4,
-        borderColor: 'rgba(220,38,38,0.3)',
-        boxShadow: '0 12px 40px rgba(220,38,38,0.1)',
+        borderColor: 'rgba(255,77,28,0.3)',
+        boxShadow: '0 12px 40px rgba(255,77,28,0.1)',
       }}
       transition={{ duration: 0.3 }}
       onClick={onClick}
@@ -51,7 +51,7 @@ export const ThoughtLeadershipCard = memo(({
           style={{
             background: entry.image
               ? `url(${entry.image}) center/cover`
-              : 'linear-gradient(135deg, rgba(220,38,38,0.1) 0%, rgba(255,255,255,0.02) 100%)',
+              : 'linear-gradient(135deg, rgba(255,77,28,0.1) 0%, rgba(255,255,255,0.02) 100%)',
           }}
         />
         {/* Gradient overlay */}
@@ -68,7 +68,7 @@ export const ThoughtLeadershipCard = memo(({
             border: '1px solid rgba(255,255,255,0.1)',
           }}
         >
-          <Icon className="w-3 h-3 text-alchemy-red/80" />
+          <Icon className="w-3 h-3 text-ember/80" />
           <span className="font-mono text-[10px] text-porcelain/60 uppercase tracking-wider">
             {entry.type === 'linkedin' ? 'LinkedIn' : 'Case Study'}
           </span>
@@ -86,7 +86,7 @@ export const ThoughtLeadershipCard = memo(({
 
         {/* Engagement */}
         {entry.engagement && (
-          <div className="flex gap-4 font-mono text-[10px] text-alchemy-red/60">
+          <div className="flex gap-4 font-mono text-[10px] text-ember/60">
             {entry.engagement.views && <span>{entry.engagement.views} views</span>}
             {entry.engagement.comments && <span>{entry.engagement.comments} comments</span>}
             {entry.engagement.shares && <span>{entry.engagement.shares} shares</span>}

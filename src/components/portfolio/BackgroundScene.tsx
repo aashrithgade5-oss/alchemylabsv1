@@ -17,25 +17,25 @@ const sceneConfigs: Record<SceneMode, {
   vignette: string;
 }> = {
   hero: {
-    gradient: 'radial-gradient(ellipse at 30% 30%, rgba(220,38,38,0.08) 0%, transparent 50%)',
+    gradient: 'radial-gradient(ellipse at 30% 30%, rgba(255,77,28,0.08) 0%, transparent 50%)',
     orbs: [
-      { x: '25%', y: '30%', size: '600px', color: 'rgba(220,38,38,0.06)', blur: '200px' },
+      { x: '25%', y: '30%', size: '600px', color: 'rgba(255,77,28,0.06)', blur: '200px' },
       { x: '75%', y: '60%', size: '400px', color: 'rgba(255,255,255,0.02)', blur: '150px' },
     ],
     vignette: 'radial-gradient(ellipse at center, transparent 40%, rgba(10,10,10,0.8) 100%)',
   },
   system: {
-    gradient: 'radial-gradient(ellipse at 50% 50%, rgba(220,38,38,0.04) 0%, transparent 60%)',
+    gradient: 'radial-gradient(ellipse at 50% 50%, rgba(255,77,28,0.04) 0%, transparent 60%)',
     orbs: [
-      { x: '50%', y: '50%', size: '800px', color: 'rgba(220,38,38,0.03)', blur: '250px' },
+      { x: '50%', y: '50%', size: '800px', color: 'rgba(255,77,28,0.03)', blur: '250px' },
     ],
     vignette: 'radial-gradient(ellipse at center, transparent 50%, rgba(10,10,10,0.6) 100%)',
   },
   gallery: {
     gradient: 'linear-gradient(180deg, rgba(10,10,10,1) 0%, rgba(5,5,5,1) 100%)',
     orbs: [
-      { x: '10%', y: '20%', size: '300px', color: 'rgba(220,38,38,0.04)', blur: '120px' },
-      { x: '90%', y: '80%', size: '300px', color: 'rgba(220,38,38,0.04)', blur: '120px' },
+      { x: '10%', y: '20%', size: '300px', color: 'rgba(255,77,28,0.04)', blur: '120px' },
+      { x: '90%', y: '80%', size: '300px', color: 'rgba(255,77,28,0.04)', blur: '120px' },
     ],
     vignette: 'radial-gradient(ellipse at center, transparent 20%, rgba(5,5,5,0.95) 100%)',
   },
@@ -45,16 +45,16 @@ const sceneConfigs: Record<SceneMode, {
     vignette: 'none',
   },
   offer: {
-    gradient: 'radial-gradient(ellipse at 50% 80%, rgba(220,38,38,0.06) 0%, transparent 50%)',
+    gradient: 'radial-gradient(ellipse at 50% 80%, rgba(255,77,28,0.06) 0%, transparent 50%)',
     orbs: [
-      { x: '50%', y: '70%', size: '500px', color: 'rgba(220,38,38,0.05)', blur: '180px' },
+      { x: '50%', y: '70%', size: '500px', color: 'rgba(255,77,28,0.05)', blur: '180px' },
     ],
     vignette: 'radial-gradient(ellipse at center, transparent 40%, rgba(10,10,10,0.7) 100%)',
   },
   contact: {
-    gradient: 'radial-gradient(ellipse at 50% 100%, rgba(220,38,38,0.1) 0%, transparent 60%)',
+    gradient: 'radial-gradient(ellipse at 50% 100%, rgba(255,77,28,0.1) 0%, transparent 60%)',
     orbs: [
-      { x: '50%', y: '90%', size: '600px', color: 'rgba(220,38,38,0.08)', blur: '200px' },
+      { x: '50%', y: '90%', size: '600px', color: 'rgba(255,77,28,0.08)', blur: '200px' },
     ],
     vignette: 'radial-gradient(ellipse at center, transparent 30%, rgba(10,10,10,0.8) 100%)',
   },

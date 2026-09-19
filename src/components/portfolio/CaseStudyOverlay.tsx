@@ -53,10 +53,10 @@ const accentMap: Record<string, { primary: string; glow: string; border: string;
 };
 
 const fallbackAccent = {
-  primary: '#DC2626',
-  glow: 'rgba(220,38,38,0.1)',
-  border: 'rgba(220,38,38,0.25)',
-  text: 'rgba(220,38,38,0.85)',
+  primary: '#FF4D1C',
+  glow: 'rgba(255,77,28,0.1)',
+  border: 'rgba(255,77,28,0.25)',
+  text: 'rgba(255,77,28,0.85)',
 };
 
 export const CaseStudyOverlay = memo(({ open, onOpenChange, caseStudy }: CaseStudyOverlayProps) => {

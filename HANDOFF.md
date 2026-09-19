@@ -946,3 +946,10 @@ fallback — set that env var in Vercel before the first deploy (see ERROR_LOG.m
 - Eva hero media provided at /media/eva/hero.* (fixes 404 + hydration error from fallback swap).
 - Journal hidden (footer link removed, noindex) per owner.
 - QA: all routes 200 (unknown offer 404), no horizontal overflow at 375 on home/services/offer/contact/eva, checkout sheet: aria-modal, focus trap, scroll lock, Esc closes. X-Frame-Options DENY verified. Build passes.
+
+## 2026-09-20 - O-9..O-11 final push
+- Homepage page flow: .section-feather melts every section's media into one void; FeaturedWork carbon band + ClosingBand border removed.
+- Contact: two-column editorial layout, accessible CalendlyDialog (focus trap, skeleton, fallback link, dark params, booked only on real postMessage), claims removed; /contact 149kB (under budget).
+- Privacy + Terms rewritten truthfully (processors, consent-gated page_views, DPDP/GDPR, 20 Sep 2026). Owner to confirm 3 added terms.
+- Aashrith portfolio (unfrozen): Arc of Intent rebuilt as scroll-drawn ember line + travelling pulse, role text sharpens/sweeps as pulse arrives; tasteful CV data (1 proof point per role); Ashzz.ai marquee filled with 10 Higgsfield tiles; editorial footer; CV download in hero + footer; MotionConfig reducedMotion=user; legacy red -> ember.
+- Shared PortfolioFooter now also restyles Eva's footer.

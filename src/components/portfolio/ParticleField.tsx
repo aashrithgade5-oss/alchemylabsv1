@@ -52,7 +52,7 @@ Particle.displayName = 'Particle';
 
 export const ParticleField = memo(({
   count = 30,
-  color = 'rgba(220, 38, 38, 0.3)',
+  color = 'rgba(255,77,28, 0.3)',
   opacity = 0.4,
   speed = 1,
   className,

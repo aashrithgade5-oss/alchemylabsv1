@@ -25,8 +25,8 @@ const variantStyles = {
     border: '1px solid rgba(255,255,255,0.05)',
   },
   red: {
-    background: 'linear-gradient(135deg, rgba(220,38,38,0.08) 0%, rgba(255,255,255,0.02) 100%)',
-    border: '1px solid rgba(220,38,38,0.15)',
+    background: 'linear-gradient(135deg, rgba(255,77,28,0.08) 0%, rgba(255,255,255,0.02) 100%)',
+    border: '1px solid rgba(255,77,28,0.15)',
   },
 };
 
@@ -53,9 +53,9 @@ export const GlassCard = memo(({
       )}
       style={variantStyles[variant]}
       whileHover={hover ? {
-        borderColor: 'rgba(220,38,38,0.3)',
+        borderColor: 'rgba(255,77,28,0.3)',
         y: -4,
-        boxShadow: '0 12px 40px rgba(220,38,38,0.1)',
+        boxShadow: '0 12px 40px rgba(255,77,28,0.1)',
       } : undefined}
       transition={{ duration: 0.3 }}
       {...motionProps}
