@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import Link from 'next/link';
-import { AnimatePresence, motion, useReducedMotion, useScroll, useSpring } from 'framer-motion';
+import { AnimatePresence, motion, useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion';
 import { ArrowLeft, ArrowUpRight, Download, Linkedin, Mail, Menu, X } from 'lucide-react';
 import { PortfolioFooter } from '@/components/portfolio/PortfolioFooter';
 import { NoiseTexture } from '@/components/effects';
@@ -41,15 +41,15 @@ function Reveal({ children, delay = 0, className = '' }: { children: ReactNode; 
 
 const Eyebrow = ({ n, children }: { n: string; children: ReactNode }) => (
   <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-bone/50">
-    <span className="text-ember">{n}</span> — {children}
+    <span className="text-[rgb(var(--blush))]">{n}</span> — {children}
   </p>
 );
 
 // Inter Bold sentence-case line with ONE lowercase Playfair-italic emphasis word.
 const Line = ({ pre, em, post = '', className = '' }: { pre: string; em: string; post?: string; className?: string }) => (
-  <h2 className={`font-headline font-bold tracking-[-0.02em] leading-[1.05] ${className}`}>
+  <h2 className={`font-headline font-bold tracking-[-0.02em] leading-[1.05] [text-wrap:balance] ${className}`}>
     <span className="glass-type">{pre} </span>
-    <span className="font-playfair italic font-normal text-ember clip-pad">{em}</span>
+    <span className="font-playfair italic font-normal eva-em clip-pad">{em}</span>
     {post && <span className="glass-type">{post}</span>}
   </h2>
 );
@@ -60,8 +60,8 @@ const ResumeButton = ({ ghost = false }: { ghost?: boolean }) => (
     download
     className={`inline-flex min-h-[48px] items-center gap-3 rounded-full px-6 font-mono text-xs uppercase tracking-[0.18em] transition-colors ${
       ghost
-        ? 'border border-bone/20 text-bone hover:border-ember hover:text-ember'
-        : 'bg-ember text-void hover:bg-bone'
+        ? 'border border-bone/20 text-bone hover:border-[rgb(var(--blush))] hover:text-[rgb(var(--blush))]'
+        : 'bg-[rgb(var(--rose))] text-void shadow-[0_0_40px_-12px_rgb(var(--rose)/0.8)] hover:bg-[rgb(var(--petal))]'
     }`}
   >
     <Download className="h-4 w-4" aria-hidden="true" />
@@ -93,7 +93,7 @@ function Nav() {
           </Link>
           <div className="hidden items-center gap-8 md:flex">
             {NAV.map((l) => (
-              <a key={l.href} href={l.href} className="font-mono text-[11px] uppercase tracking-[0.2em] text-bone/60 transition-colors hover:text-ember">
+              <a key={l.href} href={l.href} className="font-mono text-[11px] uppercase tracking-[0.2em] text-bone/60 transition-colors hover:text-[rgb(var(--blush))]">
                 {l.label}
               </a>
             ))}
@@ -126,7 +126,7 @@ function Nav() {
                   key={l.href}
                   href={l.href}
                   onClick={() => setOpen(false)}
-                  className="py-2 font-headline text-4xl font-bold text-bone hover:text-ember"
+                  className="py-2 font-headline text-4xl font-bold text-bone hover:text-[rgb(var(--blush))]"
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.05, duration: 0.4, ease: EASE }}
@@ -146,7 +146,7 @@ function Nav() {
 function ScrollProgress() {
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 120, damping: 30 });
-  return <motion.div className="fixed inset-x-0 top-0 z-[80] h-[2px] origin-left bg-ember" style={{ scaleX }} />;
+  return <motion.div className="fixed inset-x-0 top-0 z-[80] h-[2px] origin-left bg-gradient-to-r from-[rgb(var(--rose))] via-[rgb(var(--blush))] to-[rgb(var(--petal))]" style={{ scaleX }} />;
 }
 
 // ---------- Hero ----------
@@ -163,7 +163,7 @@ function WordCycler() {
       <AnimatePresence mode="wait">
         <motion.span
           key={eva.heroWords[i]}
-          className="inline-block font-playfair italic font-normal text-ember clip-pad"
+          className="inline-block font-playfair italic font-normal eva-em clip-pad"
           initial={{ opacity: 0, y: '0.4em' }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: '-0.4em' }}
@@ -177,32 +177,34 @@ function WordCycler() {
 }
 
 function Hero() {
+  const ref = useRef<HTMLElement>(null);
+  const reduce = useReducedMotion();
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] });
+  const mediaY = useTransform(scrollYProgress, [0, 1], ['0%', '14%']);
+  const textY = useTransform(scrollYProgress, [0, 1], ['0%', '-10%']);
   return (
-    <section className="relative flex min-h-[100svh] items-end overflow-hidden bg-void">
-      <HeroMedia />
-      {/* Legibility: left + bottom falloff into the void */}
-      <div className="absolute inset-0 bg-gradient-to-t from-void via-void/60 to-void/10" />
-      <div className="absolute inset-0 bg-gradient-to-r from-void/90 via-void/40 to-transparent" />
-      <img
-        src="/media/founder-eva-silhouette.png"
-        alt=""
-        aria-hidden="true"
-        className="pointer-events-none absolute bottom-0 right-0 hidden h-[82%] w-auto object-contain opacity-80 lg:block"
-      />
+    <section ref={ref} className="relative flex min-h-[100svh] items-end overflow-hidden bg-void">
+      <motion.div className="absolute inset-0" style={reduce ? undefined : { y: mediaY, scale: 1.08 }}>
+        <HeroMedia />
+      </motion.div>
+      {/* Legibility: left wash for the copy column, bottom falloff into the void, faint blush bloom behind subject */}
+      <div className="absolute inset-0 bg-[linear-gradient(90deg,#0A0908_0%,rgb(10_9_8/0.85)_30%,rgb(10_9_8/0.35)_58%,transparent_78%)] max-md:bg-[linear-gradient(180deg,rgb(10_9_8/0.35)_0%,rgb(10_9_8/0.55)_45%,#0A0908_100%)]" />
+      <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-void to-transparent" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(45%_55%_at_78%_45%,rgb(var(--blush)/0.12),transparent_70%)]" />
       <NoiseTexture opacity={0.03} />
 
-      <div className="relative z-10 mx-auto w-full max-w-7xl px-4 pb-14 pt-28 sm:px-8 sm:pb-20">
+      <motion.div style={reduce ? undefined : { y: textY }} className="relative z-10 mx-auto w-full max-w-7xl px-4 pb-14 pt-28 sm:px-8 sm:pb-20">
         <motion.p
           className="font-mono text-[11px] uppercase tracking-[0.3em] text-bone/60"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          <span className="text-ember">●</span> {eva.role} · {eva.city}
+          <span className="text-[rgb(var(--blush))]">●</span> {eva.role} · {eva.city}
         </motion.p>
 
         <motion.h1
-          className="mt-6 font-headline font-bold leading-[0.9] tracking-[-0.04em] text-[clamp(3.5rem,14vw,11rem)]"
+          className="mt-6 font-headline font-bold leading-[0.9] [text-wrap:balance] tracking-[-0.04em] text-[clamp(3.5rem,14vw,11rem)]"
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.3, ease: EASE }}
@@ -212,7 +214,7 @@ function Hero() {
         </motion.h1>
 
         <motion.p
-          className="mt-6 max-w-xl font-headline text-2xl font-bold leading-tight text-bone sm:text-4xl"
+          className="mt-6 max-w-xl [text-wrap:balance] font-headline text-2xl font-bold leading-tight text-bone sm:text-4xl"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6, ease: EASE }}
@@ -227,7 +229,7 @@ function Hero() {
           transition={{ duration: 0.8, delay: 0.8, ease: EASE }}
         >
           <ResumeButton />
-          <a href="#contact" className="inline-flex min-h-[48px] items-center gap-2 px-2 font-mono text-xs uppercase tracking-[0.18em] text-bone/70 hover:text-ember">
+          <a href="#contact" className="inline-flex min-h-[48px] items-center gap-2 px-2 font-mono text-xs uppercase tracking-[0.18em] text-bone/70 hover:text-[rgb(var(--blush))]">
             Start a conversation <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
           </a>
         </motion.div>
@@ -246,7 +248,7 @@ function Hero() {
             </div>
           ))}
         </motion.dl>
-      </div>
+      </motion.div>
     </section>
   );
 }
@@ -283,7 +285,7 @@ function BrandAlchemyWork() {
 
       <Marquee label="Brand Alchemy social posts" seconds={70}>
         {brandAlchemyPosts.map((src, i) => (
-          <figure key={src} className="mr-4 w-[62vw] shrink-0 overflow-hidden rounded-2xl border border-bone/10 sm:mr-6 sm:w-[300px] lg:w-[340px]">
+          <figure key={src} className="mr-4 w-[62vw] shrink-0 overflow-hidden rounded-2xl border border-bone/10 transition-colors duration-500 hover:border-[rgb(var(--blush)/0.6)] sm:mr-6 sm:w-[300px] lg:w-[340px]">
             <img
               src={src}
               alt={`Brand Alchemy social post ${i + 1}`}
@@ -295,11 +297,11 @@ function BrandAlchemyWork() {
       </Marquee>
 
       <div className="mt-10 border-t border-bone/10 pt-8">
-        <Marquee label="What Eva did at Brand Alchemy" seconds={40} reverse>
+        <Marquee label="What Eva did at Brand Alchemy" seconds={60} reverse>
           {brandAlchemyWork.map((w) => (
             <span key={w} className="flex items-center whitespace-nowrap font-headline text-2xl font-bold text-bone/80 sm:text-4xl">
               <span className="px-6 sm:px-10">{w}</span>
-              <span className="font-playfair italic font-normal text-ember">·</span>
+              <span className="font-playfair italic font-normal eva-em">·</span>
             </span>
           ))}
         </Marquee>
@@ -322,18 +324,18 @@ function Experience() {
             <li key={r.org}>
               <Reveal delay={i * 0.04} className="group grid gap-4 border-b border-bone/10 py-10 md:grid-cols-12 md:gap-8">
                 <div className="md:col-span-3">
-                  <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-ember">{r.dates}</p>
+                  <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[rgb(var(--blush))]">{r.dates}</p>
                   <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.2em] text-bone/40">{r.place}</p>
                 </div>
                 <div className="md:col-span-4">
-                  <h3 className="font-headline text-2xl font-bold text-bone transition-colors group-hover:text-ember sm:text-3xl">{r.org}</h3>
+                  <h3 className="font-headline text-2xl font-bold text-bone transition-colors group-hover:text-[rgb(var(--blush))] sm:text-3xl">{r.org}</h3>
                   <p className="mt-2 text-bone/60">{r.title}</p>
                 </div>
                 <div className="md:col-span-5">
                   <ul className="space-y-3 text-bone/70">
                     {r.points.map((p) => (
                       <li key={p} className="flex gap-3">
-                        <span className="mt-[0.6em] h-px w-4 shrink-0 bg-ember" aria-hidden="true" />
+                        <span className="mt-[0.6em] h-px w-4 shrink-0 bg-[rgb(var(--blush))]" aria-hidden="true" />
                         <span>{p}</span>
                       </li>
                     ))}
@@ -368,8 +370,8 @@ function Leadership() {
         <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {positions.map((p, i) => (
             <Reveal key={p.title} delay={i * 0.06}>
-              <article className="flex h-full flex-col rounded-2xl border border-bone/10 bg-void p-7 transition-colors hover:border-ember/50">
-                <span className="font-mono text-[11px] tracking-[0.2em] text-ember">{String(i + 1).padStart(2, '0')}</span>
+              <article className="flex h-full flex-col rounded-2xl border border-bone/10 bg-void p-7 transition-colors hover:border-[rgb(var(--blush)/0.5)]">
+                <span className="font-mono text-[11px] tracking-[0.2em] text-[rgb(var(--blush))]">{String(i + 1).padStart(2, '0')}</span>
                 <h3 className="mt-6 font-headline text-xl font-bold text-bone">{p.title}</h3>
                 <p className="mt-1 text-bone/60">{p.org}</p>
                 {p.note && <p className="mt-auto pt-6 font-mono text-[11px] uppercase leading-relaxed tracking-[0.12em] text-bone/45">{p.note}</p>}
@@ -439,7 +441,7 @@ function Contact() {
     <section id="contact" className="relative scroll-mt-16 overflow-hidden border-t border-bone/10 px-4 py-28 sm:px-8 sm:py-40">
       <div
         className="pointer-events-none absolute inset-0"
-        style={{ background: 'radial-gradient(60% 50% at 50% 100%, rgb(var(--ember) / 0.14), transparent 70%)' }}
+        style={{ background: 'radial-gradient(60% 50% at 50% 100%, rgb(var(--rose) / 0.2), transparent 70%)' }}
         aria-hidden="true"
       />
       <Reveal className="relative mx-auto max-w-4xl text-center">
@@ -451,7 +453,7 @@ function Contact() {
         <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <a
             href={`mailto:${eva.email}`}
-            className="inline-flex min-h-[48px] items-center gap-3 rounded-full bg-ember px-6 font-mono text-xs uppercase tracking-[0.18em] text-void transition-colors hover:bg-bone"
+            className="inline-flex min-h-[48px] items-center gap-3 rounded-full bg-[rgb(var(--rose))] px-6 shadow-[0_0_40px_-12px_rgb(var(--rose)/0.8)] font-mono text-xs uppercase tracking-[0.18em] text-void transition-colors hover:bg-[rgb(var(--petal))]"
           >
             <Mail className="h-4 w-4" aria-hidden="true" /> {eva.email}
           </a>
@@ -459,7 +461,7 @@ function Contact() {
             href={eva.linkedin}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex min-h-[48px] items-center gap-3 rounded-full border border-bone/20 px-6 font-mono text-xs uppercase tracking-[0.18em] text-bone transition-colors hover:border-ember hover:text-ember"
+            className="inline-flex min-h-[48px] items-center gap-3 rounded-full border border-bone/20 px-6 font-mono text-xs uppercase tracking-[0.18em] text-bone transition-colors hover:border-[rgb(var(--blush))] hover:text-[rgb(var(--blush))]"
           >
             <Linkedin className="h-4 w-4" aria-hidden="true" /> LinkedIn
           </a>
@@ -473,7 +475,16 @@ function Contact() {
 // ---------- Page ----------
 export default function EvaPortfolio() {
   return (
-    <div className="min-h-screen bg-void font-sans text-bone">
+    <div className="eva min-h-screen overflow-x-clip bg-void font-sans text-bone">
+      {/* Black + pink is Eva (black + red is Aashrith). --ember is re-pointed so shared chrome (footer) follows. */}
+      <style>{`
+        .eva { --blush: 244 182 200; --rose: 217 70 122; --petal: 250 221 230; --ember: 217 70 122; --ember-deep: 176 48 96; --footer-accent: #D9467A; }
+        .eva ::selection { background: rgb(var(--rose) / 0.45); color: #EDE6DD; }
+        .eva :focus-visible { outline: 2px solid rgb(var(--blush)); outline-offset: 3px; }
+        .eva-em { background: linear-gradient(100deg, rgb(var(--petal)), rgb(var(--blush)) 40%, rgb(var(--rose)) 70%, rgb(var(--petal))); background-size: 250% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: eva-flow 14s ease-in-out infinite alternate; }
+        @keyframes eva-flow { to { background-position: 100% 0; } }
+        @media (prefers-reduced-motion: reduce) { .eva-em { animation: none; } }
+      `}</style>
       <ScrollProgress />
       <Nav />
       <main>

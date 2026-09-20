@@ -45,7 +45,7 @@ export function OfferDetailView({ slug }: { slug: string }) {
   const index = Number(pillar.numeral);
 
   return (
-    <main className="relative overflow-x-clip font-sans">
+    <main className="relative overflow-x-clip font-sans [&_h1]:[text-wrap:balance] [&_h2]:[text-wrap:balance] [&_h3]:[text-wrap:balance] [&_p]:[text-wrap:pretty] [&_li]:[text-wrap:pretty]">
       <HomeAtmosphere />
 
       {/* hero: same ember wash + kanji watermark as the pillar sections */}
@@ -60,13 +60,13 @@ export function OfferDetailView({ slug }: { slug: string }) {
         />
         <span
           aria-hidden
-          className="pointer-events-none absolute -left-4 top-16 select-none font-sans text-[9rem] leading-none text-ember/[0.15] md:text-[16rem]"
+          className="pointer-events-none absolute -bottom-10 -left-4 hidden select-none font-sans text-[12rem] leading-none text-ember/[0.05] lg:block"
         >
           {kanji[pillar.slug]}
         </span>
 
         <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-6 pb-16 pt-32 md:px-12 md:pt-40 lg:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] lg:px-16">
-          <div>
+          <div className="min-w-0">
             <Link
               href={`/services#pillar-${index}`}
               className="inline-flex min-h-[44px] items-center font-mono text-[10px] tracking-[0.3em] text-ash transition-colors hover:text-bone"

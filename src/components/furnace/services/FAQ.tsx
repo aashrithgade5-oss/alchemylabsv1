@@ -19,7 +19,7 @@ export function FAQ() {
         <div className="mt-12">
           {faqs.map((item) => (
             <details key={item.q} className="group border-t border-line py-6 last:border-b">
-              <summary className="flex cursor-pointer list-none items-baseline justify-between gap-6 [&::-webkit-details-marker]:hidden">
+              <summary className="flex min-h-[44px] cursor-pointer list-none items-center justify-between gap-6 [&::-webkit-details-marker]:hidden">
                 <h3 className="font-sans text-lg font-bold text-bone transition-colors duration-300 group-hover:text-ember md:text-xl">
                   {item.q}
                 </h3>

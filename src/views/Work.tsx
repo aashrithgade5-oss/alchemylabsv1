@@ -16,14 +16,6 @@ import { AmbientVideo } from '@/components/furnace/home/AmbientVideo';
 
 const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
-// White-on-black text marks (mix-blend-screen), same set FeaturedWork uses.
-// AI Media Gen has no mark yet — falls back to the plain h3 below.
-const textMarks: Record<string, string> = {
-  'aether-rituals': '/media/aether-rituals-text.png',
-  genesis: '/media/genesis-text.png',
-  'oakley-concept': '/media/oakley-text.png',
-};
-
 function WorkTile({ entry, large }: { entry: (typeof portfolio)[number]; large: boolean }) {
   return (
     <GlassPanel className={`group h-full ${large ? 'md:min-h-[28rem]' : ''}`}>
@@ -31,36 +23,28 @@ function WorkTile({ entry, large }: { entry: (typeof portfolio)[number]; large: 
         <AmbientVideo
           src={entry.video.src}
           poster={entry.video.poster}
-          className="absolute inset-0 h-full w-full object-cover opacity-40 transition-opacity duration-500 group-hover:opacity-55"
+          className="absolute inset-0 h-full w-full object-cover opacity-70 transition-opacity duration-700 group-hover:opacity-90"
         />
       ) : (
         <Image
           src={entry.visuals[0] ?? entry.image}
           alt=""
           fill
-          className="object-cover opacity-40 transition-opacity duration-500 group-hover:opacity-55"
+          sizes="(min-width: 768px) 50vw, 100vw"
+          className="object-cover opacity-70 transition-opacity duration-700 group-hover:opacity-90"
         />
       )}
-      <div className="relative flex h-full flex-col justify-end p-8 md:p-10">
+      <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-void via-void/60 to-transparent" />
+      <div className="relative flex h-full min-h-[18rem] flex-col justify-end p-8 md:p-10">
         <p className="font-mono text-[10px] tracking-[0.25em] text-ember">
           {entry.label} · {entry.discipline}
         </p>
-        {textMarks[entry.id] ? (
-          <Image
-            src={textMarks[entry.id]}
-            alt={entry.title}
-            width={800}
-            height={200}
-            className={`mt-4 h-auto mix-blend-screen ${large ? 'w-64 md:w-80' : 'w-44 md:w-52'}`}
-          />
-        ) : (
-          <h3
-            className={`mt-4 font-headline font-black text-bone ${large ? 'text-3xl md:text-4xl' : 'text-xl md:text-2xl'}`}
-          >
-            {entry.title}
-          </h3>
-        )}
-        <p className={`mt-3 max-w-md leading-relaxed text-ash ${large ? 'text-base md:text-lg' : 'text-sm'}`}>
+        <h3
+          className={`mt-4 font-headline font-bold leading-[1.05] tracking-[-0.035em] text-bone [text-wrap:balance] ${large ? 'text-4xl md:text-5xl' : 'text-2xl md:text-3xl'}`}
+        >
+          {entry.title}
+        </h3>
+        <p className={`mt-3 max-w-md leading-relaxed text-bone/70 [text-wrap:pretty] ${large ? 'text-base md:text-lg' : 'text-sm'}`}>
           {entry.summary}
         </p>
       </div>
@@ -125,7 +109,7 @@ export default function Work() {
           <KineticHeadline
             as="h1"
             text="Proof over polish."
-            className="mt-7 max-w-4xl font-headline text-[clamp(3rem,7vw,7rem)] font-black leading-[1.02] tracking-[-0.04em] text-bone"
+            className="mt-7 max-w-4xl font-headline text-[clamp(3rem,7vw,7rem)] font-bold leading-[1.02] tracking-[-0.045em] text-bone"
             wordClassName="glass-type"
             delay={0.15}
           />
@@ -145,7 +129,7 @@ export default function Work() {
           behind the grid gains the red-slats loop, dimmed and feathered,
           matching the depth treatment elsewhere on the rebuilt pages. */}
       <section className="relative overflow-hidden px-6 pb-24 md:px-12 md:pb-32">
-        <div aria-hidden className="absolute inset-0">
+        <div aria-hidden className="section-feather absolute inset-0">
           <AmbientVideo
             src="/media/red-slats-wide.mp4"
             poster="/media/red-slats-wide-poster.jpg"
@@ -189,7 +173,7 @@ export default function Work() {
           pedagogy, in copy voice. */}
       <section className="relative overflow-hidden border-t border-line px-6 py-28 md:px-12 md:py-36">
         {/* "keep the one frame": one still figure in a blurred crowd */}
-        <div aria-hidden className="absolute inset-0">
+        <div aria-hidden className="section-feather absolute inset-0">
           <Image
             src="/media/mb-the-one-who-stays.webp"
             alt=""

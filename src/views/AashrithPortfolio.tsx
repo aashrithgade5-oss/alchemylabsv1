@@ -1,9 +1,8 @@
 'use client';
 
 import { memo, useState, useEffect, useRef, useCallback } from 'react';
-import { motion, MotionConfig, AnimatePresence, useScroll, useTransform, useSpring, useMotionValue, useMotionValueEvent, useReducedMotion } from 'framer-motion';
+import { motion, MotionConfig, AnimatePresence, useScroll, useTransform, useSpring, useMotionValue, useMotionValueEvent, useReducedMotion, type MotionValue } from 'framer-motion';
 import Link from 'next/link';
-import Image from 'next/image';
 import { ArrowLeft, Sun, Moon, Menu, X, Linkedin, Instagram, Youtube, ExternalLink, Film, Music, Sparkles, Users, Shield, Clock, Phone, ArrowRight, Eye } from 'lucide-react';
 import { SEOHead } from '@/components/SEOHead';
 import { thoughtLeadershipEntries } from '@/data/portfolioProjects';
@@ -16,6 +15,8 @@ import {
   ParticleField,
 } from '@/components/portfolio';
 import { PortfolioFooter } from '@/components/portfolio/PortfolioFooter';
+import { SafeImage } from '@/components/portfolio/SafeImage';
+import { StreakSeam } from '@/components/portfolio/LightStreaks';
 import { BlueprintGrid, NoiseTexture } from '@/components/effects';
 import { SequentianBackground } from '@/components/SequentianBackground';
 import { CaseStudyOverlay, type CaseStudyData } from '@/components/portfolio/CaseStudyOverlay';
@@ -88,102 +89,114 @@ const brandAlchemyPosts = [
   { image: ba9, title: 'Hermès — Craft That Outlives Trends', desc: 'Alchemy Casefiles Vol.1: deconstructing 187 years of time-trained brand mastery.', link: '#' },
 ];
 
-// Case study data
+// Case study data — Challenge / Approach / System built / Outcome.
+// Outcomes appear only where a result is already on record; concepts describe the work.
+const studio186Img = '/media/aashrith/studio186.webp';
 const caseStudyData: Record<string, CaseStudyData> = {
   'aether-rituals': {
     id: 'aether-rituals',
     title: 'Aether Rituals',
-    subtitle: '48-hour luxury wellness brand architecture experiment',
-    image: aetherBento,
-    challenge: 'Create a complete luxury wellness brand identity from zero — including color system, product design, spatial design, and brand narrative — using AI-native tools in just 48 hours.',
-    approach: 'We architected a transcendent brand system blending ancient ritual with modern minimalism. Using Midjourney for product visualization, ChatGPT for narrative architecture, and Figma for system design.',
+    subtitle: 'A concept AI-native skincare house: identity, packaging and campaign film from one AI pipeline.',
+    image: '/media/aether-rituals-1.png',
+    concept: true,
+    role: 'Founder & creative director (concept)',
+    year: '2024',
+    challenge: 'Build a complete luxury skincare house from zero — positioning, colour, product, packaging, space and film — and hold it to the standard of an established maison rather than a mood board.',
+    approach: 'Strategy first. The house was anchored on one idea, the pause that transforms, and every visual decision was traced back to it: ancient ritual meeting modern minimalism, restraint over ornament, texture over noise.',
     process: [
-      'Brand strategy & positioning: Defined "the pause that transforms" as core philosophy',
-      'Color system architecture: Four tones representing performance, transcendence, purity, and subtlety',
-      'Product line design: Ritual essentials — containers, packaging, spatial elements',
-      'Spatial design: Showroom concepts merging minimalism with organic textures',
-      'Brand collateral: Typography system, product photography style, lifestyle imagery',
+      'Positioning and narrative architecture around "the pause that transforms".',
+      'A four-tone colour system for performance, transcendence, purity and subtlety.',
+      'Ritual essentials: containers, packaging and spatial elements designed as one family.',
+      'Showroom concepts pairing minimal architecture with organic texture.',
+      'A campaign film and lifestyle imagery produced through the same AI-native pipeline.',
     ],
-    results: [
-      'Complete brand identity system in 48 hours',
-      'Visual language competitive with $50K+ agency work',
-      'Proof-of-concept for AI-native luxury branding',
-      'Featured in creative portfolio, driving client interest',
-    ],
-    timeline: '48 Hours',
     tools: ['Midjourney', 'ChatGPT', 'Figma', 'Photoshop'],
-    tags: ['Luxury', 'Wellness', 'AI-Native', 'Brand Architecture', '48-Hour Sprint'],
+    tags: ['Concept', 'Skincare', 'Luxury', 'AI-native', 'Brand architecture'],
+    gallery: ['/media/aether-rituals-2.png', '/media/aether-rituals-3.png', '/media/aether-rituals-4.png', '/media/aether-rituals-5.png', aetherBento],
+    video: '/media/aether-rituals-preview.mp4',
+    poster: '/media/aether-rituals-preview-poster.jpg',
   },
   'genesis': {
     id: 'genesis',
     title: 'Genesis',
-    subtitle: 'Experimental AI-native streetwear brand with full video generation',
+    subtitle: 'A concept AI brand system — monochrome streetwear for the AI generation, built entirely through generative tools.',
     image: genesisBento,
-    challenge: 'Build a complete streetwear brand for the AI generation — including apparel design, video campaigns, logo system, and brand personality — entirely through AI generation tools.',
-    approach: 'Genesis emerged as a monochromatic visual system built on contrast, mystery, and apocalyptic aesthetics. We used Runway ML for video generation, Midjourney for product mockups.',
+    concept: true,
+    role: 'Founder & creative director (concept)',
+    year: '2024',
+    challenge: 'Design a streetwear brand whose whole world — apparel, logo, personality and moving image — could be generated end to end, without losing a point of view.',
+    approach: 'Genesis was built on contrast and mystery: a monochrome system with a geometric mark and a technical, utilitarian voice, so every generated asset had rules to obey.',
     process: [
-      'Brand positioning: "Apocalyptic streetwear for the AI generation"',
-      'Visual system: Monochrome palette with high contrast and geometric logo',
-      'Apparel design: Hoodies, tees, outerwear with branded elements',
-      'Video campaign: AI-generated lifestyle footage using Runway ML',
-      'Typography & graphics: Technical, utilitarian, future-forward',
+      'Positioning: apocalyptic streetwear for the AI generation.',
+      'Monochrome visual system with high contrast and a geometric logo.',
+      'Apparel range — hoodies, tees and outerwear carrying the brand elements.',
+      'AI-generated lifestyle film for the campaign.',
+      'Typography and graphics: technical, utilitarian, future-facing.',
     ],
-    results: [
-      'Full streetwear brand identity with video assets',
-      'Distinctive visual language separating from generic streetwear',
-      'Demonstrated capability of AI video generation for fashion',
-      'Ready-to-launch brand system (conceptual)',
-    ],
-    timeline: '5 Days',
+    timeline: '5 days',
     tools: ['Runway ML', 'Midjourney', 'ChatGPT', 'Premiere Pro', 'Figma'],
-    tags: ['Streetwear', 'AI Video', 'Brand Identity', 'Gen Z', 'Dystopian'],
+    tags: ['Concept', 'Streetwear', 'AI video', 'Brand system'],
+    gallery: ['/media/Genesis.png', '/media/genesis-text.png'],
+  },
+  'deorhi': {
+    id: 'deorhi',
+    title: 'Deorhi',
+    subtitle: 'Heritage luxury travel for Studio186 (The Times of India Group) — an editorial model rebuilt around restraint-coded luxury.',
+    image: studio186Img,
+    role: 'Social & Growth Lead, Studio186',
+    year: '2026',
+    challenge: 'Deorhi sells heritage travel — havelis, courtyards, slow time. At 8K monthly reach, the brand needed an editorial voice that felt as quiet and considered as the places themselves.',
+    approach: 'Rebuild the editorial model around restraint-coded luxury: fewer, better frames; stillness over spectacle; copy that lets the architecture speak. Paid growth was layered on the same restraint rather than against it.',
+    process: [
+      'A restraint-led editorial model for content and captions.',
+      'Brand, design and tone guidelines shared across the Studio186 verticals.',
+      'An AI-native production pipeline for consistent, on-brand output.',
+      'Paid growth run from the same editorial logic.',
+    ],
+    results: ['Monthly reach 8K → 700K in six weeks.'],
+    tools: ['AI-native production pipeline'],
+    tags: ['Client work', 'Heritage', 'Luxury travel', 'Editorial', 'Growth'],
+    gallery: ['/media/aashrith/deorhi-1.webp', '/media/aashrith/deorhi-2.webp'],
   },
   'dior-campaign': {
     id: 'dior-campaign',
-    title: 'Dior: Dual Fragrance Campaign',
-    subtitle: "Luxury AI campaign for J'adore & Poison",
+    title: 'Dior: Dual Fragrance',
+    subtitle: "A conceptual AI campaign for J'adore and Poison — two colour stories, one visual language.",
     image: diorBento,
-    challenge: "Create two distinct luxury fragrance campaigns for Dior's iconic scents — each with its own visual language, yet unified under one premium creative direction.",
-    approach: "We architected two parallel color stories: J'adore in gold and amber light, Poison in purple and shadow. Both use AI-generated cinematic imagery rivaling traditional luxury photography.",
+    concept: true,
+    role: 'Creative direction (concept)',
+    year: '2024',
+    challenge: "Create two distinct fragrance campaigns for Dior's J'adore and Poison — each with its own visual language, unified under one premium creative direction.",
+    approach: "Two parallel colour stories built on the duality of desire: J'adore in gold, amber and warm light; Poison in purple, shadow and drama.",
     process: [
-      'Campaign strategy: Duality of desire — light vs. dark, sovereign vs. seductive',
-      "J'adore visual system: Gold, amber, warm light, ethereal environments",
-      'Poison visual system: Purple, shadow, mystery, dramatic compositions',
-      'Product integration: Bottle placement, lighting, atmosphere',
-      'Typography & layout: Premium editorial design language',
+      "J'adore visual system: gold, amber, warm light, ethereal environments.",
+      'Poison visual system: purple, shadow, mystery, dramatic composition.',
+      'Bottle placement, lighting and atmosphere for each scent.',
+      'An editorial typography and layout language across both.',
     ],
-    results: [
-      'Two complete luxury fragrance campaigns',
-      'Visual quality matching $100K+ traditional production',
-      'Demonstrated AI capability in ultra-premium category',
-      'Case study for luxury brand AI adoption',
-    ],
-    timeline: '1 Week',
+    timeline: '1 week',
     tools: ['Midjourney', 'ChatGPT', 'Photoshop', 'InDesign'],
-    tags: ['Luxury', 'Fragrance', 'Dual Campaign', 'AI Creative Direction', 'Editorial'],
+    tags: ['Concept', 'Fragrance', 'Campaign', 'AI direction'],
   },
   'oakley-showcase': {
     id: 'oakley-showcase',
     title: 'Oakley: Equipment Redefined',
-    subtitle: '24-hour AI campaign for performance eyewear',
+    subtitle: 'A conceptual 24-hour AI campaign for performance eyewear.',
     image: oakleyBento,
-    challenge: "Create a visually arresting product campaign for Oakley eyewear in 24 hours using only AI tools.",
-    approach: 'We developed a bold orange-red visual system emphasizing speed, precision, and satisfaction. Using AI-powered product photography and dynamic compositions.',
+    concept: true,
+    role: 'Creative direction (concept)',
+    year: '2024',
+    challenge: 'Create a visually arresting product campaign for Oakley eyewear in 24 hours, using only AI tools.',
+    approach: 'A bold orange-red system built around speed, precision and satisfaction, carried through dramatic product light and kinetic layouts.',
     process: [
-      'Visual strategy: Bold orange-red gradient system',
-      'Product photography: AI-generated hero shots with dramatic lighting',
-      'Campaign tagline: "Equipment for our world" / "Satisfy"',
-      'Layout design: Asymmetric grids, kinetic energy, motion blur',
+      'Orange-red gradient visual system.',
+      'AI-generated hero product shots with dramatic lighting.',
+      'Campaign lines: "Equipment for our world" / "Satisfy".',
+      'Asymmetric grids, kinetic energy and motion blur in layout.',
     ],
-    results: [
-      'Campaign-ready visual assets in 24 hours',
-      'Distinctive aesthetic matching Oakley brand DNA',
-      'Proof of AI capability in athletic/product categories',
-      'Portfolio piece demonstrating speed + quality',
-    ],
-    timeline: '24 Hours',
+    timeline: '24 hours',
     tools: ['Midjourney', 'Photoshop', 'Figma'],
-    tags: ['Athletic', 'Product Photography', 'AI Campaign', '24-Hour Sprint'],
+    tags: ['Concept', 'Athletic', 'Product', 'AI campaign'],
   },
 };
 
@@ -193,47 +206,71 @@ const creativeProjects = [
     id: 'aether-rituals',
     num: '01',
     title: 'Aether Rituals',
-    category: 'Luxury Lifestyle Brand',
-    description: 'A transcendent luxury brand architecture blending ancient rituals with modern minimalism. The system speaks to transformation: the pause that reshapes reality.',
-    image: aetherBento,
-    tags: ['Brand Architecture', 'Product Design', 'Luxury Lifestyle'],
+    category: 'AI-native skincare house',
+    description: 'Identity, packaging and campaign film from one AI pipeline — ancient ritual meets modern minimalism.',
+    image: '/media/aether-rituals-1.png',
+    tags: ['Brand architecture', 'Packaging', 'Campaign film'],
     year: '2024',
+    concept: true,
     sequentianVariant: 4 as const,
   },
   {
     id: 'genesis',
     num: '02',
     title: 'Genesis',
-    category: 'Streetwear Brand',
-    description: 'Apocalyptic streetwear for the AI generation. A monochromatic visual system built on contrast, mystery, and dystopian aesthetics.',
+    category: 'AI brand system',
+    description: 'Apocalyptic streetwear for the AI generation. A monochrome system built on contrast and mystery.',
     image: genesisBento,
-    tags: ['Streetwear', 'Branding', 'AI-Generated Visuals'],
+    tags: ['Brand system', 'Streetwear', 'AI video'],
     year: '2024',
+    concept: true,
     sequentianVariant: 1 as const,
   },
   {
-    id: 'dior-campaign',
+    id: 'deorhi',
     num: '03',
+    title: 'Deorhi',
+    category: 'Heritage luxury travel · Studio186',
+    description: 'An editorial model rebuilt around restraint-coded luxury. Monthly reach 8K → 700K in six weeks.',
+    image: studio186Img,
+    tags: ['Editorial', 'Growth', 'Heritage luxury'],
+    year: '2026',
+    concept: false,
+    sequentianVariant: 2 as const,
+  },
+  {
+    id: 'dior-campaign',
+    num: '04',
     title: 'Dior: Dual Fragrance',
-    category: 'Conceptual Fragrance Campaign',
-    description: "AI-generated cinematic campaigns for two iconic fragrances. Two color stories, one visual language.",
+    category: 'Fragrance campaign',
+    description: 'AI-generated cinematic campaigns for two iconic fragrances. Two colour stories, one visual language.',
     image: diorBento,
-    tags: ['Fragrance', 'Campaign Creative', 'AI Direction'],
+    tags: ['Fragrance', 'Campaign', 'AI direction'],
     year: '2024',
+    concept: true,
     sequentianVariant: 5 as const,
   },
   {
     id: 'oakley-showcase',
-    num: '04',
+    num: '05',
     title: 'Oakley: Equipment Redefined',
-    category: 'Athletic Brand Showcase',
-    description: 'Bold visual system for performance eyewear. AI-powered product photography pushing the boundaries of athletic brand aesthetics.',
+    category: 'Athletic brand showcase',
+    description: 'A bold visual system for performance eyewear, with AI product photography built in 24 hours.',
     image: oakleyBento,
-    tags: ['Athletic', 'Product Photography', 'AI Asset Generation'],
+    tags: ['Athletic', 'Product', 'AI assets'],
     year: '2024',
+    concept: true,
     sequentianVariant: 3 as const,
   },
 ];
+
+// Ashzz.ai — editorial thought-leadership posts (16:9)
+const azPosts = ['Prompt', 'Taste', 'Signal', 'Agents', 'Latent', 'Curate', 'Synthesis', 'Output', 'Judgment', 'Frontier'].map((title, i) => ({
+  image: `/media/aashrith/az-${i + 1}.webp`,
+  title,
+  desc: '',
+  link: '',
+}));
 
 // Thought leadership posts
 const thoughtLeadershipPosts = [
@@ -664,42 +701,50 @@ HeroSection.displayName = 'HeroSection';
 // ============================================
 // INTERACTIVE POST TILE — Shared component for Brand Alchemy + Ash Archives
 // ============================================
-const PostTile = memo(({ post, index, accent, isHovered, onHover, onLeave }: {
+const PostTile = memo(({ post, index, accent, isHovered, onHover, onLeave, wide = false }: {
   post: { image: string; title: string; desc: string; link: string };
   index: number;
   accent: string;
   isHovered: boolean;
   onHover: () => void;
   onLeave: () => void;
-}) => (
-  <motion.a
-    href={post.link}
-    target="_blank"
-    rel="noopener noreferrer"
-    className="flex-shrink-0 w-64 sm:w-72 rounded-2xl overflow-hidden relative group cursor-pointer block"
-    style={{ aspectRatio: '4/5' }}
+  /** 16:9 editorial post instead of 4:5 */
+  wide?: boolean;
+}) => {
+  const Tag = post.link ? motion.a : motion.div;
+  return (
+  <Tag
+    {...(post.link ? { href: post.link, target: '_blank', rel: 'noopener noreferrer' } : { tabIndex: 0 })}
+    className={`snap-start flex-shrink-0 ${wide ? 'w-[82vw] max-w-[300px] sm:max-w-none sm:w-[420px] lg:w-[480px]' : 'w-64 sm:w-72'} rounded-2xl overflow-hidden relative group cursor-pointer block bg-alchemy-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-ember`}
+    style={{ aspectRatio: wide ? '16/9' : '4/5' }}
     onMouseEnter={onHover}
     onMouseLeave={onLeave}
-    whileHover={{ scale: 1.04, y: -8 }}
+    onFocus={onHover}
+    onBlur={onLeave}
+    whileHover={{ scale: wide ? 1.02 : 1.04, y: wide ? -4 : -8 }}
     transition={{ type: 'spring', stiffness: 300, damping: 25 }}
   >
     {/* Image */}
-    <img src={post.image} alt={post.title} className="absolute inset-0 w-full h-full object-cover transition-all duration-700 group-hover:scale-110" loading="lazy" />
+    {wide ? (
+      <SafeImage src={post.image} fallback="/assets/thought-leadership-1.png" alt={post.title} fill sizes="480px" className="object-cover transition-transform duration-700 group-hover:scale-[1.04]" />
+    ) : (
+      <img src={post.image} alt={post.title} className="absolute inset-0 w-full h-full object-cover transition-all duration-700 group-hover:scale-110" loading="lazy" />
+    )}
     
     {/* Blur overlay on hover */}
-    <motion.div
+    {!wide && <motion.div
       className="absolute inset-0 transition-all duration-500"
       initial={false}
       animate={{
         backdropFilter: isHovered ? 'blur(4px)' : 'blur(0px)',
       }}
-    />
+    />}
 
     {/* Gradient overlay */}
     <div className="absolute inset-0 transition-opacity duration-500"
       style={{
         background: 'linear-gradient(180deg, transparent 10%, rgba(0,0,0,0.2) 40%, rgba(0,0,0,0.9) 100%)',
-        opacity: isHovered ? 1 : 0.5,
+        opacity: wide ? (isHovered ? 0.25 : 0) : isHovered ? 1 : 0.5,
       }}
     />
 
@@ -726,7 +771,7 @@ const PostTile = memo(({ post, index, accent, isHovered, onHover, onLeave }: {
     />
 
     {/* View Post indicator — appears on hover */}
-    <AnimatePresence>
+    {!wide && <AnimatePresence>
       {isHovered && (
         <motion.div
           className="absolute inset-0 flex items-center justify-center z-20"
@@ -751,10 +796,10 @@ const PostTile = memo(({ post, index, accent, isHovered, onHover, onLeave }: {
           </motion.div>
         </motion.div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>}
 
     {/* Content at bottom */}
-    <div className="absolute bottom-0 left-0 right-0 p-4 z-10">
+    {!wide && <div className="absolute bottom-0 left-0 right-0 p-4 z-10">
       <motion.p
         className="font-body font-semibold text-sm text-white leading-tight mb-1"
         initial={false}
@@ -771,15 +816,15 @@ const PostTile = memo(({ post, index, accent, isHovered, onHover, onLeave }: {
       >
         {post.desc}
       </motion.p>
-    </div>
-  </motion.a>
-));
+    </div>}
+  </Tag>
+  );
+});
 PostTile.displayName = 'PostTile';
 
 // ============================================
 // VENTURE ECOSYSTEM — "The System"
 // ============================================
-const azCaptions = ['Signal', 'Spark', 'Vision', 'Prompt', 'Orbit', 'Hand-off', 'Flow', 'Selection', 'Dissolve', 'Constellation'];
 
 const VentureEcosystem = memo(({ isDark }: { isDark: boolean }) => {
   const sectionRef = useRef<HTMLElement>(null);
@@ -807,9 +852,9 @@ const VentureEcosystem = memo(({ isDark }: { isDark: boolean }) => {
       description: 'An AI-native creative ecosystem where builders, designers, and strategists experiment at the bleeding edge of generative media, prompt engineering, and applied AI workflows.',
       accent: 'rgba(168,85,247,0.4)',
       monogram: 'AZ',
-      speed: 'medium' as const,
+      speed: 'slow' as const,
       direction: 'right' as const,
-      posts: null,
+      posts: azPosts,
       postPrefix: 'az',
     },
     {
@@ -826,56 +871,19 @@ const VentureEcosystem = memo(({ isDark }: { isDark: boolean }) => {
     },
   ];
 
-  const createVentureTiles = (venture: typeof ventureData[0], idx: number) => {
-    if (venture.posts) {
-      return venture.posts.map((post, i) => (
-        <PostTile
-          key={i}
-          post={post}
-          index={i}
-          accent={venture.accent}
-          isHovered={hoveredPost === `${venture.postPrefix}-${i}`}
-          onHover={() => setHoveredPost(`${venture.postPrefix}-${i}`)}
-          onLeave={() => setHoveredPost(null)}
-        />
-      ));
-    }
-
-    // Ashzz.ai — glass emoticons (1–6) + generative art (7–10)
-    return azCaptions.map((caption, i) => (
-      <motion.div
-        key={caption}
-        className="flex-shrink-0 w-48 sm:w-56 rounded-2xl overflow-hidden relative group"
-        style={{
-          aspectRatio: '4/3',
-          background: t(isDark,
-            'linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%)',
-            'linear-gradient(135deg, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0.01) 100%)'
-          ),
-          backdropFilter: 'blur(16px) saturate(150%)',
-          border: `1px solid ${t(isDark, 'rgba(255,255,255,0.06)', 'rgba(0,0,0,0.05)')}`,
-        }}
-        whileHover={{
-          y: -4,
-          borderColor: venture.accent,
-          boxShadow: `0 8px 40px ${venture.accent.replace('0.4', '0.12')}`,
-        }}
-        transition={{ duration: 0.4, ease: EASE }}
-      >
-        <Image
-          src={`/media/aashrith/az-${i + 1}.webp`}
-          alt={`Ashzz.ai — ${caption}`}
-          fill
-          sizes="224px"
-          className={`transition-transform duration-700 ease-out group-hover:scale-[1.04] ${i < 6 ? 'object-contain p-6' : 'object-cover'}`}
-        />
-        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
-        <span className="absolute left-3 bottom-2.5 font-mono text-[10px] uppercase tracking-[0.22em] text-white/80">
-          {String(i + 1).padStart(2, '0')} · {caption}
-        </span>
-      </motion.div>
+  const createVentureTiles = (venture: typeof ventureData[0]) =>
+    venture.posts.map((post, i) => (
+      <PostTile
+        key={i}
+        post={post}
+        index={i}
+        wide={venture.postPrefix === 'az'}
+        accent={venture.accent}
+        isHovered={hoveredPost === `${venture.postPrefix}-${i}`}
+        onHover={() => setHoveredPost(`${venture.postPrefix}-${i}`)}
+        onLeave={() => setHoveredPost(null)}
+      />
     ));
-  };
 
   return (
     <section ref={sectionRef} id="ventures" className={`relative overflow-hidden ${t(isDark, 'bg-alchemy-black', 'bg-[#fafaf9]')}`}>
@@ -985,8 +993,8 @@ const VentureEcosystem = memo(({ isDark }: { isDark: boolean }) => {
               </div>
 
               {/* Marquee */}
-              <MarqueeRow speed={venture.speed} direction={venture.direction} gap={16} pauseOnHover={true}>
-                {createVentureTiles(venture, idx)}
+              <MarqueeRow speed={venture.speed} duration={venture.postPrefix === 'az' ? 130 : undefined} direction={venture.direction} gap={16} pauseOnHover={true}>
+                {createVentureTiles(venture)}
               </MarqueeRow>
             </motion.div>
           ))}
@@ -1024,6 +1032,7 @@ const ImmersiveProject = memo(({ project, index, isDark, isMobile, onDiscover }:
         }}
         loading={index === 0 ? 'eager' : 'lazy'}
         decoding="async"
+        onError={(e) => { const el = e.currentTarget; if (!el.dataset.fb) { el.dataset.fb = '1'; el.src = aetherBento; } }}
       />
 
       {/* Vignettes */}
@@ -1054,18 +1063,18 @@ const ImmersiveProject = memo(({ project, index, isDark, isMobile, onDiscover }:
             <span className="font-mono text-[9px] px-2.5 py-1 rounded-full text-white/35 uppercase tracking-wider"
               style={{ border: '1px solid rgba(255,255,255,0.12)' }}
             >
-              Conceptual Exploration
+              {project.concept ? 'Concept' : 'Client work'}
             </span>
           </motion.div>
 
           <motion.h3
-            className="font-display text-3xl sm:text-5xl lg:text-7xl text-white mb-4 leading-[0.95]"
+            className="font-body font-bold text-4xl sm:text-5xl lg:text-7xl text-white mb-4 leading-[0.95] tracking-[-0.03em] [text-wrap:balance]"
             initial={{ opacity: 0, filter: 'blur(8px)' }}
             whileInView={{ opacity: 1, filter: 'blur(0px)' }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1, ease: EASE }}
           >
-            {project.title}
+            <button type="button" onClick={onDiscover} className="text-left [text-wrap:balance] hover:text-white/85 transition-colors">{project.title}</button>
           </motion.h3>
 
           <motion.p
@@ -1099,7 +1108,9 @@ const ImmersiveProject = memo(({ project, index, isDark, isMobile, onDiscover }:
           <div className="flex items-center gap-4 mt-5">
             <motion.button
               onClick={onDiscover}
-              className="group flex items-center gap-2 px-5 py-2.5 rounded-full font-mono text-[11px] sm:text-xs tracking-wider text-white/70 transition-all duration-300"
+              aria-haspopup="dialog"
+              aria-label={`Open case study: ${project.title}`}
+              className="group flex min-h-11 items-center gap-2 px-6 rounded-full font-mono text-[11px] sm:text-xs uppercase tracking-[0.18em] text-white/85 transition-all duration-300"
               style={{
                 background: 'rgba(255,255,255,0.08)',
                 backdropFilter: 'blur(20px)',
@@ -1112,7 +1123,7 @@ const ImmersiveProject = memo(({ project, index, isDark, isMobile, onDiscover }:
               }}
               whileTap={{ scale: 0.97 }}
             >
-              Discover More
+              View case study
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
             </motion.button>
             <span className="font-mono text-[10px] text-white/20 tracking-wider">{project.year}</span>
@@ -1154,7 +1165,7 @@ const CreativeProjectsSection = memo(({ isDark, onDiscover }: { isDark: boolean;
               <span className="italic hero-fluid-text bg-clip-text text-transparent">fingerprints.</span>
             </h2>
             <p className={`font-body text-sm sm:text-base max-w-xl mx-auto ${t(isDark, 'text-porcelain/45', 'text-neutral-500')}`}>
-              Four AI-native brand explorations. Each built on strategic architecture, not surface aesthetics.
+              Concept houses and client work. Each built on strategic architecture, not surface aesthetics.
             </p>
           </motion.div>
         </div>
@@ -1180,12 +1191,49 @@ CreativeProjectsSection.displayName = 'CreativeProjectsSection';
 // ============================================
 // CAREER TIMELINE — "The Arc of Intent"
 // ============================================
-const arcRoles = [
-  { org: 'Studio186', parent: 'Bennett, Coleman & Co. (The Times of India Group), Mumbai', role: 'Social & Growth Lead, four premium brand verticals', dates: 'Jul 2026 — Present', proof: "Rebuilt Deorhi's editorial model around restraint-coded luxury; monthly reach 8K → 700K in six weeks." },
-  { org: 'Alchemy Labs', parent: '', role: 'Founder & Brand Strategist', dates: 'Jul 2025 — Present', proof: 'Brand strategy & identity, generative-AI production and custom web for fashion, skincare and niche luxury.' },
-  { org: 'Cipla Ltd.', parent: 'Delhi NCR', role: 'Marketing Strategy Intern', dates: 'May — Jul 2023', proof: 'Campaigns across 6+ markets reaching 12.8M consumers.' },
-  { org: 'Velocity Gaming', parent: '', role: 'Branding & Social Media Manager', dates: 'Mar — May 2022', proof: 'Instagram 5K → 40K in 10 weeks; Corsair and Red Bull sponsorships.' },
-  { org: 'S8UL Esports', parent: '', role: 'Content Strategy & Growth Manager', dates: 'Apr 2020 — May 2021', proof: 'Creative pipeline for a 13M+ combined creator audience.' },
+type ArcRoleData = { org: string; parent: string; role: string; dates: string; lines: string[]; chips?: string[]; image?: string; imageAlt?: string };
+const arcRoles: ArcRoleData[] = [
+  {
+    org: 'Studio186', parent: 'The Times of India Group (Bennett, Coleman & Co.), Mumbai', role: 'Social & Growth Lead', dates: 'Jul 2026 — Present',
+    lines: [
+      'Sole lead for brand, content and paid growth across four premium verticals: HumanEdge (preventive health) and its consumer sub-brand, Taqsha (Indian craft) and Deorhi (heritage luxury travel). Led the sub-brand launch end to end.',
+      'Built the AI-native production pipeline and the brand, design and tone guidelines for all four.',
+      "Rebuilt Deorhi's editorial model around restraint-coded luxury: monthly reach 8K → 700K in six weeks.",
+    ],
+    chips: ['HumanEdge', 'Taqsha', 'Deorhi'],
+    image: '/media/aashrith/studio186.webp',
+    imageAlt: 'Deorhi · heritage haveli courtyard',
+  },
+  {
+    org: 'Alchemy Labs', parent: 'Founder-led practice', role: 'Founder & Brand Strategist', dates: 'Jul 2025 — Present',
+    lines: [
+      'An independent practice for fashion, skincare and niche luxury.',
+      'Brand strategy and identity, generative-AI production and custom web — delivered as one system.',
+    ],
+    chips: ['Fashion', 'Skincare', 'Niche luxury'],
+  },
+  {
+    org: 'Cipla Ltd.', parent: 'Delhi NCR', role: 'Marketing Strategy Intern', dates: 'May — Jul 2023',
+    lines: [
+      'Marketing strategy across 6+ markets.',
+      'Campaigns reaching 12.8M consumers.',
+    ],
+  },
+  {
+    org: 'Velocity Gaming', parent: '', role: 'Branding & Social Media Manager', dates: 'Mar — May 2022',
+    lines: [
+      'Owned branding and social media.',
+      'Instagram grew 5K → 40K in 10 weeks, alongside Corsair and Red Bull sponsorships.',
+    ],
+    chips: ['Corsair', 'Red Bull'],
+  },
+  {
+    org: 'S8UL Esports', parent: '', role: 'Content Strategy & Growth Manager', dates: 'Apr 2020 — May 2021',
+    lines: [
+      'Content strategy and growth.',
+      'Built the creative pipeline behind a 13M+ combined creator audience.',
+    ],
+  },
 ];
 
 const arcCoda = [
@@ -1194,7 +1242,7 @@ const arcCoda = [
   { label: 'Credentials', items: ['Wharton Business Foundations · LVMH Insider · Google AI Leader'] },
 ];
 
-const ArcRole = memo(({ role, active, isDark, reduced }: { role: typeof arcRoles[0]; active: boolean; isDark: boolean; reduced: boolean }) => {
+const ArcRole = memo(({ role, active, isDark, reduced }: { role: ArcRoleData; active: boolean; isDark: boolean; reduced: boolean }) => {
   const on = active || reduced;
   const ink = t(isDark, '#f5f5f4', '#171717');
   const dim = t(isDark, 'rgba(245,245,244,0.35)', 'rgba(23,23,23,0.35)');
@@ -1202,13 +1250,14 @@ const ArcRole = memo(({ role, active, isDark, reduced }: { role: typeof arcRoles
     <motion.article
       className="relative pl-10 sm:pl-16 lg:pl-0 lg:grid lg:grid-cols-[180px_1fr] lg:gap-16"
       initial={false}
-      animate={{ opacity: on ? 1 : 0.3, filter: on ? 'blur(0px)' : 'blur(2px)' }}
+      animate={{ opacity: on ? 1 : 0.35 }}
       transition={{ duration: reduced ? 0 : 0.6, ease: EASE }}
     >
       <span className={`block font-mono text-[10px] sm:text-[11px] uppercase tracking-[0.22em] mb-3 lg:mb-0 lg:pt-3 lg:text-right ${t(isDark, 'text-porcelain/45', 'text-neutral-500')}`}>{role.dates}</span>
-      <div className="lg:pl-16">
+      <div className="lg:pl-16 min-w-0">
+        <p className="font-mono text-[11px] sm:text-xs uppercase tracking-[0.16em] text-ember mb-3">{role.role}</p>
         <h3
-          className="font-body font-bold text-2xl sm:text-3xl lg:text-[2.5rem] leading-[1.08] tracking-[-0.02em] [text-wrap:balance]"
+          className="font-body font-bold text-3xl sm:text-4xl lg:text-5xl leading-[1.02] tracking-[-0.03em] [text-wrap:balance]"
           style={{
             backgroundImage: `linear-gradient(90deg, ${ink} 0%, ${ink} 45%, #FF4D1C 50%, ${dim} 55%, ${dim} 100%)`,
             backgroundSize: '220% 100%',
@@ -1221,9 +1270,37 @@ const ArcRole = memo(({ role, active, isDark, reduced }: { role: typeof arcRoles
         >
           {role.org}
         </h3>
-        {role.parent && <p className={`font-body text-xs sm:text-sm mt-1.5 ${t(isDark, 'text-porcelain/40', 'text-neutral-500')}`}>{role.parent}</p>}
-        <p className="font-mono text-[11px] sm:text-xs uppercase tracking-[0.16em] text-ember mt-3">{role.role}</p>
-        <p className={`font-body text-sm sm:text-base leading-relaxed max-w-[52ch] mt-4 [text-wrap:pretty] ${t(isDark, 'text-porcelain/65', 'text-neutral-600')}`}>{role.proof}</p>
+        {role.parent && <p className={`font-body text-sm mt-2 [text-wrap:pretty] ${t(isDark, 'text-porcelain/50', 'text-neutral-500')}`}>{role.parent}</p>}
+
+        <ol className="mt-6 space-y-3 max-w-[58ch]">
+          {role.lines.map((line, j) => (
+            <li key={line} className={`grid grid-cols-[28px_1fr] gap-2 font-body text-[15px] sm:text-base leading-relaxed [text-wrap:pretty] ${j === role.lines.length - 1 && role.lines.length > 1 ? t(isDark, 'text-porcelain', 'text-neutral-900') : t(isDark, 'text-porcelain/65', 'text-neutral-600')}`}>
+              <span className="font-mono text-[10px] pt-[0.4em] text-ember/70" aria-hidden>{String(j + 1).padStart(2, '0')}</span>
+              <span>{line}</span>
+            </li>
+          ))}
+        </ol>
+
+        {role.chips && (
+          <ul className="mt-6 flex flex-wrap gap-2" aria-label="Brands">
+            {role.chips.map((c) => (
+              <li key={c} className={`font-mono text-[10px] uppercase tracking-[0.16em] rounded-full border px-3 py-1.5 ${t(isDark, 'border-porcelain/15 text-porcelain/70', 'border-neutral-300 text-neutral-600')}`}>{c}</li>
+            ))}
+          </ul>
+        )}
+
+        {role.image && (
+          <motion.figure
+            className="relative mt-8 aspect-[16/9] w-full max-w-2xl overflow-hidden rounded-[20px]"
+            initial={false}
+            animate={{ opacity: on ? 1 : 0.25, scale: on ? 1 : 0.97 }}
+            transition={{ duration: reduced ? 0 : 0.9, ease: EASE }}
+          >
+            <SafeImage src={role.image} fallback="/media/aether-rituals-2.png" alt={role.imageAlt ?? role.org} fill sizes="(min-width: 1024px) 672px, 90vw" className="object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+            <figcaption className="absolute left-4 bottom-3 font-mono text-[10px] uppercase tracking-[0.22em] text-white/80">{role.imageAlt ?? role.org}</figcaption>
+          </motion.figure>
+        )}
       </div>
     </motion.article>
   );
@@ -1340,51 +1417,84 @@ const creativePursuits = [
   { icon: Users, title: 'Community', desc: '3.8K+ builders' },
 ];
 
-const WordRevealQuote = memo(({ isDark }: { isDark: boolean }) => {
-  const fullSentence = "The best brands aren't designed — they're engineered to feel inevitable.".split(' ');
-  const highlightSet = new Set(['engineered', 'inevitable.']);
+// ============================================
+// STATEMENT — scroll-linked editorial line + principles
+// ============================================
+const statementWords = "The best brands aren't designed. They're engineered to feel inevitable.".split(' ');
+const EMPHASIS = 'inevitable.';
+const principles = [
+  { k: '01', title: 'Architecture before aesthetics', body: 'Positioning, narrative and system are decided before a single frame is made.' },
+  { k: '02', title: 'One pipeline, every output', body: 'Identity, content and campaign film come from the same AI-native system, so the brand never drifts.' },
+  { k: '03', title: 'Restraint is the signal', body: 'Luxury reads in what is left out. Fewer, better frames compound.' },
+];
+
+const StatementWord = ({ word, i, n, progress, isDark }: { word: string; i: number; n: number; progress: MotionValue<number>; isDark: boolean }) => {
+  const start = i / n;
+  const opacity = useTransform(progress, [start, start + 1.5 / n], [0.16, 1]);
+  const em = word === EMPHASIS;
+  return (
+    <>
+      <motion.span
+        style={{ opacity }}
+        className={em
+          ? 'font-playfair italic font-normal text-ember tracking-[-0.01em]'
+          : t(isDark, 'text-porcelain', 'text-neutral-900')}
+      >
+        {em ? 'inevitable' : word}
+      </motion.span>
+      {em ? <motion.span style={{ opacity }} className={t(isDark, 'text-porcelain', 'text-neutral-900')}>.</motion.span> : null}
+      {i < n - 1 ? ' ' : ''}
+    </>
+  );
+};
+
+const StatementSection = memo(({ isDark }: { isDark: boolean }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const reduced = useReducedMotion();
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start 85%', 'end 45%'] });
+  const full = useMotionValue(1);
+  const progress = reduced ? full : scrollYProgress;
 
   return (
-    <motion.blockquote
-      className={`font-display text-xl sm:text-2xl lg:text-3xl italic leading-snug ${t(isDark, 'text-porcelain/80', 'text-neutral-800')}`}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: '-100px' }}
-    >
-      <span>"</span>
-      {fullSentence.map((word, i) => {
-        const isHighlight = highlightSet.has(word);
-        return (
-          <motion.span
-            key={i}
-            className={isHighlight ? 'text-ember' : ''}
-            style={isHighlight ? { textShadow: '0 0 20px rgba(255,77,28,0.4)' } : {}}
-            variants={{
-              hidden: { opacity: 0, y: 8 },
-              visible: { opacity: 1, y: 0 },
-            }}
-            transition={{ duration: 0.3, delay: i * 0.03, ease: EASE }}
+    <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 sm:pt-44 pb-20 sm:pb-28 text-left">
+      <p className="font-mono text-[10px] sm:text-xs uppercase tracking-[0.4em] text-ember mb-8 sm:mb-12">The thesis</p>
+      <div ref={ref}>
+        <h2 className="font-body font-bold text-[2.25rem] leading-[1.06] sm:text-6xl lg:text-[5.25rem] sm:leading-[1.02] tracking-[-0.035em] max-w-[18ch] [text-wrap:balance] [hyphens:none]">
+          {statementWords.map((w, i) => (
+            <StatementWord key={i} word={w} i={i} n={statementWords.length} progress={progress} isDark={isDark} />
+          ))}
+        </h2>
+      </div>
+      <p className={`font-mono text-xs tracking-wider mt-8 ${t(isDark, 'text-porcelain/45', 'text-neutral-500')}`}>— Aashrith Gade</p>
+
+      <div className={`mt-20 sm:mt-28 grid gap-10 sm:gap-8 sm:grid-cols-3 border-t pt-10 ${t(isDark, 'border-porcelain/10', 'border-neutral-200')}`}>
+        {principles.map((p, i) => (
+          <motion.div
+            key={p.k}
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.7, delay: i * 0.08, ease: EASE }}
           >
-            {word}{' '}
-          </motion.span>
-        );
-      })}
-      <span>"</span>
-    </motion.blockquote>
+            <span className="font-mono text-[10px] tracking-[0.3em] text-ember">{p.k}</span>
+            <h3 className={`mt-4 font-body font-bold text-xl sm:text-2xl leading-tight tracking-[-0.02em] [text-wrap:balance] ${t(isDark, 'text-porcelain', 'text-neutral-900')}`}>{p.title}</h3>
+            <p className={`mt-3 font-body text-sm sm:text-base leading-relaxed max-w-[34ch] [text-wrap:pretty] ${t(isDark, 'text-porcelain/60', 'text-neutral-600')}`}>{p.body}</p>
+          </motion.div>
+        ))}
+      </div>
+    </div>
   );
 });
-WordRevealQuote.displayName = 'WordRevealQuote';
+StatementSection.displayName = 'StatementSection';
 
 const PhilosophyCTA = memo(({ isDark }: { isDark: boolean }) => (
   <section id="connect" className={`relative overflow-hidden ${t(isDark, 'bg-alchemy-black', 'bg-[#fafaf9]')} text-center`}>
     <SequentianBackground variant={4} opacity={isDark ? 0.22 : 0.12} glow={false} />
 
-    <div className="relative z-10 max-w-3xl mx-auto py-24 sm:py-40 px-4 sm:px-6">
-      <WordRevealQuote isDark={isDark} />
+    <StatementSection isDark={isDark} />
+    <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8"><StreakSeam isDark={isDark} /></div>
 
-      <motion.p className={`font-mono text-xs tracking-wider mt-8 ${t(isDark, 'text-porcelain/30', 'text-neutral-400')}`} initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: 0.3 }}>
-        — Aashrith Gade
-      </motion.p>
+    <div className="relative z-10 max-w-3xl mx-auto pt-20 sm:pt-28 pb-24 sm:pb-40 px-4 sm:px-6">
 
       <motion.div
         className="flex flex-wrap justify-center gap-3 mt-14 mb-14"
@@ -1533,9 +1643,15 @@ const AashrithPortfolio = () => {
     });
   };
 
+  const order = creativeProjects.map((p) => p.id);
+  const idx = activeCaseStudy ? order.indexOf(activeCaseStudy) : -1;
+  const prevId = idx > 0 ? order[idx - 1] : null;
+  const nextId = idx >= 0 && idx < order.length - 1 ? order[idx + 1] : null;
+  const closeCase = useCallback((isOpen: boolean) => { if (!isOpen) setActiveCaseStudy(null); }, []);
+
   return (
     <MotionConfig reducedMotion="user">
-    <div className={`min-h-screen ${isDark ? 'bg-alchemy-black text-porcelain' : 'bg-[#fafaf9] text-neutral-900'} transition-colors duration-500`}>
+    <div className={`min-h-screen overflow-x-clip ${isDark ? 'bg-alchemy-black text-porcelain' : 'bg-[#fafaf9] text-neutral-900'} transition-colors duration-500`}>
       <SEOHead title="Aashrith Gade — Founder, Brand Architect" description="Portfolio of Aashrith Gade: founder of Brand Alchemy, Ashzz.ai & Alchemy Labs. AI-native brand architecture with luxury-grade taste." />
       <BackgroundScene mode="hero" />
       <ScrollProgressBar />
@@ -1544,8 +1660,10 @@ const AashrithPortfolio = () => {
 
       <HeroSection isDark={isDark} />
       <VentureEcosystem isDark={isDark} />
+      <StreakSeam isDark={isDark} />
       <CreativeProjectsSection isDark={isDark} onDiscover={setActiveCaseStudy} />
       <CareerTimeline isDark={isDark} />
+      <StreakSeam isDark={isDark} />
       <PhilosophyCTA isDark={isDark} />
 
       <PortfolioFooter
@@ -1553,7 +1671,11 @@ const AashrithPortfolio = () => {
         founderName="Aashrith Gade"
         monogram="AG"
         copyright="Designed and built by Aashrith Gade"
-        signoff="Always building. Always iterating."
+        headline={<>Always building. Always <span className="font-playfair italic font-normal text-ember">iterating</span>.</>}
+        bgImage="/media/aashrith/footer-bg.webp"
+        bgFallback="/assets/footer-bg.png"
+        featherFrom={isDark ? '#0A0908' : '#fafaf9'}
+        streaks
         portfolioLinks={portfolioFooterLinks}
         ventureLinks={ventureFooterLinks}
         connectLinks={connectFooterLinks}
@@ -1561,8 +1683,12 @@ const AashrithPortfolio = () => {
 
       <CaseStudyOverlay
         open={!!activeCaseStudy}
-        onOpenChange={(isOpen) => { if (!isOpen) setActiveCaseStudy(null); }}
+        onOpenChange={closeCase}
         caseStudy={activeCaseStudy ? caseStudyData[activeCaseStudy] || null : null}
+        onPrev={prevId ? () => setActiveCaseStudy(prevId) : undefined}
+        onNext={nextId ? () => setActiveCaseStudy(nextId) : undefined}
+        prevTitle={prevId ? caseStudyData[prevId]?.title : undefined}
+        nextTitle={nextId ? caseStudyData[nextId]?.title : undefined}
       />
     </div>
     </MotionConfig>

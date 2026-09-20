@@ -29,15 +29,15 @@ const pillars = [
     line: 'Campaign film and imagery from an AI pipeline, directed by hand.',
     media: {
       type: 'video' as const,
-      src: '/media/aether-rituals-preview.mp4',
-      poster: '/media/aether-rituals-preview-poster.jpg',
+      src: '/media/svc/pillar-ai.mp4',
+      poster: '/media/svc/pillar-ai.webp',
     },
   },
   {
     index: '02',
     tag: 'BRAND SYSTEMS',
     line: 'Identity built to survive contact with the market.',
-    media: { type: 'image' as const, src: '/media/genesis-bento.png' },
+    media: { type: 'video' as const, src: '/media/svc/pillar-brand.mp4', poster: '/media/svc/pillar-brand.webp' },
   },
   {
     index: '03',
@@ -45,8 +45,8 @@ const pillars = [
     line: 'Straight answers on where your brand goes next.',
     media: {
       type: 'video' as const,
-      src: '/media/red-cloak-water.mp4',
-      poster: '/media/red-cloak-water-poster.jpg',
+      src: '/media/svc/pillar-advisory.mp4',
+      poster: '/media/svc/pillar-advisory.webp',
     },
   },
 ];
@@ -77,7 +77,7 @@ function PillarCard({ pillar, i }: { pillar: (typeof pillars)[number]; i: number
             <AmbientVideo
               src={pillar.media.src}
               poster={pillar.media.poster}
-              className="absolute inset-0 h-full w-full object-cover opacity-25"
+              className="absolute inset-0 h-full w-full object-cover opacity-60"
             />
           ) : (
             <Image
@@ -89,18 +89,18 @@ function PillarCard({ pillar, i }: { pillar: (typeof pillars)[number]; i: number
               className="absolute inset-0 object-cover opacity-25"
             />
           )}
-          <div className="relative flex h-full flex-col justify-between p-7 md:p-9">
+          {/* legibility scrim: copy always sits on a dark floor, never on bright media */}
+          <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-void via-void/55 to-void/10" />
+          <div className="relative flex h-full min-h-[13.5rem] flex-col justify-between p-7 md:p-9">
             <span
               aria-hidden
-              className={`font-sans font-black leading-none tracking-tight text-bone/15 transition-colors duration-500 group-hover:text-ember/30 ${
-                i === 0 ? 'text-8xl md:text-9xl' : 'text-6xl md:text-7xl'
-              }`}
+              className="font-mono text-[11px] tracking-[0.3em] text-bone/60 transition-colors duration-500 group-hover:text-ember"
             >
               {pillar.index}
             </span>
             <div className="mt-8 max-w-xl">
               <h3 className="font-mono text-xs tracking-[0.25em] text-bone">{pillar.tag}</h3>
-              <p className="mt-3 text-base leading-relaxed text-ash md:text-lg">{pillar.line}</p>
+              <p className="mt-3 text-base leading-relaxed text-bone/80 [text-wrap:pretty] md:text-lg">{pillar.line}</p>
             </div>
           </div>
         </GlassPanel>

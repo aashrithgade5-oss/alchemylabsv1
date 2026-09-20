@@ -49,7 +49,7 @@ export function BottomCTA() {
 
       <div className="relative mx-auto flex max-w-3xl flex-col items-center px-6 py-24 text-center md:py-32">
         <p className="font-mono text-[10px] tracking-[0.3em] text-ash">BEGIN</p>
-        <h2 className="mt-6 font-headline text-[clamp(2rem,4vw,3.25rem)] font-black leading-[1.05] tracking-[-0.03em] text-bone">
+        <h2 className="mt-6 font-headline text-[clamp(2rem,4.4vw,3.5rem)] font-bold leading-[1.1] tracking-[-0.035em] [text-wrap:balance] text-bone">
           Bring the brand. We will build what it needs.
         </h2>
         <div className="mt-10">

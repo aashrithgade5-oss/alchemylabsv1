@@ -5,6 +5,8 @@ export const metadata: Metadata = {
   title: { absolute: 'Eva Doshi · Brand & Marketing Strategist' },
   description:
     'Eva Doshi — Mumbai-based marketing and luxury brand strategist. Co-founder of Brand Alchemy, formerly content at Dentsu Creative across 12+ brands.',
+  // duplicate of /eva — point crawlers at the canonical route
+  alternates: { canonical: '/eva' },
 };
 
 export default EvaPortfolio;

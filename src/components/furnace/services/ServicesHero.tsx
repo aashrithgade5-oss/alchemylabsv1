@@ -2,86 +2,82 @@
 
 import { useRef } from 'react';
 import Image from 'next/image';
-import { m, useScroll, useTransform } from 'framer-motion';
-import { KineticHeadline } from '../KineticHeadline';
+import { m, useReducedMotion, useScroll, useTransform } from 'framer-motion';
+import { MagneticCTA } from '../MagneticCTA';
+import { InViewVideo } from './SvcMedia';
 
-// Phase 3 (Landing_Page_Patches.pdf): real precedent for the full-bleed
-// "animated" services hero is commit 24ed763 (pre-Next.js SolutionsHub.tsx)
-// — copy verbatim match ("Three Pillars." / "Every brand challenge demands
-// a different instrument..."). Correction to the brief: that background was
-// never a video file, it's this static texture with scroll-driven parallax
-// (scale + y), which is what reads as "animated". Asset was already sitting
-// unused at this exact path — no new asset needed.
+const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
+const fade = (delay: number) => ({
+  initial: { opacity: 0, y: 16 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.9, delay, ease },
+});
+
+/**
+ * Full-bleed hero: crimson light-bar loop over its poster (poster always
+ * renders, so a missing mp4 degrades cleanly), darkened for legibility,
+ * gentle transform-only parallax. Reduced motion: poster only, no parallax.
+ */
 export function ServicesHero() {
   const sectionRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start start', 'end end'] });
-  const bgScale = useTransform(scrollYProgress, [0, 1], [1, 1.1]);
-  const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '8%']);
+  const reduced = useReducedMotion();
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start start', 'end start'] });
+  const bgY = useTransform(scrollYProgress, [0, 1], ['0%', reduced ? '0%' : '12%']);
 
   return (
-    <section ref={sectionRef} className="relative overflow-hidden bg-void">
+    <section ref={sectionRef} className="relative flex min-h-[88svh] items-end overflow-hidden bg-void">
       <div aria-hidden className="absolute inset-0">
-        <m.div className="absolute inset-0" style={{ scale: bgScale, y: bgY }}>
-          {/* C-P20 imagery pass: precision-engineering read replaces the old
-              texture (none of the prior services imagery was approved) */}
+        <m.div className="absolute inset-0 will-change-transform" style={{ y: bgY, scale: 1.08 }}>
           <Image
-            src="/media/space-shuttle.png"
+            src="/media/svc/services-hero.webp"
             alt=""
             fill
             priority
-            quality={90}
             sizes="100vw"
-            className="object-cover object-center opacity-[0.28]"
+            className="object-cover object-center"
           />
+          <InViewVideo src="/media/svc/services-hero.mp4" className="absolute inset-0 h-full w-full object-cover" />
         </m.div>
         <div
           className="absolute inset-0"
           style={{
             background:
-              'linear-gradient(to bottom, rgba(10,9,8,0.35) 0%, rgba(10,9,8,0.55) 55%, rgba(10,9,8,1) 100%)',
+              'linear-gradient(to bottom, rgba(10,9,8,0.55) 0%, rgba(10,9,8,0.45) 35%, rgba(10,9,8,0.8) 75%, rgba(10,9,8,1) 100%)',
           }}
         />
-        {/* C-P24: the Japanese red, present from the first frame */}
         <div
-          aria-hidden
           className="absolute inset-0"
-          style={{
-            background:
-              'radial-gradient(60% 55% at 82% 18%, rgba(255,77,28,0.17) 0%, rgba(178,34,20,0.07) 45%, transparent 72%)',
-          }}
+          style={{ background: 'radial-gradient(70% 60% at 20% 70%, rgba(10,9,8,0.55) 0%, transparent 70%)' }}
         />
       </div>
-      {/* pb reduced from pb-20/28: the first PillarSection's own pt-24/32
-          stacked on top of that measured a 240px dead gap before its
-          content (FO4 W3.6 spacing audit) */}
-      <div className="relative mx-auto max-w-6xl px-6 pb-6 pt-40 md:px-12 md:pb-8 md:pt-48 lg:px-16">
-        <p className="font-mono text-[10px] tracking-[0.3em] text-bone/70 md:text-[11px]">
-          SERVICES · SCOPED PER PROJECT
-        </p>
-        <KineticHeadline
-          text="Three pillars."
-          className="mt-7 max-w-4xl font-headline text-[clamp(2.75rem,7vw,7rem)] font-bold leading-[1.02] tracking-[-0.04em] text-bone"
-          wordClassName="glass-type"
-          delay={0.15}
-        />
-        <m.p
-          initial={{ opacity: 0, y: 16, filter: 'blur(8px)' }}
-          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-          transition={{ duration: 1, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-6 max-w-2xl text-base leading-relaxed text-bone/75 md:text-lg"
-        >
-          Every brand challenge demands a different instrument. We&rsquo;ve engineered three —
-          each built to compound.
+
+      <div className="relative mx-auto w-full max-w-6xl px-6 pb-16 pt-40 md:px-12 md:pb-24 md:pt-48 lg:px-16">
+        <m.p {...fade(0.05)} className="font-mono text-[10px] tracking-[0.3em] text-bone/70 md:text-[11px]">
+          SERVICES · AI CREATIVE · BRAND SYSTEMS · ADVISORY
         </m.p>
-        <m.p
-          initial={{ opacity: 0, y: 16, filter: 'blur(8px)' }}
-          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-          transition={{ duration: 1, delay: 0.75, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-3 max-w-xl text-sm leading-relaxed text-bone/60 md:text-base"
+        <m.h1
+          {...fade(0.15)}
+          className="mt-7 max-w-4xl font-headline text-[clamp(2.5rem,7vw,6.5rem)] font-bold leading-[1.02] tracking-[-0.04em] text-bone [text-wrap:balance]"
         >
-          Every engagement is scoped per project and held to one standard. Printed prices live on
-          the five fixed offers below.
+          <span className="glass-type">Brand work built to </span>
+          <span className="font-playfair font-normal italic">compound</span>
+          <span className="glass-type">.</span>
+        </m.h1>
+        <m.p
+          {...fade(0.35)}
+          className="mt-6 max-w-2xl text-base leading-relaxed text-bone/80 md:text-lg [text-wrap:pretty]"
+        >
+          Three pillars, one standard: AI creative, brand systems and advisory, scoped per project.
+          Or start today with one of five fixed-price offers.
         </m.p>
+        <m.div {...fade(0.5)} className="mt-10 flex flex-wrap items-center gap-4">
+          <MagneticCTA href="/contact" variant="ember">
+            Book a call
+          </MagneticCTA>
+          <MagneticCTA href="#the-five" variant="ghost">
+            See fixed-price offers
+          </MagneticCTA>
+        </m.div>
       </div>
     </section>
   );

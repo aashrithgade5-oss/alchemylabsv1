@@ -50,7 +50,7 @@ export default function ServiceProductPage() {
   }
 
   return (
-    <main className="relative font-sans">
+    <main className="relative overflow-x-clip font-sans [&_h1]:[text-wrap:balance] [&_h2]:[text-wrap:balance] [&_h3]:[text-wrap:balance] [&_p]:[text-wrap:pretty] [&_li]:[text-wrap:pretty]">
       <HomeAtmosphere />
 
       <section className="relative overflow-hidden px-6 pb-10 pt-32 md:px-12 md:pt-44">
@@ -82,7 +82,7 @@ export default function ServiceProductPage() {
             initial={{ opacity: 0, y: 16, filter: 'blur(8px)' }}
             animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
             transition={{ duration: 1, delay: 0.6, ease }}
-            className="mx-auto mt-7 max-w-xl font-playfair text-xl italic text-bone/75 md:text-2xl"
+            className="mx-auto mt-7 max-w-xl text-xl font-medium text-bone/80 md:text-2xl"
           >
             {product.tagline}
           </m.p>
@@ -123,7 +123,7 @@ export default function ServiceProductPage() {
           transition={{ duration: 1, ease }}
           className="mx-auto max-w-md"
         >
-          <GlassPanel refract className="px-6 py-8 md:px-8 md:py-10">
+          <GlassPanel className="px-6 py-8 md:px-8 md:py-10">
             <CheckoutPanel product={product} />
           </GlassPanel>
         </m.div>

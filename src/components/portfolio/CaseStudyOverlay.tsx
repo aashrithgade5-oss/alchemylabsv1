@@ -1,8 +1,9 @@
 'use client';
 
-import { memo, useEffect, useCallback, useRef } from 'react';
+import { memo, useEffect, useCallback, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { X, ArrowRight, Clock, Wrench } from 'lucide-react';
+import { X, ArrowLeft, ArrowRight } from 'lucide-react';
+import { SafeImage } from './SafeImage';
 
 export interface CaseStudyData {
   id: string;
@@ -11,11 +12,20 @@ export interface CaseStudyData {
   image: string;
   challenge: string;
   approach: string;
+  /** "System built" — what was actually made. */
   process: string[];
-  results: string[];
-  timeline: string;
-  tools: string[];
+  /** Outcome — only facts already stated. Omit to describe the work instead. */
+  results?: string[];
+  outcome?: string;
+  timeline?: string;
+  tools?: string[];
   tags: string[];
+  role?: string;
+  year?: string;
+  concept?: boolean;
+  gallery?: string[];
+  video?: string;
+  poster?: string;
   accent?: string;
 }
 
@@ -23,407 +33,218 @@ interface CaseStudyOverlayProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   caseStudy: CaseStudyData | null;
+  onPrev?: () => void;
+  onNext?: () => void;
+  prevTitle?: string;
+  nextTitle?: string;
 }
 
-const accentMap: Record<string, { primary: string; glow: string; border: string; text: string }> = {
-  'aether-rituals': {
-    primary: '#D4AF37',
-    glow: 'rgba(212,175,55,0.12)',
-    border: 'rgba(212,175,55,0.25)',
-    text: 'rgba(212,175,55,0.85)',
-  },
-  'genesis': {
-    primary: '#B4B4B4',
-    glow: 'rgba(180,180,180,0.08)',
-    border: 'rgba(180,180,180,0.2)',
-    text: 'rgba(180,180,180,0.85)',
-  },
-  'dior-campaign': {
-    primary: '#A855F7',
-    glow: 'rgba(168,85,247,0.1)',
-    border: 'rgba(168,85,247,0.25)',
-    text: 'rgba(168,85,247,0.85)',
-  },
-  'oakley-showcase': {
-    primary: '#F97316',
-    glow: 'rgba(249,115,22,0.1)',
-    border: 'rgba(249,115,22,0.25)',
-    text: 'rgba(249,115,22,0.85)',
-  },
-};
+const FOCUSABLE = 'a[href],button:not([disabled]),video[controls],[tabindex]:not([tabindex="-1"])';
+const label = 'font-mono text-[10px] uppercase tracking-[0.3em]';
 
-const fallbackAccent = {
-  primary: '#FF4D1C',
-  glow: 'rgba(255,77,28,0.1)',
-  border: 'rgba(255,77,28,0.25)',
-  text: 'rgba(255,77,28,0.85)',
-};
-
-export const CaseStudyOverlay = memo(({ open, onOpenChange, caseStudy }: CaseStudyOverlayProps) => {
-  const accent = caseStudy ? (accentMap[caseStudy.id] || fallbackAccent) : fallbackAccent;
-  const contentRef = useRef<HTMLDivElement>(null);
+export const CaseStudyOverlay = memo(({ open, onOpenChange, caseStudy, onPrev, onNext, prevTitle, nextTitle }: CaseStudyOverlayProps) => {
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
+  const returnFocus = useRef<HTMLElement | null>(null);
+  const [mounted, setMounted] = useState(false);
   const close = useCallback(() => onOpenChange(false), [onOpenChange]);
+  const accent = caseStudy?.accent ?? '#FF4D1C';
 
-  // Scroll lock + Lenis
+  useEffect(() => setMounted(true), []);
+
+  // Scroll lock (+ Lenis pause via modal events) and focus restore
   useEffect(() => {
-    if (open) {
-      document.dispatchEvent(new Event('modal-open'));
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.dispatchEvent(new Event('modal-close'));
-      document.body.style.overflow = '';
-    }
+    if (!open) return;
+    returnFocus.current = document.activeElement as HTMLElement | null;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    document.dispatchEvent(new Event('modal-open'));
     return () => {
+      document.body.style.overflow = prev;
       document.dispatchEvent(new Event('modal-close'));
-      document.body.style.overflow = '';
+      returnFocus.current?.focus?.();
     };
   }, [open]);
 
-  // ESC key
+  // New case: back to top, focus the close button
   useEffect(() => {
     if (!open) return;
-    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') close(); };
-    window.addEventListener('keydown', handler);
-    return () => window.removeEventListener('keydown', handler);
-  }, [open, close]);
+    dialogRef.current?.scrollTo({ top: 0 });
+    requestAnimationFrame(() => closeRef.current?.focus());
+  }, [open, caseStudy?.id]);
 
-  // Focus on open
+  // Escape, arrows, focus trap
   useEffect(() => {
-    if (open && contentRef.current) {
-      requestAnimationFrame(() => contentRef.current?.focus());
-    }
-  }, [open]);
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') { e.preventDefault(); close(); return; }
+      if (e.key === 'ArrowRight' && onNext) onNext();
+      if (e.key === 'ArrowLeft' && onPrev) onPrev();
+      if (e.key !== 'Tab' || !dialogRef.current) return;
+      const els = Array.from(dialogRef.current.querySelectorAll<HTMLElement>(FOCUSABLE));
+      if (!els.length) return;
+      const first = els[0], last = els[els.length - 1];
+      if (e.shiftKey && (document.activeElement === first || !dialogRef.current.contains(document.activeElement))) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [open, close, onNext, onPrev]);
 
-  if (!open || !caseStudy) return null;
-
-  const portalTarget = document.getElementById('overlay-root');
-  if (!portalTarget) return null;
+  if (!mounted || !open || !caseStudy) return null;
+  const cs = caseStudy;
+  const gallery = cs.gallery?.length ? cs.gallery : [cs.image];
+  const sections: [string, string | string[]][] = [
+    ['Challenge', cs.challenge],
+    ['Approach', cs.approach],
+    ['System built', cs.process],
+  ];
+  const outcome = cs.results?.length ? cs.results : cs.outcome ? [cs.outcome] : null;
 
   return createPortal(
     <div
-      className="overlay-backdrop"
-      style={{
-        position: 'fixed',
-        inset: 0,
-        zIndex: 9999,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '1rem',
-        background: 'rgba(0,0,0,0.82)',
-        backdropFilter: 'blur(20px)',
-        WebkitBackdropFilter: 'blur(20px)',
-        animation: 'csoFadeIn 0.25s ease-out',
-      }}
-      onClick={(e) => { if (e.target === e.currentTarget) close(); }}
+      ref={dialogRef}
       role="dialog"
       aria-modal="true"
-      aria-label={caseStudy.title}
+      aria-label={`${cs.title} case study`}
+      data-lenis-prevent
+      className="cso fixed inset-0 z-[9999] overflow-y-auto overflow-x-hidden overscroll-contain bg-[#0A0908] text-porcelain"
     >
-      {/* Content card */}
-      <div
-        ref={contentRef}
-        tabIndex={-1}
-        className="outline-none"
-        style={{
-          position: 'relative',
-          width: '100%',
-          maxWidth: '52rem',
-          maxHeight: '88vh',
-          overflowY: 'auto',
-          overflowX: 'hidden',
-          borderRadius: '1.25rem',
-          background: 'linear-gradient(180deg, rgba(18,18,20,0.98) 0%, rgba(8,8,10,0.99) 100%)',
-          border: `1px solid ${accent.border}`,
-          boxShadow: `0 0 60px ${accent.glow}, 0 25px 80px rgba(0,0,0,0.7)`,
-          animation: 'csoSlideUp 0.35s cubic-bezier(0.22, 1, 0.36, 1)',
-        }}
-      >
-        {/* Accent line */}
-        <div style={{
-          height: '2px',
-          borderRadius: '1.25rem 1.25rem 0 0',
-          background: `linear-gradient(90deg, transparent 5%, ${accent.primary} 50%, transparent 95%)`,
-        }} />
-
-        {/* Close button */}
+      {/* Top bar */}
+      <div className="sticky top-0 z-30 flex items-center justify-between gap-4 px-4 sm:px-8 py-3 bg-gradient-to-b from-[#0A0908]/90 to-transparent">
+        <span className={`${label} text-porcelain/55 truncate`}>Case study · {cs.title}</span>
         <button
+          ref={closeRef}
           onClick={close}
-          className="group"
-          style={{
-            position: 'absolute',
-            top: '1.25rem',
-            right: '1.25rem',
-            zIndex: 100,
-            width: '2.5rem',
-            height: '2.5rem',
-            borderRadius: '50%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            background: 'rgba(0,0,0,0.5)',
-            border: '1px solid rgba(255,255,255,0.12)',
-            backdropFilter: 'blur(12px)',
-            cursor: 'pointer',
-            transition: 'all 0.2s ease',
-          }}
-          onMouseEnter={(e) => {
-            const el = e.currentTarget;
-            el.style.background = 'rgba(255,255,255,0.1)';
-            el.style.borderColor = 'rgba(255,255,255,0.25)';
-            el.style.transform = 'scale(1.08)';
-          }}
-          onMouseLeave={(e) => {
-            const el = e.currentTarget;
-            el.style.background = 'rgba(0,0,0,0.5)';
-            el.style.borderColor = 'rgba(255,255,255,0.12)';
-            el.style.transform = 'scale(1)';
-          }}
           aria-label="Close case study"
+          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/15 bg-black/50 text-white/80 transition-colors hover:border-white/40 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+          style={{ outlineColor: accent }}
         >
-          <X className="w-4 h-4 text-white/70" />
+          <X className="h-4 w-4" />
         </button>
-
-        {/* Hero image */}
-        <div style={{ position: 'relative', width: '100%', aspectRatio: '2 / 1', overflow: 'hidden' }}>
-          <img
-            src={caseStudy.image}
-            alt={caseStudy.title}
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              objectPosition: 'center 25%',
-              animation: 'csoKenBurns 10s ease-out forwards',
-            }}
-          />
-          {/* Gradient fade to content */}
-          <div style={{
-            position: 'absolute', inset: 0,
-            background: 'linear-gradient(to top, rgba(18,18,20,1) 0%, rgba(18,18,20,0.6) 40%, rgba(18,18,20,0.1) 70%, transparent 100%)',
-          }} />
-          {/* Accent glow */}
-          <div style={{
-            position: 'absolute', bottom: 0, left: 0, right: 0, height: '40%',
-            background: `radial-gradient(ellipse 80% 100% at 50% 100%, ${accent.glow} 0%, transparent 70%)`,
-          }} />
-        </div>
-
-        {/* Content body */}
-        <div style={{ padding: '0 2rem 2.5rem', marginTop: '-3rem', position: 'relative', zIndex: 10 }}>
-          {/* Tag */}
-          <span
-            className="font-mono"
-            style={{
-              display: 'inline-block',
-              fontSize: '9px',
-              textTransform: 'uppercase',
-              letterSpacing: '0.2em',
-              padding: '5px 14px',
-              borderRadius: '9999px',
-              marginBottom: '1rem',
-              background: accent.glow,
-              border: `1px solid ${accent.border}`,
-              color: accent.text,
-            }}
-          >
-            Conceptual Vision
-          </span>
-
-          {/* Title */}
-          <h2 className="font-display" style={{
-            fontSize: 'clamp(1.75rem, 4vw, 2.75rem)',
-            color: 'white',
-            lineHeight: 1.08,
-            marginBottom: '0.5rem',
-            fontStyle: 'italic',
-          }}>
-            {caseStudy.title}
-          </h2>
-
-          {/* Subtitle */}
-          <p className="font-body" style={{
-            fontSize: '0.9rem',
-            color: 'rgba(255,255,255,0.45)',
-            lineHeight: 1.5,
-            marginBottom: '1.5rem',
-            fontWeight: 300,
-          }}>
-            {caseStudy.subtitle}
-          </p>
-
-          {/* Meta row */}
-          <div style={{
-            display: 'flex',
-            gap: '1.5rem',
-            marginBottom: '1.5rem',
-            flexWrap: 'wrap',
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-              <Clock style={{ width: '0.75rem', height: '0.75rem', color: accent.text, opacity: 0.7 }} />
-              <span className="font-mono" style={{ fontSize: '10px', color: accent.text }}>
-                {caseStudy.timeline}
-              </span>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-              <Wrench style={{ width: '0.75rem', height: '0.75rem', color: 'rgba(255,255,255,0.3)' }} />
-              <span className="font-mono" style={{ fontSize: '10px', color: 'rgba(255,255,255,0.4)' }}>
-                {caseStudy.tools.join(' · ')}
-              </span>
-            </div>
-          </div>
-
-          {/* Divider */}
-          <div style={{
-            height: '1px',
-            marginBottom: '2rem',
-            background: `linear-gradient(90deg, ${accent.border}, rgba(255,255,255,0.04) 80%)`,
-          }} />
-
-          {/* Two-column layout for challenge + approach */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '2rem', marginBottom: '2rem' }}>
-            {/* Challenge */}
-            <div>
-              <h3 className="font-mono" style={{
-                fontSize: '9px', textTransform: 'uppercase', letterSpacing: '0.2em',
-                marginBottom: '0.75rem', color: accent.text, opacity: 0.7,
-              }}>
-                The Challenge
-              </h3>
-              <p className="font-body" style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.55)', lineHeight: 1.7, fontWeight: 300 }}>
-                {caseStudy.challenge}
-              </p>
-            </div>
-
-            {/* Approach */}
-            <div>
-              <h3 className="font-mono" style={{
-                fontSize: '9px', textTransform: 'uppercase', letterSpacing: '0.2em',
-                marginBottom: '0.75rem', color: accent.text, opacity: 0.7,
-              }}>
-                Our Approach
-              </h3>
-              <p className="font-body" style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.55)', lineHeight: 1.7, fontWeight: 300 }}>
-                {caseStudy.approach}
-              </p>
-            </div>
-          </div>
-
-          {/* Process steps */}
-          <div style={{ marginBottom: '2rem' }}>
-            <h3 className="font-mono" style={{
-              fontSize: '9px', textTransform: 'uppercase', letterSpacing: '0.2em',
-              marginBottom: '1rem', color: accent.text, opacity: 0.7,
-            }}>
-              Process
-            </h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
-              {caseStudy.process.map((step, i) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
-                  <span
-                    className="font-mono"
-                    style={{
-                      flexShrink: 0,
-                      width: '1.375rem',
-                      height: '1.375rem',
-                      borderRadius: '50%',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: '9px',
-                      fontWeight: 700,
-                      marginTop: '2px',
-                      background: accent.glow,
-                      border: `1px solid ${accent.border}`,
-                      color: accent.text,
-                    }}
-                  >
-                    {i + 1}
-                  </span>
-                  <p className="font-body" style={{ fontSize: '0.775rem', color: 'rgba(255,255,255,0.5)', lineHeight: 1.65, fontWeight: 300 }}>
-                    {step}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Impact */}
-          <div style={{ marginBottom: '2rem' }}>
-            <h3 className="font-mono" style={{
-              fontSize: '9px', textTransform: 'uppercase', letterSpacing: '0.2em',
-              marginBottom: '0.75rem', color: accent.text, opacity: 0.7,
-            }}>
-              Impact
-            </h3>
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-              gap: '0.5rem',
-            }}>
-              {caseStudy.results.map((result, i) => (
-                <div
-                  key={i}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                    gap: '0.5rem',
-                    padding: '0.625rem 0.75rem',
-                    borderRadius: '0.625rem',
-                    background: 'rgba(255,255,255,0.02)',
-                    border: '1px solid rgba(255,255,255,0.04)',
-                  }}
-                >
-                  <ArrowRight style={{ width: '0.625rem', height: '0.625rem', marginTop: '3px', flexShrink: 0, color: accent.text, opacity: 0.6 }} />
-                  <p className="font-body" style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.5)', lineHeight: 1.55, fontWeight: 300 }}>
-                    {result}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Tags */}
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem' }}>
-            {caseStudy.tags.map((tag) => (
-              <span
-                key={tag}
-                className="font-mono"
-                style={{
-                  fontSize: '9px',
-                  padding: '5px 12px',
-                  borderRadius: '9999px',
-                  color: 'rgba(255,255,255,0.45)',
-                  background: 'rgba(255,255,255,0.03)',
-                  border: '1px solid rgba(255,255,255,0.06)',
-                  letterSpacing: '0.05em',
-                }}
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-        </div>
       </div>
 
-      {/* Animations */}
+      {/* Hero */}
+      <header className="relative -mt-[68px] h-[78svh] min-h-[460px] w-full overflow-hidden">
+        <div className="cso-hero absolute inset-0">
+          <SafeImage key={cs.id} src={cs.image} alt={cs.title} fill priority sizes="100vw" className="object-cover object-[center_30%]" />
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0A0908] via-[#0A0908]/40 to-[#0A0908]/30" />
+        <div className="absolute inset-x-0 bottom-0 mx-auto max-w-6xl px-4 sm:px-8 pb-10 sm:pb-16">
+          <div className="flex flex-wrap items-center gap-2 mb-5">
+            <span className={`${label} rounded-full border px-3 py-1.5`} style={{ borderColor: accent, color: accent }}>
+              {cs.concept ? 'Concept' : 'Client work'}
+            </span>
+            {cs.year && <span className={`${label} text-white/55`}>{cs.year}</span>}
+          </div>
+          <h2 className="font-body font-bold text-[2.75rem] sm:text-7xl lg:text-8xl leading-[0.95] tracking-[-0.035em] text-white [text-wrap:balance]">{cs.title}</h2>
+          <p className="mt-4 max-w-2xl font-body text-base sm:text-lg text-white/70 leading-relaxed [text-wrap:pretty]">{cs.subtitle}</p>
+        </div>
+      </header>
+
+      <div className="mx-auto max-w-6xl px-4 sm:px-8">
+        {/* Meta */}
+        <dl className="grid grid-cols-2 sm:grid-cols-4 gap-6 border-y border-white/10 py-8">
+          {([
+            ['Role', cs.role],
+            ['Year', cs.year],
+            ['Timeline', cs.timeline],
+            ['Tools', cs.tools?.join(' · ')],
+          ] as const).filter(([, v]) => v).map(([k, v]) => (
+            <div key={k} className="min-w-0">
+              <dt className={`${label} text-porcelain/45 mb-2`}>{k}</dt>
+              <dd className="font-body text-sm text-porcelain/85 [text-wrap:pretty]">{v}</dd>
+            </div>
+          ))}
+        </dl>
+
+        {/* Narrative */}
+        <div className="py-16 sm:py-24 space-y-14 sm:space-y-20">
+          {sections.map(([k, v], i) => (
+            <section key={k} className="grid gap-4 lg:grid-cols-[220px_1fr] lg:gap-16">
+              <h3 className={`${label} lg:pt-2`} style={{ color: accent }}>{String(i + 1).padStart(2, '0')} — {k}</h3>
+              {Array.isArray(v) ? (
+                <ul className="space-y-4 max-w-[62ch]">
+                  {v.map((s) => (
+                    <li key={s} className="flex gap-4 font-body text-base sm:text-lg leading-relaxed text-porcelain/80 [text-wrap:pretty]">
+                      <span className="mt-[0.7em] h-px w-5 shrink-0" style={{ background: accent }} aria-hidden />
+                      {s}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="max-w-[62ch] font-body text-lg sm:text-xl leading-relaxed text-porcelain/85 [text-wrap:pretty]">{v}</p>
+              )}
+            </section>
+          ))}
+          {outcome && (
+            <section className="grid gap-4 lg:grid-cols-[220px_1fr] lg:gap-16">
+              <h3 className={`${label} lg:pt-2`} style={{ color: accent }}>04 — Outcome</h3>
+              <div className="space-y-3 max-w-[62ch]">
+                {outcome.map((o) => (
+                  <p key={o} className="font-body font-bold text-2xl sm:text-3xl leading-tight tracking-[-0.02em] text-white [text-wrap:balance]">{o}</p>
+                ))}
+              </div>
+            </section>
+          )}
+        </div>
+
+        {/* Film */}
+        {cs.video && (
+          <video
+            src={cs.video}
+            poster={cs.poster}
+            controls
+            muted
+            playsInline
+            preload="metadata"
+            className="mb-4 w-full rounded-[20px] bg-black aspect-video object-cover"
+          />
+        )}
+
+        {/* Gallery */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pb-16">
+          {gallery.map((src, i) => (
+            <div key={src + i} className={`relative overflow-hidden rounded-[20px] bg-white/5 ${i === 0 && gallery.length % 2 === 1 ? 'sm:col-span-2 aspect-[16/9]' : 'aspect-[4/5]'}`}>
+              <SafeImage src={src} fallback={cs.image} alt={`${cs.title} — image ${i + 1}`} fill sizes="(min-width: 640px) 50vw, 100vw" className="object-cover" />
+            </div>
+          ))}
+        </div>
+
+        {cs.tags.length > 0 && (
+          <div className="flex flex-wrap gap-2 pb-16">
+            {cs.tags.map((tag) => (
+              <span key={tag} className="font-mono text-[10px] uppercase tracking-[0.16em] rounded-full border border-white/10 px-3 py-1.5 text-white/55">{tag}</span>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Prev / next */}
+      {(onPrev || onNext) && (
+        <nav aria-label="More case studies" className="border-t border-white/10">
+          <div className="mx-auto grid max-w-6xl grid-cols-2 px-4 sm:px-8">
+            <button onClick={onPrev} disabled={!onPrev} className="group flex min-h-[120px] flex-col items-start justify-center gap-2 py-8 pr-4 text-left disabled:opacity-0">
+              <span className={`${label} flex items-center gap-2 text-white/45`}><ArrowLeft className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-1" />Previous</span>
+              <span className="font-body font-bold text-lg sm:text-3xl tracking-[-0.02em] text-white/80 group-hover:text-white [text-wrap:balance]">{prevTitle}</span>
+            </button>
+            <button onClick={onNext} disabled={!onNext} className="group flex min-h-[120px] flex-col items-end justify-center gap-2 border-l border-white/10 py-8 pl-4 text-right disabled:opacity-0">
+              <span className={`${label} flex items-center gap-2 text-white/45`}>Next<ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" /></span>
+              <span className="font-body font-bold text-lg sm:text-3xl tracking-[-0.02em] text-white/80 group-hover:text-white [text-wrap:balance]">{nextTitle}</span>
+            </button>
+          </div>
+        </nav>
+      )}
+
       <style>{`
-        @keyframes csoFadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-        @keyframes csoSlideUp {
-          from { opacity: 0; transform: translateY(24px) scale(0.97); }
-          to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        @keyframes csoKenBurns {
-          from { transform: scale(1.06); }
-          to { transform: scale(1); }
-        }
-        .overlay-backdrop::-webkit-scrollbar { display: none; }
+        .cso { animation: csoIn .45s cubic-bezier(.22,1,.36,1); }
+        .cso-hero { animation: csoKen 12s ease-out forwards; }
+        @keyframes csoIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+        @keyframes csoKen { from { transform: scale(1.08); } to { transform: scale(1); } }
+        @media (prefers-reduced-motion: reduce) { .cso, .cso-hero { animation: none; } }
       `}</style>
     </div>,
-    portalTarget
+    document.body
   );
 });
 

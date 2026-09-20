@@ -1,9 +1,10 @@
 'use client';
-import { memo } from 'react';
-import { motion } from 'framer-motion';
+import { memo, useRef, type CSSProperties, type ReactNode } from 'react';
+import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
 import Link from 'next/link';
-import Image from 'next/image';
 import { ArrowUpRight } from 'lucide-react';
+import { SafeImage } from './SafeImage';
+import { LightStreaks } from './LightStreaks';
 
 type FooterLink = { label: string; href: string; external?: boolean; download?: boolean };
 
@@ -16,6 +17,18 @@ interface PortfolioFooterProps {
   portfolioLinks?: FooterLink[];
   ventureLinks?: FooterLink[];
   connectLinks?: FooterLink[];
+  /** Accent colour (any CSS colour / var). Default ember. */
+  accent?: string;
+  /** Full-bleed background image. When set it renders sharp with parallax drift. */
+  bgImage?: string;
+  /** Used if bgImage fails to load. */
+  bgFallback?: string;
+  /** Large sign-off line above the masthead. */
+  headline?: ReactNode;
+  /** Temporal motion-blur light streaks. */
+  streaks?: boolean;
+  /** Colour the top edge feathers from (the page background). */
+  featherFrom?: string;
 }
 
 const t = (isDark: boolean, dark: string, light: string) => isDark ? dark : light;
@@ -34,7 +47,7 @@ const FooterLinkItem = ({ link }: { link: FooterLink }) => {
     >
       <span className="relative">
         {link.label}
-        <span className="absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 bg-ember transition-transform duration-500 ease-out group-hover:scale-x-100" />
+        <span className="absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 transition-transform duration-500 ease-out group-hover:scale-x-100" style={{ background: 'var(--footer-accent)' }} />
       </span>
       {ext && <ArrowUpRight className="w-3 h-3 opacity-40" />}
     </a>
@@ -67,16 +80,54 @@ export const PortfolioFooter = memo(({
   portfolioLinks = [],
   ventureLinks = [],
   connectLinks = [],
+  accent = '#FF4D1C',
+  bgImage,
+  bgFallback = '/assets/footer-bg.png',
+  headline,
+  streaks = false,
+  featherFrom,
 }: PortfolioFooterProps) => {
   const cv = connectLinks.find((l) => l.download);
+  const ref = useRef<HTMLElement>(null);
+  const reduced = useReducedMotion();
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end end'] });
+  const bgY = useTransform(scrollYProgress, [0, 1], reduced ? ['0%', '0%'] : ['-12%', '0%']);
+  const bgScale = useTransform(scrollYProgress, [0, 1], reduced ? [1.08, 1.08] : [1.18, 1.06]);
+  const vars = { '--footer-accent': accent, '--streak-accent': accent } as CSSProperties;
+
   return (
-    <footer className={`relative overflow-hidden ${t(isDark, 'bg-alchemy-black', 'bg-neutral-950')}`}>
+    <footer ref={ref} style={vars} className={`relative overflow-hidden ${t(isDark, 'bg-alchemy-black', 'bg-neutral-950')}`}>
       <div className="absolute inset-0 z-0" aria-hidden>
-        <Image src="/assets/footer-bg.png" alt="" fill sizes="100vw" className="object-cover opacity-40 scale-110" style={{ filter: 'blur(10px) saturate(1.1)' }} />
-        <div className="absolute inset-0 bg-gradient-to-t from-alchemy-black via-alchemy-black/80 to-alchemy-black" />
+        {bgImage ? (
+          <>
+            <motion.div className="absolute inset-0" style={{ y: bgY, scale: bgScale }}>
+              <SafeImage src={bgImage} fallback={bgFallback} alt="" fill sizes="100vw" className="object-cover object-center opacity-80" />
+            </motion.div>
+            <div className="absolute inset-0 bg-gradient-to-t from-alchemy-black via-alchemy-black/60 to-alchemy-black/20" />
+            <div className="absolute inset-x-0 top-0 h-48" style={{ background: `linear-gradient(to bottom, ${featherFrom ?? '#0A0908'}, transparent)` }} />
+          </>
+        ) : (
+          <>
+            <SafeImage src={bgFallback} alt="" fill sizes="100vw" className="object-cover opacity-40 scale-110" style={{ filter: 'blur(10px) saturate(1.1)' }} />
+            <div className="absolute inset-0 bg-gradient-to-t from-alchemy-black via-alchemy-black/80 to-alchemy-black" />
+          </>
+        )}
+        {streaks && <LightStreaks />}
       </div>
 
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-28 pb-10">
+        {headline && (
+          <motion.p
+            className="font-body font-bold text-porcelain text-[2.5rem] sm:text-6xl lg:text-[5.5rem] leading-[0.98] tracking-[-0.035em] [text-wrap:balance] max-w-4xl pt-16 sm:pt-32 pb-16 sm:pb-24"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 1, ease: EASE }}
+          >
+            {headline}
+          </motion.p>
+        )}
+
         {/* Masthead */}
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-8 pb-16 sm:pb-20 border-b border-porcelain/10">
           <motion.div
@@ -87,7 +138,7 @@ export const PortfolioFooter = memo(({
             transition={{ duration: 0.8, ease: EASE }}
           >
             <div className="flex items-center gap-4">
-              <span className="w-11 h-11 rounded-full flex items-center justify-center font-mono text-xs font-bold text-porcelain border border-ember/40">
+              <span className="w-11 h-11 rounded-full flex items-center justify-center font-mono text-xs font-bold text-porcelain border" style={{ borderColor: `color-mix(in srgb, ${accent} 45%, transparent)` }}>
                 {monogram}
               </span>
               <span className="font-body text-xl sm:text-2xl font-bold tracking-[-0.01em] text-porcelain">{founderName}</span>
@@ -99,7 +150,7 @@ export const PortfolioFooter = memo(({
               <a
                 href={cv.href}
                 download
-                className="mt-8 inline-flex min-h-11 items-center gap-2 rounded-full border border-porcelain/20 px-6 font-mono text-[11px] uppercase tracking-[0.2em] text-porcelain/80 hover:border-ember hover:text-porcelain transition-colors duration-300"
+                className="footer-cv mt-8 inline-flex min-h-11 items-center gap-2 rounded-full border border-porcelain/20 px-6 font-mono text-[11px] uppercase tracking-[0.2em] text-porcelain/80 hover:text-porcelain transition-colors duration-300"
               >
                 {cv.label}
               </a>
@@ -120,7 +171,7 @@ export const PortfolioFooter = memo(({
           <p className="font-mono text-[10px] sm:text-[11px] tracking-[0.08em] text-porcelain/40">
             © 2026 {copyright}.
           </p>
-          <div className="flex gap-6">
+          <div className="flex flex-wrap gap-x-6">
             {[['Alchemy Labs', '/about'], ['Privacy', '/privacy'], ['Terms', '/terms']].map(([label, href]) => (
               <Link key={href} href={href} className="inline-flex min-h-11 items-center font-mono text-[10px] sm:text-[11px] uppercase tracking-[0.18em] text-porcelain/40 hover:text-porcelain transition-colors duration-300">
                 {label}
@@ -129,6 +180,7 @@ export const PortfolioFooter = memo(({
           </div>
         </div>
       </div>
+      <style>{`.footer-cv:hover { border-color: var(--footer-accent); }`}</style>
     </footer>
   );
 });

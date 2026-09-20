@@ -25,8 +25,8 @@ export function ServicesClosing() {
       <div aria-hidden className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-void to-transparent" />
       <div className="relative mx-auto flex min-h-[70svh] max-w-4xl flex-col items-center justify-center px-6 py-32 text-center">
         <m.p
-          initial={{ opacity: 0, y: 24, filter: 'blur(12px)' }}
-          whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-120px' }}
           transition={{ duration: 0.8, ease }}
           className="font-headline text-[clamp(2rem,4vw,3.5rem)] font-bold leading-[1.1] tracking-[-0.03em] text-bone"
@@ -40,10 +40,13 @@ export function ServicesClosing() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.4, ease }}
-          className="mt-12"
+          className="mt-12 flex flex-wrap items-center justify-center gap-4"
         >
           <MagneticCTA href="/contact" variant="ember">
-            Begin
+            Book a call
+          </MagneticCTA>
+          <MagneticCTA href="#the-five" variant="ghost">
+            See fixed-price offers
           </MagneticCTA>
         </m.div>
       </div>

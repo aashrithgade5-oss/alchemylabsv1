@@ -74,8 +74,8 @@ function WeBuild() {
   const active = reduced ? 1 : i;
 
   return (
-    <div
-      aria-label={`We build ${BUILDS.map((b) => b.word.toLowerCase()).join(', ')}`}
+    <h1
+      aria-label={`Alchemy Labs — AI-native brand studio. We build ${BUILDS.map((b) => b.word.toLowerCase()).join(', ')}`}
       className="font-headline text-[clamp(2.05rem,8vw,8rem)] font-black leading-[1.04] tracking-[-0.03em]"
     >
       <span aria-hidden className="glass-type block">WE BUILD</span>
@@ -140,7 +140,7 @@ function WeBuild() {
           </m.span>
         )}
       </span>
-    </div>
+    </h1>
   );
 }
 

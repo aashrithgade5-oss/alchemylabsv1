@@ -9,6 +9,7 @@ import { LayoutTransition } from '@/components/LayoutTransition';
 import { SiteChrome } from '@/components/furnace/SiteChrome';
 import { GrainOverlay } from '@/components/furnace/GrainOverlay';
 import { CookieConsent } from '@/components/CookieConsent';
+import { OrganizationSchema } from '@/components/OrganizationSchema';
 import '@/index.css';
 
 // Phase 0 type law (supersedes the Geist/Fraunces lock, see CLAUDE.md):
@@ -89,6 +90,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${inter.variable} ${playfair.variable} ${GeistSans.variable} ${GeistMono.variable}`}
     >
         <body>
+          <OrganizationSchema />
           <Providers>
             {/* LayoutTransition's transform wrapper breaks position:fixed for
                 descendants, so the chrome sits outside it */}

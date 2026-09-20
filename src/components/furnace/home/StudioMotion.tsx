@@ -34,8 +34,8 @@ export function StudioMotion() {
             fell below the line box and read as clipped. 1.25 contains it. */}
         <ScrollScrub
           text="The forge never cools."
-          className="relative z-10 justify-center font-sans text-[clamp(2rem,4vw,3.5rem)] font-medium leading-[1.25] tracking-[-0.03em] text-bone"
-          wordClassName="glass-type-thin"
+          className="relative z-10 justify-center font-headline text-[clamp(2rem,4.4vw,3.75rem)] font-bold leading-[1.2] tracking-[-0.035em] text-bone"
+          wordClassName="glass-flow"
         />
       </div>
     </section>

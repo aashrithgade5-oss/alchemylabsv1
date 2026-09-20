@@ -6,13 +6,12 @@ import { PillarSection } from '@/components/furnace/services/PillarSection';
 import { pillars } from '@/components/furnace/services/pillars';
 import { HomeAtmosphere } from '@/components/furnace/home/HomeAtmosphere';
 
-const FiveGrid = lazy(() =>
-  import('@/components/furnace/services/FiveGrid').then((m) => ({ default: m.FiveGrid })),
-);
-// C-P20: the same infinite offer marquee used on the landing page, placed
-// directly after the hero so the first scroll lands on the offering list.
+// Below-fold sections split out of the first chunk.
 const TheFive = lazy(() =>
   import('@/components/furnace/home/TheFive').then((m) => ({ default: m.TheFive })),
+);
+const EngagementSteps = lazy(() =>
+  import('@/components/furnace/services/EngagementSteps').then((m) => ({ default: m.EngagementSteps })),
 );
 const FAQ = lazy(() =>
   import('@/components/furnace/services/FAQ').then((m) => ({ default: m.FAQ })),
@@ -22,15 +21,15 @@ const ServicesClosing = lazy(() =>
     default: m.ServicesClosing,
   })),
 );
-// C-P24: the page's editorial soul beat — same scroll-bound pull-quote
-// primitive (with meteors) the homepage uses.
-const Intertext = lazy(() =>
-  import('@/components/furnace/home/Intertext').then((m) => ({ default: m.Intertext })),
-);
 
+// Page-wide word-break law: balanced headings, pretty body copy.
+const wrap = '[&_h1]:[text-wrap:balance] [&_h2]:[text-wrap:balance] [&_h3]:[text-wrap:balance] [&_p]:[text-wrap:pretty]';
+
+// Order: promise -> fixed-price offers -> pillars -> process -> FAQ -> close.
+// (FiveGrid dropped here: it duplicated TheFive's offers and its #the-five id.)
 export default function ServicesPage() {
   return (
-    <main className="relative font-sans">
+    <main className={`relative overflow-x-clip font-sans ${wrap}`}>
       <HomeAtmosphere />
       <ServicesHero />
       <Suspense fallback={null}>
@@ -40,11 +39,7 @@ export default function ServicesPage() {
         <PillarSection key={pillar.slug} pillar={pillar} index={i} />
       ))}
       <Suspense fallback={null}>
-        <Intertext eyebrow="THE STANDARD" compact>
-          <span className="block">Three instruments.</span>
-          <span className="block">One hand behind them.</span>
-        </Intertext>
-        <FiveGrid />
+        <EngagementSteps />
         <FAQ />
         <ServicesClosing />
       </Suspense>

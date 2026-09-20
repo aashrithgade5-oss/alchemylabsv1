@@ -27,6 +27,13 @@ const nextConfig = {
   },
   async redirects() {
     return [
+      // one canonical host for search: www -> apex
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'www.alchemylabs.in' }],
+        destination: 'https://alchemylabs.in/:path*',
+        permanent: true,
+      },
       { source: '/solutions', destination: '/services', permanent: true },
       { source: '/solutions/:path*', destination: '/services', permanent: true },
       // C-P20: the old '/services/:slug → /services' rule is GONE — the five
