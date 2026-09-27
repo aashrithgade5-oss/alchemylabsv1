@@ -5,6 +5,7 @@ import { motion, MotionConfig, AnimatePresence, useScroll, useTransform, useSpri
 import Link from 'next/link';
 import Image from 'next/image';
 import { AG_MEDIA as M } from '@lib/portfolio';
+import { ogCard } from '@lib/og';
 import { ArrowLeft, Sun, Moon, Menu, X, Linkedin, Instagram, Youtube, ExternalLink, Film, Music, Sparkles, Users, Shield, Clock, Phone, ArrowRight, Eye } from 'lucide-react';
 import { SEOHead } from '@/components/SEOHead';
 import { thoughtLeadershipEntries } from '@/data/portfolioProjects';
@@ -1780,7 +1781,7 @@ const AashrithPortfolio = () => {
   return (
     <MotionConfig reducedMotion="user">
     <div className={`min-h-screen overflow-x-clip ${isDark ? 'bg-alchemy-black text-porcelain' : 'bg-[#fafaf9] text-neutral-900'} transition-colors duration-500`}>
-      <SEOHead title="Aashrith Gade — Founder, Brand Architect" description="Portfolio of Aashrith Gade: founder of Brand Alchemy, Ashzz.ai & Alchemy Labs. AI-native brand architecture with luxury-grade taste." />
+      <SEOHead title="Aashrith Gade — Founder, Brand Architect" description="Portfolio of Aashrith Gade: founder of Brand Alchemy, Ashzz.ai & Alchemy Labs. AI-native brand architecture with luxury-grade taste." image={ogCard('aashrith')} />
       <BackgroundScene mode="hero" />
       <ScrollProgressBar />
       <FixedControls isDark={isDark} toggleTheme={toggleTheme} />
