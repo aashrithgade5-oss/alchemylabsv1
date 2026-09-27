@@ -1,14 +1,20 @@
 import type { Metadata } from 'next';
 import About from '@/views/About';
+import { JsonLd } from '@/components/JsonLd';
+import { breadcrumbJsonLd, pageMetadata } from '@lib/seo';
 
-const description =
-  'An AI-native brand studio in Mumbai. How we work, what we believe, and the judgment behind the machine speed.';
-
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: 'About',
-  description,
-  alternates: { canonical: '/about' },
-  openGraph: { title: 'About · Alchemy Labs', description, url: '/about' },
-};
+  description:
+    'Meet Alchemy Labs, an AI-native brand studio in Mumbai founded by Aashrith Gade and Eva Doshi: how we work, what we believe, and why judgment comes first.',
+  path: '/about',
+});
 
-export default About;
+export default function Page() {
+  return (
+    <>
+      <JsonLd data={breadcrumbJsonLd([{ name: 'About', path: '/about' }])} />
+      <About />
+    </>
+  );
+}

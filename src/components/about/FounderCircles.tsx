@@ -5,8 +5,8 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 
-const founderAashrith = '/assets/founder-aashrith-silhouette.png';
-const founderEva = '/assets/founder-eva-silhouette.png';
+const founderAashrith = '/media/founder-aashrith-silhouette.png';
+const founderEva = '/media/founder-eva-silhouette.png';
 
 const CINEMATIC_EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -93,7 +93,7 @@ const FounderPanel = memo(({ founder, index }: { founder: typeof founders[0]; in
         {/* Silhouette photo background — blurred for premium dim aesthetic */}
         <motion.img
           src={founder.photo}
-          alt=""
+          alt={`${founder.fullName}, ${founder.title.split(' · ')[0]} of Alchemy Labs`}
           loading="lazy"
           decoding="async"
           className="absolute inset-0 w-full h-full object-cover pointer-events-none"
@@ -159,9 +159,9 @@ const FounderPanel = memo(({ founder, index }: { founder: typeof founders[0]; in
 
         {/* Content */}
         <div className="relative z-10 flex flex-col items-center justify-end text-center h-full px-6 sm:px-10 py-10 sm:py-14 lg:py-12">
-          <h3 className="font-sans text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black uppercase tracking-[0.1em] text-porcelain mb-3">
+          <h2 className="font-sans text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black uppercase tracking-[0.1em] text-porcelain mb-3">
             {founder.fullName}
-          </h3>
+          </h2>
 
           <p className="font-mono text-[10px] sm:text-xs text-alchemy-red/80 tracking-[0.15em] uppercase mb-3">
             {founder.title}

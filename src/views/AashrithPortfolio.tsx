@@ -21,29 +21,29 @@ import { BlueprintGrid, NoiseTexture } from '@/components/effects';
 import { SequentianBackground } from '@/components/SequentianBackground';
 import { CaseStudyOverlay, type CaseStudyData } from '@/components/portfolio/CaseStudyOverlay';
 import { useIsMobile } from '@/hooks/use-mobile';
-const aashrithHeroBg = '/assets/aashrith-hero-bg.mp4';
-const aetherBento = '/assets/aether-bento.png';
-const genesisBento = '/assets/genesis-bento.png';
-const diorBento = '/assets/dior-bento.png';
-const oakleyBento = '/assets/oakley-bento.png';
-const tl1 = '/assets/thought-leadership-1.png';
-const tl2 = '/assets/thought-leadership-2.png';
-const tl3 = '/assets/thought-leadership-3.png';
-const tl4 = '/assets/thought-leadership-4.png';
-const tl5 = '/assets/thought-leadership-5.png';
-const tl6 = '/assets/thought-leadership-6.png';
-const tl7 = '/assets/thought-leadership-7.png';
-const tl8 = '/assets/thought-leadership-8.png';
-const tl9 = '/assets/thought-leadership-9.png';
-const ba1 = '/assets/ba-post-1.jpg';
-const ba2 = '/assets/ba-post-2.jpg';
-const ba3 = '/assets/ba-post-3.jpg';
-const ba4 = '/assets/ba-post-4.jpg';
-const ba5 = '/assets/ba-post-5.jpg';
-const ba6 = '/assets/ba-post-6.jpg';
-const ba7 = '/assets/ba-post-7.jpg';
-const ba8 = '/assets/ba-post-8.jpg';
-const ba9 = '/assets/ba-post-9.jpg';
+const aashrithHeroBg = '/media/aashrith-hero-bg.mp4';
+const aetherBento = '/media/aether-bento.webp';
+const genesisBento = '/media/genesis-bento.webp';
+const diorBento = '/media/dior-bento.webp';
+const oakleyBento = '/media/oakley-bento.webp';
+const tl1 = '/media/thought-leadership-1.webp';
+const tl2 = '/media/thought-leadership-2.png';
+const tl3 = '/media/thought-leadership-3.webp';
+const tl4 = '/media/thought-leadership-4.png';
+const tl5 = '/media/thought-leadership-5.webp';
+const tl6 = '/media/thought-leadership-6.png';
+const tl7 = '/media/thought-leadership-7.webp';
+const tl8 = '/media/thought-leadership-8.webp';
+const tl9 = '/media/thought-leadership-9.webp';
+const ba1 = '/media/ba-post-1.jpg';
+const ba2 = '/media/ba-post-2.jpg';
+const ba3 = '/media/ba-post-3.jpg';
+const ba4 = '/media/ba-post-4.jpg';
+const ba5 = '/media/ba-post-5.jpg';
+const ba6 = '/media/ba-post-6.jpg';
+const ba7 = '/media/ba-post-7.jpg';
+const ba8 = '/media/ba-post-8.jpg';
+const ba9 = '/media/ba-post-9.jpg';
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 const t = (isDark: boolean, dark: string, light: string) => isDark ? dark : light;
@@ -97,7 +97,7 @@ const caseStudyData: Record<string, CaseStudyData> = {
     id: 'aether-rituals',
     title: 'Aether Rituals',
     subtitle: 'A concept AI-native skincare house: identity, packaging and campaign film from one AI pipeline.',
-    image: '/media/aether-rituals-1.png',
+    image: '/media/aether-rituals-1.webp',
     concept: true,
     role: 'Founder & creative director (concept)',
     year: '2024',
@@ -112,7 +112,7 @@ const caseStudyData: Record<string, CaseStudyData> = {
     ],
     tools: ['Midjourney', 'ChatGPT', 'Figma', 'Photoshop'],
     tags: ['Concept', 'Skincare', 'Luxury', 'AI-native', 'Brand architecture'],
-    gallery: ['/media/aether-rituals-2.png', '/media/aether-rituals-3.png', '/media/aether-rituals-4.png', '/media/aether-rituals-5.png', aetherBento],
+    gallery: ['/media/aether-rituals-2.webp', '/media/aether-rituals-3.webp', '/media/aether-rituals-4.webp', '/media/aether-rituals-5.webp', aetherBento],
     video: '/media/aether-rituals-preview.mp4',
     poster: '/media/aether-rituals-preview-poster.jpg',
   },
@@ -208,7 +208,7 @@ const creativeProjects = [
     title: 'Aether Rituals',
     category: 'AI-native skincare house',
     description: 'Identity, packaging and campaign film from one AI pipeline — ancient ritual meets modern minimalism.',
-    image: '/media/aether-rituals-1.png',
+    image: '/media/aether-rituals-1.webp',
     tags: ['Brand architecture', 'Packaging', 'Campaign film'],
     year: '2024',
     concept: true,
@@ -726,7 +726,7 @@ const PostTile = memo(({ post, index, accent, isHovered, onHover, onLeave, wide 
   >
     {/* Image */}
     {wide ? (
-      <SafeImage src={post.image} fallback="/assets/thought-leadership-1.png" alt={post.title} fill sizes="480px" className="object-cover transition-transform duration-700 group-hover:scale-[1.04]" />
+      <SafeImage src={post.image} fallback="/media/thought-leadership-1.webp" alt={post.title} fill sizes="480px" className="object-cover transition-transform duration-700 group-hover:scale-[1.04]" />
     ) : (
       <img src={post.image} alt={post.title} className="absolute inset-0 w-full h-full object-cover transition-all duration-700 group-hover:scale-110" loading="lazy" />
     )}
@@ -1296,7 +1296,7 @@ const ArcRole = memo(({ role, active, isDark, reduced }: { role: ArcRoleData; ac
             animate={{ opacity: on ? 1 : 0.25, scale: on ? 1 : 0.97 }}
             transition={{ duration: reduced ? 0 : 0.9, ease: EASE }}
           >
-            <SafeImage src={role.image} fallback="/media/aether-rituals-2.png" alt={role.imageAlt ?? role.org} fill sizes="(min-width: 1024px) 672px, 90vw" className="object-cover" />
+            <SafeImage src={role.image} fallback="/media/aether-rituals-2.webp" alt={role.imageAlt ?? role.org} fill sizes="(min-width: 1024px) 672px, 90vw" className="object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
             <figcaption className="absolute left-4 bottom-3 font-mono text-[10px] uppercase tracking-[0.22em] text-white/80">{role.imageAlt ?? role.org}</figcaption>
           </motion.figure>
@@ -1673,7 +1673,7 @@ const AashrithPortfolio = () => {
         copyright="Designed and built by Aashrith Gade"
         headline={<>Always building. Always <span className="font-playfair italic font-normal text-ember">iterating</span>.</>}
         bgImage="/media/aashrith/footer-bg.webp"
-        bgFallback="/assets/footer-bg.png"
+        bgFallback="/media/footer-bg.png"
         featherFrom={isDark ? '#0A0908' : '#fafaf9'}
         streaks
         portfolioLinks={portfolioFooterLinks}

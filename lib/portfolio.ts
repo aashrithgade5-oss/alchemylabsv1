@@ -27,13 +27,13 @@ export const portfolio: PortfolioEntry[] = [
     discipline: 'AI + BRAND SYSTEM',
     summary:
       'A concept skincare house built end to end: identity, packaging, and campaign film from one AI pipeline under a single creative direction.',
-    image: '/assets/case-study-3.jpg',
+    image: '/media/case-study-3.jpg',
     visuals: [
-      '/assets/aether-rituals-1.png',
-      '/assets/aether-rituals-2.png',
-      '/assets/aether-rituals-3.png',
-      '/assets/aether-rituals-4.png',
-      '/assets/aether-rituals-5.png',
+      '/media/aether-rituals-1.webp',
+      '/media/aether-rituals-2.webp',
+      '/media/aether-rituals-3.webp',
+      '/media/aether-rituals-4.webp',
+      '/media/aether-rituals-5.webp',
     ],
     featured: true,
   },
@@ -44,8 +44,8 @@ export const portfolio: PortfolioEntry[] = [
     discipline: 'AI + BRAND SYSTEM',
     summary:
       'A framework study for hybrid engagements: generative production and brand architecture priced and delivered as one offer.',
-    image: '/assets/genesis-bento.png',
-    visuals: ['/assets/genesis-bento.png'],
+    image: '/media/genesis-bento.webp',
+    visuals: ['/media/genesis-bento.webp'],
     featured: true,
   },
   {
@@ -55,8 +55,8 @@ export const portfolio: PortfolioEntry[] = [
     discipline: 'AI CAMPAIGN',
     summary:
       'An unsolicited campaign exploration for Oakley: performance eyewear rendered through generative visual narratives.',
-    image: '/assets/oakley-bento.png',
-    visuals: ['/assets/oakley-bento.png'],
+    image: '/media/oakley-bento.webp',
+    visuals: ['/media/oakley-bento.webp'],
     featured: true,
   },
   {
@@ -66,8 +66,8 @@ export const portfolio: PortfolioEntry[] = [
     discipline: 'AI CAMPAIGN',
     summary:
       "Two parallel luxury fragrance campaigns for J'adore and Poison, architected as one duality: gold-and-amber light against purple-and-shadow, unified under a single creative direction.",
-    image: '/assets/dior-bento.png',
-    visuals: ['/assets/dior-bento.png'],
+    image: '/media/dior-bento.webp',
+    visuals: ['/media/dior-bento.webp'],
     featured: true,
   },
   {
@@ -77,8 +77,8 @@ export const portfolio: PortfolioEntry[] = [
     discipline: 'AI FILM + IMAGE',
     summary:
       'Studio reels and stills from our production pipeline, graded and finished by hand.',
-    image: '/assets/case-study-2.jpg',
-    visuals: ['/assets/case-study-2.jpg', '/assets/case-study-1.jpg'],
+    image: '/media/case-study-2.jpg',
+    visuals: ['/media/case-study-2.jpg', '/media/case-study-1.jpg'],
   },
   {
     // C-P18: sixth entry — genuinely distinct project from the 12:21 AM

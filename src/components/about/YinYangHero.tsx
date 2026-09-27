@@ -5,7 +5,7 @@ import { memo, lazy, Suspense, useState, useRef } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { BlueprintGrid, NoiseTexture } from '@/components/effects';
 import { useIsMobile } from '@/hooks/use-mobile';
-const aboutHeroVideo = '/assets/about-hero-video.mp4';
+const aboutHeroVideo = '/media/about-hero-video.mp4';
 
 const LazyNeuralBackground = lazy(() =>
   import('@/components/NeuralBackground').then((m) => ({ default: m.NeuralBackground }))
@@ -121,8 +121,8 @@ export const YinYangHero = memo(() => {
           </span>
         </motion.div>
 
-        {/* Title — staggered 3D reveal */}
-        <div className="mb-5">
+        {/* Title — staggered 3D reveal (the page's single <h1>) */}
+        <h1 className="mb-5">
           <ClipReveal delay={0.4}>
             <span className="font-sans text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light text-porcelain/80 block mb-1">
               Architects of
@@ -140,7 +140,7 @@ export const YinYangHero = memo(() => {
               and inevitability
             </span>
           </ClipReveal>
-        </div>
+        </h1>
 
         {/* Subtitle */}
         <motion.p

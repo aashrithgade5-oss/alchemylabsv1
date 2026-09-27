@@ -1,35 +1,45 @@
 import type { Metadata } from 'next';
 import { products } from '@lib/payments';
 import ServiceProductPage from '@/views/ServiceProductPage';
+import { JsonLd } from '@/components/JsonLd';
+import {
+  breadcrumbJsonLd,
+  fitDescription,
+  pageMetadata,
+  serviceJsonLd,
+  stripPrices,
+} from '@lib/seo';
 
-// Without these every productized service shared one generic title and OG
-// card, so each link preview looked identical. page.tsx stays a server
-// component (the view below carries its own 'use client'), so it can export
-// route metadata even though the page itself renders on the client.
+// Each productized offer gets its own title, description and card. page.tsx
+// stays a server component (the view carries its own 'use client'), so it can
+// export route metadata. Metadata and schema never carry the price, which is
+// shown on the page itself.
+const describe = (tagline: string) =>
+  stripPrices(
+    fitDescription(
+      [tagline],
+      [
+        [
+          'A fixed-scope offer from Alchemy Labs, an AI-native brand studio in Mumbai.',
+          'A fixed-scope offer from Alchemy Labs, Mumbai.',
+        ],
+        ['Start dates confirmed in writing.', 'Start without a call.'],
+      ],
+    ),
+  );
+
 export async function generateMetadata({
   params,
 }: {
   params: { slug: string };
 }): Promise<Metadata> {
   const product = products.find((p) => p.id === params.slug);
-  if (!product) return { title: 'Service not found' };
-
-  return {
+  if (!product) return { title: 'Service not found', robots: { index: false } };
+  return pageMetadata({
     title: product.name,
-    description: product.tagline,
-    alternates: { canonical: `/services/${product.id}` },
-    openGraph: {
-      title: `${product.name} · Alchemy Labs`,
-      description: product.tagline,
-      url: `/services/${product.id}`,
-      type: 'website',
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: `${product.name} · Alchemy Labs`,
-      description: product.tagline,
-    },
-  };
+    description: describe(product.tagline),
+    path: `/services/${product.id}`,
+  });
 }
 
 // Prerender the five at build time instead of server-rendering each on demand.
@@ -40,6 +50,27 @@ export function generateStaticParams() {
 // Rendered through a real server component rather than `export default
 // ServiceProductPage` — a bare re-export of a 'use client' binding makes Next
 // treat the whole route as client-rendered and skip generateStaticParams.
-export default function Page() {
-  return <ServiceProductPage />;
+export default function Page({ params }: { params: { slug: string } }) {
+  const product = products.find((p) => p.id === params.slug);
+  return (
+    <>
+      {product && (
+        <JsonLd
+          data={[
+            breadcrumbJsonLd([
+              { name: 'Services', path: '/services' },
+              { name: product.name, path: `/services/${product.id}` },
+            ]),
+            serviceJsonLd({
+              name: product.name,
+              description: stripPrices(product.tagline),
+              path: `/services/${product.id}`,
+              serviceType: 'Fixed-scope brand service',
+            }),
+          ]}
+        />
+      )}
+      <ServiceProductPage />
+    </>
+  );
 }

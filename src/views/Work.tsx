@@ -39,11 +39,11 @@ function WorkTile({ entry, large }: { entry: (typeof portfolio)[number]; large: 
         <p className="font-mono text-[10px] tracking-[0.25em] text-ember">
           {entry.label} · {entry.discipline}
         </p>
-        <h3
+        <h2
           className={`mt-4 font-headline font-bold leading-[1.05] tracking-[-0.035em] text-bone [text-wrap:balance] ${large ? 'text-4xl md:text-5xl' : 'text-2xl md:text-3xl'}`}
         >
           {entry.title}
-        </h3>
+        </h2>
         <p className={`mt-3 max-w-md leading-relaxed text-bone/70 [text-wrap:pretty] ${large ? 'text-base md:text-lg' : 'text-sm'}`}>
           {entry.summary}
         </p>
@@ -199,6 +199,12 @@ export default function Work() {
             instead of expiring. The work above survived that cut. If it looks restrained, that is
             the point. Restraint is what volume can never buy.
           </p>
+          <Link
+            href="/services"
+            className="mt-8 inline-flex min-h-[44px] items-center font-mono text-[10px] tracking-[0.3em] text-ash transition-colors duration-300 hover:text-bone"
+          >
+            HOW WE WORK →
+          </Link>
         </m.div>
       </section>
 

@@ -27,7 +27,7 @@ export const pillars: Pillar[] = [
     tag: 'FILM · IMAGERY · CONTENT SYSTEMS',
     description: 'Campaign film and imagery from an AI pipeline, directed by hand.',
     // C-P20 imagery pass: abstract treatment for the AI pillar
-    still: '/media/cinematic-still-1.png',
+    still: '/media/cinematic-still-1.webp',
     offers: [
       {
         name: 'Campaign Sprint',
@@ -57,7 +57,7 @@ export const pillars: Pillar[] = [
     title: 'Brand Systems',
     tag: 'IDENTITY · NARRATIVE · VISUAL WORLD',
     description: 'Identity built to survive contact with the market.',
-    still: '/media/lone-figure-1.png',
+    still: '/media/lone-figure-1.webp',
     offers: [
       {
         name: 'Identity System',
@@ -87,7 +87,7 @@ export const pillars: Pillar[] = [
     title: 'Advisory',
     tag: 'AUDITS · STRATEGY · SYSTEM DESIGN',
     description: 'Straight answers on where your brand goes next.',
-    still: '/media/lone-figure-2.png',
+    still: '/media/lone-figure-2.webp',
     offers: [
       {
         name: 'AI Leverage Audit',

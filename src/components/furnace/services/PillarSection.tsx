@@ -121,6 +121,9 @@ export function PillarSection({ pillar, index }: { pillar: Pillar; index: number
             <MagneticCTA href={`/contact?pillar=${pillar.slug}`} variant="ember">
               {ctas[pillar.slug]}
             </MagneticCTA>
+            <MagneticCTA href="/work" variant="ghost">
+              See the work
+            </MagneticCTA>
           </div>
         </div>
       </div>
