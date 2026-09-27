@@ -28,26 +28,63 @@ const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
 // TRANSITION treatment below; the page's one persistent aurora instance
 // moved to "Judgment" in TurnSequence). All five words carry their metallic
 // gradients again.
-const BUILDS: { word: string; gradient: string }[] = [
-  { word: 'STRATEGY', gradient: 'linear-gradient(180deg, #b8b8bd 0%, #f4f2ee 55%, #cfcdc9 100%)' },
-  { word: 'BRAND SYSTEMS', gradient: 'linear-gradient(180deg, #c9bfae 0%, #f6efe2 55%, #d8cdbb 100%)' },
-  { word: 'IDENTITY', gradient: 'linear-gradient(180deg, #b3b9c4 0%, #eef2f7 55%, #c5ccd8 100%)' },
-  { word: 'CAMPAIGNS', gradient: 'linear-gradient(180deg, #d0a89a 0%, #ffe9de 55%, #d9b3a4 100%)' },
-  { word: 'FILM', gradient: 'linear-gradient(180deg, #c8c4bc 0%, #faf7f2 55%, #d4d0c8 100%)' },
+// Patches-3: every service word glitches in its OWN colour pair and sweep,
+// so the swap reads as a gradient shuffle, not the same flash five times.
+// Pairs stay warm/cool opposites for a clean chromatic split.
+const BUILDS: { word: string; gradient: string; glitch: [string, string]; sweep: string; band: string }[] = [
+  {
+    word: 'STRATEGY',
+    gradient: 'linear-gradient(180deg, #b8b8bd 0%, #f4f2ee 55%, #cfcdc9 100%)',
+    glitch: ['rgba(255,176,40,0.6)', 'rgba(150,190,255,0.5)'],
+    sweep: 'rgba(255,176,40,0.95), rgba(255,236,190,0.95), rgba(237,230,221,0.9)',
+    band: 'rgba(255,176,40,0.85), rgba(255,226,150,0.9)',
+  },
+  {
+    word: 'BRAND SYSTEMS',
+    gradient: 'linear-gradient(180deg, #c9bfae 0%, #f6efe2 55%, #d8cdbb 100%)',
+    glitch: ['rgba(255,77,28,0.6)', 'rgba(160,100,255,0.55)'],
+    sweep: 'rgba(255,77,28,0.9), rgba(196,110,255,0.9), rgba(237,230,221,0.9)',
+    band: 'rgba(255,77,28,0.85), rgba(190,120,255,0.85)',
+  },
+  {
+    word: 'IDENTITY',
+    gradient: 'linear-gradient(180deg, #b3b9c4 0%, #eef2f7 55%, #c5ccd8 100%)',
+    glitch: ['rgba(70,210,255,0.6)', 'rgba(255,90,60,0.5)'],
+    sweep: 'rgba(70,210,255,0.9), rgba(236,246,255,0.95), rgba(255,120,80,0.85)',
+    band: 'rgba(80,200,255,0.8), rgba(220,240,255,0.9)',
+  },
+  {
+    word: 'CAMPAIGNS',
+    gradient: 'linear-gradient(180deg, #d0a89a 0%, #ffe9de 55%, #d9b3a4 100%)',
+    glitch: ['rgba(255,60,150,0.6)', 'rgba(255,200,60,0.55)'],
+    sweep: 'rgba(255,60,150,0.9), rgba(255,170,60,0.95), rgba(255,233,222,0.9)',
+    band: 'rgba(255,70,150,0.85), rgba(255,190,70,0.9)',
+  },
+  {
+    word: 'FILM',
+    gradient: 'linear-gradient(180deg, #c8c4bc 0%, #faf7f2 55%, #d4d0c8 100%)',
+    glitch: ['rgba(255,40,40,0.6)', 'rgba(40,220,200,0.55)'],
+    sweep: 'rgba(255,50,40,0.9), rgba(250,247,242,0.95), rgba(40,220,200,0.85)',
+    band: 'rgba(255,60,40,0.85), rgba(60,220,200,0.85)',
+  },
 ];
 
 // C-P11 swap flourish: a one-shot aurora band swept through the incoming
 // word + a single-frame RGB channel split (textShadow copies behind the
 // transparent glyphs), ~260ms. Remounted per activation via key={active}.
-const AURORA_SWEEP =
-  'linear-gradient(115deg, transparent 30%, rgba(255,77,28,0.9) 44%, rgba(255,180,40,0.95) 50%, rgba(237,230,221,0.9) 56%, transparent 70%)';
+const sweepFor = (stops: string) => {
+  const [a, b, c] = stops.split(/,(?![^(]*\))/).map((x) => x.trim());
+  return `linear-gradient(115deg, transparent 30%, ${a} 44%, ${b} 50%, ${c} 56%, transparent 70%)`;
+};
 
 // A diagonal ember highlight band, twice the element's width, swept left to
 // right on a loop. Layered as its own bg-clip:text span directly over the
 // metallic fill so the base gradient (and the grid cell it lives in) never
 // changes — only an ember shimmer passes through it.
-const WORD_SHIMMER =
-  'linear-gradient(115deg, transparent 35%, rgba(255,77,28,0.85) 48%, rgba(255,160,40,0.9) 52%, transparent 65%)';
+const shimmerFor = (band: string) => {
+  const [a, b] = band.split(/,(?![^(]*\))/).map((x) => x.trim());
+  return `linear-gradient(115deg, transparent 35%, ${a} 48%, ${b} 52%, transparent 65%)`;
+};
 
 // The dominant hero element (phase 4): "WE BUILD" over a cycling word, as a
 // stacked lockup. Every word renders into the SAME grid cell so the block
@@ -119,7 +156,7 @@ function WeBuild() {
           </m.span>
         ))}
         {!reduced && BUILDS.map((b, idx) => (
-          <WordShimmer key={`${b.word}-shimmer`} word={b.word} active={idx === active} />
+          <WordShimmer key={`${b.word}-shimmer`} word={b.word} band={b.band} active={idx === active} />
         ))}
         {/* C-P11: transition flourish — remounts on every word change so the
             keyframes replay; same grid cell, so zero layout shift */}
@@ -129,7 +166,7 @@ function WeBuild() {
             aria-hidden
             className="clip-pad pointer-events-none col-start-1 row-start-1 sm:whitespace-nowrap"
             style={{
-              backgroundImage: AURORA_SWEEP,
+              backgroundImage: sweepFor(BUILDS[active].sweep),
               backgroundSize: '260% 100%',
               WebkitBackgroundClip: 'text',
               backgroundClip: 'text',
@@ -138,20 +175,24 @@ function WeBuild() {
             initial={{
               opacity: 0.95,
               backgroundPositionX: '0%',
-              x: 3,
-              textShadow: '-3px 0 rgba(255,60,40,0.5), 3px 0 rgba(90,170,255,0.5)',
+              x: 4,
+              textShadow: `-4px 0 ${BUILDS[active].glitch[0]}, 4px 0 ${BUILDS[active].glitch[1]}`,
             }}
             animate={{
               opacity: 0,
               backgroundPositionX: '260%',
-              x: 0,
-              textShadow: '0 0 rgba(0,0,0,0)',
+              x: [4, -3, 1, 0],
+              textShadow: [
+                `-4px 0 ${BUILDS[active].glitch[0]}, 4px 0 ${BUILDS[active].glitch[1]}`,
+                `3px 0 ${BUILDS[active].glitch[0]}, -3px 0 ${BUILDS[active].glitch[1]}`,
+                '0 0 rgba(0,0,0,0), 0 0 rgba(0,0,0,0)',
+              ],
             }}
             transition={{
-              duration: 0.26,
+              duration: 0.34,
               ease: 'easeOut',
-              textShadow: { duration: 0.1 },
-              x: { duration: 0.1 },
+              textShadow: { duration: 0.16, times: [0, 0.5, 1] },
+              x: { duration: 0.16, times: [0, 0.35, 0.7, 1] },
             }}
           >
             {BUILDS[active].word}
@@ -166,13 +207,13 @@ function WeBuild() {
 // Stacked in the SAME grid cell as the base word (not absolutely
 // positioned), same text/typography, so its glyphs land exactly over the
 // base fill's glyphs — only the ember band travels through them.
-function WordShimmer({ word, active }: { word: string; active: boolean }) {
+function WordShimmer({ word, band, active }: { word: string; band: string; active: boolean }) {
   return (
     <m.span
       aria-hidden
       className="clip-pad pointer-events-none col-start-1 row-start-1 sm:whitespace-nowrap"
       style={{
-        backgroundImage: WORD_SHIMMER,
+        backgroundImage: shimmerFor(band),
         backgroundSize: '260% 100%',
         WebkitBackgroundClip: 'text',
         backgroundClip: 'text',

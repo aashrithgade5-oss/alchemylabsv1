@@ -41,7 +41,7 @@ const SectionDivider = memo(() => (
       transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
     />
     <motion.div
-      className="w-1 h-1 rounded-full bg-alchemy-red/30"
+      className="w-1 h-1 rounded-full bg-ember/40"
       initial={{ scale: 0 }}
       whileInView={{ scale: 1 }}
       viewport={{ once: true }}

@@ -20,10 +20,10 @@ const founders = [
     slug: '/aashrith',
     photo: founderAashrith,
     photoPosition: 'center 20%',
-    gradient: 'linear-gradient(135deg, rgba(180,200,220,0.02) 0%, rgba(255,255,255,0.04) 50%, rgba(220,38,38,0.03) 100%)',
-    overlayGradient: 'linear-gradient(180deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.2) 30%, rgba(0,0,0,0.15) 50%, rgba(220,38,38,0.12) 70%, rgba(0,0,0,0.7) 100%)',
-    hoverGlow: 'radial-gradient(ellipse at 50% 40%, rgba(220,38,38,0.18) 0%, transparent 70%)',
-    hoverBorder: 'rgba(220,38,38,0.4)',
+    gradient: 'linear-gradient(135deg, rgba(180,200,220,0.02) 0%, rgba(255,255,255,0.04) 50%, rgba(255,77,28,0.03) 100%)',
+    overlayGradient: 'linear-gradient(180deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.2) 30%, rgba(0,0,0,0.15) 50%, rgba(255,77,28,0.12) 70%, rgba(0,0,0,0.7) 100%)',
+    hoverGlow: 'radial-gradient(ellipse at 50% 40%, rgba(255,77,28,0.18) 0%, transparent 70%)',
+    hoverBorder: 'rgba(255,77,28,0.4)',
     monogramColor: 'rgba(255,255,255,0.04)',
   },
   {
@@ -123,7 +123,7 @@ const FounderPanel = memo(({ founder, index }: { founder: typeof founders[0]; in
           style={{
             background: (founder as any).isPink
               ? 'radial-gradient(ellipse 70% 60% at 50% 55%, rgba(236,72,153,0.15) 0%, rgba(236,72,153,0.05) 40%, transparent 70%)'
-              : 'radial-gradient(ellipse 70% 60% at 50% 55%, rgba(220,38,38,0.15) 0%, rgba(220,38,38,0.05) 40%, transparent 70%)',
+              : 'radial-gradient(ellipse 70% 60% at 50% 55%, rgba(255,77,28,0.15) 0%, rgba(255,77,28,0.05) 40%, transparent 70%)',
           }}
         />
 
@@ -159,15 +159,15 @@ const FounderPanel = memo(({ founder, index }: { founder: typeof founders[0]; in
 
         {/* Content */}
         <div className="relative z-10 flex flex-col items-center justify-end text-center h-full px-6 sm:px-10 py-10 sm:py-14 lg:py-12">
-          <h2 className="font-sans text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black uppercase tracking-[0.1em] text-porcelain mb-3">
+          <h2 className="font-sans text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black uppercase tracking-[0.1em] text-bone mb-3">
             {founder.fullName}
           </h2>
 
-          <p className="font-mono text-[10px] sm:text-xs text-alchemy-red/80 tracking-[0.15em] uppercase mb-3">
+          <p className="font-mono text-[10px] sm:text-xs text-ember/80 tracking-[0.15em] uppercase mb-3">
             {founder.title}
           </p>
 
-          <p className="font-sans text-xs sm:text-sm text-porcelain/40 mb-8 max-w-xs leading-relaxed">
+          <p className="font-sans text-xs sm:text-sm text-bone/40 mb-8 max-w-xs leading-relaxed">
             {founder.specialty}
           </p>
 
@@ -175,17 +175,17 @@ const FounderPanel = memo(({ founder, index }: { founder: typeof founders[0]; in
             href={founder.slug}
             className="inline-flex items-center gap-2.5 px-7 py-3 rounded-full text-xs sm:text-sm font-sans font-medium transition-all duration-300 group/btn no-glow"
             style={{
-              background: (founder as any).isPink ? 'rgba(236,72,153,0.15)' : 'rgba(220,38,38,0.15)',
-              border: `1px solid ${(founder as any).isPink ? 'rgba(236,72,153,0.4)' : 'rgba(220,38,38,0.4)'}`,
+              background: (founder as any).isPink ? 'rgba(236,72,153,0.15)' : 'rgba(255,77,28,0.15)',
+              border: `1px solid ${(founder as any).isPink ? 'rgba(236,72,153,0.4)' : 'rgba(255,77,28,0.4)'}`,
               boxShadow: isHovered
-                ? `0 0 30px ${(founder as any).isPink ? 'rgba(236,72,153,0.2)' : 'rgba(220,38,38,0.2)'}`
-                : `0 0 20px ${(founder as any).isPink ? 'rgba(236,72,153,0.1)' : 'rgba(220,38,38,0.1)'}`,
+                ? `0 0 30px ${(founder as any).isPink ? 'rgba(236,72,153,0.2)' : 'rgba(255,77,28,0.2)'}`
+                : `0 0 20px ${(founder as any).isPink ? 'rgba(236,72,153,0.1)' : 'rgba(255,77,28,0.1)'}`,
             }}
           >
-            <span className="text-porcelain group-hover/btn:text-alchemy-red transition-colors">
+            <span className="text-bone group-hover/btn:text-ember transition-colors">
               Discover Portfolio
             </span>
-            <ArrowRight className="w-3.5 h-3.5 text-alchemy-red group-hover/btn:translate-x-1 transition-transform" />
+            <ArrowRight className="w-3.5 h-3.5 text-ember group-hover/btn:translate-x-1 transition-transform" />
           </Link>
         </div>
       </motion.div>
@@ -198,12 +198,12 @@ export const FounderCircles = memo(() => {
   const isMobile = useIsMobile();
 
   return (
-    <section className="relative py-16 sm:py-24 lg:py-32 overflow-hidden">
+    <section className="relative py-12 sm:py-16 lg:py-20 overflow-hidden">
       <div className="absolute inset-0 bg-background" />
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: 'radial-gradient(ellipse 70% 50% at 50% 50%, rgba(220,38,38,0.03) 0%, transparent 70%)',
+          background: 'radial-gradient(ellipse 70% 50% at 50% 50%, rgba(255,77,28,0.03) 0%, transparent 70%)',
         }}
       />
 
@@ -214,7 +214,7 @@ export const FounderCircles = memo(() => {
           {!isMobile && (
             <div className="relative flex items-center justify-center w-px mx-4">
               <motion.div
-                className="w-px bg-gradient-to-b from-transparent via-alchemy-red/60 to-transparent"
+                className="w-px bg-gradient-to-b from-transparent via-ember/60 to-transparent"
                 initial={{ height: '0%' }}
                 whileInView={{ height: '100%' }}
                 viewport={{ once: true, margin: '-100px' }}

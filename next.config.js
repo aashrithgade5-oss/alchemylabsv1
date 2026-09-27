@@ -2,6 +2,14 @@
 const nextConfig = {
   images: {
     formats: ['image/avif', 'image/webp'],
+    // Patches-3: Higgsfield generations are served from its CDN and optimized
+    // + cached by Vercel's image pipeline (the build sandbox cannot download
+    // them). Scoped to this one host.
+    remotePatterns: [
+      { protocol: 'https', hostname: 'd8j0ntlcm91z4.cloudfront.net' }, // generations
+      { protocol: 'https', hostname: 'd2ol7oe51mr4n9.cloudfront.net' }, // re-encoded uploads
+    ],
+    minimumCacheTTL: 60 * 60 * 24 * 30,
   },
   // C-P20 hotfix: the 12:21 AM consolidation MOVED public/assets/* into
   // public/media/ — every historical '/assets/…' reference (including the

@@ -1235,6 +1235,14 @@ html {
 }
 
 /* CTA hover: one soft light sheen sweeps across the pill, once per hover. */
+.cta-sheen {
+  /* the sheen must be clipped to its own pill: without these the ::after
+     escaped to the nearest positioned ancestor and parked a grey light beam
+     across the contact form's left column (Patches-3) */
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
 .cta-sheen::after {
   content: '';
   position: absolute;
@@ -1677,4 +1685,48 @@ html[data-pl='out'] .al-pl-void {
 }
 html[data-pl='run'] .hero-depth {
   transform: scale(1.12);
+}
+
+/* ---------------------------------------------------------------------------
+   Patches-3: glossy glass card (contact brief). No backdrop-filter (scrolling
+   page): the "glass" is built from light, not blur. Gradient hairline edge,
+   specular sheen, inner top highlight, depth shadow, ember bloom.
+--------------------------------------------------------------------------- */
+.gloss-card {
+  position: relative;
+  border-radius: 24px;
+  padding: 1px;
+  background: linear-gradient(160deg, rgba(237, 230, 221, 0.32), rgba(237, 230, 221, 0.06) 35%, rgba(255, 77, 28, 0.08) 70%, rgba(255, 77, 28, 0.35));
+  box-shadow:
+    0 40px 120px -30px rgba(0, 0, 0, 0.75),
+    0 0 0 1px rgba(0, 0, 0, 0.35),
+    0 0 90px -20px rgba(255, 77, 28, 0.18);
+}
+.gloss-card__body {
+  position: relative;
+  overflow: hidden;
+  border-radius: 23px;
+  background:
+    radial-gradient(70% 55% at 100% 0%, rgba(255, 77, 28, 0.10), transparent 70%),
+    radial-gradient(60% 50% at 0% 100%, rgba(237, 230, 221, 0.04), transparent 70%),
+    linear-gradient(180deg, rgb(33, 29, 26), rgb(17, 15, 13));
+}
+/* specular sheen: one soft diagonal pass of light across the upper third */
+.gloss-card__body::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(118deg, rgba(255, 255, 255, 0.075) 0%, rgba(255, 255, 255, 0.02) 22%, transparent 38%);
+}
+/* inner top highlight: the lit lip of the glass */
+.gloss-card__body::after {
+  content: '';
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  top: 0;
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
 }

@@ -207,10 +207,10 @@ export const Contact = memo(() => {
   );
 
   return (
-    <section id="contact" className="relative px-5 py-10 sm:px-8 md:px-12 md:py-14">
+    <section id="contact" className="relative px-5 py-10 sm:px-8 md:px-14 md:py-16">
       <div className="grid gap-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16">
         {/* Left — direct lines */}
-        <aside className="min-w-0">
+        <aside className="min-w-0 lg:border-r lg:border-bone/[0.07] lg:pr-14">
           <m.p {...reveal(0)} className="font-mono text-[10px] uppercase tracking-[0.3em] text-bone/50">Direct lines</m.p>
           <m.h2 {...reveal(1)} className="glass-type mt-4 font-headline text-[clamp(2rem,4vw,3rem)] font-bold leading-[1.05] tracking-[-0.03em] text-bone">
             Let&rsquo;s build something <span className="font-playfair font-normal italic text-ember">inevitable</span>.
@@ -276,7 +276,7 @@ export const Contact = memo(() => {
             {!isSubmitted ? (
               <m.div key="form" exit={reduce ? undefined : { opacity: 0, y: -12 }} transition={{ duration: 0.3 }}>
                 {/* Primary alternative: book a call */}
-                <m.div {...reveal(1)} className="rounded-[20px] border border-bone/10 bg-bone/[0.03] p-5 sm:p-6">
+                <m.div {...reveal(1)} className="relative overflow-hidden rounded-[20px] border border-ember/25 bg-[linear-gradient(135deg,rgba(255,77,28,0.10),rgba(237,230,221,0.02)_55%)] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] sm:p-6">
                   <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                       <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-bone/45">Strategy call · 30 min</p>
@@ -309,7 +309,7 @@ export const Contact = memo(() => {
                       <input id="c-company" type="text" autoComplete="organization" value={form.company} onChange={set('company')} placeholder="Optional" disabled={isSubmitting} className={`${field} ${fieldBorder()}`} />
                     </Field>
                     <Field id="c-service" text="What do you need?" hint="“Specific request” opens your email app">
-                      <select id="c-service" value={form.service} onChange={handleService} disabled={isSubmitting} aria-describedby="c-service-hint" className={`${field} ${fieldBorder()} cursor-pointer appearance-none bg-carbon pr-10 [background-image:linear-gradient(45deg,transparent_50%,rgba(237,230,221,0.5)_50%),linear-gradient(135deg,rgba(237,230,221,0.5)_50%,transparent_50%)] [background-position:calc(100%-20px)_50%,calc(100%-15px)_50%] [background-repeat:no-repeat] [background-size:5px_5px]`}>
+                      <select id="c-service" value={form.service} onChange={handleService} disabled={isSubmitting} aria-describedby="c-service-hint" className={`${field} ${fieldBorder()} cursor-pointer appearance-none pr-10 [background-image:linear-gradient(45deg,transparent_50%,rgba(237,230,221,0.5)_50%),linear-gradient(135deg,rgba(237,230,221,0.5)_50%,transparent_50%)] [background-position:calc(100%-20px)_50%,calc(100%-15px)_50%] [background-repeat:no-repeat] [background-size:5px_5px]`}>
                         <option value="" disabled className="bg-carbon text-bone/40">Choose one</option>
                         {serviceOptions.map((o) => (
                           <option key={o.value} value={o.value} className="bg-carbon text-bone">{o.label}</option>
