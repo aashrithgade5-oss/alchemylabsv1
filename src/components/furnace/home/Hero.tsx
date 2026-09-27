@@ -10,9 +10,8 @@ import {
   useTransform,
 } from 'framer-motion';
 import { DecodeText } from '../DecodeText';
-import { KineticHeadline, useScrollVelocitySkew } from '../KineticHeadline';
+import { useScrollVelocitySkew } from '../KineticHeadline';
 import { MagneticCTA } from '../MagneticCTA';
-import { CapacityTag } from '../CapacityTag';
 import { HeroMeshField } from './HeroMeshField';
 import { usePreloaderHandoff } from '../preloader-gate';
 
@@ -33,6 +32,13 @@ const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
 // Pairs stay warm/cool opposites for a clean chromatic split.
 const BUILDS: { word: string; gradient: string; glitch: [string, string]; sweep: string; band: string }[] = [
   {
+    word: 'CAMPAIGNS',
+    gradient: 'linear-gradient(180deg, #d0a89a 0%, #ffe9de 55%, #d9b3a4 100%)',
+    glitch: ['rgba(255,60,150,0.6)', 'rgba(255,200,60,0.55)'],
+    sweep: 'rgba(255,60,150,0.9), rgba(255,170,60,0.95), rgba(255,233,222,0.9)',
+    band: 'rgba(255,70,150,0.85), rgba(255,190,70,0.9)',
+  },
+  {
     word: 'STRATEGY',
     gradient: 'linear-gradient(180deg, #b8b8bd 0%, #f4f2ee 55%, #cfcdc9 100%)',
     glitch: ['rgba(255,176,40,0.6)', 'rgba(150,190,255,0.5)'],
@@ -52,13 +58,6 @@ const BUILDS: { word: string; gradient: string; glitch: [string, string]; sweep:
     glitch: ['rgba(70,210,255,0.6)', 'rgba(255,90,60,0.5)'],
     sweep: 'rgba(70,210,255,0.9), rgba(236,246,255,0.95), rgba(255,120,80,0.85)',
     band: 'rgba(80,200,255,0.8), rgba(220,240,255,0.9)',
-  },
-  {
-    word: 'CAMPAIGNS',
-    gradient: 'linear-gradient(180deg, #d0a89a 0%, #ffe9de 55%, #d9b3a4 100%)',
-    glitch: ['rgba(255,60,150,0.6)', 'rgba(255,200,60,0.55)'],
-    sweep: 'rgba(255,60,150,0.9), rgba(255,170,60,0.95), rgba(255,233,222,0.9)',
-    band: 'rgba(255,70,150,0.85), rgba(255,190,70,0.9)',
   },
   {
     word: 'FILM',
@@ -98,7 +97,7 @@ function WeBuild() {
 
   useEffect(() => {
     if (reduced) return;
-    const t = setInterval(() => setI((v) => (v + 1) % BUILDS.length), 2400);
+    const t = setInterval(() => setI((v) => (v + 1) % BUILDS.length), 2800);
     return () => clearInterval(t);
   }, [reduced]);
 
@@ -109,11 +108,11 @@ function WeBuild() {
     color: 'transparent',
   });
 
-  const active = reduced ? 1 : i;
+  const active = reduced ? 0 : i;
 
   return (
     <h1
-      aria-label={`Alchemy Labs — AI-native brand studio. We build ${BUILDS.map((b) => b.word.toLowerCase()).join(', ')}`}
+      aria-label={`Alchemy Labs, AI-native brand studio. We build ${BUILDS.map((b) => b.word.toLowerCase()).join(', ')}`}
       className="font-headline text-[clamp(2.6rem,11.5vw,8rem)] font-black leading-[1.04] tracking-[-0.03em]"
     >
       {/* Patches-1: "Build" in script (owner request), ember-metal fill;
@@ -144,11 +143,13 @@ function WeBuild() {
                 ? { opacity: idx === active ? 1 : 0 }
                 : {
                     opacity: idx === active ? 1 : 0,
-                    y: idx === active ? '0%' : '18%',
-                    filter: idx === active ? 'blur(0px)' : 'blur(10px)',
+                    y: idx === active ? '0%' : idx === (active + BUILDS.length - 1) % BUILDS.length ? '-14%' : '14%',
+                    scale: idx === active ? 1 : 0.985,
                   }
             }
-            transition={{ duration: 0.5, ease }}
+            // transform + opacity only: a blur filter on 8rem glyphs dropped
+            // frames on every swap (Safari worst), which read as a stutter
+            transition={{ duration: 0.62, ease }}
           >
             <span className="clip-pad" style={clipStyle(b.gradient)}>
               {b.word}
@@ -158,45 +159,40 @@ function WeBuild() {
         {!reduced && BUILDS.map((b, idx) => (
           <WordShimmer key={`${b.word}-shimmer`} word={b.word} band={b.band} active={idx === active} />
         ))}
-        {/* C-P11: transition flourish — remounts on every word change so the
-            keyframes replay; same grid cell, so zero layout shift */}
+        {/* Patches-4 glitch: two solid colour ghosts of the incoming word
+            split apart and settle in ~420ms. Transform + opacity only (the old
+            animated text-shadow repainted 8rem glyphs every frame, which is
+            what made it judder), remounted per swap via key. */}
         {!reduced && (
-          <m.span
-            key={`sweep-${active}`}
-            aria-hidden
-            className="clip-pad pointer-events-none col-start-1 row-start-1 sm:whitespace-nowrap"
-            style={{
-              backgroundImage: sweepFor(BUILDS[active].sweep),
-              backgroundSize: '260% 100%',
-              WebkitBackgroundClip: 'text',
-              backgroundClip: 'text',
-              color: 'transparent',
-            }}
-            initial={{
-              opacity: 0.95,
-              backgroundPositionX: '0%',
-              x: 4,
-              textShadow: `-4px 0 ${BUILDS[active].glitch[0]}, 4px 0 ${BUILDS[active].glitch[1]}`,
-            }}
-            animate={{
-              opacity: 0,
-              backgroundPositionX: '260%',
-              x: [4, -3, 1, 0],
-              textShadow: [
-                `-4px 0 ${BUILDS[active].glitch[0]}, 4px 0 ${BUILDS[active].glitch[1]}`,
-                `3px 0 ${BUILDS[active].glitch[0]}, -3px 0 ${BUILDS[active].glitch[1]}`,
-                '0 0 rgba(0,0,0,0), 0 0 rgba(0,0,0,0)',
-              ],
-            }}
-            transition={{
-              duration: 0.34,
-              ease: 'easeOut',
-              textShadow: { duration: 0.16, times: [0, 0.5, 1] },
-              x: { duration: 0.16, times: [0, 0.35, 0.7, 1] },
-            }}
-          >
-            {BUILDS[active].word}
-          </m.span>
+          <span key={`glitch-${active}`} aria-hidden className="pointer-events-none col-start-1 row-start-1 grid sm:whitespace-nowrap">
+            {BUILDS[active].glitch.map((c, k) => (
+              <m.span
+                key={k}
+                className="col-start-1 row-start-1 will-change-transform"
+                style={{ color: c }}
+                initial={{ x: k ? 7 : -7, opacity: 0.85 }}
+                animate={{ x: [k ? 7 : -7, k ? -3 : 3, 0], opacity: [0.85, 0.5, 0] }}
+                transition={{ duration: 0.42, times: [0, 0.4, 1], ease: 'easeOut' }}
+              >
+                {BUILDS[active].word}
+              </m.span>
+            ))}
+            <m.span
+              className="clip-pad col-start-1 row-start-1"
+              style={{
+                backgroundImage: sweepFor(BUILDS[active].sweep),
+                backgroundSize: '260% 100%',
+                WebkitBackgroundClip: 'text',
+                backgroundClip: 'text',
+                color: 'transparent',
+              }}
+              initial={{ opacity: 0.9, backgroundPositionX: '0%' }}
+              animate={{ opacity: 0, backgroundPositionX: '200%' }}
+              transition={{ duration: 0.7, ease: 'easeOut' }}
+            >
+              {BUILDS[active].word}
+            </m.span>
+          </span>
         )}
       </span>
     </h1>
@@ -227,7 +223,7 @@ function WordShimmer({ word, band, active }: { word: string; band: string; activ
       }
       transition={
         active
-          ? { backgroundPositionX: { duration: 2.6, ease: 'linear', repeat: Infinity } }
+          ? { backgroundPositionX: { duration: 3.4, ease: 'linear', repeat: Infinity } }
           : { duration: 0.3 }
       }
     >
@@ -411,50 +407,43 @@ export function Hero() {
             >
               <WeBuild />
             </m.div>
-            {/* kicker — R-P10 contrast raise: thin→light weight plus a soft
-                drop-shadow scrim tucked behind the glyphs (static filter, no
-                mix-blend descendants; not a solid backing block) */}
-            <KineticHeadline
-              text="Taste is the moat."
-              className="relative z-10 mt-8 justify-center font-sans text-[clamp(1.125rem,1.8vw,1.5rem)] font-light leading-[1.05] tracking-[-0.01em] text-bone [filter:drop-shadow(0_2px_12px_rgba(10,9,8,0.95))_drop-shadow(0_0_3px_rgba(10,9,8,0.7))] md:mt-10"
-              wordClassName="glass-type"
-              delay={0.9}
-              as="p"
-            />
+            {/* Patches-4: one line finishes the lockup, one line says who
+                it's for. The old kicker + paragraph stacked three voices
+                under the headline and pushed the CTAs off the oval. */}
+            <m.p
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9, delay: 0.85, ease }}
+              className="relative z-10 mt-4 font-headline text-[clamp(1.35rem,3.2vw,2.4rem)] font-light leading-[1.15] tracking-[-0.02em] text-bone [filter:drop-shadow(0_2px_12px_rgba(10,9,8,0.9))] md:mt-5"
+            >
+              <span className="glass-type">at scale, without losing the </span>
+              <span className="font-playfair italic">taste</span>
+              <span className="glass-type">.</span>
+            </m.p>
 
             <m.p
-              initial={{ opacity: 0, y: 18, filter: 'blur(8px)' }}
-              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-              transition={{ duration: 0.8, delay: 1.15, ease }}
-              className="relative z-10 mt-5 max-w-xl text-lg font-light leading-relaxed text-bone/80 [text-wrap:balance] md:mt-6 md:text-xl"
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 1.05, ease }}
+              className="relative z-10 mt-4 max-w-md text-[15px] leading-relaxed text-bone/70 [text-wrap:balance] md:text-base"
             >
-              AI drafts at scale. Judgment decides what airs. Brand systems and campaign film for
-              founders who already know the{' '}
-              <span className="font-playfair italic">difference</span>.
+              Strategy, identity and film for founders building something worth looking at.
             </m.p>
 
             <m.div
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 1.35, ease }}
+              transition={{ duration: 0.7, delay: 1.2, ease }}
               className="relative z-10 mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center sm:gap-5"
             >
               <MagneticCTA href="/contact" variant="ember">
-                Begin the sprint
+                Book a call
               </MagneticCTA>
               <MagneticCTA href="/work" variant="glass" className="px-6 py-3 text-xs">
                 See the work
               </MagneticCTA>
             </m.div>
 
-            <m.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.7, delay: 1.6 }}
-              className="relative z-10 mt-8"
-            >
-              <CapacityTag />
-            </m.div>
           </div>
         </m.div>
       </div>

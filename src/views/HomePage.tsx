@@ -70,20 +70,20 @@ export default function HomePage() {
       <Suspense fallback={null}>
         <TurnSequence />
         <Intertext eyebrow="THE PRACTICE" compact>
-          <span className="block">A <em>thousand</em> drafts.</span>
-          <span className="block">One that <em>ships.</em></span>
+          <span className="block">We make fewer <em>things.</em></span>
+          <span className="block">We make them <em>properly.</em></span>
         </Intertext>
         <Pillars />
         <StillBreak />
-        <ScrubBeat eyebrow="THE PROOF" text="Every frame here survived the eye." compact />
+        <ScrubBeat eyebrow="THE PROOF" text="Every frame here was chosen by eye." compact />
         <FeaturedWork />
         <Intertext eyebrow="THE OFFER" compact>
-          <span className="block">No two briefs <em>alike.</em></span>
-          <span className="block">No price <em>lists.</em></span>
-          <span className="block">One <em>conversation.</em></span>
+          <span className="block">Every brief is <em>different.</em></span>
+          <span className="block">So is every <em>quote.</em></span>
+          <span className="block">It starts with a <em>call.</em></span>
         </Intertext>
         <TheFive />
-        <ScrubBeat eyebrow="THE STANDARD" text={['One studio.', 'One bar.', 'No exceptions.']} compact />
+        <ScrubBeat eyebrow="THE STANDARD" text={['One standard,', 'on every project.']} compact />
         <StudioMotion />
         <ClosingBand />
       </Suspense>
