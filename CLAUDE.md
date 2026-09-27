@@ -70,6 +70,15 @@ Everything here is NON-NEGOTIABLE and must be re-verified at the END of every se
   high, NEVER a low-alpha transparent glyph. Over bright media, a text-scoped elliptical
   vignette (`.text-vignette`) sits between media and text.
 
+## BACKEND (Patches-2, 2026-09-27)
+- Forms post to our own route handlers (`app/api/brief`, `app/api/newsletter`) -> `lib/server/notify.ts`
+  (Resend > Gmail SMTP > FormSubmit) to aashrithgade5@ + alchemylabs.work@. Never reintroduce a
+  browser-side captcha that can block real clients. A failed delivery must surface, never fake success
+  (bots excepted).
+- Private vault = `/alchemy-vault`, auth in `middleware.ts` + `lib/vault-session.ts` (env creds, HMAC
+  cookie). Never link it, never list it in robots/sitemap. `/admin` stays 404.
+- Secrets live in `.env.local` (gitignored) and Vercel env. Never commit them. See docs/OPERATIONS.md.
+
 ## DEPLOY
 - LOCALHOST ONLY. Never deploy, never touch Vercel. Deploy trigger is only the exact
   user phrase "yes, upload it to Vercel and make this live."

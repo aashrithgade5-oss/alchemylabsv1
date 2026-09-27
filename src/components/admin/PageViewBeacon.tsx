@@ -34,14 +34,14 @@ function referrerHost(): string | null {
 
 /**
  * One row per route change into public.page_views, only after cookie consent,
- * never on /admin. Plain fetch (no supabase-js) to keep public bundles small.
+ * never on the private vault. Plain fetch (no supabase-js) to keep public bundles small.
  */
 export default function PageViewBeacon() {
   const pathname = usePathname();
 
   useEffect(() => {
     if (!pathname || !URL || !KEY) return;
-    if (pathname.startsWith('/admin') || !hasConsent()) return;
+    if (pathname.startsWith('/alchemy-vault') || !hasConsent()) return;
     fetch(`${URL}/rest/v1/page_views`, {
       method: 'POST',
       keepalive: true,

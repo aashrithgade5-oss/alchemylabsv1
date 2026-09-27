@@ -3,7 +3,7 @@ import { products } from '@lib/payments';
 import { SITE } from '@lib/seo';
 import { allOffers } from '@/components/furnace/services/offerDetails';
 
-// Public, indexable routes only. Deliberately excluded: /admin (private),
+// Public, indexable routes only. Deliberately excluded: the private vault,
 // /journal (unpublished, noindex), and the legacy /AashrithGadePortfolio +
 // /EvaDoshiPortfolio slugs (308 to /aashrith and /eva in next.config.js).
 export default function sitemap(): MetadataRoute.Sitemap {

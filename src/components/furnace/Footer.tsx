@@ -81,12 +81,15 @@ export function FurnaceFooter() {
           <p className="font-mono text-[10px] tracking-[0.2em] text-ash">
             MUMBAI · WORKING GLOBALLY
           </p>
-          <div className="flex gap-6 font-mono text-[10px] tracking-[0.2em] text-ash">
+          <div className="flex flex-wrap gap-x-6 gap-y-2 font-mono text-[10px] tracking-[0.2em] text-ash">
             <Link href="/privacy" className="transition-colors hover:text-bone">
               PRIVACY
             </Link>
             <Link href="/terms" className="transition-colors hover:text-bone">
               TERMS
+            </Link>
+            <Link href="/pay" className="transition-colors hover:text-bone">
+              PAY
             </Link>
             <span>© {new Date().getFullYear()} ALCHEMY LABS</span>
           </div>

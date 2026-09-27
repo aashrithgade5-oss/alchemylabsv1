@@ -4,7 +4,6 @@ import { m, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { ArrowRight, Calendar, MessageCircle, Instagram, Mail, Loader2, Check, Linkedin, Youtube, Copy, ArrowUpRight } from 'lucide-react';
 import Link from 'next/link';
 import { toast } from 'sonner';
-import { TurnstileWidget } from './TurnstileWidget';
 import { socialLinks } from '@/data/socialLinks';
 import { CalendlyDialog } from './contact/CalendlyDialog';
 import { validateBrief, type Brief, type BriefErrors } from './contact/validate';
@@ -105,7 +104,9 @@ export const Contact = memo(() => {
   const [errors, setErrors] = useState<BriefErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  // time-trap: bots submit within milliseconds of load; the server drops those
+  const startedAt = useRef<number>(0);
   const [honeypot, setHoneypot] = useState('');
   const [calendlyOpen, setCalendlyOpen] = useState(false);
   const [booked, setBooked] = useState(false);
@@ -127,14 +128,8 @@ export const Contact = memo(() => {
     if (value && value !== 'specific-request') setForm((f) => ({ ...f, service: value }));
   }, []);
 
-  const handleTurnstileVerify = useCallback((token: string) => setTurnstileToken(token), []);
-  const handleTurnstileExpire = useCallback(() => setTurnstileToken(null), []);
-  const handleTurnstileError = useCallback(() => {
-    setTurnstileToken(null);
-    // Suppress error toast on preview/localhost — Turnstile always fails there
-    const h = window.location.hostname;
-    if (h.includes('lovable.app') || h === 'localhost' || h === '127.0.0.1') return;
-    toast.error('Security verification failed. Please refresh and try again.');
+  useEffect(() => {
+    startedAt.current = Date.now();
   }, []);
 
   const set = (k: keyof Brief) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -164,34 +159,25 @@ export const Contact = memo(() => {
       formRef.current?.querySelector<HTMLElement>(`#c-${firstBad}`)?.focus();
       return;
     }
-    if (!turnstileToken) {
-      toast.error('Please complete the security verification.');
-      return;
-    }
     setIsSubmitting(true);
+    setSubmitError(null);
 
     try {
-      // Lazy: supabase-js only downloads when someone actually submits.
-      const { supabase } = await import('@/integrations/supabase/client');
-      // The edge function verifies Turnstile + rate limit, then persists and
-      // emails; the browser has no direct insert rights on the table.
-      const { error } = await supabase.functions.invoke('send-contact-email', {
-        body: {
-          name: form.name,
-          email: form.email,
-          company: form.company,
-          service: form.service,
-          message: form.message,
-          turnstileToken,
-          website: honeypot,
-        },
+      // Patches-2: our own server route (app/api/brief) validates, drops
+      // bots (honeypot + time-trap + rate limit), emails the founders and
+      // stores the brief. No third-party widget can block a real client.
+      const res = await fetch('/api/brief', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...form, website: honeypot, startedAt: startedAt.current }),
       });
-      if (error) throw error;
+      const data = (await res.json().catch(() => ({}))) as { error?: string };
+      if (!res.ok) throw new Error(data.error ?? 'Something went wrong.');
       setIsSubmitted(true);
-      setTurnstileToken(null);
     } catch (error) {
-      console.error('Error submitting form:', error);
-      toast.error('Something went wrong. Please try again, or email us directly.');
+      const msg = error instanceof Error ? error.message : 'Something went wrong.';
+      setSubmitError(msg);
+      toast.error(msg);
     } finally {
       setIsSubmitting(false);
     }
@@ -334,7 +320,7 @@ export const Contact = memo(() => {
 
                   <m.div {...reveal(4)}>
                     <Field id="c-message" text="What are we building? *" error={errors.message}>
-                      <textarea id="c-message" required rows={5} value={form.message} onChange={set('message')} onBlur={blur('message')} placeholder="The vision, the timeline, what good looks like." disabled={isSubmitting} aria-invalid={!!errors.message} aria-describedby={errors.message ? 'c-message-error' : undefined} className={`${field} ${fieldBorder(errors.message)} resize-y`} />
+                      <textarea id="c-message" required rows={5} maxLength={5000} value={form.message} onChange={set('message')} onBlur={blur('message')} placeholder="The vision, the timeline, what good looks like." disabled={isSubmitting} aria-invalid={!!errors.message} aria-describedby={errors.message ? 'c-message-error' : undefined} className={`${field} ${fieldBorder(errors.message)} resize-y`} />
                     </Field>
                   </m.div>
 
@@ -344,7 +330,14 @@ export const Contact = memo(() => {
                     <input id="c-website" name="website" tabIndex={-1} autoComplete="off" value={honeypot} onChange={(e) => setHoneypot(e.target.value)} />
                   </div>
 
-                  <TurnstileWidget onVerify={handleTurnstileVerify} onError={handleTurnstileError} onExpire={handleTurnstileExpire} />
+                  {submitError && (
+                    <p role="alert" className="rounded-2xl border border-ember/40 bg-ember/[0.06] p-4 font-body text-sm text-bone/85">
+                      {submitError}{' '}
+                      <a href={`mailto:${STUDIO_EMAIL}?subject=Project brief`} className="underline decoration-ember/60 underline-offset-4">Email the brief</a>
+                      {' '}or{' '}
+                      <a href={WHATSAPP} target="_blank" rel="noopener noreferrer" className="underline decoration-ember/60 underline-offset-4">WhatsApp us</a>.
+                    </p>
+                  )}
 
                   <div className="flex flex-col-reverse gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-bone/40">NDA available on request</p>
@@ -376,18 +369,10 @@ export const Contact = memo(() => {
                   Brief <span className="font-playfair font-normal italic">received</span>.
                 </h3>
                 <p className="mt-3 max-w-md font-body text-[15px] leading-relaxed text-bone/60">
-                  Thanks for the detail. Want to skip the back-and-forth? Pick a time for a call.
+                  Thanks for the detail. It is with both founders now, and we reply from{' '}
+                  {STUDIO_EMAIL}.
                 </p>
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-                  {bookButton('Book the call', true)}
-                  <a
-                    href={WHATSAPP}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-full border border-bone/15 px-6 font-body text-sm text-bone transition-colors hover:border-ember/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-ember"
-                  >
-                    <MessageCircle className="h-4 w-4" aria-hidden /> WhatsApp
-                  </a>
                   <Link
                     href="/"
                     className="inline-flex min-h-[48px] items-center justify-center rounded-full px-6 font-body text-sm text-bone/60 transition-colors hover:text-bone focus-visible:outline focus-visible:outline-2 focus-visible:outline-ember"
@@ -397,7 +382,7 @@ export const Contact = memo(() => {
                 </div>
                 <button
                   type="button"
-                  onClick={() => { setForm(empty); setErrors({}); setIsSubmitted(false); }}
+                  onClick={() => { setForm(empty); setErrors({}); setIsSubmitted(false); startedAt.current = Date.now(); }}
                   className="mt-6 min-h-[44px] font-mono text-[10px] uppercase tracking-[0.2em] text-bone/40 underline-offset-4 hover:text-bone/70 hover:underline"
                 >
                   Send another brief

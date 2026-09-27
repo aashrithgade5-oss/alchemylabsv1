@@ -7,14 +7,22 @@
 // + payment links) and Razorpay International or Stripe for cross-border
 // cards. Until then international clients are invoiced by email.
 
-/** OWNER: paste the UPI ID here (e.g. 'name@okhdfcbank'). Empty = the UPI
-    block hides itself and points people to WhatsApp instead of showing a
-    QR that pays nobody. */
-export const upiVpa = '';
-export const upiPayeeName = 'Alchemy Labs';
-/** Optional: your own UPI scanner image (e.g. '/media/upi-qr.png'). When set
-    it is shown instead of the generated QR. */
+/** UPI ID. Taken from the owner's own PhonePe scanner (decoded 2026-09-27):
+    upi://pay?pa=7794912315@ybl&pn=AASHRITH GADE. PhonePe also issues
+    7794912315@ibl for the same number; swap here if you prefer that one. */
+export const upiVpa = '7794912315@ybl';
+/** Must match the bank-verified account name. */
+export const upiPayeeName = 'Aashrith Gade';
+/** Optional: a scanner image to show instead of the generated QR. */
 export const upiQrImage: string | null = null;
+
+/** Card / netbanking / wallets (India): a Razorpay Payment Page or Payment
+    Link URL (https://rzp.io/...). Empty = the card rail offers a secure link
+    on request instead. Set NEXT_PUBLIC_CARD_PAYMENT_URL in Vercel. */
+export const cardPaymentUrl = process.env.NEXT_PUBLIC_CARD_PAYMENT_URL ?? '';
+/** International cards / PayPal: Razorpay International page, Stripe
+    Payment Link or paypal.me URL. Set NEXT_PUBLIC_INTL_PAYMENT_URL. */
+export const intlPaymentUrl = process.env.NEXT_PUBLIC_INTL_PAYMENT_URL ?? '';
 
 export const CONTACT_EMAIL = 'alchemylabs.work@gmail.com';
 export const WHATSAPP_NUMBER = '917794912315';
@@ -86,13 +94,39 @@ export const products: Product[] = [
   },
 ];
 
-/** UPI intent with NO amount: the payer enters the agreed figure. */
-export function upiPaymentUri(note = 'Alchemy Labs'): string {
-  const params = new URLSearchParams({
-    pa: upiVpa,
-    pn: upiPayeeName,
-    cu: 'INR',
-    tn: note,
-  });
-  return `upi://pay?${params.toString()}`;
+/** UPI query with NO amount: the payer enters the agreed figure. */
+export function upiQuery(note = ''): string {
+  // %20 spaces (some apps choke on '+'), and a LITERAL '@' in the VPA:
+  // several UPI apps never decode %40, so the ID would not resolve.
+  const q: [string, string][] = [
+    ['pa', upiVpa],
+    ['pn', upiPayeeName],
+    ['cu', 'INR'],
+  ];
+  if (note) q.push(['tn', note.slice(0, 50)]);
+  return q.map(([k, v]) => `${k}=${encodeURIComponent(v).replace(/%40/g, '@')}`).join('&');
+}
+
+/** Generic intent: Android shows its UPI app chooser; QR payload too. */
+export function upiPaymentUri(note = ''): string {
+  return `upi://pay?${upiQuery(note)}`;
+}
+
+export type UpiApp = 'gpay' | 'phonepe' | 'paytm' | 'any';
+
+/** App-specific deep links (iOS has no generic upi:// chooser). */
+export function upiAppLink(app: UpiApp, platform: 'ios' | 'android' | 'other', note?: string) {
+  const q = upiQuery(note);
+  switch (app) {
+    case 'gpay':
+      return platform === 'android'
+        ? `intent://pay?${q}#Intent;scheme=upi;package=com.google.android.apps.nbu.paisa.user;end`
+        : `gpay://upi/pay?${q}`;
+    case 'phonepe':
+      return `phonepe://pay?${q}`;
+    case 'paytm':
+      return `paytmmp://pay?${q}`;
+    default:
+      return `upi://pay?${q}`;
+  }
 }

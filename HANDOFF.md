@@ -988,3 +988,24 @@ fallback — set that env var in Vercel before the first deploy (see ERROR_LOG.m
   12-route x 3-viewport matrix (36 checks) (iPhone 13, iPad Mini, 1440): 200s, one h1, no overflow, no console errors.
 - NOT verifiable here: real Safari/WebKit (download blocked by sandbox proxy). Owner to spot-check on
   iPhone Safari + macOS Safari. Not deployed.
+
+## 2026-09-27 - Patches-2 (payments, contact, email, vault)
+- Brief + newsletter now server routes (app/api/brief, app/api/newsletter) -> lib/server/notify.ts:
+  Resend > Gmail SMTP > FormSubmit to aashrithgade5@ + CC alchemylabs.work@, reply-to sender;
+  optional Supabase storage via service role. Turnstile hard-block removed (it blocked every brief on
+  localhost and any host off its allowlist); honeypot + time-trap + rate limit + same-origin instead.
+  Newsletter was fake (cleared the input) - now real. Migration: newsletter_subscribers.
+- Contact: one booking CTA (Book a call -> Calendly); success state no longer adds a second one;
+  honest inline error with email/WhatsApp fallback. UPI moved off /contact to /pay (noindex, footer PAY).
+- Payments: UPI 7794912315@ybl (decoded from owner's PhonePe QR; owner typed @ibl - same number,
+  both PhonePe handles). LuxeQr: ECC-H soft-square modules + atom seal, decodes on iPhone SE/13,
+  Pixel 7, iPad Mini, desktop. Literal '@' (apps choke on %40). Phone buttons: GPay/PhonePe/Paytm/any.
+  Card + international rails via NEXT_PUBLIC_CARD_PAYMENT_URL / NEXT_PUBLIC_INTL_PAYMENT_URL (Razorpay/
+  Stripe/PayPal hosted pages), WhatsApp link request until set.
+- Vault: /alchemy-vault + /alchemy-vault/login, middleware HMAC cookie (12h), env creds, 8/15min
+  lockout, fails closed, /admin 404, X-Robots-Tag noindex. Old Supabase-auth admin + StatsPanel deleted.
+  New dashboard: briefs/newsletter/traffic/system status, CSV export.
+- Tests: 10/10 (notify payloads incl. FormSubmit activation = failure, vault session tamper/expiry).
+  E2E via curl on prod build: validation 400, honeypot silent 200, cross-origin 403, vault 307/401/200.
+- Sandbox cannot reach any mail provider: real delivery must be proven by the owner (docs/OPERATIONS.md s3).
+- .gitignore now covers .env*.local (it covered nothing before).
