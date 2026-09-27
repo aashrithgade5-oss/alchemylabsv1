@@ -8,6 +8,7 @@ import { MagneticCTA } from '../MagneticCTA';
 import { HomeAtmosphere } from '../home/HomeAtmosphere';
 import { SvcImage } from './SvcMedia';
 import { findOffer, processByPillar } from './offerDetails';
+import { offerShot } from './mediaRegistry';
 
 const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
 const kanji: Record<string, string> = { ai: '壱', brand: '弐', advisory: '参' };
@@ -43,6 +44,7 @@ export function OfferDetailView({ slug }: { slug: string }) {
   const { offer, pillar, detail } = entry;
   const steps = processByPillar[pillar.slug];
   const index = Number(pillar.numeral);
+  const shot = offerShot(slug);
 
   return (
     <main className="relative overflow-x-clip font-sans [&_h1]:[text-wrap:balance] [&_h2]:[text-wrap:balance] [&_h3]:[text-wrap:balance] [&_p]:[text-wrap:pretty] [&_li]:[text-wrap:pretty]">
@@ -90,17 +92,31 @@ export function OfferDetailView({ slug }: { slug: string }) {
               </MagneticCTA>
             </div>
           </div>
-          <div className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl border border-line sm:aspect-[16/10] lg:aspect-[4/5]">
-            <SvcImage
-              src={`/media/svc/${slug}.webp`}
-              alt={`${offer.name}: visual direction from the ${pillar.title} pillar`}
-              fill
-              priority
-              sizes="(min-width: 1024px) 26rem, 100vw"
-              className="object-cover"
-            />
-            <div aria-hidden className="absolute inset-0 bg-void/20" />
-          </div>
+          {/* 4:3 masters, subject centred: 4/5 on phones and lg, 4/3 on tablets */}
+          <m.div
+            initial={{ clipPath: 'inset(4% 4% 4% 4% round 16px)' }}
+            animate={{ clipPath: 'inset(0% 0% 0% 0% round 16px)' }}
+            transition={{ duration: 1.1, delay: 0.2, ease }}
+            className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl border border-line sm:aspect-[4/3] lg:aspect-[4/5]"
+          >
+            <m.div
+              className="absolute inset-0"
+              initial={{ scale: 1.08 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 1.6, delay: 0.2, ease }}
+            >
+              <SvcImage
+                src={shot.src}
+                alt={`${offer.name}: visual direction from the ${pillar.title} pillar`}
+                fill
+                priority
+                sizes="(min-width: 1024px) 26rem, (min-width: 640px) calc(100vw - 6rem), 100vw"
+                className="object-cover"
+                style={{ objectPosition: shot.pos }}
+              />
+            </m.div>
+            <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-void/35 via-transparent to-transparent" />
+          </m.div>
         </div>
       </section>
 

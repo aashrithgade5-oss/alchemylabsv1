@@ -9,6 +9,7 @@ import { KineticHeadline } from '@/components/furnace/KineticHeadline';
 import { CheckoutPanel } from '@/components/furnace/PaymentSheet';
 import { HomeAtmosphere } from '@/components/furnace/home/HomeAtmosphere';
 import { SvcImage } from '@/components/furnace/services/SvcMedia';
+import { offerShot } from '@/components/furnace/services/mediaRegistry';
 
 const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
@@ -102,14 +103,15 @@ export default function ServiceProductPage() {
           className="relative mx-auto mt-12 aspect-[16/10] w-full max-w-3xl overflow-hidden rounded-2xl border border-line"
         >
           <SvcImage
-            src={`/media/svc/${product.id}.webp`}
+            src={offerShot(product.id).src}
             alt={`${product.name}: example of the deliverable's visual direction`}
             fill
             priority
             sizes="(min-width: 768px) 48rem, 100vw"
             className="object-cover"
+            style={{ objectPosition: offerShot(product.id).pos }}
           />
-          <div aria-hidden className="absolute inset-0 bg-void/15" />
+          <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-void/30 via-transparent to-transparent" />
         </m.div>
       </section>
 

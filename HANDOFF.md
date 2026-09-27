@@ -1009,3 +1009,20 @@ fallback — set that env var in Vercel before the first deploy (see ERROR_LOG.m
   E2E via curl on prod build: validation 400, honeypot silent 200, cross-origin 403, vault 307/401/200.
 - Sandbox cannot reach any mail provider: real delivery must be proven by the owner (docs/OPERATIONS.md s3).
 - .gitignore now covers .env*.local (it covered nothing before).
+
+## 2026-09-27 - Patches-3 (final polish, media, go-live)
+- Hero glitch: per-word chromatic pairs + sweep + shimmer (STRATEGY amber/ice, BRAND SYSTEMS ember/violet,
+  IDENTITY cyan/ember, CAMPAIGNS magenta/gold, FILM red/teal), 3-step jitter.
+- Contact: .gloss-card (light-built glass), column divider, ember call card, matched select. Found and
+  fixed .cta-sheen ::after escaping its button (grey beam over the left column on every desktop visit).
+- About: new hero (Higgsfield two-founders frame, <picture> wide/tall, Seedance loop H.264 784KB),
+  headline to emphasis law, particles/aurora/14.8MB video removed, founder cards ember.
+- Aashrith portfolio (agent): Deorhi folded into ONE open Studio186 case study (HumanEdge, Evolve,
+  Deorhi, Taqsha; Notion-sourced facts), 25 images, no '#' links, scroll reveals.
+- Eva portfolio (agent): 10 images, Story + How-she-works, posts keep aspect, false language line removed.
+- Services (agent): molten-glass hero + loop, samurai crop fixed, 17-slot art-directed offer series
+  (src/components/furnace/services/mediaRegistry.ts).
+- Media pipeline: Higgsfield CDN URLs via lib/hf.ts + next/image remotePatterns (sandbox cannot download).
+  Visual QA relay: Higgsfield sandbox -> Figma upload_assets -> get_screenshot (file m2c2gMJa4WBS6k8XqbLZai).
+  All 65 new images reviewed there.
+- QA: build OK; 12 routes x 3 viewports all 200, one h1, no overflow. /about 156kB (pre-existing >150).

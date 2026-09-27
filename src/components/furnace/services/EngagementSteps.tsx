@@ -29,8 +29,12 @@ export function EngagementSteps() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-60px' }}
               transition={{ duration: 0.7, delay: i * 0.08, ease }}
-              className="glass-solid rounded-2xl p-7"
+              className="glass-solid group relative overflow-hidden rounded-2xl p-7 transition-transform duration-500 ease-out hover:-translate-y-1"
             >
+              <span
+                aria-hidden
+                className="absolute inset-x-0 top-0 h-px origin-left scale-x-0 bg-ember/70 transition-transform duration-700 ease-out group-hover:scale-x-100"
+              />
               <p className="font-mono text-[10px] tracking-[0.25em] text-ember">0{i + 1}</p>
               <h3 className="mt-3 font-sans text-xl font-bold text-bone [text-wrap:balance]">{s.title}</h3>
               <p className="mt-2 text-sm leading-relaxed text-ash [text-wrap:pretty]">{s.body}</p>
