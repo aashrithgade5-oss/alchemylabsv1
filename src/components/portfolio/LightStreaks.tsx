@@ -28,7 +28,7 @@ export const LightStreaks = ({ color = 'var(--streak-accent, #FF4D1C)', classNam
         }}
       />
     ))}
-    <style>{`
+    <style dangerouslySetInnerHTML={{ __html: `
       .lstreak { opacity: 0; transform: translate3d(-110%,0,0) scaleX(.6); animation-name: lstreakRun; animation-iteration-count: infinite; animation-timing-function: cubic-bezier(.65,0,.35,1); will-change: transform, opacity; }
       @keyframes lstreakRun {
         0% { opacity: 0; transform: translate3d(-110%,0,0) scaleX(.6); }
@@ -37,7 +37,7 @@ export const LightStreaks = ({ color = 'var(--streak-accent, #FF4D1C)', classNam
         100% { opacity: 0; transform: translate3d(320%,0,0) scaleX(1.4); }
       }
       @media (prefers-reduced-motion: reduce) { .lstreak { animation: none; opacity: .25; transform: translate3d(60%,0,0); } }
-    `}</style>
+    ` }} />
   </div>
 );
 

@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Inter, Playfair_Display } from 'next/font/google';
+import { Inter, Pinyon_Script, Playfair_Display } from 'next/font/google';
 import PageViewBeacon from '@/components/admin/PageViewBeacon';
 import { GeistSans } from 'geist/font/sans';
 import { GeistMono } from 'geist/font/mono';
@@ -10,6 +10,7 @@ import { SiteChrome } from '@/components/furnace/SiteChrome';
 import { GrainOverlay } from '@/components/furnace/GrainOverlay';
 import { CookieConsent } from '@/components/CookieConsent';
 import { OrganizationSchema } from '@/components/OrganizationSchema';
+import { Preloader } from '@/components/furnace/Preloader';
 import '@/index.css';
 
 // Phase 0 type law (supersedes the Geist/Fraunces lock, see CLAUDE.md):
@@ -36,8 +37,19 @@ const playfair = Playfair_Display({
   variable: '--font-playfair',
 });
 
+// Patches-1 (owner request 2026-09-27): a script face for the single word
+// "Build" in the hero lockup. Scoped to that one word; Playfair italic stays
+// the only italic everywhere else.
+const script = Pinyon_Script({
+  subsets: ['latin'],
+  weight: '400',
+  variable: '--font-script',
+  display: 'swap',
+});
+
+// 140-160 chars (SEO pass 2026-09-27); matches the homepage description.
 const description =
-  'An AI-native brand studio in Mumbai. Brand systems and campaign imagery, built at machine speed under human judgment.';
+  'Alchemy Labs is an AI-native brand studio in Mumbai. We build brand systems, campaign imagery and AI films, generated wide and cut down by human judgment.';
 
 export const metadata: Metadata = {
   title: {
@@ -52,15 +64,24 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL ?? 'https://alchemylabs.in',
   ),
-  alternates: { canonical: '/' },
+  // No root canonical: an inherited `canonical: '/'` pointed every page that
+  // lacked its own (404, legacy routes) at the homepage. Each public route sets
+  // its own via pageMetadata() in lib/seo.ts; app/page.tsx sets '/'.
   openGraph: {
     title: 'Alchemy Labs · AI-Native Brand Studio',
     description,
-    url: 'https://alchemylabs.in',
+    url: '/',
     siteName: 'Alchemy Labs',
-    images: [{ url: '/og-image.png', width: 1200, height: 630 }],
+    locale: 'en_IN',
+    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'Alchemy Labs' }],
     type: 'website',
   },
+  // Google Search Console HTML-tag verification. Only emitted when the env
+  // var is set (Next drops undefined values), so nothing ships until the
+  // owner adds NEXT_PUBLIC_GSC_VERIFICATION. DNS TXT verification needs none.
+  ...(process.env.NEXT_PUBLIC_GSC_VERIFICATION
+    ? { verification: { google: process.env.NEXT_PUBLIC_GSC_VERIFICATION } }
+    : {}),
   twitter: {
     card: 'summary_large_image',
     title: 'Alchemy Labs · AI-Native Brand Studio',
@@ -85,11 +106,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     // next-view-transitions' <ViewTransitions> wrapper silently blocked every
     // AnimatePresence exit unmount (stuck invisible overlays); removed, the
     // framer fade in LayoutTransition is the page transition.
+    // suppressHydrationWarning: the preloader gate sets data-pl on <html>
+    // during parse, before React hydrates
     <html
       lang="en"
-      className={`${inter.variable} ${playfair.variable} ${GeistSans.variable} ${GeistMono.variable}`}
+      suppressHydrationWarning
+      className={`${inter.variable} ${playfair.variable} ${script.variable} ${GeistSans.variable} ${GeistMono.variable}`}
     >
         <body>
+          <Preloader />
           <OrganizationSchema />
           <Providers>
             {/* LayoutTransition's transform wrapper breaks position:fixed for

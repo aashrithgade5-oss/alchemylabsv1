@@ -477,14 +477,14 @@ export default function EvaPortfolio() {
   return (
     <div className="eva min-h-screen overflow-x-clip bg-void font-sans text-bone">
       {/* Black + pink is Eva (black + red is Aashrith). --ember is re-pointed so shared chrome (footer) follows. */}
-      <style>{`
+      <style dangerouslySetInnerHTML={{ __html: `
         .eva { --blush: 244 182 200; --rose: 217 70 122; --petal: 250 221 230; --ember: 217 70 122; --ember-deep: 176 48 96; --footer-accent: #D9467A; }
         .eva ::selection { background: rgb(var(--rose) / 0.45); color: #EDE6DD; }
         .eva :focus-visible { outline: 2px solid rgb(var(--blush)); outline-offset: 3px; }
         .eva-em { background: linear-gradient(100deg, rgb(var(--petal)), rgb(var(--blush)) 40%, rgb(var(--rose)) 70%, rgb(var(--petal))); background-size: 250% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: eva-flow 14s ease-in-out infinite alternate; }
         @keyframes eva-flow { to { background-position: 100% 0; } }
         @media (prefers-reduced-motion: reduce) { .eva-em { animation: none; } }
-      `}</style>
+      ` }} />
       <ScrollProgress />
       <Nav />
       <main>

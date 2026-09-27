@@ -68,14 +68,14 @@ export function ServicesHero() {
           className="mt-6 max-w-2xl text-base leading-relaxed text-bone/80 md:text-lg [text-wrap:pretty]"
         >
           Three pillars, one standard: AI creative, brand systems and advisory, scoped per project.
-          Or start today with one of five fixed-price offers.
+          Or start small with one of five focused offers.
         </m.p>
         <m.div {...fade(0.5)} className="mt-10 flex flex-wrap items-center gap-4">
           <MagneticCTA href="/contact" variant="ember">
             Book a call
           </MagneticCTA>
           <MagneticCTA href="#the-five" variant="ghost">
-            See fixed-price offers
+            See the focused offers
           </MagneticCTA>
         </m.div>
       </div>

@@ -1252,16 +1252,20 @@ html {
 .glass-flow {
   color: transparent;
   background-image: linear-gradient(100deg, #cfcac3 0%, #f6f1ea 22%, #ffb59c 38%, #f6f1ea 54%, #c9c4bd 76%, #f6f1ea 100%);
-  /* viewport-anchored: every word of a line shares ONE gradient band, so the
-     flow travels through the sentence instead of restarting per word */
-  background-size: 200vw 100vh;
-  background-attachment: fixed;
+  /* Patches-1: background-attachment:fixed is gone. WebKit paints
+     bg-clip:text + fixed attachment as NOTHING (the invisible TurnSequence
+     lines on Safari). Continuity now comes from a per-word phase offset
+     (--gi = word index, set inline): the band walks word to word. The
+     alternate ease never jumps at the loop point, so it flows, never flashes. */
+  background-size: 400% 100%;
   -webkit-background-clip: text;
   background-clip: text;
-  animation: glass-flow 16s linear infinite;
+  animation: glass-flow 9s ease-in-out infinite alternate;
+  animation-delay: calc(var(--gi, 0) * -0.45s);
 }
 @keyframes glass-flow {
-  to { background-position: 200vw 0; }
+  from { background-position: 0% 50%; }
+  to { background-position: 100% 50%; }
 }
 @media (prefers-reduced-motion: reduce) {
   .glass-flow { animation: none; }
@@ -1542,4 +1546,135 @@ html {
   .meteor {
     display: none;
   }
+}
+
+/* ---------------------------------------------------------------------------
+   Patches-1: opening sequence (Preloader.tsx + PreloaderController.tsx).
+   Server-rendered; html[data-pl] is set by an inline gate before first paint:
+   run -> out (aperture opening) -> done. skip = never shown.
+   --al-p: fill 0..1, --al-open: aperture 0..1 (both written by rAF).
+--------------------------------------------------------------------------- */
+.al-pl {
+  --al-p: 0;
+  --al-open: 0;
+  position: fixed;
+  inset: 0;
+  z-index: 95;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* failsafe: never blocks the page even if JS never arrives */
+  animation: al-pl-failsafe 0.6s ease 7s forwards;
+}
+html[data-pl='skip'] .al-pl,
+html[data-pl='done'] .al-pl {
+  display: none;
+}
+html[data-pl='run'] {
+  overflow: hidden;
+}
+@keyframes al-pl-failsafe {
+  to { opacity: 0; visibility: hidden; }
+}
+/* aperture: a soft-edged hole grows from the mark until the void is gone */
+.al-pl-void {
+  position: absolute;
+  inset: 0;
+  background: #0a0908;
+}
+html[data-pl='out'] .al-pl {
+  pointer-events: none;
+}
+html[data-pl='out'] .al-pl-void {
+  -webkit-mask-image: radial-gradient(circle at 50% 46%, transparent calc(var(--al-open) * 150vmax - 10vmax), #000 calc(var(--al-open) * 150vmax));
+  mask-image: radial-gradient(circle at 50% 46%, transparent calc(var(--al-open) * 150vmax - 10vmax), #000 calc(var(--al-open) * 150vmax));
+}
+.al-pl-glow {
+  position: absolute;
+  left: 50%;
+  top: 46%;
+  width: min(120vw, 64rem);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%) scale(calc(0.7 + var(--al-p) * 0.3));
+  background: radial-gradient(circle, rgba(255, 77, 28, 0.16) 0%, rgba(255, 77, 28, 0.05) 32%, transparent 62%);
+  opacity: calc(0.4 + var(--al-p) * 0.6);
+  animation: al-pl-breathe 3.2s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes al-pl-breathe {
+  50% { filter: brightness(1.25); }
+}
+.al-pl-stage {
+  position: relative;
+  width: min(80vw, 34rem);
+  aspect-ratio: 1;
+  /* the mark travels toward the camera as the aperture opens */
+  transform: scale(calc(1 + var(--al-open) * 1.8));
+  opacity: calc(1 - var(--al-open) * 1.5);
+  will-change: transform, opacity;
+}
+.al-pl-mark {
+  position: absolute;
+  inset: 0;
+  -webkit-mask: url('/media/alchemy-minimal-logo.png') center / contain no-repeat;
+  mask: url('/media/alchemy-minimal-logo.png') center / contain no-repeat;
+}
+.al-pl-outline {
+  background: rgba(237, 230, 221, 0.16);
+}
+.al-pl-fillclip {
+  position: absolute;
+  inset: 0;
+  clip-path: inset(calc((1 - var(--al-p)) * 100%) 0 0 0);
+}
+.al-pl-metal {
+  background-image: linear-gradient(115deg, #8f8a84 0%, #f6f1ea 28%, #ffb59c 42%, #fffaf3 50%, #c9c4bd 64%, #f6f1ea 80%, #8f8a84 100%);
+  background-size: 260% 100%;
+  animation: al-pl-sheen 2.4s linear infinite;
+}
+/* WebGL liquid metal present -> it replaces the CSS metal */
+.al-pl-fillclip:has(canvas) .al-pl-metal {
+  opacity: 0;
+}
+@keyframes al-pl-sheen {
+  from { background-position: 100% 0; }
+  to { background-position: -160% 0; }
+}
+.al-pl-ring {
+  position: absolute;
+  inset: 17%;
+  width: 66%;
+  height: 66%;
+  transform: rotate(-90deg);
+  overflow: visible;
+}
+.al-pl-ring circle {
+  fill: none;
+  /* user units (viewBox 100): non-scaling-stroke breaks dash math in Chrome */
+  stroke-width: 0.3;
+}
+.al-pl-ring-track {
+  stroke: rgba(237, 230, 221, 0.08);
+}
+.al-pl-ring-fill {
+  stroke: #ff4d1c;
+  stroke-width: 0.4;
+  stroke-linecap: round;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  filter: drop-shadow(0 0 6px rgba(255, 77, 28, 0.6));
+}
+.al-pl-caption {
+  position: relative;
+  margin-top: -2rem;
+  text-align: center;
+  opacity: calc(1 - var(--al-open) * 3);
+}
+/* hero settles forward out of depth as the aperture opens */
+.hero-depth {
+  transition: transform 1.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+html[data-pl='run'] .hero-depth {
+  transform: scale(1.12);
 }

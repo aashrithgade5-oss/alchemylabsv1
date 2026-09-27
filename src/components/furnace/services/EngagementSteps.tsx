@@ -38,7 +38,7 @@ export function EngagementSteps() {
           ))}
         </ol>
         <p className="mt-6 max-w-xl text-sm leading-relaxed text-ash [text-wrap:pretty]">
-          Fixed-price offers skip straight to checkout.
+          Focused offers start from a set point and are scoped in one short conversation.
         </p>
       </div>
     </section>

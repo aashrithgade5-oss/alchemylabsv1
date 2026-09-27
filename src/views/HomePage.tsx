@@ -2,7 +2,6 @@
 
 import { lazy, Suspense } from 'react';
 import { Hero } from '@/components/furnace/home/Hero';
-import { Loader } from '@/components/furnace/home/Loader';
 import { HomeAtmosphere } from '@/components/furnace/home/HomeAtmosphere';
 import { ScrollScrub } from '@/components/furnace/fx/ScrollScrub';
 
@@ -67,7 +66,6 @@ export default function HomePage() {
   return (
     <main className="relative font-sans">
       <HomeAtmosphere />
-      <Loader />
       <Hero />
       <Suspense fallback={null}>
         <TurnSequence />
@@ -80,9 +78,9 @@ export default function HomePage() {
         <ScrubBeat eyebrow="THE PROOF" text="Every frame here survived the eye." compact />
         <FeaturedWork />
         <Intertext eyebrow="THE OFFER" compact>
-          <span className="block">No <em>estimates.</em></span>
-          <span className="block">No discovery <em>calls.</em></span>
-          <span className="block">A price on the <em>wall.</em></span>
+          <span className="block">No two briefs <em>alike.</em></span>
+          <span className="block">No price <em>lists.</em></span>
+          <span className="block">One <em>conversation.</em></span>
         </Intertext>
         <TheFive />
         <ScrubBeat eyebrow="THE STANDARD" text={['One studio.', 'One bar.', 'No exceptions.']} compact />

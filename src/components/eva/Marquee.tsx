@@ -27,7 +27,7 @@ export function Marquee({
         <div className="flex shrink-0">{children}</div>
         <div className="flex shrink-0" aria-hidden="true">{children}</div>
       </div>
-      <style>{`
+      <style dangerouslySetInnerHTML={{ __html: `
         @keyframes eva-marquee { from { transform: translateX(0) } to { transform: translateX(-50%) } }
         .eva-marquee-track { animation: eva-marquee linear infinite; will-change: transform; }
         .eva-marquee:hover .eva-marquee-track, .eva-marquee:focus-within .eva-marquee-track { animation-play-state: paused; }
@@ -36,7 +36,7 @@ export function Marquee({
           .eva-marquee-track { animation: none; }
           .eva-marquee-track > [aria-hidden] { display: none; }
         }
-      `}</style>
+      ` }} />
     </div>
   );
 }

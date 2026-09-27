@@ -46,7 +46,7 @@ export function ServicesClosing() {
             Book a call
           </MagneticCTA>
           <MagneticCTA href="#the-five" variant="ghost">
-            See fixed-price offers
+            See the focused offers
           </MagneticCTA>
         </m.div>
       </div>

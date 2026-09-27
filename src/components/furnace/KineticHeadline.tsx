@@ -50,8 +50,10 @@ export function KineticHeadline({
     >
       {words.map((word, i) => (
         <span key={i} className="inline-block overflow-visible whitespace-pre" aria-hidden>
+          {/* motion (filter/transform) on the wrapper, bg-clip:text on the
+              inner span: WebKit drops clipped glyphs under a filter */}
           <m.span
-            className={`inline-block will-change-transform ${wordClassName}`}
+            className="inline-block will-change-transform"
             variants={{
               hidden: { y: '55%', opacity: 0, filter: 'blur(14px)' },
               visible: {
@@ -62,8 +64,10 @@ export function KineticHeadline({
               },
             }}
           >
-            {word}
-            {i < words.length - 1 ? ' ' : ''}
+            <span className={wordClassName || undefined}>
+              {word}
+              {i < words.length - 1 ? ' ' : ''}
+            </span>
           </m.span>
         </span>
       ))}

@@ -3,7 +3,7 @@
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { m } from 'framer-motion';
-import { products } from '@lib/payments';
+import { fromLabel, products } from '@lib/payments';
 import { GlassPanel } from '@/components/furnace/GlassPanel';
 import { KineticHeadline } from '@/components/furnace/KineticHeadline';
 import { CheckoutPanel } from '@/components/furnace/PaymentSheet';
@@ -69,7 +69,7 @@ export default function ServiceProductPage() {
             transition={{ duration: 0.8, delay: 0.1 }}
             className="font-mono text-[10px] tracking-[0.3em] text-bone/70 md:text-[11px]"
           >
-            FIXED SCOPE · ${product.priceUsd} · ₹{product.priceInr.toLocaleString('en-IN')}
+            FOCUSED OFFER · {fromLabel(product).toUpperCase()}
           </m.p>
           <KineticHeadline
             as="h1"
@@ -113,8 +113,7 @@ export default function ServiceProductPage() {
         </m.div>
       </section>
 
-      {/* the existing UPI checkout flow, housed in liquid glass — reused
-          from PaymentSheet, not rebuilt */}
+      {/* enquiry + UPI panel, shared with the home sheet (PaymentSheet) */}
       <section className="relative px-4 pb-20 md:px-6 md:pb-28">
         <m.div
           initial={{ opacity: 0, y: 32 }}
@@ -123,7 +122,7 @@ export default function ServiceProductPage() {
           transition={{ duration: 1, ease }}
           className="mx-auto max-w-md"
         >
-          <GlassPanel className="px-6 py-8 md:px-8 md:py-10">
+          <GlassPanel solid className="px-6 py-8 md:px-8 md:py-10">
             <CheckoutPanel product={product} />
           </GlassPanel>
         </m.div>

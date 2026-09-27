@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, type ElementType } from 'react';
+import { useRef, type CSSProperties, type ElementType } from 'react';
 import {
   m,
   useMotionTemplate,
@@ -20,17 +20,27 @@ function Word({
   range,
   progress,
   className,
+  index,
 }: {
   word: string;
   range: [number, number];
   progress: MotionValue<number>;
   className?: string;
+  index: number;
 }) {
   // Fully hidden at rest: nothing renders pre-faded-in before its reveal.
   const opacity = useTransform(progress, range, [0, 1]);
   const blurPx = useTransform(progress, range, [12, 0]);
   const filter = useMotionTemplate`blur(${blurPx}px)`;
-  return <m.span className={className} style={{ opacity, filter }}>{word}</m.span>;
+  // filter/opacity on a wrapper, bg-clip:text on the inner span: WebKit drops
+  // clipped-text glyphs when a filter sits on the same element
+  return (
+    <m.span className="inline-block" style={{ opacity, filter }}>
+      <span className={className} style={{ '--gi': index } as CSSProperties}>
+        {word}
+      </span>
+    </m.span>
+  );
 }
 
 export function ScrollScrub({
@@ -90,6 +100,7 @@ export function ScrollScrub({
               range={[n / total, Math.min(n / total + 0.3, 1)]}
               progress={scrollYProgress}
               className={wordClassName}
+              index={n}
             />
           );
         });

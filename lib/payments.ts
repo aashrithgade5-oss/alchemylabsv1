@@ -1,19 +1,47 @@
-// Payment config for the Productized Five — the only offers on the site
-// with printed prices. Hero services are scoped per project and never
-// carry a number.
+// Payment + offer config (Patches-1, 2026-09-27): NO exact prices anywhere on
+// the site. Every engagement is scoped per project; the five productized
+// offers only show a "from" starting point. Payment happens AFTER scope is
+// agreed, so UPI carries no amount: the client enters the agreed figure.
+//
+// FUTURE BUILD (not live): Razorpay for India (UPI/cards/netbanking, invoices
+// + payment links) and Razorpay International or Stripe for cross-border
+// cards. Until then international clients are invoiced by email.
 
-// TODO(OVERHAUL_TODO): replace with the real VPA before launch.
-export const upiVpa = 'alchemylabs@upi';
+/** OWNER: paste the UPI ID here (e.g. 'name@okhdfcbank'). Empty = the UPI
+    block hides itself and points people to WhatsApp instead of showing a
+    QR that pays nobody. */
+export const upiVpa = '';
 export const upiPayeeName = 'Alchemy Labs';
+/** Optional: your own UPI scanner image (e.g. '/media/upi-qr.png'). When set
+    it is shown instead of the generated QR. */
+export const upiQrImage: string | null = null;
+
+export const CONTACT_EMAIL = 'alchemylabs.work@gmail.com';
+export const WHATSAPP_NUMBER = '917794912315';
+export const WHATSAPP_DISPLAY = '+91 77949 12315';
+export const CALENDLY_URL = 'https://calendly.com/alchemylabs-work/30min';
+
+export function whatsappLink(text: string) {
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+}
+
+export function estimateText(offer?: string) {
+  return offer
+    ? `Hi Alchemy Labs, I'd like a rough estimate for ${offer}. Brand: `
+    : `Hi Alchemy Labs, I'd like a rough estimate for a project. Brand: `;
+}
+
+/** "From ₹9,000": the only price form allowed on the site. */
+export function fromLabel(p: { fromInr: number }) {
+  return `From ₹${p.fromInr.toLocaleString('en-IN')}`;
+}
 
 export interface Product {
   id: string;
   name: string;
   tagline: string;
-  priceUsd: number;
-  priceInr: number;
-  /** Shopify card checkout URL (product or cart permalink). null = "opening soon". */
-  shopifyCheckoutUrl: string | null;
+  /** Starting point in INR. Final figure is scoped per brief. */
+  fromInr: number;
   /** C-P16: category accent hex, drawn from the locked palette (ember /
       ember-deep / amber / bone / ash) — drives the per-service hover glow
       on the marquee and the services pages. Not arbitrary colors. */
@@ -26,55 +54,45 @@ export const products: Product[] = [
     accent: '#FF4D1C',
     name: 'Brand Glow-Up Audit',
     tagline: "A direct read on your brand's current state, with fixes ranked by impact.",
-    priceUsd: 199,
-    priceInr: 9000,
-    shopifyCheckoutUrl: null,
+    fromInr: 9000,
   },
   {
     id: 'website-teardown',
     accent: '#C93A14',
     name: 'Website Teardown',
     tagline: 'Your site reviewed screen by screen, with a plain list of what to change.',
-    priceUsd: 199,
-    priceInr: 9000,
-    shopifyCheckoutUrl: null,
+    fromInr: 9000,
   },
   {
     id: 'sample-reel',
     accent: '#FFA028',
     name: 'Sample Reel',
     tagline: "One finished AI film in your brand's voice, before you commit to more.",
-    priceUsd: 299,
-    priceInr: 14000,
-    shopifyCheckoutUrl: null,
+    fromInr: 14000,
   },
   {
     id: 'logo-rescue',
     accent: '#EDE6DD',
     name: 'Logo Rescue',
     tagline: 'Your existing mark corrected and set to standard.',
-    priceUsd: 249,
-    priceInr: 12000,
-    shopifyCheckoutUrl: null,
+    fromInr: 12000,
   },
   {
     id: 'instagram-aesthetic-audit',
     accent: '#9A9186',
     name: 'Instagram Aesthetic Audit',
     tagline: 'Your grid held against the brands you admire, with a plan to close the gap.',
-    priceUsd: 199,
-    priceInr: 9000,
-    shopifyCheckoutUrl: null,
+    fromInr: 9000,
   },
 ];
 
-export function upiPaymentUri(product: Product): string {
+/** UPI intent with NO amount: the payer enters the agreed figure. */
+export function upiPaymentUri(note = 'Alchemy Labs'): string {
   const params = new URLSearchParams({
     pa: upiVpa,
     pn: upiPayeeName,
-    am: String(product.priceInr),
     cu: 'INR',
-    tn: `${product.name} - Alchemy Labs`,
+    tn: note,
   });
   return `upi://pay?${params.toString()}`;
 }

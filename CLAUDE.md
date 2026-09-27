@@ -18,6 +18,13 @@ Everything here is NON-NEGOTIABLE and must be re-verified at the END of every se
   Playfair italic regular, lowercase (e.g. "judgment", "one"). Never whole sentences in
   Playfair. Gradients on type must flow slowly and continuously, never flash.
 - NO UNVERIFIABLE CLAIMS: no "most selling", scarcity counters, or guaranteed reply times.
+- SCRIPT EXCEPTION (user, 2026-09-27 Patches-1): the single word "Build" in the hero
+  lockup is **Pinyon Script** (`font-script`, `--font-script`). Scoped to that one word;
+  never reuse it elsewhere. Playfair italic remains the only italic.
+- NO PRINTED PRICES (user, 2026-09-27 Patches-1): no exact price anywhere on the site.
+  The five productized offers may show only `fromLabel()` ("From ₹X") from `lib/payments.ts`;
+  every CTA is "Book a call" / "Text us for a rough estimate". UPI carries no amount
+  (client enters the agreed figure). UPI ID lives in `lib/payments.ts` (`upiVpa`).
 - Eyebrows / labels / technical: **Geist Mono** (`font-mono`) — untouched by this pass.
 - Geist Sans is retired as a body/display face. It is kept installed ONLY to feed the
   frozen `--font-display` alias below — never assign `font-sans`/`font-headline`
@@ -29,6 +36,11 @@ Everything here is NON-NEGOTIABLE and must be re-verified at the END of every se
   separate Tailwind key for exactly this reason — never reuse `font-display`.
 
 ## ANIMATION
+- Opening sequence = server-rendered `Preloader.tsx` gated by `html[data-pl]` (run/out/done/skip).
+  Never reintroduce a client-only loader (it mounted after hydration and never showed on Safari).
+- WebKit law: never put `filter`/animated blur on the SAME element as `background-clip:text`
+  (wrap it); never use `background-attachment: fixed` with clipped text. Inline `<style>` must use
+  `dangerouslySetInnerHTML` (text children with `>` break hydration).
 - Framer Motion + Lenis (feel only). BANNED: GSAP, Three.js, Locomotive. No custom cursor.
 - Scroll reveals start hidden at rest (opacity 0 / blur) and animate only on viewport entry.
 - Never animate `filter` on an ancestor of a `mix-blend-*` element.

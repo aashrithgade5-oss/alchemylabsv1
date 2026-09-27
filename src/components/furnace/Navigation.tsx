@@ -72,7 +72,7 @@ export function FurnaceNavigation() {
         />
         <Link href="/" className="relative flex items-center gap-2.5" aria-label="Alchemy Labs, home">
           <Image
-            src="/assets/alchemy-minimal-logo.png"
+            src="/media/alchemy-minimal-logo.png"
             alt=""
             width={38}
             height={38}

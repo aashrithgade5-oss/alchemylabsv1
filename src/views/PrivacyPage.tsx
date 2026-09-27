@@ -49,8 +49,8 @@ const sections: Section[] = [
             its own policy.
           </li>
           <li>
-            <strong>Payments.</strong> UPI payments open your own UPI app. Card checkout, when live, runs on
-            Shopify. This site never sees or stores card or bank details.
+            <strong>Payments.</strong> UPI payments open your own UPI app. International invoices are sent by
+            email. This site never sees or stores card or bank details.
           </li>
         </ul>
       </>

@@ -117,6 +117,7 @@ export default {
         // Own key, not `display` — that name is the frozen alias above.
         headline: ['var(--font-inter)', '-apple-system', 'sans-serif'],
         playfair: ['var(--font-playfair)', 'Georgia', 'serif'],
+        script: ['var(--font-script)', 'cursive'],
         body: ['var(--font-inter)', '-apple-system', 'sans-serif'],
         accent: ['var(--font-geist-mono)', 'SF Mono', 'monospace'],
       },

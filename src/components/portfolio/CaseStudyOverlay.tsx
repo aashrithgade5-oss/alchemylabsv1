@@ -236,13 +236,13 @@ export const CaseStudyOverlay = memo(({ open, onOpenChange, caseStudy, onPrev, o
         </nav>
       )}
 
-      <style>{`
+      <style dangerouslySetInnerHTML={{ __html: `
         .cso { animation: csoIn .45s cubic-bezier(.22,1,.36,1); }
         .cso-hero { animation: csoKen 12s ease-out forwards; }
         @keyframes csoIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
         @keyframes csoKen { from { transform: scale(1.08); } to { transform: scale(1); } }
         @media (prefers-reduced-motion: reduce) { .cso, .cso-hero { animation: none; } }
-      `}</style>
+      ` }} />
     </div>,
     document.body
   );

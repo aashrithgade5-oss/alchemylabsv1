@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { lazy, Suspense, useRef } from 'react';
 import { m, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
 import { Contact } from '@/components/Contact';
@@ -8,6 +8,9 @@ import { HomeAtmosphere } from '@/components/furnace/home/HomeAtmosphere';
 import { AmbientVideo } from '@/components/furnace/home/AmbientVideo';
 import { GlassPanel } from '@/components/furnace/GlassPanel';
 import { KineticHeadline } from '@/components/furnace/KineticHeadline';
+
+// below the fold: the QR encoder never lands in /contact First Load JS
+const UpiPay = lazy(() => import('@/components/furnace/UpiPay').then((mod) => ({ default: mod.UpiPay })));
 
 const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
@@ -111,6 +114,32 @@ export const ContactPage = () => {
         >
           <GlassPanel refract>
             <Contact />
+          </GlassPanel>
+        </m.div>
+      </section>
+
+      {/* Patches-1: pay an amount already agreed in writing (no prices here) */}
+      <section id="pay" className="relative scroll-mt-28 px-4 pb-28 md:px-6 md:pb-40">
+        <m.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.9, ease }}
+          className="mx-auto max-w-xl"
+        >
+          <GlassPanel solid className="px-6 py-8 md:px-10 md:py-10">
+            <p className="font-mono text-[10px] tracking-[0.3em] text-ash">ALREADY SCOPED WITH US</p>
+            <h2 className="mt-4 font-headline text-2xl font-bold tracking-[-0.02em] text-bone md:text-3xl">
+              <span className="glass-type">Pay an agreed </span>
+              <span className="font-playfair font-normal italic">invoice</span>
+            </h2>
+            <Suspense fallback={<div className="mt-6 h-44" />}>
+              <UpiPay note="Alchemy Labs invoice" className="mt-6" />
+            </Suspense>
+            <p className="mt-6 text-sm leading-relaxed text-ash">
+              International clients are invoiced by email. Send the receipt once paid and we confirm the
+              start date in writing.
+            </p>
           </GlassPanel>
         </m.div>
       </section>

@@ -19,8 +19,8 @@ const sections: Section[] = [
     title: 'Scope and pricing',
     body: (
       <p>
-        We work on fixed-scope engagements. Each is quoted per project, or priced per a printed offer on this
-        site. The scope we agree in writing defines the deliverables. Work outside it is quoted separately.
+        We work on fixed-scope engagements. Each is quoted per project after we understand the brief; the
+        focused offers on this site show a starting point only. The scope we agree in writing defines the deliverables. Work outside it is quoted separately.
       </p>
     ),
   },
@@ -30,9 +30,9 @@ const sections: Section[] = [
     body: (
       <>
         <p>
-          Payment is due before work starts. We confirm the start date in writing once payment clears. Payments
-          are made by UPI or, once live, card checkout through Shopify. We never collect card or bank details on
-          this site.
+          Payment of the amount agreed in writing is due before work starts. We confirm the start date once
+          payment clears. Payments are made by UPI; international clients are invoiced by email. We never
+          collect card or bank details on this site.
         </p>
         <p>Fees paid for work already started are not refundable unless we agree otherwise in writing.</p>
       </>

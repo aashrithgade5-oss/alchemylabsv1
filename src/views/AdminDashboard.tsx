@@ -49,7 +49,7 @@ const StatsPanel = dynamic(() => import('@/components/admin/StatsPanel'), {
   ssr: false,
   loading: () => <div className="flex justify-center py-20"><Loader2 className="w-6 h-6 animate-spin text-ember" /></div>,
 });
-const alchemyLogo = '/assets/alchemy-minimal-logo.png';
+const alchemyLogo = '/media/alchemy-minimal-logo.png';
 
 interface ContactSubmission {
   id: string;

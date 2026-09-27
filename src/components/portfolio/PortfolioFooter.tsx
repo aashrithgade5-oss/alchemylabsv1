@@ -82,7 +82,7 @@ export const PortfolioFooter = memo(({
   connectLinks = [],
   accent = '#FF4D1C',
   bgImage,
-  bgFallback = '/assets/footer-bg.png',
+  bgFallback = '/media/footer-bg.png',
   headline,
   streaks = false,
   featherFrom,
@@ -180,7 +180,7 @@ export const PortfolioFooter = memo(({
           </div>
         </div>
       </div>
-      <style>{`.footer-cv:hover { border-color: var(--footer-accent); }`}</style>
+      <style dangerouslySetInnerHTML={{ __html: `.footer-cv:hover { border-color: var(--footer-accent); }` }} />
     </footer>
   );
 });

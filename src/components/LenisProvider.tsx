@@ -25,6 +25,13 @@ export function resetScroll() {
   window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
 }
 
+/** Freeze/unfreeze smooth scroll (the preloader holds the page still). */
+export function setScrollLocked(locked: boolean) {
+  if (!activeLenis) return;
+  if (locked) activeLenis.stop();
+  else activeLenis.start();
+}
+
 export function LenisProvider() {
   const lenisRef = useRef<Lenis | null>(null);
   const reduced = useReducedMotion();

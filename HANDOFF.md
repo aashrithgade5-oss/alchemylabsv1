@@ -959,3 +959,32 @@ fallback — set that env var in Vercel before the first deploy (see ERROR_LOG.m
 - Merged 21 remote web-upload asset commits (no force push).
 - SEO: app/sitemap.ts + app/robots.ts on alchemylabs.in (static lovable ones removed); metadataBase/OG/SEOHead/admin links -> alchemylabs.in; journal + admin disallowed. Favicon = atom mark.
 - Prod-build QC: all routes 200, 404 for unknown, canonical correct, mobile/desktop visual pass, Arc of Intent verified.
+
+## 2026-09-27 - Patches-1 (Notion: RANDIM / WEBSITE OVERHAUL / Patches-1)
+- P1-1 SEO (subagent): lib/seo.ts + JsonLd; unique titles/descriptions/canonicals per route (no prices);
+  Organization+WebSite, Service, Breadcrumb, FAQPage schema; one h1 per page (About gained its h1);
+  admin + journal noindex layouts; HSTS; /AashrithGadePortfolio -> /aashrith, /EvaDoshiPortfolio -> /eva
+  301s; 20 images re-encoded to WebP; docs/SEO_PLAYBOOK.md (Search Console steps + backlink plan).
+- P1-2 Hero: "WE Build" lockup, Build in Pinyon Script (ember metal). Cycler words may wrap on phones
+  so the lockup stays the LARGEST type at every width (was 32.8px vs TurnSequence 36px on mobile).
+  TurnSequence floor lowered to 1.75rem. Short eyebrow on phones.
+- P1-3 Preloader: old client-only Loader deleted (mounted after hydration: Safari showed only its own
+  URL-bar progress). New server-rendered Preloader + PreloaderController: outline atom -> metal fill
+  (WebGL liquid metal on desktop, CSS brushed metal on phones) + ember ring + counter; exit = aperture
+  opens in the void while the mark pushes toward camera and the hero settles out of 1.12 depth.
+  Waits for window load, hard cap 4.2s, CSS failsafe 7s, first visit per session, home only.
+- P1-4 Pillars: anchor card collapsed to one row (missing h-full) -> fixed; preserve-3d removed and
+  glass-solid used (WebKit dropped the video layers); poster <img> under every loop.
+  Safari invisible scroll text: .glass-flow lost background-attachment:fixed (WebKit paints clipped
+  text as nothing); motion/blur moved to wrapper spans in ScrollScrub, TurnSequence, KineticHeadline,
+  Hero cycler.
+- P1-5 Pricing: every exact price removed (TheFive, offer pages, sheet, FAQ, services copy, terms,
+  "A price on the wall" interlude). Five offers show "From ₹X" only. CTAs: Book a call / Text us for a
+  rough estimate (WhatsApp prefilled). UpiPay component (QR dark-on-bone, copy ID, open-app intent, no
+  amount) in the offer panel and /contact#pay. FiveGrid (dead) deleted. OWNER: set upiVpa in lib/payments.ts.
+- P1-6 QA: cookie banner rebuilt for phones (was a one-word column over the CTAs) and waits for the
+  preloader; /eva hydration crash fixed (inline <style> with '>' -> dangerouslySetInnerHTML, 6 files);
+  logo paths /assets -> /media. Prod build: / 137->129kB, /contact 149kB, /about 153kB (pre-existing).
+  12-route x 3-viewport matrix (36 checks) (iPhone 13, iPad Mini, 1440): 200s, one h1, no overflow, no console errors.
+- NOT verifiable here: real Safari/WebKit (download blocked by sandbox proxy). Owner to spot-check on
+  iPhone Safari + macOS Safari. Not deployed.
