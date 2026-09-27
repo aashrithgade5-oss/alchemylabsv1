@@ -5,6 +5,26 @@ import { createPortal } from 'react-dom';
 import { X, ArrowLeft, ArrowRight } from 'lucide-react';
 import { SafeImage } from './SafeImage';
 
+export interface CaseStudyFrame {
+  src: string;
+  alt: string;
+  /** 16:9 full-width frame; default is a 4:5 half-width frame. */
+  wide?: boolean;
+}
+
+/** A brand inside an umbrella case study (e.g. Studio186's verticals). */
+export interface CaseStudyVertical {
+  id: string;
+  name: string;
+  /** Short descriptor, e.g. "Preventive health". */
+  kicker: string;
+  /** Optional parent line, e.g. "HumanEdge's consumer sub-brand". */
+  parent?: string;
+  intro: string;
+  points: string[];
+  frames?: CaseStudyFrame[];
+}
+
 export interface CaseStudyData {
   id: string;
   title: string;
@@ -27,6 +47,12 @@ export interface CaseStudyData {
   video?: string;
   poster?: string;
   accent?: string;
+  /** 'open' = ongoing engagement; the page says so instead of implying a finished story. */
+  status?: 'open';
+  statusNote?: string;
+  verticals?: CaseStudyVertical[];
+  /** Full-bleed gallery frames with explicit aspect (overrides `gallery`). */
+  frames?: CaseStudyFrame[];
 }
 
 interface CaseStudyOverlayProps {
@@ -73,6 +99,19 @@ export const CaseStudyOverlay = memo(({ open, onOpenChange, caseStudy, onPrev, o
     requestAnimationFrame(() => closeRef.current?.focus());
   }, [open, caseStudy?.id]);
 
+  // Scroll reveals inside the dialog's own scroller (hidden at rest, in on entry)
+  useEffect(() => {
+    if (!open || !dialogRef.current) return;
+    const root = dialogRef.current;
+    const els = Array.from(root.querySelectorAll<HTMLElement>('.cso-rv'));
+    if (!('IntersectionObserver' in window)) { els.forEach((el) => el.classList.add('is-in')); return; }
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } });
+    }, { root, rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, [open, caseStudy?.id]);
+
   // Escape, arrows, focus trap
   useEffect(() => {
     if (!open) return;
@@ -93,7 +132,7 @@ export const CaseStudyOverlay = memo(({ open, onOpenChange, caseStudy, onPrev, o
 
   if (!mounted || !open || !caseStudy) return null;
   const cs = caseStudy;
-  const gallery = cs.gallery?.length ? cs.gallery : [cs.image];
+  const gallery = cs.gallery?.length ? cs.gallery : cs.frames?.length || cs.verticals?.length ? [] : [cs.image];
   const sections: [string, string | string[]][] = [
     ['Challenge', cs.challenge],
     ['Approach', cs.approach],
@@ -135,6 +174,12 @@ export const CaseStudyOverlay = memo(({ open, onOpenChange, caseStudy, onPrev, o
             <span className={`${label} rounded-full border px-3 py-1.5`} style={{ borderColor: accent, color: accent }}>
               {cs.concept ? 'Concept' : 'Client work'}
             </span>
+            {cs.status === 'open' && (
+              <span className={`${label} inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/30 px-3 py-1.5 text-white/85`}>
+                <span className="cso-live relative inline-block h-1.5 w-1.5 rounded-full" style={{ background: accent }} aria-hidden />
+                Open case study · ongoing
+              </span>
+            )}
             {cs.year && <span className={`${label} text-white/55`}>{cs.year}</span>}
           </div>
           <h2 className="font-body font-bold text-[2.75rem] sm:text-7xl lg:text-8xl leading-[0.95] tracking-[-0.035em] text-white [text-wrap:balance]">{cs.title}</h2>
@@ -161,7 +206,7 @@ export const CaseStudyOverlay = memo(({ open, onOpenChange, caseStudy, onPrev, o
         {/* Narrative */}
         <div className="py-16 sm:py-24 space-y-14 sm:space-y-20">
           {sections.map(([k, v], i) => (
-            <section key={k} className="grid gap-4 lg:grid-cols-[220px_1fr] lg:gap-16">
+            <section key={k} className="cso-rv grid gap-4 lg:grid-cols-[220px_1fr] lg:gap-16">
               <h3 className={`${label} lg:pt-2`} style={{ color: accent }}>{String(i + 1).padStart(2, '0')} — {k}</h3>
               {Array.isArray(v) ? (
                 <ul className="space-y-4 max-w-[62ch]">
@@ -178,8 +223,8 @@ export const CaseStudyOverlay = memo(({ open, onOpenChange, caseStudy, onPrev, o
             </section>
           ))}
           {outcome && (
-            <section className="grid gap-4 lg:grid-cols-[220px_1fr] lg:gap-16">
-              <h3 className={`${label} lg:pt-2`} style={{ color: accent }}>04 — Outcome</h3>
+            <section className="cso-rv grid gap-4 lg:grid-cols-[220px_1fr] lg:gap-16">
+              <h3 className={`${label} lg:pt-2`} style={{ color: accent }}>04 — {cs.status === 'open' ? 'So far' : 'Outcome'}</h3>
               <div className="space-y-3 max-w-[62ch]">
                 {outcome.map((o) => (
                   <p key={o} className="font-body font-bold text-2xl sm:text-3xl leading-tight tracking-[-0.02em] text-white [text-wrap:balance]">{o}</p>
@@ -188,6 +233,50 @@ export const CaseStudyOverlay = memo(({ open, onOpenChange, caseStudy, onPrev, o
             </section>
           )}
         </div>
+
+        {cs.status === 'open' && cs.statusNote && (
+          <p className="cso-rv mb-16 sm:mb-24 max-w-[62ch] border-l-2 pl-5 font-body text-base sm:text-lg leading-relaxed text-porcelain/70 [text-wrap:pretty]" style={{ borderColor: accent }}>
+            {cs.statusNote}
+          </p>
+        )}
+
+        {/* Verticals: one chapter per brand inside an umbrella engagement */}
+        {cs.verticals?.length ? (
+          <div className="pb-8">
+            <p className={`${label} mb-10 sm:mb-14`} style={{ color: accent }}>The verticals</p>
+            <div className="space-y-24 sm:space-y-32">
+              {cs.verticals.map((v, vi) => (
+                <section key={v.id} id={`cso-${v.id}`} aria-labelledby={`cso-h-${v.id}`} className="scroll-mt-20">
+                  <header className="cso-rv grid gap-3 lg:grid-cols-[220px_1fr] lg:gap-16">
+                    <span className={`${label} text-porcelain/45 lg:pt-3`}>{String(vi + 1).padStart(2, '0')} / {String(cs.verticals!.length).padStart(2, '0')} · {v.kicker}</span>
+                    <div className="min-w-0">
+                      <h3 id={`cso-h-${v.id}`} className="font-body font-bold text-4xl sm:text-6xl leading-[0.98] tracking-[-0.035em] text-white [text-wrap:balance]">{v.name}</h3>
+                      {v.parent && <p className="mt-3 font-playfair italic text-lg sm:text-xl text-porcelain/70">{v.parent}</p>}
+                      <p className="mt-6 max-w-[62ch] font-body text-lg sm:text-xl leading-relaxed text-porcelain/85 [text-wrap:pretty]">{v.intro}</p>
+                      <ul className="mt-8 space-y-4 max-w-[62ch]">
+                        {v.points.map((pt) => (
+                          <li key={pt} className="flex gap-4 font-body text-base sm:text-lg leading-relaxed text-porcelain/75 [text-wrap:pretty]">
+                            <span className="mt-[0.7em] h-px w-5 shrink-0" style={{ background: accent }} aria-hidden />
+                            {pt}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </header>
+                  {v.frames?.length ? (
+                    <div className="mt-10 sm:mt-14 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {v.frames.map((f) => (
+                        <figure key={f.src} className={`cso-rv cso-frame relative overflow-hidden rounded-[20px] bg-white/5 ${f.wide ? 'sm:col-span-2 aspect-[16/9]' : 'aspect-[4/5]'}`}>
+                          <SafeImage src={f.src} fallback={cs.image} alt={f.alt} fill sizes={f.wide ? '(min-width: 1152px) 1088px, 100vw' : '(min-width: 640px) 50vw, 100vw'} className="object-cover" />
+                        </figure>
+                      ))}
+                    </div>
+                  ) : null}
+                </section>
+              ))}
+            </div>
+          </div>
+        ) : null}
 
         {/* Film */}
         {cs.video && (
@@ -203,13 +292,21 @@ export const CaseStudyOverlay = memo(({ open, onOpenChange, caseStudy, onPrev, o
         )}
 
         {/* Gallery */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pb-16">
-          {gallery.map((src, i) => (
-            <div key={src + i} className={`relative overflow-hidden rounded-[20px] bg-white/5 ${i === 0 && gallery.length % 2 === 1 ? 'sm:col-span-2 aspect-[16/9]' : 'aspect-[4/5]'}`}>
-              <SafeImage src={src} fallback={cs.image} alt={`${cs.title} — image ${i + 1}`} fill sizes="(min-width: 640px) 50vw, 100vw" className="object-cover" />
-            </div>
-          ))}
-        </div>
+        {(cs.frames?.length || gallery.length > 0) && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pb-16">
+            {cs.frames?.length
+              ? cs.frames.map((f) => (
+                  <figure key={f.src} className={`cso-rv cso-frame relative overflow-hidden rounded-[20px] bg-white/5 ${f.wide ? 'sm:col-span-2 aspect-[16/9]' : 'aspect-[4/5]'}`}>
+                    <SafeImage src={f.src} fallback={cs.image} alt={f.alt} fill sizes={f.wide ? '(min-width: 1152px) 1088px, 100vw' : '(min-width: 640px) 50vw, 100vw'} className="object-cover" />
+                  </figure>
+                ))
+              : gallery.map((src, i) => (
+                  <div key={src + i} className={`cso-rv cso-frame relative overflow-hidden rounded-[20px] bg-white/5 ${i === 0 && gallery.length % 2 === 1 ? 'sm:col-span-2 aspect-[16/9]' : 'aspect-[4/5]'}`}>
+                    <SafeImage src={src} fallback={cs.image} alt={`${cs.title} — image ${i + 1}`} fill sizes="(min-width: 640px) 50vw, 100vw" className="object-cover" />
+                  </div>
+                ))}
+          </div>
+        )}
 
         {cs.tags.length > 0 && (
           <div className="flex flex-wrap gap-2 pb-16">
@@ -241,7 +338,13 @@ export const CaseStudyOverlay = memo(({ open, onOpenChange, caseStudy, onPrev, o
         .cso-hero { animation: csoKen 12s ease-out forwards; }
         @keyframes csoIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
         @keyframes csoKen { from { transform: scale(1.08); } to { transform: scale(1); } }
-        @media (prefers-reduced-motion: reduce) { .cso, .cso-hero { animation: none; } }
+        .cso-rv { opacity: 0; transform: translateY(24px); transition: opacity .9s cubic-bezier(.22,1,.36,1), transform .9s cubic-bezier(.22,1,.36,1); }
+        .cso-rv.is-in { opacity: 1; transform: none; }
+        .cso-frame :is(img) { transform: scale(1.06); transition: transform 1.6s cubic-bezier(.22,1,.36,1); }
+        .cso-frame.is-in :is(img) { transform: scale(1); }
+        .cso-live::after { content: ''; position: absolute; inset: -4px; border-radius: 9999px; border: 1px solid currentColor; color: inherit; opacity: .6; animation: csoPulse 2.4s ease-out infinite; }
+        @keyframes csoPulse { from { transform: scale(.6); opacity: .7; } to { transform: scale(1.8); opacity: 0; } }
+        @media (prefers-reduced-motion: reduce) { .cso, .cso-hero, .cso-live::after { animation: none; } .cso-rv, .cso-frame :is(img) { opacity: 1; transform: none; transition: none; } }
       ` }} />
     </div>,
     document.body

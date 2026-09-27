@@ -54,6 +54,8 @@ Everything here is NON-NEGOTIABLE and must be re-verified at the END of every se
 ## UNFROZEN 2026-09-19 by owner for the portfolio overhaul (AashrithPortfolio.tsx,
 ## src/components/portfolio/*). Preserve its identity: light/dark toggle, section order,
 ## voice, ventures. The --font-display alias rule still stands.
+## OWNER-AUTHORIZED 2026-09-27 (Patches-3): portfolio content + data edits (Deorhi folded into an open
+## Studio186 case study, Higgsfield imagery via lib/hf.ts). Re-freeze applies after this pass.
 ## FROZEN — Aashrith Gade portfolio (diff must always be empty)
 `app/aashrith/page.tsx`, `app/AashrithGadePortfolio/page.tsx`, `src/views/AashrithPortfolio.tsx`,
 `src/components/portfolio/*`, `src/components/effects*`, `src/components/SequentianBackground.tsx`,
