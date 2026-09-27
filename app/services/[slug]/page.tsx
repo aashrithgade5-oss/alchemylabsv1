@@ -39,6 +39,7 @@ export async function generateMetadata({
     title: product.name,
     description: describe(product.tagline),
     path: `/services/${product.id}`,
+    og: `product-${product.id}`,
   });
 }
 

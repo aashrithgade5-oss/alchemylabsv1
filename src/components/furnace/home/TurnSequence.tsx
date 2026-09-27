@@ -11,6 +11,7 @@ import {
   useTransform,
   type MotionValue,
 } from 'framer-motion';
+import { BrandSeal } from './BrandSeal';
 
 const FRAME_COUNT = 104;
 const frameSrc = (i: number) => `/sequence-turn/turn-${String(i + 1).padStart(3, '0')}.webp`;
@@ -22,9 +23,9 @@ const frameSrc = (i: number) => `/sequence-turn/turn-${String(i + 1).padStart(3,
 // Inter Bold sentence case; ONE lowercase Playfair-italic emphasis word per
 // line (CLAUDE.md emphasis relock).
 const LINES = [
-  { text: 'The machine drafts by the thousand.', range: [0.05, 0.3], accent: 'thousand.' },
-  { text: 'Only judgment keeps one.', range: [0.38, 0.62], accent: 'judgment' },
-  { text: 'That one is yours.', range: [0.7, 0.94], accent: 'yours.' },
+  { text: 'Anyone can make a thousand images now.', range: [0.04, 0.24], accent: 'thousand' },
+  { text: 'Knowing which one to keep is the work.', range: [0.3, 0.5], accent: 'keep' },
+  { text: 'We do that part by hand.', range: [0.56, 0.74], accent: 'hand.' },
 ] as const;
 
 // One word of a kinetic line, sharpening into focus across its own slice
@@ -202,8 +203,10 @@ function ScrubSequence() {
   // appearance to real content instead of component mount.
   const overlayOpacity = useTransform(scrollYProgress, [0, LINES[0].range[0]], [0, 1]);
 
-  // Fade to void on exit so the next section never starts on a hard red edge.
-  const exitScrim = useTransform(scrollYProgress, [0.94, 1], [0, 1]);
+  // Patches-4: the film fades to void early and the Alchemy seal draws
+  // itself in the space that used to be a long empty scroll; it is still on
+  // screen when the stage releases, so the next interlude arrives under it.
+  const exitScrim = useTransform(scrollYProgress, [0.74, 0.82], [0, 1]);
 
   return (
     // -mt-[100svh] + z-0 under the hero (z-10): this stage locks at the exact
@@ -251,6 +254,7 @@ function ScrubSequence() {
           ))}
         </div>
         <m.div aria-hidden className="absolute inset-0 bg-void" style={{ opacity: exitScrim }} />
+        <BrandSeal progress={scrollYProgress} range={[0.78, 0.97]} />
       </m.div>
     </section>
   );

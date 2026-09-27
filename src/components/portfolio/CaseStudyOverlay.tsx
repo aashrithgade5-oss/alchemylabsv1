@@ -172,7 +172,7 @@ export const CaseStudyOverlay = memo(({ open, onOpenChange, caseStudy, onPrev, o
         <div className="absolute inset-x-0 bottom-0 mx-auto max-w-6xl px-4 sm:px-8 pb-10 sm:pb-16">
           <div className="flex flex-wrap items-center gap-2 mb-5">
             <span className={`${label} rounded-full border px-3 py-1.5`} style={{ borderColor: accent, color: accent }}>
-              {cs.concept ? 'Concept' : 'Client work'}
+              {cs.concept ? 'Concept' : cs.id === 'studio186' ? 'Full-time role' : 'Client work'}
             </span>
             {cs.status === 'open' && (
               <span className={`${label} inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/30 px-3 py-1.5 text-white/85`}>

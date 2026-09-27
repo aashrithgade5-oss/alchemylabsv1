@@ -18,12 +18,6 @@ const center = '50% 50%';
 
 // Services hero: molten ember glass poured onto black stone ("alchemy"). The
 // pour sits right of centre; the headline owns the dark lower-left.
-export const SVC_HERO = {
-  wide: hf('hf_20260927_102131_49838ea4-eac2-4b29-b41e-c299e4e191d3.png'),
-  tall: hf('hf_20260927_110110_184c2f0f-082e-43c9-a76b-2d5717901af9.png'),
-  // H.264 1600w, 271KB, 6s (start frame = end frame, so the loop seam is clean).
-  loop: 'https://d2ol7oe51mr4n9.cloudfront.net/user_3FUhukBmQOQ2FavgLXr2fi3ujjI/fa9b5fce-e37c-4c39-b493-3715eaf18dd5.mp4',
-} as const;
 
 /** Twelve studio offers (4:3 masters, subject centred) + five productized (16:9). */
 export const offerShots: Record<string, SvcShot> = {

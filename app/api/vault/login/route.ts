@@ -20,11 +20,15 @@ export async function POST(req: Request) {
   const parsed = schema.safeParse(await req.json().catch(() => null));
   if (!parsed.success) return json({ error: 'Invalid request' }, 400);
 
-  const userOk = safeEqual(parsed.data.username.trim(), process.env.ADMIN_USERNAME!);
-  const passOk = safeEqual(parsed.data.password, process.env.ADMIN_PASSWORD!);
+  // username is forgiving (case, extra spaces); the password is exact
+  const norm = (v: string) => v.trim().replace(/\s+/g, ' ').toLowerCase();
+  const userOk = safeEqual(norm(parsed.data.username), norm(process.env.ADMIN_USERNAME!));
+  // tolerate a stray space pasted into the Vercel env value
+  const envPass = process.env.ADMIN_PASSWORD!;
+  const passOk = safeEqual(parsed.data.password, envPass) || safeEqual(parsed.data.password, envPass.trim());
   if (!(userOk && passOk)) {
     await new Promise((r) => setTimeout(r, 450));
-    return json({ error: 'Those credentials are not right.' }, 401);
+    return json({ error: 'That username or password is not right. The password is case-sensitive.' }, 401);
   }
 
   cookies().set(VAULT_COOKIE, await createSession(), {

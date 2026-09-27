@@ -97,10 +97,10 @@ const caseStudyData: Record<string, CaseStudyData> = {
   'studio186': {
     id: 'studio186',
     title: 'Studio186',
-    subtitle: 'Four premium brands inside The Times of India Group: preventive health, its consumer sub-brand, heritage travel and Indian craft. One lead, one system, written while the work is still happening.',
+    subtitle: 'My full-time role at Studio186, The Times of India Group: four premium brands in preventive health, its consumer sub-brand, heritage travel and Indian craft. One lead, one system, written while the work is still happening.',
     image: M.s186Cover,
     status: 'open',
-    role: 'Social & Growth Lead (sole lead)',
+    role: 'Social & Growth Lead, full-time',
     year: '2026',
     timeline: 'Jul 2026 — ongoing',
     challenge: 'Four brands, four audiences: a longevity clinic, a five-day nutrition kit, heritage travel and Indian craft. One person accountable for brand, content and paid growth across all of them. Each needed its own voice without the studio’s output splintering into four.',
@@ -112,7 +112,7 @@ const caseStudyData: Record<string, CaseStudyData> = {
       'Paid growth run from the same editorial logic as organic.',
     ],
     results: ['Deorhi: monthly reach 8K → 700K in six weeks.', 'Evolve: sub-brand launch led end to end.'],
-    statusNote: 'This is an open case study. The engagement is live, so it reads like a working file: what was diagnosed, what was built, and only the results already on record. It gets updated as the work lands.',
+    statusNote: 'This is an open case study of the job I do every day. The work is live, so it reads like a working file: what was diagnosed, what was built, and only the results already on record. It gets updated as the work lands.',
     verticals: [
       {
         id: 'humanedge',
@@ -183,7 +183,7 @@ const caseStudyData: Record<string, CaseStudyData> = {
       },
     ],
     tools: ['AI-native production pipeline', 'Meta', 'LinkedIn'],
-    tags: ['Client work', 'Open case study', 'Preventive health', 'Heritage luxury', 'Indian craft', 'Growth'],
+    tags: ['Full-time role', 'Open case study', 'Preventive health', 'Heritage luxury', 'Indian craft', 'Growth'],
   },
   'aether-rituals': {
     id: 'aether-rituals',
@@ -285,9 +285,11 @@ const caseStudyData: Record<string, CaseStudyData> = {
     tools: ['Midjourney', 'Photoshop', 'Figma'],
     tags: ['Concept', 'Athletic', 'Product', 'AI campaign'],
     frames: [
-      { src: M.oakleyRider, alt: 'Equipment Redefined — golden-hour effort' },
-      { src: M.oakleyMacro, alt: 'Equipment Redefined — wet asphalt, hard light' },
-      { src: '/media/oakley-bento.webp', alt: 'Equipment Redefined — the original board', wide: true },
+      { src: M.oakleySprint, alt: 'Equipment Redefined — speed, streaked in heat' },
+      { src: M.oakleyLens, alt: 'Equipment Redefined — the desert in the lens' },
+      { src: M.oakleyEclipse, alt: 'Equipment Redefined — eclipse', wide: true },
+      { src: M.oakleyCrew, alt: 'Equipment Redefined — out of the haze' },
+      { src: '/media/oakley-bento.webp', alt: 'Equipment Redefined — the original board' },
     ],
   },
 };
@@ -299,21 +301,8 @@ type CreativeProject = {
 };
 const creativeProjects: CreativeProject[] = [
   {
-    id: 'studio186',
-    num: '01',
-    title: 'Studio186',
-    category: 'Four brands · The Times of India Group',
-    description: 'HumanEdge, Evolve, Deorhi and Taqsha, run as one system. Deorhi went from 8K to 700K monthly reach in six weeks. The rest is still being written.',
-    image: M.s186Cover,
-    tags: ['HumanEdge', 'Evolve', 'Deorhi', 'Taqsha'],
-    year: '2026',
-    concept: false,
-    open: true,
-    sequentianVariant: 2,
-  },
-  {
     id: 'aether-rituals',
-    num: '02',
+    num: '01',
     title: 'Aether Rituals',
     category: 'AI-native skincare house',
     description: 'A skincare house built on one idea, the pause that transforms. Identity, packaging and campaign film from a single pipeline.',
@@ -325,11 +314,11 @@ const creativeProjects: CreativeProject[] = [
   },
   {
     id: 'genesis',
-    num: '03',
+    num: '02',
     title: 'Genesis',
     category: 'AI brand system',
     description: 'Monochrome streetwear for the AI generation. Every generated asset had rules to obey, so the brand never lost its point of view.',
-    image: M.genesisHero,
+    image: genesisBento,
     tags: ['Brand system', 'Streetwear', 'AI video'],
     year: '2024',
     concept: true,
@@ -337,11 +326,11 @@ const creativeProjects: CreativeProject[] = [
   },
   {
     id: 'dior-campaign',
-    num: '04',
+    num: '03',
     title: 'Dior: Dual Fragrance',
     category: 'Fragrance campaign',
     description: "J'adore in gold and warm light, Poison in violet and shadow. Two colour stories, one visual language.",
-    image: M.diorHero,
+    image: diorBento,
     tags: ['Fragrance', 'Campaign', 'AI direction'],
     year: '2024',
     concept: true,
@@ -349,15 +338,28 @@ const creativeProjects: CreativeProject[] = [
   },
   {
     id: 'oakley-showcase',
-    num: '05',
+    num: '04',
     title: 'Oakley: Equipment Redefined',
     category: 'Athletic brand showcase',
     description: 'Speed, precision and an orange-red system, taken from brief to campaign in 24 hours.',
-    image: M.oakleyHero,
+    image: oakleyBento,
     tags: ['Athletic', 'Product', 'AI assets'],
     year: '2024',
     concept: true,
     sequentianVariant: 3,
+  },
+  {
+    id: 'studio186',
+    num: '05',
+    title: 'Studio186',
+    category: 'Full-time role · Social & Growth Lead · The Times of India Group',
+    description: 'My full-time role since July 2026: social and growth lead for four brands, HumanEdge, Evolve, Deorhi and Taqsha, run as one system. Deorhi went from 8K to 700K monthly reach in six weeks.',
+    image: M.s186Cover,
+    tags: ['HumanEdge', 'Evolve', 'Deorhi', 'Taqsha'],
+    year: '2026',
+    concept: false,
+    open: true,
+    sequentianVariant: 2,
   },
 ];
 
@@ -733,17 +735,17 @@ const HeroSection = memo(({ isDark }: { isDark: boolean }) => {
         </motion.h1>
 
         <motion.p
-          className={`font-body text-base sm:text-lg lg:text-xl max-w-2xl mx-auto ${t(isDark, 'text-porcelain/50', 'text-neutral-500')}`}
+          className={`mx-auto font-body text-[clamp(0.95rem,1.7vw,1.35rem)] font-light tracking-[-0.01em] sm:whitespace-nowrap ${t(isDark, 'text-porcelain/70', 'text-neutral-600')}`}
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.7 }}
         >
-          I don't design brands. I architect the systems that make them <span className="text-ember italic font-display">inevitable.</span>
+          Brand strategy with <span className="font-playfair italic text-ember">taste</span>, and the systems to carry it.
         </motion.p>
 
         <motion.div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-8" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.9 }}>
           <span className={`font-mono text-xs sm:text-sm ${t(isDark, 'text-porcelain/40', 'text-neutral-400')}`}>Founder of</span>
-          {['Brand Alchemy', 'Ashzz.ai', 'Ash Archives'].map((name, i) => (
+          {['Alchemy Labs', 'Brand Alchemy', 'Ashzz.ai', 'Ash Archives'].map((name, i, all) => (
             <span key={name} className="flex items-center gap-2 sm:gap-3">
               <motion.span
                 className="font-body font-bold text-xs sm:text-sm bg-gradient-to-r from-ember to-ember-deep bg-clip-text text-transparent"
@@ -752,14 +754,11 @@ const HeroSection = memo(({ isDark }: { isDark: boolean }) => {
               >
                 {name}
               </motion.span>
-              {i < 2 && <span className={`${t(isDark, 'text-porcelain/20', 'text-neutral-300')}`}>·</span>}
+              {i < all.length - 1 && <span className={`${t(isDark, 'text-porcelain/20', 'text-neutral-300')}`}>·</span>}
             </span>
           ))}
         </motion.div>
 
-        <motion.div className={`flex justify-center gap-6 font-mono text-[10px] sm:text-xs ${t(isDark, 'text-porcelain/30', 'text-neutral-400')} mt-5`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.1 }}>
-          <span>Mumbai, IN</span><span>·</span><span>NMIMS '26</span><span>·</span><span>Founder-led practice</span>
-        </motion.div>
 
         <motion.div className="mt-8 flex justify-center" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.3 }}>
           <a
@@ -1162,7 +1161,7 @@ const ImmersiveProject = memo(({ project, index, isDark, isMobile, onDiscover }:
             <span className="font-mono text-[9px] px-2.5 py-1 rounded-full text-white/55 uppercase tracking-wider"
               style={{ border: '1px solid rgba(255,255,255,0.16)' }}
             >
-              {project.concept ? 'Concept' : 'Client work'}
+              {project.concept ? 'Concept' : project.id === 'studio186' ? 'Full-time role' : 'Client work'}
             </span>
             {project.open && (
               <span className="inline-flex items-center gap-1.5 font-mono text-[9px] px-2.5 py-1 rounded-full text-white/80 uppercase tracking-wider bg-ember/15" style={{ border: '1px solid rgba(255,77,28,0.35)' }}>
@@ -1277,7 +1276,7 @@ const CreativeProjectsSection = memo(({ isDark, onDiscover }: { isDark: boolean;
               <span className="italic hero-fluid-text bg-clip-text text-transparent">fingerprints.</span>
             </h2>
             <p className={`font-body text-sm sm:text-base max-w-xl mx-auto ${t(isDark, 'text-porcelain/45', 'text-neutral-500')}`}>
-              One live client engagement, still being written, and four concept houses built to test a system end to end. Each starts with the architecture, not the surface.
+              Four concept houses built to test a system end to end, and the job I do every day. Each one starts with the thinking, not the surface.
             </p>
           </motion.div>
         </div>

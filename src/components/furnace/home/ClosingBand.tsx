@@ -125,7 +125,7 @@ export function ClosingBand() {
         >
           <TiltCTA>
             <MagneticCTA href="/contact" variant="ember">
-              Begin
+              Book a call
             </MagneticCTA>
           </TiltCTA>
         </m.div>

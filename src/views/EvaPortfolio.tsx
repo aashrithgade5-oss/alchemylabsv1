@@ -647,8 +647,8 @@ export default function EvaPortfolio() {
         featherFrom="#0A0908"
         headline={
           <>
-            <span className="glass-type">From Mumbai, with </span>
-            <span className="font-playfair italic font-normal eva-em clip-pad">intent</span>
+            <span className="glass-type">From the first pitch to the final </span>
+            <span className="font-playfair italic font-normal eva-em clip-pad">cut</span>
             <span className="glass-type">.</span>
           </>
         }

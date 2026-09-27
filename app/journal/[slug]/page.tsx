@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { postsData } from '@/data/journalPosts';
 import BlogPostPage from '@/views/BlogPostPage';
+import { ogImageFor } from '@lib/seo';
+import { ogCard } from '@lib/og';
 
 // Every post previously shared the site-wide title and OG card, so all six
 // links looked identical when shared. First content paragraph doubles as the
@@ -27,11 +29,13 @@ export async function generateMetadata({
       url: `/journal/${params.slug}`,
       type: 'article',
       authors: [post.author.name],
+      images: [ogImageFor('journal', post.title)],
     },
     twitter: {
       card: 'summary_large_image',
       title: `${post.title} · Alchemy Labs`,
       description,
+      images: [ogCard('journal')],
     },
   };
 }

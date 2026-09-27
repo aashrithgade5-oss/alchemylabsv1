@@ -1730,3 +1730,33 @@ html[data-pl='run'] .hero-depth {
   pointer-events: none;
   background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
 }
+
+/* About hero (Patches-4): slow ember aurora + scroll cue. Blur lives on its
+   own layer, never on text. */
+.about-aurora {
+  background: conic-gradient(from 0deg at 50% 60%, rgba(255,77,28,0) 0deg, rgba(255,77,28,0.12) 80deg, rgba(255,77,28,0) 160deg, rgba(255,77,28,0.08) 240deg, rgba(255,77,28,0) 360deg);
+  filter: blur(60px);
+  animation: about-aurora 18s linear infinite;
+  will-change: transform;
+}
+@keyframes about-aurora { to { transform: rotate(360deg) scale(1.2); } }
+.scroll-cue-dot { top: 0; animation: scroll-cue 2.5s ease-in-out infinite; }
+@keyframes scroll-cue { 0%, 100% { transform: translate(-50%, 0); opacity: 0; } 50% { transform: translate(-50%, 32px); opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .about-aurora, .scroll-cue-dot { animation: none; } }
+.svc-breath {
+  background: radial-gradient(60% 70% at 50% 100%, rgba(255,77,28,0.16), transparent 70%);
+  animation: svc-breath 7s ease-in-out infinite;
+}
+@keyframes svc-breath { 0%, 100% { opacity: 0.45; } 50% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .svc-breath { animation: none; } }
+
+/* Universal footer (Patches-4): linear service marquee + the rising mark. */
+.footer-marquee { animation: footer-marquee 42s linear infinite; }
+@keyframes footer-marquee { to { transform: translateX(-50%); } }
+.footer-mark {
+  background: linear-gradient(180deg, rgba(237,230,221,0.55) 0%, rgba(237,230,221,0.12) 60%, rgba(255,77,28,0.05) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+@media (prefers-reduced-motion: reduce) { .footer-marquee { animation: none; } }

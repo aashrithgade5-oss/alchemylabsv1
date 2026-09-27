@@ -3,7 +3,11 @@
 import { usePathname } from 'next/navigation';
 import { FurnaceNavigation } from './Navigation';
 import { FurnaceFooter } from './Footer';
-import { BottomCTA } from './BottomCTA';
+import dynamic from 'next/dynamic';
+
+// The homepage closer on every page (owner, Patches-4). Lazy so its 3D
+// marquee never lands in any route's First Load JS.
+const ClosingBand = dynamic(() => import('./home/ClosingBand').then((mod) => mod.ClosingBand));
 
 // The founder portfolios render their own inline nav and footer; the global
 // chrome previously stacked on top of them. This gate keeps their files
@@ -25,14 +29,15 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
   // Homepage and (since C-P17) Work both end in ClosingBand, their own
   // dedicated closer with the same "bring the brand, Begin" beat —
   // stacking this one right after it would read as the same CTA twice.
-  // /pay is a utility page a client opens with an invoice: no sales closer.
-  const skipBottomCTA = pathname === '/contact' || pathname === '/' || pathname === '/work' || pathname === '/pay';
+  // /pay is a utility page a client opens with an invoice, and the legal
+  // pages end plainly: no sales closer on any of them.
+  const skipBottomCTA = ['/', '/work', '/contact', '/pay', '/privacy', '/terms'].includes(pathname);
 
   return (
     <>
       <FurnaceNavigation />
       {children}
-      {!skipBottomCTA && <BottomCTA />}
+      {!skipBottomCTA && <ClosingBand />}
       <FurnaceFooter />
     </>
   );

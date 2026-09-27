@@ -1026,3 +1026,23 @@ fallback — set that env var in Vercel before the first deploy (see ERROR_LOG.m
   Visual QA relay: Higgsfield sandbox -> Figma upload_assets -> get_screenshot (file m2c2gMJa4WBS6k8XqbLZai).
   All 65 new images reviewed there.
 - QA: build OK; 12 routes x 3 viewports all 200, one h1, no overflow. /about 156kB (pre-existing >150).
+
+## Patches-4 (2026-09-27) — final clear pass
+- Vault: production login verified working (desktop + iPhone). Username now case/space-insensitive, show-password toggle,
+  clearer errors. Dashboard: new Overview tab (Vercel Analytics / Speed Insights / Logs / Deployments / Search Console /
+  Calendly / Gmail links, live build SHA, setup checklist, optional deploy feed via VERCEL_API_TOKEN). System tab folded in.
+- Vercel Web Analytics installed (`@vercel/analytics`, VaultSafeAnalytics drops /alchemy-vault). Enable once in Vercel >
+  project > Analytics tab for data to start flowing.
+- About + Services heroes restored to the original films (About re-encoded 14.8MB -> 4.1MB, hosted on Higgsfield CDN).
+- Landing hero: "We Build CAMPAIGNS" leads; one supporting line + one who-for line; CapacityTag + kicker removed;
+  glitch is transform/opacity only (no animated blur/text-shadow). TurnSequence ends early into the Alchemy seal
+  (BrandSeal.tsx, scroll-drawn atom + wordmark) so the gap before the next interlude is branded, not empty.
+- Copy de-AI'd on the home interludes.
+- Aashrith portfolio: one-line tagline, "Founder of" only (NMIMS row gone), Studio186 last as a full-time role,
+  bento boards as Genesis/Dior/Oakley thumbnails (new images stay as openers), new Oakley set from the bento reference.
+- Eva footer line: "From the first pitch to the final cut."
+- Universal footer (Footer.tsx): molten-horizon image with parallax, service marquee, newsletter, rising ALCHEMY mark.
+  ClosingBand is now the pre-footer on every page except /, /work (own), /contact, /pay, /privacy, /terms.
+  ServicesClosing retired (duplicate).
+- Work + Contact heroes: new upscaled full-bleed art (gallery sculpture / lit doorway) via ArtPicture (wide/tall).
+- Per-page share cards: 26 1200x630 JPEGs (lib/og.ts) wired through pageMetadata(og) + layout/pay/journal/aashrith.

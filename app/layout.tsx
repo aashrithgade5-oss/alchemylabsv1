@@ -1,9 +1,12 @@
+import { ogImageFor } from '@lib/seo';
+import { ogCard } from '@lib/og';
 import type { Metadata } from 'next';
 import { Inter, Pinyon_Script, Playfair_Display } from 'next/font/google';
 import PageViewBeacon from '@/components/admin/PageViewBeacon';
 import { GeistSans } from 'geist/font/sans';
 import { GeistMono } from 'geist/font/mono';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import { VaultSafeAnalytics } from '@/components/admin/VaultSafeAnalytics';
 import { Providers } from '@/components/Providers';
 import { LayoutTransition } from '@/components/LayoutTransition';
 import { SiteChrome } from '@/components/furnace/SiteChrome';
@@ -73,7 +76,7 @@ export const metadata: Metadata = {
     url: '/',
     siteName: 'Alchemy Labs',
     locale: 'en_IN',
-    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'Alchemy Labs' }],
+    images: [ogImageFor('home', 'Alchemy Labs · AI-Native Brand Studio')],
     type: 'website',
   },
   // Google Search Console HTML-tag verification. Only emitted when the env
@@ -86,7 +89,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Alchemy Labs · AI-Native Brand Studio',
     description,
-    images: ['/og-image.png'],
+    images: [ogCard('home')],
   },
   icons: {
     icon: [
@@ -156,6 +159,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </filter>
           </svg>
           <SpeedInsights />
+          <VaultSafeAnalytics />
           <PageViewBeacon />
         </body>
       </html>

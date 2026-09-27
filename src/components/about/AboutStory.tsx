@@ -29,7 +29,7 @@ const MOVES = [
     numeral: '03',
     kanji: '刃',
     name: 'EXECUTE',
-    line: 'The machine drafts by the thousand. The eye keeps one. That one carries the name.',
+    line: 'Anyone can make a thousand images. Choosing one is the job. That one carries our name.',
   },
 ];
 

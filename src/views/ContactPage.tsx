@@ -5,7 +5,8 @@ import { m, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
 import { Contact } from '@/components/Contact';
 import { HomeAtmosphere } from '@/components/furnace/home/HomeAtmosphere';
-import { AmbientVideo } from '@/components/furnace/home/AmbientVideo';
+import { ArtPicture } from '@/components/furnace/ArtPicture';
+import { CONTACT_HERO } from '@lib/hf';
 import { KineticHeadline } from '@/components/furnace/KineticHeadline';
 
 const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
@@ -21,27 +22,31 @@ export const ContactPage = () => {
     offset: ['start end', 'end start'],
   });
   const bgScale = useTransform(scrollYProgress, [0, 1], [1.1, 1.22]);
+  const heroRef = useRef<HTMLElement>(null);
+  const { scrollYProgress: heroProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
+  const heroScale = useTransform(heroProgress, [0, 1], [1.02, 1.12]);
 
   return (
     <main className="relative font-sans">
       <HomeAtmosphere />
 
       {/* Centered header: oversized Inter, one Playfair italic line */}
-      <section className="relative px-6 pb-16 pt-40 text-center md:pt-48">
-        {/* running silhouettes, dissolving into void before the form */}
+      <section ref={heroRef} className="relative flex min-h-[86svh] flex-col items-center justify-center px-6 pb-16 pt-40 text-center md:pt-48">
+        {/* Patches-4: the lit doorway, an open invitation. Full bleed,
+            dissolving into void before the form. */}
         <div
           aria-hidden
           className="absolute inset-0 overflow-hidden"
           style={{
-            WebkitMaskImage: 'linear-gradient(to bottom, black 30%, transparent 100%)',
-            maskImage: 'linear-gradient(to bottom, black 30%, transparent 100%)',
+            WebkitMaskImage: 'linear-gradient(to bottom, black 55%, transparent 100%)',
+            maskImage: 'linear-gradient(to bottom, black 55%, transparent 100%)',
           }}
         >
-          <AmbientVideo
-            src="/media/red-slats-tall.mp4"
-            poster="/media/red-slats-tall-poster.jpg"
-            className="h-full w-full object-cover opacity-25"
-          />
+          <m.div className="absolute inset-0 will-change-transform" style={{ scale: heroScale }}>
+            <ArtPicture wide={CONTACT_HERO.wide} tall={CONTACT_HERO.tall} className="object-[50%_60%] opacity-80 md:object-[62%_55%]" />
+          </m.div>
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_55%_at_50%_45%,rgba(10,9,8,0.55),transparent_75%)]" />
+          <div className="svc-breath absolute inset-x-0 bottom-0 h-1/2" />
         </div>
         <div className="relative">
         <m.p

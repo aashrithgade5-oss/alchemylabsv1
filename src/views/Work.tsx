@@ -6,6 +6,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { portfolio } from '@lib/portfolio';
 import { GlassPanel } from '@/components/furnace/GlassPanel';
+import { ArtPicture } from '@/components/furnace/ArtPicture';
+import { WORK_HERO } from '@lib/hf';
 import { KineticHeadline } from '@/components/furnace/KineticHeadline';
 // Lazy like the homepage: ClosingBand drags TextHoverEffect + the marquee
 // into First Load otherwise (/work 134→159kB when imported statically).
@@ -65,44 +67,23 @@ export default function Work() {
 
   return (
     <main className="relative font-sans">
-      <section ref={heroRef} className="relative min-h-[70vh] overflow-hidden bg-void">
+      <section ref={heroRef} className="relative flex min-h-[88svh] items-end overflow-hidden bg-void">
         <div aria-hidden className="absolute inset-0">
-          <m.div className="absolute inset-0" style={{ scale: bgScale, y: bgY }}>
-            <Image
-              src="/media/mb-samurai-glass-walk.webp"
-              alt=""
-              fill
-              priority
-              quality={90}
-              sizes="100vw"
-              className="object-cover object-[70%_50%] opacity-[0.55]"
-            />
+          {/* Patches-4: the gallery after hours, one molten sculpture on
+              black stone. Tall frame on phones, wide on md+. */}
+          <m.div className="absolute inset-0 will-change-transform" style={{ scale: bgScale, y: bgY }}>
+            <ArtPicture wide={WORK_HERO.wide} tall={WORK_HERO.tall} className="object-[50%_50%] opacity-[0.85]" />
           </m.div>
-          {/* the "lights moving" pass: an oversized copy drifting slowly
-              sideways under the parallax layer's blend */}
-          <m.div
-            className="absolute -inset-x-[20%] inset-y-0 mix-blend-screen"
-            animate={{ x: ['-4%', '4%'] }}
-            transition={{ duration: 22, ease: 'easeInOut', repeat: Infinity, repeatType: 'mirror' }}
-          >
-            <Image
-              src="/media/mb-samurai-glass-walk.webp"
-              alt=""
-              fill
-              quality={75}
-              sizes="140vw"
-              className="object-cover object-center opacity-[0.14] blur-[2px]"
-            />
-          </m.div>
+          <div className="svc-breath absolute inset-x-0 bottom-0 h-2/3" />
           <div
             className="absolute inset-0"
             style={{
               background:
-                'linear-gradient(to bottom, rgba(10,9,8,0.35) 0%, rgba(10,9,8,0.55) 55%, rgba(10,9,8,1) 100%)',
+                'linear-gradient(to bottom, rgba(10,9,8,0.45) 0%, rgba(10,9,8,0.25) 40%, rgba(10,9,8,0.7) 78%, rgba(10,9,8,1) 100%)',
             }}
           />
         </div>
-        <div className="relative mx-auto max-w-6xl px-6 pb-16 pt-40 md:px-12 md:pb-20 md:pt-48 lg:px-16">
+        <div className="relative mx-auto w-full max-w-6xl px-6 pb-16 pt-40 md:px-12 md:pb-20 md:pt-48 lg:px-16">
           <p className="font-mono text-[10px] tracking-[0.3em] text-bone/70 md:text-[11px]">
             SELECTED WORK
           </p>

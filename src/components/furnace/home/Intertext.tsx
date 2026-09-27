@@ -37,8 +37,10 @@ export function Intertext({
   });
 
   // blur floor 12: the one scrub signature (matches fx/ScrollScrub)
-  const opacity = useTransform(scrollYProgress, [0.12, 0.38, 0.62, 0.88], [0, 1, 1, 0]);
-  const blurPx = useTransform(scrollYProgress, [0.12, 0.38, 0.62, 0.88], [12, 0, 0, 12]);
+  // compact beats arrive sooner: less dead void between moments
+  const inAt = compact ? [0.04, 0.26, 0.64, 0.9] : [0.12, 0.38, 0.62, 0.88];
+  const opacity = useTransform(scrollYProgress, inAt, [0, 1, 1, 0]);
+  const blurPx = useTransform(scrollYProgress, inAt, [12, 0, 0, 12]);
   const y = useTransform(scrollYProgress, [0, 1], [56, -56]);
   const filter = useMotionTemplate`blur(${blurPx}px)`;
 
