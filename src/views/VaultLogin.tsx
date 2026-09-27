@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Loader2, Lock } from 'lucide-react';
+import { Eye, EyeOff, Loader2, Lock } from 'lucide-react';
 
 const field =
   'mt-2 block min-h-[48px] w-full rounded-2xl border border-bone/10 bg-bone/[0.03] px-4 py-3 text-[15px] text-bone outline-none transition-[border-color,box-shadow] focus:border-ember/60 focus:shadow-[0_0_0_4px_rgba(255,77,28,0.12)]';
@@ -10,6 +10,7 @@ export default function VaultLogin() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [busy, setBusy] = useState(false);
+  const [show, setShow] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const submit = async (e: React.FormEvent) => {
@@ -26,7 +27,13 @@ export default function VaultLogin() {
       if (!res.ok) throw new Error(data.error ?? 'Sign-in failed.');
       window.location.assign('/alchemy-vault');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Sign-in failed.');
+      setError(
+        err instanceof TypeError
+          ? 'No connection. Check your network and try again.'
+          : err instanceof Error
+            ? err.message
+            : 'Sign-in failed.',
+      );
       setBusy(false);
     }
   };
@@ -43,9 +50,20 @@ export default function VaultLogin() {
           The <span className="font-playfair font-normal italic">vault</span>
         </h1>
         <label htmlFor="v-user" className="mt-8 block font-mono text-[10px] tracking-[0.2em] text-bone/55">USERNAME</label>
-        <input id="v-user" autoComplete="username" required value={username} onChange={(e) => setUsername(e.target.value)} className={field} />
+        <input id="v-user" autoComplete="username" autoCapitalize="none" autoCorrect="off" spellCheck={false} required value={username} onChange={(e) => setUsername(e.target.value)} className={field} />
         <label htmlFor="v-pass" className="mt-5 block font-mono text-[10px] tracking-[0.2em] text-bone/55">PASSWORD</label>
-        <input id="v-pass" type="password" autoComplete="current-password" required value={password} onChange={(e) => setPassword(e.target.value)} className={field} />
+        <div className="relative">
+          <input id="v-pass" type={show ? 'text' : 'password'} autoComplete="current-password" required value={password} onChange={(e) => setPassword(e.target.value)} className={`${field} pr-14`} />
+          <button
+            type="button"
+            onClick={() => setShow((v) => !v)}
+            aria-label={show ? 'Hide password' : 'Show password'}
+            aria-pressed={show}
+            className="absolute bottom-0 right-1 flex h-12 w-12 items-center justify-center rounded-full text-bone/55 transition-colors hover:text-bone focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ember"
+          >
+            {show ? <EyeOff className="h-4 w-4" aria-hidden /> : <Eye className="h-4 w-4" aria-hidden />}
+          </button>
+        </div>
         {error && <p role="alert" className="mt-4 text-sm text-ember">{error}</p>}
         <button
           type="submit"

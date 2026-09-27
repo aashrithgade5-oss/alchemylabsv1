@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Download, LogOut, Mail, RefreshCw, Search } from 'lucide-react';
+import { ArrowUpRight, Check, Download, LogOut, Mail, RefreshCw, Search } from 'lucide-react';
 
 type Sub = { id: string; name: string; email: string; company: string | null; service: string | null; message: string; created_at: string };
 type Nl = { id: string; email: string; source: string | null; created_at: string };
@@ -16,6 +16,8 @@ type Data = {
     intl: boolean;
     searchConsoleTag: boolean;
   };
+  build: { env: string; sha: string; message: string; branch: string; region: string };
+  deployments: { id: string; url: string; state: string; target: string | null; created: number; message: string }[] | null;
   submissions: Sub[];
   subscribers: Nl[];
   views: View[];
@@ -37,6 +39,18 @@ function csv(rows: Record<string, unknown>[], name: string) {
   URL.revokeObjectURL(url);
 }
 
+const VERCEL = 'https://vercel.com/aashrithgade5-oss-projects/alchemylabsv1';
+const LINKS: [string, string, string][] = [
+  ['Visitors', 'Vercel Web Analytics', `${VERCEL}/analytics`],
+  ['Speed', 'Vercel Speed Insights', `${VERCEL}/speed-insights`],
+  ['Errors + logs', 'Vercel Logs', `${VERCEL}/logs`],
+  ['Deploys', 'Vercel Deployments', `${VERCEL}/deployments`],
+  ['Google', 'Search Console', 'https://search.google.com/search-console?resource_id=sc-domain:alchemylabs.in'],
+  ['Calls', 'Calendly bookings', 'https://calendly.com/app/scheduled_events/user/me'],
+  ['Inbox', 'Briefs in Gmail', 'https://mail.google.com/mail/u/0/#search/%22Alchemy+Labs%22+brief'],
+  ['Payments page', 'alchemylabs.in/pay', '/pay'],
+];
+
 const Card = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => (
   <div className={`rounded-[18px] border border-bone/[0.07] bg-carbon p-5 sm:p-6 ${className}`}>{children}</div>
 );
@@ -48,7 +62,7 @@ export default function VaultDashboard() {
   const [data, setData] = useState<Data | null>(null);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
-  const [tab, setTab] = useState<'briefs' | 'newsletter' | 'traffic' | 'system'>('briefs');
+  const [tab, setTab] = useState<'overview' | 'briefs' | 'newsletter' | 'traffic'>('overview');
   const [q, setQ] = useState('');
   const [open, setOpen] = useState<string | null>(null);
 
@@ -146,13 +160,6 @@ export default function VaultDashboard() {
         </header>
 
         {err && <p role="alert" className="mt-6 rounded-2xl border border-ember/40 bg-ember/[0.06] p-4 text-sm">{err}</p>}
-        {i && !i.storage && (
-          <p className="mt-6 rounded-2xl border border-amber/40 bg-amber/[0.06] p-4 text-sm leading-relaxed text-bone/85">
-            Storage is not connected, so this ledger is empty. Every brief and sign-up is still emailed to{' '}
-            {i.mailTo.join(' and ')}. Add <code className="font-mono text-xs">SUPABASE_SERVICE_ROLE_KEY</code> to list them here (see System).
-          </p>
-        )}
-
         <section className="mt-8 grid grid-cols-2 gap-3 lg:grid-cols-4">
           {[
             ['Briefs · 30 days', briefs30],
@@ -168,11 +175,82 @@ export default function VaultDashboard() {
         </section>
 
         <nav role="tablist" aria-label="Vault sections" className="mt-8 flex flex-wrap gap-1 rounded-full border border-line p-1 sm:w-fit">
+          {tabBtn('overview', 'OVERVIEW')}
           {tabBtn('briefs', 'BRIEFS', data?.submissions.length)}
           {tabBtn('newsletter', 'NEWSLETTER', data?.subscribers.length)}
           {tabBtn('traffic', 'TRAFFIC')}
-          {tabBtn('system', 'SYSTEM')}
         </nav>
+
+
+        {tab === 'overview' && i && (
+          <section className="mt-6 grid gap-3 lg:grid-cols-3">
+            <Card className="lg:col-span-2">
+              <Label>Open</Label>
+              <ul className="mt-4 grid gap-2 sm:grid-cols-2">
+                {LINKS.map(([k, name, href]) => (
+                  <li key={k}>
+                    <a
+                      href={href}
+                      target={href.startsWith('/') ? undefined : '_blank'}
+                      rel="noopener noreferrer"
+                      className="group flex min-h-[56px] items-center justify-between gap-3 rounded-2xl border border-bone/[0.07] px-4 py-3 transition-colors hover:border-ember/50"
+                    >
+                      <span>
+                        <span className="block font-mono text-[10px] uppercase tracking-[0.18em] text-bone/45">{k}</span>
+                        <span className="text-sm">{name}</span>
+                      </span>
+                      <ArrowUpRight className="h-4 w-4 text-bone/40 transition-colors group-hover:text-ember" aria-hidden />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </Card>
+            <Card>
+              <Label>Live build</Label>
+              <p className="mt-3 text-sm">
+                <span className="mr-2 inline-block h-2 w-2 rounded-full bg-emerald-400 align-middle" aria-hidden />
+                {data?.build.env === 'production' ? 'Production' : data?.build.env} {data?.build.sha && <span className="font-mono text-bone/60">· {data.build.sha}</span>}
+              </p>
+              {data?.build.message && <p className="mt-2 text-sm leading-relaxed text-ash">{data.build.message}</p>}
+              {data?.deployments && (
+                <ul className="mt-4 space-y-2 border-t border-line pt-4">
+                  {data.deployments.map((d) => (
+                    <li key={d.id} className="flex items-baseline justify-between gap-3 text-xs">
+                      <span className="truncate text-bone/75">{d.message || d.url}</span>
+                      <span className={`shrink-0 font-mono ${d.state === 'READY' ? 'text-emerald-400' : d.state === 'ERROR' ? 'text-ember' : 'text-amber'}`}>{d.state.toLowerCase()}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </Card>
+            <Card className="lg:col-span-3">
+              <Label>Setup</Label>
+              <ul className="mt-4 grid gap-x-8 gap-y-3 md:grid-cols-2">
+                {(
+                  [
+                    [true, 'Vault sign-in', 'Working'],
+                    [true, 'Brief + newsletter email', i.mail === 'formsubmit' ? `FormSubmit to ${i.mailTo[0]}. Click its one-time activation email once.` : `${i.mail === 'gmail' ? 'Gmail' : 'Resend'} to ${i.mailTo.join(', ')}`],
+                    [i.storage, 'Brief ledger in this vault', i.storage ? 'Connected' : 'Vercel env: SUPABASE_SERVICE_ROLE_KEY (Supabase > Settings > API > service_role). Emails work without it.'],
+                    [true, 'UPI', i.upi],
+                    [i.card, 'Card / netbanking link', i.card ? 'Live' : 'Optional: NEXT_PUBLIC_CARD_PAYMENT_URL (Razorpay payment page)'],
+                    [i.intl, 'International link', i.intl ? 'Live' : 'Optional: NEXT_PUBLIC_INTL_PAYMENT_URL (PayPal.me or Stripe link)'],
+                    [Boolean(data?.deployments), 'Deploy feed here', data?.deployments ? 'Connected' : 'Optional: VERCEL_API_TOKEN (vercel.com/account/tokens)'],
+                  ] as [boolean, string, string][]
+                ).map(([ok, k, note]) => (
+                  <li key={k} className="flex gap-3">
+                    <span className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full ${ok ? 'bg-emerald-400/15 text-emerald-400' : 'border border-amber/50'}`} aria-hidden>
+                      {ok && <Check className="h-3 w-3" />}
+                    </span>
+                    <span>
+                      <span className="block text-sm font-semibold">{k}<span className="sr-only">{ok ? ': done' : ': to do'}</span></span>
+                      <span className="block break-words text-sm text-ash">{note}</span>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </Card>
+          </section>
+        )}
 
         {tab === 'briefs' && (
           <section className="mt-6">
@@ -187,7 +265,7 @@ export default function VaultDashboard() {
               </button>
             </div>
             <ul className="mt-4 space-y-2">
-              {briefs.length === 0 && <li className="rounded-2xl border border-line p-6 text-sm text-ash">{loading ? 'Loading' : 'No briefs yet.'}</li>}
+              {briefs.length === 0 && <li className="rounded-2xl border border-line p-6 text-sm text-ash">{loading ? 'Loading' : i && !i.storage ? `Briefs arrive by email at ${i.mailTo.join(' and ')}. To list them here too, add the ledger key (see Overview > Setup).` : 'No briefs yet.'}</li>}
               {briefs.map((b) => (
                 <li key={b.id} className="rounded-2xl border border-bone/[0.07] bg-carbon">
                   <button type="button" onClick={() => setOpen(open === b.id ? null : b.id)} aria-expanded={open === b.id} className="flex w-full flex-wrap items-baseline justify-between gap-2 p-5 text-left">
@@ -218,7 +296,7 @@ export default function VaultDashboard() {
               <Download className="h-4 w-4" aria-hidden /> Export CSV
             </button>
             <ul className="mt-4 divide-y divide-line rounded-2xl border border-bone/[0.07] bg-carbon">
-              {(data?.subscribers.length ?? 0) === 0 && <li className="p-6 text-sm text-ash">{loading ? 'Loading' : 'No subscribers yet.'}</li>}
+              {(data?.subscribers.length ?? 0) === 0 && <li className="p-6 text-sm text-ash">{loading ? 'Loading' : i && !i.storage ? 'Sign-ups arrive by email. Add the ledger key to list them here (Overview > Setup).' : 'No subscribers yet.'}</li>}
               {data?.subscribers.map((s) => (
                 <li key={s.id} className="flex flex-wrap items-baseline justify-between gap-2 px-5 py-4">
                   <span className="break-all text-sm">{s.email}</span>
@@ -232,7 +310,12 @@ export default function VaultDashboard() {
         {tab === 'traffic' && (
           <section className="mt-6 grid gap-3 lg:grid-cols-3">
             <Card className="lg:col-span-3">
-              <Label>Page views · last 30 days (visitors who accepted cookies)</Label>
+              <div className="flex flex-wrap items-baseline justify-between gap-3">
+                <Label>Page views · last 30 days (visitors who accepted cookies)</Label>
+                <a href={`${VERCEL}/analytics`} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-[40px] items-center gap-1 text-sm text-bone/75 underline decoration-ember/50 underline-offset-4 hover:text-bone">
+                  Full analytics on Vercel <ArrowUpRight className="h-3.5 w-3.5" aria-hidden />
+                </a>
+              </div>
               <div className="mt-5 flex h-40 items-end gap-[3px]" role="img" aria-label="Daily page views, last 30 days">
                 {traffic.days.map((d) => (
                   <div key={d.d} title={`${d.d}: ${d.n}`} className="flex-1 rounded-t bg-ember/70" style={{ height: `${Math.max(2, (d.n / traffic.max) * 100)}%` }} />
@@ -256,30 +339,9 @@ export default function VaultDashboard() {
           </section>
         )}
 
-        {tab === 'system' && i && (
-          <section className="mt-6 grid gap-3 md:grid-cols-2">
-            {[
-              ['Brief + newsletter email', true, `Via ${i.mail === 'formsubmit' ? 'FormSubmit (click the one-time activation email first)' : i.mail === 'gmail' ? 'Gmail SMTP' : 'Resend'} to ${i.mailTo.join(', ')}`],
-              ['Ledger storage', i.storage, i.storage ? 'Supabase connected' : 'Add SUPABASE_SERVICE_ROLE_KEY to list briefs here'],
-              ['UPI', Boolean(i.upi), i.upi],
-              ['Card / netbanking checkout', i.card, i.card ? 'Razorpay link live' : 'Set NEXT_PUBLIC_CARD_PAYMENT_URL'],
-              ['International checkout', i.intl, i.intl ? 'Link live' : 'Set NEXT_PUBLIC_INTL_PAYMENT_URL'],
-              ['Search Console tag', i.searchConsoleTag, i.searchConsoleTag ? 'Meta tag live' : 'Optional: DNS verification needs no tag'],
-            ].map(([k, ok, note]) => (
-              <Card key={k as string}>
-                <div className="flex items-center gap-3">
-                  <span className={`h-2 w-2 rounded-full ${ok ? 'bg-emerald-400' : 'bg-amber'}`} aria-hidden />
-                  <p className="font-semibold">{k as string}</p>
-                  <span className="sr-only">{ok ? 'connected' : 'not connected'}</span>
-                </div>
-                <p className="mt-2 break-words text-sm text-ash">{note as string}</p>
-              </Card>
-            ))}
-            {data?.errors.length ? (
-              <Card className="md:col-span-2"><Label>Storage errors</Label><pre className="mt-2 whitespace-pre-wrap text-xs text-ember">{data.errors.join('\n')}</pre></Card>
-            ) : null}
-          </section>
-        )}
+        {data?.errors.length ? (
+          <Card className="mt-3"><Label>Storage errors</Label><pre className="mt-2 whitespace-pre-wrap text-xs text-ember">{data.errors.join('\n')}</pre></Card>
+        ) : null}
       </div>
     </main>
   );
