@@ -16,11 +16,6 @@ const EngagementSteps = lazy(() =>
 const FAQ = lazy(() =>
   import('@/components/furnace/services/FAQ').then((m) => ({ default: m.FAQ })),
 );
-const ServicesClosing = lazy(() =>
-  import('@/components/furnace/services/ServicesClosing').then((m) => ({
-    default: m.ServicesClosing,
-  })),
-);
 
 // Page-wide word-break law: balanced headings, pretty body copy.
 const wrap = '[&_h1]:[text-wrap:balance] [&_h2]:[text-wrap:balance] [&_h3]:[text-wrap:balance] [&_p]:[text-wrap:pretty]';
@@ -41,7 +36,6 @@ export default function ServicesPage() {
       <Suspense fallback={null}>
         <EngagementSteps />
         <FAQ />
-        <ServicesClosing />
       </Suspense>
     </main>
   );

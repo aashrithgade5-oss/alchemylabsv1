@@ -41,6 +41,7 @@ export function generateMetadata({ params }: { params: { offer: string } }): Met
     title: `${entry.offer.name} · ${entry.pillar.title}`,
     description: describe(entry),
     path: `/services/studio/${entry.slug}`,
+    og: `offer-${entry.slug}`,
   });
 }
 

@@ -13,10 +13,12 @@ export const ABOUT_HERO_POSTER = `${UP}/f733380a-fde8-4f13-92b7-306802a307c2.jpg
 // Full-bleed page heroes (Patches-4, upscaled): Work = the gallery after
 // hours, Contact = the lit doorway. Wide for md+, tall for phones.
 export const WORK_HERO = {
-  wide: hf('hf_20260927_121341_6e66e345-0b1d-458a-8545-865acfdd814d.png'), // 4096x2294
-  tall: hf('hf_20260927_121343_1710a498-e1d3-43ea-9a87-0d8f4f0f447b.png'), // 2160x3856
+  wide: { src: hf('hf_20260927_121341_6e66e345-0b1d-458a-8545-865acfdd814d.png'), w: 4096, h: 2294 },
+  tall: { src: hf('hf_20260927_121343_1710a498-e1d3-43ea-9a87-0d8f4f0f447b.png'), w: 2160, h: 3856 },
 } as const;
 export const CONTACT_HERO = {
-  wide: hf('hf_20260927_121347_c95fbb24-bb67-43aa-a72c-f11f9b35499f.png'), // 4096x2294
-  tall: hf('hf_20260927_121349_ab8b80fe-db90-498c-a244-40354a2e2ce2.png'), // 2160x3856
+  wide: { src: hf('hf_20260927_121347_c95fbb24-bb67-43aa-a72c-f11f9b35499f.png'), w: 4096, h: 2294 },
+  tall: { src: hf('hf_20260927_121349_ab8b80fe-db90-498c-a244-40354a2e2ce2.png'), w: 2160, h: 3856 },
 } as const;
+// Universal footer: a molten obsidian horizon (upscaled 21:9).
+export const FOOTER_BG = hf('hf_20260927_122002_2171731c-b9c0-4c4a-8c08-8a3d33e7bd3b.png');

@@ -81,6 +81,10 @@ Everything here is NON-NEGOTIABLE and must be re-verified at the END of every se
   cookie). Never link it, never list it in robots/sitemap. `/admin` stays 404.
 - Secrets live in `.env.local` (gitignored) and Vercel env. Never commit them. See docs/OPERATIONS.md.
 
+## CHROME (Patches-4)
+- Footer = src/components/furnace/Footer.tsx (universal, image + marquee + rising mark). Pre-footer = ClosingBand
+  (lazy in SiteChrome). Share cards live in lib/og.ts; every public route gets its own via pageMetadata({ og }).
+
 ## DEPLOY
 - LOCALHOST ONLY. Never deploy, never touch Vercel. Deploy trigger is only the exact
   user phrase "yes, upload it to Vercel and make this live."

@@ -1749,3 +1749,14 @@ html[data-pl='run'] .hero-depth {
 }
 @keyframes svc-breath { 0%, 100% { opacity: 0.45; } 50% { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .svc-breath { animation: none; } }
+
+/* Universal footer (Patches-4): linear service marquee + the rising mark. */
+.footer-marquee { animation: footer-marquee 42s linear infinite; }
+@keyframes footer-marquee { to { transform: translateX(-50%); } }
+.footer-mark {
+  background: linear-gradient(180deg, rgba(237,230,221,0.55) 0%, rgba(237,230,221,0.12) 60%, rgba(255,77,28,0.05) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+@media (prefers-reduced-motion: reduce) { .footer-marquee { animation: none; } }

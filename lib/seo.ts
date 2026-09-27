@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { ogCard } from './og';
 
 // Shared SEO helpers. Why a helper: in the App Router a page's `openGraph` /
 // `twitter` object REPLACES the root layout's (no deep merge), so any page that
@@ -8,7 +9,6 @@ import type { Metadata } from 'next';
 export const SITE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://alchemylabs.in';
 export const SITE_NAME = 'Alchemy Labs';
 export const ORG_ID = `${SITE}/#organization`;
-export const OG_IMAGE = { url: '/og-image.png', width: 1200, height: 630, alt: 'Alchemy Labs' };
 
 type PageMetaInput = {
   /** Page name, rendered as "<title> · Alchemy Labs" by the root template. */
@@ -19,10 +19,18 @@ type PageMetaInput = {
   /** Pass true for a title that must not get the " · Alchemy Labs" suffix. */
   absoluteTitle?: boolean;
   type?: 'website' | 'profile' | 'article';
+  /** Share-card key in lib/og.ts. Defaults to the route's first segment. */
+  og?: string;
 };
 
-export function pageMetadata({ title, description, path, absoluteTitle, type = 'website' }: PageMetaInput): Metadata {
+/** The page's own hero card (falls back to the home card). */
+export function ogImageFor(key: string, alt: string) {
+  return { url: ogCard(key), width: 1200, height: 630, alt };
+}
+
+export function pageMetadata({ title, description, path, absoluteTitle, type = 'website', og }: PageMetaInput): Metadata {
   const fullTitle = absoluteTitle ? title : `${title} · ${SITE_NAME}`;
+  const image = ogImageFor(og ?? (path === '/' ? 'home' : path.split('/')[1]), fullTitle);
   return {
     title: absoluteTitle ? { absolute: title } : title,
     description,
@@ -34,13 +42,13 @@ export function pageMetadata({ title, description, path, absoluteTitle, type = '
       siteName: SITE_NAME,
       locale: 'en_IN',
       type,
-      images: [OG_IMAGE],
+      images: [image],
     },
     twitter: {
       card: 'summary_large_image',
       title: fullTitle,
       description,
-      images: [OG_IMAGE.url],
+      images: [image.url],
     },
   };
 }
