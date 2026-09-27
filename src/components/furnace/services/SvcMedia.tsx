@@ -21,24 +21,51 @@ export function SvcImage({ src, alt, ...rest }: ImageProps) {
  * source, so the poster/still underneath is all that renders. On any load
  * error the video unmounts and whatever sits beneath remains.
  */
-export function InViewVideo({ src, className = '' }: { src: string; className?: string }) {
+export function InViewVideo({
+  src,
+  poster,
+  className = '',
+  minWidth = 0,
+  onPlaying,
+  style,
+}: {
+  src: string;
+  poster?: string;
+  className?: string;
+  /** Only attach the source at or above this viewport width (px). */
+  minWidth?: number;
+  onPlaying?: () => void;
+  style?: React.CSSProperties;
+}) {
   const ref = useRef<HTMLVideoElement>(null);
   const reduced = useReducedMotion();
   const near = useInView(ref, { margin: '25% 0px', once: true });
   const visible = useInView(ref, { amount: 0.15 });
   const [failed, setFailed] = useState(false);
+  const [wideEnough, setWideEnough] = useState(minWidth === 0);
+
+  useEffect(() => {
+    if (!minWidth) return;
+    const mq = window.matchMedia(`(min-width: ${minWidth}px)`);
+    const sync = () => setWideEnough(mq.matches);
+    sync();
+    mq.addEventListener('change', sync);
+    return () => mq.removeEventListener('change', sync);
+  }, [minWidth]);
+
+  const armed = near && wideEnough && !reduced;
 
   // a <source> added after mount needs an explicit load()
   useEffect(() => {
-    if (near && !reduced) ref.current?.load();
-  }, [near, reduced]);
+    if (armed) ref.current?.load();
+  }, [armed]);
 
   useEffect(() => {
     const v = ref.current;
-    if (!v || reduced || !near) return;
+    if (!v || !armed) return;
     if (visible) v.play().catch(() => {});
     else v.pause();
-  }, [visible, near, reduced]);
+  }, [visible, armed]);
 
   if (failed || reduced) return null;
   return (
@@ -49,15 +76,13 @@ export function InViewVideo({ src, className = '' }: { src: string; className?: 
       loop
       playsInline
       preload="none"
+      poster={poster}
       onError={() => setFailed(true)}
+      onPlaying={onPlaying}
       className={className}
+      style={style}
     >
-      {near && <source src={src} type="video/mp4" onError={() => setFailed(true)} />}
+      {armed && <source src={src} type="video/mp4" onError={() => setFailed(true)} />}
     </video>
   );
-}
-
-/** Pillar loop over its still. */
-export function PillarLoop({ slug, className = '' }: { slug: string; className?: string }) {
-  return <InViewVideo src={`/media/svc/pillar-${slug}.mp4`} className={className} />;
 }

@@ -62,36 +62,36 @@ function PillarCard({ pillar, i }: { pillar: (typeof pillars)[number]; i: number
       className={i === 0 ? 'md:col-span-2 md:row-span-2' : ''}
       style={{ perspective: 1200 }}
     >
+      {/* h-full: the anchor wrapper spans two grid rows; without it the
+          card collapsed to one row and left an empty block beside 02/03.
+          No preserve-3d: WebKit stopped compositing the card video under it. */}
       <m.div
         onPointerMove={tilt.onMove}
         onPointerLeave={tilt.onLeave}
-        style={{ rotateX: tilt.rotateX, rotateY: tilt.rotateY, transformStyle: 'preserve-3d' }}
+        style={{ rotateX: tilt.rotateX, rotateY: tilt.rotateY }}
+        className="h-full"
       >
-        {/* refract stays anchor-card-only (FO3 P2 decision, unchanged) —
-            the new red-glow hover is additive, not a replacement for it */}
         <GlassPanel
-          refract={i === 0}
+          solid
           className="group h-full transition-shadow duration-500 hover:shadow-[0_0_60px_rgba(255,77,28,0.22)]"
         >
-          {pillar.media.type === 'video' ? (
-            <AmbientVideo
-              src={pillar.media.src}
-              poster={pillar.media.poster}
-              className="absolute inset-0 h-full w-full object-cover opacity-60"
-            />
-          ) : (
-            <Image
-              src={pillar.media.src}
-              alt=""
-              fill
-              quality={90}
-              sizes="(max-width: 768px) 100vw, 33vw"
-              className="absolute inset-0 object-cover opacity-25"
-            />
-          )}
+          {/* poster as a real image under the video: a frame always paints,
+              even where autoplay is refused (Low Power Mode, data saver) */}
+          <Image
+            src={pillar.media.poster}
+            alt=""
+            fill
+            sizes={i === 0 ? '(max-width: 768px) 100vw, 66vw' : '(max-width: 768px) 100vw, 33vw'}
+            className="object-cover opacity-80 transition-transform duration-1000 ease-out group-hover:scale-[1.04]"
+          />
+          <AmbientVideo
+            src={pillar.media.src}
+            poster={pillar.media.poster}
+            className="absolute inset-0 h-full w-full object-cover opacity-80 transition-transform duration-1000 ease-out group-hover:scale-[1.04]"
+          />
           {/* legibility scrim: copy always sits on a dark floor, never on bright media */}
-          <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-void via-void/55 to-void/10" />
-          <div className="relative flex h-full min-h-[13.5rem] flex-col justify-between p-7 md:p-9">
+          <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-void/95 via-void/45 to-transparent" />
+          <div className={`relative flex h-full flex-col ${i === 0 ? 'min-h-[20rem]' : 'min-h-[13.5rem]'} justify-between p-7 md:p-9`}>
             <span
               aria-hidden
               className="font-mono text-[11px] tracking-[0.3em] text-bone/60 transition-colors duration-500 group-hover:text-ember"

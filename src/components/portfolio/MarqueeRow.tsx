@@ -63,11 +63,11 @@ export const MarqueeRow = memo(({
         {set(false)}
         {set(true)}
       </div>
-      <style>{`
+      <style dangerouslySetInnerHTML={{ __html: `
         @keyframes mqScroll { from { transform: translate3d(0,0,0); } to { transform: translate3d(-50%,0,0); } }
         .mq-track { will-change: transform; padding-block: 12px; }
         .mq-pausable:hover .mq-track, .mq-pausable:focus-within .mq-track { animation-play-state: paused; }
-      `}</style>
+      ` }} />
     </div>
   );
 });

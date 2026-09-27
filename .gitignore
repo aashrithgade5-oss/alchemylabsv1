@@ -28,3 +28,6 @@ dist-ssr
 # raw source footage stays out of git (compressed derivatives are committed)
 public/media/*.mov
 supabase/.temp/
+
+# local secrets (admin vault, mail, service keys) - never commit
+.env*.local

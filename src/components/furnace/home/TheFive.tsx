@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { m, useReducedMotion } from 'framer-motion';
-import { products, type Product } from '@lib/payments';
+import Link from 'next/link';
+import { fromLabel, products, type Product } from '@lib/payments';
 import { PaymentSheet } from '../PaymentSheet';
 import { AmbientVideo } from './AmbientVideo';
 import { CardContainer, CardBody, CardItem } from '@/components/ui/3d-card';
@@ -21,11 +22,6 @@ const cardTints = [
   'linear-gradient(160deg, rgba(237,230,221,0.14) 0%, rgba(10,9,8,0.6) 70%)',
   'linear-gradient(160deg, rgba(255,77,28,0.12) 0%, rgba(201,58,20,0.3) 55%, rgba(10,9,8,0.55) 100%)',
 ];
-
-// Marks the lowest printed price (a truthful label, not a sales claim).
-const ENTRY = new Set(
-  products.filter((p) => p.priceUsd === Math.min(...products.map((x) => x.priceUsd))).map((p) => p.id),
-);
 
 // Calm luxury pace: ~18px/s across a ~1.6k px half-track.
 const MARQUEE_SECONDS = 90;
@@ -83,24 +79,22 @@ function ProductCard({
           </div>
           <div aria-hidden className="pointer-events-none absolute inset-0" style={{ background: tint }} />
           <div aria-hidden className="pointer-events-none absolute inset-0 bg-gradient-to-t from-carbon via-carbon/70 to-transparent" />
-          {ENTRY.has(product.id) && (
-            <span className="absolute right-4 top-4 z-10 rounded-full border border-ember/40 bg-void/60 px-3 py-1 font-mono text-[9px] tracking-[0.15em] text-ember">
-              ENTRY OFFER
-            </span>
-          )}
           <div className="pointer-events-none relative flex h-full flex-col justify-between p-7">
             <CardItem translateZ={30}>
-              <p className="font-mono text-[10px] tracking-[0.25em] text-ash">FIXED SCOPE</p>
-              <h3 className="mt-3 pr-16 font-sans text-xl font-bold leading-snug text-bone [text-wrap:balance]">
-                {product.name}
+              <p className="font-mono text-[10px] tracking-[0.25em] text-ash">FOCUSED OFFER</p>
+              <h3 className="mt-3 font-sans text-xl font-bold leading-snug text-bone [text-wrap:balance]">
+                <Link
+                  href={`/services/${product.id}`}
+                  tabIndex={duplicate ? -1 : undefined}
+                  className="pointer-events-auto underline-offset-4 hover:underline focus-visible:underline focus-visible:outline-none"
+                >
+                  {product.name}
+                </Link>
               </h3>
               <p className="mt-3 text-sm leading-relaxed text-ash [text-wrap:pretty]">{product.tagline}</p>
             </CardItem>
             <CardItem translateZ={50} className="pointer-events-auto mt-8 w-full">
-              <p className="font-mono text-sm text-bone">
-                ${product.priceUsd}
-                <span className="ml-2 text-[11px] text-ash">₹{product.priceInr.toLocaleString('en-IN')}</span>
-              </p>
+              <p className="font-mono text-xs tracking-[0.15em] text-bone/80">{fromLabel(product)}</p>
               <button
                 type="button"
                 tabIndex={duplicate ? -1 : undefined}
@@ -109,7 +103,7 @@ function ProductCard({
                 onBlur={() => setLive(false)}
                 className="mt-4 min-h-[44px] w-full rounded-full bg-ember px-5 py-2.5 font-sans text-sm font-semibold text-void transition-colors duration-300 hover:bg-amber focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bone focus-visible:ring-offset-2 focus-visible:ring-offset-carbon"
               >
-                Buy now · ${product.priceUsd}
+                Get an estimate
               </button>
             </CardItem>
           </div>
@@ -158,7 +152,7 @@ export function TheFive() {
             transition={{ duration: 0.9, ease }}
             className="mt-6 font-headline text-[clamp(2rem,4vw,3.5rem)] font-bold leading-[1.05] tracking-[-0.03em] text-bone [text-wrap:balance]"
           >
-            <span className="glass-type">Priced to </span>
+            <span className="glass-type">Scoped to </span>
             <span className="font-playfair font-normal italic">ship</span>
             <span className="glass-type">.</span>
           </m.h2>
@@ -169,8 +163,8 @@ export function TheFive() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="mt-4 max-w-md text-base leading-relaxed text-ash [text-wrap:pretty]"
           >
-            Five offers with printed prices. Fixed scope, pay at checkout, start dates confirmed in
-            writing.
+            Five focused ways to start. Each begins from a set point and is scoped to your brief
+            before anything is billed.
           </m.p>
         </div>
         {!scrollRow && (
@@ -191,7 +185,7 @@ export function TheFive() {
         // Static, swipeable snap row: touch devices and reduced motion.
         <div
           role="region"
-          aria-label="The five fixed-price offers"
+          aria-label="The five focused offers"
           tabIndex={0}
           className="furnace-snap relative mt-14 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-px-6 px-6 pb-24 focus-visible:outline-none md:scroll-px-12 md:px-12 md:pb-32"
         >
@@ -202,7 +196,7 @@ export function TheFive() {
       ) : (
         <div
           role="region"
-          aria-label="The five fixed-price offers"
+          aria-label="The five focused offers"
           className="relative mt-14 overflow-hidden pb-24 md:pb-32"
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={() => setHovered(false)}

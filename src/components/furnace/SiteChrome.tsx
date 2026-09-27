@@ -16,14 +16,17 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
     (route) => pathname === route || pathname.startsWith(`${route}/`),
   );
 
-  if (isPortfolio) return <>{children}</>;
+  // the private vault is a bare tool surface: no public chrome at all
+  const isVault = pathname === '/alchemy-vault' || pathname.startsWith('/alchemy-vault/');
+  if (isPortfolio || isVault) return <>{children}</>;
 
   // /contact IS the CTA destination this band points to — showing it there
   // would just loop the visitor back onto the page they're already on.
   // Homepage and (since C-P17) Work both end in ClosingBand, their own
   // dedicated closer with the same "bring the brand, Begin" beat —
   // stacking this one right after it would read as the same CTA twice.
-  const skipBottomCTA = pathname === '/contact' || pathname === '/' || pathname === '/work';
+  // /pay is a utility page a client opens with an invoice: no sales closer.
+  const skipBottomCTA = pathname === '/contact' || pathname === '/' || pathname === '/work' || pathname === '/pay';
 
   return (
     <>

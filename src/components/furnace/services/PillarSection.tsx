@@ -5,7 +5,8 @@ import Link from 'next/link';
 import { m } from 'framer-motion';
 import { MagneticCTA } from '../MagneticCTA';
 import { offerSlug, type Pillar } from './pillars';
-import { PillarLoop } from './SvcMedia';
+import { InViewVideo } from './SvcMedia';
+import { pillarMedia } from './mediaRegistry';
 
 const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
@@ -41,6 +42,7 @@ const reveal = {
 export function PillarSection({ pillar, index }: { pillar: Pillar; index: number }) {
   const mediaLeft = index % 2 === 1;
   const [lead, em] = heads[pillar.slug];
+  const media = pillarMedia[pillar.slug];
 
   return (
     <section id={`pillar-${index + 1}`} className="relative scroll-mt-24 overflow-hidden">
@@ -54,22 +56,33 @@ export function PillarSection({ pillar, index }: { pillar: Pillar; index: number
       />
 
       <div className="relative mx-auto grid max-w-6xl gap-10 px-6 py-16 md:px-12 md:py-24 lg:grid-cols-[minmax(0,1fr)_minmax(0,22rem)] lg:gap-16 lg:px-16 xl:grid-cols-[minmax(0,1fr)_minmax(0,24rem)]">
-        {/* media: own column, never overlaps the copy */}
+        {/* media: own column, never overlaps the copy. 16:9 on phones/tablets
+            (the loops are 16:9, so nothing is cropped); square on lg with a
+            per-pillar object-position so the subject is always whole. */}
         <m.div
-          {...reveal}
-          className={`relative aspect-[16/10] w-full overflow-hidden rounded-2xl border border-line sm:aspect-[16/9] lg:sticky lg:top-28 lg:aspect-[4/5] lg:self-start ${
+          initial={{ opacity: 0, clipPath: 'inset(8% 8% 8% 8% round 16px)' }}
+          whileInView={{ opacity: 1, clipPath: 'inset(0% 0% 0% 0% round 16px)' }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 1.1, ease }}
+          className={`relative aspect-video w-full overflow-hidden rounded-2xl border border-line lg:sticky lg:top-28 lg:aspect-square lg:self-start ${
             mediaLeft ? 'lg:order-first' : 'lg:order-last'
           }`}
         >
           <Image
-            src={pillar.still}
+            src={media.poster}
             alt=""
             fill
             sizes="(min-width: 1280px) 24rem, (min-width: 1024px) 22rem, 100vw"
             className="object-cover"
+            style={{ objectPosition: media.pos }}
           />
-          <PillarLoop slug={pillar.slug} className="absolute inset-0 h-full w-full object-cover" />
-          <div aria-hidden className="absolute inset-0 bg-void/25" />
+          <InViewVideo
+            src={media.loop}
+            poster={media.poster}
+            className="absolute inset-0 h-full w-full object-cover"
+            style={{ objectPosition: media.pos }}
+          />
+          <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-void/40 via-transparent to-transparent" />
         </m.div>
 
         <div className="min-w-0">
@@ -93,8 +106,15 @@ export function PillarSection({ pillar, index }: { pillar: Pillar; index: number
 
           {/* solid glass: no backdrop-filter re-rasterising while scrolling */}
           <m.ul {...reveal} className="glass-solid mt-8 flex flex-col rounded-2xl px-5 md:px-8">
-            {pillar.offers.map((offer) => (
-              <li key={offer.name} className="group relative border-t border-line py-5 first:border-t-0">
+            {pillar.offers.map((offer, i) => (
+              <m.li
+                key={offer.name}
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-40px' }}
+                transition={{ duration: 0.6, delay: 0.08 * i, ease }}
+                className="group relative border-t border-line py-5 first:border-t-0"
+              >
                 <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
                   <h3 className="min-w-0 font-sans text-lg font-bold text-bone transition-colors duration-300 group-hover:text-ember md:text-2xl [text-wrap:balance]">
                     {/* whole row is the tap target via the stretched link */}
@@ -113,13 +133,16 @@ export function PillarSection({ pillar, index }: { pillar: Pillar; index: number
                   </span>
                 </div>
                 <p className="mt-2 max-w-lg text-sm leading-relaxed text-ash [text-wrap:pretty]">{offer.line}</p>
-              </li>
+              </m.li>
             ))}
           </m.ul>
 
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <MagneticCTA href={`/contact?pillar=${pillar.slug}`} variant="ember">
               {ctas[pillar.slug]}
+            </MagneticCTA>
+            <MagneticCTA href="/work" variant="ghost">
+              See the work
             </MagneticCTA>
           </div>
         </div>

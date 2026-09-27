@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { subscribeNewsletter } from '@/lib/newsletter';
 import Image from 'next/image';
 import { MagneticCTA } from './MagneticCTA';
 
@@ -9,15 +10,26 @@ import { MagneticCTA } from './MagneticCTA';
  * footer. Rebuilt from the pre-Next.js Footer.tsx (commit f00fef1, the
  * last Vite-era version) — its footer-bg.png treatment and newsletter
  * subsection are real history; the enlarged wordmark and magnetic CTA
- * are new. The newsletter stays cosmetic (never had a working backend;
- * kept for visual completeness, not reintroduced as a real integration).
+ * are new. Patches-2: the newsletter is real now (app/api/newsletter emails
+ * the founders on every sign-up and stores it when storage is connected).
  */
 export function BottomCTA() {
   const [email, setEmail] = useState('');
+  const [hp, setHp] = useState('');
+  const [state, setState] = useState<'idle' | 'sending' | 'done' | 'error'>('idle');
+  const [msg, setMsg] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setEmail('');
+    setState('sending');
+    const res = await subscribeNewsletter(email, hp, 'closing-band');
+    if (res.ok) {
+      setState('done');
+      setEmail('');
+    } else {
+      setState('error');
+      setMsg(res.error ?? 'Could not subscribe right now.');
+    }
   };
 
   return (
@@ -63,19 +75,32 @@ export function BottomCTA() {
           <p className="mt-3 text-sm leading-relaxed text-ash">
             Quarterly notes on brand systems and AI, no filler.
           </p>
-          <form onSubmit={handleSubmit} className="mt-5 flex flex-col gap-3">
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="your@email.com"
-              required
-              className="glass-input !text-bone placeholder:!text-ash"
-            />
-            <MagneticCTA type="submit" variant="ghost" className="w-full">
-              Subscribe
-            </MagneticCTA>
-          </form>
+          {state === 'done' ? (
+            <p role="status" className="mt-5 text-sm text-bone">
+              You are on the list. The next note lands in your inbox.
+            </p>
+          ) : (
+            <form onSubmit={handleSubmit} className="mt-5 flex flex-col gap-3" aria-label="Newsletter sign-up">
+              <label htmlFor="nl-email" className="sr-only">Email address</label>
+              <input
+                id="nl-email"
+                type="email"
+                autoComplete="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="your@email.com"
+                required
+                disabled={state === 'sending'}
+                className="glass-input !text-bone placeholder:!text-ash"
+              />
+              {/* honeypot */}
+              <input aria-hidden tabIndex={-1} autoComplete="off" value={hp} onChange={(e) => setHp(e.target.value)} className="absolute -left-[9999px] h-0 w-0 opacity-0" />
+              <MagneticCTA type="submit" variant="ghost" className="w-full" disabled={state === 'sending'}>
+                {state === 'sending' ? 'Subscribing' : 'Subscribe'}
+              </MagneticCTA>
+              {state === 'error' && <p role="alert" className="text-sm text-ember">{msg}</p>}
+            </form>
+          )}
         </div>
       </div>
     </section>

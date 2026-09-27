@@ -18,6 +18,13 @@ Everything here is NON-NEGOTIABLE and must be re-verified at the END of every se
   Playfair italic regular, lowercase (e.g. "judgment", "one"). Never whole sentences in
   Playfair. Gradients on type must flow slowly and continuously, never flash.
 - NO UNVERIFIABLE CLAIMS: no "most selling", scarcity counters, or guaranteed reply times.
+- SCRIPT EXCEPTION (user, 2026-09-27 Patches-1): the single word "Build" in the hero
+  lockup is **Pinyon Script** (`font-script`, `--font-script`). Scoped to that one word;
+  never reuse it elsewhere. Playfair italic remains the only italic.
+- NO PRINTED PRICES (user, 2026-09-27 Patches-1): no exact price anywhere on the site.
+  The five productized offers may show only `fromLabel()` ("From ₹X") from `lib/payments.ts`;
+  every CTA is "Book a call" / "Text us for a rough estimate". UPI carries no amount
+  (client enters the agreed figure). UPI ID lives in `lib/payments.ts` (`upiVpa`).
 - Eyebrows / labels / technical: **Geist Mono** (`font-mono`) — untouched by this pass.
 - Geist Sans is retired as a body/display face. It is kept installed ONLY to feed the
   frozen `--font-display` alias below — never assign `font-sans`/`font-headline`
@@ -29,6 +36,11 @@ Everything here is NON-NEGOTIABLE and must be re-verified at the END of every se
   separate Tailwind key for exactly this reason — never reuse `font-display`.
 
 ## ANIMATION
+- Opening sequence = server-rendered `Preloader.tsx` gated by `html[data-pl]` (run/out/done/skip).
+  Never reintroduce a client-only loader (it mounted after hydration and never showed on Safari).
+- WebKit law: never put `filter`/animated blur on the SAME element as `background-clip:text`
+  (wrap it); never use `background-attachment: fixed` with clipped text. Inline `<style>` must use
+  `dangerouslySetInnerHTML` (text children with `>` break hydration).
 - Framer Motion + Lenis (feel only). BANNED: GSAP, Three.js, Locomotive. No custom cursor.
 - Scroll reveals start hidden at rest (opacity 0 / blur) and animate only on viewport entry.
 - Never animate `filter` on an ancestor of a `mix-blend-*` element.
@@ -42,6 +54,8 @@ Everything here is NON-NEGOTIABLE and must be re-verified at the END of every se
 ## UNFROZEN 2026-09-19 by owner for the portfolio overhaul (AashrithPortfolio.tsx,
 ## src/components/portfolio/*). Preserve its identity: light/dark toggle, section order,
 ## voice, ventures. The --font-display alias rule still stands.
+## OWNER-AUTHORIZED 2026-09-27 (Patches-3): portfolio content + data edits (Deorhi folded into an open
+## Studio186 case study, Higgsfield imagery via lib/hf.ts). Re-freeze applies after this pass.
 ## FROZEN — Aashrith Gade portfolio (diff must always be empty)
 `app/aashrith/page.tsx`, `app/AashrithGadePortfolio/page.tsx`, `src/views/AashrithPortfolio.tsx`,
 `src/components/portfolio/*`, `src/components/effects*`, `src/components/SequentianBackground.tsx`,
@@ -57,6 +71,15 @@ Everything here is NON-NEGOTIABLE and must be re-verified at the END of every se
 - Display text uses the metallic gradient `.glass-type` (bg-clip:text) — floor luminance
   high, NEVER a low-alpha transparent glyph. Over bright media, a text-scoped elliptical
   vignette (`.text-vignette`) sits between media and text.
+
+## BACKEND (Patches-2, 2026-09-27)
+- Forms post to our own route handlers (`app/api/brief`, `app/api/newsletter`) -> `lib/server/notify.ts`
+  (Resend > Gmail SMTP > FormSubmit) to aashrithgade5@ + alchemylabs.work@. Never reintroduce a
+  browser-side captcha that can block real clients. A failed delivery must surface, never fake success
+  (bots excepted).
+- Private vault = `/alchemy-vault`, auth in `middleware.ts` + `lib/vault-session.ts` (env creds, HMAC
+  cookie). Never link it, never list it in robots/sitemap. `/admin` stays 404.
+- Secrets live in `.env.local` (gitignored) and Vercel env. Never commit them. See docs/OPERATIONS.md.
 
 ## DEPLOY
 - LOCALHOST ONLY. Never deploy, never touch Vercel. Deploy trigger is only the exact

@@ -19,8 +19,16 @@ export const CookieConsent = memo(() => {
   useEffect(() => {
     if (hasConsented || !isHomepage) return;
     try { if (localStorage.getItem(DECLINED_KEY)) return; } catch { /* storage blocked */ }
-    const timer = setTimeout(() => setVisible(true), 1200);
-    return () => clearTimeout(timer);
+    // never stacks on top of the opening sequence: wait for its handover
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const arm = () => { timer = setTimeout(() => setVisible(true), 1600); };
+    const pl = document.documentElement.getAttribute('data-pl');
+    if (pl === 'run') window.addEventListener('al:preloaded', arm, { once: true });
+    else arm();
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('al:preloaded', arm);
+    };
   }, [hasConsented, isHomepage]);
 
   const handleDecline = () => {
@@ -43,12 +51,12 @@ export const CookieConsent = memo(() => {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 40, opacity: 0 }}
           transition={{ duration: 0.45, ease: EASE_CINEMATIC }}
-          className="fixed bottom-6 left-6 z-[200] max-w-sm"
+          className="fixed inset-x-3 bottom-[max(0.75rem,env(safe-area-inset-bottom))] z-[200] sm:inset-x-auto sm:bottom-6 sm:left-6 sm:max-w-md"
         >
           <div
             className="relative overflow-hidden rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.4),0_2px_8px_rgba(0,0,0,0.3)]"
             style={{
-              background: 'rgba(255,255,255,0.04)',
+              background: 'rgba(22,20,18,0.88)',
               backdropFilter: 'blur(48px)',
               WebkitBackdropFilter: 'blur(48px)',
               border: '1px solid rgba(255,255,255,0.10)',
@@ -57,13 +65,16 @@ export const CookieConsent = memo(() => {
             {/* Top edge highlight – light refraction */}
             <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
 
-            <div className="relative px-6 py-5 flex items-center gap-4">
+            {/* stacked on phones (copy row, then actions row) so the copy
+                never collapses into a one-word column */}
+            <div className="relative flex flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:gap-4 sm:px-6 sm:py-5">
+              <div className="flex min-w-0 flex-1 items-center gap-3 sm:gap-4">
               <div className="w-9 h-9 rounded-xl bg-white/[0.06] border border-white/[0.08] flex items-center justify-center shrink-0">
                 <Cookie className="w-5 h-5 text-white/60" />
               </div>
 
               <div className="flex-1 min-w-0">
-                <p className="text-sm text-white/70 leading-relaxed">
+                <p className="text-sm text-white/70 leading-snug">
                   We use cookies to optimize your experience.{' '}
                   <Link href="/privacy" className="inline-flex min-h-11 items-center gap-1 text-white/40 hover:text-white/60 transition-colors">
                     <Shield className="w-3 h-3" />
@@ -71,7 +82,9 @@ export const CookieConsent = memo(() => {
                   </Link>
                 </p>
               </div>
+              </div>
 
+              <div className="flex items-center justify-end gap-2">
               <button
                 onClick={handleDecline}
                 className="shrink-0 min-h-11 px-3 text-sm text-white/55 transition-colors hover:text-white"
@@ -88,6 +101,7 @@ export const CookieConsent = memo(() => {
               >
                 Allow
               </button>
+              </div>
             </div>
           </div>
         </m.div>

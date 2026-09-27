@@ -7,10 +7,10 @@ import Image from 'next/image';
 // Server-renderable: no hooks, no randomness; reduced motion stops the
 // columns via the CSS media query.
 const COLUMNS: string[][] = [
-  ['/media/aether-bento.png', '/media/cinematic-still-1.png', '/media/b2-bomber-1.png'],
-  ['/media/genesis-bento.png', '/media/cinematic-still-2.png', '/media/sequentian-5.png'],
-  ['/media/dior-bento.png', '/media/cinematic-still-3.png', '/media/lone-figure-2.png'],
-  ['/media/oakley-bento.png', '/media/thought-leadership-1.png', '/media/porsche-showreel-poster.jpg'],
+  ['/media/aether-bento.webp', '/media/cinematic-still-1.webp', '/media/b2-bomber-1.webp'],
+  ['/media/genesis-bento.webp', '/media/cinematic-still-2.webp', '/media/sequentian-5.png'],
+  ['/media/dior-bento.webp', '/media/cinematic-still-3.webp', '/media/lone-figure-2.webp'],
+  ['/media/oakley-bento.webp', '/media/thought-leadership-1.webp', '/media/porsche-showreel-poster.jpg'],
 ];
 
 export function ThreeDMarquee({ background = false }: { background?: boolean }) {

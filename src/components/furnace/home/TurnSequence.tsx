@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, type CSSProperties } from 'react';
 import {
   m,
   useInView,
@@ -35,23 +35,28 @@ function Word({
   wEnd,
   progress,
   accent = false,
+  index,
 }: {
   word: string;
   wStart: number;
   wEnd: number;
   progress: MotionValue<number>;
   accent?: boolean;
+  index: number;
 }) {
   // blur floor 12: the one scrub signature (matches fx/ScrollScrub)
   const opacity = useTransform(progress, [wStart, wEnd], [0, 1]);
   const blurPx = useTransform(progress, [wStart, wEnd], [12, 0]);
   const filter = useMotionTemplate`blur(${blurPx}px)`;
   return (
-    <m.span
-      className={accent ? 'glass-flow font-playfair font-normal italic tracking-normal' : 'glass-flow'}
-      style={{ opacity, filter }}
-    >
-      {word}
+    // filter on the wrapper, bg-clip:text on the inner span (WebKit-safe)
+    <m.span className="inline-block" style={{ opacity, filter }}>
+      <span
+        className={accent ? 'glass-flow font-playfair font-normal italic tracking-normal' : 'glass-flow'}
+        style={{ '--gi': index } as CSSProperties}
+      >
+        {word}
+      </span>
     </m.span>
   );
 }
@@ -80,7 +85,7 @@ function KineticLine({
   return (
     <m.h2
       style={{ opacity, y, filter }}
-      className="absolute flex max-w-5xl flex-wrap justify-center gap-x-4 px-6 text-center font-headline text-[clamp(2.25rem,5.6vw,5rem)] font-bold leading-[1.08] tracking-[-0.035em] text-bone [text-wrap:balance]"
+      className="absolute flex max-w-5xl flex-wrap justify-center gap-x-4 px-6 text-center font-headline text-[clamp(1.75rem,5.6vw,5rem)] font-bold leading-[1.08] tracking-[-0.035em] text-bone [text-wrap:balance]"
     >
       {words.map((word, i) => {
         const wStart = start + (i / words.length) * inWindow;
@@ -92,6 +97,7 @@ function KineticLine({
             wEnd={wStart + inWindow * 0.4}
             progress={progress}
             accent={!!accent && word === accent}
+            index={i}
           />
         );
       })}

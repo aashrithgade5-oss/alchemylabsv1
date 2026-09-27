@@ -1,19 +1,55 @@
-// Payment config for the Productized Five — the only offers on the site
-// with printed prices. Hero services are scoped per project and never
-// carry a number.
+// Payment + offer config (Patches-1, 2026-09-27): NO exact prices anywhere on
+// the site. Every engagement is scoped per project; the five productized
+// offers only show a "from" starting point. Payment happens AFTER scope is
+// agreed, so UPI carries no amount: the client enters the agreed figure.
+//
+// FUTURE BUILD (not live): Razorpay for India (UPI/cards/netbanking, invoices
+// + payment links) and Razorpay International or Stripe for cross-border
+// cards. Until then international clients are invoiced by email.
 
-// TODO(OVERHAUL_TODO): replace with the real VPA before launch.
-export const upiVpa = 'alchemylabs@upi';
-export const upiPayeeName = 'Alchemy Labs';
+/** UPI ID. Taken from the owner's own PhonePe scanner (decoded 2026-09-27):
+    upi://pay?pa=7794912315@ybl&pn=AASHRITH GADE. PhonePe also issues
+    7794912315@ibl for the same number; swap here if you prefer that one. */
+export const upiVpa = '7794912315@ybl';
+/** Must match the bank-verified account name. */
+export const upiPayeeName = 'Aashrith Gade';
+/** Optional: a scanner image to show instead of the generated QR. */
+export const upiQrImage: string | null = null;
+
+/** Card / netbanking / wallets (India): a Razorpay Payment Page or Payment
+    Link URL (https://rzp.io/...). Empty = the card rail offers a secure link
+    on request instead. Set NEXT_PUBLIC_CARD_PAYMENT_URL in Vercel. */
+export const cardPaymentUrl = process.env.NEXT_PUBLIC_CARD_PAYMENT_URL ?? '';
+/** International cards / PayPal: Razorpay International page, Stripe
+    Payment Link or paypal.me URL. Set NEXT_PUBLIC_INTL_PAYMENT_URL. */
+export const intlPaymentUrl = process.env.NEXT_PUBLIC_INTL_PAYMENT_URL ?? '';
+
+export const CONTACT_EMAIL = 'alchemylabs.work@gmail.com';
+export const WHATSAPP_NUMBER = '917794912315';
+export const WHATSAPP_DISPLAY = '+91 77949 12315';
+export const CALENDLY_URL = 'https://calendly.com/alchemylabs-work/30min';
+
+export function whatsappLink(text: string) {
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+}
+
+export function estimateText(offer?: string) {
+  return offer
+    ? `Hi Alchemy Labs, I'd like a rough estimate for ${offer}. Brand: `
+    : `Hi Alchemy Labs, I'd like a rough estimate for a project. Brand: `;
+}
+
+/** "From ₹9,000": the only price form allowed on the site. */
+export function fromLabel(p: { fromInr: number }) {
+  return `From ₹${p.fromInr.toLocaleString('en-IN')}`;
+}
 
 export interface Product {
   id: string;
   name: string;
   tagline: string;
-  priceUsd: number;
-  priceInr: number;
-  /** Shopify card checkout URL (product or cart permalink). null = "opening soon". */
-  shopifyCheckoutUrl: string | null;
+  /** Starting point in INR. Final figure is scoped per brief. */
+  fromInr: number;
   /** C-P16: category accent hex, drawn from the locked palette (ember /
       ember-deep / amber / bone / ash) — drives the per-service hover glow
       on the marquee and the services pages. Not arbitrary colors. */
@@ -26,55 +62,71 @@ export const products: Product[] = [
     accent: '#FF4D1C',
     name: 'Brand Glow-Up Audit',
     tagline: "A direct read on your brand's current state, with fixes ranked by impact.",
-    priceUsd: 199,
-    priceInr: 9000,
-    shopifyCheckoutUrl: null,
+    fromInr: 9000,
   },
   {
     id: 'website-teardown',
     accent: '#C93A14',
     name: 'Website Teardown',
     tagline: 'Your site reviewed screen by screen, with a plain list of what to change.',
-    priceUsd: 199,
-    priceInr: 9000,
-    shopifyCheckoutUrl: null,
+    fromInr: 9000,
   },
   {
     id: 'sample-reel',
     accent: '#FFA028',
     name: 'Sample Reel',
     tagline: "One finished AI film in your brand's voice, before you commit to more.",
-    priceUsd: 299,
-    priceInr: 14000,
-    shopifyCheckoutUrl: null,
+    fromInr: 14000,
   },
   {
     id: 'logo-rescue',
     accent: '#EDE6DD',
     name: 'Logo Rescue',
     tagline: 'Your existing mark corrected and set to standard.',
-    priceUsd: 249,
-    priceInr: 12000,
-    shopifyCheckoutUrl: null,
+    fromInr: 12000,
   },
   {
     id: 'instagram-aesthetic-audit',
     accent: '#9A9186',
     name: 'Instagram Aesthetic Audit',
     tagline: 'Your grid held against the brands you admire, with a plan to close the gap.',
-    priceUsd: 199,
-    priceInr: 9000,
-    shopifyCheckoutUrl: null,
+    fromInr: 9000,
   },
 ];
 
-export function upiPaymentUri(product: Product): string {
-  const params = new URLSearchParams({
-    pa: upiVpa,
-    pn: upiPayeeName,
-    am: String(product.priceInr),
-    cu: 'INR',
-    tn: `${product.name} - Alchemy Labs`,
-  });
-  return `upi://pay?${params.toString()}`;
+/** UPI query with NO amount: the payer enters the agreed figure. */
+export function upiQuery(note = ''): string {
+  // %20 spaces (some apps choke on '+'), and a LITERAL '@' in the VPA:
+  // several UPI apps never decode %40, so the ID would not resolve.
+  const q: [string, string][] = [
+    ['pa', upiVpa],
+    ['pn', upiPayeeName],
+    ['cu', 'INR'],
+  ];
+  if (note) q.push(['tn', note.slice(0, 50)]);
+  return q.map(([k, v]) => `${k}=${encodeURIComponent(v).replace(/%40/g, '@')}`).join('&');
+}
+
+/** Generic intent: Android shows its UPI app chooser; QR payload too. */
+export function upiPaymentUri(note = ''): string {
+  return `upi://pay?${upiQuery(note)}`;
+}
+
+export type UpiApp = 'gpay' | 'phonepe' | 'paytm' | 'any';
+
+/** App-specific deep links (iOS has no generic upi:// chooser). */
+export function upiAppLink(app: UpiApp, platform: 'ios' | 'android' | 'other', note?: string) {
+  const q = upiQuery(note);
+  switch (app) {
+    case 'gpay':
+      return platform === 'android'
+        ? `intent://pay?${q}#Intent;scheme=upi;package=com.google.android.apps.nbu.paisa.user;end`
+        : `gpay://upi/pay?${q}`;
+    case 'phonepe':
+      return `phonepe://pay?${q}`;
+    case 'paytm':
+      return `paytmmp://pay?${q}`;
+    default:
+      return `upi://pay?${q}`;
+  }
 }

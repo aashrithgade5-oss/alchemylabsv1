@@ -9,6 +9,10 @@ interface GlassPanelProps {
       scrolled frame in Chromium), so opt-in: hero surfaces only, never
       inside scrolling containers. */
   refract?: boolean;
+  /** .glass-solid instead of backdrop blur: required for panels that hold
+      video or sit in scrolling sections (WebKit drops video layers under
+      backdrop-filter + 3D transforms). */
+  solid?: boolean;
 }
 
 /**
@@ -17,7 +21,7 @@ interface GlassPanelProps {
  * pointer-tracked highlight, and an optional displacement-mapped edge ring
  * that bends the backdrop (.glass-refract-edge, filter in app/layout.tsx).
  */
-export function GlassPanel({ children, className = '', refract = false }: GlassPanelProps) {
+export function GlassPanel({ children, className = '', refract = false, solid = false }: GlassPanelProps) {
   const ref = useRef<HTMLDivElement>(null);
 
   const handlePointerMove = useCallback((e: React.PointerEvent) => {
@@ -32,7 +36,7 @@ export function GlassPanel({ children, className = '', refract = false }: GlassP
     <div
       ref={ref}
       onPointerMove={handlePointerMove}
-      className={`liquid-glass relative overflow-hidden rounded-2xl ${className}`}
+      className={`${solid ? 'glass-solid' : 'liquid-glass'} relative overflow-hidden rounded-2xl ${className}`}
       style={{ ['--gx' as string]: '50%', ['--gy' as string]: '0%' }}
     >
       {/* refraction ring: backdrop bends through the panel edges */}

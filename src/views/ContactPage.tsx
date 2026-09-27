@@ -6,7 +6,6 @@ import Image from 'next/image';
 import { Contact } from '@/components/Contact';
 import { HomeAtmosphere } from '@/components/furnace/home/HomeAtmosphere';
 import { AmbientVideo } from '@/components/furnace/home/AmbientVideo';
-import { GlassPanel } from '@/components/furnace/GlassPanel';
 import { KineticHeadline } from '@/components/furnace/KineticHeadline';
 
 const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
@@ -99,7 +98,7 @@ export const ContactPage = () => {
           }}
         >
           <m.div className="absolute inset-0" style={{ scale: bgScale }}>
-            <Image src="/media/mb-slat-corridor.webp" alt="" fill sizes="100vw" className="object-cover object-right opacity-50" />
+            <Image src="/media/mb-slat-corridor.webp" alt="" fill sizes="100vw" className="object-cover object-right opacity-30" />
           </m.div>
         </div>
         <m.div
@@ -109,11 +108,16 @@ export const ContactPage = () => {
           transition={{ duration: 1, ease }}
           className="mx-auto max-w-5xl"
         >
-          <GlassPanel refract>
-            <Contact />
-          </GlassPanel>
+          {/* Patches-3: light-built glass (see .gloss-card): the refract ring read
+              as a heavy grey bezel on desktop */}
+          <div className="gloss-card">
+            <div className="gloss-card__body">
+              <Contact />
+            </div>
+          </div>
         </m.div>
       </section>
+
     </main>
   );
 };

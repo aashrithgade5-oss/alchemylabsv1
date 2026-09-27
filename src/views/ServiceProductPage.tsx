@@ -3,12 +3,13 @@
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { m } from 'framer-motion';
-import { products } from '@lib/payments';
+import { fromLabel, products } from '@lib/payments';
 import { GlassPanel } from '@/components/furnace/GlassPanel';
 import { KineticHeadline } from '@/components/furnace/KineticHeadline';
 import { CheckoutPanel } from '@/components/furnace/PaymentSheet';
 import { HomeAtmosphere } from '@/components/furnace/home/HomeAtmosphere';
 import { SvcImage } from '@/components/furnace/services/SvcMedia';
+import { offerShot } from '@/components/furnace/services/mediaRegistry';
 
 const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
@@ -69,7 +70,7 @@ export default function ServiceProductPage() {
             transition={{ duration: 0.8, delay: 0.1 }}
             className="font-mono text-[10px] tracking-[0.3em] text-bone/70 md:text-[11px]"
           >
-            FIXED SCOPE · ${product.priceUsd} · ₹{product.priceInr.toLocaleString('en-IN')}
+            FOCUSED OFFER · {fromLabel(product).toUpperCase()}
           </m.p>
           <KineticHeadline
             as="h1"
@@ -102,19 +103,19 @@ export default function ServiceProductPage() {
           className="relative mx-auto mt-12 aspect-[16/10] w-full max-w-3xl overflow-hidden rounded-2xl border border-line"
         >
           <SvcImage
-            src={`/media/svc/${product.id}.webp`}
+            src={offerShot(product.id).src}
             alt={`${product.name}: example of the deliverable's visual direction`}
             fill
             priority
             sizes="(min-width: 768px) 48rem, 100vw"
             className="object-cover"
+            style={{ objectPosition: offerShot(product.id).pos }}
           />
-          <div aria-hidden className="absolute inset-0 bg-void/15" />
+          <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-void/30 via-transparent to-transparent" />
         </m.div>
       </section>
 
-      {/* the existing UPI checkout flow, housed in liquid glass — reused
-          from PaymentSheet, not rebuilt */}
+      {/* enquiry + UPI panel, shared with the home sheet (PaymentSheet) */}
       <section className="relative px-4 pb-20 md:px-6 md:pb-28">
         <m.div
           initial={{ opacity: 0, y: 32 }}
@@ -123,7 +124,7 @@ export default function ServiceProductPage() {
           transition={{ duration: 1, ease }}
           className="mx-auto max-w-md"
         >
-          <GlassPanel className="px-6 py-8 md:px-8 md:py-10">
+          <GlassPanel solid className="px-6 py-8 md:px-8 md:py-10">
             <CheckoutPanel product={product} />
           </GlassPanel>
         </m.div>

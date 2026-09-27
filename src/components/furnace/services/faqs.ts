@@ -4,15 +4,15 @@
 export const faqs = [
   {
     q: 'What does a project cost?',
-    a: 'Hero engagements are scoped per project after one conversation, because a launch campaign and a full identity system carry different weights. The five fixed offers on this page have printed prices from $199 and start without a call.',
+    a: 'Every engagement is scoped per project, because a launch campaign and a full identity system carry different weights. Book a call or text us on WhatsApp with the brief and we come back with a rough estimate. The five focused offers start from a set point, and the final figure is agreed in writing before work begins.',
   },
   {
     q: 'How fast is delivery?',
     a: 'The Campaign Sprint lands in 2 to 5 days. Films, identity systems, and content engines take 7 to 14 days. Advisory runs from a single session to 6 weeks. Every timeline is confirmed in writing before work starts.',
   },
   {
-    q: 'How does payment work for the fixed offers?',
-    a: 'Checkout opens a payment sheet: scan the UPI QR on desktop or tap the payment link on mobile. Card checkout through Shopify opens soon. After paying, send the receipt and your materials by mail or WhatsApp and we confirm the start date in writing.',
+    q: 'How does payment work?',
+    a: 'Once scope and price are agreed in writing, you pay by UPI (scan the QR or tap through on mobile) and send the receipt by mail or WhatsApp. International clients are invoiced by email. We confirm the start date in writing after payment.',
   },
   {
     q: 'Do you work with companies outside India?',

@@ -25,7 +25,7 @@ const ServicesClosing = lazy(() =>
 // Page-wide word-break law: balanced headings, pretty body copy.
 const wrap = '[&_h1]:[text-wrap:balance] [&_h2]:[text-wrap:balance] [&_h3]:[text-wrap:balance] [&_p]:[text-wrap:pretty]';
 
-// Order: promise -> fixed-price offers -> pillars -> process -> FAQ -> close.
+// Order: promise -> focused offers -> pillars -> process -> FAQ -> close.
 // (FiveGrid dropped here: it duplicated TheFive's offers and its #the-five id.)
 export default function ServicesPage() {
   return (
