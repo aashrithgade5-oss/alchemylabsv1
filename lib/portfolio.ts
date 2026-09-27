@@ -36,6 +36,11 @@ export const AG_MEDIA = {
   oakleyHero: hf('hf_20260927_102344_630a2d3f-2230-4c30-afab-17dfd346a0c8.png'), // 16:9
   oakleyRider: hf('hf_20260927_102347_0ebbf1ba-160c-40c9-be93-ecb57ef98d47.png'), // 4:5
   oakleyMacro: hf('hf_20260927_102347_aac4bea2-5f75-495d-b7e2-f5f251c2d394.png'), // 4:5
+  // Patches-4 set, art-directed from the original bento board (upscaled)
+  oakleyEclipse: hf('hf_20260927_121355_223444b7-a2d6-4884-9357-b985324d0e5b.png'), // 16:9 4096w
+  oakleySprint: hf('hf_20260927_121357_05ba35bd-f0aa-4bbf-9e1f-90f3cb5ee2aa.png'), // 4:5
+  oakleyLens: hf('hf_20260927_121359_90c7b0d9-e4cf-43d4-965e-e68957a394bb.png'), // 4:5
+  oakleyCrew: hf('hf_20260927_121401_d0319cd2-e0c7-4c23-9f9c-178273f40ece.png'), // 4:5
 } as const;
 
 export type EntryLabel = 'CONCEPT' | 'SELF-INITIATED' | 'CLIENT';
