@@ -49,7 +49,7 @@ export function FurnaceNavigation() {
             consistent treatment, no pop. */}
         <div
           aria-hidden
-          className={`liquid-glass pointer-events-none absolute inset-0 rounded-[inherit] transition-opacity duration-500 ${
+          className={`liquid-glass nav-glass pointer-events-none absolute inset-0 rounded-[inherit] transition-opacity duration-500 ${
             scrolled ? 'opacity-100' : 'opacity-0'
           }`}
         />

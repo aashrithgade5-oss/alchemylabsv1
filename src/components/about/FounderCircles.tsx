@@ -1,5 +1,6 @@
 'use client';
 import { m, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { EmberField } from '@/components/fx/EmberField';
 import { memo, useState, useCallback } from 'react';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
@@ -200,6 +201,7 @@ export const FounderCircles = memo(() => {
   return (
     <section className="relative py-12 sm:py-16 lg:py-20 overflow-hidden">
       <div className="absolute inset-0 bg-background" />
+      <EmberField preset="dusk" mask="radial" opacity={0.45} />
       <div
         className="absolute inset-0 pointer-events-none"
         style={{

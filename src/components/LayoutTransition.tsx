@@ -1,10 +1,9 @@
 'use client';
 
-import { m, useReducedMotion } from 'framer-motion';
+import { useReducedMotion } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState, memo } from 'react';
 import { resetScroll } from '@/components/LenisProvider';
-import { EASE } from '@lib/motion';
 
 const ScrollRestoration = memo(() => {
   const pathname = usePathname();
@@ -42,26 +41,15 @@ function RouteVeil() {
   }, [pathname, reduced]);
 
   if (!run) return null;
+  // CSS keyframes, not framer: the incoming page's mount can block the main
+  // thread for a few hundred ms, and a JS-driven veil then skips to its end.
+  // A compositor transform animation keeps gliding regardless.
   return (
-    <m.div
-      key={run}
-      aria-hidden
-      className="pointer-events-none fixed inset-0 z-[95] flex items-center justify-center bg-void"
-      initial={{ y: '0%' }}
-      animate={{ y: '-101%' }}
-      transition={{ duration: 0.7, delay: 0.12, ease: EASE.inOut }}
-    >
-      <m.img
-        src="/media/alchemy-minimal-logo.png"
-        alt=""
-        width={44}
-        height={44}
-        initial={{ opacity: 1, scale: 1 }}
-        animate={{ opacity: 0, scale: 0.9 }}
-        transition={{ duration: 0.35, ease: EASE.out }}
-      />
+    <div key={run} aria-hidden className="route-veil pointer-events-none fixed inset-0 z-[95] flex items-center justify-center bg-void">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/media/alchemy-minimal-logo.png" alt="" width={44} height={44} className="route-veil-mark" />
       <span className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-ember to-transparent shadow-[0_0_24px_rgba(255,77,28,0.6)]" />
-    </m.div>
+    </div>
   );
 }
 

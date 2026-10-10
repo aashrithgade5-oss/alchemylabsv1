@@ -1768,3 +1768,19 @@ html[data-pl='run'] .hero-depth {
 }
 .ember-field-in { animation: ember-field-in 1.6s var(--ease-out) both; }
 @keyframes ember-field-in { from { opacity: 0; } to { opacity: 1; } }
+/* Patches-5 route veil: compositor-only, so a busy main thread can't skip it */
+.route-veil { animation: route-veil 0.78s var(--ease-in-out) 0.12s both; will-change: transform; }
+.route-veil-mark { animation: route-veil-mark 0.45s var(--ease-out) 0.15s both; }
+@keyframes route-veil { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(0, -101%, 0); visibility: hidden; } }
+@keyframes route-veil-mark { from { opacity: 1; transform: scale(1); } to { opacity: 0; transform: scale(0.9); } }
+@media (prefers-reduced-motion: reduce) { .route-veil { display: none; } }
+/* the flat mark holds until the liquid metal has faded in over it */
+.liquid-png-out { animation: liquid-png-out 0.8s var(--ease-out) 1.4s both; }
+@keyframes liquid-png-out { to { opacity: 0; } }
+/* nav glass: a void tint and calmer saturation, so it never turns neon over
+   the red film (liquid-glass alone pushed saturate 180% on red) */
+.nav-glass {
+  background: rgba(10, 9, 8, 0.48);
+  -webkit-backdrop-filter: blur(22px) saturate(115%) brightness(0.95);
+  backdrop-filter: blur(22px) saturate(115%) brightness(0.95);
+}

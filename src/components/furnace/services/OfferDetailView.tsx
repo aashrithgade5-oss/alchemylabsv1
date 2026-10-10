@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { EmberField } from '@/components/fx/EmberField';
 import { m } from 'framer-motion';
 import { KineticHeadline } from '../KineticHeadline';
 import { GlassPanel } from '../GlassPanel';
@@ -120,6 +121,10 @@ export function OfferDetailView({ slug }: { slug: string }) {
         </div>
       </section>
 
+      {/* Patches-5: a dusk field behind the glass panels, so the glass has
+          something to bend and the body is never flat void */}
+      <div className="relative">
+      <EmberField preset="dusk" mask="radial" opacity={0.45} />
       <div className="relative mx-auto flex max-w-6xl flex-col gap-16 px-6 pb-24 md:gap-24 md:px-12 lg:px-16">
         <Reveal className="grid gap-8 md:grid-cols-2">
           <div>
@@ -200,6 +205,7 @@ export function OfferDetailView({ slug }: { slug: string }) {
             </MagneticCTA>
           </div>
         </Reveal>
+      </div>
       </div>
     </main>
   );

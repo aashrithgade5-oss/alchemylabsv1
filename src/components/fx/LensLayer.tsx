@@ -126,7 +126,7 @@ export function LensLayer({
       ref={ref}
       aria-hidden
       className={`pointer-events-none absolute inset-0 rounded-[inherit] ${className}`}
-      style={map ? { backdropFilter: `url(#${id}) blur(${blur}px) saturate(150%)`, WebkitBackdropFilter: `url(#${id}) blur(${blur}px) saturate(150%)` } : undefined}
+      style={map ? { backdropFilter: `url(#${id}) blur(${blur}px) saturate(112%)`, WebkitBackdropFilter: `url(#${id}) blur(${blur}px) saturate(112%)` } : undefined}
     >
       {map && (
         <svg className="absolute h-0 w-0" aria-hidden>

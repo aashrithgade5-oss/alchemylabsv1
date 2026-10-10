@@ -93,7 +93,7 @@ export function ClosingBand() {
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="mb-12 flex flex-row items-center gap-3"
         >
-          <LiquidMark size={52} />
+          <LiquidMark size={64} />
           <Image
             src="/media/wordmark-crop.png"
             alt="Alchemy Labs"

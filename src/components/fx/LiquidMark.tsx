@@ -25,10 +25,10 @@ export function LiquidMark({ size = 96, className = '', tint = '#EDE6DD' }: { si
         alt=""
         width={size || 256}
         height={size || 256}
-        className={`absolute inset-0 h-full w-full transition-opacity duration-700 ${allowed && inView ? 'opacity-0' : 'opacity-100'}`}
+        className={`absolute inset-0 h-full w-full ${allowed && inView ? 'liquid-png-out' : ''}`}
       />
       {allowed && inView && (
-        <div className="ember-field-in absolute inset-[-12%]">
+        <div className="ember-field-in absolute inset-[-20%]">
           <LiquidMetal
             image="/media/alchemy-minimal-logo.png"
             colorBack="#00000000"
@@ -41,7 +41,7 @@ export function LiquidMark({ size = 96, className = '', tint = '#EDE6DD' }: { si
             contour={0.5}
             angle={70}
             speed={live ? 0.7 : 0}
-            scale={0.88}
+            scale={1}
             fit="contain"
             minPixelRatio={2}
             maxPixelCount={600 * 600}

@@ -1046,3 +1046,15 @@ fallback — set that env var in Vercel before the first deploy (see ERROR_LOG.m
   ServicesClosing retired (duplicate).
 - Work + Contact heroes: new upscaled full-bleed art (gallery sculpture / lit doorway) via ArtPicture (wide/tall).
 - Per-page share cards: 26 1200x630 JPEGs (lib/og.ts) wired through pageMetadata(og) + layout/pay/journal/aashrith.
+
+## Patches-5 (2026-10-10) — The Furnace Language (on branch, awaiting owner review; NOT on production)
+- Plan: docs/MASTERPLAN-P5.md. Four repos mapped onto Paper shaders (already installed, no Three.js):
+  EmberField (ShaderGradient look), LiquidMark (liquid-logo), LensLayer (liquid-glass-js look), R3F declined (ban + budget).
+- Placements: 404 rebuilt (dusk field + liquid atom), /pay dusk field, vault login ash field, home ScrubBeats
+  (dusk pool replaces halos over void), Services steps (ash), offer bodies + founders + product checkout (low dusk/ember),
+  Brand Seal solidifies into liquid metal, ClosingBand liquid atom, nav lens glass with void tint.
+- Motion: global reduced-motion via MotionConfig, ease B -> house curve on About/Founders/LazySection, motion -> m,
+  TextHoverEffect mousemove throttled to rAF, CSS route veil between pages, hero glitch toned down.
+- Cleanup: legacy fixed AtmosphericBackground (off-palette red) removed; 7 dead components deleted;
+  HeroMeshField pauses off screen; Work tiles with video -> glass-solid.
+- QA: local Chromium screenshots of 404, pay, seal, scrub beat, closing band, veil, nav, iPhone 404/hero.

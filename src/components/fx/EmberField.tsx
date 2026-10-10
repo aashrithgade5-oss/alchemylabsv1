@@ -32,7 +32,10 @@ export function EmberField({
   preset = 'ember',
   className = '',
   opacity = 1,
+  mask = 'none',
 }: {
+  /** radial: soft pool in the middle; fade: strong at top, gone by the bottom */
+  mask?: 'none' | 'radial' | 'fade';
   preset?: EmberPreset;
   className?: string;
   opacity?: number;
@@ -40,9 +43,15 @@ export function EmberField({
   const ref = useRef<HTMLDivElement>(null);
   const { allowed, live, inView } = useFx(ref);
   const speed = live ? 1 : 0;
+  const m =
+    mask === 'radial'
+      ? 'radial-gradient(ellipse 60% 55% at 50% 50%, black 15%, transparent 72%)'
+      : mask === 'fade'
+        ? 'linear-gradient(to bottom, black 30%, transparent 95%)'
+        : undefined;
 
   return (
-    <div ref={ref} aria-hidden className={`pointer-events-none absolute inset-0 overflow-hidden ${className}`} style={{ opacity }}>
+    <div ref={ref} aria-hidden className={`pointer-events-none absolute inset-0 overflow-hidden ${className}`} style={{ opacity, WebkitMaskImage: m, maskImage: m }}>
       <div className="absolute inset-0" style={{ background: POSTER[preset] }} />
       {allowed && inView && (
         <div className="ember-field-in absolute inset-0">
@@ -61,10 +70,10 @@ export function EmberField({
               {...sizing}
               colorBack="#0A0908"
               colors={preset === 'ember' ? ['#FF4D1C', '#C93A14', '#3A1208'] : ['#3a3530', '#1d1a17', '#EDE6DD']}
-              softness={0.75}
-              intensity={preset === 'ember' ? 0.22 : 0.12}
-              noise={0.32}
-              shape={preset === 'ember' ? 'wave' : 'blob'}
+              softness={0.95}
+              intensity={preset === 'ember' ? 0.16 : 0.1}
+              noise={0.12}
+              shape={preset === 'ember' ? 'corners' : 'blob'}
               speed={0.22 * speed}
             />
           )}

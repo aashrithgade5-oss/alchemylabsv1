@@ -26,7 +26,7 @@ export default function PayPage() {
             maskImage: 'linear-gradient(to bottom, black 35%, transparent 95%)',
           }}
         >
-          <EmberField preset="ember" opacity={0.6} />
+          <EmberField preset="dusk" opacity={0.6} />
         </div>
         <div className="relative mx-auto max-w-md text-center">
           <m.p

@@ -85,6 +85,14 @@ Everything here is NON-NEGOTIABLE and must be re-verified at the END of every se
 - Footer = src/components/furnace/Footer.tsx (universal, image + marquee + rising mark). Pre-footer = ClosingBand
   (lazy in SiteChrome). Share cards live in lib/og.ts; every public route gets its own via pageMetadata({ og }).
 
+## FURNACE LANGUAGE (Patches-5)
+- Materials live in src/components/fx: EmberField (Paper grain/mesh gradient, presets ember/dusk/ash),
+  LiquidMark (Paper LiquidMetal atom), LensLayer (lens-map liquid glass, Chromium; blur fallback).
+- Every WebGL moment goes through src/hooks/useFx.ts (reduced motion, Save-Data, <4GB, WebGL, in-view,
+  tab visible). One WebGL moment per viewport. Motion tokens: lib/motion.ts + --ease-out/--ease-in-out.
+- Route veil is CSS-only (.route-veil) so a busy main thread never skips it. MotionConfig reducedMotion="user"
+  is global in Providers. Three.js stays banned: ShaderGradient/R3F looks are built on Paper shaders.
+
 ## DEPLOY
 - LOCALHOST ONLY. Never deploy, never touch Vercel. Deploy trigger is only the exact
   user phrase "yes, upload it to Vercel and make this live."
