@@ -100,7 +100,7 @@ export function FurnaceFooter() {
   const markOpacity = useTransform(scrollYProgress, [0.45, 0.95], reduced ? [1, 1] : [0, 1]);
 
   return (
-    <footer ref={ref} className="relative overflow-hidden bg-void">
+    <footer id="site-footer" ref={ref} className="relative overflow-hidden bg-void">
       <div aria-hidden className="absolute inset-0">
         <m.div className="absolute inset-0 will-change-transform" style={{ y: bgY, scale: bgScale }}>
           <Image src={FOOTER_BG} alt="" fill sizes="100vw" quality={80} className="object-cover object-[50%_60%] opacity-80" />
