@@ -1,12 +1,13 @@
 'use client';
 
 import { useRef } from 'react';
+import { LoopLayer } from '@/components/fx/LoopLayer';
 import { m, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
 import { Contact } from '@/components/Contact';
 import { HomeAtmosphere } from '@/components/furnace/home/HomeAtmosphere';
 import { ArtPicture } from '@/components/furnace/ArtPicture';
-import { CONTACT_HERO } from '@lib/hf';
+import { CONTACT_HERO, LOOPS } from '@lib/hf';
 import { KineticHeadline } from '@/components/furnace/KineticHeadline';
 
 const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
@@ -44,6 +45,8 @@ export const ContactPage = () => {
         >
           <m.div className="absolute inset-0 will-change-transform" style={{ scale: heroScale }}>
             <ArtPicture wide={CONTACT_HERO.wide} tall={CONTACT_HERO.tall} className="object-[50%_60%] opacity-80 md:object-[62%_55%]" />
+            {/* Higgsfield loop: haze drifts through the doorway light (desktop) */}
+            <LoopLayer src={LOOPS.contact} className="opacity-80" style={{ objectPosition: '62% 55%' }} />
           </m.div>
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_55%_at_50%_45%,rgba(10,9,8,0.55),transparent_75%)]" />
           <div className="svc-breath absolute inset-x-0 bottom-0 h-1/2" />

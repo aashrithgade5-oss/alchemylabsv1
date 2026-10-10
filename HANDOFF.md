@@ -1058,3 +1058,6 @@ fallback — set that env var in Vercel before the first deploy (see ERROR_LOG.m
 - Cleanup: legacy fixed AtmosphericBackground (off-palette red) removed; 7 dead components deleted;
   HeroMeshField pauses off screen; Work tiles with video -> glass-solid.
 - QA: local Chromium screenshots of 404, pay, seal, scrub beat, closing band, veil, nav, iPhone 404/hero.
+- Higgsfield loops (Patches-5b): Seedance 2.5 image-to-video from the Work, Contact and footer stills, H.264
+  12s ping-pong (1.0–1.8MB), lib/hf.ts LOOPS, played via fx/LoopLayer (desktop, in-view, reduced-motion safe).
+- Local review: `npm run review` (scripts/live-review.sh) serves localhost:3000 and auto-pulls this branch every 30s.

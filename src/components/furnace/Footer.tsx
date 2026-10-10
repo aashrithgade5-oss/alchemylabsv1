@@ -1,12 +1,13 @@
 'use client';
 
 import { useRef, useState } from 'react';
+import { LoopLayer } from '@/components/fx/LoopLayer';
 import Image from 'next/image';
 import Link from 'next/link';
 import { m, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { subscribeNewsletter } from '@/lib/newsletter';
-import { FOOTER_BG } from '@lib/hf';
+import { FOOTER_BG, LOOPS } from '@lib/hf';
 
 const nav = [
   { label: 'Work', href: '/work' },
@@ -103,6 +104,8 @@ export function FurnaceFooter() {
       <div aria-hidden className="absolute inset-0">
         <m.div className="absolute inset-0 will-change-transform" style={{ y: bgY, scale: bgScale }}>
           <Image src={FOOTER_BG} alt="" fill sizes="100vw" quality={80} className="object-cover object-[50%_60%] opacity-80" />
+          {/* Higgsfield loop: the molten fissures pulse, mist drifts (desktop) */}
+          <LoopLayer src={LOOPS.footer} className="opacity-80" style={{ objectPosition: '50% 60%' }} />
         </m.div>
         <div className="absolute inset-0 bg-gradient-to-t from-void via-void/55 to-void/30" />
         <div className="absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-void to-transparent" />

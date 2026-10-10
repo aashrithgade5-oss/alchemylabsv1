@@ -1,13 +1,14 @@
 'use client';
 
 import { lazy, Suspense, useRef } from 'react';
+import { LoopLayer } from '@/components/fx/LoopLayer';
 import { m, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { portfolio } from '@lib/portfolio';
 import { GlassPanel } from '@/components/furnace/GlassPanel';
 import { ArtPicture } from '@/components/furnace/ArtPicture';
-import { WORK_HERO } from '@lib/hf';
+import { LOOPS, WORK_HERO } from '@lib/hf';
 import { KineticHeadline } from '@/components/furnace/KineticHeadline';
 // Lazy like the homepage: ClosingBand drags TextHoverEffect + the marquee
 // into First Load otherwise (/work 134→159kB when imported statically).
@@ -73,6 +74,8 @@ export default function Work() {
               black stone. Tall frame on phones, wide on md+. */}
           <m.div className="absolute inset-0 will-change-transform" style={{ scale: bgScale, y: bgY }}>
             <ArtPicture wide={WORK_HERO.wide} tall={WORK_HERO.tall} className="object-[50%_50%] opacity-[0.85]" />
+            {/* Higgsfield loop: the sculpture's light breathes (desktop) */}
+            <LoopLayer src={LOOPS.work} className="opacity-[0.85]" />
           </m.div>
           <div className="svc-breath absolute inset-x-0 bottom-0 h-2/3" />
           <div

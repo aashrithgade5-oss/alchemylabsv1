@@ -22,3 +22,11 @@ export const CONTACT_HERO = {
 } as const;
 // Universal footer: a molten obsidian horizon (upscaled 21:9).
 export const FOOTER_BG = hf('hf_20260927_122002_2171731c-b9c0-4c4a-8c08-8a3d33e7bd3b.png');
+
+// Higgsfield brand loops (Patches-5): Seedance 2.5 image-to-video from each
+// page's own still, H.264 1920w, 12s ping-pong (seamless), desktop only.
+export const LOOPS = {
+  work: `${UP}/fbaba44b-879d-4b43-9fed-b6d23656f6c3.mp4`,
+  contact: `${UP}/73993751-6f3e-43a9-a291-f86d3d2ff414.mp4`,
+  footer: `${UP}/97552477-2fd1-4e74-8fc6-fe6e15348fea.mp4`,
+} as const;
