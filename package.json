@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "review": "bash scripts/live-review.sh"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
