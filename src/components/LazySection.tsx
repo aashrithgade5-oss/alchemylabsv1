@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState, ReactNode, memo } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 
 interface LazySectionProps {
   children: ReactNode;
@@ -78,13 +78,13 @@ export const LazySection = memo(({
     <div ref={ref} className={className} style={{ minHeight: isVisible ? 'auto' : minHeight }}>
       {!isVisible && (skeleton || <DefaultSkeleton minHeight={minHeight} />)}
       {isVisible && (
-        <motion.div
+        <m.div
           initial={{ opacity: 0 }}
           animate={{ opacity: hasLoaded ? 1 : 0 }}
-          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
         >
           {children}
-        </motion.div>
+        </m.div>
       )}
     </div>
   );

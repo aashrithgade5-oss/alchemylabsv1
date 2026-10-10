@@ -1,6 +1,7 @@
 'use client';
 
 import { m, useTransform, type MotionValue } from 'framer-motion';
+import { LiquidMark } from '@/components/fx/LiquidMark';
 
 const ORBITS = [0, 60, 120];
 
@@ -21,6 +22,9 @@ export function BrandSeal({ progress, range }: { progress: MotionValue<number>; 
   const glow = useTransform(progress, [a + span * 0.5, a + span * 0.85], [0, 1]);
   const scale = useTransform(progress, [a, b], [0.86, 1]);
   const rotate = useTransform(progress, [a, b], [-30, 0]);
+  // Patches-5: once drawn, the line atom solidifies into liquid metal
+  const metal = useTransform(progress, [a + span * 0.66, a + span * 0.88], [0, 1]);
+  const lines = useTransform(progress, [a + span * 0.7, a + span * 0.9], [1, 0.12]);
   const word = useTransform(progress, [a + span * 0.62, a + span * 0.86], [0, 1]);
   const wordY = useTransform(progress, [a + span * 0.62, a + span * 0.86], [14, 0]);
 
@@ -34,10 +38,13 @@ export function BrandSeal({ progress, range }: { progress: MotionValue<number>; 
             background: 'radial-gradient(circle, rgba(255,77,28,0.28) 0%, rgba(255,77,28,0.08) 40%, transparent 70%)',
           }}
         />
+        <m.div className="absolute inset-0" style={{ opacity: metal }}>
+          <LiquidMark size={0} />
+        </m.div>
         <m.svg
           viewBox="-60 -60 120 120"
           className="relative h-[clamp(7.5rem,18vw,12rem)] w-[clamp(7.5rem,18vw,12rem)] overflow-visible"
-          style={{ rotate }}
+          style={{ rotate, opacity: lines }}
         >
           <defs>
             <linearGradient id="seal-stroke" x1="0" y1="0" x2="1" y2="1">

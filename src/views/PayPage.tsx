@@ -1,6 +1,7 @@
 'use client';
 
 import { m } from 'framer-motion';
+import { EmberField } from '@/components/fx/EmberField';
 import Link from 'next/link';
 import { HomeAtmosphere } from '@/components/furnace/home/HomeAtmosphere';
 import { GlassPanel } from '@/components/furnace/GlassPanel';
@@ -14,8 +15,20 @@ export default function PayPage() {
   return (
     <main className="relative font-sans">
       <HomeAtmosphere />
-      <section className="relative px-4 pb-28 pt-36 md:px-6 md:pt-44">
-        <div className="mx-auto max-w-md text-center">
+      <section className="relative overflow-hidden px-4 pb-28 pt-36 md:px-6 md:pt-44">
+        {/* Patches-5: a slow ember field under the invoice card, fading out
+            before the footer so the page stays quiet */}
+        <div
+          aria-hidden
+          className="absolute inset-0"
+          style={{
+            WebkitMaskImage: 'linear-gradient(to bottom, black 35%, transparent 95%)',
+            maskImage: 'linear-gradient(to bottom, black 35%, transparent 95%)',
+          }}
+        >
+          <EmberField preset="ember" opacity={0.6} />
+        </div>
+        <div className="relative mx-auto max-w-md text-center">
           <m.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

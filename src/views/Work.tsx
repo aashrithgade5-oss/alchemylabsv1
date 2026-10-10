@@ -20,7 +20,7 @@ const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
 function WorkTile({ entry, large }: { entry: (typeof portfolio)[number]; large: boolean }) {
   return (
-    <GlassPanel className={`group h-full ${large ? 'md:min-h-[28rem]' : ''}`}>
+    <GlassPanel solid className={`group h-full ${large ? 'md:min-h-[28rem]' : ''}`}>
       {entry.video ? (
         <AmbientVideo
           src={entry.video.src}

@@ -1760,3 +1760,11 @@ html[data-pl='run'] .hero-depth {
   color: transparent;
 }
 @media (prefers-reduced-motion: reduce) { .footer-marquee { animation: none; } }
+
+/* Patches-5 motion tokens + shader fade-in */
+:root {
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+}
+.ember-field-in { animation: ember-field-in 1.6s var(--ease-out) both; }
+@keyframes ember-field-in { from { opacity: 0; } to { opacity: 1; } }

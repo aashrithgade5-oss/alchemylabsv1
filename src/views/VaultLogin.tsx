@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Eye, EyeOff, Loader2, Lock } from 'lucide-react';
+import { EmberField } from '@/components/fx/EmberField';
 
 const field =
   'mt-2 block min-h-[48px] w-full rounded-2xl border border-bone/10 bg-bone/[0.03] px-4 py-3 text-[15px] text-bone outline-none transition-[border-color,box-shadow] focus:border-ember/60 focus:shadow-[0_0_0_4px_rgba(255,77,28,0.12)]';
@@ -40,7 +41,7 @@ export default function VaultLogin() {
 
   return (
     <main className="relative flex min-h-[100svh] items-center justify-center bg-void px-5 py-24 font-sans">
-      <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_45%_at_50%_40%,rgba(255,77,28,0.10),transparent_70%)]" />
+      <EmberField preset="ash" />
       <form onSubmit={submit} className="glass-solid relative w-full max-w-sm rounded-[20px] p-7 sm:p-9" aria-label="Vault sign-in">
         <span className="flex h-11 w-11 items-center justify-center rounded-full border border-ember/40 text-ember">
           <Lock className="h-4 w-4" aria-hidden />

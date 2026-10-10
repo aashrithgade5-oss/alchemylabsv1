@@ -1,6 +1,6 @@
 "use client";
 import React, { useRef, useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 
 export const TextHoverEffect = ({
   text,
@@ -12,6 +12,8 @@ export const TextHoverEffect = ({
 }) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const [cursor, setCursor] = useState({ x: 0, y: 0 });
+  const pending = useRef<{ x: number; y: number } | null>(null);
+  const raf = useRef(0);
   const [hovered, setHovered] = useState(false);
   const [maskPosition, setMaskPosition] = useState({ cx: "50%", cy: "50%" });
 
@@ -36,7 +38,16 @@ export const TextHoverEffect = ({
       xmlns="http://www.w3.org/2000/svg"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      onMouseMove={(e) => setCursor({ x: e.clientX, y: e.clientY })}
+      onMouseMove={(e) => {
+        // one state update per frame, not per mouse event (Patches-5)
+        pending.current = { x: e.clientX, y: e.clientY };
+        if (!raf.current) {
+          raf.current = requestAnimationFrame(() => {
+            raf.current = 0;
+            if (pending.current) setCursor(pending.current);
+          });
+        }
+      }}
       className="select-none"
     >
       <defs>
@@ -58,7 +69,7 @@ export const TextHoverEffect = ({
           )}
         </linearGradient>
 
-        <motion.radialGradient
+        <m.radialGradient
           id="revealMask"
           gradientUnits="userSpaceOnUse"
           r="20%"
@@ -76,7 +87,7 @@ export const TextHoverEffect = ({
         >
           <stop offset="0%" stopColor="white" />
           <stop offset="100%" stopColor="black" />
-        </motion.radialGradient>
+        </m.radialGradient>
         <mask id="textMask">
           <rect
             x="0"
@@ -98,7 +109,7 @@ export const TextHoverEffect = ({
       >
         {text}
       </text>
-      <motion.text
+      <m.text
         x="50%"
         y="50%"
         textAnchor="middle"
@@ -116,7 +127,7 @@ export const TextHoverEffect = ({
         }}
       >
         {text}
-      </motion.text>
+      </m.text>
       <text
         x="50%"
         y="50%"

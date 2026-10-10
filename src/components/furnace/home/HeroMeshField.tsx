@@ -1,6 +1,8 @@
 'use client';
 
+import { useRef } from 'react';
 import dynamic from 'next/dynamic';
+import { useFx } from '@/hooks/useFx';
 
 // Lazy WebGL chunk (matches GlassFluted/Loader pattern) so the shader
 // library never lands in the homepage's synchronous First Load JS — Hero
@@ -30,21 +32,27 @@ const topFeather: React.CSSProperties = {
 };
 
 export function HeroMeshField() {
+  // Patches-5: pauses once the hero scrolls away or the tab hides
+  const ref = useRef<HTMLDivElement>(null);
+  const { allowed, live } = useFx(ref, '0px');
   return (
     <div
+      ref={ref}
       aria-hidden
       className="absolute inset-x-0 bottom-0 h-[55%] mix-blend-screen opacity-30"
       style={topFeather}
     >
-      <MeshGradient
+      {allowed && <MeshGradient
         colors={['#0A0908', '#C93A14', '#161412', '#FF4D1C']}
         distortion={0.7}
         swirl={0.35}
-        speed={0.3}
+        speed={live ? 0.3 : 0}
         grainMixer={0}
         grainOverlay={0}
+        minPixelRatio={1}
+        maxPixelCount={1280 * 720}
         style={{ width: '100%', height: '100%' }}
-      />
+      />}
     </div>
   );
 }

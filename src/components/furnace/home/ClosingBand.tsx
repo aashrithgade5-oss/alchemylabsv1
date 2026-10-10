@@ -8,6 +8,7 @@ import { MagneticCTA } from '../MagneticCTA';
 import { TextHoverEffect } from '@/components/ui/text-hover-effect';
 import { ThreeDMarquee } from '../ThreeDMarquee';
 import { useTilt } from '@/hooks/useTilt';
+import { LiquidMark } from '@/components/fx/LiquidMark';
 
 const WORDS = ['IDENTITY', 'CAMPAIGNS', 'FILM', 'STRATEGY'];
 
@@ -92,7 +93,7 @@ export function ClosingBand() {
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="mb-12 flex flex-row items-center gap-3"
         >
-          <Image src="/media/alchemy-minimal-logo.png" alt="" width={36} height={36} />
+          <LiquidMark size={52} />
           <Image
             src="/media/wordmark-crop.png"
             alt="Alchemy Labs"
