@@ -26,6 +26,17 @@ if command -v lsof >/dev/null 2>&1; then
     sleep 1
   fi
 fi
+# still busy (no lsof, or a server we may not stop)? never fall back onto the
+# old site: move to the next free port and say so loudly
+port_free() { node -e "const s=require('net').createServer();s.once('error',()=>process.exit(1));s.listen($1,()=>s.close(()=>process.exit(0)))"; }
+WANT=$PORT
+while ! port_free "$PORT"; do PORT=$((PORT + 1)); done
+if [ "$PORT" != "$WANT" ]; then
+  echo ""
+  echo "  !! Port $WANT is busy with another server (probably an OLD copy of the site)."
+  echo "  !! This review runs on http://localhost:$PORT instead. Do not use localhost:$WANT."
+  echo ""
+fi
 rm -rf .next   # never serve a cached build from an older copy
 
 echo "[live-review] running commit $(git log -1 --format='%h  %s')"
