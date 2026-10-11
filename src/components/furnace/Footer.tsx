@@ -198,7 +198,7 @@ export function FurnaceFooter() {
         {/* the wordmark, cast in liquid metal, rises into place as the page ends */}
         <m.div aria-hidden style={{ y: markY, opacity: markOpacity }} className="pointer-events-none relative mt-16 select-none md:mt-24">
           <div className="relative mx-auto aspect-[2180/410] w-full">
-            <LiquidMark size={0} src="/media/alchemy-wordmark.png" inset="-1%" pixels={1600 * 420} tint="#EDE6DD" />
+            <LiquidMark size={0} src="/media/alchemy-wordmark-metal.png" inset="-1%" pixels={1600 * 420} tint="#EDE6DD" />
           </div>
         </m.div>
 
