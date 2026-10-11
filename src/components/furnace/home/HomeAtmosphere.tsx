@@ -46,6 +46,14 @@ export function HomeAtmosphere() {
           `,
         }}
       />
+      {/* Patches-6: slow liquid drift. Three soft pools (graphite, bone,
+          ember) travelling on long compositor-only loops, so no stretch of
+          the page ever sits on dead flat black. */}
+      <div className="liquid-drift absolute inset-0">
+        <span className="liquid-drift__a" />
+        <span className="liquid-drift__b" />
+        <span className="liquid-drift__c" />
+      </div>
     </div>
   );
 }

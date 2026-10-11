@@ -1,6 +1,7 @@
 'use client';
 
 import { lazy, Suspense } from 'react';
+import { EmberField } from '@/components/fx/EmberField';
 import { Hero } from '@/components/furnace/home/Hero';
 import { HomeAtmosphere } from '@/components/furnace/home/HomeAtmosphere';
 import { ScrollScrub } from '@/components/furnace/fx/ScrollScrub';
@@ -23,8 +24,18 @@ function ScrubBeat({
     >
       <p className="font-mono text-[10px] tracking-[0.35em] text-ash">{eyebrow}</p>
       <div className="relative mt-8">
-        {/* boxless refractive halo behind the type */}
-        <div aria-hidden className="glass-halo absolute -inset-x-12 -inset-y-8 z-0" />
+        {/* Patches-5: the halo used to refract plain void (cost, no read);
+            a radial-masked dusk ember field now breathes behind the line */}
+        <div
+          aria-hidden
+          className="absolute -inset-x-[30vw] -inset-y-[18vh] z-0"
+          style={{
+            WebkitMaskImage: 'radial-gradient(ellipse 50% 50% at 50% 50%, black 20%, transparent 70%)',
+            maskImage: 'radial-gradient(ellipse 50% 50% at 50% 50%, black 20%, transparent 70%)',
+          }}
+        >
+          <EmberField preset="dusk" opacity={0.9} />
+        </div>
         <ScrollScrub
           text={text}
           className="relative z-10 max-w-5xl justify-center text-center font-headline text-[clamp(2rem,4.4vw,3.75rem)] font-bold leading-[1.1] tracking-[-0.035em] text-bone"

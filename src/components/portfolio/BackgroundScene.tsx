@@ -1,7 +1,6 @@
 'use client';
 
 import { memo, useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { getIsMobile } from '@/lib/utils';
 
 type SceneMode = 'hero' | 'system' | 'gallery' | 'experience' | 'offer' | 'contact';
@@ -76,40 +75,24 @@ export const BackgroundScene = memo(({ mode = 'hero', className }: BackgroundSce
         style={{ background: config.gradient }}
       />
 
-      {/* Animated orbs - desktop only */}
-      {!isMobile && (
-        <AnimatePresence mode="wait">
-          {config.orbs.map((orb, i) => (
-            <motion.div
-              key={`${mode}-orb-${i}`}
-              className="absolute rounded-full"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ 
-                opacity: 1, 
-                scale: 1,
-                x: [0, 20, 0],
-                y: [0, -15, 0],
-              }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              transition={{
-                opacity: { duration: 1.2 },
-                scale: { duration: 1.2 },
-                x: { duration: 20, repeat: Infinity, ease: 'easeInOut' },
-                y: { duration: 15, repeat: Infinity, ease: 'easeInOut' },
-              }}
-              style={{
-                left: orb.x,
-                top: orb.y,
-                width: orb.size,
-                height: orb.size,
-                background: orb.color,
-                filter: `blur(${orb.blur})`,
-                transform: 'translate(-50%, -50%)',
-              }}
-            />
-          ))}
-        </AnimatePresence>
-      )}
+      {/* Drifting orbs, desktop only. Patches-7: a radial gradient + CSS
+          drift instead of blur(200px) driven by JS keyframes every frame
+          (same look, no main-thread work, no filter repaint). */}
+      {!isMobile &&
+        config.orbs.map((orb, i) => (
+          <div
+            key={`${mode}-orb-${i}`}
+            className="scene-orb absolute rounded-full"
+            style={{
+              left: orb.x,
+              top: orb.y,
+              width: `calc(${orb.size} + ${orb.blur} * 2)`,
+              height: `calc(${orb.size} + ${orb.blur} * 2)`,
+              background: `radial-gradient(circle, ${orb.color} 0%, transparent 62%)`,
+              animationDelay: `${i * -6}s`,
+            }}
+          />
+        ))}
 
       {/* Vignette overlay */}
       {config.vignette !== 'none' && (

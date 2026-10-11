@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation';
 import { m, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { confettiBurst } from '@/lib/confetti';
+import { LensLayer } from '@/components/fx/LensLayer';
 
 const navItems = [
   { label: 'Work', href: '/work' },
@@ -48,19 +49,18 @@ export function FurnaceNavigation() {
             consistent treatment, no pop. */}
         <div
           aria-hidden
-          className={`liquid-glass pointer-events-none absolute inset-0 rounded-[inherit] transition-opacity duration-500 ${
+          className={`liquid-glass nav-glass pointer-events-none absolute inset-0 rounded-[inherit] transition-opacity duration-500 ${
             scrolled ? 'opacity-100' : 'opacity-0'
           }`}
         />
-        {/* Phase 2 backdrop-mode glass edge: real refraction shows whatever
-            color is scrolled behind the nav (red hero vs void sections).
-            Chrome-only, degrades via @supports. Opacity-faded with the same
-            curve as the glass layer. */}
-        <div
-          aria-hidden
-          className={`glass-refract-edge pointer-events-none absolute inset-0 rounded-[inherit] transition-opacity duration-500 ${
-            scrolled ? 'opacity-100' : 'opacity-0'
-          }`}
+        {/* Patches-5 Liquid Glass v2: a lens-map rim that bends whatever is
+            scrolled behind the nav (Chromium); Safari keeps the blur layer above.
+            Its own opacity fades with the glass, never an ancestor's (an
+            ancestor opacity would cut the backdrop off). */}
+        <LensLayer
+          bezel={16}
+          strength={30}
+          className={`transition-opacity duration-500 ${scrolled ? 'opacity-100' : 'opacity-0'}`}
         />
         {/* C-P14 chromatic hairline: 1px RGB-split ring, visible on scroll,
             full strength on hover — CSS only */}

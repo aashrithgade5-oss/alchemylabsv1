@@ -29,6 +29,10 @@ interface PortfolioFooterProps {
   streaks?: boolean;
   /** Colour the top edge feathers from (the page background). */
   featherFrom?: string;
+  /** Patches-7 lock-in: the founder's name as a pane of liquid glass at the foot. */
+  glassMark?: string;
+  /** a founder-specific sign-off set large at the foot (Eva's own mark) */
+  signature?: ReactNode;
 }
 
 const t = (isDark: boolean, dark: string, light: string) => isDark ? dark : light;
@@ -86,6 +90,8 @@ export const PortfolioFooter = memo(({
   headline,
   streaks = false,
   featherFrom,
+  glassMark,
+  signature,
 }: PortfolioFooterProps) => {
   const cv = connectLinks.find((l) => l.download);
   const ref = useRef<HTMLElement>(null);
@@ -93,6 +99,8 @@ export const PortfolioFooter = memo(({
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end end'] });
   const bgY = useTransform(scrollYProgress, [0, 1], reduced ? ['0%', '0%'] : ['-12%', '0%']);
   const bgScale = useTransform(scrollYProgress, [0, 1], reduced ? [1.08, 1.08] : [1.18, 1.06]);
+  const markY = useTransform(scrollYProgress, [0.5, 1], reduced ? ['0%', '0%'] : ['30%', '0%']);
+  const markOpacity = useTransform(scrollYProgress, [0.5, 0.92], reduced ? [1, 1] : [0, 1]);
   const vars = { '--footer-accent': accent, '--streak-accent': accent } as CSSProperties;
 
   return (
@@ -165,6 +173,22 @@ export const PortfolioFooter = memo(({
             </div>
           </div>
         </div>
+
+        {glassMark && (
+          <motion.p
+            aria-hidden
+            style={{ y: markY, opacity: markOpacity }}
+            className="glass-letter pointer-events-none select-none whitespace-nowrap pt-14 text-center font-body text-[clamp(2.5rem,10.2vw,9.4rem)] font-black leading-[0.85] tracking-[-0.055em] sm:pt-20"
+          >
+            {glassMark}
+          </motion.p>
+        )}
+
+        {signature && (
+          <motion.div aria-hidden style={{ y: markY, opacity: markOpacity }} className="pointer-events-none select-none pt-14 sm:pt-20">
+            {signature}
+          </motion.div>
+        )}
 
         {/* Colophon */}
         <div className="pt-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">

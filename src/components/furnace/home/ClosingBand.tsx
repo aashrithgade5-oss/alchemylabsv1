@@ -8,6 +8,8 @@ import { MagneticCTA } from '../MagneticCTA';
 import { TextHoverEffect } from '@/components/ui/text-hover-effect';
 import { ThreeDMarquee } from '../ThreeDMarquee';
 import { useTilt } from '@/hooks/useTilt';
+import { LiquidMark } from '@/components/fx/LiquidMark';
+import { LiveWhenVisible } from '@/components/fx/LiveWhenVisible';
 
 const WORDS = ['IDENTITY', 'CAMPAIGNS', 'FILM', 'STRATEGY'];
 
@@ -76,9 +78,10 @@ export function ClosingBand() {
           Dim + gradient + ember radial keep the centered text sovereign.
           This same block now closes the Work page too. */}
       <div aria-hidden className="section-feather absolute inset-0">
-        <div className="absolute inset-0 opacity-50">
+        {/* Patches-7: the 24-frame 3D plane pauses whenever it is off screen */}
+        <LiveWhenVisible className="absolute inset-0 opacity-50">
           <ThreeDMarquee background />
-        </div>
+        </LiveWhenVisible>
         <div className="absolute inset-0 bg-void/55" />
         <div className="absolute inset-0 bg-gradient-to-t from-void via-void/50 to-void/70" />
         <div className="absolute bottom-0 left-1/2 h-[60%] w-[120%] -translate-x-1/2 bg-[radial-gradient(ellipse_at_center,rgba(255,77,28,0.14)_0%,transparent_70%)]" />
@@ -92,7 +95,7 @@ export function ClosingBand() {
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="mb-12 flex flex-row items-center gap-3"
         >
-          <Image src="/media/alchemy-minimal-logo.png" alt="" width={36} height={36} />
+          <LiquidMark size={64} desktopOnly />
           <Image
             src="/media/wordmark-crop.png"
             alt="Alchemy Labs"

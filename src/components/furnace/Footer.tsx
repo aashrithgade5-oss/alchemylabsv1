@@ -1,8 +1,10 @@
 'use client';
 
 import { useRef, useState } from 'react';
+import { LiveWhenVisible } from '@/components/fx/LiveWhenVisible';
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { m, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { subscribeNewsletter } from '@/lib/newsletter';
@@ -83,34 +85,36 @@ function Newsletter() {
 }
 
 /**
- * Site-wide footer (Patches-4), the same family as the portfolio footers:
- * a full-bleed molten horizon with scroll parallax, a slow service marquee,
- * the working links + newsletter, and a giant ALCHEMY wordmark that rises
- * into place as the page ends. Transform/opacity only; reduced motion
- * freezes every layer.
+ * Site-wide footer (Patches-6). The molten horizon still at full resolution
+ * (the soft 1080p loop and the 1.2x zoom are gone: they were what read as
+ * low quality), an editorial index grid with hairlines, and the ALCHEMY
+ * wordmark cast in liquid metal (the same Paper LiquidMetal as the atom),
+ * rising into place as the page ends. Reduced motion freezes every layer.
  */
 export function FurnaceFooter() {
   const ref = useRef<HTMLElement>(null);
   const reduced = useReducedMotion();
+  const onContact = usePathname() === '/contact';
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end end'] });
-  const bgY = useTransform(scrollYProgress, [0, 1], reduced ? ['0%', '0%'] : ['-14%', '0%']);
-  const bgScale = useTransform(scrollYProgress, [0, 1], reduced ? [1.06, 1.06] : [1.2, 1.04]);
-  const markY = useTransform(scrollYProgress, [0.45, 1], reduced ? ['0%', '0%'] : ['40%', '0%']);
-  const markOpacity = useTransform(scrollYProgress, [0.45, 0.95], reduced ? [1, 1] : [0, 1]);
+  const bgY = useTransform(scrollYProgress, [0, 1], reduced ? ['0%', '0%'] : ['-6%', '0%']);
+  const markY = useTransform(scrollYProgress, [0.45, 1], reduced ? ['0%', '0%'] : ['30%', '0%']);
+  const markOpacity = useTransform(scrollYProgress, [0.45, 0.9], reduced ? [1, 1] : [0, 1]);
 
   return (
-    <footer ref={ref} className="relative overflow-hidden bg-void">
+    <footer id="site-footer" ref={ref} className="relative overflow-hidden bg-void">
       <div aria-hidden className="absolute inset-0">
-        <m.div className="absolute inset-0 will-change-transform" style={{ y: bgY, scale: bgScale }}>
-          <Image src={FOOTER_BG} alt="" fill sizes="100vw" quality={80} className="object-cover object-[50%_60%] opacity-80" />
+        <m.div className="absolute inset-x-0 -top-[6%] bottom-0 will-change-transform" style={{ y: bgY }}>
+          <Image src={FOOTER_BG} alt="" fill sizes="100vw" quality={78} className="object-cover object-[50%_62%] opacity-70" />
         </m.div>
-        <div className="absolute inset-0 bg-gradient-to-t from-void via-void/55 to-void/30" />
+        <div className="absolute inset-0 bg-gradient-to-t from-void via-void/60 to-void/35" />
         <div className="absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-void to-transparent" />
+        {/* fine grid: the brutalist index the content sits on */}
+        <div className="footer-grid absolute inset-0" />
       </div>
 
       {/* linear scroll: the services, drifting under the fold line */}
-      <div aria-hidden className="relative border-y border-bone/10 py-5">
-        <div className="footer-marquee flex w-max whitespace-nowrap">
+      <LiveWhenVisible className="relative border-y border-bone/10 py-5">
+        <div aria-hidden className="footer-marquee flex w-max whitespace-nowrap">
           {[0, 1].map((k) => (
             <span key={k} className="flex gap-10 pr-10">
               {MARQUEE.map((w, i) => (
@@ -122,24 +126,34 @@ export function FurnaceFooter() {
             </span>
           ))}
         </div>
-      </div>
+      </LiveWhenVisible>
 
       <div className="relative mx-auto max-w-6xl px-6 pb-6 pt-20 md:px-10 md:pt-28">
-        <m.p
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-60px' }}
-          transition={{ duration: 1, ease }}
-          className="max-w-3xl font-headline text-[clamp(2.25rem,5.5vw,4.75rem)] font-bold leading-[1.02] tracking-[-0.035em] [text-wrap:balance]"
-        >
-          <span className="glass-type">Made in Mumbai, for brands with </span>
-          <span className="font-playfair font-normal italic text-bone">taste</span>
-          <span className="glass-type">.</span>
-        </m.p>
+        <div className="flex flex-col gap-10 md:flex-row md:items-end md:justify-between">
+          <m.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 1, ease }}
+            className="max-w-3xl font-headline text-[clamp(2.25rem,5.5vw,4.75rem)] font-bold leading-[1.02] tracking-[-0.035em] [text-wrap:balance]"
+          >
+            <span className="glass-type">Made for brands with </span>
+            <span className="font-playfair font-normal italic text-bone">taste</span>
+            <span className="glass-type">.</span>
+          </m.p>
+          {!onContact && <Link
+            href="/contact"
+            className="cta-sheen group inline-flex min-h-[52px] w-fit shrink-0 items-center gap-3 rounded-full border border-bone/20 bg-bone/[0.06] px-6 text-sm font-semibold text-bone shadow-[inset_0_1px_0_rgba(255,255,255,0.18)] transition-colors duration-300 hover:border-ember/60 hover:bg-ember/15"
+          >
+            Book a call
+            <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden />
+          </Link>}
+        </div>
 
         <div className="mt-16 grid gap-12 border-t border-bone/10 pt-12 md:mt-24 md:grid-cols-12 md:gap-8">
           <div className="md:col-span-5">
             <Link href="/" className="flex w-fit items-center gap-3" aria-label="Alchemy Labs home">
+              {/* flat mark here: the wordmark below is this viewport's one WebGL moment */}
               <Image src="/media/alchemy-minimal-logo.png" alt="" width={32} height={32} />
               <span className="flex items-baseline gap-1.5">
                 <span className="font-playfair text-xl italic text-bone">Alchemy</span>
@@ -152,7 +166,7 @@ export function FurnaceFooter() {
           </div>
 
           <nav className="flex flex-col md:col-span-2" aria-label="Footer">
-            <p className="mb-3 font-mono text-[10px] tracking-[0.25em] text-bone/50">SITE</p>
+            <p className="mb-3 font-mono text-[10px] tracking-[0.25em] text-bone/50"><span className="text-ember/80">01</span> SITE</p>
             {nav.map((item) => (
               <Link key={item.href} href={item.href} className={linkCls}>
                 {item.label}
@@ -161,7 +175,7 @@ export function FurnaceFooter() {
           </nav>
 
           <div className="flex flex-col md:col-span-2">
-            <p className="mb-3 font-mono text-[10px] tracking-[0.25em] text-bone/50">ELSEWHERE</p>
+            <p className="mb-3 font-mono text-[10px] tracking-[0.25em] text-bone/50"><span className="text-ember/80">02</span> ELSEWHERE</p>
             {socials.map((item) => (
               <a key={item.href} href={item.href} target="_blank" rel="noopener noreferrer" className={linkCls}>
                 {item.label}
@@ -171,7 +185,7 @@ export function FurnaceFooter() {
           </div>
 
           <div className="flex flex-col md:col-span-3">
-            <p className="mb-3 font-mono text-[10px] tracking-[0.25em] text-bone/50">WRITE</p>
+            <p className="mb-3 font-mono text-[10px] tracking-[0.25em] text-bone/50"><span className="text-ember/80">03</span> WRITE</p>
             <a href="mailto:alchemylabs.work@gmail.com" className={`${linkCls} break-all font-mono text-xs tracking-wider`}>
               alchemylabs.work@gmail.com
             </a>
@@ -181,17 +195,21 @@ export function FurnaceFooter() {
           </div>
         </div>
 
-        {/* the giant mark rises into place as the page ends */}
-        <m.p
-          aria-hidden
-          style={{ y: markY, opacity: markOpacity }}
-          className="pointer-events-none mt-16 select-none text-center font-headline text-[clamp(4.5rem,21vw,20rem)] font-black leading-[0.8] tracking-[-0.06em] md:mt-24"
-        >
-          <span className="footer-mark">ALCHEMY</span>
-        </m.p>
+        {/* the wordmark, cast in liquid metal, rises into place as the page ends */}
+        <m.div aria-hidden style={{ y: markY, opacity: markOpacity }} className="pointer-events-none relative mt-16 select-none md:mt-24">
+          <LiveWhenVisible className="relative mx-auto aspect-[2180/410] w-full">
+            {/* Patches-7: liquid chrome without WebGL. The wordmark is a mask; a
+                brushed-metal ground and one slow light sweep move under it on
+                transform only, so the footer costs the main thread nothing. */}
+            <div className="chrome-word absolute inset-0" style={{ WebkitMaskImage: 'url(/media/alchemy-wordmark-metal.png)', maskImage: 'url(/media/alchemy-wordmark-metal.png)' }}>
+              <span className="chrome-word__base" />
+              <span className="chrome-word__sweep" />
+            </div>
+          </LiveWhenVisible>
+        </m.div>
 
         <div className="relative mt-8 flex flex-col gap-3 border-t border-bone/10 pt-6 md:flex-row md:items-center md:justify-between">
-          <p className="font-mono text-[10px] tracking-[0.2em] text-bone/45">MUMBAI · WORKING GLOBALLY</p>
+          <p className="font-mono text-[10px] tracking-[0.2em] text-bone/45">AI-NATIVE BRAND STUDIO · WORKING WORLDWIDE</p>
           <div className="flex flex-wrap gap-x-6 gap-y-2 font-mono text-[10px] tracking-[0.2em] text-bone/45">
             <Link href="/privacy" className="transition-colors hover:text-bone">PRIVACY</Link>
             <Link href="/terms" className="transition-colors hover:text-bone">TERMS</Link>

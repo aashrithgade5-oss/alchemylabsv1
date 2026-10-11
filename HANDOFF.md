@@ -1046,3 +1046,54 @@ fallback — set that env var in Vercel before the first deploy (see ERROR_LOG.m
   ServicesClosing retired (duplicate).
 - Work + Contact heroes: new upscaled full-bleed art (gallery sculpture / lit doorway) via ArtPicture (wide/tall).
 - Per-page share cards: 26 1200x630 JPEGs (lib/og.ts) wired through pageMetadata(og) + layout/pay/journal/aashrith.
+
+## Patches-5 (2026-10-10) — The Furnace Language (on branch, awaiting owner review; NOT on production)
+- Plan: docs/MASTERPLAN-P5.md. Four repos mapped onto Paper shaders (already installed, no Three.js):
+  EmberField (ShaderGradient look), LiquidMark (liquid-logo), LensLayer (liquid-glass-js look), R3F declined (ban + budget).
+- Placements: 404 rebuilt (dusk field + liquid atom), /pay dusk field, vault login ash field, home ScrubBeats
+  (dusk pool replaces halos over void), Services steps (ash), offer bodies + founders + product checkout (low dusk/ember),
+  Brand Seal solidifies into liquid metal, ClosingBand liquid atom, nav lens glass with void tint.
+- Motion: global reduced-motion via MotionConfig, ease B -> house curve on About/Founders/LazySection, motion -> m,
+  TextHoverEffect mousemove throttled to rAF, CSS route veil between pages, hero glitch toned down.
+- Cleanup: legacy fixed AtmosphericBackground (off-palette red) removed; 7 dead components deleted;
+  HeroMeshField pauses off screen; Work tiles with video -> glass-solid.
+- QA: local Chromium screenshots of 404, pay, seal, scrub beat, closing band, veil, nav, iPhone 404/hero.
+- Higgsfield loops (Patches-5b): Seedance 2.5 image-to-video from the Work, Contact and footer stills, H.264
+  12s ping-pong (1.0–1.8MB), lib/hf.ts LOOPS, played via fx/LoopLayer (desktop, in-view, reduced-motion safe).
+- Local review: `npm run review` (scripts/live-review.sh) serves localhost:3000 and auto-pulls this branch every 30s.
+
+## Patches-6 (2026-10-11) — branch claude/youthful-thompson-2dy1hj, PR #8 (review only, not live)
+Owner feedback after reviewing Patches-5, addressed:
+- BrandSeal: the three dots under "Anyone can make a thousand images now" were the round caps of
+  zero-length orbits. The seal is now invisible until its range, orbits use butt caps + an opacity gate,
+  and a light-built glass lens condenses around the atom before it turns to liquid metal.
+- StillBreak: "For founders who can tell the difference." is Inter Bold + one Playfair italic word.
+- Mumbai trimmed from display copy (hero eyebrow, footer headline + line, About hero line).
+- Footer: soft 1080p loop and 1.2x zoom removed; ALCHEMY wordmark cast in liquid metal
+  (alchemy-wordmark-metal.png via LiquidMark src); numbered index columns, faint grid, Book a call.
+- Work: hero is a contact sheet of real case-study frames (no Higgsfield film).
+- Contact: rebuilt. 404-style hero (dusk field + liquid atom), three paths (call opens Calendly via the
+  `alchemy:book` event, brief scrolls to #brief, WhatsApp estimate), brand glyph icon set, "What happens
+  next" four steps, and the original two-chair room (contact-bg.png) recreated in Higgsfield
+  (gpt_image_2_5 + upscale) as the parallax backdrop (lib/hf.ts CONTACT_LOUNGE). /contact 220kB -> 152kB.
+- Doorway still moved to About ("Alchemy was never about gold."), lib/hf.ts DOORWAY.
+- Liquid-metal `metal` EmberField preset on the Intertext interludes; CSS liquid drift in HomeAtmosphere.
+- Portfolios: MonoField (B/W liquid metal mesh + grid + glass slabs) on Arc of Intent, Connect and Eva's
+  Experience; liquid-metal founder name in PortfolioFooter (`metalMark`).
+- /review updated. LoopLayer + LOOPS removed.
+Not done (needs the owner): Instagram/LinkedIn screenshots for the Ash AI posts. Claude in Chrome is not
+connected to the cloud session; needs the post links/images or a session with Chrome attached.
+
+## Patches-7 (2026-10-11) — owner: research, portfolios, zero-lag footer, then live
+- Research: docs/PORTFOLIO-RESEARCH.md (sources + how each finding landed).
+- Footer lag root causes: (1) LiquidMetal wordmark preprocessing a 2180px mask on the main thread when it
+  came into view, (2) ClosingBand 3D marquee (24 images on a 2800px plane) animating forever off screen,
+  (3) shaders unmounting/remounting on every pass. Fixes: CSS chrome wordmark, LiveWhenVisible gate,
+  mount-once shaders, ClosingBand atom desktop-only. Measured with WebGL off: 0 long tasks on every
+  footer approach (desktop + iPhone 13 emulation).
+- Aashrith: role plates for all five roles (AG_MEDIA.arc*, monochrome, swap-ready), MonoField on
+  ventures/journey/connect with slabs moved to the margins, glass-letter name lock-in, "Let's talk" pill,
+  BackgroundScene orbs + ParticleField moved from framer JS loops + blur() to CSS gradients.
+- Eva: .eva-ink replaces .glass-type, Experience restored (no MonoField), liquid-metal name removed,
+  footer = monochrome fluted-glass wall (evaMedia.fluted) + "Eva" signature.
+- Owner instruction this pass: push live after QA ("push it to Vercel... the version that is live").

@@ -1,5 +1,6 @@
 'use client';
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { m, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { EmberField } from '@/components/fx/EmberField';
 import { memo, useState, useCallback } from 'react';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
@@ -8,7 +9,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 const founderAashrith = '/media/founder-aashrith-silhouette.png';
 const founderEva = '/media/founder-eva-silhouette.png';
 
-const CINEMATIC_EASE = [0.22, 1, 0.36, 1] as const;
+const CINEMATIC_EASE = [0.16, 1, 0.3, 1] as const;
 
 const founders = [
   {
@@ -70,7 +71,7 @@ const FounderPanel = memo(({ founder, index }: { founder: typeof founders[0]; in
   }, [mouseX, mouseY]);
 
   return (
-    <motion.div
+    <m.div
       className="relative flex-1 min-w-0"
       style={!isMobile ? { perspective: 1000 } : undefined}
       initial={{ opacity: 0, x: index === 0 ? -60 : 60 }}
@@ -78,7 +79,7 @@ const FounderPanel = memo(({ founder, index }: { founder: typeof founders[0]; in
       viewport={{ once: true, margin: '-100px' }}
       transition={{ duration: 0.8, delay: index * 0.2, ease: CINEMATIC_EASE }}
     >
-      <motion.div
+      <m.div
         className="relative overflow-hidden rounded-2xl lg:rounded-3xl cursor-pointer group"
         style={{
           aspectRatio: isMobile ? 'auto' : '3/4',
@@ -91,7 +92,7 @@ const FounderPanel = memo(({ founder, index }: { founder: typeof founders[0]; in
         transition={{ duration: 0.3 }}
       >
         {/* Silhouette photo background — blurred for premium dim aesthetic */}
-        <motion.img
+        <m.img
           src={founder.photo}
           alt={`${founder.fullName}, ${founder.title.split(' · ')[0]} of Alchemy Labs`}
           loading="lazy"
@@ -188,8 +189,8 @@ const FounderPanel = memo(({ founder, index }: { founder: typeof founders[0]; in
             <ArrowRight className="w-3.5 h-3.5 text-ember group-hover/btn:translate-x-1 transition-transform" />
           </Link>
         </div>
-      </motion.div>
-    </motion.div>
+      </m.div>
+    </m.div>
   );
 });
 FounderPanel.displayName = 'FounderPanel';
@@ -200,6 +201,7 @@ export const FounderCircles = memo(() => {
   return (
     <section className="relative py-12 sm:py-16 lg:py-20 overflow-hidden">
       <div className="absolute inset-0 bg-background" />
+      <EmberField preset="dusk" mask="radial" opacity={0.45} />
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
@@ -213,7 +215,7 @@ export const FounderCircles = memo(() => {
 
           {!isMobile && (
             <div className="relative flex items-center justify-center w-px mx-4">
-              <motion.div
+              <m.div
                 className="w-px bg-gradient-to-b from-transparent via-ember/60 to-transparent"
                 initial={{ height: '0%' }}
                 whileInView={{ height: '100%' }}

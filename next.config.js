@@ -1,5 +1,26 @@
+const { execSync } = require('child_process');
+
+// Review build stamp (Patches-5): the commit and branch every review copy
+// shows in its corner badge, so a stale local copy is obvious at a glance.
+function git(cmd, fallback) {
+  try {
+    return execSync(`git ${cmd}`, { stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim();
+  } catch {
+    return fallback;
+  }
+}
+const BUILD_SHA = (process.env.VERCEL_GIT_COMMIT_SHA || git('rev-parse HEAD', 'unknown')).slice(0, 7);
+const BUILD_BRANCH = process.env.VERCEL_GIT_COMMIT_REF || git('rev-parse --abbrev-ref HEAD', 'unknown');
+// review surfaces exist on `next dev` and Vercel previews, never on production
+const REVIEW = process.env.NODE_ENV === 'development' || process.env.VERCEL_ENV === 'preview';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  env: {
+    NEXT_PUBLIC_BUILD_SHA: BUILD_SHA,
+    NEXT_PUBLIC_BUILD_BRANCH: BUILD_BRANCH,
+    NEXT_PUBLIC_REVIEW: REVIEW ? '1' : '',
+  },
   images: {
     formats: ['image/avif', 'image/webp'],
     // Patches-3: Higgsfield generations are served from its CDN and optimized

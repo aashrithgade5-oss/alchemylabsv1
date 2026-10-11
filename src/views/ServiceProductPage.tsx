@@ -1,6 +1,7 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
+import { EmberField } from '@/components/fx/EmberField';
 import Link from 'next/link';
 import { m } from 'framer-motion';
 import { fromLabel, products } from '@lib/payments';
@@ -116,7 +117,8 @@ export default function ServiceProductPage() {
       </section>
 
       {/* enquiry + UPI panel, shared with the home sheet (PaymentSheet) */}
-      <section className="relative px-4 pb-20 md:px-6 md:pb-28">
+      <section className="relative overflow-hidden px-4 pb-20 md:px-6 md:pb-28">
+        <EmberField preset="ember" mask="radial" opacity={0.5} />
         <m.div
           initial={{ opacity: 0, y: 32 }}
           whileInView={{ opacity: 1, y: 0 }}

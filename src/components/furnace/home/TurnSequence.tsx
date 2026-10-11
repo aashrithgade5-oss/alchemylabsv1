@@ -218,6 +218,8 @@ function ScrubSequence() {
       aria-hidden
       className="relative z-0 -mt-[100svh] h-[400vh]"
     >
+      {/* review deep link: lands where the atom solidifies into metal */}
+      <span id="brand-seal" aria-hidden className="pointer-events-none absolute left-0 top-[86%] h-px w-px" />
       <m.div
         className="sticky top-0 h-[100svh] overflow-hidden"
       >

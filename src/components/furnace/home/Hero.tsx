@@ -170,9 +170,11 @@ function WeBuild() {
                 key={k}
                 className="col-start-1 row-start-1 will-change-transform"
                 style={{ color: c }}
-                initial={{ x: k ? 7 : -7, opacity: 0.85 }}
-                animate={{ x: [k ? 7 : -7, k ? -3 : 3, 0], opacity: [0.85, 0.5, 0] }}
-                transition={{ duration: 0.42, times: [0, 0.4, 1], ease: 'easeOut' }}
+                // Patches-5: a whisper, not a pile-up (two-line words on phones
+                // stacked three solid ghosts at 85%)
+                initial={{ x: k ? 4 : -4, opacity: 0.45 }}
+                animate={{ x: [k ? 4 : -4, k ? -1.5 : 1.5, 0], opacity: [0.45, 0.2, 0] }}
+                transition={{ duration: 0.34, times: [0, 0.4, 1], ease: 'easeOut' }}
               >
                 {BUILDS[active].word}
               </m.span>
@@ -186,7 +188,7 @@ function WeBuild() {
                 backgroundClip: 'text',
                 color: 'transparent',
               }}
-              initial={{ opacity: 0.9, backgroundPositionX: '0%' }}
+              initial={{ opacity: 0.6, backgroundPositionX: '0%' }}
               animate={{ opacity: 0, backgroundPositionX: '200%' }}
               transition={{ duration: 0.7, ease: 'easeOut' }}
             >
@@ -384,9 +386,9 @@ export function Hero() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="font-mono text-[10px] tracking-[0.3em] text-bone/80 md:text-[11px]"
           >
-            {/* short form on phones: the full line wrapped and orphaned "MUMBAI" */}
-            <span className="sm:hidden"><DecodeText text="AI-NATIVE BRAND STUDIO · MUMBAI" delay={300} /></span>
-            <span className="hidden sm:inline"><DecodeText text="ALCHEMY LABS · AI-NATIVE BRAND STUDIO · MUMBAI" delay={300} /></span>
+            {/* Patches-6: location trimmed from the hero (it is in the footer + schema) */}
+            <span className="sm:hidden"><DecodeText text="AI-NATIVE BRAND STUDIO" delay={300} /></span>
+            <span className="hidden sm:inline"><DecodeText text="ALCHEMY LABS · AI-NATIVE BRAND STUDIO" delay={300} /></span>
           </m.p>
 
           {/* R-P10: the vignette/halo pair now wraps the FULL text block

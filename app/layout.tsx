@@ -10,6 +10,7 @@ import { VaultSafeAnalytics } from '@/components/admin/VaultSafeAnalytics';
 import { Providers } from '@/components/Providers';
 import { LayoutTransition } from '@/components/LayoutTransition';
 import { SiteChrome } from '@/components/furnace/SiteChrome';
+import { ReviewBadge } from '@/components/ReviewBadge';
 import { GrainOverlay } from '@/components/furnace/GrainOverlay';
 import { CookieConsent } from '@/components/CookieConsent';
 import { OrganizationSchema } from '@/components/OrganizationSchema';
@@ -160,6 +161,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </svg>
           <SpeedInsights />
           <VaultSafeAnalytics />
+          <ReviewBadge />
           <PageViewBeacon />
         </body>
       </html>

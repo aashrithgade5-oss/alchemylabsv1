@@ -1,6 +1,7 @@
 'use client';
 
 import { m } from 'framer-motion';
+import { EmberField } from '@/components/fx/EmberField';
 
 const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
@@ -13,8 +14,9 @@ const steps = [
 /** "How engagements work": the three steps between first call and hand-over. */
 export function EngagementSteps() {
   return (
-    <section className="relative">
-      <div className="mx-auto max-w-6xl px-6 py-16 md:px-12 md:py-24 lg:px-16">
+    <section className="relative overflow-hidden">
+      <EmberField preset="ash" mask="radial" />
+      <div className="relative mx-auto max-w-6xl px-6 py-16 md:px-12 md:py-24 lg:px-16">
         <p className="font-mono text-[10px] tracking-[0.3em] text-ash">HOW ENGAGEMENTS WORK</p>
         <h2 className="mt-5 font-headline text-[clamp(2rem,4vw,3.5rem)] font-bold leading-[1.05] tracking-[-0.03em] text-bone [text-wrap:balance]">
           <span className="glass-type">Three steps, no </span>

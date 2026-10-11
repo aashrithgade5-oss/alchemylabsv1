@@ -16,6 +16,8 @@ export const evaMedia = {
   paris: { src: hf('hf_20260927_102012_9548e7bd-978f-4467-9334-86848a3447fc.png'), w: 1792, h: 2240, alt: 'A Paris balcony at dusk with a closed notebook and an espresso on the ledge' },
   letter: { src: hf('hf_20260927_102013_330c8516-30d9-43ff-8670-1f0513721459.png'), w: 1792, h: 2240, alt: 'A cream envelope with a rose wax seal beside a garden rose on dark linen' },
   mumbai: { src: hf('hf_20260927_102012_014cf2d9-2d03-4604-bad7-08be6cb1dc28.png'), w: 2688, h: 1520, alt: 'Marine Drive, Mumbai, at dusk' },
+  // Patches-7 footer: a backlit fluted-glass wall in black and white (echoes the hero's fluted glass)
+  fluted: { src: hf('hf_20261011_194506_19c28351-e876-4528-915f-b22da11bfa6b.png'), w: 5040, h: 2160, alt: 'A backlit fluted glass wall at night' },
 } as const;
 
 export type EvaImage = (typeof evaMedia)[keyof typeof evaMedia];

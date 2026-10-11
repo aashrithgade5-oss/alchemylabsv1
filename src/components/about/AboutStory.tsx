@@ -5,6 +5,8 @@ import { Intertext } from '@/components/furnace/home/Intertext';
 import { AmbientVideo } from '@/components/furnace/home/AmbientVideo';
 import { ScrollScrub } from '@/components/furnace/fx/ScrollScrub';
 import { GlassPanel } from '@/components/furnace/GlassPanel';
+import { ArtPicture } from '@/components/furnace/ArtPicture';
+import { DOORWAY } from '@lib/hf';
 
 const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
@@ -143,14 +145,12 @@ export function AboutStory() {
 
       {/* THE NAME — why Alchemy */}
       <section className="relative overflow-hidden px-6 py-28 text-center md:py-36">
-        <div
-          aria-hidden
-          className="absolute inset-0"
-          style={{
-            background:
-              'radial-gradient(50% 45% at 50% 55%, rgba(255,77,28,0.12) 0%, rgba(178,34,20,0.05) 50%, transparent 75%)',
-          }}
-        />
+        {/* Patches-6: the lit doorway moved here from /contact. The furnace
+            door, ajar: transformation under pressure, the light of the work. */}
+        <div aria-hidden className="section-feather absolute inset-0">
+          <ArtPicture wide={DOORWAY.wide} tall={DOORWAY.tall} priority={false} className="object-[50%_60%] opacity-70 md:object-[70%_55%]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_55%_60%_at_50%_50%,rgba(10,9,8,0.82),rgba(10,9,8,0.35)_70%,transparent_100%)]" />
+        </div>
         <div className="relative mx-auto max-w-3xl">
           <p className="font-mono text-[10px] tracking-[0.3em] text-ash">THE NAME</p>
           <ScrollScrub
