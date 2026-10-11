@@ -8,7 +8,7 @@ import { useFx } from '@/hooks/useFx';
 const GrainGradient = dynamic(() => import('@paper-design/shaders-react').then((m) => m.GrainGradient), { ssr: false });
 const MeshGradient = dynamic(() => import('@paper-design/shaders-react').then((m) => m.MeshGradient), { ssr: false });
 
-export type EmberPreset = 'ember' | 'dusk' | 'ash';
+export type EmberPreset = 'ember' | 'dusk' | 'ash' | 'metal';
 
 // The static poster each preset falls back to (reduced motion, Save-Data,
 // low-memory, no WebGL) and paints under the shader while it compiles.
@@ -18,6 +18,8 @@ const POSTER: Record<EmberPreset, string> = {
   dusk:
     'radial-gradient(70% 60% at 30% 20%, rgba(255,77,28,0.14), transparent 70%), radial-gradient(60% 60% at 80% 90%, rgba(237,230,221,0.06), transparent 70%), #0A0908',
   ash: 'radial-gradient(60% 50% at 50% 40%, rgba(237,230,221,0.07), transparent 70%), #0A0908',
+  metal:
+    'radial-gradient(55% 45% at 35% 40%, rgba(237,230,221,0.08), transparent 70%), radial-gradient(45% 40% at 70% 65%, rgba(255,77,28,0.08), transparent 70%), #0A0908',
 };
 
 // Shared sizing: cap GPU work (about 0.9 megapixel) and stay at DPR 1.
@@ -55,7 +57,19 @@ export function EmberField({
       <div className="absolute inset-0" style={{ background: POSTER[preset] }} />
       {allowed && inView && (
         <div className="ember-field-in absolute inset-0">
-          {preset === 'dusk' ? (
+          {preset === 'metal' ? (
+            // Patches-6 liquid metal: graphite folds with one bone highlight
+            // and an ember undertone, so long black stretches move like mercury
+            <MeshGradient
+              {...sizing}
+              colors={['#0A0908', '#2b2825', '#8f8a84', '#161412', '#3a1a10']}
+              distortion={0.85}
+              swirl={0.6}
+              grainMixer={0.1}
+              grainOverlay={0.12}
+              speed={0.1 * speed}
+            />
+          ) : preset === 'dusk' ? (
             <MeshGradient
               {...sizing}
               colors={['#0A0908', '#2a0f07', '#C93A14', '#161412', '#5a2a1a']}

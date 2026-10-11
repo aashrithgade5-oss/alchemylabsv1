@@ -14,23 +14,39 @@ const LiquidMetal = dynamic(() => import('@paper-design/shaders-react').then((m)
  * and freezes when off screen.
  */
 /** size 0 = fill the parent (for responsive slots). */
-export function LiquidMark({ size = 96, className = '', tint = '#EDE6DD' }: { size?: number; className?: string; tint?: string }) {
+export function LiquidMark({
+  size = 96,
+  className = '',
+  tint = '#EDE6DD',
+  src = '/media/alchemy-minimal-logo.png',
+  inset = '-20%',
+  pixels = 600 * 600,
+}: {
+  size?: number;
+  className?: string;
+  tint?: string;
+  /** any white-on-transparent PNG (the atom by default; the ALCHEMY wordmark in the footer) */
+  src?: string;
+  /** shader overscan: the atom needs room for its rim, a wordmark needs little */
+  inset?: string;
+  pixels?: number;
+}) {
   const ref = useRef<HTMLDivElement>(null);
   const { allowed, live, inView } = useFx(ref, '100px');
 
   return (
     <div ref={ref} aria-hidden className={`relative ${size ? '' : 'h-full w-full'} ${className}`} style={size ? { width: size, height: size } : undefined}>
       <Image
-        src="/media/alchemy-minimal-logo.png"
+        src={src}
         alt=""
         width={size || 256}
         height={size || 256}
         className={`absolute inset-0 h-full w-full ${allowed && inView ? 'liquid-png-out' : ''}`}
       />
       {allowed && inView && (
-        <div className="ember-field-in absolute inset-[-20%]">
+        <div className="ember-field-in absolute" style={{ inset }}>
           <LiquidMetal
-            image="/media/alchemy-minimal-logo.png"
+            image={src}
             colorBack="#00000000"
             colorTint={tint}
             repetition={3}
@@ -44,7 +60,7 @@ export function LiquidMark({ size = 96, className = '', tint = '#EDE6DD' }: { si
             scale={1}
             fit="contain"
             minPixelRatio={2}
-            maxPixelCount={600 * 600}
+            maxPixelCount={pixels}
             style={{ width: '100%', height: '100%' }}
           />
         </div>

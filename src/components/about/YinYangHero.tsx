@@ -121,7 +121,7 @@ export const YinYangHero = memo(() => {
           transition={{ duration: 0.8, delay: 0.9, ease }}
           className="max-w-xl text-base leading-relaxed text-bone/55 sm:text-lg [text-wrap:pretty]"
         >
-          Two founders, one studio in Mumbai. We decide what is worth making, then build it with care and the best tools we can find.
+          Two founders, one studio. We decide what is worth making, then build it with care and the best tools we can find.
         </m.p>
       </m.div>
 

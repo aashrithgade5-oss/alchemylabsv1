@@ -386,9 +386,9 @@ export function Hero() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="font-mono text-[10px] tracking-[0.3em] text-bone/80 md:text-[11px]"
           >
-            {/* short form on phones: the full line wrapped and orphaned "MUMBAI" */}
-            <span className="sm:hidden"><DecodeText text="AI-NATIVE BRAND STUDIO · MUMBAI" delay={300} /></span>
-            <span className="hidden sm:inline"><DecodeText text="ALCHEMY LABS · AI-NATIVE BRAND STUDIO · MUMBAI" delay={300} /></span>
+            {/* Patches-6: location trimmed from the hero (it is in the footer + schema) */}
+            <span className="sm:hidden"><DecodeText text="AI-NATIVE BRAND STUDIO" delay={300} /></span>
+            <span className="hidden sm:inline"><DecodeText text="ALCHEMY LABS · AI-NATIVE BRAND STUDIO" delay={300} /></span>
           </m.p>
 
           {/* R-P10: the vignette/halo pair now wraps the FULL text block

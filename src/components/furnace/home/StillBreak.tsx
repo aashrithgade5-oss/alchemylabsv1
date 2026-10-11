@@ -30,15 +30,26 @@ export function StillBreak() {
       <div aria-hidden className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-void to-transparent" />
       <div aria-hidden className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-void to-transparent" />
       <div className="absolute inset-0 flex items-center justify-center px-6">
-        <m.p
+        {/* Patches-6: editorial pairing. Inter Bold carries the line, the ONE
+            emphasis word is Playfair italic regular (emphasis relock); the
+            mono rule above it gives the line an editorial masthead. */}
+        <m.div
           initial={{ opacity: 0, y: 28, filter: 'blur(12px)' }}
           whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
           viewport={{ once: true, margin: '-120px' }}
           transition={{ duration: 0.8, ease }}
-          className="text-center font-playfair text-[clamp(1.75rem,4vw,3.5rem)] italic leading-[1.15] text-bone [text-wrap:balance] sm:whitespace-nowrap"
+          className="flex flex-col items-center text-center"
         >
-          For founders who can tell the difference.
-        </m.p>
+          <p className="flex items-center gap-4 font-mono text-[10px] tracking-[0.35em] text-bone/60">
+            <span aria-hidden className="h-px w-10 bg-bone/30" />
+            WHO WE WORK WITH
+            <span aria-hidden className="h-px w-10 bg-bone/30" />
+          </p>
+          <p className="mt-7 max-w-5xl font-headline text-[clamp(2.25rem,5.6vw,5.25rem)] font-bold leading-[1.02] tracking-[-0.045em] text-bone [text-wrap:balance]">
+            <span className="glass-type">For founders who can tell the </span>
+            <span className="font-playfair font-normal italic tracking-[-0.01em] text-bone">difference.</span>
+          </p>
+        </m.div>
       </div>
     </section>
   );

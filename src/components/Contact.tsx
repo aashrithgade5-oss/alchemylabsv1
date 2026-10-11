@@ -1,7 +1,8 @@
 'use client';
 import { useState, useCallback, useEffect, useRef, memo, type ReactNode } from 'react';
 import { m, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { ArrowRight, Calendar, MessageCircle, Instagram, Mail, Loader2, Check, Linkedin, Youtube, Copy, ArrowUpRight } from 'lucide-react';
+import { ArrowRight, Instagram, Loader2, Check, Linkedin, Youtube, Copy, ArrowUpRight } from 'lucide-react';
+import { GlyphBrief, GlyphCall, GlyphMessage } from '@/components/brand/Glyphs';
 import Link from 'next/link';
 import { toast } from 'sonner';
 import { socialLinks } from '@/data/socialLinks';
@@ -132,6 +133,13 @@ export const Contact = memo(() => {
     startedAt.current = Date.now();
   }, []);
 
+  // Patches-6: the contact hero's "Book a call" path opens the same dialog
+  useEffect(() => {
+    const open = () => setCalendlyOpen(true);
+    window.addEventListener('alchemy:book', open);
+    return () => window.removeEventListener('alchemy:book', open);
+  }, []);
+
   const set = (k: keyof Brief) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const next = { ...form, [k]: e.target.value };
     setForm(next);
@@ -201,7 +209,7 @@ export const Contact = memo(() => {
         primary ? 'bg-bone text-void hover:bg-white' : 'border border-bone/15 text-bone hover:border-ember/50'
       }`}
     >
-      <Calendar className="h-4 w-4" aria-hidden />
+      <GlyphCall size={18} />
       {text}
     </button>
   );
@@ -220,15 +228,15 @@ export const Contact = memo(() => {
           </m.p>
 
           <m.ul {...reveal(3)} className="mt-8">
-            <Line href={`mailto:${STUDIO_EMAIL}?subject=Inquiry – Alchemy Labs`} icon={<Mail className="h-4 w-4" aria-hidden />} title="Email the studio" detail={STUDIO_EMAIL} onCopy={() => copy(STUDIO_EMAIL)} />
-            <Line href={WHATSAPP} external icon={<MessageCircle className="h-4 w-4" aria-hidden />} title="WhatsApp" detail="+91 77949 12315" />
+            <Line href={`mailto:${STUDIO_EMAIL}?subject=Inquiry – Alchemy Labs`} icon={<GlyphBrief size={18} />} title="Email the studio" detail={STUDIO_EMAIL} onCopy={() => copy(STUDIO_EMAIL)} />
+            <Line href={WHATSAPP} external icon={<GlyphMessage size={18} />} title="WhatsApp" detail="+91 77949 12315" />
           </m.ul>
 
           <m.div {...reveal(4)} className="mt-8 border-t border-bone/10 pt-6">
             <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-bone/40">Speak to a founder</p>
             <ul className="mt-2">
               {founders.map((f) => (
-                <Line key={f.email} href={`mailto:${f.email}?subject=Direct Inquiry – Alchemy Labs`} icon={<Mail className="h-4 w-4" aria-hidden />} title={f.name} detail={f.email} onCopy={() => copy(f.email)} />
+                <Line key={f.email} href={`mailto:${f.email}?subject=Direct Inquiry – Alchemy Labs`} icon={<GlyphBrief size={18} />} title={f.name} detail={f.email} onCopy={() => copy(f.email)} />
               ))}
             </ul>
           </m.div>
@@ -294,7 +302,7 @@ export const Contact = memo(() => {
                   <span className="h-px flex-1 bg-bone/10" />
                 </div>
 
-                <form ref={formRef} onSubmit={handleSubmit} noValidate aria-label="Project brief" className="relative space-y-6">
+                <form id="brief" ref={formRef} onSubmit={handleSubmit} noValidate aria-label="Project brief" className="relative scroll-mt-32 space-y-6">
                   <m.div {...reveal(2)} className="grid gap-6 sm:grid-cols-2">
                     <Field id="c-name" text="Your name *" error={errors.name}>
                       <input id="c-name" type="text" autoComplete="name" required value={form.name} onChange={set('name')} onBlur={blur('name')} placeholder="Alex Rivera" disabled={isSubmitting} aria-invalid={!!errors.name} aria-describedby={errors.name ? 'c-name-error' : undefined} className={`${field} ${fieldBorder(errors.name)}`} />

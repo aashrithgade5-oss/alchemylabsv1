@@ -1,14 +1,11 @@
 'use client';
 
 import { lazy, Suspense, useRef } from 'react';
-import { LoopLayer } from '@/components/fx/LoopLayer';
-import { m, useScroll, useTransform } from 'framer-motion';
+import { m, useScroll, useTransform, type MotionValue } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { portfolio } from '@lib/portfolio';
+import { AG_MEDIA, portfolio } from '@lib/portfolio';
 import { GlassPanel } from '@/components/furnace/GlassPanel';
-import { ArtPicture } from '@/components/furnace/ArtPicture';
-import { LOOPS, WORK_HERO } from '@lib/hf';
 import { KineticHeadline } from '@/components/furnace/KineticHeadline';
 // Lazy like the homepage: ClosingBand drags TextHoverEffect + the marquee
 // into First Load otherwise (/work 134→159kB when imported statically).
@@ -55,34 +52,67 @@ function WorkTile({ entry, large }: { entry: (typeof portfolio)[number]; large: 
   );
 }
 
+
+// Patches-6: the hero is the work itself. A contact sheet of real frames
+// from the case studies below, three rows drifting at different speeds
+// (CSS, compositor-only) and parting with scroll. Nothing abstract.
+const SHEET = [
+  { src: AG_MEDIA.aetherHero, title: 'Aether Rituals' },
+  { src: AG_MEDIA.oakleyEclipse, title: 'Oakley' },
+  { src: AG_MEDIA.diorHero, title: 'Dior' },
+  { src: AG_MEDIA.genesisHero, title: 'Genesis' },
+  { src: '/media/porsche-showreel-poster.jpg', title: 'Porsche' },
+  { src: '/media/aether-rituals-2.webp', title: 'Aether Rituals' },
+  { src: AG_MEDIA.oakleySprint, title: 'Oakley' },
+  { src: AG_MEDIA.diorGold, title: 'Dior' },
+  { src: '/media/case-study-2.jpg', title: 'Studio reel' },
+  { src: AG_MEDIA.oakleyLens, title: 'Oakley' },
+  { src: '/media/aether-rituals-4.webp', title: 'Aether Rituals' },
+  { src: AG_MEDIA.diorShadow, title: 'Dior' },
+] as const;
+const ROWS = [SHEET.slice(0, 4), SHEET.slice(4, 8), SHEET.slice(8, 12)];
+
+function SheetRow({ row, index, progress }: { row: readonly (typeof SHEET)[number][]; index: number; progress: MotionValue<number> }) {
+  const x = useTransform(progress, [0, 1], index % 2 ? ['0%', '-8%'] : ['0%', '8%']);
+  return (
+    <m.div style={{ x }} className={index === 2 ? 'hidden md:block' : ''}>
+      <div className={`work-sheet-row flex w-max gap-3 md:gap-4 ${index % 2 ? 'work-sheet-row--rev' : ''}`}>
+        {[0, 1].map((k) =>
+          row.map((f, i) => (
+            <figure key={`${k}-${i}`} className="relative h-[24svh] w-[38svh] shrink-0 overflow-hidden rounded-[16px] border border-bone/10 md:h-[27svh] md:w-[44svh]">
+              <Image src={f.src} alt="" fill sizes="(min-width: 768px) 30vw, 60vw" quality={70} className="object-cover" priority={index === 0 && k === 0 && i < 2} />
+              <figcaption className="absolute bottom-2 left-3 font-mono text-[9px] tracking-[0.25em] text-bone/70">
+                {String(index * 4 + i + 1).padStart(2, '0')} · {f.title.toUpperCase()}
+              </figcaption>
+            </figure>
+          )),
+        )}
+      </div>
+    </m.div>
+  );
+}
+
 export default function Work() {
   const [featured, ...rest] = portfolio;
   const heroRef = useRef<HTMLElement>(null);
-  // C-P18: hero video replaced with the Solutions-page "moving lights"
-  // treatment — scroll parallax (scale + y) over a static glow texture,
-  // plus a slow drifting glow layer. Unique asset (red-glow-box.webp);
-  // red-slats-wide.mp4 moves down to the bento backdrop.
-  const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end end'] });
-  const bgScale = useTransform(scrollYProgress, [0, 1], [1, 1.12]);
-  const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '8%']);
+  // Patches-6: the contact sheet sinks and its rows part as the hero scrolls away
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
+  const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '14%']);
 
   return (
     <main className="relative font-sans">
       <section ref={heroRef} className="relative flex min-h-[88svh] items-end overflow-hidden bg-void">
-        <div aria-hidden className="absolute inset-0">
-          {/* Patches-4: the gallery after hours, one molten sculpture on
-              black stone. Tall frame on phones, wide on md+. */}
-          <m.div className="absolute inset-0 will-change-transform" style={{ scale: bgScale, y: bgY }}>
-            <ArtPicture wide={WORK_HERO.wide} tall={WORK_HERO.tall} className="object-[50%_50%] opacity-[0.85]" />
-            {/* Higgsfield loop: the sculpture's light breathes (desktop) */}
-            <LoopLayer src={LOOPS.work} className="opacity-[0.85]" />
+        <div aria-hidden className="absolute inset-0 overflow-hidden">
+          <m.div className="absolute inset-x-0 top-[12svh] flex -rotate-[4deg] scale-110 flex-col gap-3 opacity-60 will-change-transform md:gap-4" style={{ y: bgY }}>
+            {ROWS.map((row, i) => (
+              <SheetRow key={i} row={row} index={i} progress={scrollYProgress} />
+            ))}
           </m.div>
-          <div className="svc-breath absolute inset-x-0 bottom-0 h-2/3" />
           <div
             className="absolute inset-0"
             style={{
               background:
-                'linear-gradient(to bottom, rgba(10,9,8,0.45) 0%, rgba(10,9,8,0.25) 40%, rgba(10,9,8,0.7) 78%, rgba(10,9,8,1) 100%)',
+                'radial-gradient(ellipse 70% 60% at 30% 70%, rgba(10,9,8,0.85), transparent 75%), linear-gradient(to bottom, rgba(10,9,8,0.55) 0%, rgba(10,9,8,0.35) 40%, rgba(10,9,8,0.8) 78%, rgba(10,9,8,1) 100%)',
             }}
           />
         </div>

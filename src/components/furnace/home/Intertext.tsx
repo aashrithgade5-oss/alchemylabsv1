@@ -9,6 +9,7 @@ import {
   useTransform,
 } from 'framer-motion';
 import { Meteors } from '../Meteors';
+import { EmberField } from '@/components/fx/EmberField';
 
 /**
  * Scroll-bound editorial interlude: the line sharpens out of a blur as it
@@ -49,15 +50,9 @@ export function Intertext({
       ref={ref}
       className={`relative flex items-center justify-center overflow-hidden px-6 ${compact ? 'min-h-[38svh]' : 'min-h-[70svh]'}`}
     >
-      {/* ember vignette bleeding one edge so the moment never sits on flat void */}
-      <div
-        aria-hidden
-        className="absolute inset-y-0 right-0 w-1/2"
-        style={{
-          background:
-            'radial-gradient(46rem 32rem at 100% 50%, rgba(178,34,20,0.12) 0%, transparent 70%)',
-        }}
-      />
+      {/* Patches-6: liquid metal moving behind the line (was a static ember
+          edge), radial-masked so it pools under the type and never boxes */}
+      <EmberField preset="metal" mask="radial" opacity={0.75} />
       {/* R-7b: meteors live on pull-quote moments only (never heroes/CTAs) */}
       <Meteors />
       <m.div
