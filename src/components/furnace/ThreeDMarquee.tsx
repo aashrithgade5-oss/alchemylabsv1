@@ -35,7 +35,7 @@ export function ThreeDMarquee({ background = false }: { background?: boolean }) 
           {COLUMNS.map((column, i) => (
             <div
               key={i}
-              className="marquee3d-col flex flex-col gap-4"
+              className={`marquee3d-col flex flex-col gap-4 ${i === 3 ? 'max-md:hidden' : ''}`}
               data-dir={i % 2 === 1 ? 'down' : undefined}
               style={{ animationDuration: `${36 + i * 7}s` }}
             >
@@ -47,6 +47,8 @@ export function ThreeDMarquee({ background = false }: { background?: boolean }) 
                   alt=""
                   width={640}
                   height={427}
+                  sizes="(min-width: 768px) 640px, 360px"
+                  quality={60}
                   className="aspect-[3/2] w-full rounded-2xl border border-white/10 object-cover"
                 />
               ))}

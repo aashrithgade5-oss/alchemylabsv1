@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useFx } from '@/hooks/useFx';
 
@@ -43,7 +43,13 @@ export function EmberField({
   opacity?: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const { allowed, live, inView } = useFx(ref);
+  const { allowed, live, inView } = useFx(ref, '400px');
+  // Patches-7: mount once, then only pause. Unmounting off screen meant a
+  // shader recompile (a visible hitch) every time a section scrolled back in.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    if (allowed && inView) setMounted(true);
+  }, [allowed, inView]);
   const speed = live ? 1 : 0;
   const m =
     mask === 'radial'
@@ -55,7 +61,7 @@ export function EmberField({
   return (
     <div ref={ref} aria-hidden className={`pointer-events-none absolute inset-0 overflow-hidden ${className}`} style={{ opacity, WebkitMaskImage: m, maskImage: m }}>
       <div className="absolute inset-0" style={{ background: POSTER[preset] }} />
-      {allowed && inView && (
+      {allowed && mounted && (
         <div className="ember-field-in absolute inset-0">
           {preset === 'metal' ? (
             // Patches-6 liquid metal: graphite folds with one bone highlight

@@ -1,5 +1,4 @@
 import { memo, useMemo } from 'react';
-import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { usePerformance } from '@/contexts/PerformanceContext';
@@ -12,37 +11,32 @@ interface ParticleFieldProps {
   className?: string;
 }
 
+// Patches-7: deterministic (no SSR/CSR mismatch), CSS-animated, no blur
+// filter: a radial gradient gives the same soft dot. Was up to 47 framer
+// JS loops, each a blurred layer, running for the life of the page.
+const rand = (n: number) => {
+  const x = Math.sin(n * 9301 + 49297) * 233280;
+  return x - Math.floor(x);
+};
+
 const Particle = memo(({ color, opacity, speed, index }: {
   color: string; opacity: number; speed: number; index: number;
 }) => {
-  const style = useMemo(() => {
-    const x = Math.random() * 100;
-    const y = Math.random() * 100;
-    const size = 4 + Math.random() * 12;
-    const dur = (8 + Math.random() * 12) / speed;
-    const delay = Math.random() * dur;
-    const range = 20 + Math.random() * 40;
-    return { x, y, size, dur, delay, range };
-  }, [speed, index]);
-
+  const size = 24 + rand(index + 3) * 36;
+  const dur = (8 + rand(index + 4) * 12) / speed;
   return (
-    <motion.div
-      className="absolute rounded-full will-change-transform"
+    <div
+      className="particle-drift absolute rounded-full"
       style={{
-        left: `${style.x}%`,
-        top: `${style.y}%`,
-        width: style.size,
-        height: style.size,
-        background: color,
+        left: `${rand(index + 1) * 100}%`,
+        top: `${rand(index + 2) * 100}%`,
+        width: size,
+        height: size,
+        background: `radial-gradient(circle, ${color} 0%, transparent 65%)`,
         opacity,
-        filter: 'blur(20px)',
-      }}
-      animate={{ y: [-style.range, style.range, -style.range] }}
-      transition={{
-        duration: style.dur,
-        repeat: Infinity,
-        ease: 'easeInOut',
-        delay: style.delay,
+        animationDuration: `${dur}s`,
+        animationDelay: `${-rand(index + 5) * dur}s`,
+        ['--range' as string]: `${20 + rand(index + 6) * 40}px`,
       }}
     />
   );

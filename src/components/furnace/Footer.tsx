@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { LiquidMark } from '@/components/fx/LiquidMark';
+import { LiveWhenVisible } from '@/components/fx/LiveWhenVisible';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -104,7 +104,7 @@ export function FurnaceFooter() {
     <footer id="site-footer" ref={ref} className="relative overflow-hidden bg-void">
       <div aria-hidden className="absolute inset-0">
         <m.div className="absolute inset-x-0 -top-[6%] bottom-0 will-change-transform" style={{ y: bgY }}>
-          <Image src={FOOTER_BG} alt="" fill sizes="100vw" quality={90} className="object-cover object-[50%_62%] opacity-70" />
+          <Image src={FOOTER_BG} alt="" fill sizes="100vw" quality={78} className="object-cover object-[50%_62%] opacity-70" />
         </m.div>
         <div className="absolute inset-0 bg-gradient-to-t from-void via-void/60 to-void/35" />
         <div className="absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-void to-transparent" />
@@ -113,8 +113,8 @@ export function FurnaceFooter() {
       </div>
 
       {/* linear scroll: the services, drifting under the fold line */}
-      <div aria-hidden className="relative border-y border-bone/10 py-5">
-        <div className="footer-marquee flex w-max whitespace-nowrap">
+      <LiveWhenVisible className="relative border-y border-bone/10 py-5">
+        <div aria-hidden className="footer-marquee flex w-max whitespace-nowrap">
           {[0, 1].map((k) => (
             <span key={k} className="flex gap-10 pr-10">
               {MARQUEE.map((w, i) => (
@@ -126,7 +126,7 @@ export function FurnaceFooter() {
             </span>
           ))}
         </div>
-      </div>
+      </LiveWhenVisible>
 
       <div className="relative mx-auto max-w-6xl px-6 pb-6 pt-20 md:px-10 md:pt-28">
         <div className="flex flex-col gap-10 md:flex-row md:items-end md:justify-between">
@@ -197,9 +197,15 @@ export function FurnaceFooter() {
 
         {/* the wordmark, cast in liquid metal, rises into place as the page ends */}
         <m.div aria-hidden style={{ y: markY, opacity: markOpacity }} className="pointer-events-none relative mt-16 select-none md:mt-24">
-          <div className="relative mx-auto aspect-[2180/410] w-full">
-            <LiquidMark size={0} src="/media/alchemy-wordmark-metal.png" inset="-1%" pixels={1600 * 420} tint="#EDE6DD" />
-          </div>
+          <LiveWhenVisible className="relative mx-auto aspect-[2180/410] w-full">
+            {/* Patches-7: liquid chrome without WebGL. The wordmark is a mask; a
+                brushed-metal ground and one slow light sweep move under it on
+                transform only, so the footer costs the main thread nothing. */}
+            <div className="chrome-word absolute inset-0" style={{ WebkitMaskImage: 'url(/media/alchemy-wordmark-metal.png)', maskImage: 'url(/media/alchemy-wordmark-metal.png)' }}>
+              <span className="chrome-word__base" />
+              <span className="chrome-word__sweep" />
+            </div>
+          </LiveWhenVisible>
         </m.div>
 
         <div className="relative mt-8 flex flex-col gap-3 border-t border-bone/10 pt-6 md:flex-row md:items-center md:justify-between">

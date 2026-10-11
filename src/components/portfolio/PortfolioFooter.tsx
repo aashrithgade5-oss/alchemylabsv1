@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 import { SafeImage } from './SafeImage';
 import { LightStreaks } from './LightStreaks';
-import { LiquidMark } from '@/components/fx/LiquidMark';
 
 type FooterLink = { label: string; href: string; external?: boolean; download?: boolean };
 
@@ -30,8 +29,10 @@ interface PortfolioFooterProps {
   streaks?: boolean;
   /** Colour the top edge feathers from (the page background). */
   featherFrom?: string;
-  /** Patches-6 lock-in: the founder's name cast in liquid metal at the foot. */
-  metalMark?: { src: string; w: number; h: number; tint?: string };
+  /** Patches-7 lock-in: the founder's name as a pane of liquid glass at the foot. */
+  glassMark?: string;
+  /** a founder-specific sign-off set large at the foot (Eva's own mark) */
+  signature?: ReactNode;
 }
 
 const t = (isDark: boolean, dark: string, light: string) => isDark ? dark : light;
@@ -89,7 +90,8 @@ export const PortfolioFooter = memo(({
   headline,
   streaks = false,
   featherFrom,
-  metalMark,
+  glassMark,
+  signature,
 }: PortfolioFooterProps) => {
   const cv = connectLinks.find((l) => l.download);
   const ref = useRef<HTMLElement>(null);
@@ -172,11 +174,19 @@ export const PortfolioFooter = memo(({
           </div>
         </div>
 
-        {metalMark && (
+        {glassMark && (
+          <motion.p
+            aria-hidden
+            style={{ y: markY, opacity: markOpacity }}
+            className="glass-letter pointer-events-none select-none whitespace-nowrap pt-14 text-center font-body text-[clamp(2.5rem,10.2vw,9.4rem)] font-black leading-[0.85] tracking-[-0.055em] sm:pt-20"
+          >
+            {glassMark}
+          </motion.p>
+        )}
+
+        {signature && (
           <motion.div aria-hidden style={{ y: markY, opacity: markOpacity }} className="pointer-events-none select-none pt-14 sm:pt-20">
-            <div className="relative w-full" style={{ aspectRatio: `${metalMark.w} / ${metalMark.h}` }}>
-              <LiquidMark size={0} src={metalMark.src} inset="-1%" pixels={1600 * 420} tint={metalMark.tint ?? '#EDE6DD'} />
-            </div>
+            {signature}
           </motion.div>
         )}
 

@@ -104,6 +104,14 @@ Everything here is NON-NEGOTIABLE and must be re-verified at the END of every se
 - No Higgsfield video loops on heroes or the footer (owner: the loops read as glitchy/soft).
 - Location stays out of display copy (hero/footer); it lives in SEO metadata, schema and legal pages.
 
+## PATCHES-7 (2026-10-11) — three brands, zero-lag footer
+- Alchemy = liquid metal + ember. Aashrith = graphite + liquid glass (MonoField, .glass-letter, role plates).
+  Eva = flat .eva-ink + rose Playfair signature + fluted-glass imagery. Never cross the materials.
+- Footer wordmark is CSS chrome (.chrome-word, mask + transform sweep). No WebGL in any footer.
+- Infinite CSS animations live inside LiveWhenVisible (paused off screen). No framer infinite keyframe
+  loops for ambient motion and no large blur() filters: use radial gradients + CSS keyframes.
+- Shaders mount once (idle) and pause; never unmount/remount on scroll.
+
 ## DEPLOY
 - LOCALHOST ONLY. Never deploy, never touch Vercel. Deploy trigger is only the exact
   user phrase "yes, upload it to Vercel and make this live."

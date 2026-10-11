@@ -1083,3 +1083,17 @@ Owner feedback after reviewing Patches-5, addressed:
 - /review updated. LoopLayer + LOOPS removed.
 Not done (needs the owner): Instagram/LinkedIn screenshots for the Ash AI posts. Claude in Chrome is not
 connected to the cloud session; needs the post links/images or a session with Chrome attached.
+
+## Patches-7 (2026-10-11) — owner: research, portfolios, zero-lag footer, then live
+- Research: docs/PORTFOLIO-RESEARCH.md (sources + how each finding landed).
+- Footer lag root causes: (1) LiquidMetal wordmark preprocessing a 2180px mask on the main thread when it
+  came into view, (2) ClosingBand 3D marquee (24 images on a 2800px plane) animating forever off screen,
+  (3) shaders unmounting/remounting on every pass. Fixes: CSS chrome wordmark, LiveWhenVisible gate,
+  mount-once shaders, ClosingBand atom desktop-only. Measured with WebGL off: 0 long tasks on every
+  footer approach (desktop + iPhone 13 emulation).
+- Aashrith: role plates for all five roles (AG_MEDIA.arc*, monochrome, swap-ready), MonoField on
+  ventures/journey/connect with slabs moved to the margins, glass-letter name lock-in, "Let's talk" pill,
+  BackgroundScene orbs + ParticleField moved from framer JS loops + blur() to CSS gradients.
+- Eva: .eva-ink replaces .glass-type, Experience restored (no MonoField), liquid-metal name removed,
+  footer = monochrome fluted-glass wall (evaMedia.fluted) + "Eva" signature.
+- Owner instruction this pass: push live after QA ("push it to Vercel... the version that is live").

@@ -7,6 +7,15 @@ export const metadata: Metadata = { title: 'Review', robots: { index: false, fol
 type Item = { what: string; look: string; href: string };
 const SECTIONS: { title: string; items: Item[] }[] = [
   {
+    title: 'Patches-7 · Performance + three brands',
+    items: [
+      { what: 'Footer, no lag', look: 'ALCHEMY is now liquid chrome built from CSS (a light sweep under the wordmark): no WebGL, nothing on the main thread. Off-screen marquees pause.', href: '/services#site-footer' },
+      { what: 'Aashrith · every role has a plate', look: 'Small monochrome plates beside each job (placeholders, swap in lib/portfolio.ts). Grey liquid-glass ground kept and refined.', href: '/aashrith#journey' },
+      { what: 'Aashrith · glass name + Let\u2019s talk', look: 'The footer name is a pane of glass; a "Let\u2019s talk" pill stays at the top on every scroll.', href: '/aashrith#connect' },
+      { what: 'Eva · her own brand', look: 'Flat petal ink (no Alchemy metal), previous Experience restored, monochrome fluted-glass footer and an "Eva" signature.', href: '/eva#contact' },
+    ],
+  },
+  {
     title: 'Patches-6 · Homepage',
     items: [
       { what: 'The atom, no stray dots', look: 'Scroll through "Anyone can make a thousand images now": nothing shows until the seal begins. A glass lens condenses, the orbits trace inside it, then it turns to liquid metal.', href: '/#brand-seal' },

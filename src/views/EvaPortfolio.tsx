@@ -6,7 +6,6 @@ import Link from 'next/link';
 import { AnimatePresence, motion, useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion';
 import { ArrowLeft, ArrowUpRight, Download, Linkedin, Mail, Menu, X } from 'lucide-react';
 import { PortfolioFooter } from '@/components/portfolio/PortfolioFooter';
-import { MonoField } from '@/components/portfolio/MonoField';
 import { NoiseTexture } from '@/components/effects';
 import { setScrollLocked } from '@/components/LenisProvider';
 import { Marquee } from '@/components/eva/Marquee';
@@ -52,9 +51,9 @@ const Eyebrow = ({ n, children }: { n: string; children: ReactNode }) => (
 // Inter Bold sentence-case line with ONE lowercase Playfair-italic emphasis word.
 const Line = ({ pre, em, post = '', className = '', as: Tag = 'h2' }: { pre: string; em: string; post?: string; className?: string; as?: 'h2' | 'p' }) => (
   <Tag className={`font-headline font-bold tracking-[-0.02em] leading-[1.05] [text-wrap:balance] ${className}`}>
-    <span className="glass-type">{pre} </span>
+    <span className="eva-ink">{pre} </span>
     <span className="font-playfair italic font-normal eva-em clip-pad">{em}</span>
-    {post && <span className="glass-type">{post}</span>}
+    {post && <span className="eva-ink">{post}</span>}
   </Tag>
 );
 
@@ -198,7 +197,7 @@ function WordCycler() {
           {eva.heroWords[i]}
         </motion.span>
       </AnimatePresence>
-      <span className="glass-type">.</span>
+      <span className="eva-ink">.</span>
     </span>
   );
 }
@@ -240,7 +239,7 @@ function Hero() {
                 animate={{ y: 0 }}
                 transition={{ duration: 1.1, delay: 0.25 + i * 0.12, ease: EASE }}
               >
-                <span className="glass-type">{w}</span>
+                <span className="eva-ink">{w}</span>
               </motion.span>
             </span>
           ))}
@@ -252,7 +251,7 @@ function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6, ease: EASE }}
         >
-          <span className="glass-type">Luxury brands, built with </span>
+          <span className="eva-ink">Luxury brands, built with </span>
           <WordCycler />
         </motion.p>
 
@@ -390,10 +389,8 @@ function BrandAlchemyWork() {
 function Experience() {
   const [active, setActive] = useState(0);
   return (
-    <section id="experience" className="relative scroll-mt-16 overflow-clip px-4 py-24 sm:px-8 sm:py-32">
-      {/* Patches-6: the shared black-and-white liquid glass ground */}
-      <MonoField />
-      <div className="relative mx-auto max-w-7xl">
+    <section id="experience" className="scroll-mt-16 px-4 py-24 sm:px-8 sm:py-32">
+      <div className="mx-auto max-w-7xl">
         <Reveal>
           <Eyebrow n="02">Experience</Eyebrow>
           <Line pre="Agency floor to" em="founder" post="'s desk." className="mt-5 text-[clamp(2rem,5vw,4rem)]" />
@@ -616,6 +613,7 @@ export default function EvaPortfolio() {
     <div className="eva min-h-screen overflow-x-clip bg-void font-sans text-bone">
       {/* Black + pink is Eva (black + red is Aashrith). --ember is re-pointed so shared chrome (footer) follows. */}
       <style dangerouslySetInnerHTML={{ __html: `
+        .eva-ink { color: #F4EDEB; }
         .eva { --blush: 244 182 200; --rose: 217 70 122; --petal: 250 221 230; --ember: 217 70 122; --ember-deep: 176 48 96; --footer-accent: #D9467A; }
         .eva ::selection { background: rgb(var(--rose) / 0.45); color: #EDE6DD; }
         .eva :focus-visible { outline: 2px solid rgb(var(--blush)); outline-offset: 3px; }
@@ -646,14 +644,19 @@ export default function EvaPortfolio() {
         monogram="ED"
         copyright="Eva Doshi"
         accent="#D9467A"
-        bgImage={evaMedia.mumbai.src}
+        bgImage={evaMedia.fluted.src}
         featherFrom="#0A0908"
-        metalMark={{ src: '/media/eva-wordmark-metal.png', w: 2257, h: 410, tint: '#F4D5DF' }}
+        signature={
+          <p className="flex items-baseline justify-center gap-4 sm:gap-6">
+            <span className="font-playfair text-[clamp(4.5rem,19vw,16rem)] font-normal italic leading-[0.85] tracking-[-0.02em] eva-em clip-pad">Eva</span>
+            <span className="font-mono text-[11px] uppercase tracking-[0.5em] text-bone/60 sm:text-sm">Doshi</span>
+          </p>
+        }
         headline={
           <>
-            <span className="glass-type">From the first pitch to the final </span>
+            <span className="eva-ink">From the first pitch to the final </span>
             <span className="font-playfair italic font-normal eva-em clip-pad">cut</span>
-            <span className="glass-type">.</span>
+            <span className="eva-ink">.</span>
           </>
         }
         portfolioLinks={NAV}

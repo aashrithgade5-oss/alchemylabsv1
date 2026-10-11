@@ -1,6 +1,6 @@
 'use client';
 
-import { memo, useRef } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { m, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { useFx } from '@/hooks/useFx';
@@ -17,7 +17,12 @@ const MeshGradient = dynamic(() => import('@paper-design/shaders-react').then((m
 export const MonoField = memo(({ isDark = true, className = '' }: { isDark?: boolean; className?: string }) => {
   const ref = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
-  const { allowed, live, inView } = useFx(ref);
+  const { allowed, live, inView } = useFx(ref, '400px');
+  // mount once, then only pause (no shader recompile on every pass)
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    if (allowed && inView) setMounted(true);
+  }, [allowed, inView]);
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
   const slabA = useTransform(scrollYProgress, [0, 1], reduced ? ['0%', '0%'] : ['-12%', '18%']);
   const slabB = useTransform(scrollYProgress, [0, 1], reduced ? ['0%', '0%'] : ['16%', '-14%']);
@@ -37,7 +42,7 @@ export const MonoField = memo(({ isDark = true, className = '' }: { isDark?: boo
             : 'radial-gradient(60% 45% at 25% 30%, rgba(10,9,8,0.05), transparent 70%), radial-gradient(50% 40% at 80% 75%, rgba(10,9,8,0.04), transparent 70%)',
         }}
       />
-      {allowed && inView && (
+      {allowed && mounted && (
         <div className="ember-field-in absolute inset-0" style={{ opacity: isDark ? 0.45 : 0.5 }}>
           <MeshGradient
             colors={colors}
@@ -47,15 +52,15 @@ export const MonoField = memo(({ isDark = true, className = '' }: { isDark?: boo
             grainOverlay={0.1}
             speed={live ? 0.08 : 0}
             minPixelRatio={1}
-            maxPixelCount={1280 * 720}
+            maxPixelCount={960 * 540}
             style={{ width: '100%', height: '100%' }}
           />
         </div>
       )}
       <div className={`mono-grid absolute inset-0 ${isDark ? '' : 'mono-grid--light'}`} />
       {/* glass slabs: light-built liquid glass, drifting on scroll */}
-      <m.div style={{ y: slabA }} className={`mono-slab right-[7%] top-[14%] h-[40%] w-[18%] ${isDark ? '' : 'mono-slab--light'}`} />
-      <m.div style={{ y: slabB }} className={`mono-slab right-[27%] top-[58%] h-[30%] w-[10%] ${isDark ? '' : 'mono-slab--light'}`} />
+      <m.div style={{ y: slabA }} className={`mono-slab left-[2%] top-[22%] h-[34%] w-[9%] ${isDark ? '' : 'mono-slab--light'}`} />
+      <m.div style={{ y: slabB }} className={`mono-slab right-[1.5%] top-[60%] h-[26%] w-[5%] ${isDark ? '' : 'mono-slab--light'}`} />
       {/* feather into the page at both edges */}
       <div className={`absolute inset-x-0 top-0 h-32 bg-gradient-to-b ${isDark ? 'from-[#0A0908]' : 'from-[#fafaf9]'} to-transparent`} />
       <div className={`absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t ${isDark ? 'from-[#0A0908]' : 'from-[#fafaf9]'} to-transparent`} />

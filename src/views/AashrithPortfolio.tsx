@@ -407,8 +407,23 @@ const FixedControls = memo(({ isDark, toggleTheme }: { isDark: boolean; toggleTh
       </Link>
     </motion.div>
 
-    <motion.div className="fixed top-4 right-4 z-[70]" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.3, ease: EASE }}>
+    <motion.div className="fixed top-4 right-4 z-[70] flex items-center gap-2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.3, ease: EASE }}>
+      {/* Patches-7: the next step stays one tap away on every scroll position */}
+      <a
+        href="#connect"
+        className="flex h-10 items-center gap-2 rounded-full px-4 font-mono text-[10px] uppercase tracking-[0.2em] transition-colors hover:text-ember"
+        style={{
+          background: t(isDark, 'rgba(10,10,10,0.7)', 'rgba(250,250,249,0.7)'),
+          backdropFilter: 'blur(24px) saturate(140%)',
+          border: `1px solid ${t(isDark, 'rgba(255,255,255,0.08)', 'rgba(0,0,0,0.06)')}`,
+          color: t(isDark, 'rgba(245,245,244,0.75)', 'rgba(38,38,38,1)'),
+        }}
+      >
+        <span className="h-1.5 w-1.5 rounded-full bg-ember" aria-hidden />
+        Let&rsquo;s talk
+      </a>
       <button
+        aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
         onClick={toggleTheme}
         className="flex items-center justify-center w-10 h-10 rounded-full transition-all"
         style={{
@@ -986,7 +1001,7 @@ const VentureEcosystem = memo(({ isDark }: { isDark: boolean }) => {
   return (
     <section ref={sectionRef} id="ventures" className={`relative overflow-hidden ${t(isDark, 'bg-alchemy-black', 'bg-[#fafaf9]')}`}>
       <motion.div className="absolute inset-0" style={{ scale: bgScale }}>
-        <SequentianBackground variant={2} opacity={isDark ? 0.16 : 0.09} glow={false} />
+        <MonoField isDark={isDark} />
       </motion.div>
       <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 60% 50% at 50% 50%, rgba(255,77,28,0.05) 0%, transparent 70%)' }} />
       <ParticleField count={12} color="rgba(255,77,28,0.2)" opacity={0.15} />
@@ -1315,7 +1330,7 @@ const arcRoles: ArcRoleData[] = [
     ],
     chips: ['HumanEdge', 'Evolve', 'Deorhi', 'Taqsha'],
     image: M.deorhiCourtyard,
-    imageAlt: 'Deorhi · a haveli courtyard at first light',
+    imageAlt: 'Deorhi · the courtyard',
     caseId: 'studio186',
   },
   {
@@ -1325,6 +1340,8 @@ const arcRoles: ArcRoleData[] = [
       'Brand strategy and identity, generative-AI production and custom web — delivered as one system.',
     ],
     chips: ['Fashion', 'Skincare', 'Niche luxury'],
+    image: M.arcAlchemy,
+    imageAlt: 'The studio desk',
   },
   {
     org: 'Cipla Ltd.', parent: 'Delhi NCR', role: 'Marketing Strategy Intern', dates: 'May — Jul 2023',
@@ -1332,6 +1349,8 @@ const arcRoles: ArcRoleData[] = [
       'Marketing strategy across 6+ markets.',
       'Campaigns reaching 12.8M consumers.',
     ],
+    image: M.arcCipla,
+    imageAlt: 'Scale, in glass',
   },
   {
     org: 'Velocity Gaming', parent: '', role: 'Branding & Social Media Manager', dates: 'Mar — May 2022',
@@ -1340,6 +1359,8 @@ const arcRoles: ArcRoleData[] = [
       'Instagram grew 5K → 40K in 10 weeks, alongside Corsair and Red Bull sponsorships.',
     ],
     chips: ['Corsair', 'Red Bull'],
+    image: M.arcVelocity,
+    imageAlt: 'Before the show',
   },
   {
     org: 'S8UL Esports', parent: '', role: 'Content Strategy & Growth Manager', dates: 'Apr 2020 — May 2021',
@@ -1347,6 +1368,8 @@ const arcRoles: ArcRoleData[] = [
       'Content strategy and growth.',
       'Built the creative pipeline behind a 13M+ combined creator audience.',
     ],
+    image: M.arcS8ul,
+    imageAlt: 'The creator floor',
   },
 ];
 
@@ -1356,19 +1379,36 @@ const arcCoda = [
   { label: 'Credentials', items: ['Wharton Business Foundations · LVMH Insider · Google AI Leader'] },
 ];
 
-const ArcRole = memo(({ role, active, isDark, reduced, onDiscover }: { role: ArcRoleData; active: boolean; isDark: boolean; reduced: boolean; onDiscover?: (id: string) => void }) => {
+// Patches-7: every role carries a plate. Quiet by design (monochrome, small,
+// in a light-built glass frame) so the copy leads until real photos replace
+// the placeholders in AG_MEDIA; hover or the active role brings it up.
+const RolePlate = ({ role, on, index, isDark, className = '' }: { role: ArcRoleData; on: boolean; index: number; isDark: boolean; className?: string }) =>
+  role.image ? (
+    <figure className={`role-plate group/plate ${t(isDark, '', 'role-plate--light')} ${on ? 'is-on' : ''} ${className}`}>
+      <div className="role-plate__frame">
+        <SafeImage src={role.image} fallback="/media/aether-rituals-2.webp" alt={role.imageAlt ?? role.org} fill sizes="(min-width: 1024px) 220px, 96px" className="role-plate__img object-cover" />
+      </div>
+      <figcaption className={`mt-2.5 hidden font-mono text-[9px] uppercase tracking-[0.24em] lg:block ${t(isDark, 'text-porcelain/40', 'text-neutral-500')}`}>
+        Plate {String(index + 1).padStart(2, '0')} · {role.imageAlt ?? role.org}
+      </figcaption>
+    </figure>
+  ) : null;
+
+const ArcRole = memo(({ role, index, active, isDark, reduced, onDiscover }: { role: ArcRoleData; index: number; active: boolean; isDark: boolean; reduced: boolean; onDiscover?: (id: string) => void }) => {
   const on = active || reduced;
   const ink = t(isDark, '#f5f5f4', '#171717');
   const dim = t(isDark, 'rgba(245,245,244,0.35)', 'rgba(23,23,23,0.35)');
   return (
     <motion.article
-      className="relative pl-10 sm:pl-16 lg:pl-0 lg:grid lg:grid-cols-[180px_1fr] lg:gap-16"
+      className="relative pl-10 sm:pl-16 lg:pl-0 lg:grid lg:grid-cols-[180px_1fr_200px] lg:gap-16 xl:grid-cols-[180px_1fr_220px]"
       initial={false}
       animate={{ opacity: on ? 1 : 0.35 }}
       transition={{ duration: reduced ? 0 : 0.6, ease: EASE }}
     >
       <span className={`block font-mono text-[10px] sm:text-[11px] uppercase tracking-[0.22em] mb-3 lg:mb-0 lg:pt-3 lg:text-right ${t(isDark, 'text-porcelain/45', 'text-neutral-500')}`}>{role.dates}</span>
       <div className="lg:pl-16 min-w-0">
+        <div className="flex items-start justify-between gap-5">
+        <div className="min-w-0">
         <p className="font-mono text-[11px] sm:text-xs uppercase tracking-[0.16em] text-ember mb-3">{role.role}</p>
         <h3
           className="font-body font-bold text-3xl sm:text-4xl lg:text-5xl leading-[1.02] tracking-[-0.03em] [text-wrap:balance]"
@@ -1385,6 +1425,10 @@ const ArcRole = memo(({ role, active, isDark, reduced, onDiscover }: { role: Arc
           {role.org}
         </h3>
         {role.parent && <p className={`font-body text-sm mt-2 [text-wrap:pretty] ${t(isDark, 'text-porcelain/50', 'text-neutral-500')}`}>{role.parent}</p>}
+        </div>
+        {/* phones/tablets: the plate rides beside the title, small */}
+        <RolePlate role={role} on={on} index={index} isDark={isDark} className="w-20 shrink-0 sm:w-24 lg:hidden" />
+        </div>
 
         <ol className="mt-6 space-y-3 max-w-[58ch]">
           {role.lines.map((line, j) => (
@@ -1403,19 +1447,6 @@ const ArcRole = memo(({ role, active, isDark, reduced, onDiscover }: { role: Arc
           </ul>
         )}
 
-        {role.image && (
-          <motion.figure
-            className="relative mt-8 aspect-[16/9] w-full max-w-2xl overflow-hidden rounded-[20px]"
-            initial={false}
-            animate={{ opacity: on ? 1 : 0.25, scale: on ? 1 : 0.97 }}
-            transition={{ duration: reduced ? 0 : 0.9, ease: EASE }}
-          >
-            <SafeImage src={role.image} fallback="/media/aether-rituals-2.webp" alt={role.imageAlt ?? role.org} fill sizes="(min-width: 1024px) 672px, 90vw" className="object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-            <figcaption className="absolute left-4 bottom-3 font-mono text-[10px] uppercase tracking-[0.22em] text-white/80">{role.imageAlt ?? role.org}</figcaption>
-          </motion.figure>
-        )}
-
         {role.caseId && onDiscover && (
           <button
             type="button"
@@ -1432,6 +1463,8 @@ const ArcRole = memo(({ role, active, isDark, reduced, onDiscover }: { role: Arc
           </button>
         )}
       </div>
+      {/* desktop: the plate column */}
+      <RolePlate role={role} on={on} index={index} isDark={isDark} className="hidden lg:block lg:pt-2" />
     </motion.article>
   );
 });
@@ -1512,7 +1545,7 @@ const CareerTimeline = memo(({ isDark, onDiscover }: { isDark: boolean; onDiscov
                     }}
                     aria-hidden
                   />
-                  <ArcRole role={role} active={i === active} isDark={isDark} reduced={reduced} onDiscover={onDiscover} />
+                  <ArcRole role={role} index={i} active={i === active} isDark={isDark} reduced={reduced} onDiscover={onDiscover} />
                 </div>
               );
             })}
@@ -1807,7 +1840,7 @@ const AashrithPortfolio = () => {
         bgFallback="/media/footer-bg.png"
         featherFrom={isDark ? '#0A0908' : '#fafaf9'}
         streaks
-        metalMark={{ src: '/media/aashrith-wordmark-metal.png', w: 2237, h: 409 }}
+        glassMark="Aashrith Gade"
         portfolioLinks={portfolioFooterLinks}
         ventureLinks={ventureFooterLinks}
         connectLinks={connectFooterLinks}

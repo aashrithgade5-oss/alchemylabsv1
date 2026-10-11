@@ -5,6 +5,7 @@ import { m, useScroll, useTransform, type MotionValue } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { AG_MEDIA, portfolio } from '@lib/portfolio';
+import { LiveWhenVisible } from '@/components/fx/LiveWhenVisible';
 import { GlassPanel } from '@/components/furnace/GlassPanel';
 import { KineticHeadline } from '@/components/furnace/KineticHeadline';
 // Lazy like the homepage: ClosingBand drags TextHoverEffect + the marquee
@@ -102,8 +103,8 @@ export default function Work() {
   return (
     <main className="relative font-sans">
       <section ref={heroRef} className="relative flex min-h-[88svh] items-end overflow-hidden bg-void">
-        <div aria-hidden className="absolute inset-0 overflow-hidden">
-          <m.div className="absolute inset-x-0 top-[12svh] flex -rotate-[4deg] scale-110 flex-col gap-3 opacity-60 will-change-transform md:gap-4" style={{ y: bgY }}>
+        <LiveWhenVisible className="absolute inset-0 overflow-hidden">
+          <m.div aria-hidden className="absolute inset-x-0 top-[12svh] flex -rotate-[4deg] scale-110 flex-col gap-3 opacity-60 will-change-transform md:gap-4" style={{ y: bgY }}>
             {ROWS.map((row, i) => (
               <SheetRow key={i} row={row} index={i} progress={scrollYProgress} />
             ))}
@@ -115,7 +116,7 @@ export default function Work() {
                 'radial-gradient(ellipse 70% 60% at 30% 70%, rgba(10,9,8,0.85), transparent 75%), linear-gradient(to bottom, rgba(10,9,8,0.55) 0%, rgba(10,9,8,0.35) 40%, rgba(10,9,8,0.8) 78%, rgba(10,9,8,1) 100%)',
             }}
           />
-        </div>
+        </LiveWhenVisible>
         <div className="relative mx-auto w-full max-w-6xl px-6 pb-16 pt-40 md:px-12 md:pb-20 md:pt-48 lg:px-16">
           <p className="font-mono text-[10px] tracking-[0.3em] text-bone/70 md:text-[11px]">
             SELECTED WORK
