@@ -1061,3 +1061,25 @@ fallback — set that env var in Vercel before the first deploy (see ERROR_LOG.m
 - Higgsfield loops (Patches-5b): Seedance 2.5 image-to-video from the Work, Contact and footer stills, H.264
   12s ping-pong (1.0–1.8MB), lib/hf.ts LOOPS, played via fx/LoopLayer (desktop, in-view, reduced-motion safe).
 - Local review: `npm run review` (scripts/live-review.sh) serves localhost:3000 and auto-pulls this branch every 30s.
+
+## Patches-6 (2026-10-11) — branch claude/youthful-thompson-2dy1hj, PR #8 (review only, not live)
+Owner feedback after reviewing Patches-5, addressed:
+- BrandSeal: the three dots under "Anyone can make a thousand images now" were the round caps of
+  zero-length orbits. The seal is now invisible until its range, orbits use butt caps + an opacity gate,
+  and a light-built glass lens condenses around the atom before it turns to liquid metal.
+- StillBreak: "For founders who can tell the difference." is Inter Bold + one Playfair italic word.
+- Mumbai trimmed from display copy (hero eyebrow, footer headline + line, About hero line).
+- Footer: soft 1080p loop and 1.2x zoom removed; ALCHEMY wordmark cast in liquid metal
+  (alchemy-wordmark-metal.png via LiquidMark src); numbered index columns, faint grid, Book a call.
+- Work: hero is a contact sheet of real case-study frames (no Higgsfield film).
+- Contact: rebuilt. 404-style hero (dusk field + liquid atom), three paths (call opens Calendly via the
+  `alchemy:book` event, brief scrolls to #brief, WhatsApp estimate), brand glyph icon set, "What happens
+  next" four steps, and the original two-chair room (contact-bg.png) recreated in Higgsfield
+  (gpt_image_2_5 + upscale) as the parallax backdrop (lib/hf.ts CONTACT_LOUNGE). /contact 220kB -> 152kB.
+- Doorway still moved to About ("Alchemy was never about gold."), lib/hf.ts DOORWAY.
+- Liquid-metal `metal` EmberField preset on the Intertext interludes; CSS liquid drift in HomeAtmosphere.
+- Portfolios: MonoField (B/W liquid metal mesh + grid + glass slabs) on Arc of Intent, Connect and Eva's
+  Experience; liquid-metal founder name in PortfolioFooter (`metalMark`).
+- /review updated. LoopLayer + LOOPS removed.
+Not done (needs the owner): Instagram/LinkedIn screenshots for the Ash AI posts. Claude in Chrome is not
+connected to the cloud session; needs the post links/images or a session with Chrome attached.

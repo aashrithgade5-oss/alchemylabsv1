@@ -56,6 +56,9 @@ Everything here is NON-NEGOTIABLE and must be re-verified at the END of every se
 ## voice, ventures. The --font-display alias rule still stands.
 ## OWNER-AUTHORIZED 2026-09-27 (Patches-3): portfolio content + data edits (Deorhi folded into an open
 ## Studio186 case study, Higgsfield imagery via lib/hf.ts). Re-freeze applies after this pass.
+## OWNER-AUTHORIZED 2026-10-11 (Patches-6): portfolio visual pass on both founder pages (MonoField
+## black-and-white liquid-glass ground on Arc of Intent / Connect / Eva Experience, liquid-metal name
+## lock-in in PortfolioFooter). Re-freeze applies after this pass.
 ## FROZEN — Aashrith Gade portfolio (diff must always be empty)
 `app/aashrith/page.tsx`, `app/AashrithGadePortfolio/page.tsx`, `src/views/AashrithPortfolio.tsx`,
 `src/components/portfolio/*`, `src/components/effects*`, `src/components/SequentianBackground.tsx`,
@@ -92,6 +95,14 @@ Everything here is NON-NEGOTIABLE and must be re-verified at the END of every se
   tab visible). One WebGL moment per viewport. Motion tokens: lib/motion.ts + --ease-out/--ease-in-out.
 - Route veil is CSS-only (.route-veil) so a busy main thread never skips it. MotionConfig reducedMotion="user"
   is global in Providers. Three.js stays banned: ShaderGradient/R3F looks are built on Paper shaders.
+
+## PATCHES-6 (2026-10-11)
+- Brand glyphs live in src/components/brand/Glyphs.tsx (drawn from the atom: orbit 4:9, nucleus, hairlines).
+  Use them instead of generic icons on brand surfaces.
+- LiquidMark takes any white-on-transparent PNG (`src`): the footer wordmark (alchemy-wordmark-metal.png)
+  and the founder names are cast in liquid metal. One WebGL moment per viewport still holds.
+- No Higgsfield video loops on heroes or the footer (owner: the loops read as glitchy/soft).
+- Location stays out of display copy (hero/footer); it lives in SEO metadata, schema and legal pages.
 
 ## DEPLOY
 - LOCALHOST ONLY. Never deploy, never touch Vercel. Deploy trigger is only the exact

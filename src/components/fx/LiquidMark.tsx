@@ -36,11 +36,11 @@ export function LiquidMark({
 
   return (
     <div ref={ref} aria-hidden className={`relative ${size ? '' : 'h-full w-full'} ${className}`} style={size ? { width: size, height: size } : undefined}>
+      {/* fill slots size the fallback to the slot, so a wide wordmark never shows a 640px PNG */}
       <Image
         src={src}
         alt=""
-        width={size || 256}
-        height={size || 256}
+        {...(size ? { width: size, height: size } : { fill: true, sizes: '(min-width: 1280px) 1200px, 100vw' })}
         className={`absolute inset-0 h-full w-full ${allowed && inView ? 'liquid-png-out' : ''}`}
       />
       {allowed && inView && (

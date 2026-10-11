@@ -22,6 +22,7 @@ import { SafeImage } from '@/components/portfolio/SafeImage';
 import { StreakSeam } from '@/components/portfolio/LightStreaks';
 import { BlueprintGrid, NoiseTexture } from '@/components/effects';
 import { SequentianBackground } from '@/components/SequentianBackground';
+import { MonoField } from '@/components/portfolio/MonoField';
 import { CaseStudyOverlay, type CaseStudyData } from '@/components/portfolio/CaseStudyOverlay';
 import { useIsMobile } from '@/hooks/use-mobile';
 const aashrithHeroBg = '/media/aashrith-hero-bg.mp4';
@@ -1467,7 +1468,8 @@ const CareerTimeline = memo(({ isDark, onDiscover }: { isDark: boolean; onDiscov
 
   return (
     <section id="journey" className={`relative overflow-hidden ${t(isDark, 'bg-alchemy-black', 'bg-[#fafaf9]')}`}>
-      <SequentianBackground variant={5} opacity={isDark ? 0.14 : 0.08} glow={false} />
+      {/* Patches-6: black-and-white liquid glass ground (was the orange sequentian still) */}
+      <MonoField isDark={isDark} />
 
       <div className="relative z-10 py-24 sm:py-36 lg:py-44 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.header initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: 0.8, ease: EASE }} className="mb-20 sm:mb-28 max-w-3xl">
@@ -1618,7 +1620,7 @@ StatementSection.displayName = 'StatementSection';
 
 const PhilosophyCTA = memo(({ isDark }: { isDark: boolean }) => (
   <section id="connect" className={`relative overflow-hidden ${t(isDark, 'bg-alchemy-black', 'bg-[#fafaf9]')} text-center`}>
-    <SequentianBackground variant={4} opacity={isDark ? 0.22 : 0.12} glow={false} />
+    <MonoField isDark={isDark} />
 
     <StatementSection isDark={isDark} />
     <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8"><StreakSeam isDark={isDark} /></div>
@@ -1805,6 +1807,7 @@ const AashrithPortfolio = () => {
         bgFallback="/media/footer-bg.png"
         featherFrom={isDark ? '#0A0908' : '#fafaf9'}
         streaks
+        metalMark={{ src: '/media/aashrith-wordmark-metal.png', w: 2237, h: 409 }}
         portfolioLinks={portfolioFooterLinks}
         ventureLinks={ventureFooterLinks}
         connectLinks={connectFooterLinks}

@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { AnimatePresence, motion, useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion';
 import { ArrowLeft, ArrowUpRight, Download, Linkedin, Mail, Menu, X } from 'lucide-react';
 import { PortfolioFooter } from '@/components/portfolio/PortfolioFooter';
+import { MonoField } from '@/components/portfolio/MonoField';
 import { NoiseTexture } from '@/components/effects';
 import { setScrollLocked } from '@/components/LenisProvider';
 import { Marquee } from '@/components/eva/Marquee';
@@ -389,8 +390,10 @@ function BrandAlchemyWork() {
 function Experience() {
   const [active, setActive] = useState(0);
   return (
-    <section id="experience" className="scroll-mt-16 px-4 py-24 sm:px-8 sm:py-32">
-      <div className="mx-auto max-w-7xl">
+    <section id="experience" className="relative scroll-mt-16 overflow-clip px-4 py-24 sm:px-8 sm:py-32">
+      {/* Patches-6: the shared black-and-white liquid glass ground */}
+      <MonoField />
+      <div className="relative mx-auto max-w-7xl">
         <Reveal>
           <Eyebrow n="02">Experience</Eyebrow>
           <Line pre="Agency floor to" em="founder" post="'s desk." className="mt-5 text-[clamp(2rem,5vw,4rem)]" />
@@ -645,6 +648,7 @@ export default function EvaPortfolio() {
         accent="#D9467A"
         bgImage={evaMedia.mumbai.src}
         featherFrom="#0A0908"
+        metalMark={{ src: '/media/eva-wordmark-metal.png', w: 2257, h: 410, tint: '#F4D5DF' }}
         headline={
           <>
             <span className="glass-type">From the first pitch to the final </span>

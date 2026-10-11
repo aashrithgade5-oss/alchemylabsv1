@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 import { SafeImage } from './SafeImage';
 import { LightStreaks } from './LightStreaks';
+import { LiquidMark } from '@/components/fx/LiquidMark';
 
 type FooterLink = { label: string; href: string; external?: boolean; download?: boolean };
 
@@ -29,6 +30,8 @@ interface PortfolioFooterProps {
   streaks?: boolean;
   /** Colour the top edge feathers from (the page background). */
   featherFrom?: string;
+  /** Patches-6 lock-in: the founder's name cast in liquid metal at the foot. */
+  metalMark?: { src: string; w: number; h: number; tint?: string };
 }
 
 const t = (isDark: boolean, dark: string, light: string) => isDark ? dark : light;
@@ -86,6 +89,7 @@ export const PortfolioFooter = memo(({
   headline,
   streaks = false,
   featherFrom,
+  metalMark,
 }: PortfolioFooterProps) => {
   const cv = connectLinks.find((l) => l.download);
   const ref = useRef<HTMLElement>(null);
@@ -93,6 +97,8 @@ export const PortfolioFooter = memo(({
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end end'] });
   const bgY = useTransform(scrollYProgress, [0, 1], reduced ? ['0%', '0%'] : ['-12%', '0%']);
   const bgScale = useTransform(scrollYProgress, [0, 1], reduced ? [1.08, 1.08] : [1.18, 1.06]);
+  const markY = useTransform(scrollYProgress, [0.5, 1], reduced ? ['0%', '0%'] : ['30%', '0%']);
+  const markOpacity = useTransform(scrollYProgress, [0.5, 0.92], reduced ? [1, 1] : [0, 1]);
   const vars = { '--footer-accent': accent, '--streak-accent': accent } as CSSProperties;
 
   return (
@@ -165,6 +171,14 @@ export const PortfolioFooter = memo(({
             </div>
           </div>
         </div>
+
+        {metalMark && (
+          <motion.div aria-hidden style={{ y: markY, opacity: markOpacity }} className="pointer-events-none select-none pt-14 sm:pt-20">
+            <div className="relative w-full" style={{ aspectRatio: `${metalMark.w} / ${metalMark.h}` }}>
+              <LiquidMark size={0} src={metalMark.src} inset="-1%" pixels={1600 * 420} tint={metalMark.tint ?? '#EDE6DD'} />
+            </div>
+          </motion.div>
+        )}
 
         {/* Colophon */}
         <div className="pt-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
