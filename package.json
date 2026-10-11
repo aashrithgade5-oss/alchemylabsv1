@@ -9,7 +9,7 @@
     "lint": "next lint",
     "test": "vitest run",
     "test:watch": "vitest",
-    "review": "bash scripts/live-review.sh"
+    "review": "node scripts/live-review.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
