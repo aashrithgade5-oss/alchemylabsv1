@@ -50,7 +50,7 @@ export const AG_MEDIA = {
   // Patches-8 venture key visuals (21:9, upscaled): one cinematic frame per venture
   ventureBA: hf('hf_20261013_174151_49bc478b-eaa1-49e7-864c-ac8f711106a6.png'), // obsidian monolith, molten scripture
   ventureAZ: hf('hf_20261013_174159_831fbfa9-63bc-49af-9838-169f54c9ce85.png'), // liquid-chrome network
-  ventureAA: hf('hf_20261013_173641_0be1745a-1829-4e67-a2dd-84b8ba9fc8b7.png'), // endless glass archive
+  ventureAA: hf('hf_20261013_175005_87d822d9-0da8-4e5a-aace-c25a282d212b.png'), // endless glass archive
 } as const;
 
 export type EntryLabel = 'CONCEPT' | 'SELF-INITIATED' | 'CLIENT';

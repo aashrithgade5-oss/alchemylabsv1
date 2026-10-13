@@ -5,7 +5,6 @@ import Image from 'next/image';
 import { AnimatePresence, m, useReducedMotion } from 'framer-motion';
 import { KineticHeadline } from '../KineticHeadline';
 import { MagneticCTA } from '../MagneticCTA';
-import { TextHoverEffect } from '@/components/ui/text-hover-effect';
 import { ThreeDMarquee } from '../ThreeDMarquee';
 import { useTilt } from '@/hooks/useTilt';
 import { LiquidMark } from '@/components/fx/LiquidMark';
@@ -86,7 +85,7 @@ export function ClosingBand() {
         <div className="absolute inset-0 bg-gradient-to-t from-void via-void/50 to-void/70" />
         <div className="absolute bottom-0 left-1/2 h-[60%] w-[120%] -translate-x-1/2 bg-[radial-gradient(ellipse_at_center,rgba(255,77,28,0.14)_0%,transparent_70%)]" />
       </div>
-      <div className="relative mx-auto flex min-h-[92svh] max-w-5xl flex-col items-center justify-center px-6 py-24 text-center md:py-32">
+      <div className="relative mx-auto flex min-h-[78svh] max-w-5xl flex-col items-center justify-center px-6 py-24 text-center md:py-32">
         {/* Phase 10: logo beside the wordmark, one line (was stacked) */}
         <m.div
           initial={{ opacity: 0, scale: 0.96 }}
@@ -138,19 +137,17 @@ export function ClosingBand() {
             a separate small WordSwitcher line above a smaller mark). */}
         <div aria-hidden className="mt-14 h-px w-24 bg-line" />
 
-        {/* Phase 10: giant ALCHEMY wordmark enlarged further, WordSwitcher
-            centered ON TOP of it instead of sitting as its own line above. */}
+        {/* Patches-8: the outlined ALCHEMY used to sit directly above the
+            footer's liquid-metal ALCHEMY. One mark per page: the switcher
+            stays, the footer owns the wordmark. */}
         <m.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className="relative mt-2 h-52 w-full max-w-5xl md:h-80"
+          className="mt-10"
         >
-          <TextHoverEffect text="ALCHEMY" />
-          <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-            <WordSwitcher />
-          </div>
+          <WordSwitcher />
         </m.div>
       </div>
     </section>
