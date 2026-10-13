@@ -1572,6 +1572,9 @@ html {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  /* Patches-8: the scaling mark + 120vw glow widened the layout viewport on
+     iPhone (iOS then zoomed the whole site out). Clip at the fixed layer. */
+  overflow: hidden;
   /* failsafe: never blocks the page even if JS never arrives */
   animation: al-pl-failsafe 0.6s ease 7s forwards;
 }
@@ -1991,3 +1994,59 @@ html[data-pl='run'] .hero-depth {
 .particle-drift { transform: translate3d(0, calc(var(--range, 30px) * -1), 0); animation: particle-drift 12s ease-in-out infinite alternate; will-change: transform; }
 @keyframes particle-drift { to { transform: translate3d(0, var(--range, 30px), 0); } }
 @media (prefers-reduced-motion: reduce) { .particle-drift { animation: none; } }
+
+/* Patches-8 Aashrith venture key art + number glow (CSS, not a framer loop) */
+.venture-art { box-shadow: inset 0 0 0 1px rgba(237, 230, 221, 0.1), 0 40px 100px -40px rgba(0, 0, 0, 0.8); }
+.venture-art::after { content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; background: linear-gradient(150deg, rgba(255, 255, 255, 0.1) 0%, transparent 35%); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22); }
+.venture-art--light { box-shadow: inset 0 0 0 1px rgba(10, 9, 8, 0.08), 0 40px 100px -40px rgba(10, 9, 8, 0.3); }
+.venture-num-glow { animation: venture-glow 3s ease-in-out infinite; will-change: transform, opacity; }
+@keyframes venture-glow { 0%, 100% { transform: scale(1); opacity: 0.4; } 50% { transform: scale(1.3); opacity: 0.8; } }
+@media (prefers-reduced-motion: reduce) { .venture-num-glow { animation: none; } }
+
+/* Patches-8 portfolio footer, light mode: porcelain tokens become ink */
+.pf-light .text-porcelain { color: #171717; }
+.pf-light .text-porcelain\/80 { color: rgba(23, 23, 23, 0.8); }
+.pf-light .text-porcelain\/65 { color: rgba(23, 23, 23, 0.7); }
+.pf-light .text-porcelain\/45 { color: rgba(23, 23, 23, 0.55); }
+.pf-light .text-porcelain\/40 { color: rgba(23, 23, 23, 0.5); }
+.pf-light .hover\:text-porcelain:hover { color: #0a0908; }
+.pf-light .border-porcelain\/10 { border-color: rgba(23, 23, 23, 0.1); }
+.pf-light .border-porcelain\/20 { border-color: rgba(23, 23, 23, 0.2); }
+.pf-light .glass-letter {
+  background-image: linear-gradient(115deg, rgba(10, 9, 8, 0.1) 0%, rgba(10, 9, 8, 0.32) 36%, rgba(10, 9, 8, 0.12) 52%, rgba(10, 9, 8, 0.24) 78%, rgba(10, 9, 8, 0.08) 100%);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.9), 0 -1px 0 rgba(10, 9, 8, 0.12);
+}
+
+/* Patches-8 venture tiles: CSS shimmer (was a framer loop per tile) + soft marquee edges */
+.tile-shimmer { animation: tile-shimmer 4s linear infinite; will-change: transform; transform: translateX(-100%); }
+@keyframes tile-shimmer { to { transform: translateX(400%); } }
+@media (prefers-reduced-motion: reduce) { .tile-shimmer { animation: none; } }
+#ventures .marquee-edge, #ventures [data-marquee] {
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
+}
+
+/* Patches-8 role plates: typographic, theme-aware, handmade in code */
+.role-mono { position: absolute; inset: 0; overflow: hidden; background: radial-gradient(120% 90% at 20% 0%, #26221f 0%, #121110 60%); }
+.role-mono__grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(237,230,221,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(237,230,221,0.06) 1px, transparent 1px); background-size: 25% 20%; }
+.role-mono__index { position: absolute; left: 10%; top: 8%; font-family: var(--font-geist-mono, ui-monospace), monospace; font-size: 9px; letter-spacing: 0.28em; color: rgba(237,230,221,0.55); }
+.role-mono__letters {
+  position: absolute; left: 8%; bottom: 10%;
+  font-family: var(--font-inter), system-ui, sans-serif; font-weight: 900; letter-spacing: -0.06em; line-height: 0.8;
+  font-size: clamp(2.25rem, 5.2vw, 4.5rem);
+  color: transparent;
+  background-image: linear-gradient(115deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.62) 38%, rgba(255,255,255,0.2) 54%, rgba(255,255,255,0.44) 80%);
+  -webkit-background-clip: text; background-clip: text;
+  text-shadow: 0 -1px 0 rgba(255,255,255,0.12);
+  transition: transform 1s cubic-bezier(0.22,1,0.36,1);
+}
+.role-mono__rule { position: absolute; left: 10%; right: 10%; top: 50%; height: 1px; background: linear-gradient(90deg, rgba(255,77,28,0.7), rgba(255,77,28,0) 70%); transform: scaleX(0.3); transform-origin: left; transition: transform 1.1s cubic-bezier(0.22,1,0.36,1); }
+.role-mono__dot { position: absolute; right: 12%; top: 9%; width: 6px; height: 6px; border-radius: 9999px; background: #FF4D1C; opacity: 0.35; transition: opacity 0.8s ease; }
+.role-plate.is-on .role-mono__rule, .role-plate:hover .role-mono__rule { transform: scaleX(1); }
+.role-plate.is-on .role-mono__dot { opacity: 1; box-shadow: 0 0 14px rgba(255,77,28,0.7); }
+.role-plate:hover .role-mono__letters { transform: translateY(-4px); }
+.role-plate--light .role-mono { background: radial-gradient(120% 90% at 20% 0%, #ffffff 0%, #ece7e1 70%); }
+.role-plate--light .role-mono__grid { background-image: linear-gradient(rgba(10,9,8,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(10,9,8,0.06) 1px, transparent 1px); }
+.role-plate--light .role-mono__index { color: rgba(10,9,8,0.5); }
+.role-plate--light .role-mono__letters { background-image: linear-gradient(115deg, rgba(10,9,8,0.55) 0%, rgba(10,9,8,0.9) 40%, rgba(10,9,8,0.6) 60%, rgba(10,9,8,0.8) 100%); text-shadow: 0 1px 0 rgba(255,255,255,0.8); }
+@media (prefers-reduced-motion: reduce) { .role-mono__letters, .role-mono__rule { transition: none; } }

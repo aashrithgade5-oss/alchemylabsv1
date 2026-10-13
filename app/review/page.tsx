@@ -7,6 +7,17 @@ export const metadata: Metadata = { title: 'Review', robots: { index: false, fol
 type Item = { what: string; look: string; href: string };
 const SECTIONS: { title: string; items: Item[] }[] = [
   {
+    title: 'Patches-8 · Fit on every phone, real liquid metal',
+    items: [
+      { what: 'iPhone fit (the zoom-out bug)', look: 'Open on your iPhone: no zoom-out, no sideways wiggle, no black strip on the right. Audited on iPhone SE, 13 and 15 Pro Max, every route.', href: '/' },
+      { what: 'Footer: true liquid metal', look: 'On desktop the ALCHEMY wordmark is live liquid metal again, prepared while the page is idle so reaching it never stutters. Phones get chrome with a moving light sweep.', href: '/services#site-footer' },
+      { what: 'One ALCHEMY per page', look: 'The outlined ALCHEMY above the footer is gone; the closing band keeps its word cycler.', href: '/about#site-footer' },
+      { what: 'Aashrith · ventures', look: 'Key visuals removed; the post marquees are back as an editorial contact sheet (staggered rhythm, index numerals, pauses off screen).', href: '/aashrith#ventures' },
+      { what: 'Aashrith · light mode', look: 'Toggle the sun/moon: hero, ventures, timeline plates and footer all convert (paper ground, ink type, no black bands).', href: '/aashrith' },
+      { what: 'Aashrith · role plates', look: 'Generated photos replaced by hand-built typographic plates (monogram, grid, proof line), dark and light.', href: '/aashrith#journey' },
+    ],
+  },
+  {
     title: 'Patches-7 · Performance + three brands',
     items: [
       { what: 'Footer, no lag', look: 'ALCHEMY is now liquid chrome built from CSS (a light sweep under the wordmark): no WebGL, nothing on the main thread. Off-screen marquees pause.', href: '/services#site-footer' },

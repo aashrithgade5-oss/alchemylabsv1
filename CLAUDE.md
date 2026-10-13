@@ -112,6 +112,14 @@ Everything here is NON-NEGOTIABLE and must be re-verified at the END of every se
   loops for ambient motion and no large blur() filters: use radial gradients + CSS keyframes.
 - Shaders mount once (idle) and pause; never unmount/remount on scroll.
 
+## PATCHES-8 (2026-10-13) — mobile is P0
+- Before every push: `node scripts/qa-overflow.cjs` (or the `mobile-qa` subagent) must print `ok` for every
+  route on iPhone SE / 13 / 15 Pro Max. One element wider than the viewport makes iOS zoom the whole site out.
+- Page wrapper uses `overflow-x-clip` (LayoutTransition). Never `overflow-hidden` around sticky content, never
+  rely on html/body clipping (iOS ignores it). Fixed full-screen layers (preloader) clip themselves.
+- Footer wordmark: LiquidMark `eager` + `shaderSrc` (half-size mask) on desktop, chrome + sweep on touch.
+- One ALCHEMY wordmark per page (the footer's). Subagents: .claude/agents/mobile-qa.md, award-judge.md.
+
 ## DEPLOY
 - LOCALHOST ONLY. Never deploy, never touch Vercel. Deploy trigger is only the exact
   user phrase "yes, upload it to Vercel and make this live."

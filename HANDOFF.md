@@ -1097,3 +1097,20 @@ connected to the cloud session; needs the post links/images or a session with Ch
 - Eva: .eva-ink replaces .glass-type, Experience restored (no MonoField), liquid-metal name removed,
   footer = monochrome fluted-glass wall (evaMedia.fluted) + "Eva" signature.
 - Owner instruction this pass: push live after QA ("push it to Vercel... the version that is live").
+
+## Patches-8 (2026-10-13) — review build (not merged to production)
+- P0 mobile fix: the homepage overflowed on every iPhone (preloader stage 552px on a 320px screen, ScrubBeat
+  glow -30vw, hero skew), which made iOS load the whole site zoomed out with a black strip on the right.
+  Clipped at each layer + page-level overflow-x-clip. scripts/qa-overflow.cjs: 0 overflow on 12 routes x 3 iPhones.
+- Footer: true LiquidMetal on desktop again, prepared at idle after load from alchemy-wordmark-metal-sm.png;
+  chrome + sweep fallback on touch. ClosingBand outlined ALCHEMY removed (one wordmark per page).
+- Aashrith ventures: Higgsfield key visuals (AG_MEDIA.ventureBA/AZ/AA) with parallax; glow moved to CSS.
+- Research: docs/AWARD-PLAYBOOK.md (agency workflows, skills + install commands, iOS bar), decisions in
+  docs/DESIGN-DECISIONS-P8.md. Subagents added: .claude/agents/mobile-qa.md, award-judge.md.
+- Not possible here: Claude in Chrome / Pinterest (not connected to the cloud session).
+- P8-3 (owner feedback): venture key visuals removed (marquee restored, editorial stagger + index numerals, CSS
+  shimmer, no backdrop blur in the strip, marquee pauses off screen). Real light mode on /aashrith: --background
+  remapped to paper on the page wrapper (fades no longer paint black bands), hero video multiply/greyscale,
+  footer `.pf-light`. Role plates = typographic `.role-mono` (set `photo` on a role for a real image). MonoField
+  warmer, edge slabs removed. Footer metal `look="wordmark"` (calmer reflections). Chrome/Pinterest still need
+  the owner's own machine (Claude Desktop or `claude remote-control`).

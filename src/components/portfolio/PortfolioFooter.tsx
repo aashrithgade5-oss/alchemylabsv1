@@ -104,20 +104,22 @@ export const PortfolioFooter = memo(({
   const vars = { '--footer-accent': accent, '--streak-accent': accent } as CSSProperties;
 
   return (
-    <footer ref={ref} style={vars} className={`relative overflow-hidden ${t(isDark, 'bg-alchemy-black', 'bg-neutral-950')}`}>
+    // Patches-8: a real light mode. Paper ground, ink type, the photo washed to
+    // paper instead of black; `.pf-light` remaps the porcelain text tokens.
+    <footer ref={ref} style={vars} className={`relative overflow-hidden ${t(isDark, 'bg-alchemy-black', 'pf-light bg-[#f3eee8]')}`}>
       <div className="absolute inset-0 z-0" aria-hidden>
         {bgImage ? (
           <>
             <motion.div className="absolute inset-0" style={{ y: bgY, scale: bgScale }}>
               <SafeImage src={bgImage} fallback={bgFallback} alt="" fill sizes="100vw" className="object-cover object-center opacity-80" />
             </motion.div>
-            <div className="absolute inset-0 bg-gradient-to-t from-alchemy-black via-alchemy-black/60 to-alchemy-black/20" />
+            <div className={`absolute inset-0 bg-gradient-to-t ${t(isDark, 'from-alchemy-black via-alchemy-black/60 to-alchemy-black/20', 'from-[#f3eee8] via-[#f3eee8]/85 to-[#f3eee8]/55')}`} />
             <div className="absolute inset-x-0 top-0 h-48" style={{ background: `linear-gradient(to bottom, ${featherFrom ?? '#0A0908'}, transparent)` }} />
           </>
         ) : (
           <>
             <SafeImage src={bgFallback} alt="" fill sizes="100vw" className="object-cover opacity-40 scale-110" style={{ filter: 'blur(10px) saturate(1.1)' }} />
-            <div className="absolute inset-0 bg-gradient-to-t from-alchemy-black via-alchemy-black/80 to-alchemy-black" />
+            <div className={`absolute inset-0 bg-gradient-to-t ${t(isDark, 'from-alchemy-black via-alchemy-black/80 to-alchemy-black', 'from-[#f3eee8] via-[#f3eee8]/90 to-[#f3eee8]')}`} />
           </>
         )}
         {streaks && <LightStreaks />}

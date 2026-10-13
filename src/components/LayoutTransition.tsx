@@ -57,7 +57,9 @@ export function LayoutTransition({ children }: { children: React.ReactNode }) {
   return (
     <>
       <ScrollRestoration />
-      <div className="min-h-screen">{children}</div>
+      {/* Patches-8: one horizontal clip around every page. overflow-x: clip (not
+          hidden) keeps position: sticky working and never makes a scroll box. */}
+      <div className="min-h-screen overflow-x-clip">{children}</div>
       <RouteVeil />
     </>
   );

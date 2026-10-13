@@ -711,19 +711,18 @@ const HeroSection = memo(({ isDark }: { isDark: boolean }) => {
       <motion.video
         src={aashrithHeroBg}
         autoPlay muted loop playsInline preload="metadata"
-        className="absolute inset-0 w-full h-full object-cover"
+        className={`absolute inset-0 w-full h-full object-cover ${isDark ? '' : 'grayscale contrast-125 mix-blend-multiply'}`}
         style={{ scale: videoScale }}
         initial={{ opacity: 0 }}
-        animate={{ opacity: isDark ? 0.25 : 0.35 }}
+        animate={{ opacity: isDark ? 0.25 : 0.14 }}
         transition={{ duration: 1.2, ease: EASE }}
       />
 
-      {!isDark && <div className="absolute inset-0" style={{ background: 'rgba(0,0,0,0.05)' }} />}
       <div className="absolute inset-0" style={{ background: t(isDark, 'radial-gradient(ellipse 70% 60% at 50% 50%, transparent 30%, rgba(10,10,10,0.7) 100%)', 'radial-gradient(ellipse 70% 60% at 50% 50%, transparent 30%, rgba(250,250,249,0.85) 100%)') }} />
       <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 50% 50% at 50% 70%, rgba(255,77,28,0.06) 0%, transparent 70%)' }} />
       <div className="absolute inset-0 pointer-events-none" style={{ background: t(isDark, 'radial-gradient(ellipse 40% 30% at 50% 45%, rgba(10,10,10,0.5) 0%, transparent 70%)', 'radial-gradient(ellipse 40% 30% at 50% 45%, rgba(250,250,249,0.4) 0%, transparent 70%)') }} />
 
-      <SequentianBackground variant={1} opacity={isDark ? 0.15 : 0.08} blur={0} glow={false} />
+      {isDark && <SequentianBackground variant={1} opacity={0.15} blur={0} glow={false} />}
       <BlueprintGrid opacity={0.02} />
       <NoiseTexture opacity={0.03} />
       <ParticleField count={35} color="rgba(255,77,28,0.3)" opacity={0.4} />
@@ -844,14 +843,10 @@ const PostTile = memo(({ post, index, accent, isHovered, onHover, onLeave, wide 
       <img src={post.image} alt={post.title} className="absolute inset-0 w-full h-full object-cover transition-all duration-700 group-hover:scale-110" loading="lazy" />
     )}
     
-    {/* Blur overlay on hover */}
-    {!wide && <motion.div
-      className="absolute inset-0 transition-all duration-500"
-      initial={false}
-      animate={{
-        backdropFilter: isHovered ? 'blur(4px)' : 'blur(0px)',
-      }}
-    />}
+    {/* Patches-8: editorial index numeral (no backdrop blur inside a moving strip) */}
+    <span className="absolute left-3 top-3 z-10 font-mono text-[9px] tracking-[0.28em] text-white/75 mix-blend-difference">
+      {String(index + 1).padStart(2, '0')}
+    </span>
 
     {/* Gradient overlay */}
     <div className="absolute inset-0 transition-opacity duration-500"
@@ -863,11 +858,9 @@ const PostTile = memo(({ post, index, accent, isHovered, onHover, onLeave, wide 
 
     {/* Top shimmer sweep */}
     <div className="absolute top-0 left-0 right-0 h-px overflow-hidden">
-      <motion.div
-        className="h-full w-1/3"
-        style={{ background: `linear-gradient(90deg, transparent, ${accent}, transparent)` }}
-        animate={{ x: ['-100%', '400%'] }}
-        transition={{ duration: 4, repeat: Infinity, ease: 'linear', delay: index * 0.4 }}
+      <span
+        className="tile-shimmer block h-full w-1/3"
+        style={{ background: `linear-gradient(90deg, transparent, ${accent}, transparent)`, animationDelay: `${index * 0.4}s` }}
       />
     </div>
 
@@ -984,8 +977,11 @@ const VentureEcosystem = memo(({ isDark }: { isDark: boolean }) => {
     },
   ];
 
+  // Patches-8: alternate tiles sit a half-step lower, so the strip reads as an
+  // editorial contact sheet rather than a uniform row
   const createVentureTiles = (venture: typeof ventureData[0]) =>
     venture.posts.map((post, i) => (
+      <div key={i} className={venture.postPrefix === 'az' ? '' : i % 2 ? 'pt-8 sm:pt-12' : 'pb-8 sm:pb-12'}>
       <PostTile
         key={i}
         post={post}
@@ -996,6 +992,7 @@ const VentureEcosystem = memo(({ isDark }: { isDark: boolean }) => {
         onHover={() => setHoveredPost(`${venture.postPrefix}-${i}`)}
         onLeave={() => setHoveredPost(null)}
       />
+      </div>
     ));
 
   return (
@@ -1081,11 +1078,9 @@ const VentureEcosystem = memo(({ isDark }: { isDark: boolean }) => {
                     }}>
                       {venture.num}
                     </span>
-                    <motion.div
-                      className="absolute -inset-4 rounded-full pointer-events-none"
+                    <div
+                      className="venture-num-glow absolute -inset-4 rounded-full pointer-events-none"
                       style={{ background: `radial-gradient(circle, ${venture.accent.replace(/[\d.]+\)$/, '0.08)')} 0%, transparent 70%)` }}
-                      animate={{ scale: [1, 1.3, 1], opacity: [0.4, 0.8, 0.4] }}
-                      transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
                     />
                   </div>
 
@@ -1106,7 +1101,7 @@ const VentureEcosystem = memo(({ isDark }: { isDark: boolean }) => {
               </div>
 
               {/* Marquee */}
-              <MarqueeRow speed={venture.speed} duration={venture.postPrefix === 'az' ? 130 : undefined} direction={venture.direction} gap={16} pauseOnHover={true}>
+              <MarqueeRow className="marquee-edge" speed={venture.speed} duration={venture.postPrefix === 'az' ? 130 : undefined} direction={venture.direction} gap={16} pauseOnHover={true}>
                 {createVentureTiles(venture)}
               </MarqueeRow>
             </motion.div>
@@ -1319,7 +1314,7 @@ CreativeProjectsSection.displayName = 'CreativeProjectsSection';
 // ============================================
 // CAREER TIMELINE — "The Arc of Intent"
 // ============================================
-type ArcRoleData = { org: string; parent: string; role: string; dates: string; lines: string[]; chips?: string[]; image?: string; imageAlt?: string; caseId?: string };
+type ArcRoleData = { org: string; parent: string; role: string; dates: string; lines: string[]; chips?: string[]; image?: string; imageAlt?: string; caseId?: string; mono?: string; photo?: string };
 const arcRoles: ArcRoleData[] = [
   {
     org: 'Studio186', parent: 'The Times of India Group (Bennett, Coleman & Co.), Mumbai', role: 'Social & Growth Lead', dates: 'Jul 2026 — Present',
@@ -1329,8 +1324,8 @@ const arcRoles: ArcRoleData[] = [
       "Rebuilt Deorhi's editorial model around restraint-coded luxury: monthly reach 8K → 700K in six weeks.",
     ],
     chips: ['HumanEdge', 'Evolve', 'Deorhi', 'Taqsha'],
-    image: M.deorhiCourtyard,
-    imageAlt: 'Deorhi · the courtyard',
+    mono: 'S186',
+    imageAlt: 'Four verticals, one system',
     caseId: 'studio186',
   },
   {
@@ -1340,8 +1335,8 @@ const arcRoles: ArcRoleData[] = [
       'Brand strategy and identity, generative-AI production and custom web — delivered as one system.',
     ],
     chips: ['Fashion', 'Skincare', 'Niche luxury'],
-    image: M.arcAlchemy,
-    imageAlt: 'The studio desk',
+    mono: 'AL',
+    imageAlt: 'Founder-led practice',
   },
   {
     org: 'Cipla Ltd.', parent: 'Delhi NCR', role: 'Marketing Strategy Intern', dates: 'May — Jul 2023',
@@ -1349,8 +1344,8 @@ const arcRoles: ArcRoleData[] = [
       'Marketing strategy across 6+ markets.',
       'Campaigns reaching 12.8M consumers.',
     ],
-    image: M.arcCipla,
-    imageAlt: 'Scale, in glass',
+    mono: 'Ci',
+    imageAlt: '12.8M consumers',
   },
   {
     org: 'Velocity Gaming', parent: '', role: 'Branding & Social Media Manager', dates: 'Mar — May 2022',
@@ -1359,8 +1354,8 @@ const arcRoles: ArcRoleData[] = [
       'Instagram grew 5K → 40K in 10 weeks, alongside Corsair and Red Bull sponsorships.',
     ],
     chips: ['Corsair', 'Red Bull'],
-    image: M.arcVelocity,
-    imageAlt: 'Before the show',
+    mono: 'VG',
+    imageAlt: '5K to 40K in 10 weeks',
   },
   {
     org: 'S8UL Esports', parent: '', role: 'Content Strategy & Growth Manager', dates: 'Apr 2020 — May 2021',
@@ -1368,8 +1363,8 @@ const arcRoles: ArcRoleData[] = [
       'Content strategy and growth.',
       'Built the creative pipeline behind a 13M+ combined creator audience.',
     ],
-    image: M.arcS8ul,
-    imageAlt: 'The creator floor',
+    mono: 'S8',
+    imageAlt: '13M+ creator audience',
   },
 ];
 
@@ -1382,17 +1377,32 @@ const arcCoda = [
 // Patches-7: every role carries a plate. Quiet by design (monochrome, small,
 // in a light-built glass frame) so the copy leads until real photos replace
 // the placeholders in AG_MEDIA; hover or the active role brings it up.
-const RolePlate = ({ role, on, index, isDark, className = '' }: { role: ArcRoleData; on: boolean; index: number; isDark: boolean; className?: string }) =>
-  role.image ? (
+const RolePlate = ({ role, on, index, isDark, className = '' }: { role: ArcRoleData; on: boolean; index: number; isDark: boolean; className?: string }) => {
+  // Patches-8: a hand-built typographic plate (monogram, hairline grid, the
+  // proof line) instead of a generated photo. Set `photo` on a role to show a
+  // real image in the same glass frame.
+  if (!role.mono && !role.photo) return null;
+  return (
     <figure className={`role-plate group/plate ${t(isDark, '', 'role-plate--light')} ${on ? 'is-on' : ''} ${className}`}>
       <div className="role-plate__frame">
-        <SafeImage src={role.image} fallback="/media/aether-rituals-2.webp" alt={role.imageAlt ?? role.org} fill sizes="(min-width: 1024px) 220px, 96px" className="role-plate__img object-cover" />
+        {role.photo ? (
+          <SafeImage src={role.photo} fallback="/media/aether-rituals-2.webp" alt={role.imageAlt ?? role.org} fill sizes="(min-width: 1024px) 220px, 96px" className="role-plate__img object-cover" />
+        ) : (
+          <div className="role-mono" aria-hidden>
+            <span className="role-mono__grid" />
+            <span className="role-mono__index">{String(index + 1).padStart(2, '0')}</span>
+            <span className="role-mono__letters">{role.mono}</span>
+            <span className="role-mono__rule" />
+            <span className="role-mono__dot" />
+          </div>
+        )}
       </div>
-      <figcaption className={`mt-2.5 hidden font-mono text-[9px] uppercase tracking-[0.24em] lg:block ${t(isDark, 'text-porcelain/40', 'text-neutral-500')}`}>
-        Plate {String(index + 1).padStart(2, '0')} · {role.imageAlt ?? role.org}
+      <figcaption className={`mt-2.5 hidden font-mono text-[9px] uppercase tracking-[0.24em] lg:block ${t(isDark, 'text-porcelain/45', 'text-neutral-500')}`}>
+        {role.imageAlt ?? role.org}
       </figcaption>
     </figure>
-  ) : null;
+  );
+};
 
 const ArcRole = memo(({ role, index, active, isDark, reduced, onDiscover }: { role: ArcRoleData; index: number; active: boolean; isDark: boolean; reduced: boolean; onDiscover?: (id: string) => void }) => {
   const on = active || reduced;
@@ -1815,7 +1825,12 @@ const AashrithPortfolio = () => {
 
   return (
     <MotionConfig reducedMotion="user">
-    <div className={`min-h-screen overflow-x-clip ${isDark ? 'bg-alchemy-black text-porcelain' : 'bg-[#fafaf9] text-neutral-900'} transition-colors duration-500`}>
+    <div
+      className={`min-h-screen overflow-x-clip ${isDark ? 'bg-alchemy-black text-porcelain' : 'ag-light bg-[#fafaf9] text-neutral-900'} transition-colors duration-500`}
+      // Patches-8: shared fades use hsl(var(--background)), which is the site's
+      // void. In light mode it must be paper, or every fade paints a black band.
+      style={isDark ? undefined : ({ '--background': '60 9% 98%', '--foreground': '0 0% 9%' } as React.CSSProperties)}
+    >
       <SEOHead title="Aashrith Gade — Founder, Brand Architect" description="Portfolio of Aashrith Gade: founder of Brand Alchemy, Ashzz.ai & Alchemy Labs. AI-native brand architecture with luxury-grade taste." image={ogCard('aashrith')} />
       <BackgroundScene mode="hero" />
       <ScrollProgressBar />

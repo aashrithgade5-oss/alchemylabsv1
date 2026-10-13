@@ -2,6 +2,7 @@
 
 import { useRef, useState } from 'react';
 import { LiveWhenVisible } from '@/components/fx/LiveWhenVisible';
+import { LiquidMark } from '@/components/fx/LiquidMark';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -198,13 +199,21 @@ export function FurnaceFooter() {
         {/* the wordmark, cast in liquid metal, rises into place as the page ends */}
         <m.div aria-hidden style={{ y: markY, opacity: markOpacity }} className="pointer-events-none relative mt-16 select-none md:mt-24">
           <LiveWhenVisible className="relative mx-auto aspect-[2180/410] w-full">
-            {/* Patches-7: liquid chrome without WebGL. The wordmark is a mask; a
-                brushed-metal ground and one slow light sweep move under it on
-                transform only, so the footer costs the main thread nothing. */}
-            <div className="chrome-word absolute inset-0" style={{ WebkitMaskImage: 'url(/media/alchemy-wordmark-metal.png)', maskImage: 'url(/media/alchemy-wordmark-metal.png)' }}>
-              <span className="chrome-word__base" />
-              <span className="chrome-word__sweep" />
-            </div>
+            {/* Patches-8: real liquid metal on desktop (Paper LiquidMetal), prepared
+                at idle after load from a half-size mask so reaching the footer
+                costs nothing; phones / touch keep the CSS chrome (mask + sweep). */}
+            <LiquidMark
+              size={0}
+              src="/media/alchemy-wordmark-metal.png"
+              shaderSrc="/media/alchemy-wordmark-metal-sm.png"
+              inset="-1%"
+              pixels={1400 * 300}
+              tint="#EDE6DD"
+              chrome
+              desktopOnly
+              eager
+              look="wordmark"
+            />
           </LiveWhenVisible>
         </m.div>
 

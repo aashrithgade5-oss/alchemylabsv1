@@ -41,12 +41,6 @@ export const AG_MEDIA = {
   oakleySprint: hf('hf_20260927_121357_05ba35bd-f0aa-4bbf-9e1f-90f3cb5ee2aa.png'), // 4:5
   oakleyLens: hf('hf_20260927_121359_90c7b0d9-e4cf-43d4-965e-e68957a394bb.png'), // 4:5
   oakleyCrew: hf('hf_20260927_121401_d0319cd2-e0c7-4c23-9f9c-178273f40ece.png'), // 4:5
-  // Patches-7 Arc of Intent plates: monochrome editorial placeholders, one
-  // per role. SWAP each for a real photo from that job (any 4:5 image works).
-  arcAlchemy: hf('hf_20261011_194259_8c6baf43-bf71-48ca-8b6e-dcb941512747.png'), // 4:5 studio desk, chrome atom
-  arcCipla: hf('hf_20261011_194300_607d201b-bbe7-44a2-9204-9876f3b7f4c7.png'), // 4:5 vials on stone
-  arcVelocity: hf('hf_20261011_194300_4d610ab9-fced-467c-b707-165c4090c7a8.png'), // 4:5 arena before the show
-  arcS8ul: hf('hf_20261011_194300_76fd340e-c889-4f56-9814-4e58fe4ea4c8.png'), // 4:5 creator studio corner
 } as const;
 
 export type EntryLabel = 'CONCEPT' | 'SELF-INITIATED' | 'CLIENT';

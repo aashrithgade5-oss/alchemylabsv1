@@ -2,7 +2,6 @@
 
 import { memo, useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
-import { m, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { useFx } from '@/hooks/useFx';
 
 const MeshGradient = dynamic(() => import('@paper-design/shaders-react').then((mod) => mod.MeshGradient), { ssr: false });
@@ -16,20 +15,16 @@ const MeshGradient = dynamic(() => import('@paper-design/shaders-react').then((m
  */
 export const MonoField = memo(({ isDark = true, className = '' }: { isDark?: boolean; className?: string }) => {
   const ref = useRef<HTMLDivElement>(null);
-  const reduced = useReducedMotion();
   const { allowed, live, inView } = useFx(ref, '400px');
   // mount once, then only pause (no shader recompile on every pass)
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
     if (allowed && inView) setMounted(true);
   }, [allowed, inView]);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
-  const slabA = useTransform(scrollYProgress, [0, 1], reduced ? ['0%', '0%'] : ['-12%', '18%']);
-  const slabB = useTransform(scrollYProgress, [0, 1], reduced ? ['0%', '0%'] : ['16%', '-14%']);
 
   const colors = isDark
-    ? ['#0A0908', '#171615', '#4a4744', '#0c0b0a', '#26241f']
-    : ['#fafaf9', '#e7e5e2', '#bdb9b4', '#f4f3f1', '#d6d3cf'];
+    ? ['#0A0908', '#1f1b18', '#7a6f64', '#120f0d', '#3d2a20']
+    : ['#fafaf9', '#f1ebe4', '#dccfc2', '#f7f3ef', '#ecdfd2'];
 
   return (
     <div ref={ref} aria-hidden className={`pointer-events-none absolute inset-0 overflow-hidden ${className}`}>
@@ -43,7 +38,7 @@ export const MonoField = memo(({ isDark = true, className = '' }: { isDark?: boo
         }}
       />
       {allowed && mounted && (
-        <div className="ember-field-in absolute inset-0" style={{ opacity: isDark ? 0.45 : 0.5 }}>
+        <div className="ember-field-in absolute inset-0" style={{ opacity: isDark ? 0.6 : 0.7 }}>
           <MeshGradient
             colors={colors}
             distortion={0.9}
@@ -58,9 +53,8 @@ export const MonoField = memo(({ isDark = true, className = '' }: { isDark?: boo
         </div>
       )}
       <div className={`mono-grid absolute inset-0 ${isDark ? '' : 'mono-grid--light'}`} />
-      {/* glass slabs: light-built liquid glass, drifting on scroll */}
-      <m.div style={{ y: slabA }} className={`mono-slab left-[2%] top-[22%] h-[34%] w-[9%] ${isDark ? '' : 'mono-slab--light'}`} />
-      <m.div style={{ y: slabB }} className={`mono-slab right-[1.5%] top-[60%] h-[26%] w-[5%] ${isDark ? '' : 'mono-slab--light'}`} />
+      {/* Patches-8: the edge slabs read as stray boxes (owner); the glass now
+          lives in the content (plates, chips), the ground stays clean */}
       {/* feather into the page at both edges */}
       <div className={`absolute inset-x-0 top-0 h-32 bg-gradient-to-b ${isDark ? 'from-[#0A0908]' : 'from-[#fafaf9]'} to-transparent`} />
       <div className={`absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t ${isDark ? 'from-[#0A0908]' : 'from-[#fafaf9]'} to-transparent`} />
