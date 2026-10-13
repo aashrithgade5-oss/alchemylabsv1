@@ -31,6 +31,7 @@ export function LiquidMark({
   desktopOnly = false,
   eager = false,
   shaderSrc,
+  look = 'atom',
 }: {
   size?: number;
   className?: string;
@@ -49,6 +50,8 @@ export function LiquidMark({
   eager?: boolean;
   /** a smaller mask for the shader only (preprocessing cost scales with pixels) */
   shaderSrc?: string;
+  /** 'wordmark': calmer, wider reflections and less colour fringing for big type */
+  look?: 'atom' | 'wordmark';
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const { allowed, live, inView } = useFx(ref, '600px');
@@ -107,14 +110,14 @@ export function LiquidMark({
             image={shaderSrc ?? src}
             colorBack="#00000000"
             colorTint={tint}
-            repetition={3}
-            softness={0.1}
-            shiftRed={0.45}
-            shiftBlue={0.18}
-            distortion={0.1}
-            contour={0.5}
-            angle={70}
-            speed={live ? 0.7 : 0}
+            repetition={look === 'wordmark' ? 2 : 3}
+            softness={look === 'wordmark' ? 0.32 : 0.1}
+            shiftRed={look === 'wordmark' ? 0.22 : 0.45}
+            shiftBlue={look === 'wordmark' ? 0.14 : 0.18}
+            distortion={look === 'wordmark' ? 0.06 : 0.1}
+            contour={look === 'wordmark' ? 0.38 : 0.5}
+            angle={look === 'wordmark' ? 52 : 70}
+            speed={live ? (look === 'wordmark' ? 0.45 : 0.7) : 0}
             scale={1}
             fit="contain"
             minPixelRatio={size ? 2 : 1}

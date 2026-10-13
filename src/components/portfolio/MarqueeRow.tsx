@@ -1,6 +1,6 @@
 'use client';
 
-import { memo, useState, useEffect, ReactNode } from 'react';
+import { memo, useState, useEffect, useRef, ReactNode } from 'react';
 import { cn, getIsMobile } from '@/lib/utils';
 
 interface MarqueeRowProps {
@@ -32,6 +32,15 @@ export const MarqueeRow = memo(({
   gap = 24,
 }: MarqueeRowProps) => {
   const [isStatic, setIsStatic] = useState(true);
+  // Patches-8: pause the strip while it is off screen
+  const rowRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = rowRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => el.setAttribute('data-live', e.isIntersecting ? '1' : '0'), { rootMargin: '120px' });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [isStatic]);
 
   useEffect(() => {
     setIsStatic(getIsMobile() || window.matchMedia('(prefers-reduced-motion: reduce)').matches);
@@ -53,6 +62,7 @@ export const MarqueeRow = memo(({
 
   return (
     <div
+      ref={rowRef}
       className={cn('mq-row overflow-hidden', pauseOnHover && 'mq-pausable', className)}
       style={{ maskImage: 'linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent)', WebkitMaskImage: 'linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent)' }}
     >
@@ -66,7 +76,7 @@ export const MarqueeRow = memo(({
       <style dangerouslySetInnerHTML={{ __html: `
         @keyframes mqScroll { from { transform: translate3d(0,0,0); } to { transform: translate3d(-50%,0,0); } }
         .mq-track { will-change: transform; padding-block: 12px; }
-        .mq-pausable:hover .mq-track, .mq-pausable:focus-within .mq-track { animation-play-state: paused; }
+        .mq-pausable:hover .mq-track, .mq-pausable:focus-within .mq-track, .mq-row[data-live='0'] .mq-track { animation-play-state: paused; }
       ` }} />
     </div>
   );

@@ -12,7 +12,9 @@ const SECTIONS: { title: string; items: Item[] }[] = [
       { what: 'iPhone fit (the zoom-out bug)', look: 'Open on your iPhone: no zoom-out, no sideways wiggle, no black strip on the right. Audited on iPhone SE, 13 and 15 Pro Max, every route.', href: '/' },
       { what: 'Footer: true liquid metal', look: 'On desktop the ALCHEMY wordmark is live liquid metal again, prepared while the page is idle so reaching it never stutters. Phones get chrome with a moving light sweep.', href: '/services#site-footer' },
       { what: 'One ALCHEMY per page', look: 'The outlined ALCHEMY above the footer is gone; the closing band keeps its word cycler.', href: '/about#site-footer' },
-      { what: 'Aashrith · venture key visuals', look: 'Brand Alchemy, Ashzz.ai and Ash Archives each open with a cinematic Higgsfield frame (parallax).', href: '/aashrith#ventures' },
+      { what: 'Aashrith · ventures', look: 'Key visuals removed; the post marquees are back as an editorial contact sheet (staggered rhythm, index numerals, pauses off screen).', href: '/aashrith#ventures' },
+      { what: 'Aashrith · light mode', look: 'Toggle the sun/moon: hero, ventures, timeline plates and footer all convert (paper ground, ink type, no black bands).', href: '/aashrith' },
+      { what: 'Aashrith · role plates', look: 'Generated photos replaced by hand-built typographic plates (monogram, grid, proof line), dark and light.', href: '/aashrith#journey' },
     ],
   },
   {

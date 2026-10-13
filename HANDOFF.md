@@ -1108,3 +1108,9 @@ connected to the cloud session; needs the post links/images or a session with Ch
 - Research: docs/AWARD-PLAYBOOK.md (agency workflows, skills + install commands, iOS bar), decisions in
   docs/DESIGN-DECISIONS-P8.md. Subagents added: .claude/agents/mobile-qa.md, award-judge.md.
 - Not possible here: Claude in Chrome / Pinterest (not connected to the cloud session).
+- P8-3 (owner feedback): venture key visuals removed (marquee restored, editorial stagger + index numerals, CSS
+  shimmer, no backdrop blur in the strip, marquee pauses off screen). Real light mode on /aashrith: --background
+  remapped to paper on the page wrapper (fades no longer paint black bands), hero video multiply/greyscale,
+  footer `.pf-light`. Role plates = typographic `.role-mono` (set `photo` on a role for a real image). MonoField
+  warmer, edge slabs removed. Footer metal `look="wordmark"` (calmer reflections). Chrome/Pinterest still need
+  the owner's own machine (Claude Desktop or `claude remote-control`).

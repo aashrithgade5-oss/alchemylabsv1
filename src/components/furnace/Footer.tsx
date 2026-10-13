@@ -212,6 +212,7 @@ export function FurnaceFooter() {
               chrome
               desktopOnly
               eager
+              look="wordmark"
             />
           </LiveWhenVisible>
         </m.div>
