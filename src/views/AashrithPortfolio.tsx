@@ -939,6 +939,27 @@ PostTile.displayName = 'PostTile';
 // VENTURE ECOSYSTEM — "The System"
 // ============================================
 
+// Patches-8: one cinematic key visual per venture, between the header and
+// its post marquee. Parallax on transform only; the image sits a little
+// larger than its frame so the drift never shows an edge.
+const VentureKeyArt = memo(({ src, alt, label, isDark }: { src: string; alt: string; label: string; isDark: boolean }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
+  const y = useTransform(scrollYProgress, [0, 1], ['-8%', '8%']);
+  return (
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 mb-10">
+      <figure ref={ref} className={`venture-art relative h-[28svh] min-h-[180px] overflow-hidden rounded-[20px] sm:h-[42svh] ${t(isDark, '', 'venture-art--light')}`}>
+        <motion.div className="absolute inset-x-0 -inset-y-[10%] will-change-transform" style={{ y }}>
+          <SafeImage src={src} fallback="/media/aether-rituals-2.webp" alt={alt} fill sizes="(min-width: 1200px) 1152px, 100vw" className="object-cover" />
+        </motion.div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-black/20" />
+        <figcaption className="absolute bottom-4 left-5 font-mono text-[10px] uppercase tracking-[0.28em] text-white/75">{label}</figcaption>
+      </figure>
+    </div>
+  );
+});
+VentureKeyArt.displayName = 'VentureKeyArt';
+
 const VentureEcosystem = memo(({ isDark }: { isDark: boolean }) => {
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start end', 'end start'] });
@@ -957,6 +978,8 @@ const VentureEcosystem = memo(({ isDark }: { isDark: boolean }) => {
       direction: 'left' as const,
       posts: brandAlchemyPosts,
       postPrefix: 'ba',
+      art: M.ventureBA,
+      artAlt: 'Brand Alchemy · strategy cut into stone',
     },
     {
       num: '02',
@@ -969,6 +992,8 @@ const VentureEcosystem = memo(({ isDark }: { isDark: boolean }) => {
       direction: 'right' as const,
       posts: azPosts,
       postPrefix: 'az',
+      art: M.ventureAZ,
+      artAlt: 'Ashzz.ai · a network of builders',
     },
     {
       num: '03',
@@ -981,6 +1006,8 @@ const VentureEcosystem = memo(({ isDark }: { isDark: boolean }) => {
       direction: 'left' as const,
       posts: thoughtLeadershipPosts,
       postPrefix: 'tl',
+      art: M.ventureAA,
+      artAlt: 'Ash Archives · the feed as an archive',
     },
   ];
 
@@ -1081,11 +1108,9 @@ const VentureEcosystem = memo(({ isDark }: { isDark: boolean }) => {
                     }}>
                       {venture.num}
                     </span>
-                    <motion.div
-                      className="absolute -inset-4 rounded-full pointer-events-none"
+                    <div
+                      className="venture-num-glow absolute -inset-4 rounded-full pointer-events-none"
                       style={{ background: `radial-gradient(circle, ${venture.accent.replace(/[\d.]+\)$/, '0.08)')} 0%, transparent 70%)` }}
-                      animate={{ scale: [1, 1.3, 1], opacity: [0.4, 0.8, 0.4] }}
-                      transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
                     />
                   </div>
 
@@ -1104,6 +1129,8 @@ const VentureEcosystem = memo(({ isDark }: { isDark: boolean }) => {
                   </div>
                 </motion.div>
               </div>
+
+              <VentureKeyArt src={venture.art} alt={venture.artAlt} label={`${venture.num} · ${venture.artAlt}`} isDark={isDark} />
 
               {/* Marquee */}
               <MarqueeRow speed={venture.speed} duration={venture.postPrefix === 'az' ? 130 : undefined} direction={venture.direction} gap={16} pauseOnHover={true}>

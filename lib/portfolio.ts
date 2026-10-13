@@ -47,6 +47,10 @@ export const AG_MEDIA = {
   arcCipla: hf('hf_20261011_194300_607d201b-bbe7-44a2-9204-9876f3b7f4c7.png'), // 4:5 vials on stone
   arcVelocity: hf('hf_20261011_194300_4d610ab9-fced-467c-b707-165c4090c7a8.png'), // 4:5 arena before the show
   arcS8ul: hf('hf_20261011_194300_76fd340e-c889-4f56-9814-4e58fe4ea4c8.png'), // 4:5 creator studio corner
+  // Patches-8 venture key visuals (21:9, upscaled): one cinematic frame per venture
+  ventureBA: hf('hf_20261013_174151_49bc478b-eaa1-49e7-864c-ac8f711106a6.png'), // obsidian monolith, molten scripture
+  ventureAZ: hf('hf_20261013_174159_831fbfa9-63bc-49af-9838-169f54c9ce85.png'), // liquid-chrome network
+  ventureAA: hf('hf_20261013_173641_0be1745a-1829-4e67-a2dd-84b8ba9fc8b7.png'), // endless glass archive
 } as const;
 
 export type EntryLabel = 'CONCEPT' | 'SELF-INITIATED' | 'CLIENT';

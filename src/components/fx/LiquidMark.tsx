@@ -29,6 +29,8 @@ export function LiquidMark({
   pixels = 600 * 600,
   chrome = false,
   desktopOnly = false,
+  eager = false,
+  shaderSrc,
 }: {
   size?: number;
   className?: string;
@@ -42,6 +44,11 @@ export function LiquidMark({
   chrome?: boolean;
   /** no shader on phones / touch devices (wide wordmarks) */
   desktopOnly?: boolean;
+  /** prepare the shader at idle after page load, not when it scrolls near
+      (its mask preprocessing is main-thread work; do it while nobody scrolls) */
+  eager?: boolean;
+  /** a smaller mask for the shader only (preprocessing cost scales with pixels) */
+  shaderSrc?: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const { allowed, live, inView } = useFx(ref, '600px');
@@ -55,15 +62,24 @@ export function LiquidMark({
   }, [desktopOnly]);
 
   useEffect(() => {
-    if (mounted || !allowed || !inView || !deviceOk) return;
+    if (mounted || !allowed || !deviceOk || (!eager && !inView)) return;
     const w = window as IdleWindow;
-    if (w.requestIdleCallback) {
-      const id = w.requestIdleCallback(() => setMounted(true), { timeout: 1500 });
-      return () => w.cancelIdleCallback?.(id);
-    }
-    const t = window.setTimeout(() => setMounted(true), 200);
-    return () => window.clearTimeout(t);
-  }, [mounted, allowed, inView, deviceOk]);
+    let idle = 0;
+    let t = 0;
+    const schedule = () => {
+      if (w.requestIdleCallback) idle = w.requestIdleCallback(() => setMounted(true), { timeout: eager ? 6000 : 1500 });
+      else t = window.setTimeout(() => setMounted(true), 200);
+    };
+    // eager: wait for the page to finish loading, then a quiet moment
+    const start = () => (eager ? (t = window.setTimeout(schedule, 2500)) : schedule());
+    if (eager && document.readyState !== 'complete') window.addEventListener('load', start, { once: true });
+    else start();
+    return () => {
+      window.removeEventListener('load', start);
+      if (idle) w.cancelIdleCallback?.(idle);
+      window.clearTimeout(t);
+    };
+  }, [mounted, allowed, inView, deviceOk, eager]);
 
   const shader = mounted && allowed && deviceOk;
   const fallbackCls = `absolute inset-0 h-full w-full ${shader ? 'liquid-png-out' : ''}`;
@@ -71,7 +87,11 @@ export function LiquidMark({
   return (
     <div ref={ref} aria-hidden className={`relative ${size ? '' : 'h-full w-full'} ${className}`} style={size ? { width: size, height: size } : undefined}>
       {chrome ? (
-        <div className={`chrome-cut ${fallbackCls}`} style={{ WebkitMaskImage: `url(${src})`, maskImage: `url(${src})` }} />
+        // brushed chrome + one slow light sweep through the mark (transform only)
+        <div className={`chrome-word ${fallbackCls}`} style={{ WebkitMaskImage: `url(${src})`, maskImage: `url(${src})` }}>
+          <span className="chrome-word__base" />
+          <span className="chrome-word__sweep" />
+        </div>
       ) : (
         // fill slots size the fallback to the slot, so a wide mark never shows a 640px PNG
         <Image
@@ -84,7 +104,7 @@ export function LiquidMark({
       {shader && (
         <div className="ember-field-in absolute" style={{ inset }}>
           <LiquidMetal
-            image={src}
+            image={shaderSrc ?? src}
             colorBack="#00000000"
             colorTint={tint}
             repetition={3}
