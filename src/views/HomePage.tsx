@@ -20,7 +20,7 @@ function ScrubBeat({
 }) {
   return (
     <section
-      className={`relative flex flex-col items-center justify-center px-6 ${compact ? 'min-h-[42svh]' : 'min-h-[70svh]'}`}
+      className={`relative flex flex-col items-center justify-center overflow-hidden px-6 ${compact ? 'min-h-[42svh]' : 'min-h-[70svh]'}`}
     >
       <p className="font-mono text-[10px] tracking-[0.35em] text-ash">{eyebrow}</p>
       <div className="relative mt-8">
@@ -75,7 +75,7 @@ const ClosingBand = lazy(() =>
 
 export default function HomePage() {
   return (
-    <main className="relative font-sans">
+    <main className="relative overflow-x-clip font-sans">
       <HomeAtmosphere />
       <Hero />
       <Suspense fallback={null}>
